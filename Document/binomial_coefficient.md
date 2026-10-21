@@ -1,0 +1,54 @@
+# 二項係数
+
+[整数版](../Math/Combination/Binomial_Mod.cpp)・[任意法Mint版](../Math/Combination/ModInt_Binomial.cpp)・[素数専用版](../Math/Combination/Prime_Binomial.cpp)
+
+## APIと前提
+
+`BinomialMod`は法`1..UINT32_MAX`の値を整数で返します。Mint版は利用側のMintが扱える法を使用し、`PrimeBinomial`では素数の法が必要です。動的なMintの法は構築前に設定し、変更した場合は計算器も作り直します。
+`n,k`は`std::int64_t`で指定します。
+
+| 操作 | 意味 |
+| --- | --- |
+| `prepare(max_n)` | 問い合わせ用の表を指定範囲まで準備 |
+| `COM(n,k)` | 二項係数。`n<0`、`k<0`、`k>n`は0 |
+| `Lucas(n,k)` | 素数の法での照会。`COM`もLucas処理を自動で選択 |
+| `H(n,k)` | 重複組合せ。`0H0=1`、`0Hk=0`（`k>0`） |
+
+法1では結果は0です。任意法版で合成数・法1を扱う場合は`COM`を使います。`H`の`n+k-1`が型の範囲を超える場合は例外です。
+
+## 素数の法
+
+準備した階乗・逆階乗から、`n<p`では`n!/(k!(n-k)!) mod p`を求めます。
+`n>=p`ではLucasの定理を使い、`n,k`をp進数の桁へ分解して各桁の二項係数を掛けます。どこかの桁で`k`側が大きければ0です。
+表外では小さい側の`k`を使った積による計算へ進みます。
+
+`BinomialMod`と`ModIntBinomial`は設定上限内で表を自動拡張できます。`PrimeBinomial`の表外照会は積で計算し、表を広げる場合は明示的に`prepare`を呼びます。
+`ModIntBinomial`は素数の法では自身の階乗表、合成数では整数版の計算器を使います。
+
+## 合成数の法
+
+法を互いに素な素数冪`p^e`へ分解し、それぞれで計算した結果を中国剰余定理（CRT）で合成します。
+各素数冪では、階乗に含まれる`p`の個数と、`p`の倍数を除いた積を分けて扱います。付値が`e`以上なら結果は0で、それ以外は累積積と逆累積積の表などから剰余を求めます。
+表で扱えない範囲には、分子・分母から素因子を取り除きながら直接の積を計算する経路を使います。
+
+## 計算量と上限
+
+法の素因数分解は試し割りで最悪O(sqrt(modulus))です。表の構築時間と領域は用意する要素数に比例し、逆元計算などが別途必要です。
+準備済みの素数法で`n<p`の照会はO(1)回の剰余演算、全桁が表に収まるLucasはO(log_p n)回の桁処理です。
+素数冪の照会はp進桁と表参照に、表外の照会は積や素因子除去の回数に依存します。合成数では各素数冪の処理とCRTを合わせた費用になります。
+
+任意法版は次で設定します。
+
+```cpp
+BinomialOptions options;
+options.table_limit = 200'000;
+options.max_multiplicative_steps = 1'000'000;
+BinomialMod comb(998244353, 200'000, options);
+```
+
+`table_limit`は各表の最大添字で、既定値は5,100,000、構築時の`max_n`は5,000,000です。`max_n=0`だけでは照会時の自動拡張は止まりません。表を持たずに積で計算する場合は、任意法版で`max_n=0`と`table_limit=0`を指定します。
+素数専用版は`PrimeBinomial(max_n, max_steps)`で前計算範囲と表外計算予算を設定します。
+任意法版で明示的な`prepare`が`table_limit`を超える場合は`length_error`になります。各版とも、照会の積が計算予算を超える場合は`length_error`になります。
+`SKIP_RUNTIME_CHECKS`でも計算予算・内部容量・数学的な0判定を維持します。
+
+理論参考：[A. Granville, Arithmetic properties of Binomial Coefficients](https://dms.umontreal.ca/~andrew/Binomial/intro.html)。実装の出典・許諾に関する根拠は[監査資料](../Audit/license-audit-2026-10-17.json)を参照してください。

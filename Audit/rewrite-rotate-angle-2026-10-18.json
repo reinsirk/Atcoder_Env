@@ -1,0 +1,899 @@
+{
+  "date": "2026-10-18",
+  "license": "CC0-1.0",
+  "files": {
+    "rotate.cpp": {
+      "sha256": "a36d11f5ea614062404181b049ccfb6835d620b9e56e855f375cda286fe2a583",
+      "SPDX": "CC0-1.0"
+    },
+    "偏角ソート.cpp": {
+      "sha256": "f4b5811099dc1b514141bf89cbf1d24b062aa3f02f2ea839d791bb6c80c26f8c",
+      "SPDX": "CC0-1.0"
+    }
+  },
+  "creation": {
+    "method": "初回の全面新規実装担当には旧コード・原典・Readme・履歴を渡さず、AGENTS.mdと公開API・数学的な仕様を提示。別担当の偏角テスト、rootの行列独立照合と旧新ベンチ結果から新コードを調整。",
+    "fresh_implementation_authors_read_legacy_or_external_implementation": false,
+    "coordinator": "rootは旧コードをAPI抽出・性能比較のため参照。公開説明の配置、GCC/Clangの分岐条件と使用例・監査・配布を整備。旧本文を新実装へ取り込んでいない。",
+    "historical_terms": "旧版の由来・利用条件の未確認事項はmain監査のhistorical_auditへ保存し、新規CC0を過去版へ遡及適用しない。"
+  },
+  "API": {
+    "matrix": {
+      "preserved": [
+        "rotate_90r",
+        "flip_i",
+        "flip_j"
+      ],
+      "added": [
+        "rotate_90l",
+        "rotate_180",
+        "rotate_quarter",
+        "transpose",
+        "flip_i_inplace",
+        "flip_j_inplace",
+        "const input",
+        "vector<string> overloads",
+        "copy-construction-only T"
+      ],
+      "legacy_empty": "既存3関数は外側空で1空行を返す。H本の空行は90度で空、反転ではH本を保持。新コピーAPIの外側空は空。",
+      "signature": "const参照へ拡張したため通常の非const呼出も対応。旧非const参照型を固定した関数ポインタは移行が必要。",
+      "checks": "矩形を前提。参照行ごとに処理へ統合し、検査だけの事前走査なし。SKIPで形状検査のみ除く。幅0回転や奇数中央行など未参照行は検査しない。コンテナ容量制限と安全な添字は維持。",
+      "ownership": "コピー版は入力不変、inplaceは例外までの変更が残り得る。上下inplaceは行をswapし要素のswap不要、左右は要素swap可能が前提。"
+    },
+    "angle": {
+      "preserved": [
+        "arccmp_less",
+        "arccmp_g",
+        "arccmp_less_eq",
+        "arccmp_g_eq"
+      ],
+      "added": [
+        "angle_cross_sign",
+        "same_angle",
+        "AngleLess",
+        "AngleGreater",
+        "angle_sort",
+        "angle_sort_indices"
+      ],
+      "semantics": "[0,2pi)を昇順、零は先頭/降順末尾、同方向は長さを区別せず等値。非厳密比較はstd::sortには使わない。旧ゼロの等値推移性違反を修正。全int64で厳密。",
+      "arithmetic": "nativeは64bit積のoverflowを検出し、範囲外だけ128bit拡張の積比較。標準はsigned32範囲の64bit積と32bit分割128bit積の符号・大小を使い分ける。配列全体の検査・浮動小数点・ノルムなし。",
+      "checks": "全int64入力が有効なため検査専用状態なし。SKIPで本体の経路は変わらない。REINSIRK_FORCE_STANDARD_ARITHMETICで標準演算を選択。"
+    }
+  },
+  "verification": {
+    "matrix": {
+      "sha256": "a36d11f5ea614062404181b049ccfb6835d620b9e56e855f375cda286fe2a583",
+      "results": [
+        {
+          "name": "gcc_checked",
+          "passed": true,
+          "output": "4807 independent matrix datasets passed"
+        },
+        {
+          "name": "gcc_skip",
+          "passed": true,
+          "output": "4807 independent matrix datasets passed"
+        },
+        {
+          "name": "clang_checked",
+          "passed": true,
+          "output": "4807 independent matrix datasets passed"
+        },
+        {
+          "name": "clang_skip",
+          "passed": true,
+          "output": "4807 independent matrix datasets passed"
+        },
+        {
+          "name": "ASan_UBSan",
+          "passed": true,
+          "output": "4807 independent matrix datasets passed"
+        }
+      ],
+      "tested_sha256": "7e69a02ac65f693f0ba5350a7abd1253728cbad7acd07d6f31f02d7f409d9678",
+      "post_test_change": "API説明コメントをinclude直後へ移動。編集前後の標準プリプロセス結果の完全一致を確認。",
+      "preprocessed_sha256": "15c12085bbb8f5114193df3fa67576e4a168768cff8a18b6a6510f91e6651574"
+    },
+    "matrix_scope": "独立4807データセット。0..39の全H,Wのint/bool/文字盤面、縦長/横長/大行列、非default型、string要素、群恒等式、回数INT_MIN/MAX、入力不変、独立所有、重複include、不正形状。GCC/Clang検査ON/OFFとASan/UBSan。作者側はcopy-only型2x33/33x33も確認。",
+    "angle": {
+      "started_utc": "2026-10-17T15:26:21.465039+00:00",
+      "header": "/home/reinsirk/Atcoder_Env/偏角ソート.cpp",
+      "header_sha256_before": "f4b5811099dc1b514141bf89cbf1d24b062aa3f02f2ea839d791bb6c80c26f8c",
+      "test": "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+      "test_sha256": "c8d9c2c7686ec02cdd94b542ed5cec355da41b01f86433ea1b4d70a6cf2d170d",
+      "cpu": 10,
+      "reference": "boost::multiprecision::cpp_int determinant and four-quadrant order",
+      "seed": "0x23949812abfed012",
+      "configurations": [
+        {
+          "name": "gcc_checked_native_release",
+          "compiler_version": "g++ (GCC) 15.3.0",
+          "skip_runtime_checks": false,
+          "force_standard_arithmetic": false,
+          "asan_ubsan": false,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_gcc_checked_native_release"
+          ],
+          "compile_exit_code": 0,
+          "compile_stdout": "",
+          "compile_stderr": "",
+          "compile_seconds": 2.031135955010541,
+          "run_exit_code": 0,
+          "stdout": "PASS pairs=1020625 triples=105625 sorts=26\n",
+          "stderr": "",
+          "run_seconds": 0.04082811799889896,
+          "passed": true
+        },
+        {
+          "name": "gcc_checked_standard_release",
+          "compiler_version": "g++ (GCC) 15.3.0",
+          "skip_runtime_checks": false,
+          "force_standard_arithmetic": true,
+          "asan_ubsan": false,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "-DREINSIRK_FORCE_STANDARD_ARITHMETIC",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_gcc_checked_standard_release"
+          ],
+          "compile_exit_code": 0,
+          "compile_stdout": "",
+          "compile_stderr": "",
+          "compile_seconds": 2.072601644991664,
+          "run_exit_code": 0,
+          "stdout": "PASS pairs=1020625 triples=105625 sorts=26\n",
+          "stderr": "",
+          "run_seconds": 0.04934193700319156,
+          "passed": true
+        },
+        {
+          "name": "gcc_skip_native_release",
+          "compiler_version": "g++ (GCC) 15.3.0",
+          "skip_runtime_checks": true,
+          "force_standard_arithmetic": false,
+          "asan_ubsan": false,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_gcc_skip_native_release"
+          ],
+          "compile_exit_code": 0,
+          "compile_stdout": "",
+          "compile_stderr": "",
+          "compile_seconds": 2.0191592190094525,
+          "run_exit_code": 0,
+          "stdout": "PASS pairs=1020625 triples=105625 sorts=26\n",
+          "stderr": "",
+          "run_seconds": 0.04061236100096721,
+          "passed": true
+        },
+        {
+          "name": "gcc_skip_standard_release",
+          "compiler_version": "g++ (GCC) 15.3.0",
+          "skip_runtime_checks": true,
+          "force_standard_arithmetic": true,
+          "asan_ubsan": false,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DREINSIRK_FORCE_STANDARD_ARITHMETIC",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_gcc_skip_standard_release"
+          ],
+          "compile_exit_code": 0,
+          "compile_stdout": "",
+          "compile_stderr": "",
+          "compile_seconds": 2.066926339000929,
+          "run_exit_code": 0,
+          "stdout": "PASS pairs=1020625 triples=105625 sorts=26\n",
+          "stderr": "",
+          "run_seconds": 0.04921633200137876,
+          "passed": true
+        },
+        {
+          "name": "clang_checked_native_release",
+          "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+          "skip_runtime_checks": false,
+          "force_standard_arithmetic": false,
+          "asan_ubsan": false,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_clang_checked_native_release"
+          ],
+          "compile_exit_code": 0,
+          "compile_stdout": "",
+          "compile_stderr": "",
+          "compile_seconds": 1.4363624019897543,
+          "run_exit_code": 0,
+          "stdout": "PASS pairs=1020625 triples=105625 sorts=26\n",
+          "stderr": "",
+          "run_seconds": 0.05929216599906795,
+          "passed": true
+        },
+        {
+          "name": "clang_checked_standard_release",
+          "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+          "skip_runtime_checks": false,
+          "force_standard_arithmetic": true,
+          "asan_ubsan": false,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-DREINSIRK_FORCE_STANDARD_ARITHMETIC",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_clang_checked_standard_release"
+          ],
+          "compile_exit_code": 0,
+          "compile_stdout": "",
+          "compile_stderr": "",
+          "compile_seconds": 1.4155581169907236,
+          "run_exit_code": 0,
+          "stdout": "PASS pairs=1020625 triples=105625 sorts=26\n",
+          "stderr": "",
+          "run_seconds": 0.07129111798712984,
+          "passed": true
+        },
+        {
+          "name": "clang_skip_native_release",
+          "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+          "skip_runtime_checks": true,
+          "force_standard_arithmetic": false,
+          "asan_ubsan": false,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_clang_skip_native_release"
+          ],
+          "compile_exit_code": 0,
+          "compile_stdout": "",
+          "compile_stderr": "",
+          "compile_seconds": 1.421011393002118,
+          "run_exit_code": 0,
+          "stdout": "PASS pairs=1020625 triples=105625 sorts=26\n",
+          "stderr": "",
+          "run_seconds": 0.059513048006920144,
+          "passed": true
+        },
+        {
+          "name": "clang_skip_standard_release",
+          "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+          "skip_runtime_checks": true,
+          "force_standard_arithmetic": true,
+          "asan_ubsan": false,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DREINSIRK_FORCE_STANDARD_ARITHMETIC",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_clang_skip_standard_release"
+          ],
+          "compile_exit_code": 0,
+          "compile_stdout": "",
+          "compile_stderr": "",
+          "compile_seconds": 1.4188074829871766,
+          "run_exit_code": 0,
+          "stdout": "PASS pairs=1020625 triples=105625 sorts=26\n",
+          "stderr": "",
+          "run_seconds": 0.07159054400108289,
+          "passed": true
+        },
+        {
+          "name": "clang_checked_native_asan_ubsan",
+          "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+          "skip_runtime_checks": false,
+          "force_standard_arithmetic": false,
+          "asan_ubsan": true,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O1",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all",
+            "-fno-omit-frame-pointer",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_clang_checked_native_asan_ubsan"
+          ],
+          "compile_exit_code": 0,
+          "compile_stdout": "",
+          "compile_stderr": "",
+          "compile_seconds": 1.9654919919994427,
+          "run_exit_code": 0,
+          "stdout": "PASS pairs=1020625 triples=105625 sorts=26\n",
+          "stderr": "",
+          "run_seconds": 0.16061065200483426,
+          "passed": true,
+          "initial_runtime_attempt": {
+            "run_exit_code": 1,
+            "stdout": "",
+            "stderr": "==27==LeakSanitizer has encountered a fatal error.\n==27==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1\n==27==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)\n",
+            "run_seconds": 0.15981357199780177
+          },
+          "runtime_environment": {
+            "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+            "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+          }
+        },
+        {
+          "name": "clang_checked_standard_asan_ubsan",
+          "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+          "skip_runtime_checks": false,
+          "force_standard_arithmetic": true,
+          "asan_ubsan": true,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O1",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-DREINSIRK_FORCE_STANDARD_ARITHMETIC",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all",
+            "-fno-omit-frame-pointer",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_clang_checked_standard_asan_ubsan"
+          ],
+          "compile_exit_code": 0,
+          "compile_stdout": "",
+          "compile_stderr": "",
+          "compile_seconds": 1.9345356280100532,
+          "run_exit_code": 0,
+          "stdout": "PASS pairs=1020625 triples=105625 sorts=26\n",
+          "stderr": "",
+          "run_seconds": 0.17317067600379232,
+          "passed": true,
+          "initial_runtime_attempt": {
+            "run_exit_code": 1,
+            "stdout": "",
+            "stderr": "==33==LeakSanitizer has encountered a fatal error.\n==33==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1\n==33==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)\n",
+            "run_seconds": 0.17352354098693468
+          },
+          "runtime_environment": {
+            "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+            "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+          }
+        }
+      ],
+      "header_sha256_after": "f4b5811099dc1b514141bf89cbf1d24b062aa3f02f2ea839d791bb6c80c26f8c",
+      "header_unchanged": true,
+      "all_passed": true,
+      "finished_utc": "2026-10-17T15:27:40.040965+00:00",
+      "toolchain_setup_failures": [
+        {
+          "name": "clang_checked_native_release",
+          "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+          "skip_runtime_checks": false,
+          "force_standard_arithmetic": false,
+          "asan_ubsan": false,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_clang_checked_native_release"
+          ],
+          "compile_exit_code": 1,
+          "compile_stdout": "",
+          "compile_stderr": "In file included from /tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp:4:\n/home/reinsirk/Atcoder_Env/偏角ソート.cpp:3:10: fatal error: 'algorithm' file not found\n    3 | #include <algorithm>\n      |          ^~~~~~~~~~~\n1 error generated.\n",
+          "compile_seconds": 0.21535548500833102,
+          "passed": false
+        },
+        {
+          "name": "clang_checked_standard_release",
+          "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+          "skip_runtime_checks": false,
+          "force_standard_arithmetic": true,
+          "asan_ubsan": false,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "-DREINSIRK_FORCE_STANDARD_ARITHMETIC",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_clang_checked_standard_release"
+          ],
+          "compile_exit_code": 1,
+          "compile_stdout": "",
+          "compile_stderr": "In file included from /tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp:4:\n/home/reinsirk/Atcoder_Env/偏角ソート.cpp:3:10: fatal error: 'algorithm' file not found\n    3 | #include <algorithm>\n      |          ^~~~~~~~~~~\n1 error generated.\n",
+          "compile_seconds": 0.21604256398859434,
+          "passed": false
+        },
+        {
+          "name": "clang_skip_native_release",
+          "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+          "skip_runtime_checks": true,
+          "force_standard_arithmetic": false,
+          "asan_ubsan": false,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_clang_skip_native_release"
+          ],
+          "compile_exit_code": 1,
+          "compile_stdout": "",
+          "compile_stderr": "In file included from /tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp:4:\n/home/reinsirk/Atcoder_Env/偏角ソート.cpp:3:10: fatal error: 'algorithm' file not found\n    3 | #include <algorithm>\n      |          ^~~~~~~~~~~\n1 error generated.\n",
+          "compile_seconds": 0.21743546599464025,
+          "passed": false
+        },
+        {
+          "name": "clang_skip_standard_release",
+          "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+          "skip_runtime_checks": true,
+          "force_standard_arithmetic": true,
+          "asan_ubsan": false,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O2",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DREINSIRK_FORCE_STANDARD_ARITHMETIC",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_clang_skip_standard_release"
+          ],
+          "compile_exit_code": 1,
+          "compile_stdout": "",
+          "compile_stderr": "In file included from /tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp:4:\n/home/reinsirk/Atcoder_Env/偏角ソート.cpp:3:10: fatal error: 'algorithm' file not found\n    3 | #include <algorithm>\n      |          ^~~~~~~~~~~\n1 error generated.\n",
+          "compile_seconds": 0.21745897999790031,
+          "passed": false
+        },
+        {
+          "name": "clang_checked_native_asan_ubsan",
+          "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+          "skip_runtime_checks": false,
+          "force_standard_arithmetic": false,
+          "asan_ubsan": true,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O1",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all",
+            "-fno-omit-frame-pointer",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_clang_checked_native_asan_ubsan"
+          ],
+          "compile_exit_code": 1,
+          "compile_stdout": "",
+          "compile_stderr": "In file included from /tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp:4:\n/home/reinsirk/Atcoder_Env/偏角ソート.cpp:3:10: fatal error: 'algorithm' file not found\n    3 | #include <algorithm>\n      |          ^~~~~~~~~~~\n1 error generated.\n",
+          "compile_seconds": 0.2169282410031883,
+          "passed": false
+        },
+        {
+          "name": "clang_checked_standard_asan_ubsan",
+          "compiler_version": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+          "skip_runtime_checks": false,
+          "force_standard_arithmetic": true,
+          "asan_ubsan": true,
+          "compile_command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-O1",
+            "-DANGLE_HEADER=\"/home/reinsirk/Atcoder_Env/偏角ソート.cpp\"",
+            "-DREINSIRK_FORCE_STANDARD_ARITHMETIC",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all",
+            "-fno-omit-frame-pointer",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp",
+            "-o",
+            "/tmp/atcoder_cc0_matrix_angle_20261018/angle_clang_checked_standard_asan_ubsan"
+          ],
+          "compile_exit_code": 1,
+          "compile_stdout": "",
+          "compile_stderr": "In file included from /tmp/atcoder_cc0_matrix_angle_20261018/angle_test.cpp:4:\n/home/reinsirk/Atcoder_Env/偏角ソート.cpp:3:10: fatal error: 'algorithm' file not found\n    3 | #include <algorithm>\n      |          ^~~~~~~~~~~\n1 error generated.\n",
+          "compile_seconds": 0.21766022600058932,
+          "passed": false
+        }
+      ],
+      "toolchain_setup_note": "Clang default selected an incomplete system GCC16; explicitly use the installed GCC15.3 toolchain.",
+      "sanitizer_runtime_note": "LeakSanitizer is unavailable under the runner ptrace environment. ASan and UBSan remained enabled; only leak detection was disabled."
+    },
+    "angle_scope": "別担当は実装本文を読まず多倍長外積・四象限の参照を作成。各1020625対/105625三つ組/26sort。int64端点、signed32境界内外、零、同向/反平行、同値関係と推移性、昇降順・添字・入力不変。通常8構成とClang ASan/UBSan両演算2構成。",
+    "leak_sanitizer": "実行環境のptrace制約でdetect_leaks=0。ASan/UBSanは有効。"
+  },
+  "benchmark": {
+    "compiler": "GCC15.3.0",
+    "flags": [
+      "-std=c++23",
+      "-O2"
+    ],
+    "cpu_affinity": 8,
+    "repetitions": 7,
+    "ordering": "old/new alternated; angle also includes convenience sort",
+    "statistic": "median",
+    "unit": "milliseconds",
+    "baseline": "旧本文を/tmpへ保存し、比較用だけunused bits/stdc++.h・ACL include/usingを標準includeへ置換。別namespaceで区別した以外は処理変更なし。",
+    "matrix_inputs": {
+      "tiny": [
+        "int",
+        8,
+        12,
+        30000
+      ],
+      "small": [
+        "int",
+        32,
+        32,
+        3000
+      ],
+      "medium": [
+        "int",
+        256,
+        384,
+        80
+      ],
+      "large": [
+        "int",
+        1024,
+        1024,
+        8
+      ],
+      "wide": [
+        "int",
+        4,
+        200000,
+        8
+      ],
+      "tall": [
+        "int",
+        200000,
+        4,
+        3
+      ],
+      "bits": [
+        "bool",
+        512,
+        1024,
+        20
+      ],
+      "strings": [
+        "string(length48)",
+        64,
+        96,
+        100
+      ]
+    },
+    "matrix_measurement": "生成を除き、各関数の返却行列の確保/初期化/破棄と数点checksumを含む。検査有効。24条件すべてchecksum一致。",
+    "matrix_results": {
+      "tiny": {
+        "right": {
+          "old": 3.785753,
+          "new": 3.674927
+        },
+        "flip_i": {
+          "old": 3.186896,
+          "new": 1.970809
+        },
+        "flip_j": {
+          "old": 3.350631,
+          "new": 2.277037
+        }
+      },
+      "small": {
+        "right": {
+          "old": 2.637172,
+          "new": 1.824788
+        },
+        "flip_i": {
+          "old": 2.099199,
+          "new": 1.202476
+        },
+        "flip_j": {
+          "old": 2.783981,
+          "new": 1.660388
+        }
+      },
+      "medium": {
+        "right": {
+          "old": 5.43285,
+          "new": 3.961117
+        },
+        "flip_i": {
+          "old": 5.765311,
+          "new": 3.653166
+        },
+        "flip_j": {
+          "old": 5.749373,
+          "new": 4.728046
+        }
+      },
+      "large": {
+        "right": {
+          "old": 12.159141,
+          "new": 10.26018
+        },
+        "flip_i": {
+          "old": 7.37219,
+          "new": 5.252091
+        },
+        "flip_j": {
+          "old": 7.294716,
+          "new": 6.26904
+        }
+      },
+      "wide": {
+        "right": {
+          "old": 31.647784,
+          "new": 28.691519
+        },
+        "flip_i": {
+          "old": 7.307209,
+          "new": 4.538485
+        },
+        "flip_j": {
+          "old": 7.244377,
+          "new": 4.554043
+        }
+      },
+      "tall": {
+        "right": {
+          "old": 3.697171,
+          "new": 3.156568
+        },
+        "flip_i": {
+          "old": 16.063439,
+          "new": 14.788779
+        },
+        "flip_j": {
+          "old": 15.790991,
+          "new": 14.386674
+        }
+      },
+      "bits": {
+        "right": {
+          "old": 11.258731,
+          "new": 6.858809
+        },
+        "flip_i": {
+          "old": 14.781532,
+          "new": 0.190483
+        },
+        "flip_j": {
+          "old": 15.536582,
+          "new": 9.652383
+        }
+      },
+      "strings": {
+        "right": {
+          "old": 11.402248,
+          "new": 9.490781
+        },
+        "flip_i": {
+          "old": 10.930097,
+          "new": 9.155367
+        },
+        "flip_j": {
+          "old": 10.925013,
+          "new": 9.009451
+        }
+      }
+    },
+    "angle_inputs": "成分±10^9の非零int64 pair。compare:20万対4比較×16。tiny:32点sort×30000。random/sorted/same_ray:20万点sort×4。旧版の積/差がoverflowしない入力に限定。",
+    "angle_measurement": "生成を除きコピーとstd::sortを含む。old/newは関数ポインタarccmp_less、convenienceはangle_sort。compareのconvenience欄も同じ4比較式なので追加sortの比較には使わない。各checksum一致。",
+    "angle_results": {
+      "native": {
+        "compare": {
+          "old": 30.425495,
+          "new": 13.779197,
+          "convenience": 12.702711
+        },
+        "tiny": {
+          "old": 11.501311,
+          "new": 9.609778,
+          "convenience": 6.101172
+        },
+        "random": {
+          "old": 55.016883,
+          "new": 54.771266,
+          "convenience": 46.205352
+        },
+        "sorted": {
+          "old": 21.126719,
+          "new": 19.405806,
+          "convenience": 11.559226
+        },
+        "same_ray": {
+          "old": 24.740517,
+          "new": 19.508223,
+          "convenience": 8.594076
+        }
+      },
+      "standard": {
+        "compare": {
+          "old": 30.599942,
+          "new": 13.783249,
+          "convenience": 13.708475
+        },
+        "tiny": {
+          "old": 12.111372,
+          "new": 11.165679,
+          "convenience": 6.25829
+        },
+        "random": {
+          "old": 55.410519,
+          "new": 57.181645,
+          "convenience": 46.552872
+        },
+        "sorted": {
+          "old": 23.433533,
+          "new": 23.336312,
+          "convenience": 14.472322
+        },
+        "same_ray": {
+          "old": 25.249041,
+          "new": 19.551509,
+          "convenience": 8.63255
+        }
+      }
+    },
+    "angle_descending": {
+      "native": {
+        "old": 56.753298,
+        "new": 56.839656,
+        "convenience": 49.620387
+      },
+      "standard": {
+        "old": 57.280519,
+        "new": 58.214326,
+        "convenience": 52.531349
+      }
+    },
+    "angle_descending_input": "乱数20万点×4。別測定でold/newはstd::sort(arccmp_g)、convenienceはangle_sort(descending=true)。",
+    "limitations": "全入力/環境で同等以上とは保証しない。標準代替の乱数std::sort既存APIは55.411→57.182ms(+約3%)、追加sortは46.553ms。native既存APIは主要ケースでほぼ同等以上。"
+  }
+}

@@ -1,0 +1,67 @@
+引き継ぎ元: 「高速化とスマートポインタ化」
+引き継ぎ先: mypc /home/reinsirk/Atcoder_Env
+作業の目的: 競技プログラミング向けに、安全で高速かつ簡潔なC++ライブラリを整備する。
+
+共通方針
+- 標準C++17。独自namespaceを使わない。long longではなくstd::int64_t等を使う。
+- コメントは短い日本語。各ライブラリは自作別ファイルincludeに依存せず、単独貼り付け可能にする。
+- 有効な入力を渡す前提とし、サイズ・添字・始点・重み・キー等の実行時入力検査は行わない。
+- 内部の添字更新や容量拡張のオーバーフロー防止は維持する。
+- C(n,k)=0となるk>n等の数学的な0判定はAPIの仕様として残す。
+- #pragma onceに代えてインクルードガードを使う。共通部品にも個別ガードを付ける。
+- Edgeはint to; std::int64_t w;。Edge/Graph/INFはREINSIRK_GRAPH_TYPES_DEFINED内にまとめる。
+- ライブラリ本体と使用例、配布ZIPを同期する。
+- Verifyを依頼された場合は、ユーザーがライブラリを貼るためmainだけを渡す。
+- サブエージェントへの委任・並列作業は既定で依頼されている。
+- 説明は日本語で簡潔に。不要な確認で作業を止めない。
+
+現在のライブラリ
+binary_trie.hpp:
+  BinaryTrie<T,MAX_LOG,NODES>。MAX_LOGは最上位ビット番号。30bitなら29。
+  多重集合、1始まりget_kth、add/del/find/min_element/max_element/operate_xor。
+  unique_ptrのブロックプールと再利用リスト。入力チェックなし、ノード容量保護あり。
+binomial_prime.hpp:
+  PrimeBinomial<Mint>。COM/Lucas/H。既定で500万まで前計算。
+  素数・構築後のmod不変は利用者の前提。表外の計算回数制限は維持。
+binomial_mod.hpp:
+  BinomialOptions / BinomialMod / ModIntBinomial<Mint>を同じファイルに収録。
+  法1～UINT32_MAX、素数冪とCRTで合成数に対応。既定前計算500万。
+  内部table/step上限保護は残す。共通部品ごとのガードあり。
+spfa.hpp / bellman_ford.hpp:
+  Graph=vector<vector<Edge>>。重み絶対値<=1e9、INF=1<<60。
+  (graph,distances,start)で全距離上書き。未到達INF、到達可能な負閉路影響-INF、戻り値は負閉路の有無。
+  標準C++17、128bit整数なし。入力検査・有限距離のINF衝突検査は削除済み。
+dijkstra.hpp:
+  重み[0,1e9]。全頂点の距離を計算する。
+  Dijkstra(graph,distances,start)とDijkstra(graph,distances,start,target,path)の2形式。
+  3引数版はif constexprで経路用の確保・更新を除去。未到達INF、経路なしは空。
+dynamic_fenwick_tree_2d.hpp:
+  HashMap / DynamicFenwickTree<S,T> / DynamicFenwickTree2D<T>を単一ファイルに収録。
+  2D内部セル座標を64bitキーにして単一ハッシュ表で管理。初期化O(1)で外側配列もnewも不要。
+  半開区間sum、検索でセルを追加しない。unsigned内部添字と更新guardを使用。
+  1D lower_boundは非負要素専用、最小0-based添字、不足時size()、w<=0は0。
+  入力範囲検査なし。Tの加減算は表現範囲内に収まる前提。
+
+最新作業は完了済み
+7ヘッダーすべてで入力検査削除・ガード追加、8使用例とZIPの同期を実施。
+再確認:
+- BinaryTrie: 50万操作。
+- Binomial: Pascal/Lucas/H/BigInt参照で1,363,542件。
+- Fenwick: 有効69,000操作、最大添字境界。
+- SPFA/Bellman-Ford/Dijkstra: 各4万ランダムと有効境界。
+- Graph3種の全6順序で本文二重貼り付け、7ヘッダー同時二重include、8使用例の厳格C++17コンパイル。
+
+Verify用main
+verify_set_xor_min_main.cpp: Library Checker Set Xor-Min。集合なので重複add防止。
+verify_binomial_prime_mod_main.cpp: Library Checker Binomial Coefficient (Prime Mod)、前計算9,999,999。
+verify_binomial_mod_main.cpp: Library Checker Binomial Coefficient、合成数の法・n<=1e18。
+verify_lucas_arc117_c_main.cpp: AtCoder ARC117 C、mod3のLucas。
+verify_grl_1_b_spfa_main.cpp / verify_grl_1_b_bellman_ford_main.cpp: AOJ GRL_1_B。
+verify_shortest_path_main.cpp: Library Checker Shortest Path、距離＋辺列。
+verify_grl_1_a_main.cpp: AOJ GRL_1_A、3引数Dijkstraで全距離。
+ユーザーは従前のSPFA/Bellman-FordでAOJ ACと報告済み。最新変更後のオンライン提出は行っていない。
+
+初回の引き継ぎ作業
+AGENTS.mdと既存プロジェクト構成を確認し、新しい引き継ぎ用ディレクトリへファイルを展開する。
+既存ファイルを不用意に上書きせず、受け取ったライブラリとVerify用mainの一覧・格納先を報告する。
+ユーザーはそのWorkで引き続きライブラリ整備を進めたい。

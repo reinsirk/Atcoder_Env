@@ -1,0 +1,126 @@
+// SPDX-License-Identifier: CC0-1.0
+
+#include <cstdint>
+#include <iostream>
+#include <limits>
+#include <utility>
+#include <vector>
+#include <atcoder/all>
+
+using namespace std;
+using namespace atcoder;
+
+#define SKIP_RUNTIME_CHECKS
+
+#ifndef REINSIRK_INF_DEFINED
+#define REINSIRK_INF_DEFINED
+inline constexpr std::int64_t INF = std::int64_t{1} << 60;
+#endif
+
+#ifndef REINSIRK_UNWEIGHTED_GRAPH_DEFINED
+#define REINSIRK_UNWEIGHTED_GRAPH_DEFINED
+using Graph = std::vector<std::vector<int>>;
+#endif
+
+#ifndef REINSIRK_GRAPH_TYPES_DEFINED
+#define REINSIRK_GRAPH_TYPES_DEFINED
+// 有向辺。出発点は隣接リストの添字。
+struct Edge {
+    int to;
+    std::int64_t w;
+    Edge(int destination, std::int64_t weight) : to(destination), w(weight) {}
+};
+using WGraph = std::vector<std::vector<Edge>>;
+#endif
+
+#ifndef REINSIRK_CHMIN_DEFINED
+#define REINSIRK_CHMIN_DEFINED
+#define REINSIRK_TEMP_DEFINE_CHMIN
+// chmin(a, b): b < a なら a を更新して true を返す。比較・代入各1回以下。
+template <class T> constexpr bool chmin(T& a, T b);
+#endif
+
+#ifndef REINSIRK_CHMAX_DEFINED
+#define REINSIRK_CHMAX_DEFINED
+#define REINSIRK_TEMP_DEFINE_CHMAX
+// chmax(a, b): a < b なら a を更新して true を返す。比較・代入各1回以下。
+template <class T> constexpr bool chmax(T& a, T b);
+#endif
+
+#ifndef REINSIRK_POW64I_DEFINED
+#define REINSIRK_POW64I_DEFINED
+#define REINSIRK_TEMP_DEFINE_POW64I
+// pow64i(x, n): x^n mod 2^64 を O(log(n + 1)) で返す。0^0 は1。
+constexpr std::uint64_t pow64i(std::uint64_t x, std::uint64_t n);
+#endif
+
+#ifndef REINSIRK_IS_MUL_OVERFLOW_DEFINED
+#define REINSIRK_IS_MUL_OVERFLOW_DEFINED
+#define REINSIRK_TEMP_DEFINE_IS_MUL_OVERFLOW
+// is_mul_overflow(a, b): a*b が符号付き64ビット整数の範囲外なら true。O(1)。
+constexpr bool is_mul_overflow(std::int64_t a, std::int64_t b);
+#endif
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    return 0;
+}
+
+#ifdef REINSIRK_TEMP_DEFINE_CHMIN
+#undef REINSIRK_TEMP_DEFINE_CHMIN
+template <class T>
+constexpr bool chmin(T& a, T b) {
+    if (b < a) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+#endif
+
+#ifdef REINSIRK_TEMP_DEFINE_CHMAX
+#undef REINSIRK_TEMP_DEFINE_CHMAX
+template <class T>
+constexpr bool chmax(T& a, T b) {
+    if (a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+#endif
+
+#ifdef REINSIRK_TEMP_DEFINE_POW64I
+#undef REINSIRK_TEMP_DEFINE_POW64I
+constexpr std::uint64_t pow64i(std::uint64_t x, std::uint64_t n) {
+    std::uint64_t result = 1;
+    while (n != 0) {
+        if ((n & 1) != 0) result *= x;
+        n >>= 1;
+        if (n != 0) x *= x;
+    }
+    return result;
+}
+#endif
+
+#ifdef REINSIRK_TEMP_DEFINE_IS_MUL_OVERFLOW
+#undef REINSIRK_TEMP_DEFINE_IS_MUL_OVERFLOW
+constexpr bool is_mul_overflow(std::int64_t a, std::int64_t b) {
+#if (defined(__GNUC__) || defined(__clang__)) && !defined(REINSIRK_FORCE_STANDARD_MUL_OVERFLOW)
+    std::int64_t product;
+    return __builtin_mul_overflow(a, b, &product);
+#else
+    // 最小負数の絶対値も符号なし演算で安全に求める。
+    const std::uint64_t ua = a < 0 ? std::uint64_t{0} - static_cast<std::uint64_t>(a)
+                                   : static_cast<std::uint64_t>(a);
+    const std::uint64_t ub = b < 0 ? std::uint64_t{0} - static_cast<std::uint64_t>(b)
+                                   : static_cast<std::uint64_t>(b);
+    const std::uint64_t limit = (a < 0) != (b < 0)
+        ? std::uint64_t{1} << 63
+        : static_cast<std::uint64_t>(std::numeric_limits<std::int64_t>::max());
+    return ub != 0 && ua > limit / ub;
+#endif
+}
+#endif

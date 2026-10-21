@@ -1,0 +1,4287 @@
+{
+  "problem": "binomial_coefficient_prime_mod",
+  "snapshot_utc": "2026-10-20T11:23:38.940344+00:00",
+  "source_api": "https://v3.api.judge.yosupo.jp/submissions?problem=binomial_coefficient_prime_mod&status=AC&order=%2Btime&limit=100",
+  "selection": "ACの時間昇順。cpp/cpp17/cpp20を抽出した先頭50提出。利用者・同一ソースで重複排除しない。Functionや他言語は含まない。",
+  "method": "全50提出の公開ソースを読み、main/solveの実使用経路・マクロ置換・条件付き入出力を確認。コンパイル・再提出・速度測定はしない。",
+  "definitions": {
+    "custom_io": "入出力の少なくとも一方に自作の数値変換を使用。自作入力＋std::coutやgetchar＋printfも含む。単なるcin/cout同期解除は含めない。",
+    "specific_mod_dispatch_in_main_or_solve": "問題側のmain/solveで法2専用計算または固定法型への切り替えを行う。前計算上限min、逆階乗の局所的な初期値補正、ライブラリ内部の分岐は含めない。",
+    "query_accumulation": "計算する前に照会を配列へ蓄積。入出力内部のバッファリングは含めない。",
+    "optimization_pragma_including_conditional": "ソース上で有効またはONLINE_JUDGE等の条件付きで有効なGCC optimize/target pragma。現在のジャッジで各条件が有効だったかを再現した値ではない。",
+    "is_latest": "公開APIの値を記録。falseを現行版でのACとは扱わない。"
+  },
+  "summary_all_cpp": {
+    "submissions": 50,
+    "custom_input_or_output": 42,
+    "standard_iostream_only": 8,
+    "specific_mod_dispatch_in_main_or_solve": 19,
+    "query_accumulation": 5,
+    "query_reordering": 0,
+    "output_accumulation_in_main": 6,
+    "optimization_pragma_including_conditional": 11,
+    "is_latest_false": 10,
+    "unique_source_hashes": 47,
+    "duplicate_source_submission_groups": [
+      [
+        223248,
+        406024
+      ],
+      [
+        139188,
+        154448
+      ],
+      [
+        220423,
+        220422
+      ]
+    ],
+    "named_users": 21,
+    "anonymous_submissions": 1,
+    "language_counts": {
+      "cpp": 40,
+      "cpp17": 5,
+      "cpp20": 5
+    }
+  },
+  "rows": [
+    {
+      "rank": 1,
+      "submission_id": 223248,
+      "url": "https://judge.yosupo.jp/submission/223248",
+      "user_name": "sortA0329",
+      "language": "cpp",
+      "time_ms": 182,
+      "submission_time": "2024-07-25T11:02:45.365515Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "d919d0786693855601ea112b3b9f07f837d78815d2c5f47eb16b249531881ca5",
+      "custom_io": true,
+      "io_detail": "gsh::BasicReader/BasicWriterの独自数値変換、POSIX read/write。入力・出力は各256KiBバッファ。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "MmapReaderも定義されるが実使用されない。1位と5位はソース内容が同じ。",
+      "evidence": [
+        {
+          "lines": 778,
+          "description": "BasicReader定義"
+        },
+        {
+          "lines": 807,
+          "description": "BasicReader::reloadのread"
+        },
+        {
+          "lines": 854,
+          "description": "BasicWriter定義"
+        },
+        {
+          "lines": 874,
+          "description": "BasicWriter::reloadのwrite"
+        },
+        {
+          "lines": "2871-2872",
+          "description": "実使用r/wの型はBasicReader/BasicWriter"
+        },
+        {
+          "lines": "2880-2900",
+          "description": "MainでParser/Formatterを使用、法で分岐後は各照会を逐次処理"
+        },
+        {
+          "lines": "2904-2907",
+          "description": "mainからMain呼び出しと出力flush"
+        },
+        {
+          "lines": "1-3",
+          "description": "Ofast、unroll-loops、avx2"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "Mainで998244353、1000000007を固定法専用テーブルへ切替。"
+    },
+    {
+      "rank": 2,
+      "submission_id": 196412,
+      "url": "https://judge.yosupo.jp/submission/196412",
+      "user_name": "sortA0329",
+      "language": "cpp",
+      "time_ms": 186,
+      "submission_time": "2024-03-12T10:09:28.336608Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "a9368a4511a0d0a9e3a13faf8f460feab7a8a61eda4bddea549eb8d96c523672",
+      "custom_io": true,
+      "io_detail": "FastIstream fin / FastOstream foutによる独自数値変換、POSIX read/write。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "mainにcin/coutの同期解除はあるが問題の実使用I/Oはfin/fout。",
+      "evidence": [
+        {
+          "lines": 580,
+          "description": "FastIstream定義"
+        },
+        {
+          "lines": "590-593",
+          "description": "readから入力バッファ補充"
+        },
+        {
+          "lines": 819,
+          "description": "finインスタンス"
+        },
+        {
+          "lines": "820-826",
+          "description": "FastOstreamとwrite出力"
+        },
+        {
+          "lines": 1157,
+          "description": "foutインスタンス"
+        },
+        {
+          "lines": "4854-4874",
+          "description": "Main::runからfin/fout使用、逐次照会"
+        },
+        {
+          "lines": "17-25",
+          "description": "EVAL時ONLINE_JUDGE定義、GCC最適化pragmaを条件適用"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "Main::runで998244353を固定法専用テーブルへ切替。"
+    },
+    {
+      "rank": 3,
+      "submission_id": 196634,
+      "url": "https://judge.yosupo.jp/submission/196634",
+      "user_name": "sortA0329",
+      "language": "cpp",
+      "time_ms": 187,
+      "submission_time": "2024-03-13T12:30:48.999122Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "6b8ee754632c552697550017b84115fd3f680d3b8d053ab7358fcb4e79571f11",
+      "custom_io": true,
+      "io_detail": "FastIstream fin / FastOstream foutによる独自数値変換、POSIX read/write。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "mainにcin/coutの同期解除はあるが問題の実使用I/Oはfin/fout。",
+      "evidence": [
+        {
+          "lines": 580,
+          "description": "FastIstream定義"
+        },
+        {
+          "lines": "590-593",
+          "description": "readから入力バッファ補充"
+        },
+        {
+          "lines": 819,
+          "description": "finインスタンス"
+        },
+        {
+          "lines": "820-826",
+          "description": "FastOstreamとwrite出力"
+        },
+        {
+          "lines": 1157,
+          "description": "foutインスタンス"
+        },
+        {
+          "lines": "4861-4883",
+          "description": "Main::runからfin/fout使用、逐次照会"
+        },
+        {
+          "lines": "17-25",
+          "description": "EVAL時ONLINE_JUDGE定義、GCC最適化pragmaを条件適用"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "Main::runで998244353を固定法専用テーブルへ切替。"
+    },
+    {
+      "rank": 4,
+      "submission_id": 171539,
+      "url": "https://judge.yosupo.jp/submission/171539",
+      "user_name": "maspy",
+      "language": "cpp",
+      "time_ms": 194,
+      "submission_time": "2023-11-13T03:44:41.687191Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "67bccf5eef73ba2b90c3e27eb77032620e9e02ee9b7283213f8e15bc2c4e6e8a",
+      "custom_io": true,
+      "io_detail": "fastio::read/printで独自整数変換とfread/fwriteバッファ。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": 255,
+          "description": "fread補充"
+        },
+        {
+          "lines": 261,
+          "description": "fwrite出力"
+        },
+        {
+          "lines": "445-458",
+          "description": "printと名前取り込み"
+        },
+        {
+          "lines": "460-468",
+          "description": "INT/U32マクロはreadを呼ぶ"
+        },
+        {
+          "lines": "559-587",
+          "description": "solveで入力・法2分岐・各照会逐次処理"
+        },
+        {
+          "lines": "590-591",
+          "description": "mainはsolveを呼ぶ"
+        },
+        {
+          "lines": "5-6",
+          "description": "Ofast/unroll-loops"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "solveで法2は直接ビット式、その他はMontgomeryを使う。"
+    },
+    {
+      "rank": 5,
+      "submission_id": 406024,
+      "url": "https://judge.yosupo.jp/submission/406024",
+      "user_name": "Rohan_Kapri",
+      "language": "cpp",
+      "time_ms": 197,
+      "submission_time": "2026-09-25T06:56:26.567313Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "d919d0786693855601ea112b3b9f07f837d78815d2c5f47eb16b249531881ca5",
+      "custom_io": true,
+      "io_detail": "gsh::BasicReader/BasicWriterの独自数値変換、POSIX read/write。入力・出力は各256KiBバッファ。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "MmapReaderも定義されるが実使用されない。1位と5位はソース内容が同じ。",
+      "evidence": [
+        {
+          "lines": 778,
+          "description": "BasicReader定義"
+        },
+        {
+          "lines": 807,
+          "description": "BasicReader::reloadのread"
+        },
+        {
+          "lines": 854,
+          "description": "BasicWriter定義"
+        },
+        {
+          "lines": 874,
+          "description": "BasicWriter::reloadのwrite"
+        },
+        {
+          "lines": "2871-2872",
+          "description": "実使用r/wの型はBasicReader/BasicWriter"
+        },
+        {
+          "lines": "2880-2900",
+          "description": "MainでParser/Formatterを使用、法で分岐後は各照会を逐次処理"
+        },
+        {
+          "lines": "2904-2907",
+          "description": "mainからMain呼び出しと出力flush"
+        },
+        {
+          "lines": "1-3",
+          "description": "Ofast、unroll-loops、avx2"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "Mainで998244353、1000000007を固定法専用テーブルへ切替。"
+    },
+    {
+      "rank": 6,
+      "submission_id": 196406,
+      "url": "https://judge.yosupo.jp/submission/196406",
+      "user_name": "sortA0329",
+      "language": "cpp",
+      "time_ms": 203,
+      "submission_time": "2024-03-12T10:04:00.011947Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "30060e94792e8382a1e30c63bfa79c0a6d6bd75a30e42cd71741f37b3a1a0448",
+      "custom_io": true,
+      "io_detail": "FastIstream fin / FastOstream foutによる独自数値変換、POSIX read/write。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "mainにcin/coutの同期解除はあるが問題の実使用I/Oはfin/fout。",
+      "evidence": [
+        {
+          "lines": 580,
+          "description": "FastIstream定義"
+        },
+        {
+          "lines": "590-593",
+          "description": "readから入力バッファ補充"
+        },
+        {
+          "lines": 819,
+          "description": "finインスタンス"
+        },
+        {
+          "lines": "820-826",
+          "description": "FastOstreamとwrite出力"
+        },
+        {
+          "lines": 1157,
+          "description": "foutインスタンス"
+        },
+        {
+          "lines": "4836-4847",
+          "description": "Main::runからfin/fout使用、逐次照会"
+        },
+        {
+          "lines": "17-25",
+          "description": "EVAL時ONLINE_JUDGE定義、GCC最適化pragmaを条件適用"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 7,
+      "submission_id": 411936,
+      "url": "https://judge.yosupo.jp/submission/411936",
+      "user_name": "reinsirk",
+      "language": "cpp",
+      "time_ms": 230,
+      "submission_time": "2026-10-20T04:39:17.395205Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "0663e04d77b1bdeb1eb7c4a01b91e65e6b3f1061a2df3b87f64cecc97e436f0d",
+      "custom_io": true,
+      "io_detail": "main内の独自パーサ、64KiB freadバッファ、to_charsと64KiB fwrite出力。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "自ライブラリの旧提出。mainは特定法の切替・照会蓄積をしない。出力バッファは通常の入出力処理。",
+      "evidence": [
+        {
+          "lines": "1030-1046",
+          "description": "mainのget/readラムダ"
+        },
+        {
+          "lines": "1048-1054",
+          "description": "入力と任意法ライブラリ初期化"
+        },
+        {
+          "lines": "1055-1067",
+          "description": "各照会を入力直後にCOMして出力バッファへ格納"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 8,
+      "submission_id": 139188,
+      "url": "https://judge.yosupo.jp/submission/139188",
+      "user_name": "Nachia",
+      "language": "cpp17",
+      "time_ms": 232,
+      "submission_time": null,
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "86e49d3a0b2f9b7858bd012642eb0effbc8bc2e8ca6acebe59c970adb720951c",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "逐次API呼び出し。法別実装の切り替えなし。",
+      "evidence": [
+        {
+          "lines": [
+            167,
+            172,
+            279,
+            286,
+            288,
+            291
+          ],
+          "description": "main/solveからの実使用入出力と、特定法分岐を確認。cin/cout名でも独自型・マクロの場合がある。"
+        }
+      ],
+      "source_review": "review_extra_10.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 9,
+      "submission_id": 331410,
+      "url": "https://judge.yosupo.jp/submission/331410",
+      "user_name": "nandhagk",
+      "language": "cpp20",
+      "time_ms": 240,
+      "submission_time": "2025-11-25T03:47:07.171873Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "04d9fd88b57452c3c89a883d62b0229c1a3c9c4973454cfb941d647741eda3d5",
+      "custom_io": true,
+      "io_detail": "mmapまたはsyscall → POSIX write",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法2をmain/solveで専用処理。",
+      "evidence": [
+        {
+          "lines": [
+            381,
+            382,
+            384,
+            385,
+            396,
+            400
+          ],
+          "description": "main/solveからの実使用入出力と、特定法分岐を確認。cin/cout名でも独自型・マクロの場合がある。"
+        }
+      ],
+      "source_review": "review_extra_10.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 10,
+      "submission_id": 331407,
+      "url": "https://judge.yosupo.jp/submission/331407",
+      "user_name": "nandhagk",
+      "language": "cpp20",
+      "time_ms": 241,
+      "submission_time": "2025-11-25T03:41:43.525893Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "c717ad54c13cf8845ce8c9d9ae5555c0c45fd2dd31533c464df9752be33b5884",
+      "custom_io": true,
+      "io_detail": "mmapまたはsyscall → POSIX write",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法2をmain/solveで専用処理。",
+      "evidence": [
+        {
+          "lines": [
+            382,
+            383,
+            385,
+            386,
+            397,
+            401
+          ],
+          "description": "main/solveからの実使用入出力と、特定法分岐を確認。cin/cout名でも独自型・マクロの場合がある。"
+        }
+      ],
+      "source_review": "review_extra_10.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 11,
+      "submission_id": 331409,
+      "url": "https://judge.yosupo.jp/submission/331409",
+      "user_name": "nandhagk",
+      "language": "cpp20",
+      "time_ms": 245,
+      "submission_time": "2025-11-25T03:44:50.472872Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "e570985ff6219c6aba0c3ba5b3d2bf4cce17ac900f72d103baa37e4bad489293",
+      "custom_io": true,
+      "io_detail": "mmapまたはsyscall → POSIX write",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法2をmain/solveで専用処理。",
+      "evidence": [
+        {
+          "lines": [
+            380,
+            381,
+            383,
+            384,
+            395,
+            399
+          ],
+          "description": "main/solveからの実使用入出力と、特定法分岐を確認。cin/cout名でも独自型・マクロの場合がある。"
+        }
+      ],
+      "source_review": "review_extra_10.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 12,
+      "submission_id": 219446,
+      "url": "https://judge.yosupo.jp/submission/219446",
+      "user_name": "andyli",
+      "language": "cpp",
+      "time_ms": 252,
+      "submission_time": "2024-07-06T16:20:55.612412Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "91c07c3c9cad25666e83406d022cbc363506e6c63fe91b74337b900cff5c67f0",
+      "custom_io": true,
+      "io_detail": "独自IO、Linux本番ではmmap入力、fwriteによる出力バッファ。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "fread入力コードは非USE_MMAPの代替でありLinux本番経路では使わない。",
+      "evidence": [
+        {
+          "lines": "243-247",
+          "description": "__unix__かつ非LX_LOCALでUSE_MMAP"
+        },
+        {
+          "lines": "296-309",
+          "description": "mmap入力経路"
+        },
+        {
+          "lines": 492,
+          "description": "fwrite出力flush"
+        },
+        {
+          "lines": "599-601",
+          "description": "dRがio.readを呼ぶ"
+        },
+        {
+          "lines": 614,
+          "description": "printがio.printを呼ぶ"
+        },
+        {
+          "lines": "954-968",
+          "description": "mainの法2分岐後に各照会逐次処理"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "mainで法2専用結果、その他を動的Montgomeryへ。"
+    },
+    {
+      "rank": 13,
+      "submission_id": 315722,
+      "url": "https://judge.yosupo.jp/submission/315722",
+      "user_name": "zwezdinv",
+      "language": "cpp",
+      "time_ms": 256,
+      "submission_time": "2025-09-20T10:12:04.599583Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "0a2f9cb4bd570c9bdace6f790cec501a5437d557609e87162a2e796cd806fe2f",
+      "custom_io": true,
+      "io_detail": "std::cin/coutという記述だがマクロで独自i$/o$へ差替。通常ファイルはmmap、その他は直接syscallの入力。出力はmmap確保したバッファへ蓄積しwrite。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "出力結果を最後までバッファへ蓄積するI/O。照会そのものは保持・並替しない。pragmaはないが、AVX2 target属性付き未使用文字列I/O関数はある。",
+      "evidence": [
+        {
+          "lines": 56,
+          "description": "独自入力Gとi$。fstatで通常ファイルを判定してmmapまたはsyscall入力"
+        },
+        {
+          "lines": 57,
+          "description": "独自出力o$とwrite、std内へ独自I/Oインスタンス定義"
+        },
+        {
+          "lines": "59-60",
+          "description": "cin/coutマクロによる置換"
+        },
+        {
+          "lines": "149-183",
+          "description": "mainは法2を専用処理、照会は逐次計算"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "mainで法2はn>=kを直接出力、その他はMontgomeryの階乗表。"
+    },
+    {
+      "rank": 14,
+      "submission_id": 267167,
+      "url": "https://judge.yosupo.jp/submission/267167",
+      "user_name": "miscalc",
+      "language": "cpp",
+      "time_ms": 260,
+      "submission_time": "2025-02-11T23:48:14.395817Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "7acd9215368879a35957e8bce02a6088b8c029d451c514675df2734eb163de54",
+      "custom_io": true,
+      "io_detail": "FAST_IOが有効。LL→internal::READnodump→fastio::read、PRINT→fastio::print、fread/fwrite。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "特定法への条件分岐はないが、本入力法を設定する前に200003を設定して1000要素reserveする前処理がある（2033-2036行）。",
+      "evidence": [
+        {
+          "lines": 5,
+          "description": "FAST_IO定義"
+        },
+        {
+          "lines": "862-868",
+          "description": "fread/fwrite"
+        },
+        {
+          "lines": "1111-1116",
+          "description": "FAST_IOでREADnodumpをfastioへ"
+        },
+        {
+          "lines": "1259-1264",
+          "description": "PRINTマクロの経路"
+        },
+        {
+          "lines": "2030-2040",
+          "description": "main2は入力・法変更・reserve・逐次照会"
+        },
+        {
+          "lines": "2110-2112",
+          "description": "SINGLE_TESTCASEでmain2を呼ぶ"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 15,
+      "submission_id": 251189,
+      "url": "https://judge.yosupo.jp/submission/251189",
+      "user_name": "jinhan814",
+      "language": "cpp",
+      "time_ms": 265,
+      "submission_time": "2024-11-21T05:06:59.486695Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "e44f64419b9c87af5060e70b2803f57e4e2fd42f2281e1b143adb5ba17d1cb1a",
+      "custom_io": false,
+      "io_detail": "標準cin/cout、同期解除・tie解除。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": true,
+      "query_reordering": false,
+      "output_accumulation_in_main": true,
+      "optimization_pragma": false,
+      "notes": "fastioという名前だが独自I/Oではない。",
+      "evidence": [
+        {
+          "lines": 2,
+          "description": "fastioマクロはcin.tie(0)->sync_with_stdio(0)"
+        },
+        {
+          "lines": "38-45",
+          "description": "mainで全照会をvectorに読み、solで全計算後、全結果をcoutへ出力"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 16,
+      "submission_id": 251181,
+      "url": "https://judge.yosupo.jp/submission/251181",
+      "user_name": "jinhan814",
+      "language": "cpp",
+      "time_ms": 265,
+      "submission_time": "2024-11-21T04:27:45.114796Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "33a6c81de3f0f10385b62504fee947a90c3d84846bc116406abe7298212669b6",
+      "custom_io": false,
+      "io_detail": "標準cin/cout、同期解除・tie解除。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": true,
+      "query_reordering": false,
+      "output_accumulation_in_main": true,
+      "optimization_pragma": false,
+      "notes": "fastioという名前だが独自I/Oではない。",
+      "evidence": [
+        {
+          "lines": 2,
+          "description": "fastioマクロはcin.tie(0)->sync_with_stdio(0)"
+        },
+        {
+          "lines": "40-47",
+          "description": "mainで全照会をvectorに読み、solで全計算後、全結果をcoutへ出力"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 17,
+      "submission_id": 251180,
+      "url": "https://judge.yosupo.jp/submission/251180",
+      "user_name": "jinhan814",
+      "language": "cpp",
+      "time_ms": 265,
+      "submission_time": "2024-11-21T04:25:43.020356Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "83d8dc5262c80bb336ab51e2a0d6f3acddba49680fde160bd80ec53695f91b58",
+      "custom_io": false,
+      "io_detail": "標準cin/cout、同期解除・tie解除。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": true,
+      "query_reordering": false,
+      "output_accumulation_in_main": true,
+      "optimization_pragma": false,
+      "notes": "fastioという名前だが独自I/Oではない。 法2の指数0用の初期値分岐はあるがアルゴリズム切替には数えない。",
+      "evidence": [
+        {
+          "lines": 2,
+          "description": "fastioマクロはcin.tie(0)->sync_with_stdio(0)"
+        },
+        {
+          "lines": "40-47",
+          "description": "mainで全照会をvectorに読み、solで全計算後、全結果をcoutへ出力"
+        },
+        {
+          "lines": 24,
+          "description": "mod>2ならpow、法2なら逆階乗の初期値1という局所的数式分岐"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 18,
+      "submission_id": 251169,
+      "url": "https://judge.yosupo.jp/submission/251169",
+      "user_name": "jinhan814",
+      "language": "cpp",
+      "time_ms": 265,
+      "submission_time": "2024-11-21T04:00:41.040579Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "0749f0263776538b8b95130abd0c9d4b049f19d0006d1d0a0904ed6cf22ffc44",
+      "custom_io": false,
+      "io_detail": "標準cin/cout、同期解除・tie解除。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": true,
+      "query_reordering": false,
+      "output_accumulation_in_main": true,
+      "optimization_pragma": false,
+      "notes": "fastioという名前だが独自I/Oではない。",
+      "evidence": [
+        {
+          "lines": 2,
+          "description": "fastioマクロはcin.tie(0)->sync_with_stdio(0)"
+        },
+        {
+          "lines": "50-57",
+          "description": "mainで全照会をvectorに読み、solで全計算後、全結果をcoutへ出力"
+        },
+        {
+          "lines": "7-17",
+          "description": "sol_mod_2とsolの法2分岐"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "solで法2だけ直接ビット判定へ切替。"
+    },
+    {
+      "rank": 19,
+      "submission_id": 251170,
+      "url": "https://judge.yosupo.jp/submission/251170",
+      "user_name": "jinhan814",
+      "language": "cpp",
+      "time_ms": 266,
+      "submission_time": "2024-11-21T04:00:53.703917Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "21401d111654eef822bf5dbb30dc4aab39079a0acce0d273f099c1e17642bc90",
+      "custom_io": false,
+      "io_detail": "標準cin/cout、同期解除・tie解除。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": true,
+      "query_reordering": false,
+      "output_accumulation_in_main": true,
+      "optimization_pragma": false,
+      "notes": "fastioという名前だが独自I/Oではない。",
+      "evidence": [
+        {
+          "lines": 2,
+          "description": "fastioマクロはcin.tie(0)->sync_with_stdio(0)"
+        },
+        {
+          "lines": "50-57",
+          "description": "mainで全照会をvectorに読み、solで全計算後、全結果をcoutへ出力"
+        },
+        {
+          "lines": "7-17",
+          "description": "sol_mod_2とsolの法2分岐"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "solで法2だけ直接ビット判定へ切替。"
+    },
+    {
+      "rank": 20,
+      "submission_id": 411353,
+      "url": "https://judge.yosupo.jp/submission/411353",
+      "user_name": null,
+      "language": "cpp20",
+      "time_ms": 270,
+      "submission_time": "2026-10-17T15:33:38.665032Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "38c21273861244451e328427d4f5a42568c0a558a6c1ec117ba5a86d287d4a31",
+      "custom_io": true,
+      "io_detail": "POSIX read → POSIX write",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "逐次API呼び出し。法別実装の切り替えなし。",
+      "evidence": [
+        {
+          "lines": [
+            68,
+            150,
+            330,
+            331
+          ],
+          "description": "main/solveからの実使用入出力と、特定法分岐を確認。cin/cout名でも独自型・マクロの場合がある。"
+        }
+      ],
+      "source_review": "review_extra_10.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 21,
+      "submission_id": 264041,
+      "url": "https://judge.yosupo.jp/submission/264041",
+      "user_name": "Taiki0715",
+      "language": "cpp",
+      "time_ms": 272,
+      "submission_time": "2025-01-28T09:07:16.41787Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "47c6ef9c5de2937b67bd1b11c5304c89f547fc8603f25300f8d0bb22a9124aa7",
+      "custom_io": true,
+      "io_detail": "fastio::rd/wtによる独自整数変換、fread/fwriteバッファ。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": "26-30",
+          "description": "fread/fwrite"
+        },
+        {
+          "lines": "159-160",
+          "description": "rd/wtを名前取り込み"
+        },
+        {
+          "lines": "613-621",
+          "description": "mainで一度初期化、各照会を逐次入力→C→出力"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 22,
+      "submission_id": 314336,
+      "url": "https://judge.yosupo.jp/submission/314336",
+      "user_name": "ssmkybb",
+      "language": "cpp",
+      "time_ms": 277,
+      "submission_time": "2025-09-12T22:30:19.082586Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "df6dee13fdbc24ead7bbdba33449095d2ad5475ea537994c6c2405e066d77de4",
+      "custom_io": true,
+      "io_detail": "cin/coutはマクロでFIstream/FOstreamへ差替、fread/fwrite各128KiBバッファ。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "見かけ上cin/coutだが標準ストリームではない。階乗初期化はcombの初回呼び出し時（25行）。",
+      "evidence": [
+        {
+          "lines": 4,
+          "description": "独自FIstream/FOstreamとfread/fwrite"
+        },
+        {
+          "lines": "5-8",
+          "description": "cin/coutマクロ"
+        },
+        {
+          "lines": "42-50",
+          "description": "mainは逐次入力→comb→出力"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 23,
+      "submission_id": 267160,
+      "url": "https://judge.yosupo.jp/submission/267160",
+      "user_name": "miscalc",
+      "language": "cpp",
+      "time_ms": 277,
+      "submission_time": "2025-02-11T23:23:34.804824Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "6d10724df95b19d2e7fe6351cffb1c7cce3ca61975d4819382f91fe075d9d16e",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "最初にM/2で1000まで前計算してから入力Mへ戻す。その後10000000まで事前確保。これらはmainの余分な初期化だが特定法に応じた分岐ではない。coutのsetprecisionはあるが整数の実出力はfastio。",
+      "evidence": [
+        {
+          "lines": [
+            5
+          ],
+          "description": "FAST_IOが有効。"
+        },
+        {
+          "lines": [
+            862,
+            868
+          ],
+          "description": "入力fread・出力fwrite。"
+        },
+        {
+          "lines": [
+            1111,
+            1116,
+            1259,
+            1264
+          ],
+          "description": "FAST_IO時にREAD/PRINTがfastioに接続。"
+        },
+        {
+          "lines": [
+            2031,
+            2040
+          ],
+          "description": "main2で1照会ずつ入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 24,
+      "submission_id": 243809,
+      "url": "https://judge.yosupo.jp/submission/243809",
+      "user_name": "Taiki0715",
+      "language": "cpp20",
+      "time_ms": 278,
+      "submission_time": "2024-10-20T13:15:21.276352Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "8467cf728ef585617ffd2eef4e9fad6d5cbdb29e6b008554eed7034213f012b9",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "逐次API呼び出し。法別実装の切り替えなし。",
+      "evidence": [
+        {
+          "lines": [
+            24,
+            28,
+            206,
+            208,
+            213
+          ],
+          "description": "main/solveからの実使用入出力と、特定法分岐を確認。cin/cout名でも独自型・マクロの場合がある。"
+        }
+      ],
+      "source_review": "review_extra_10.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 25,
+      "submission_id": 217008,
+      "url": "https://judge.yosupo.jp/submission/217008",
+      "user_name": "kaage",
+      "language": "cpp",
+      "time_ms": 284,
+      "submission_time": "2024-06-25T08:49:37.961594Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "e0575f664225cecc9320beaa79f1934d2dbc767222a46260dd1cb3703f28689a",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            905,
+            906
+          ],
+          "description": "cin/coutという変数名だがFastIO::Scanner/Printer型。"
+        },
+        {
+          "lines": [
+            271,
+            290,
+            421
+          ],
+          "description": "Scannerはfread、Printerはfwrite。"
+        },
+        {
+          "lines": [
+            908,
+            918
+          ],
+          "description": "逐次照会。n<kのみ数学的0判定。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 26,
+      "submission_id": 217005,
+      "url": "https://judge.yosupo.jp/submission/217005",
+      "user_name": "kaage",
+      "language": "cpp",
+      "time_ms": 291,
+      "submission_time": "2024-06-25T08:39:03.085343Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "3d8ca474355c77c7d4fd1e512fbcd0a247769386d55f9c1828757b0971a4d415",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            886,
+            887
+          ],
+          "description": "cin/coutという変数名だがFastIO::Scanner/Printer型。"
+        },
+        {
+          "lines": [
+            271,
+            290,
+            421
+          ],
+          "description": "Scannerはfread、Printerはfwrite。"
+        },
+        {
+          "lines": [
+            889,
+            899
+          ],
+          "description": "逐次照会。n<kのみ数学的0判定。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 27,
+      "submission_id": 171538,
+      "url": "https://judge.yosupo.jp/submission/171538",
+      "user_name": "maspy",
+      "language": "cpp",
+      "time_ms": 291,
+      "submission_time": "2023-11-13T03:42:07.449112Z",
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "3f44f9684d1ce411c99a289143819d0b8bcbe2b65a0f098af185732cdca41e77",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "mod==2の専用処理はmainから呼ぶsolve内。",
+      "evidence": [
+        {
+          "lines": [
+            255,
+            261
+          ],
+          "description": "fastioのバッファ補充・排出。"
+        },
+        {
+          "lines": [
+            456,
+            458,
+            460,
+            468
+          ],
+          "description": "read/printとINT/U32マクロからfastioを使用。"
+        },
+        {
+          "lines": [
+            561,
+            570
+          ],
+          "description": "solveがmod==2で専用式に分岐。"
+        },
+        {
+          "lines": [
+            576,
+            584
+          ],
+          "description": "それ以外は1照会ずつ計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 28,
+      "submission_id": 267165,
+      "url": "https://judge.yosupo.jp/submission/267165",
+      "user_name": "miscalc",
+      "language": "cpp",
+      "time_ms": 292,
+      "submission_time": "2025-02-11T23:43:15.070293Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "bbe89ddf8f7bd239edaf1f9bd8fd5d6a981cc26b2132c529069ff60d4e27e621",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "最初に200003で1000まで前計算してから入力Mへ戻す。その後10000000まで事前確保。これらはmainの余分な初期化だが特定法に応じた分岐ではない。coutのsetprecisionはあるが整数の実出力はfastio。",
+      "evidence": [
+        {
+          "lines": [
+            5
+          ],
+          "description": "FAST_IOが有効。"
+        },
+        {
+          "lines": [
+            862,
+            868
+          ],
+          "description": "入力fread・出力fwrite。"
+        },
+        {
+          "lines": [
+            1111,
+            1116,
+            1259,
+            1264
+          ],
+          "description": "FAST_IO時にREAD/PRINTがfastioに接続。"
+        },
+        {
+          "lines": [
+            2032,
+            2040
+          ],
+          "description": "main2で1照会ずつ入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 29,
+      "submission_id": 196632,
+      "url": "https://judge.yosupo.jp/submission/196632",
+      "user_name": "sortA0329",
+      "language": "cpp",
+      "time_ms": 296,
+      "submission_time": "2024-03-13T12:27:56.517685Z",
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "1b61df54f253a766dfdae80f90973bcf6cad0e707de20d714ac1de166b44b23a",
+      "custom_io": true,
+      "io_detail": "POSIX read → POSIX write",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            590,
+            593,
+            826
+          ],
+          "description": "fin/foutの内部はread/write。"
+        },
+        {
+          "lines": [
+            4884,
+            4885,
+            4893
+          ],
+          "description": "Main::runが998244353に静的modint、その他に動的modintを選択。"
+        },
+        {
+          "lines": [
+            4890,
+            4891,
+            4898,
+            4899
+          ],
+          "description": "各分岐は逐次照会。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 30,
+      "submission_id": 220423,
+      "url": "https://judge.yosupo.jp/submission/220423",
+      "user_name": "MtSaka",
+      "language": "cpp",
+      "time_ms": 298,
+      "submission_time": "2024-07-12T13:37:09.642763Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "d63209942cc63968efab7d7cf1c94a4f91072ac6504c19ca22e8bb6ae3f4352e",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            177,
+            371
+          ],
+          "description": "fastio Scanner/Printerのfread/fwrite。"
+        },
+        {
+          "lines": [
+            58,
+            60,
+            326,
+            557,
+            677,
+            682
+          ],
+          "description": "INTはscから読み、printはprを使用。"
+        },
+        {
+          "lines": [
+            1099,
+            1104
+          ],
+          "description": "入力法を設定、上限まで前計算し1照会ずつ入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 31,
+      "submission_id": 220422,
+      "url": "https://judge.yosupo.jp/submission/220422",
+      "user_name": "MtSaka",
+      "language": "cpp",
+      "time_ms": 298,
+      "submission_time": "2024-07-12T13:37:06.901376Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "d63209942cc63968efab7d7cf1c94a4f91072ac6504c19ca22e8bb6ae3f4352e",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            177,
+            371
+          ],
+          "description": "fastio Scanner/Printerのfread/fwrite。"
+        },
+        {
+          "lines": [
+            58,
+            60,
+            326,
+            557,
+            677,
+            682
+          ],
+          "description": "INTはscから読み、printはprを使用。"
+        },
+        {
+          "lines": [
+            1099,
+            1104
+          ],
+          "description": "入力法を設定、上限まで前計算し1照会ずつ入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 32,
+      "submission_id": 154448,
+      "url": "https://judge.yosupo.jp/submission/154448",
+      "user_name": "Sputnik12345",
+      "language": "cpp17",
+      "time_ms": 298,
+      "submission_time": "2023-08-08T18:50:00.218862Z",
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "86e49d3a0b2f9b7858bd012642eb0effbc8bc2e8ca6acebe59c970adb720951c",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "逐次API呼び出し。法別実装の切り替えなし。",
+      "evidence": [
+        {
+          "lines": [
+            167,
+            172,
+            279,
+            286,
+            288,
+            291
+          ],
+          "description": "main/solveからの実使用入出力と、特定法分岐を確認。cin/cout名でも独自型・マクロの場合がある。"
+        }
+      ],
+      "source_review": "review_extra_10.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 33,
+      "submission_id": 140225,
+      "url": "https://judge.yosupo.jp/submission/140225",
+      "user_name": "AC2K",
+      "language": "cpp",
+      "time_ms": 298,
+      "submission_time": null,
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "d8e14c839b1e266dab1ed4b2925e252c3e8c29f1961262257e31ac3dc21a1a89",
+      "custom_io": true,
+      "io_detail": "getchar_unlocked → putchar_unlocked",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            139,
+            149
+          ],
+          "description": "readintがgetchar_unlocked。"
+        },
+        {
+          "lines": [
+            171,
+            172
+          ],
+          "description": "putintがputchar_unlocked。"
+        },
+        {
+          "lines": [
+            188,
+            196
+          ],
+          "description": "逐次入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 34,
+      "submission_id": 146479,
+      "url": "https://judge.yosupo.jp/submission/146479",
+      "user_name": "AC2K",
+      "language": "cpp",
+      "time_ms": 300,
+      "submission_time": null,
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "58ae69a5ac51c9d79be15a90bb28d1697bb79bbb1cf7999b59ebb252363bb15d",
+      "custom_io": true,
+      "io_detail": "getchar_unlocked → putchar_unlocked",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            445,
+            452
+          ],
+          "description": "readintがgetchar_unlocked。"
+        },
+        {
+          "lines": [
+            490,
+            491
+          ],
+          "description": "putintがputchar_unlocked。"
+        },
+        {
+          "lines": [
+            528,
+            537
+          ],
+          "description": "逐次入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 35,
+      "submission_id": 143887,
+      "url": "https://judge.yosupo.jp/submission/143887",
+      "user_name": "JustinRochester",
+      "language": "cpp17",
+      "time_ms": 303,
+      "submission_time": null,
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "3c62a749e1bfa93b588c13468539e24d2f26dc9bfaee7c0c2cdc5000db892465",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法2をmain/solveで専用処理。",
+      "evidence": [
+        {
+          "lines": [
+            10,
+            27,
+            44,
+            45,
+            97,
+            100,
+            116
+          ],
+          "description": "main/solveからの実使用入出力と、特定法分岐を確認。cin/cout名でも独自型・マクロの場合がある。"
+        }
+      ],
+      "source_review": "review_extra_10.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 36,
+      "submission_id": 166836,
+      "url": "https://judge.yosupo.jp/submission/166836",
+      "user_name": "andyli",
+      "language": "cpp",
+      "time_ms": 306,
+      "submission_time": "2023-10-17T09:18:50.491845Z",
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "6188510dce8351bb5babcdd225f6d26e0c3c66db3328654041d825764d06c67e",
+      "custom_io": true,
+      "io_detail": "mmap (Unix; その他fread) → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "入出力の定義中にはfreadもあるが、通常のUnix提出経路はUSE_MMAP。",
+      "evidence": [
+        {
+          "lines": [
+            193,
+            195,
+            237,
+            249
+          ],
+          "description": "Unixかつ非debug/localではmmap入力。"
+        },
+        {
+          "lines": [
+            306,
+            308
+          ],
+          "description": "出力はfwriteバッファ。"
+        },
+        {
+          "lines": [
+            989,
+            996
+          ],
+          "description": "mainでmod==2を専用処理。"
+        },
+        {
+          "lines": [
+            1004,
+            1006
+          ],
+          "description": "それ以外は逐次照会。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 37,
+      "submission_id": 358769,
+      "url": "https://judge.yosupo.jp/submission/358769",
+      "user_name": "polosatic",
+      "language": "cpp",
+      "time_ms": 309,
+      "submission_time": "2026-03-11T07:34:30.23308Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "1145c8ce834b5fed0ba81a12edfa0e9ffeaf7753e30fdc4f9654518d02102160",
+      "custom_io": true,
+      "io_detail": "fread → std::cout",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": true,
+      "optimization_pragma": false,
+      "notes": "照会自体の事前読み込み/並べ替えはない。全件の結果文字列蓄積はある。",
+      "evidence": [
+        {
+          "lines": [
+            11,
+            111,
+            114
+          ],
+          "description": "FastInputをcinにマクロ置換しfreadで入力。"
+        },
+        {
+          "lines": [
+            120,
+            129
+          ],
+          "description": "各照会は逐次計算するが結果文字列をmain内で全件連結し最後にcoutへ出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 38,
+      "submission_id": 143945,
+      "url": "https://judge.yosupo.jp/submission/143945",
+      "user_name": "JustinRochester",
+      "language": "cpp17",
+      "time_ms": 312,
+      "submission_time": null,
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "5d6be48339532f35c873ef174a0f9e95ae84d6acf3def4f5929bcad3e3e60145",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法2をmain/solveで専用処理。",
+      "evidence": [
+        {
+          "lines": [
+            10,
+            27,
+            44,
+            45,
+            95,
+            98,
+            114
+          ],
+          "description": "main/solveからの実使用入出力と、特定法分岐を確認。cin/cout名でも独自型・マクロの場合がある。"
+        }
+      ],
+      "source_review": "review_extra_10.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 39,
+      "submission_id": 143943,
+      "url": "https://judge.yosupo.jp/submission/143943",
+      "user_name": "JustinRochester",
+      "language": "cpp17",
+      "time_ms": 312,
+      "submission_time": null,
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "44333616a41d4b1275e71e4317f4f078c6427cba37392114b54ed8724b29cb20",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法2をmain/solveで専用処理。",
+      "evidence": [
+        {
+          "lines": [
+            10,
+            27,
+            44,
+            45,
+            95,
+            98,
+            114
+          ],
+          "description": "main/solveからの実使用入出力と、特定法分岐を確認。cin/cout名でも独自型・マクロの場合がある。"
+        }
+      ],
+      "source_review": "review_extra_10.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 40,
+      "submission_id": 210037,
+      "url": "https://judge.yosupo.jp/submission/210037",
+      "user_name": "Kiffaz11",
+      "language": "cpp",
+      "time_ms": 313,
+      "submission_time": "2024-05-20T05:17:08.9897Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "35e5dce007ac70c54973c032a8f9e27365530c79d4c16f97f9f4964e9e9d51b6",
+      "custom_io": true,
+      "io_detail": "POSIX read → POSIX write",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "先頭のGCC最適化/target pragmaは全てコメントアウト。#pragma onceはあるが最適化指定ではない。",
+      "evidence": [
+        {
+          "lines": [
+            308,
+            364
+          ],
+          "description": "yosupo::Scanner/Printerのread/write。"
+        },
+        {
+          "lines": [
+            547,
+            548
+          ],
+          "description": "stdin/stdoutからsc/prを生成。"
+        },
+        {
+          "lines": [
+            726,
+            732
+          ],
+          "description": "solveから逐次入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 41,
+      "submission_id": 210469,
+      "url": "https://judge.yosupo.jp/submission/210469",
+      "user_name": "Kiffaz11",
+      "language": "cpp",
+      "time_ms": 315,
+      "submission_time": "2024-05-21T12:19:42.057889Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "7dbc4a8caec879b4f46057d9a144960cae12d01825e28ecdfe0024f37da192cb",
+      "custom_io": true,
+      "io_detail": "POSIX read → POSIX write",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "先頭のGCC最適化/target pragmaは全てコメントアウト。#pragma onceはあるが最適化指定ではない。",
+      "evidence": [
+        {
+          "lines": [
+            328,
+            384
+          ],
+          "description": "yosupo::Scanner/Printerのread/write。"
+        },
+        {
+          "lines": [
+            567,
+            568
+          ],
+          "description": "stdin/stdoutからsc/prを生成。"
+        },
+        {
+          "lines": [
+            1137,
+            1143
+          ],
+          "description": "solveから逐次入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 42,
+      "submission_id": 358768,
+      "url": "https://judge.yosupo.jp/submission/358768",
+      "user_name": "polosatic",
+      "language": "cpp",
+      "time_ms": 322,
+      "submission_time": "2026-03-11T07:33:44.91458Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "91ce48f275757787485c61335f7b2970f5b928faa2eacc66f71c1df245369c96",
+      "custom_io": true,
+      "io_detail": "fread → std::cout",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            11,
+            111,
+            114
+          ],
+          "description": "FastInputをcinへマクロ置換。"
+        },
+        {
+          "lines": [
+            120,
+            123
+          ],
+          "description": "逐次入力・計算・cout出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 43,
+      "submission_id": 411962,
+      "url": "https://judge.yosupo.jp/submission/411962",
+      "user_name": "reinsirk",
+      "language": "cpp",
+      "time_ms": 323,
+      "submission_time": "2026-10-20T08:52:41.891563Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "545f1648dea2daf898727bffc96baa65a32422b4ca35a9cc29c62b7e9b7b975f",
+      "custom_io": false,
+      "io_detail": "std::cin → std::cout",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "入力法に応じて前計算上限をminで決める通常の初期化のみ。入力分布に応じたmainの実装切替はない。",
+      "evidence": [
+        {
+          "lines": [
+            1231,
+            1232
+          ],
+          "description": "sync_with_stdio(false),cin.tie(nullptr)。"
+        },
+        {
+          "lines": [
+            1236,
+            1245
+          ],
+          "description": "std::cin/std::coutを逐次使用。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 44,
+      "submission_id": 267162,
+      "url": "https://judge.yosupo.jp/submission/267162",
+      "user_name": "miscalc",
+      "language": "cpp",
+      "time_ms": 323,
+      "submission_time": "2025-02-11T23:29:43.196169Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "9ae96399e0d3638161f4145896264447e78b98b68256b10cdde439de4c289c9b",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "最初にM/2で1000まで前計算してから入力Mへ戻す。10000000までの事前確保はコメントアウト。これらはmainの余分な初期化だが特定法に応じた分岐ではない。coutのsetprecisionはあるが整数の実出力はfastio。",
+      "evidence": [
+        {
+          "lines": [
+            5
+          ],
+          "description": "FAST_IOが有効。"
+        },
+        {
+          "lines": [
+            862,
+            868
+          ],
+          "description": "入力fread・出力fwrite。"
+        },
+        {
+          "lines": [
+            1111,
+            1116,
+            1259,
+            1264
+          ],
+          "description": "FAST_IO時にREAD/PRINTがfastioに接続。"
+        },
+        {
+          "lines": [
+            2031,
+            2040
+          ],
+          "description": "main2で1照会ずつ入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 45,
+      "submission_id": 265146,
+      "url": "https://judge.yosupo.jp/submission/265146",
+      "user_name": "kk2a",
+      "language": "cpp",
+      "time_ms": 326,
+      "submission_time": "2025-02-02T14:04:24.169525Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "5d5af30b1e7fb37b3d85c2332ef5857ec558ec2f5356725981f7fe85e82300b8",
+      "custom_io": true,
+      "io_detail": "自作fread/fwriteバッファ",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "kin/koutはINTERACTIVE/USE_STDIO未定義なので自作Scanner/Printer。1件ずつ入出力。全件前計算をmainで実施。",
+      "evidence": {
+        "input": [
+          481,
+          499
+        ],
+        "output": [
+          613
+        ],
+        "selection": [
+          752,
+          759
+        ],
+        "calls": [
+          930,
+          938
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 46,
+      "submission_id": 210445,
+      "url": "https://judge.yosupo.jp/submission/210445",
+      "user_name": "Kiffaz11",
+      "language": "cpp",
+      "time_ms": 328,
+      "submission_time": "2024-05-21T09:10:03.048552Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "98a1ec9a8a5217faa677ce8ca573bfbea29b9f6579f58ac17fe8d5843a61d713",
+      "custom_io": true,
+      "io_detail": "自作POSIX read/writeバッファ（yosupo Scanner/Printer）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "FTはcin設定のみで、実計算I/Oはsc/pr。上部GCC最適化pragmaはすべてコメント。",
+      "evidence": {
+        "input": [
+          217,
+          308
+        ],
+        "output": [
+          364
+        ],
+        "instances": [
+          547,
+          548
+        ],
+        "calls": [
+          755,
+          762
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 47,
+      "submission_id": 411965,
+      "url": "https://judge.yosupo.jp/submission/411965",
+      "user_name": "reinsirk",
+      "language": "cpp",
+      "time_ms": 330,
+      "submission_time": "2026-10-20T09:46:36.965985Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "5197f30d608627b9fa332f54d8b8f4755f33448adaec6ff4c33beb7a86bc99b7",
+      "custom_io": false,
+      "io_detail": "std::cin/std::cout（同期解除・tie解除）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法依存の前計算上限minはあるが、法別実装切り替えなし。",
+      "evidence": {
+        "setup": [
+          2103,
+          2104
+        ],
+        "calls": [
+          2108,
+          2117,
+          2118
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 48,
+      "submission_id": 272638,
+      "url": "https://judge.yosupo.jp/submission/272638",
+      "user_name": "wkywkywky",
+      "language": "cpp",
+      "time_ms": 332,
+      "submission_time": "2025-03-11T08:49:50.794701Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "fa10c499d4b61c05d55e5d5af45be67b430e7600d9ef332a6f130c6908712eea",
+      "custom_io": true,
+      "io_detail": "自作getchar整数入力＋printf出力",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法依存の前計算上限minのみ。",
+      "evidence": {
+        "input": [
+          21,
+          25
+        ],
+        "calls": [
+          28,
+          36,
+          37
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 49,
+      "submission_id": 196633,
+      "url": "https://judge.yosupo.jp/submission/196633",
+      "user_name": "sortA0329",
+      "language": "cpp",
+      "time_ms": 333,
+      "submission_time": "2024-03-13T12:29:13.543404Z",
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "ad7e8f0fbe1e790eb835d98a6d2c2a6be1708040e0067235ca2b55c9fb758d41",
+      "custom_io": true,
+      "io_detail": "自作POSIX read/writeバッファ（fin/fout）",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "m==998244353をStaticModint32、それ以外を動的modintへ分岐。未使用のstd::cin/cout設定やMain::ifs/ofsに誤分類しない。",
+      "evidence": {
+        "input": [
+          580,
+          590,
+          593
+        ],
+        "output": [
+          820,
+          826
+        ],
+        "feature": [
+          4868,
+          4869
+        ],
+        "calls": [
+          4884,
+          4899
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 50,
+      "submission_id": 411941,
+      "url": "https://judge.yosupo.jp/submission/411941",
+      "user_name": "reinsirk",
+      "language": "cpp",
+      "time_ms": 334,
+      "submission_time": "2026-10-20T05:08:32.906522Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "ce2c073857b036079ee73e648454af834d58dc85b4cb46f9055c79cbd3d6a6d0",
+      "custom_io": false,
+      "io_detail": "std::cin/std::cout（同期解除・tie解除）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法依存の前計算上限minのみ。",
+      "evidence": {
+        "setup": [
+          1148,
+          1149
+        ],
+        "calls": [
+          1153,
+          1161,
+          1162
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    }
+  ],
+  "summary_cpp_only": {
+    "submissions": 50,
+    "custom_input_or_output": 35,
+    "standard_iostream_only": 15,
+    "specific_mod_dispatch_in_main_or_solve": 13,
+    "query_accumulation": 5,
+    "query_reordering": 0,
+    "output_accumulation_in_main": 6,
+    "optimization_pragma_including_conditional": 11,
+    "is_latest_false": 6,
+    "unique_source_hashes": 48,
+    "duplicate_source_submission_groups": [
+      [
+        223248,
+        406024
+      ],
+      [
+        220423,
+        220422
+      ]
+    ],
+    "named_users": 23,
+    "anonymous_submissions": 1,
+    "language_counts": {
+      "cpp": 50
+    }
+  },
+  "cpp_only_rows": [
+    {
+      "rank": 1,
+      "submission_id": 223248,
+      "url": "https://judge.yosupo.jp/submission/223248",
+      "user_name": "sortA0329",
+      "language": "cpp",
+      "time_ms": 182,
+      "submission_time": "2024-07-25T11:02:45.365515Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "d919d0786693855601ea112b3b9f07f837d78815d2c5f47eb16b249531881ca5",
+      "custom_io": true,
+      "io_detail": "gsh::BasicReader/BasicWriterの独自数値変換、POSIX read/write。入力・出力は各256KiBバッファ。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "MmapReaderも定義されるが実使用されない。1位と5位はソース内容が同じ。",
+      "evidence": [
+        {
+          "lines": 778,
+          "description": "BasicReader定義"
+        },
+        {
+          "lines": 807,
+          "description": "BasicReader::reloadのread"
+        },
+        {
+          "lines": 854,
+          "description": "BasicWriter定義"
+        },
+        {
+          "lines": 874,
+          "description": "BasicWriter::reloadのwrite"
+        },
+        {
+          "lines": "2871-2872",
+          "description": "実使用r/wの型はBasicReader/BasicWriter"
+        },
+        {
+          "lines": "2880-2900",
+          "description": "MainでParser/Formatterを使用、法で分岐後は各照会を逐次処理"
+        },
+        {
+          "lines": "2904-2907",
+          "description": "mainからMain呼び出しと出力flush"
+        },
+        {
+          "lines": "1-3",
+          "description": "Ofast、unroll-loops、avx2"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "Mainで998244353、1000000007を固定法専用テーブルへ切替。"
+    },
+    {
+      "rank": 2,
+      "submission_id": 196412,
+      "url": "https://judge.yosupo.jp/submission/196412",
+      "user_name": "sortA0329",
+      "language": "cpp",
+      "time_ms": 186,
+      "submission_time": "2024-03-12T10:09:28.336608Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "a9368a4511a0d0a9e3a13faf8f460feab7a8a61eda4bddea549eb8d96c523672",
+      "custom_io": true,
+      "io_detail": "FastIstream fin / FastOstream foutによる独自数値変換、POSIX read/write。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "mainにcin/coutの同期解除はあるが問題の実使用I/Oはfin/fout。",
+      "evidence": [
+        {
+          "lines": 580,
+          "description": "FastIstream定義"
+        },
+        {
+          "lines": "590-593",
+          "description": "readから入力バッファ補充"
+        },
+        {
+          "lines": 819,
+          "description": "finインスタンス"
+        },
+        {
+          "lines": "820-826",
+          "description": "FastOstreamとwrite出力"
+        },
+        {
+          "lines": 1157,
+          "description": "foutインスタンス"
+        },
+        {
+          "lines": "4854-4874",
+          "description": "Main::runからfin/fout使用、逐次照会"
+        },
+        {
+          "lines": "17-25",
+          "description": "EVAL時ONLINE_JUDGE定義、GCC最適化pragmaを条件適用"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "Main::runで998244353を固定法専用テーブルへ切替。"
+    },
+    {
+      "rank": 3,
+      "submission_id": 196634,
+      "url": "https://judge.yosupo.jp/submission/196634",
+      "user_name": "sortA0329",
+      "language": "cpp",
+      "time_ms": 187,
+      "submission_time": "2024-03-13T12:30:48.999122Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "6b8ee754632c552697550017b84115fd3f680d3b8d053ab7358fcb4e79571f11",
+      "custom_io": true,
+      "io_detail": "FastIstream fin / FastOstream foutによる独自数値変換、POSIX read/write。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "mainにcin/coutの同期解除はあるが問題の実使用I/Oはfin/fout。",
+      "evidence": [
+        {
+          "lines": 580,
+          "description": "FastIstream定義"
+        },
+        {
+          "lines": "590-593",
+          "description": "readから入力バッファ補充"
+        },
+        {
+          "lines": 819,
+          "description": "finインスタンス"
+        },
+        {
+          "lines": "820-826",
+          "description": "FastOstreamとwrite出力"
+        },
+        {
+          "lines": 1157,
+          "description": "foutインスタンス"
+        },
+        {
+          "lines": "4861-4883",
+          "description": "Main::runからfin/fout使用、逐次照会"
+        },
+        {
+          "lines": "17-25",
+          "description": "EVAL時ONLINE_JUDGE定義、GCC最適化pragmaを条件適用"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "Main::runで998244353を固定法専用テーブルへ切替。"
+    },
+    {
+      "rank": 4,
+      "submission_id": 171539,
+      "url": "https://judge.yosupo.jp/submission/171539",
+      "user_name": "maspy",
+      "language": "cpp",
+      "time_ms": 194,
+      "submission_time": "2023-11-13T03:44:41.687191Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "67bccf5eef73ba2b90c3e27eb77032620e9e02ee9b7283213f8e15bc2c4e6e8a",
+      "custom_io": true,
+      "io_detail": "fastio::read/printで独自整数変換とfread/fwriteバッファ。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": 255,
+          "description": "fread補充"
+        },
+        {
+          "lines": 261,
+          "description": "fwrite出力"
+        },
+        {
+          "lines": "445-458",
+          "description": "printと名前取り込み"
+        },
+        {
+          "lines": "460-468",
+          "description": "INT/U32マクロはreadを呼ぶ"
+        },
+        {
+          "lines": "559-587",
+          "description": "solveで入力・法2分岐・各照会逐次処理"
+        },
+        {
+          "lines": "590-591",
+          "description": "mainはsolveを呼ぶ"
+        },
+        {
+          "lines": "5-6",
+          "description": "Ofast/unroll-loops"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "solveで法2は直接ビット式、その他はMontgomeryを使う。"
+    },
+    {
+      "rank": 5,
+      "submission_id": 406024,
+      "url": "https://judge.yosupo.jp/submission/406024",
+      "user_name": "Rohan_Kapri",
+      "language": "cpp",
+      "time_ms": 197,
+      "submission_time": "2026-09-25T06:56:26.567313Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "d919d0786693855601ea112b3b9f07f837d78815d2c5f47eb16b249531881ca5",
+      "custom_io": true,
+      "io_detail": "gsh::BasicReader/BasicWriterの独自数値変換、POSIX read/write。入力・出力は各256KiBバッファ。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "MmapReaderも定義されるが実使用されない。1位と5位はソース内容が同じ。",
+      "evidence": [
+        {
+          "lines": 778,
+          "description": "BasicReader定義"
+        },
+        {
+          "lines": 807,
+          "description": "BasicReader::reloadのread"
+        },
+        {
+          "lines": 854,
+          "description": "BasicWriter定義"
+        },
+        {
+          "lines": 874,
+          "description": "BasicWriter::reloadのwrite"
+        },
+        {
+          "lines": "2871-2872",
+          "description": "実使用r/wの型はBasicReader/BasicWriter"
+        },
+        {
+          "lines": "2880-2900",
+          "description": "MainでParser/Formatterを使用、法で分岐後は各照会を逐次処理"
+        },
+        {
+          "lines": "2904-2907",
+          "description": "mainからMain呼び出しと出力flush"
+        },
+        {
+          "lines": "1-3",
+          "description": "Ofast、unroll-loops、avx2"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "Mainで998244353、1000000007を固定法専用テーブルへ切替。"
+    },
+    {
+      "rank": 6,
+      "submission_id": 196406,
+      "url": "https://judge.yosupo.jp/submission/196406",
+      "user_name": "sortA0329",
+      "language": "cpp",
+      "time_ms": 203,
+      "submission_time": "2024-03-12T10:04:00.011947Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "30060e94792e8382a1e30c63bfa79c0a6d6bd75a30e42cd71741f37b3a1a0448",
+      "custom_io": true,
+      "io_detail": "FastIstream fin / FastOstream foutによる独自数値変換、POSIX read/write。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "mainにcin/coutの同期解除はあるが問題の実使用I/Oはfin/fout。",
+      "evidence": [
+        {
+          "lines": 580,
+          "description": "FastIstream定義"
+        },
+        {
+          "lines": "590-593",
+          "description": "readから入力バッファ補充"
+        },
+        {
+          "lines": 819,
+          "description": "finインスタンス"
+        },
+        {
+          "lines": "820-826",
+          "description": "FastOstreamとwrite出力"
+        },
+        {
+          "lines": 1157,
+          "description": "foutインスタンス"
+        },
+        {
+          "lines": "4836-4847",
+          "description": "Main::runからfin/fout使用、逐次照会"
+        },
+        {
+          "lines": "17-25",
+          "description": "EVAL時ONLINE_JUDGE定義、GCC最適化pragmaを条件適用"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 7,
+      "submission_id": 411936,
+      "url": "https://judge.yosupo.jp/submission/411936",
+      "user_name": "reinsirk",
+      "language": "cpp",
+      "time_ms": 230,
+      "submission_time": "2026-10-20T04:39:17.395205Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "0663e04d77b1bdeb1eb7c4a01b91e65e6b3f1061a2df3b87f64cecc97e436f0d",
+      "custom_io": true,
+      "io_detail": "main内の独自パーサ、64KiB freadバッファ、to_charsと64KiB fwrite出力。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "自ライブラリの旧提出。mainは特定法の切替・照会蓄積をしない。出力バッファは通常の入出力処理。",
+      "evidence": [
+        {
+          "lines": "1030-1046",
+          "description": "mainのget/readラムダ"
+        },
+        {
+          "lines": "1048-1054",
+          "description": "入力と任意法ライブラリ初期化"
+        },
+        {
+          "lines": "1055-1067",
+          "description": "各照会を入力直後にCOMして出力バッファへ格納"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 8,
+      "submission_id": 219446,
+      "url": "https://judge.yosupo.jp/submission/219446",
+      "user_name": "andyli",
+      "language": "cpp",
+      "time_ms": 252,
+      "submission_time": "2024-07-06T16:20:55.612412Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "91c07c3c9cad25666e83406d022cbc363506e6c63fe91b74337b900cff5c67f0",
+      "custom_io": true,
+      "io_detail": "独自IO、Linux本番ではmmap入力、fwriteによる出力バッファ。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "fread入力コードは非USE_MMAPの代替でありLinux本番経路では使わない。",
+      "evidence": [
+        {
+          "lines": "243-247",
+          "description": "__unix__かつ非LX_LOCALでUSE_MMAP"
+        },
+        {
+          "lines": "296-309",
+          "description": "mmap入力経路"
+        },
+        {
+          "lines": 492,
+          "description": "fwrite出力flush"
+        },
+        {
+          "lines": "599-601",
+          "description": "dRがio.readを呼ぶ"
+        },
+        {
+          "lines": 614,
+          "description": "printがio.printを呼ぶ"
+        },
+        {
+          "lines": "954-968",
+          "description": "mainの法2分岐後に各照会逐次処理"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "mainで法2専用結果、その他を動的Montgomeryへ。"
+    },
+    {
+      "rank": 9,
+      "submission_id": 315722,
+      "url": "https://judge.yosupo.jp/submission/315722",
+      "user_name": "zwezdinv",
+      "language": "cpp",
+      "time_ms": 256,
+      "submission_time": "2025-09-20T10:12:04.599583Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "0a2f9cb4bd570c9bdace6f790cec501a5437d557609e87162a2e796cd806fe2f",
+      "custom_io": true,
+      "io_detail": "std::cin/coutという記述だがマクロで独自i$/o$へ差替。通常ファイルはmmap、その他は直接syscallの入力。出力はmmap確保したバッファへ蓄積しwrite。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "出力結果を最後までバッファへ蓄積するI/O。照会そのものは保持・並替しない。pragmaはないが、AVX2 target属性付き未使用文字列I/O関数はある。",
+      "evidence": [
+        {
+          "lines": 56,
+          "description": "独自入力Gとi$。fstatで通常ファイルを判定してmmapまたはsyscall入力"
+        },
+        {
+          "lines": 57,
+          "description": "独自出力o$とwrite、std内へ独自I/Oインスタンス定義"
+        },
+        {
+          "lines": "59-60",
+          "description": "cin/coutマクロによる置換"
+        },
+        {
+          "lines": "149-183",
+          "description": "mainは法2を専用処理、照会は逐次計算"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "mainで法2はn>=kを直接出力、その他はMontgomeryの階乗表。"
+    },
+    {
+      "rank": 10,
+      "submission_id": 267167,
+      "url": "https://judge.yosupo.jp/submission/267167",
+      "user_name": "miscalc",
+      "language": "cpp",
+      "time_ms": 260,
+      "submission_time": "2025-02-11T23:48:14.395817Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "7acd9215368879a35957e8bce02a6088b8c029d451c514675df2734eb163de54",
+      "custom_io": true,
+      "io_detail": "FAST_IOが有効。LL→internal::READnodump→fastio::read、PRINT→fastio::print、fread/fwrite。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "特定法への条件分岐はないが、本入力法を設定する前に200003を設定して1000要素reserveする前処理がある（2033-2036行）。",
+      "evidence": [
+        {
+          "lines": 5,
+          "description": "FAST_IO定義"
+        },
+        {
+          "lines": "862-868",
+          "description": "fread/fwrite"
+        },
+        {
+          "lines": "1111-1116",
+          "description": "FAST_IOでREADnodumpをfastioへ"
+        },
+        {
+          "lines": "1259-1264",
+          "description": "PRINTマクロの経路"
+        },
+        {
+          "lines": "2030-2040",
+          "description": "main2は入力・法変更・reserve・逐次照会"
+        },
+        {
+          "lines": "2110-2112",
+          "description": "SINGLE_TESTCASEでmain2を呼ぶ"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 11,
+      "submission_id": 251189,
+      "url": "https://judge.yosupo.jp/submission/251189",
+      "user_name": "jinhan814",
+      "language": "cpp",
+      "time_ms": 265,
+      "submission_time": "2024-11-21T05:06:59.486695Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "e44f64419b9c87af5060e70b2803f57e4e2fd42f2281e1b143adb5ba17d1cb1a",
+      "custom_io": false,
+      "io_detail": "標準cin/cout、同期解除・tie解除。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": true,
+      "query_reordering": false,
+      "output_accumulation_in_main": true,
+      "optimization_pragma": false,
+      "notes": "fastioという名前だが独自I/Oではない。",
+      "evidence": [
+        {
+          "lines": 2,
+          "description": "fastioマクロはcin.tie(0)->sync_with_stdio(0)"
+        },
+        {
+          "lines": "38-45",
+          "description": "mainで全照会をvectorに読み、solで全計算後、全結果をcoutへ出力"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 12,
+      "submission_id": 251181,
+      "url": "https://judge.yosupo.jp/submission/251181",
+      "user_name": "jinhan814",
+      "language": "cpp",
+      "time_ms": 265,
+      "submission_time": "2024-11-21T04:27:45.114796Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "33a6c81de3f0f10385b62504fee947a90c3d84846bc116406abe7298212669b6",
+      "custom_io": false,
+      "io_detail": "標準cin/cout、同期解除・tie解除。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": true,
+      "query_reordering": false,
+      "output_accumulation_in_main": true,
+      "optimization_pragma": false,
+      "notes": "fastioという名前だが独自I/Oではない。",
+      "evidence": [
+        {
+          "lines": 2,
+          "description": "fastioマクロはcin.tie(0)->sync_with_stdio(0)"
+        },
+        {
+          "lines": "40-47",
+          "description": "mainで全照会をvectorに読み、solで全計算後、全結果をcoutへ出力"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 13,
+      "submission_id": 251180,
+      "url": "https://judge.yosupo.jp/submission/251180",
+      "user_name": "jinhan814",
+      "language": "cpp",
+      "time_ms": 265,
+      "submission_time": "2024-11-21T04:25:43.020356Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "83d8dc5262c80bb336ab51e2a0d6f3acddba49680fde160bd80ec53695f91b58",
+      "custom_io": false,
+      "io_detail": "標準cin/cout、同期解除・tie解除。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": true,
+      "query_reordering": false,
+      "output_accumulation_in_main": true,
+      "optimization_pragma": false,
+      "notes": "fastioという名前だが独自I/Oではない。 法2の指数0用の初期値分岐はあるがアルゴリズム切替には数えない。",
+      "evidence": [
+        {
+          "lines": 2,
+          "description": "fastioマクロはcin.tie(0)->sync_with_stdio(0)"
+        },
+        {
+          "lines": "40-47",
+          "description": "mainで全照会をvectorに読み、solで全計算後、全結果をcoutへ出力"
+        },
+        {
+          "lines": 24,
+          "description": "mod>2ならpow、法2なら逆階乗の初期値1という局所的数式分岐"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 14,
+      "submission_id": 251169,
+      "url": "https://judge.yosupo.jp/submission/251169",
+      "user_name": "jinhan814",
+      "language": "cpp",
+      "time_ms": 265,
+      "submission_time": "2024-11-21T04:00:41.040579Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "0749f0263776538b8b95130abd0c9d4b049f19d0006d1d0a0904ed6cf22ffc44",
+      "custom_io": false,
+      "io_detail": "標準cin/cout、同期解除・tie解除。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": true,
+      "query_reordering": false,
+      "output_accumulation_in_main": true,
+      "optimization_pragma": false,
+      "notes": "fastioという名前だが独自I/Oではない。",
+      "evidence": [
+        {
+          "lines": 2,
+          "description": "fastioマクロはcin.tie(0)->sync_with_stdio(0)"
+        },
+        {
+          "lines": "50-57",
+          "description": "mainで全照会をvectorに読み、solで全計算後、全結果をcoutへ出力"
+        },
+        {
+          "lines": "7-17",
+          "description": "sol_mod_2とsolの法2分岐"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "solで法2だけ直接ビット判定へ切替。"
+    },
+    {
+      "rank": 15,
+      "submission_id": 251170,
+      "url": "https://judge.yosupo.jp/submission/251170",
+      "user_name": "jinhan814",
+      "language": "cpp",
+      "time_ms": 266,
+      "submission_time": "2024-11-21T04:00:53.703917Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "21401d111654eef822bf5dbb30dc4aab39079a0acce0d273f099c1e17642bc90",
+      "custom_io": false,
+      "io_detail": "標準cin/cout、同期解除・tie解除。",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": true,
+      "query_reordering": false,
+      "output_accumulation_in_main": true,
+      "optimization_pragma": false,
+      "notes": "fastioという名前だが独自I/Oではない。",
+      "evidence": [
+        {
+          "lines": 2,
+          "description": "fastioマクロはcin.tie(0)->sync_with_stdio(0)"
+        },
+        {
+          "lines": "50-57",
+          "description": "mainで全照会をvectorに読み、solで全計算後、全結果をcoutへ出力"
+        },
+        {
+          "lines": "7-17",
+          "description": "sol_mod_2とsolの法2分岐"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": "solで法2だけ直接ビット判定へ切替。"
+    },
+    {
+      "rank": 16,
+      "submission_id": 264041,
+      "url": "https://judge.yosupo.jp/submission/264041",
+      "user_name": "Taiki0715",
+      "language": "cpp",
+      "time_ms": 272,
+      "submission_time": "2025-01-28T09:07:16.41787Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "47c6ef9c5de2937b67bd1b11c5304c89f547fc8603f25300f8d0bb22a9124aa7",
+      "custom_io": true,
+      "io_detail": "fastio::rd/wtによる独自整数変換、fread/fwriteバッファ。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": "26-30",
+          "description": "fread/fwrite"
+        },
+        {
+          "lines": "159-160",
+          "description": "rd/wtを名前取り込み"
+        },
+        {
+          "lines": "613-621",
+          "description": "mainで一度初期化、各照会を逐次入力→C→出力"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 17,
+      "submission_id": 314336,
+      "url": "https://judge.yosupo.jp/submission/314336",
+      "user_name": "ssmkybb",
+      "language": "cpp",
+      "time_ms": 277,
+      "submission_time": "2025-09-12T22:30:19.082586Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "df6dee13fdbc24ead7bbdba33449095d2ad5475ea537994c6c2405e066d77de4",
+      "custom_io": true,
+      "io_detail": "cin/coutはマクロでFIstream/FOstreamへ差替、fread/fwrite各128KiBバッファ。",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "見かけ上cin/coutだが標準ストリームではない。階乗初期化はcombの初回呼び出し時（25行）。",
+      "evidence": [
+        {
+          "lines": 4,
+          "description": "独自FIstream/FOstreamとfread/fwrite"
+        },
+        {
+          "lines": "5-8",
+          "description": "cin/coutマクロ"
+        },
+        {
+          "lines": "42-50",
+          "description": "mainは逐次入力→comb→出力"
+        }
+      ],
+      "source_review": "review_01_17.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 18,
+      "submission_id": 267160,
+      "url": "https://judge.yosupo.jp/submission/267160",
+      "user_name": "miscalc",
+      "language": "cpp",
+      "time_ms": 277,
+      "submission_time": "2025-02-11T23:23:34.804824Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "6d10724df95b19d2e7fe6351cffb1c7cce3ca61975d4819382f91fe075d9d16e",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "最初にM/2で1000まで前計算してから入力Mへ戻す。その後10000000まで事前確保。これらはmainの余分な初期化だが特定法に応じた分岐ではない。coutのsetprecisionはあるが整数の実出力はfastio。",
+      "evidence": [
+        {
+          "lines": [
+            5
+          ],
+          "description": "FAST_IOが有効。"
+        },
+        {
+          "lines": [
+            862,
+            868
+          ],
+          "description": "入力fread・出力fwrite。"
+        },
+        {
+          "lines": [
+            1111,
+            1116,
+            1259,
+            1264
+          ],
+          "description": "FAST_IO時にREAD/PRINTがfastioに接続。"
+        },
+        {
+          "lines": [
+            2031,
+            2040
+          ],
+          "description": "main2で1照会ずつ入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 19,
+      "submission_id": 217008,
+      "url": "https://judge.yosupo.jp/submission/217008",
+      "user_name": "kaage",
+      "language": "cpp",
+      "time_ms": 284,
+      "submission_time": "2024-06-25T08:49:37.961594Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "e0575f664225cecc9320beaa79f1934d2dbc767222a46260dd1cb3703f28689a",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            905,
+            906
+          ],
+          "description": "cin/coutという変数名だがFastIO::Scanner/Printer型。"
+        },
+        {
+          "lines": [
+            271,
+            290,
+            421
+          ],
+          "description": "Scannerはfread、Printerはfwrite。"
+        },
+        {
+          "lines": [
+            908,
+            918
+          ],
+          "description": "逐次照会。n<kのみ数学的0判定。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 20,
+      "submission_id": 217005,
+      "url": "https://judge.yosupo.jp/submission/217005",
+      "user_name": "kaage",
+      "language": "cpp",
+      "time_ms": 291,
+      "submission_time": "2024-06-25T08:39:03.085343Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "3d8ca474355c77c7d4fd1e512fbcd0a247769386d55f9c1828757b0971a4d415",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            886,
+            887
+          ],
+          "description": "cin/coutという変数名だがFastIO::Scanner/Printer型。"
+        },
+        {
+          "lines": [
+            271,
+            290,
+            421
+          ],
+          "description": "Scannerはfread、Printerはfwrite。"
+        },
+        {
+          "lines": [
+            889,
+            899
+          ],
+          "description": "逐次照会。n<kのみ数学的0判定。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 21,
+      "submission_id": 171538,
+      "url": "https://judge.yosupo.jp/submission/171538",
+      "user_name": "maspy",
+      "language": "cpp",
+      "time_ms": 291,
+      "submission_time": "2023-11-13T03:42:07.449112Z",
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "3f44f9684d1ce411c99a289143819d0b8bcbe2b65a0f098af185732cdca41e77",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "mod==2の専用処理はmainから呼ぶsolve内。",
+      "evidence": [
+        {
+          "lines": [
+            255,
+            261
+          ],
+          "description": "fastioのバッファ補充・排出。"
+        },
+        {
+          "lines": [
+            456,
+            458,
+            460,
+            468
+          ],
+          "description": "read/printとINT/U32マクロからfastioを使用。"
+        },
+        {
+          "lines": [
+            561,
+            570
+          ],
+          "description": "solveがmod==2で専用式に分岐。"
+        },
+        {
+          "lines": [
+            576,
+            584
+          ],
+          "description": "それ以外は1照会ずつ計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 22,
+      "submission_id": 267165,
+      "url": "https://judge.yosupo.jp/submission/267165",
+      "user_name": "miscalc",
+      "language": "cpp",
+      "time_ms": 292,
+      "submission_time": "2025-02-11T23:43:15.070293Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "bbe89ddf8f7bd239edaf1f9bd8fd5d6a981cc26b2132c529069ff60d4e27e621",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "最初に200003で1000まで前計算してから入力Mへ戻す。その後10000000まで事前確保。これらはmainの余分な初期化だが特定法に応じた分岐ではない。coutのsetprecisionはあるが整数の実出力はfastio。",
+      "evidence": [
+        {
+          "lines": [
+            5
+          ],
+          "description": "FAST_IOが有効。"
+        },
+        {
+          "lines": [
+            862,
+            868
+          ],
+          "description": "入力fread・出力fwrite。"
+        },
+        {
+          "lines": [
+            1111,
+            1116,
+            1259,
+            1264
+          ],
+          "description": "FAST_IO時にREAD/PRINTがfastioに接続。"
+        },
+        {
+          "lines": [
+            2032,
+            2040
+          ],
+          "description": "main2で1照会ずつ入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 23,
+      "submission_id": 196632,
+      "url": "https://judge.yosupo.jp/submission/196632",
+      "user_name": "sortA0329",
+      "language": "cpp",
+      "time_ms": 296,
+      "submission_time": "2024-03-13T12:27:56.517685Z",
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "1b61df54f253a766dfdae80f90973bcf6cad0e707de20d714ac1de166b44b23a",
+      "custom_io": true,
+      "io_detail": "POSIX read → POSIX write",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            590,
+            593,
+            826
+          ],
+          "description": "fin/foutの内部はread/write。"
+        },
+        {
+          "lines": [
+            4884,
+            4885,
+            4893
+          ],
+          "description": "Main::runが998244353に静的modint、その他に動的modintを選択。"
+        },
+        {
+          "lines": [
+            4890,
+            4891,
+            4898,
+            4899
+          ],
+          "description": "各分岐は逐次照会。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 24,
+      "submission_id": 220423,
+      "url": "https://judge.yosupo.jp/submission/220423",
+      "user_name": "MtSaka",
+      "language": "cpp",
+      "time_ms": 298,
+      "submission_time": "2024-07-12T13:37:09.642763Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "d63209942cc63968efab7d7cf1c94a4f91072ac6504c19ca22e8bb6ae3f4352e",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            177,
+            371
+          ],
+          "description": "fastio Scanner/Printerのfread/fwrite。"
+        },
+        {
+          "lines": [
+            58,
+            60,
+            326,
+            557,
+            677,
+            682
+          ],
+          "description": "INTはscから読み、printはprを使用。"
+        },
+        {
+          "lines": [
+            1099,
+            1104
+          ],
+          "description": "入力法を設定、上限まで前計算し1照会ずつ入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 25,
+      "submission_id": 220422,
+      "url": "https://judge.yosupo.jp/submission/220422",
+      "user_name": "MtSaka",
+      "language": "cpp",
+      "time_ms": 298,
+      "submission_time": "2024-07-12T13:37:06.901376Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "d63209942cc63968efab7d7cf1c94a4f91072ac6504c19ca22e8bb6ae3f4352e",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            177,
+            371
+          ],
+          "description": "fastio Scanner/Printerのfread/fwrite。"
+        },
+        {
+          "lines": [
+            58,
+            60,
+            326,
+            557,
+            677,
+            682
+          ],
+          "description": "INTはscから読み、printはprを使用。"
+        },
+        {
+          "lines": [
+            1099,
+            1104
+          ],
+          "description": "入力法を設定、上限まで前計算し1照会ずつ入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 26,
+      "submission_id": 140225,
+      "url": "https://judge.yosupo.jp/submission/140225",
+      "user_name": "AC2K",
+      "language": "cpp",
+      "time_ms": 298,
+      "submission_time": null,
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "d8e14c839b1e266dab1ed4b2925e252c3e8c29f1961262257e31ac3dc21a1a89",
+      "custom_io": true,
+      "io_detail": "getchar_unlocked → putchar_unlocked",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            139,
+            149
+          ],
+          "description": "readintがgetchar_unlocked。"
+        },
+        {
+          "lines": [
+            171,
+            172
+          ],
+          "description": "putintがputchar_unlocked。"
+        },
+        {
+          "lines": [
+            188,
+            196
+          ],
+          "description": "逐次入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 27,
+      "submission_id": 146479,
+      "url": "https://judge.yosupo.jp/submission/146479",
+      "user_name": "AC2K",
+      "language": "cpp",
+      "time_ms": 300,
+      "submission_time": null,
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "58ae69a5ac51c9d79be15a90bb28d1697bb79bbb1cf7999b59ebb252363bb15d",
+      "custom_io": true,
+      "io_detail": "getchar_unlocked → putchar_unlocked",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            445,
+            452
+          ],
+          "description": "readintがgetchar_unlocked。"
+        },
+        {
+          "lines": [
+            490,
+            491
+          ],
+          "description": "putintがputchar_unlocked。"
+        },
+        {
+          "lines": [
+            528,
+            537
+          ],
+          "description": "逐次入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 28,
+      "submission_id": 166836,
+      "url": "https://judge.yosupo.jp/submission/166836",
+      "user_name": "andyli",
+      "language": "cpp",
+      "time_ms": 306,
+      "submission_time": "2023-10-17T09:18:50.491845Z",
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "6188510dce8351bb5babcdd225f6d26e0c3c66db3328654041d825764d06c67e",
+      "custom_io": true,
+      "io_detail": "mmap (Unix; その他fread) → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "入出力の定義中にはfreadもあるが、通常のUnix提出経路はUSE_MMAP。",
+      "evidence": [
+        {
+          "lines": [
+            193,
+            195,
+            237,
+            249
+          ],
+          "description": "Unixかつ非debug/localではmmap入力。"
+        },
+        {
+          "lines": [
+            306,
+            308
+          ],
+          "description": "出力はfwriteバッファ。"
+        },
+        {
+          "lines": [
+            989,
+            996
+          ],
+          "description": "mainでmod==2を専用処理。"
+        },
+        {
+          "lines": [
+            1004,
+            1006
+          ],
+          "description": "それ以外は逐次照会。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 29,
+      "submission_id": 358769,
+      "url": "https://judge.yosupo.jp/submission/358769",
+      "user_name": "polosatic",
+      "language": "cpp",
+      "time_ms": 309,
+      "submission_time": "2026-03-11T07:34:30.23308Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "1145c8ce834b5fed0ba81a12edfa0e9ffeaf7753e30fdc4f9654518d02102160",
+      "custom_io": true,
+      "io_detail": "fread → std::cout",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": true,
+      "optimization_pragma": false,
+      "notes": "照会自体の事前読み込み/並べ替えはない。全件の結果文字列蓄積はある。",
+      "evidence": [
+        {
+          "lines": [
+            11,
+            111,
+            114
+          ],
+          "description": "FastInputをcinにマクロ置換しfreadで入力。"
+        },
+        {
+          "lines": [
+            120,
+            129
+          ],
+          "description": "各照会は逐次計算するが結果文字列をmain内で全件連結し最後にcoutへ出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 30,
+      "submission_id": 210037,
+      "url": "https://judge.yosupo.jp/submission/210037",
+      "user_name": "Kiffaz11",
+      "language": "cpp",
+      "time_ms": 313,
+      "submission_time": "2024-05-20T05:17:08.9897Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "35e5dce007ac70c54973c032a8f9e27365530c79d4c16f97f9f4964e9e9d51b6",
+      "custom_io": true,
+      "io_detail": "POSIX read → POSIX write",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "先頭のGCC最適化/target pragmaは全てコメントアウト。#pragma onceはあるが最適化指定ではない。",
+      "evidence": [
+        {
+          "lines": [
+            308,
+            364
+          ],
+          "description": "yosupo::Scanner/Printerのread/write。"
+        },
+        {
+          "lines": [
+            547,
+            548
+          ],
+          "description": "stdin/stdoutからsc/prを生成。"
+        },
+        {
+          "lines": [
+            726,
+            732
+          ],
+          "description": "solveから逐次入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 31,
+      "submission_id": 210469,
+      "url": "https://judge.yosupo.jp/submission/210469",
+      "user_name": "Kiffaz11",
+      "language": "cpp",
+      "time_ms": 315,
+      "submission_time": "2024-05-21T12:19:42.057889Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "7dbc4a8caec879b4f46057d9a144960cae12d01825e28ecdfe0024f37da192cb",
+      "custom_io": true,
+      "io_detail": "POSIX read → POSIX write",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "先頭のGCC最適化/target pragmaは全てコメントアウト。#pragma onceはあるが最適化指定ではない。",
+      "evidence": [
+        {
+          "lines": [
+            328,
+            384
+          ],
+          "description": "yosupo::Scanner/Printerのread/write。"
+        },
+        {
+          "lines": [
+            567,
+            568
+          ],
+          "description": "stdin/stdoutからsc/prを生成。"
+        },
+        {
+          "lines": [
+            1137,
+            1143
+          ],
+          "description": "solveから逐次入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 32,
+      "submission_id": 358768,
+      "url": "https://judge.yosupo.jp/submission/358768",
+      "user_name": "polosatic",
+      "language": "cpp",
+      "time_ms": 322,
+      "submission_time": "2026-03-11T07:33:44.91458Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "91ce48f275757787485c61335f7b2970f5b928faa2eacc66f71c1df245369c96",
+      "custom_io": true,
+      "io_detail": "fread → std::cout",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "",
+      "evidence": [
+        {
+          "lines": [
+            11,
+            111,
+            114
+          ],
+          "description": "FastInputをcinへマクロ置換。"
+        },
+        {
+          "lines": [
+            120,
+            123
+          ],
+          "description": "逐次入力・計算・cout出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 33,
+      "submission_id": 411962,
+      "url": "https://judge.yosupo.jp/submission/411962",
+      "user_name": "reinsirk",
+      "language": "cpp",
+      "time_ms": 323,
+      "submission_time": "2026-10-20T08:52:41.891563Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "545f1648dea2daf898727bffc96baa65a32422b4ca35a9cc29c62b7e9b7b975f",
+      "custom_io": false,
+      "io_detail": "std::cin → std::cout",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "入力法に応じて前計算上限をminで決める通常の初期化のみ。入力分布に応じたmainの実装切替はない。",
+      "evidence": [
+        {
+          "lines": [
+            1231,
+            1232
+          ],
+          "description": "sync_with_stdio(false),cin.tie(nullptr)。"
+        },
+        {
+          "lines": [
+            1236,
+            1245
+          ],
+          "description": "std::cin/std::coutを逐次使用。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 34,
+      "submission_id": 267162,
+      "url": "https://judge.yosupo.jp/submission/267162",
+      "user_name": "miscalc",
+      "language": "cpp",
+      "time_ms": 323,
+      "submission_time": "2025-02-11T23:29:43.196169Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "9ae96399e0d3638161f4145896264447e78b98b68256b10cdde439de4c289c9b",
+      "custom_io": true,
+      "io_detail": "fread → fwrite",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "最初にM/2で1000まで前計算してから入力Mへ戻す。10000000までの事前確保はコメントアウト。これらはmainの余分な初期化だが特定法に応じた分岐ではない。coutのsetprecisionはあるが整数の実出力はfastio。",
+      "evidence": [
+        {
+          "lines": [
+            5
+          ],
+          "description": "FAST_IOが有効。"
+        },
+        {
+          "lines": [
+            862,
+            868
+          ],
+          "description": "入力fread・出力fwrite。"
+        },
+        {
+          "lines": [
+            1111,
+            1116,
+            1259,
+            1264
+          ],
+          "description": "FAST_IO時にREAD/PRINTがfastioに接続。"
+        },
+        {
+          "lines": [
+            2031,
+            2040
+          ],
+          "description": "main2で1照会ずつ入力・計算・出力。"
+        }
+      ],
+      "source_review": "review_18_34.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 35,
+      "submission_id": 265146,
+      "url": "https://judge.yosupo.jp/submission/265146",
+      "user_name": "kk2a",
+      "language": "cpp",
+      "time_ms": 326,
+      "submission_time": "2025-02-02T14:04:24.169525Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "5d5af30b1e7fb37b3d85c2332ef5857ec558ec2f5356725981f7fe85e82300b8",
+      "custom_io": true,
+      "io_detail": "自作fread/fwriteバッファ",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "kin/koutはINTERACTIVE/USE_STDIO未定義なので自作Scanner/Printer。1件ずつ入出力。全件前計算をmainで実施。",
+      "evidence": {
+        "input": [
+          481,
+          499
+        ],
+        "output": [
+          613
+        ],
+        "selection": [
+          752,
+          759
+        ],
+        "calls": [
+          930,
+          938
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 36,
+      "submission_id": 210445,
+      "url": "https://judge.yosupo.jp/submission/210445",
+      "user_name": "Kiffaz11",
+      "language": "cpp",
+      "time_ms": 328,
+      "submission_time": "2024-05-21T09:10:03.048552Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "98a1ec9a8a5217faa677ce8ca573bfbea29b9f6579f58ac17fe8d5843a61d713",
+      "custom_io": true,
+      "io_detail": "自作POSIX read/writeバッファ（yosupo Scanner/Printer）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "FTはcin設定のみで、実計算I/Oはsc/pr。上部GCC最適化pragmaはすべてコメント。",
+      "evidence": {
+        "input": [
+          217,
+          308
+        ],
+        "output": [
+          364
+        ],
+        "instances": [
+          547,
+          548
+        ],
+        "calls": [
+          755,
+          762
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 37,
+      "submission_id": 411965,
+      "url": "https://judge.yosupo.jp/submission/411965",
+      "user_name": "reinsirk",
+      "language": "cpp",
+      "time_ms": 330,
+      "submission_time": "2026-10-20T09:46:36.965985Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "5197f30d608627b9fa332f54d8b8f4755f33448adaec6ff4c33beb7a86bc99b7",
+      "custom_io": false,
+      "io_detail": "std::cin/std::cout（同期解除・tie解除）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法依存の前計算上限minはあるが、法別実装切り替えなし。",
+      "evidence": {
+        "setup": [
+          2103,
+          2104
+        ],
+        "calls": [
+          2108,
+          2117,
+          2118
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 38,
+      "submission_id": 272638,
+      "url": "https://judge.yosupo.jp/submission/272638",
+      "user_name": "wkywkywky",
+      "language": "cpp",
+      "time_ms": 332,
+      "submission_time": "2025-03-11T08:49:50.794701Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "fa10c499d4b61c05d55e5d5af45be67b430e7600d9ef332a6f130c6908712eea",
+      "custom_io": true,
+      "io_detail": "自作getchar整数入力＋printf出力",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法依存の前計算上限minのみ。",
+      "evidence": {
+        "input": [
+          21,
+          25
+        ],
+        "calls": [
+          28,
+          36,
+          37
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 39,
+      "submission_id": 196633,
+      "url": "https://judge.yosupo.jp/submission/196633",
+      "user_name": "sortA0329",
+      "language": "cpp",
+      "time_ms": 333,
+      "submission_time": "2024-03-13T12:29:13.543404Z",
+      "is_latest": false,
+      "case_count": 20,
+      "source_sha256_lf": "ad7e8f0fbe1e790eb835d98a6d2c2a6be1708040e0067235ca2b55c9fb758d41",
+      "custom_io": true,
+      "io_detail": "自作POSIX read/writeバッファ（fin/fout）",
+      "specific_mod_dispatch_in_main_or_solve": true,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": true,
+      "notes": "m==998244353をStaticModint32、それ以外を動的modintへ分岐。未使用のstd::cin/cout設定やMain::ifs/ofsに誤分類しない。",
+      "evidence": {
+        "input": [
+          580,
+          590,
+          593
+        ],
+        "output": [
+          820,
+          826
+        ],
+        "feature": [
+          4868,
+          4869
+        ],
+        "calls": [
+          4884,
+          4899
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 40,
+      "submission_id": 411941,
+      "url": "https://judge.yosupo.jp/submission/411941",
+      "user_name": "reinsirk",
+      "language": "cpp",
+      "time_ms": 334,
+      "submission_time": "2026-10-20T05:08:32.906522Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "ce2c073857b036079ee73e648454af834d58dc85b4cb46f9055c79cbd3d6a6d0",
+      "custom_io": false,
+      "io_detail": "std::cin/std::cout（同期解除・tie解除）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法依存の前計算上限minのみ。",
+      "evidence": {
+        "setup": [
+          1148,
+          1149
+        ],
+        "calls": [
+          1153,
+          1161,
+          1162
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 41,
+      "submission_id": 398667,
+      "url": "https://judge.yosupo.jp/submission/398667",
+      "user_name": "Today03",
+      "language": "cpp",
+      "time_ms": 335,
+      "submission_time": "2026-09-02T05:13:35.232684Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "40a5f5f0d1c37c40e7c9bfa4dabbc5a79d7fe8da0805b9f3965cb61ef34389e3",
+      "custom_io": true,
+      "io_detail": "自作POSIX read/writeバッファ（cin/coutマクロ置換）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "見た目cin/coutだがFastIOへマクロ置換。IIはinput()、sayはFastOut。ファイル先頭runは末尾自己includeで有効。全件前計算後1件ずつ処理。",
+      "evidence": {
+        "input": [
+          289,
+          298
+        ],
+        "output": [
+          358,
+          369
+        ],
+        "macro": [
+          493,
+          494
+        ],
+        "calls": [
+          3,
+          11
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 42,
+      "submission_id": 210311,
+      "url": "https://judge.yosupo.jp/submission/210311",
+      "user_name": "Kiffaz11",
+      "language": "cpp",
+      "time_ms": 336,
+      "submission_time": "2024-05-21T01:57:30.774352Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "5e2e3efe6b80996b967ca0fb107156769590db52b1db18de48a1eeac413a7f34",
+      "custom_io": true,
+      "io_detail": "自作POSIX read/writeバッファ（yosupo Scanner/Printer）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "FTはcin設定のみ。実計算I/Oはsc/pr。上部GCC最適化pragmaはすべてコメント。",
+      "evidence": {
+        "input": [
+          217,
+          308
+        ],
+        "output": [
+          364
+        ],
+        "instances": [
+          547,
+          548
+        ],
+        "calls": [
+          1188,
+          1194
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 43,
+      "submission_id": 258406,
+      "url": "https://judge.yosupo.jp/submission/258406",
+      "user_name": "transparent_heart",
+      "language": "cpp",
+      "time_ms": 343,
+      "submission_time": "2024-12-25T12:08:02.292756Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "8378330fa9330cc262e818cd59c7e356004927bf4f03c3b3561e52693488d90d",
+      "custom_io": true,
+      "io_detail": "自作getchar整数入力＋自作putchar整数出力",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "非負整数を文字単位で変換。未使用のMintストリーム演算子は実I/Oではない。",
+      "evidence": {
+        "input": [
+          3,
+          11
+        ],
+        "output": [
+          12,
+          19
+        ],
+        "calls": [
+          99,
+          105
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 44,
+      "submission_id": 222054,
+      "url": "https://judge.yosupo.jp/submission/222054",
+      "user_name": "marvinthang",
+      "language": "cpp",
+      "time_ms": 346,
+      "submission_time": "2024-07-19T06:29:20.177737Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "24e67b1e2d48252f83505ba359fa5fd882f84e68b9eb7653340198d00e06b53c",
+      "custom_io": false,
+      "io_detail": "std::cin/std::cout（同期解除・tie解除）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "file(test)はローカルファイルがあれば切り替える補助。特定法の分岐なし。",
+      "evidence": {
+        "setup": [
+          196
+        ],
+        "calls": [
+          191,
+          192,
+          198
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 45,
+      "submission_id": 411680,
+      "url": "https://judge.yosupo.jp/submission/411680",
+      "user_name": "reinsirk",
+      "language": "cpp",
+      "time_ms": 347,
+      "submission_time": "2026-10-18T22:54:24.788193Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "f4ebe8fac5b939676f98c7630937adde1013a86b9b6bfbaed5f8f77901e5364d",
+      "custom_io": false,
+      "io_detail": "std::cin/std::cout（同期解除・tie解除）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "Mint::set_mod後、PrimeBinomialを使い1件ずつ処理。",
+      "evidence": {
+        "setup": [
+          906
+        ],
+        "calls": [
+          907,
+          909
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 46,
+      "submission_id": 381064,
+      "url": "https://judge.yosupo.jp/submission/381064",
+      "user_name": null,
+      "language": "cpp",
+      "time_ms": 350,
+      "submission_time": "2026-06-21T10:54:01.864885Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "26921bacafcc985df150a00cccbc82fbe6b2f9c6117e97de67579d1f083176a7",
+      "custom_io": false,
+      "io_detail": "std::cin/std::cout（同期解除・tie解除）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "法依存の前計算上限minのみ。",
+      "evidence": {
+        "setup": [
+          127
+        ],
+        "calls": [
+          122,
+          123,
+          128,
+          129
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 47,
+      "submission_id": 255339,
+      "url": "https://judge.yosupo.jp/submission/255339",
+      "user_name": "raybb",
+      "language": "cpp",
+      "time_ms": 350,
+      "submission_time": "2024-12-09T23:44:20.955664Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "777fd1e9b63f7cda6e7c9a41ef0e4c6684467f9d16e73ed0f962ff9e4a29f2fc",
+      "custom_io": false,
+      "io_detail": "std::cin/std::cout（同期解除・tie解除）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "動的Mintを1つ使い1件ずつ処理。",
+      "evidence": {
+        "setup": [
+          398
+        ],
+        "calls": [
+          394,
+          395,
+          400
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 48,
+      "submission_id": 411011,
+      "url": "https://judge.yosupo.jp/submission/411011",
+      "user_name": "reinsirk",
+      "language": "cpp",
+      "time_ms": 351,
+      "submission_time": "2026-10-16T15:49:41.905494Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "eea9c82bfd6a32ee5841887f282e4e24fab7eae0acb34492be88cf7d553ef651",
+      "custom_io": false,
+      "io_detail": "std::cin/std::cout（同期解除・tie解除）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "Mint::set_mod後、PrimeBinomialを使い1件ずつ処理。",
+      "evidence": {
+        "setup": [
+          116,
+          117
+        ],
+        "calls": [
+          120,
+          128,
+          129
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 49,
+      "submission_id": 244774,
+      "url": "https://judge.yosupo.jp/submission/244774",
+      "user_name": "ecottea",
+      "language": "cpp",
+      "time_ms": 351,
+      "submission_time": "2024-10-24T17:21:01.088888Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "f3afe844adfb3cb40d4583a14ca9b4e83b82065e80d6477b543ff1bb68697bf9",
+      "custom_io": false,
+      "io_detail": "std::cin/std::cout（同期解除・tie解除）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "fast_ioという名前の構造体は標準iostreamの設定のみ。法依存の前計算上限minのみ。",
+      "evidence": {
+        "setup": [
+          28
+        ],
+        "calls": [
+          248,
+          256,
+          258
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    },
+    {
+      "rank": 50,
+      "submission_id": 392069,
+      "url": "https://judge.yosupo.jp/submission/392069",
+      "user_name": "achapi",
+      "language": "cpp",
+      "time_ms": 352,
+      "submission_time": "2026-08-11T19:47:47.851779Z",
+      "is_latest": true,
+      "case_count": 20,
+      "source_sha256_lf": "12f94e794afce9a82a3035e1efbf6eb0cdca704117fde1568f103bc4cd3500c7",
+      "custom_io": false,
+      "io_detail": "std::cin/std::cout（同期解除・tie解除）",
+      "specific_mod_dispatch_in_main_or_solve": false,
+      "query_accumulation": false,
+      "query_reordering": false,
+      "output_accumulation_in_main": false,
+      "optimization_pragma": false,
+      "notes": "動的Mintを1つ使い1件ずつ処理。",
+      "evidence": {
+        "setup": [
+          21,
+          22
+        ],
+        "calls": [
+          24,
+          29,
+          30
+        ]
+      },
+      "source_review": "review_35_50.json",
+      "special_mod_detail": ""
+    }
+  ],
+  "limitations": [
+    "この問題の提出50件についての調査であり、Library Checker全体の利用割合ではない。",
+    "同じ利用者の複数提出、同一ソース、当方の提出を含む。入出力別の時間差から因果効果は求められない。",
+    "提出日時・言語規格・pragma・判定版が異なる。ソースから入出力経路は分かるが、入出力だけを統一した測定ではない。",
+    "is_latest=falseの10件もAPIのAC上位順に含まれるため、歴史的な提出結果として明示。"
+  ]
+}

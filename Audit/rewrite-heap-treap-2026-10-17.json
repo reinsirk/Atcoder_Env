@@ -1,0 +1,219 @@
+{
+  "date": "2026-10-17",
+  "license": "CC0-1.0",
+  "files": {
+    "heap.cpp": {
+      "sha256": "89318050f95eb0f37d0f94a692ce646b2f676f03e690f2f7dde0f2eeceadc736",
+      "design": "vector<int>所有の二分最小ヒープ。根の1段を定数添字で修復し、残りを左右分岐で修復。",
+      "SPDX": "CC0-1.0"
+    },
+    "implicit_treap.cpp": {
+      "sha256": "37b1dce059b308471509c9c03a74aac9c885b717faf3ac8356aec440334b15c4",
+      "design": "添字poolとfree list・可換時の逆集約省略・非可換時の双方向集約・直接query/apply/境界探索・線形Cartesian構築",
+      "SPDX": "CC0-1.0"
+    }
+  },
+  "creation": {
+    "method": "既存の本体・原典・Readme・git履歴を読まない担当にAPI仕様と前提を渡して新規作成。別担当の独立参照と実測に基づき新規コードを調整。",
+    "implementation_authors_received_legacy_source": false,
+    "implementation_authors_accessed_external_implementation": false,
+    "third_party_legacy_terms": "旧コードの出典・利用条件は過去版についての監査記録に保持。現行新規実装のCC0によって旧配布物を再許諾するものではない。"
+  },
+  "verification": {
+    "heap": "std::multisetとの500000混合操作、1023長、整数端点、range/iterator構築、copy、singleton/empty、GCC/Clang・検査ON/OFF、ASan/UBSan",
+    "implicit_treap": "独立担当の約100000操作をstd::vectorと照合。非可換連結+反転、非default S/F・==なしF、affine合成順、可換true指定、sorted重複/比較と==の違い、境界探索両形式、slot再利用、copy/move、容量超過を含む。GCC15.3/Clang21のON/OFF、ASan/UBSan。",
+    "leak_sanitizer": "実行環境の制約により無効",
+    "API_compatibility": "既存の値操作・列操作・sorted操作・境界探索を維持。RangeAddMin/Sumは同じ修飾名のstructへ変更。旧公開node/pnodeとグローバル乱数変数は内部表現として廃止。"
+  },
+  "benchmark": {
+    "compiler": "GCC15.3.0",
+    "flags": [
+      "-std=c++23",
+      "-O2"
+    ],
+    "cpu_affinity": 8,
+    "repetitions": 7,
+    "statistic": "median",
+    "ordering": "old/new alternated; heap also includes std::priority_queue",
+    "unit": "milliseconds",
+    "heap_baseline": "旧版は全APIがprivate・push/pop比較方向不一致・最終要素pop範囲外アクセスがあるため、その3点だけ補正した最小ヒープを参照。旧版をそのまま有効に実行した比較ではない。",
+    "heap_inputs": "tiny:32要素の構築/全削除を30000回。その他:300000要素のpush構築と全pop、mixedは300000回pop/push。値取得を削除時間に含む。",
+    "heap_results": {
+      "tiny": {
+        "old": [
+          2.306636,
+          2.449366
+        ],
+        "new": [
+          2.173323,
+          2.234858
+        ],
+        "standard": [
+          2.381668,
+          5.304275
+        ]
+      },
+      "random": {
+        "old": [
+          2.652203,
+          16.962671
+        ],
+        "new": [
+          2.559395,
+          16.337629
+        ],
+        "standard": [
+          2.765002,
+          9.030045
+        ]
+      },
+      "ordered": {
+        "old": [
+          0.742444,
+          10.198045
+        ],
+        "new": [
+          0.72232,
+          9.361097
+        ],
+        "standard": [
+          0.718105,
+          5.938397
+        ]
+      },
+      "reverse": {
+        "old": [
+          3.159579,
+          8.490237
+        ],
+        "new": [
+          2.675032,
+          7.875363
+        ],
+        "standard": [
+          3.633603,
+          4.713404
+        ]
+      },
+      "mixed": {
+        "old": [
+          2.628689,
+          15.695088
+        ],
+        "new": [
+          2.564516,
+          15.338014
+        ],
+        "standard": [
+          2.74043,
+          16.935004
+        ]
+      }
+    },
+    "treap_baseline": "書換え前の現行版。未使用ACL includeのみ比較用ソースから除去。旧乱数エンジンを固定seedに設定。新規版は時刻seedの局所LCG。両版に同じRangeAddSum関数を与え、前後のchecksumも一致。",
+    "treap_inputs": "tiny:32要素push構築と100get/prodを10000回。build/bulk/queries/apply/reverse/boundaries:100000要素、操作200000回。updates/churn:100000操作。sorted:50000要素・200000操作。apply/reverse/updatesには8回に1回prodを含む。bulk新規版は追加されたO(N) vector ctor、旧版はpush_back構築。",
+    "treap_results": {
+      "tiny": {
+        "old": [
+          11.135798,
+          166.080883
+        ],
+        "new": [
+          5.570013,
+          66.582104
+        ]
+      },
+      "build": {
+        "old": [
+          6.557399,
+          0.000473
+        ],
+        "new": [
+          5.579259,
+          0.000119
+        ]
+      },
+      "bulk": {
+        "old": [
+          6.577447,
+          0.000415
+        ],
+        "new": [
+          1.597828,
+          0.000132
+        ]
+      },
+      "queries": {
+        "old": [
+          6.736558,
+          199.597916
+        ],
+        "new": [
+          5.713809,
+          86.320298
+        ]
+      },
+      "apply": {
+        "old": [
+          6.763901,
+          154.372544
+        ],
+        "new": [
+          5.810351,
+          118.082169
+        ]
+      },
+      "reverse": {
+        "old": [
+          6.762832,
+          188.895544
+        ],
+        "new": [
+          5.625027,
+          190.362845
+        ]
+      },
+      "updates": {
+        "old": [
+          6.703686,
+          91.788527
+        ],
+        "new": [
+          5.568154,
+          87.073054
+        ]
+      },
+      "churn": {
+        "old": [
+          6.733792,
+          105.981277
+        ],
+        "new": [
+          5.638011,
+          90.469408
+        ]
+      },
+      "sorted": {
+        "old": [
+          13.110175,
+          116.640742
+        ],
+        "new": [
+          7.997625,
+          95.459169
+        ]
+      },
+      "boundaries": {
+        "old": [
+          6.779407,
+          182.223496
+        ],
+        "new": [
+          5.745426,
+          100.609814
+        ]
+      }
+    },
+    "limitations": "有限の入力・環境での測定。構築は配列と木の破棄を含めない。個別条件に数%の増減があり、全入力で厳密に同じ時間を保証するものではない。"
+  }
+}

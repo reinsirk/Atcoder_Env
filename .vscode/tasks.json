@@ -1,0 +1,51 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++.exe アクティブなファイルのビルド",
+            "command": "g++",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-std=gnu++23",
+                "-g",
+                "-I",
+                "~/ac-library",
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}_d",
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "デバッガーによって生成されたタスク。"
+        },
+        {
+            "label": "ACTestSample",
+            "type": "shell",
+            "command": "cd ${fileDirname}&& atcoder-tools test",
+            "presentation": {
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+            }
+        },
+        {
+            "label": "ACSubmit",
+            "type": "shell",
+            "command": "cd ${fileDirname} && atcoder-tools submit",
+            "presentation": {
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+            }
+        }
+    ],
+    "version": "2.0.0"
+}

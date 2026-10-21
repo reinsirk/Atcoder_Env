@@ -1,0 +1,582 @@
+{
+  "date": "2026-10-17",
+  "license": "CC0-1.0",
+  "files": {
+    "LCA.cpp": {
+      "sha256": "24844caa92944c6096da78e948ca548834a1fa6a9b87225983502246900710c8",
+      "public_api": "Existing API, return types, normalization and valid-input results retained. ADL swap added."
+    },
+    "RollingHash.cpp": {
+      "sha256": "9a28b3194e757c87c413b251310a0cac64c45a7f4acc7c91b133d0cb8d8e485b",
+      "public_api": "Existing API, return types, normalization and valid-input results retained. ADL swap added."
+    }
+  },
+  "creation": {
+    "method": "旧コードを渡さない独立担当へ公開API・入力前提・計算量だけを提示して新規作成。その新規コードを測定結果と数学的な制約から調整。",
+    "authors_access_to_legacy_code": false,
+    "authors_access_to_external_sources": false,
+    "reviewer_role": "旧版を参照用に保存しAPI互換性・独立参照・実測性能を確認。旧コードは実装担当へ提供していない。",
+    "copyright_scope": "現在の新規実装へのCC0提供。旧配布物や履歴の利用条件は変更しない。"
+  },
+  "verification": {
+    "lca": {
+      "compilers": [
+        "GCC 15.3",
+        "Clang 21"
+      ],
+      "standard": "C++23",
+      "runtime_checks": [
+        "enabled",
+        "SKIP_RUNTIME_CHECKS"
+      ],
+      "independent_cases": "800 random forests, 320000 BFS/path/reroot cases per configuration; 300000-vertex chain; 300 shuffled-vertex forests; component/root metadata; copy/move/self-assignment; exception state preservation"
+    },
+    "rolling_hash": {
+      "compilers": [
+        "GCC 15.3",
+        "Clang 21"
+      ],
+      "standard": "C++23",
+      "runtime_checks": [
+        "enabled",
+        "SKIP_RUNTIME_CHECKS"
+      ],
+      "arithmetic": [
+        "GCC/Clang 128-bit extension",
+        "standard uint64_t 32-bit limbs"
+      ],
+      "independent_comparisons_per_configuration": 2505536,
+      "cases": "uint128 polynomial % reference; all bytes0..255; base boundaries; random canonical hash concatenation; empty/moved objects; length/base/range errors; copy/move/swap; modular boundary values"
+    },
+    "sanitizers": "AddressSanitizer + UndefinedBehaviorSanitizer; GCC15.2; native and standard RollingHash arithmetic; LSan disabled due execution environment",
+    "examples": "normal and standalone examples compile and execute"
+  },
+  "benchmark": {
+    "compiler": "GCC 15.3.0",
+    "options": [
+      "-std=c++23",
+      "-O2"
+    ],
+    "cpu_affinity": 8,
+    "repetitions": 7,
+    "statistic": "median",
+    "ordering": "old/new alternated",
+    "baseline": "pre-rewrite current sources from 32fb166, saved at start of task",
+    "unit": "milliseconds",
+    "lca_inputs": {
+      "small": "32 vertices, 100 get queries, 10000 constructions",
+      "balanced": "200000 vertices, 500000 get queries",
+      "random": "200000 vertices, 500000 get queries",
+      "star": "200000 vertices, 500000 get queries",
+      "chain": "300000 vertices, 500000 get queries",
+      "forest": "200000 vertices, 500000 get queries",
+      "other_operations": "random tree with 200000 vertices; 500000 operations each"
+    },
+    "rolling_inputs": {
+      "32": "100000 constructions; 5000000 substring queries",
+      "4096": "1000 constructions; 5000000 substring queries",
+      "1000000": "10 constructions; 5000000 substring queries",
+      "other_operations": "100000-byte repetitive string; 500000 operations each",
+      "equal_same_length": "1000000-byte random string, 1000000 equal-length comparisons"
+    },
+    "limitations": "Finite workload measurements; individual query conditions vary by a few percent. No guarantee of identical timing for every input/machine.",
+    "results": {
+      "lca/small": {
+        "old": [
+          1.75129,
+          2.706101
+        ],
+        "new": [
+          1.592948,
+          2.545905
+        ]
+      },
+      "lca/balanced": {
+        "old": [
+          3.117211,
+          17.21305
+        ],
+        "new": [
+          2.816912,
+          17.128606
+        ]
+      },
+      "lca/random": {
+        "old": [
+          6.967131,
+          17.898779
+        ],
+        "new": [
+          6.189869,
+          17.925104
+        ]
+      },
+      "lca/star": {
+        "old": [
+          2.104516,
+          2.129343
+        ],
+        "new": [
+          2.025068,
+          2.147428
+        ]
+      },
+      "lca/chain": {
+        "old": [
+          14.56646,
+          26.713624
+        ],
+        "new": [
+          13.93858,
+          25.315993
+        ]
+      },
+      "lca/forest": {
+        "old": [
+          6.611224,
+          2.358134
+        ],
+        "new": [
+          6.188853,
+          2.216744
+        ]
+      },
+      "rolling_bench/32": {
+        "old": [
+          8.67072,
+          5.74352
+        ],
+        "new": [
+          6.22007,
+          5.55664
+        ]
+      },
+      "rolling_bench/4096": {
+        "old": [
+          10.4253,
+          7.00542
+        ],
+        "new": [
+          8.29327,
+          6.29808
+        ]
+      },
+      "rolling_bench/1000000": {
+        "old": [
+          27.3786,
+          25.5975
+        ],
+        "new": [
+          20.2739,
+          25.2969
+        ]
+      },
+      "rolling_operations_bench/concat": {
+        "old": [
+          1.022833
+        ],
+        "new": [
+          0.91829
+        ]
+      },
+      "rolling_operations_bench/equal": {
+        "old": [
+          0.690645
+        ],
+        "new": [
+          0.65952
+        ]
+      },
+      "rolling_operations_bench/lcp": {
+        "old": [
+          36.911838
+        ],
+        "new": [
+          35.868301
+        ]
+      },
+      "rolling_operations_bench/compare": {
+        "old": [
+          33.219528
+        ],
+        "new": [
+          32.233633
+        ]
+      },
+      "rolling_equal_bench/equal_same_length": {
+        "old": [
+          18.892821
+        ],
+        "new": [
+          19.267391
+        ]
+      },
+      "rolling_bench_standard/32": {
+        "old": [
+          10.9215,
+          8.86465
+        ],
+        "new": [
+          10.4495,
+          8.84076
+        ]
+      },
+      "rolling_bench_standard/4096": {
+        "old": [
+          13.0492,
+          10.2335
+        ],
+        "new": [
+          12.7427,
+          9.65696
+        ]
+      },
+      "rolling_bench_standard/1000000": {
+        "old": [
+          33.8462,
+          36.8958
+        ],
+        "new": [
+          31.2878,
+          37.2835
+        ]
+      },
+      "rolling_operations_bench_standard/concat": {
+        "old": [
+          1.360415
+        ],
+        "new": [
+          1.376479
+        ]
+      },
+      "rolling_operations_bench_standard/equal": {
+        "old": [
+          0.695044
+        ],
+        "new": [
+          0.657247
+        ]
+      },
+      "rolling_operations_bench_standard/lcp": {
+        "old": [
+          48.634181
+        ],
+        "new": [
+          47.549703
+        ]
+      },
+      "rolling_operations_bench_standard/compare": {
+        "old": [
+          43.367023
+        ],
+        "new": [
+          42.40553
+        ]
+      },
+      "rolling_equal_bench_standard/equal_same_length": {
+        "old": [
+          25.172806
+        ],
+        "new": [
+          24.937464
+        ]
+      },
+      "lca_operations_bench/parent": {
+        "old": [
+          0.638545
+        ],
+        "new": [
+          0.611721
+        ]
+      },
+      "lca_operations_bench/is_ancestor": {
+        "old": [
+          2.674843
+        ],
+        "new": [
+          2.499309
+        ]
+      },
+      "lca_operations_bench/kth_ancestor": {
+        "old": [
+          3.628856
+        ],
+        "new": [
+          3.648554
+        ]
+      },
+      "lca_operations_bench/distance": {
+        "old": [
+          19.100635
+        ],
+        "new": [
+          18.625394
+        ]
+      },
+      "lca_operations_bench/reroot": {
+        "old": [
+          47.410408
+        ],
+        "new": [
+          43.654082
+        ]
+      },
+      "lca_operations_bench/path": {
+        "old": [
+          24.485298
+        ],
+        "new": [
+          24.629501
+        ]
+      },
+      "lca_skip/small": {
+        "old": [
+          1.662914,
+          2.402804
+        ],
+        "new": [
+          1.712548,
+          2.370502
+        ]
+      },
+      "lca_skip/balanced": {
+        "old": [
+          3.111081,
+          17.211992
+        ],
+        "new": [
+          2.970705,
+          17.755057
+        ]
+      },
+      "lca_skip/random": {
+        "old": [
+          7.001762,
+          17.952691
+        ],
+        "new": [
+          6.188637,
+          18.049485
+        ]
+      },
+      "lca_skip/star": {
+        "old": [
+          2.037425,
+          1.856718
+        ],
+        "new": [
+          2.065967,
+          1.90494
+        ]
+      },
+      "lca_skip/chain": {
+        "old": [
+          14.378563,
+          24.22253
+        ],
+        "new": [
+          13.890817,
+          24.314611
+        ]
+      },
+      "lca_skip/forest": {
+        "old": [
+          6.788816,
+          2.038095
+        ],
+        "new": [
+          6.324896,
+          2.069038
+        ]
+      },
+      "rolling_bench_skip/32": {
+        "old": [
+          9.07094,
+          5.40402
+        ],
+        "new": [
+          6.2132,
+          5.2871
+        ]
+      },
+      "rolling_bench_skip/4096": {
+        "old": [
+          10.4242,
+          6.68176
+        ],
+        "new": [
+          8.28858,
+          5.97024
+        ]
+      },
+      "rolling_bench_skip/1000000": {
+        "old": [
+          27.3813,
+          26.9933
+        ],
+        "new": [
+          20.2636,
+          27.0354
+        ]
+      },
+      "rolling_operations_bench_skip/concat": {
+        "old": [
+          0.856513
+        ],
+        "new": [
+          0.823212
+        ]
+      },
+      "rolling_operations_bench_skip/equal": {
+        "old": [
+          0.367762
+        ],
+        "new": [
+          0.358726
+        ]
+      },
+      "rolling_operations_bench_skip/lcp": {
+        "old": [
+          36.948611
+        ],
+        "new": [
+          35.643409
+        ]
+      },
+      "rolling_operations_bench_skip/compare": {
+        "old": [
+          32.900452
+        ],
+        "new": [
+          31.71775
+        ]
+      },
+      "rolling_equal_bench_skip/equal_same_length": {
+        "old": [
+          17.423693
+        ],
+        "new": [
+          17.999729
+        ]
+      },
+      "rolling_bench_skip_standard/32": {
+        "old": [
+          11.6225,
+          8.61746
+        ],
+        "new": [
+          10.4678,
+          8.56123
+        ]
+      },
+      "rolling_bench_skip_standard/4096": {
+        "old": [
+          13.0894,
+          9.99478
+        ],
+        "new": [
+          12.748,
+          9.26198
+        ]
+      },
+      "rolling_bench_skip_standard/1000000": {
+        "old": [
+          33.8761,
+          35.5687
+        ],
+        "new": [
+          31.294,
+          35.9731
+        ]
+      },
+      "rolling_operations_bench_skip_standard/concat": {
+        "old": [
+          1.260187
+        ],
+        "new": [
+          1.319677
+        ]
+      },
+      "rolling_operations_bench_skip_standard/equal": {
+        "old": [
+          0.345463
+        ],
+        "new": [
+          0.345981
+        ]
+      },
+      "rolling_operations_bench_skip_standard/lcp": {
+        "old": [
+          48.971315
+        ],
+        "new": [
+          47.462771
+        ]
+      },
+      "rolling_operations_bench_skip_standard/compare": {
+        "old": [
+          43.229769
+        ],
+        "new": [
+          42.467363
+        ]
+      },
+      "rolling_equal_bench_skip_standard/equal_same_length": {
+        "old": [
+          23.343611
+        ],
+        "new": [
+          23.359043
+        ]
+      },
+      "lca_operations_bench_skip/parent": {
+        "old": [
+          0.562825
+        ],
+        "new": [
+          0.556492
+        ]
+      },
+      "lca_operations_bench_skip/is_ancestor": {
+        "old": [
+          2.336015
+        ],
+        "new": [
+          2.224733
+        ]
+      },
+      "lca_operations_bench_skip/kth_ancestor": {
+        "old": [
+          3.47759
+        ],
+        "new": [
+          3.446822
+        ]
+      },
+      "lca_operations_bench_skip/distance": {
+        "old": [
+          18.112223
+        ],
+        "new": [
+          17.977689
+        ]
+      },
+      "lca_operations_bench_skip/reroot": {
+        "old": [
+          44.753597
+        ],
+        "new": [
+          43.341624
+        ]
+      },
+      "lca_operations_bench_skip/path": {
+        "old": [
+          23.747376
+        ],
+        "new": [
+          24.117565
+        ]
+      }
+    }
+  }
+}

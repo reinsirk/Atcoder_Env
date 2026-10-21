@@ -1,0 +1,2952 @@
+{
+  "format": 1,
+  "date": "2026-10-20",
+  "scope": "オンライン提出85構成・63driverを共通高速入出力へ移行。計算手順はIO差し替えと入力スカラー値初期化を除いて維持。",
+  "implementation": {
+    "path": "Verify/current/common/fast_io.hpp",
+    "sha256": "cba66d85b9c17e034da75f4b14b03ae0de281be213aea5e0561f78072209043a",
+    "bytes": 9231,
+    "license": "CC0-1.0",
+    "origin": "今回自作。外部提出の実装を取り込んでいない。",
+    "input_buffer_bytes": 131072,
+    "output_buffer_bytes": 131072,
+    "backend": "標準C++のfread/fwrite。整数入力を直接変換し、整数出力はstd::to_chars。",
+    "skip_policy": "型に収まる正しい入力を前提とし、SKIP_RUNTIME_CHECKSで入力検査と検査専用状態を除外。EOF・バッファ境界・符号付き最小値の変換は維持。"
+  },
+  "generation": {
+    "script": "Scripts/prepare_verify.py",
+    "script_sha256": "bec4a140547314df01f9a45e96ce6c6a26d75153f0d5c017f307803c76831ce5",
+    "manifest_sha256": "513f54ada2b29d6e24ef6ec0548527087ecfe703eaa10dc4b6cf896e802ba89a",
+    "entries": 137,
+    "online": 85,
+    "online_drivers": 63,
+    "local": 52,
+    "all_online_skip_first": true,
+    "all_online_identical_io_hash": true,
+    "maximum_online": {
+      "id": "binomial_modint_prime_mod_split",
+      "bytes": 94367
+    },
+    "maximum_all": {
+      "id": "dynamic_hash_local",
+      "bytes": 188460
+    },
+    "local_submissions_byte_identical": true
+  },
+  "driver_migration": {
+    "online_entries": 85,
+    "online_drivers": 63,
+    "migration": [
+      {
+        "path": "Verify/current/drivers/angle_sort_main.cpp",
+        "before_sha256": "a1a866f4d2bdb210b42aebfb225b4e2776231ea087372b17d03a6df34e56d791",
+        "after_sha256": "4c21141daca45fd55027fe62ae4bdf7c50c05570e8d394e1b2a7f68263217d45",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/angle_sort_std_main.cpp",
+        "before_sha256": "6130d24e7805aa9ec964ebc65623177a679223bee8935a34b90d1df69a7af676",
+        "after_sha256": "90ebda406a404360fdb48a4dd80609ea4978481d55d1c1640aca69bfb017028c",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/bellman_ford_coins_respawn_main.cpp",
+        "before_sha256": "5871cc83420f4ce61ebec33cbedbf1b9107dc14178f58da69ae2e34019950bf7",
+        "after_sha256": "6c7bf71f06cb76a972c1f99f596d312b0eb933810615b7ce9a094ca9108c2afd",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/binary_trie_main.cpp",
+        "before_sha256": "09a2a4cd28461024797ea1292bd915a1920f72dbeb892f83ff12992e4c013c57",
+        "after_sha256": "ffd1f56f2785089ed0884abfb3b45341007b899f6d115fb3c15c45238c503ff6",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/binomial_integer_main.cpp",
+        "before_sha256": "c0f7422cb7b84f8def7208c0b1b4b6f23d21ef4f67cb70c86bc3622df0fdc883",
+        "after_sha256": "c1bc7a0efee1af8b1f8e386177be33e92791aee8ac893edf81263394d70f2a99",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/binomial_integer_prime_mod_main.cpp",
+        "before_sha256": "fce6572ce73e4fdb21eecc67775b0f9840c4b3cb9bdc5dffbebffd0ee32376ed",
+        "after_sha256": "413e7a8b830f1dc2b0fa37b5dbc20d5a07abb3cd19d2d23a5b53328430a614d3",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/binomial_lucas_main.cpp",
+        "before_sha256": "f6900e30020884b57bd68a0b7fea2fdc34f7ffc4e14abddd4ba1fe00d136ad48",
+        "after_sha256": "bb506394dfc4fb840a8bc0c10a257aaa17a6decf3936038403e3c9668cadd002",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/binomial_modint_main.cpp",
+        "before_sha256": "f700b05ec75d7da5a978f1f6f7c39a021ab465fc15e02a57cd1bef04ce2598b6",
+        "after_sha256": "aec5dd894f99011e6734822472571ef35904e8381c5f057e1f7578c9289de3c6",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/binomial_modint_prime_mod_main.cpp",
+        "before_sha256": "19d08817d2f7e04d01c0ef856590dd28ba31e3d9f90792be08f9ea0b55dbcbcf",
+        "after_sha256": "9585167c13ba6d412619782e11e993c5c74c14ae5389091e005806c7ffd4d924",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/binomial_prime_main.cpp",
+        "before_sha256": "fcfe9113e8da84a0a875150d3ff5af1bec01061b999bbb2de7da49daa76b2f23",
+        "after_sha256": "58284287e66ebc6d0f21f25edee8ef7f14547e3633511e58e56f486e2c615e5c",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/compressed_binary_trie_main.cpp",
+        "before_sha256": "84987355456539022b61d2bdb0d6619a49110e3974714a2e52bb6064ec589f49",
+        "after_sha256": "c5763def1647d50ca3abdbe2e8e4efaaa0221dd0f6ca1a831f1fe861bc9d82e3",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/dijkstra_main.cpp",
+        "before_sha256": "e7fa1af5d19c6e2e1118195bf4d4cef87e8d34aee3204be9304719d16f274d52",
+        "after_sha256": "a3f65cbaa82ad3235b8cb01b74faa33d50ffa42f55ea12d9c9077023a47ae19f",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/dynamic_fenwick_2d_rectangle_main.cpp",
+        "before_sha256": "899ddc5c0afedb1ee70d5955aab1f454d4972dc10a8c66cb4606b10f0cbc4ff2",
+        "after_sha256": "f2b509ab43823f3b99d03423eaaa491cf2ed50a53317167cf33396ee05806efa",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/dynamic_fenwick_range_main.cpp",
+        "before_sha256": "1625eedf86370f314e4962d5af5d12835bb82f79e30662e2a478273770e47b08",
+        "after_sha256": "df8e15a56df0dce95b04c22ebc182480f38d9512f35b63e1a74e851b2f5a4d8f",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/dynamic_fenwick_rectangle_main.cpp",
+        "before_sha256": "000fce4e3d246d478d5754ce084b442f9481e24dcfe231becc218495c75e57cc",
+        "after_sha256": "6d9c9141f0e73b151e9eb2cc83b02d4fc7feefd47eb732f00fbe4e2accd51a93",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/dynamic_lichao_line_main.cpp",
+        "before_sha256": "d89c3d827d26ca4750fe958490f56bc3948ec41e489f58bff58f6a366fc99479",
+        "after_sha256": "11962a8cabe3deff1a6beb3edb62eedcc9591ce25460fd03fcb0bfe09b4d1baa",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/dynamic_lichao_segment_main.cpp",
+        "before_sha256": "c703f05ce4e6e7abdc36eb84e375cc387ca66bc002d793277fbe14d36acbb7f6",
+        "after_sha256": "478c63a327381d0e6be139a2c2957b0238f938a2e3d8c3ba2f6b3edb7f3744e6",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/dynamic_union_find_main.cpp",
+        "before_sha256": "0c027e8ee12f63d392c1653f1b450c16ff25fe08dd5e6f5983a6e41b464f9ecf",
+        "after_sha256": "3bf11077095fbfdd1803851de4aea3d29357034e2f3be66445165f13677ff818",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/erasable_priority_queue_double_main.cpp",
+        "before_sha256": "0218f37a1b09e512fc0c665ba30284d3aedb98b713d7a879f22e4bf4c26f518c",
+        "after_sha256": "e7e796d7768a99a8f1ecb11e5f01e69ed608697ca9b2bfba724260edd6a237bc",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/erasable_priority_queue_unit_main.cpp",
+        "before_sha256": "1ef07650c434dcaaf9e59786e1d32be161f0679cb8e6ed72fbf8d3c682284d41",
+        "after_sha256": "7d015fe6764d12b2829e425924d89d1cc1acb1855030fe4ec7e28e85f66f214e",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/eratosthenes_main.cpp",
+        "before_sha256": "53fb022d3cb46e5a8b839a9589db3dd380af497152fd6ca7981e2aa0693e9cdf",
+        "after_sha256": "3a64febf817b342de8c892a7abbff079d5aaccdd959bd472a5f95843ca523581",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/floyd_warshall_bus_main.cpp",
+        "before_sha256": "e073c981d3bba2713d931a1bf8310a6a3d4baaa847fb9385019e1277a81556e8",
+        "after_sha256": "3cc2222919105c01ccd4486bc4826bcb0d00bf74c3f81ea165127564b5c773f1",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/geometry_circle_relation_main.cpp",
+        "before_sha256": "17b1c5cbf219caa9c632baf36d3733fc0412453864240a82c4b23e3a4a51ba7d",
+        "after_sha256": "22d1ca151e6c7759c786b25d9081372b2e33523904227fa073bb69fb5d92b97e",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/geometry_contains_atcoder_main.cpp",
+        "before_sha256": "2adbb73132ac14271e0e1298e68f7b6ebb1334f52edac63cdfb44e2b2aeb83ec",
+        "after_sha256": "5581c87cd09ecdbd12093e79c23abfbcd3722f683cc1ece1e592f01685924dc2",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/geometry_convex_hull_main.cpp",
+        "before_sha256": "aa32f2abb761e617ab6abf453480ccd3c929d5fcb12556150fd3bb6f1aa5a9cb",
+        "after_sha256": "138537e3e1c8fac7c923493e502d36379a675f6321773a2e19397a3015821d56",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/geometry_point_segment_distance_main.cpp",
+        "before_sha256": "ea8be2810f672684cae55c1581eaca2fbff25ecbcf03c6bb944142e42d3aba0d",
+        "after_sha256": "235ff1769178c61b7f04af45abfa39f88f7e89c18f3824a8fdcb91f1905e44b3",
+        "fixed_precision": true,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/geometry_quadrilateral_main.cpp",
+        "before_sha256": "0a09d6c77d3baebfb8b3e0b7a2b95af28de4b4a7ae62916e12fbf34f23f215fc",
+        "after_sha256": "1c559face6966ad79caa46f44a5897e060afb1f22f2820251de724f4ff9138ad",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/geometry_segment_intersection_atcoder_main.cpp",
+        "before_sha256": "35875c30c4978679757ca0e4b10b4e87c5082c4db9db09563fbcf5c925f379bd",
+        "after_sha256": "cc36d71985e776480a6a0a6bcd2b002dff33836e2ca87bb0244a87c5b9720e58",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/geometry_triangle_area_main.cpp",
+        "before_sha256": "5a652249d225f73cec82a5aa760140612e3bd6c8b97c94aff30389b0026e57a6",
+        "after_sha256": "3e910af24a1efb5e2b6648369de9e02d3f31a81555e16ab9aa7356afe4faac3c",
+        "fixed_precision": true,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/hash_map_main.cpp",
+        "before_sha256": "ba3dd0443e25da50f108c682fdca97b303bc26a76f8505d1cf28b77cd171b348",
+        "after_sha256": "6039e7938a60367a67815b2c7ba4c5b42179bacb80d6b10d4802f99522756a28",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/hash_set_unit_main.cpp",
+        "before_sha256": "c704b245e443e4d91fe78b2616251a41ff536afc69a6d3945878aa3b0259df91",
+        "after_sha256": "ae2c2243dc72a8f1784327b147c84e57eb66b87b47911461a48cbf2c70f96d0a",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/heap_prefix_kth_main.cpp",
+        "before_sha256": "2757a42d3a2a22a81462ada3bd805ec7fd76a0fb45968f2f82c46dfdc4026b77",
+        "after_sha256": "f2be82d165ff4d98c0279e63181abb75f61d68981dc6167c7e4a784c51b0f9b0",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/implicit_treap_affine_main.cpp",
+        "before_sha256": "57c0ccb38208883f815da9769ddc907276e4403356940101ab43f46230a1609c",
+        "after_sha256": "164e8597c277d90da07e3f627141c3864d53311fb8cc4425b2f644b473a8f28b",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/internal_hash_map_main.cpp",
+        "before_sha256": "49d094ac2716e25649ac0ca96203e2d82498a0970ef6fb7db4ade056b3806b7d",
+        "after_sha256": "cb78fdeb9f1e9a2be43a2ef0094c0afdc4623d7fbf2ef5fcbad79cf5e4b4f4ee",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/lca_main.cpp",
+        "before_sha256": "b80798cdb68609cfa0d73a763bbe5082e3ea1bc584e693fc3c44da5afe08c137",
+        "after_sha256": "bb1f6d6feef463ff6be7e1b9052c03082ed8155f9a006fb441580078dee8f3bb",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/line_container_2d_min_main.cpp",
+        "before_sha256": "892daf263bf1a5d4cec9a9faec19204306b6c743a40718118fda3fce4960f1df",
+        "after_sha256": "e55ca503138c4d7e8fcd35a6ece8d5022996aa085ca10b9c7dd2f698b3ff988a",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/line_container_min_main.cpp",
+        "before_sha256": "48cf1d149768fddb568757d4e8107b32a6c7ac590a412db61029e5684c7236a4",
+        "after_sha256": "7e2779e4931cd3d03a9aad063f840dd71037cda1c3c631d602ebe5022b3004f8",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/lis_main.cpp",
+        "before_sha256": "04f523839eb4f5c5045ad342c5a65d905921c4afaa2f2b70d882e469174ba8c8",
+        "after_sha256": "a29976f6877b9608c0f81b5d9397d55462ec6d9d1e237f2032abd8c16ec7f26a",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/matrix_rotate_main.cpp",
+        "before_sha256": "07ae1cdc3e9caedae0df9521ed6f6cc16fd14acc1f5833e0f438319b8c67347b",
+        "after_sha256": "b8a05bb69548cf03db49426ffb15e1e883af147d71fd6a0a3f71688c7744f73a",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/nearest_two_points_main.cpp",
+        "before_sha256": "56b3e5f65b12a05f75b01e0f90db2e7749a2e2a948897170b467a1b0db0f7a9f",
+        "after_sha256": "3ef5cdedba89f836901d35940fdb9d273bab6d1d64752d85d2fb61801600e517",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/next_combination_main.cpp",
+        "before_sha256": "9250ce5d3e3f956b69074b8b62805220a34b063c79f3c89ba87d678b0fc1e15a",
+        "after_sha256": "4d155206c67fe88a61cbf6d784a5f1f92c44a02a313542ed3299c9dab381ce3f",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/persistent_union_find_main.cpp",
+        "before_sha256": "c208e7ebfe8e61b7c77f6cf8c7f3a4cbf27cf2ad8aee46597d7af071904f6e4b",
+        "after_sha256": "22c250df7a6f9f378ab792ea56e8204419103648eed046cffa42400fc33eae71",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/primality_main.cpp",
+        "before_sha256": "c656acf5b27adb4308c883a810e1b23bac37b3e04a253564c00e5fef95c2e198",
+        "after_sha256": "13f4c095d1f35e996ea75e16597fdfe6339c78dbe4028cf8d6a8d03e54f59082",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/project_selection_main.cpp",
+        "before_sha256": "4df6ce24dc73668074df2f354cc0142ac41b823c5faefdcd91e2c981d85bf0cf",
+        "after_sha256": "250b98a7c2785922b37c1817d9f74e69066a03c640b8854b27e5809acff60fa4",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/radix_sort_greater_sum_main.cpp",
+        "before_sha256": "b5e1c5034fe1688de2968e20a39338656c699e6ce734074b426ba40bd7a960c3",
+        "after_sha256": "b96ddf7776904c4c2ba2f727b6b3b4ff2e0061e7f578ed6de68ce8f2a928d3ab",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/rollback_union_find_main.cpp",
+        "before_sha256": "ee4be11172f8af67890942fc37147643b818c6ae611604ef9c776e77e0b6b2a9",
+        "after_sha256": "8c6dad142331e1dcb3d367ff3a18a6fb138bfd193494541b5eb3bff790369417",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/rollback_weighted_union_find_potential_main.cpp",
+        "before_sha256": "95a1ac9e729bcf6ccd1d59009c397e37f6562e3c021e093ad813b5823c5716eb",
+        "after_sha256": "3fb2181607a62ff3bac9232f1c3df2b0bb3b85a757d3e0a9c76dd6fb72a65b22",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/rolling_hash_zalgorithm_main.cpp",
+        "before_sha256": "0d324b5b52f810719f4ca457bd6594aef60fced70bf52dc824e9d03331732ff3",
+        "after_sha256": "7a607fffa2d5726c705ca3b487e95c6063f298e48922dc968935616ac9a5c528",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/sieve_div_game_main.cpp",
+        "before_sha256": "2e7da6db46a10dab88dfb4c1565ef34b51e5747b66a1e844a2026a4722eef602",
+        "after_sha256": "eaf1f5620d14ec6c169d331b9fc2948f5f47d29a69ab15c0acfad1d4268369a9",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/spfa_coins_respawn_main.cpp",
+        "before_sha256": "5136c2e25861d881c814f999905062a82764d6df4745280c6b85a30eba7b68fc",
+        "after_sha256": "2b9fbf726dcf611ccd4aa6331f0a357d94848bfff8f57919d6f5830a2cf2f76d",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/topological_lexicographical_main.cpp",
+        "before_sha256": "cfb3c17fc6c69b57ffc5bd7bb3a83ee52fad7304ea30ab95ad87af53a462efb7",
+        "after_sha256": "04e14b31a2767f6e9964f73a118e53e11118dbcf3ba3588baa9768f641c500bb",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/topological_longest_path_main.cpp",
+        "before_sha256": "d8d3d03aa480daefb6f221222f59de077d8c3849d8fe71889f76d458b2ecda70",
+        "after_sha256": "c55c2601e7863c90ee58a2bac8ff39fb79fc3a5921134d039cca17da5871387f",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/trie_gacha_main.cpp",
+        "before_sha256": "ebe9a1e835a57cbc324a71d8695d14c02a92ec6f4a3d34013786a959f3b4355f",
+        "after_sha256": "5fc9518bc1e13a41cb0f4e3ea45878df17cf5ea569d5cd0b168d7495356415b7",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/union_find_main.cpp",
+        "before_sha256": "4ffda2c0adcca8d5d1ac054037c5ff4285a2d33401ad0925dca0d2e868197aef",
+        "after_sha256": "4eaa2d1fb03798169633d103a7a3cf4b93e1b99b8986f7abd05b35183bd3a84d",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/weighted_union_find_potential_main.cpp",
+        "before_sha256": "8cf8fbabf8e2e2df6ec803b0244f9d0002629e5692fcb9cdae8817b2ed290deb",
+        "after_sha256": "918239c6779de3889687d870b8558bd5b954e9a50c1807edcfda02fbf1f94f55",
+        "fixed_precision": false,
+        "io_only": true,
+        "declaration_value_initialization_only": false
+      },
+      {
+        "path": "Verify/current/drivers/zeta_and_main.cpp",
+        "before_sha256": "fddad9a6df4d93bd2f140768144b35f1bb4b4e611d2db8af61b055887d4d7393",
+        "after_sha256": "b470e84905ae3da8914def4c84c44f77f6f560c2ac8c73d6c6c5f1cfb23bdd53",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/zeta_gcd_conv_main.cpp",
+        "before_sha256": "aa9c18d1b16b274207b7a68d041ddd8a5594e1f82a5796b5c0ab282efe767b98",
+        "after_sha256": "cf0b62cbf487ac68d82e3e46dfd96ad92da5e4b51e3c896f5866b6b1e5af5b0f",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/zeta_gcd_transform_main.cpp",
+        "before_sha256": "0823bdb01aa748293eebf0f248d17fb5b04f1e562e7de1734cc76b277911e4e9",
+        "after_sha256": "72486bbb800914468f18c666f0b1e5f7e2692fb9273b0f7b4c64192de1a9d7ab",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/zeta_lcm_conv_main.cpp",
+        "before_sha256": "405eb08067b25fa4b73554ad6fc114f691353bb8a5765e621fbe4ef5513529a5",
+        "after_sha256": "3846f26958f8bd93dc850b1a8b9bc7250f88bf2c6c7aec5ecce881f64eeecb11",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/zeta_lcm_transform_main.cpp",
+        "before_sha256": "31979c74a7077d934a700ee5313f1f2b5a076918cf960f7b281088c4152ac49a",
+        "after_sha256": "84011f87858285e897bda44b1417ebcacebc9cd0dcb10684d83e8dc82c249b33",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/zeta_or_as_and_main.cpp",
+        "before_sha256": "7497cff931314e1051f713a7d945f79a6eac2afbd75c7de96ef5f6f24a2556c5",
+        "after_sha256": "d240ce163f247a9e75f5c677340cb282ecf058e2099f55f1bac18e5a3f0f01b4",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/zeta_set_as_and_main.cpp",
+        "before_sha256": "70badf888c9f573c05e007809bd3776e531480581f9037240a97f3edc93b9b0c",
+        "after_sha256": "6c98b49afe62eb6de417aa5809512846c85e9a2ad08d08a1605d19fdcbb27044",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      },
+      {
+        "path": "Verify/current/drivers/zeta_sparse_gcd_main.cpp",
+        "before_sha256": "dca9a8160a52a1fe5149be5c75f0e4b061a7f8e08a30394fb8eec7188d0ac8b7",
+        "after_sha256": "a97afe17ba4e7fda6c471fc2f60b4338b391f8a1e489d67b7caf35dfd44be1ae",
+        "fixed_precision": false,
+        "io_only": false,
+        "declaration_value_initialization_only": true
+      }
+    ],
+    "untouched_local_only_driver_count": 46,
+    "checks": {
+      "online_driver_count": true,
+      "online_entry_count": true,
+      "all_online_common_header": true,
+      "local_only_drivers_unchanged": true,
+      "online_standard_streams_remaining": false,
+      "fixed_precision_driver_count": 2,
+      "all_calculation_tokens_unchanged_after_io_normalization": false,
+      "all_calculation_tokens_unchanged_after_io_and_declaration_initialization_normalization": true,
+      "warning_scalar_initialization_driver_count": 39,
+      "formatting_only_token_equivalence": true
+    },
+    "warning_scalar_initialization": [
+      {
+        "path": "Verify/current/drivers/angle_sort_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/angle_sort_std_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/bellman_ford_coins_respawn_main.cpp",
+        "initializations": [
+          {
+            "before": "int n, m;",
+            "after": "int n{}, m{};"
+          },
+          {
+            "before": "std::int64_t price;",
+            "after": "std::int64_t price{};"
+          },
+          {
+            "before": "int a, b;",
+            "after": "int a{}, b{};"
+          },
+          {
+            "before": "std::int64_t coins;",
+            "after": "std::int64_t coins{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/binary_trie_main.cpp",
+        "initializations": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "int type;",
+            "after": "int type{};"
+          },
+          {
+            "before": "std::uint32_t x;",
+            "after": "std::uint32_t x{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/binomial_integer_main.cpp",
+        "initializations": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "std::uint32_t modulus;",
+            "after": "std::uint32_t modulus{};"
+          },
+          {
+            "before": "std::int64_t n, k;",
+            "after": "std::int64_t n{}, k{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/binomial_integer_prime_mod_main.cpp",
+        "initializations": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "std::uint32_t modulus;",
+            "after": "std::uint32_t modulus{};"
+          },
+          {
+            "before": "std::int64_t n, k;",
+            "after": "std::int64_t n{}, k{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/binomial_lucas_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/binomial_modint_main.cpp",
+        "initializations": [
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::uint32_t mod;",
+            "after": "std::uint32_t mod{};"
+          },
+          {
+            "before": "std::int64_t n,k;",
+            "after": "std::int64_t n{},k{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/binomial_modint_prime_mod_main.cpp",
+        "initializations": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "std::uint32_t modulus;",
+            "after": "std::uint32_t modulus{};"
+          },
+          {
+            "before": "std::int64_t n, k;",
+            "after": "std::int64_t n{}, k{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/binomial_prime_main.cpp",
+        "initializations": [
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::uint32_t mod;",
+            "after": "std::uint32_t mod{};"
+          },
+          {
+            "before": "std::int64_t n,k;",
+            "after": "std::int64_t n{},k{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/compressed_binary_trie_main.cpp",
+        "initializations": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "int type;",
+            "after": "int type{};"
+          },
+          {
+            "before": "std::uint32_t x;",
+            "after": "std::uint32_t x{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/dijkstra_main.cpp",
+        "initializations": [
+          {
+            "before": "int n,m,s,t;",
+            "after": "int n{},m{},s{},t{};"
+          },
+          {
+            "before": "int u,v;",
+            "after": "int u{},v{};"
+          },
+          {
+            "before": "std::int64_t w;",
+            "after": "std::int64_t w{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/dynamic_lichao_line_main.cpp",
+        "initializations": [
+          {
+            "before": "int n, q;",
+            "after": "int n{}, q{};"
+          },
+          {
+            "before": "std::int64_t a, b;",
+            "after": "std::int64_t a{}, b{};"
+          },
+          {
+            "before": "int type;",
+            "after": "int type{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/dynamic_lichao_segment_main.cpp",
+        "initializations": [
+          {
+            "before": "int n, q;",
+            "after": "int n{}, q{};"
+          },
+          {
+            "before": "std::int64_t l, r, a, b;",
+            "after": "std::int64_t l{}, r{}, a{}, b{};"
+          },
+          {
+            "before": "int type;",
+            "after": "int type{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/erasable_priority_queue_double_main.cpp",
+        "initializations": [
+          {
+            "before": "int n, q;",
+            "after": "int n{}, q{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/floyd_warshall_bus_main.cpp",
+        "initializations": [
+          {
+            "before": "int n, m;",
+            "after": "int n{}, m{};"
+          },
+          {
+            "before": "int a, b;",
+            "after": "int a{}, b{};"
+          },
+          {
+            "before": "std::int64_t time;",
+            "after": "std::int64_t time{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/geometry_contains_atcoder_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/geometry_convex_hull_main.cpp",
+        "initializations": [
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/hash_map_main.cpp",
+        "initializations": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::uint64_t key;",
+            "after": "std::uint64_t key{};"
+          },
+          {
+            "before": "std::uint64_t value;",
+            "after": "std::uint64_t value{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/internal_hash_map_main.cpp",
+        "initializations": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::uint64_t key;",
+            "after": "std::uint64_t key{};"
+          },
+          {
+            "before": "std::uint64_t value;",
+            "after": "std::uint64_t value{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/line_container_min_main.cpp",
+        "initializations": [
+          {
+            "before": "int n, q;",
+            "after": "int n{}, q{};"
+          },
+          {
+            "before": "std::int64_t a, b;",
+            "after": "std::int64_t a{}, b{};"
+          },
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::int64_t a, b;",
+            "after": "std::int64_t a{}, b{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/lis_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/matrix_rotate_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/next_combination_main.cpp",
+        "initializations": [
+          {
+            "before": "int n,m;",
+            "after": "int n{},m{};"
+          },
+          {
+            "before": "std::int64_t k;",
+            "after": "std::int64_t k{};"
+          },
+          {
+            "before": "int u,v;",
+            "after": "int u{},v{};"
+          },
+          {
+            "before": "std::int64_t w;",
+            "after": "std::int64_t w{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/primality_main.cpp",
+        "initializations": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "std::uint64_t n;",
+            "after": "std::uint64_t n{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/project_selection_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t fee;",
+            "after": "std::int64_t fee{};"
+          },
+          {
+            "before": "std::int64_t reward;",
+            "after": "std::int64_t reward{};"
+          },
+          {
+            "before": "int k;",
+            "after": "int k{};"
+          },
+          {
+            "before": "int target;",
+            "after": "int target{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/radix_sort_greater_sum_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/sieve_div_game_main.cpp",
+        "initializations": [
+          {
+            "before": "std::int64_t n;",
+            "after": "std::int64_t n{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/spfa_coins_respawn_main.cpp",
+        "initializations": [
+          {
+            "before": "int n, m;",
+            "after": "int n{}, m{};"
+          },
+          {
+            "before": "std::int64_t price;",
+            "after": "std::int64_t price{};"
+          },
+          {
+            "before": "int a, b;",
+            "after": "int a{}, b{};"
+          },
+          {
+            "before": "std::int64_t coins;",
+            "after": "std::int64_t coins{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/topological_lexicographical_main.cpp",
+        "initializations": [
+          {
+            "before": "int n,m;",
+            "after": "int n{},m{};"
+          },
+          {
+            "before": "int u,v;",
+            "after": "int u{},v{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/trie_gacha_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/zeta_and_main.cpp",
+        "initializations": [
+          {
+            "before": "int exponent;",
+            "after": "int exponent{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/zeta_gcd_conv_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/zeta_gcd_transform_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/zeta_lcm_conv_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/zeta_lcm_transform_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/zeta_or_as_and_main.cpp",
+        "initializations": [
+          {
+            "before": "int exponent;",
+            "after": "int exponent{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/zeta_set_as_and_main.cpp",
+        "initializations": [
+          {
+            "before": "int exponent;",
+            "after": "int exponent{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          }
+        ]
+      },
+      {
+        "path": "Verify/current/drivers/zeta_sparse_gcd_main.cpp",
+        "initializations": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      }
+    ],
+    "warning_formatting_only_drivers": [
+      "Verify/current/drivers/lis_main.cpp",
+      "Verify/current/drivers/topological_lexicographical_main.cpp",
+      "Verify/current/drivers/matrix_rotate_main.cpp"
+    ]
+  },
+  "independent_diff_audit": {
+    "entries_before": 137,
+    "entries_after": 137,
+    "online": 85,
+    "ids_same": true,
+    "judgements_byte_exact": true,
+    "library_sha_changes": [],
+    "unexpected_manifest_changes": [],
+    "driver_logic_diffs": [],
+    "accepted_metadata_changes": [
+      {
+        "id": "binary_trie",
+        "coverage": {
+          "before": "insert_unique・重複抑止・削除・最小XOR。mainは通常の入出力。",
+          "after": "insert_unique・重複抑止・削除・最小XOR。共通高速入出力。"
+        }
+      },
+      {
+        "id": "compressed_binary_trie",
+        "coverage": {
+          "before": "圧縮版のinsert_unique・重複抑止・削除・最小XOR。mainは通常の入出力。",
+          "after": "圧縮版のinsert_unique・重複抑止・削除・最小XOR。共通高速入出力。"
+        }
+      }
+    ],
+    "accepted_scalar_initializers": [
+      {
+        "id": "dynamic_lichao_segment",
+        "driver": "Verify/current/drivers/dynamic_lichao_segment_main.cpp",
+        "changes": [
+          {
+            "before": "int n, q;",
+            "after": "int n{}, q{};"
+          },
+          {
+            "before": "std::int64_t l, r, a, b;",
+            "after": "std::int64_t l{}, r{}, a{}, b{};"
+          },
+          {
+            "before": "int type;",
+            "after": "int type{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "dynamic_lichao_line",
+        "driver": "Verify/current/drivers/dynamic_lichao_line_main.cpp",
+        "changes": [
+          {
+            "before": "int n, q;",
+            "after": "int n{}, q{};"
+          },
+          {
+            "before": "std::int64_t a, b;",
+            "after": "std::int64_t a{}, b{};"
+          },
+          {
+            "before": "int type;",
+            "after": "int type{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "hash_map",
+        "driver": "Verify/current/drivers/hash_map_main.cpp",
+        "changes": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::uint64_t key;",
+            "after": "std::uint64_t key{};"
+          },
+          {
+            "before": "std::uint64_t value;",
+            "after": "std::uint64_t value{};"
+          }
+        ]
+      },
+      {
+        "id": "internal_hash_map",
+        "driver": "Verify/current/drivers/internal_hash_map_main.cpp",
+        "changes": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::uint64_t key;",
+            "after": "std::uint64_t key{};"
+          },
+          {
+            "before": "std::uint64_t value;",
+            "after": "std::uint64_t value{};"
+          }
+        ]
+      },
+      {
+        "id": "line_container_min",
+        "driver": "Verify/current/drivers/line_container_min_main.cpp",
+        "changes": [
+          {
+            "before": "int n, q;",
+            "after": "int n{}, q{};"
+          },
+          {
+            "before": "std::int64_t a, b;",
+            "after": "std::int64_t a{}, b{};"
+          },
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::int64_t a, b;",
+            "after": "std::int64_t a{}, b{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "erasable_priority_queue_double",
+        "driver": "Verify/current/drivers/erasable_priority_queue_double_main.cpp",
+        "changes": [
+          {
+            "before": "int n, q;",
+            "after": "int n{}, q{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "bellman_ford",
+        "driver": "Verify/current/drivers/bellman_ford_coins_respawn_main.cpp",
+        "changes": [
+          {
+            "before": "int n, m;",
+            "after": "int n{}, m{};"
+          },
+          {
+            "before": "std::int64_t price;",
+            "after": "std::int64_t price{};"
+          },
+          {
+            "before": "int a, b;",
+            "after": "int a{}, b{};"
+          },
+          {
+            "before": "std::int64_t coins;",
+            "after": "std::int64_t coins{};"
+          }
+        ]
+      },
+      {
+        "id": "spfa",
+        "driver": "Verify/current/drivers/spfa_coins_respawn_main.cpp",
+        "changes": [
+          {
+            "before": "int n, m;",
+            "after": "int n{}, m{};"
+          },
+          {
+            "before": "std::int64_t price;",
+            "after": "std::int64_t price{};"
+          },
+          {
+            "before": "int a, b;",
+            "after": "int a{}, b{};"
+          },
+          {
+            "before": "std::int64_t coins;",
+            "after": "std::int64_t coins{};"
+          }
+        ]
+      },
+      {
+        "id": "dijkstra",
+        "driver": "Verify/current/drivers/dijkstra_main.cpp",
+        "changes": [
+          {
+            "before": "int n,m,s,t;",
+            "after": "int n{},m{},s{},t{};"
+          },
+          {
+            "before": "int u,v;",
+            "after": "int u{},v{};"
+          },
+          {
+            "before": "std::int64_t w;",
+            "after": "std::int64_t w{};"
+          }
+        ]
+      },
+      {
+        "id": "binary_trie",
+        "driver": "Verify/current/drivers/binary_trie_main.cpp",
+        "changes": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "int type;",
+            "after": "int type{};"
+          },
+          {
+            "before": "std::uint32_t x;",
+            "after": "std::uint32_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "compressed_binary_trie",
+        "driver": "Verify/current/drivers/compressed_binary_trie_main.cpp",
+        "changes": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "int type;",
+            "after": "int type{};"
+          },
+          {
+            "before": "std::uint32_t x;",
+            "after": "std::uint32_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "floyd_warshall",
+        "driver": "Verify/current/drivers/floyd_warshall_bus_main.cpp",
+        "changes": [
+          {
+            "before": "int n, m;",
+            "after": "int n{}, m{};"
+          },
+          {
+            "before": "int a, b;",
+            "after": "int a{}, b{};"
+          },
+          {
+            "before": "std::int64_t time;",
+            "after": "std::int64_t time{};"
+          }
+        ]
+      },
+      {
+        "id": "binomial_integer",
+        "driver": "Verify/current/drivers/binomial_integer_main.cpp",
+        "changes": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "std::uint32_t modulus;",
+            "after": "std::uint32_t modulus{};"
+          },
+          {
+            "before": "std::int64_t n, k;",
+            "after": "std::int64_t n{}, k{};"
+          }
+        ]
+      },
+      {
+        "id": "binomial_integer_split",
+        "driver": "Verify/current/drivers/binomial_integer_main.cpp",
+        "changes": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "std::uint32_t modulus;",
+            "after": "std::uint32_t modulus{};"
+          },
+          {
+            "before": "std::int64_t n, k;",
+            "after": "std::int64_t n{}, k{};"
+          }
+        ]
+      },
+      {
+        "id": "binomial_modint",
+        "driver": "Verify/current/drivers/binomial_modint_main.cpp",
+        "changes": [
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::uint32_t mod;",
+            "after": "std::uint32_t mod{};"
+          },
+          {
+            "before": "std::int64_t n,k;",
+            "after": "std::int64_t n{},k{};"
+          }
+        ]
+      },
+      {
+        "id": "binomial_modint_split",
+        "driver": "Verify/current/drivers/binomial_modint_main.cpp",
+        "changes": [
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::uint32_t mod;",
+            "after": "std::uint32_t mod{};"
+          },
+          {
+            "before": "std::int64_t n,k;",
+            "after": "std::int64_t n{},k{};"
+          }
+        ]
+      },
+      {
+        "id": "binomial_integer_prime_mod",
+        "driver": "Verify/current/drivers/binomial_integer_prime_mod_main.cpp",
+        "changes": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "std::uint32_t modulus;",
+            "after": "std::uint32_t modulus{};"
+          },
+          {
+            "before": "std::int64_t n, k;",
+            "after": "std::int64_t n{}, k{};"
+          }
+        ]
+      },
+      {
+        "id": "binomial_integer_prime_mod_split",
+        "driver": "Verify/current/drivers/binomial_integer_prime_mod_main.cpp",
+        "changes": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "std::uint32_t modulus;",
+            "after": "std::uint32_t modulus{};"
+          },
+          {
+            "before": "std::int64_t n, k;",
+            "after": "std::int64_t n{}, k{};"
+          }
+        ]
+      },
+      {
+        "id": "binomial_prime",
+        "driver": "Verify/current/drivers/binomial_prime_main.cpp",
+        "changes": [
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::uint32_t mod;",
+            "after": "std::uint32_t mod{};"
+          },
+          {
+            "before": "std::int64_t n,k;",
+            "after": "std::int64_t n{},k{};"
+          }
+        ]
+      },
+      {
+        "id": "binomial_prime_split",
+        "driver": "Verify/current/drivers/binomial_prime_main.cpp",
+        "changes": [
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "std::uint32_t mod;",
+            "after": "std::uint32_t mod{};"
+          },
+          {
+            "before": "std::int64_t n,k;",
+            "after": "std::int64_t n{},k{};"
+          }
+        ]
+      },
+      {
+        "id": "binomial_lucas",
+        "driver": "Verify/current/drivers/binomial_lucas_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "id": "binomial_lucas_split",
+        "driver": "Verify/current/drivers/binomial_lucas_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "id": "primality",
+        "driver": "Verify/current/drivers/primality_main.cpp",
+        "changes": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "std::uint64_t n;",
+            "after": "std::uint64_t n{};"
+          }
+        ]
+      },
+      {
+        "id": "binomial_modint_prime_mod",
+        "driver": "Verify/current/drivers/binomial_modint_prime_mod_main.cpp",
+        "changes": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "std::uint32_t modulus;",
+            "after": "std::uint32_t modulus{};"
+          },
+          {
+            "before": "std::int64_t n, k;",
+            "after": "std::int64_t n{}, k{};"
+          }
+        ]
+      },
+      {
+        "id": "binomial_modint_prime_mod_split",
+        "driver": "Verify/current/drivers/binomial_modint_prime_mod_main.cpp",
+        "changes": [
+          {
+            "before": "int q;",
+            "after": "int q{};"
+          },
+          {
+            "before": "std::uint32_t modulus;",
+            "after": "std::uint32_t modulus{};"
+          },
+          {
+            "before": "std::int64_t n, k;",
+            "after": "std::int64_t n{}, k{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_and_full",
+        "driver": "Verify/current/drivers/zeta_and_main.cpp",
+        "changes": [
+          {
+            "before": "int exponent;",
+            "after": "int exponent{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_and_split",
+        "driver": "Verify/current/drivers/zeta_and_main.cpp",
+        "changes": [
+          {
+            "before": "int exponent;",
+            "after": "int exponent{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_or_as_and_full",
+        "driver": "Verify/current/drivers/zeta_or_as_and_main.cpp",
+        "changes": [
+          {
+            "before": "int exponent;",
+            "after": "int exponent{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_or_as_and_split",
+        "driver": "Verify/current/drivers/zeta_or_as_and_main.cpp",
+        "changes": [
+          {
+            "before": "int exponent;",
+            "after": "int exponent{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_set_as_and_full",
+        "driver": "Verify/current/drivers/zeta_set_as_and_main.cpp",
+        "changes": [
+          {
+            "before": "int exponent;",
+            "after": "int exponent{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_set_as_and_split",
+        "driver": "Verify/current/drivers/zeta_set_as_and_main.cpp",
+        "changes": [
+          {
+            "before": "int exponent;",
+            "after": "int exponent{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          },
+          {
+            "before": "std::int64_t v;",
+            "after": "std::int64_t v{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_gcd_conv_full",
+        "driver": "Verify/current/drivers/zeta_gcd_conv_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_gcd_conv_split",
+        "driver": "Verify/current/drivers/zeta_gcd_conv_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_gcd_transform_full",
+        "driver": "Verify/current/drivers/zeta_gcd_transform_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_gcd_transform_split",
+        "driver": "Verify/current/drivers/zeta_gcd_transform_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_lcm_conv_full",
+        "driver": "Verify/current/drivers/zeta_lcm_conv_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_lcm_conv_split",
+        "driver": "Verify/current/drivers/zeta_lcm_conv_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_lcm_transform_full",
+        "driver": "Verify/current/drivers/zeta_lcm_transform_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_lcm_transform_split",
+        "driver": "Verify/current/drivers/zeta_lcm_transform_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_sieve_factorize_full",
+        "driver": "Verify/current/drivers/sieve_div_game_main.cpp",
+        "changes": [
+          {
+            "before": "std::int64_t n;",
+            "after": "std::int64_t n{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_sieve_factorize_split",
+        "driver": "Verify/current/drivers/sieve_div_game_main.cpp",
+        "changes": [
+          {
+            "before": "std::int64_t n;",
+            "after": "std::int64_t n{};"
+          }
+        ]
+      },
+      {
+        "id": "angle_sort",
+        "driver": "Verify/current/drivers/angle_sort_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "id": "angle_sort_std",
+        "driver": "Verify/current/drivers/angle_sort_std_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "id": "radix_sort",
+        "driver": "Verify/current/drivers/radix_sort_greater_sum_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "id": "project_selection",
+        "driver": "Verify/current/drivers/project_selection_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t fee;",
+            "after": "std::int64_t fee{};"
+          },
+          {
+            "before": "std::int64_t reward;",
+            "after": "std::int64_t reward{};"
+          },
+          {
+            "before": "int k;",
+            "after": "int k{};"
+          },
+          {
+            "before": "int target;",
+            "after": "int target{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_sparse_gcd_full",
+        "driver": "Verify/current/drivers/zeta_sparse_gcd_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "zeta_sparse_gcd_split",
+        "driver": "Verify/current/drivers/zeta_sparse_gcd_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          },
+          {
+            "before": "std::int64_t x;",
+            "after": "std::int64_t x{};"
+          }
+        ]
+      },
+      {
+        "id": "geometry_convex_hull_full",
+        "driver": "Verify/current/drivers/geometry_convex_hull_main.cpp",
+        "changes": [
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "id": "geometry_convex_hull_split",
+        "driver": "Verify/current/drivers/geometry_convex_hull_main.cpp",
+        "changes": [
+          {
+            "before": "int t;",
+            "after": "int t{};"
+          },
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "id": "geometry_contains_atcoder_full",
+        "driver": "Verify/current/drivers/geometry_contains_atcoder_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "id": "geometry_contains_atcoder_split",
+        "driver": "Verify/current/drivers/geometry_contains_atcoder_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "id": "trie_dictionary",
+        "driver": "Verify/current/drivers/trie_gacha_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "id": "lis",
+        "driver": "Verify/current/drivers/lis_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      },
+      {
+        "id": "topological_lexicographical",
+        "driver": "Verify/current/drivers/topological_lexicographical_main.cpp",
+        "changes": [
+          {
+            "before": "int n,m;",
+            "after": "int n{},m{};"
+          },
+          {
+            "before": "int u,v;",
+            "after": "int u{},v{};"
+          }
+        ]
+      },
+      {
+        "id": "next_combination",
+        "driver": "Verify/current/drivers/next_combination_main.cpp",
+        "changes": [
+          {
+            "before": "int n,m;",
+            "after": "int n{},m{};"
+          },
+          {
+            "before": "std::int64_t k;",
+            "after": "std::int64_t k{};"
+          },
+          {
+            "before": "int u,v;",
+            "after": "int u{},v{};"
+          },
+          {
+            "before": "std::int64_t w;",
+            "after": "std::int64_t w{};"
+          }
+        ]
+      },
+      {
+        "id": "matrix_rotate",
+        "driver": "Verify/current/drivers/matrix_rotate_main.cpp",
+        "changes": [
+          {
+            "before": "int n;",
+            "after": "int n{};"
+          }
+        ]
+      }
+    ],
+    "drivers": [
+      {
+        "id": "dynamic_fenwick_range",
+        "driver": "Verify/current/drivers/dynamic_fenwick_range_main.cpp",
+        "old_driver_sha256": "1625eedf86370f314e4962d5af5d12835bb82f79e30662e2a478273770e47b08",
+        "new_driver_sha256": "df8e15a56df0dce95b04c22ebc182480f38d9512f35b63e1a74e851b2f5a4d8f",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "dynamic_fenwick_rectangle",
+        "driver": "Verify/current/drivers/dynamic_fenwick_rectangle_main.cpp",
+        "old_driver_sha256": "000fce4e3d246d478d5754ce084b442f9481e24dcfe231becc218495c75e57cc",
+        "new_driver_sha256": "6d9c9141f0e73b151e9eb2cc83b02d4fc7feefd47eb732f00fbe4e2accd51a93",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "dynamic_fenwick_2d_rectangle",
+        "driver": "Verify/current/drivers/dynamic_fenwick_2d_rectangle_main.cpp",
+        "old_driver_sha256": "899ddc5c0afedb1ee70d5955aab1f454d4972dc10a8c66cb4606b10f0cbc4ff2",
+        "new_driver_sha256": "f2b509ab43823f3b99d03423eaaa491cf2ed50a53317167cf33396ee05806efa",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "dynamic_lichao_segment",
+        "driver": "Verify/current/drivers/dynamic_lichao_segment_main.cpp",
+        "old_driver_sha256": "c703f05ce4e6e7abdc36eb84e375cc387ca66bc002d793277fbe14d36acbb7f6",
+        "new_driver_sha256": "478c63a327381d0e6be139a2c2957b0238f938a2e3d8c3ba2f6b3edb7f3744e6",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "dynamic_lichao_line",
+        "driver": "Verify/current/drivers/dynamic_lichao_line_main.cpp",
+        "old_driver_sha256": "d89c3d827d26ca4750fe958490f56bc3948ec41e489f58bff58f6a366fc99479",
+        "new_driver_sha256": "11962a8cabe3deff1a6beb3edb62eedcc9591ce25460fd03fcb0bfe09b4d1baa",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "dynamic_union_find",
+        "driver": "Verify/current/drivers/dynamic_union_find_main.cpp",
+        "old_driver_sha256": "0c027e8ee12f63d392c1653f1b450c16ff25fe08dd5e6f5983a6e41b464f9ecf",
+        "new_driver_sha256": "3bf11077095fbfdd1803851de4aea3d29357034e2f3be66445165f13677ff818",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "hash_map",
+        "driver": "Verify/current/drivers/hash_map_main.cpp",
+        "old_driver_sha256": "ba3dd0443e25da50f108c682fdca97b303bc26a76f8505d1cf28b77cd171b348",
+        "new_driver_sha256": "6039e7938a60367a67815b2c7ba4c5b42179bacb80d6b10d4802f99522756a28",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "internal_hash_map",
+        "driver": "Verify/current/drivers/internal_hash_map_main.cpp",
+        "old_driver_sha256": "49d094ac2716e25649ac0ca96203e2d82498a0970ef6fb7db4ade056b3806b7d",
+        "new_driver_sha256": "cb78fdeb9f1e9a2be43a2ef0094c0afdc4623d7fbf2ef5fcbad79cf5e4b4f4ee",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "line_container_min",
+        "driver": "Verify/current/drivers/line_container_min_main.cpp",
+        "old_driver_sha256": "48cf1d149768fddb568757d4e8107b32a6c7ac590a412db61029e5684c7236a4",
+        "new_driver_sha256": "7e2779e4931cd3d03a9aad063f840dd71037cda1c3c631d602ebe5022b3004f8",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "erasable_priority_queue_double",
+        "driver": "Verify/current/drivers/erasable_priority_queue_double_main.cpp",
+        "old_driver_sha256": "0218f37a1b09e512fc0c665ba30284d3aedb98b713d7a879f22e4bf4c26f518c",
+        "new_driver_sha256": "e7e796d7768a99a8f1ecb11e5f01e69ed608697ca9b2bfba724260edd6a237bc",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "heap_priority_queue",
+        "driver": "Verify/current/drivers/heap_prefix_kth_main.cpp",
+        "old_driver_sha256": "2757a42d3a2a22a81462ada3bd805ec7fd76a0fb45968f2f82c46dfdc4026b77",
+        "new_driver_sha256": "f2be82d165ff4d98c0279e63181abb75f61d68981dc6167c7e4a784c51b0f9b0",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "implicit_treap_affine",
+        "driver": "Verify/current/drivers/implicit_treap_affine_main.cpp",
+        "old_driver_sha256": "57c0ccb38208883f815da9769ddc907276e4403356940101ab43f46230a1609c",
+        "new_driver_sha256": "164e8597c277d90da07e3f627141c3864d53311fb8cc4425b2f644b473a8f28b",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "hash_set_unit",
+        "driver": "Verify/current/drivers/hash_set_unit_main.cpp",
+        "old_driver_sha256": "c704b245e443e4d91fe78b2616251a41ff536afc69a6d3945878aa3b0259df91",
+        "new_driver_sha256": "ae2c2243dc72a8f1784327b147c84e57eb66b87b47911461a48cbf2c70f96d0a",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "erasable_priority_queue_unit",
+        "driver": "Verify/current/drivers/erasable_priority_queue_unit_main.cpp",
+        "old_driver_sha256": "1ef07650c434dcaaf9e59786e1d32be161f0679cb8e6ed72fbf8d3c682284d41",
+        "new_driver_sha256": "7d015fe6764d12b2829e425924d89d1cc1acb1855030fe4ec7e28e85f66f214e",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "line_container_2d_min",
+        "driver": "Verify/current/drivers/line_container_2d_min_main.cpp",
+        "old_driver_sha256": "892daf263bf1a5d4cec9a9faec19204306b6c743a40718118fda3fce4960f1df",
+        "new_driver_sha256": "e55ca503138c4d7e8fcd35a6ece8d5022996aa085ca10b9c7dd2f698b3ff988a",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "bellman_ford",
+        "driver": "Verify/current/drivers/bellman_ford_coins_respawn_main.cpp",
+        "old_driver_sha256": "5871cc83420f4ce61ebec33cbedbf1b9107dc14178f58da69ae2e34019950bf7",
+        "new_driver_sha256": "6c7bf71f06cb76a972c1f99f596d312b0eb933810615b7ce9a094ca9108c2afd",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "spfa",
+        "driver": "Verify/current/drivers/spfa_coins_respawn_main.cpp",
+        "old_driver_sha256": "5136c2e25861d881c814f999905062a82764d6df4745280c6b85a30eba7b68fc",
+        "new_driver_sha256": "2b9fbf726dcf611ccd4aa6331f0a357d94848bfff8f57919d6f5830a2cf2f76d",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "dijkstra",
+        "driver": "Verify/current/drivers/dijkstra_main.cpp",
+        "old_driver_sha256": "e7fa1af5d19c6e2e1118195bf4d4cef87e8d34aee3204be9304719d16f274d52",
+        "new_driver_sha256": "a3f65cbaa82ad3235b8cb01b74faa33d50ffa42f55ea12d9c9077023a47ae19f",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binary_trie",
+        "driver": "Verify/current/drivers/binary_trie_main.cpp",
+        "old_driver_sha256": "09a2a4cd28461024797ea1292bd915a1920f72dbeb892f83ff12992e4c013c57",
+        "new_driver_sha256": "ffd1f56f2785089ed0884abfb3b45341007b899f6d115fb3c15c45238c503ff6",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "compressed_binary_trie",
+        "driver": "Verify/current/drivers/compressed_binary_trie_main.cpp",
+        "old_driver_sha256": "84987355456539022b61d2bdb0d6619a49110e3974714a2e52bb6064ec589f49",
+        "new_driver_sha256": "c5763def1647d50ca3abdbe2e8e4efaaa0221dd0f6ca1a831f1fe861bc9d82e3",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "floyd_warshall",
+        "driver": "Verify/current/drivers/floyd_warshall_bus_main.cpp",
+        "old_driver_sha256": "e073c981d3bba2713d931a1bf8310a6a3d4baaa847fb9385019e1277a81556e8",
+        "new_driver_sha256": "3cc2222919105c01ccd4486bc4826bcb0d00bf74c3f81ea165127564b5c773f1",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binomial_integer",
+        "driver": "Verify/current/drivers/binomial_integer_main.cpp",
+        "old_driver_sha256": "c0f7422cb7b84f8def7208c0b1b4b6f23d21ef4f67cb70c86bc3622df0fdc883",
+        "new_driver_sha256": "c1bc7a0efee1af8b1f8e386177be33e92791aee8ac893edf81263394d70f2a99",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binomial_integer_split",
+        "driver": "Verify/current/drivers/binomial_integer_main.cpp",
+        "old_driver_sha256": "c0f7422cb7b84f8def7208c0b1b4b6f23d21ef4f67cb70c86bc3622df0fdc883",
+        "new_driver_sha256": "c1bc7a0efee1af8b1f8e386177be33e92791aee8ac893edf81263394d70f2a99",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binomial_modint",
+        "driver": "Verify/current/drivers/binomial_modint_main.cpp",
+        "old_driver_sha256": "f700b05ec75d7da5a978f1f6f7c39a021ab465fc15e02a57cd1bef04ce2598b6",
+        "new_driver_sha256": "aec5dd894f99011e6734822472571ef35904e8381c5f057e1f7578c9289de3c6",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binomial_modint_split",
+        "driver": "Verify/current/drivers/binomial_modint_main.cpp",
+        "old_driver_sha256": "f700b05ec75d7da5a978f1f6f7c39a021ab465fc15e02a57cd1bef04ce2598b6",
+        "new_driver_sha256": "aec5dd894f99011e6734822472571ef35904e8381c5f057e1f7578c9289de3c6",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binomial_integer_prime_mod",
+        "driver": "Verify/current/drivers/binomial_integer_prime_mod_main.cpp",
+        "old_driver_sha256": "fce6572ce73e4fdb21eecc67775b0f9840c4b3cb9bdc5dffbebffd0ee32376ed",
+        "new_driver_sha256": "413e7a8b830f1dc2b0fa37b5dbc20d5a07abb3cd19d2d23a5b53328430a614d3",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binomial_integer_prime_mod_split",
+        "driver": "Verify/current/drivers/binomial_integer_prime_mod_main.cpp",
+        "old_driver_sha256": "fce6572ce73e4fdb21eecc67775b0f9840c4b3cb9bdc5dffbebffd0ee32376ed",
+        "new_driver_sha256": "413e7a8b830f1dc2b0fa37b5dbc20d5a07abb3cd19d2d23a5b53328430a614d3",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binomial_prime",
+        "driver": "Verify/current/drivers/binomial_prime_main.cpp",
+        "old_driver_sha256": "fcfe9113e8da84a0a875150d3ff5af1bec01061b999bbb2de7da49daa76b2f23",
+        "new_driver_sha256": "58284287e66ebc6d0f21f25edee8ef7f14547e3633511e58e56f486e2c615e5c",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binomial_prime_split",
+        "driver": "Verify/current/drivers/binomial_prime_main.cpp",
+        "old_driver_sha256": "fcfe9113e8da84a0a875150d3ff5af1bec01061b999bbb2de7da49daa76b2f23",
+        "new_driver_sha256": "58284287e66ebc6d0f21f25edee8ef7f14547e3633511e58e56f486e2c615e5c",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binomial_lucas",
+        "driver": "Verify/current/drivers/binomial_lucas_main.cpp",
+        "old_driver_sha256": "f6900e30020884b57bd68a0b7fea2fdc34f7ffc4e14abddd4ba1fe00d136ad48",
+        "new_driver_sha256": "bb506394dfc4fb840a8bc0c10a257aaa17a6decf3936038403e3c9668cadd002",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binomial_lucas_split",
+        "driver": "Verify/current/drivers/binomial_lucas_main.cpp",
+        "old_driver_sha256": "f6900e30020884b57bd68a0b7fea2fdc34f7ffc4e14abddd4ba1fe00d136ad48",
+        "new_driver_sha256": "bb506394dfc4fb840a8bc0c10a257aaa17a6decf3936038403e3c9668cadd002",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "primality",
+        "driver": "Verify/current/drivers/primality_main.cpp",
+        "old_driver_sha256": "c656acf5b27adb4308c883a810e1b23bac37b3e04a253564c00e5fef95c2e198",
+        "new_driver_sha256": "13f4c095d1f35e996ea75e16597fdfe6339c78dbe4028cf8d6a8d03e54f59082",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "eratosthenes",
+        "driver": "Verify/current/drivers/eratosthenes_main.cpp",
+        "old_driver_sha256": "53fb022d3cb46e5a8b839a9589db3dd380af497152fd6ca7981e2aa0693e9cdf",
+        "new_driver_sha256": "3a64febf817b342de8c892a7abbff079d5aaccdd959bd472a5f95843ca523581",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binomial_modint_prime_mod",
+        "driver": "Verify/current/drivers/binomial_modint_prime_mod_main.cpp",
+        "old_driver_sha256": "19d08817d2f7e04d01c0ef856590dd28ba31e3d9f90792be08f9ea0b55dbcbcf",
+        "new_driver_sha256": "9585167c13ba6d412619782e11e993c5c74c14ae5389091e005806c7ffd4d924",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "binomial_modint_prime_mod_split",
+        "driver": "Verify/current/drivers/binomial_modint_prime_mod_main.cpp",
+        "old_driver_sha256": "19d08817d2f7e04d01c0ef856590dd28ba31e3d9f90792be08f9ea0b55dbcbcf",
+        "new_driver_sha256": "9585167c13ba6d412619782e11e993c5c74c14ae5389091e005806c7ffd4d924",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_and_full",
+        "driver": "Verify/current/drivers/zeta_and_main.cpp",
+        "old_driver_sha256": "fddad9a6df4d93bd2f140768144b35f1bb4b4e611d2db8af61b055887d4d7393",
+        "new_driver_sha256": "b470e84905ae3da8914def4c84c44f77f6f560c2ac8c73d6c6c5f1cfb23bdd53",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_and_split",
+        "driver": "Verify/current/drivers/zeta_and_main.cpp",
+        "old_driver_sha256": "fddad9a6df4d93bd2f140768144b35f1bb4b4e611d2db8af61b055887d4d7393",
+        "new_driver_sha256": "b470e84905ae3da8914def4c84c44f77f6f560c2ac8c73d6c6c5f1cfb23bdd53",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_or_as_and_full",
+        "driver": "Verify/current/drivers/zeta_or_as_and_main.cpp",
+        "old_driver_sha256": "7497cff931314e1051f713a7d945f79a6eac2afbd75c7de96ef5f6f24a2556c5",
+        "new_driver_sha256": "d240ce163f247a9e75f5c677340cb282ecf058e2099f55f1bac18e5a3f0f01b4",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_or_as_and_split",
+        "driver": "Verify/current/drivers/zeta_or_as_and_main.cpp",
+        "old_driver_sha256": "7497cff931314e1051f713a7d945f79a6eac2afbd75c7de96ef5f6f24a2556c5",
+        "new_driver_sha256": "d240ce163f247a9e75f5c677340cb282ecf058e2099f55f1bac18e5a3f0f01b4",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_set_as_and_full",
+        "driver": "Verify/current/drivers/zeta_set_as_and_main.cpp",
+        "old_driver_sha256": "70badf888c9f573c05e007809bd3776e531480581f9037240a97f3edc93b9b0c",
+        "new_driver_sha256": "6c98b49afe62eb6de417aa5809512846c85e9a2ad08d08a1605d19fdcbb27044",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_set_as_and_split",
+        "driver": "Verify/current/drivers/zeta_set_as_and_main.cpp",
+        "old_driver_sha256": "70badf888c9f573c05e007809bd3776e531480581f9037240a97f3edc93b9b0c",
+        "new_driver_sha256": "6c98b49afe62eb6de417aa5809512846c85e9a2ad08d08a1605d19fdcbb27044",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_gcd_conv_full",
+        "driver": "Verify/current/drivers/zeta_gcd_conv_main.cpp",
+        "old_driver_sha256": "aa9c18d1b16b274207b7a68d041ddd8a5594e1f82a5796b5c0ab282efe767b98",
+        "new_driver_sha256": "cf0b62cbf487ac68d82e3e46dfd96ad92da5e4b51e3c896f5866b6b1e5af5b0f",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_gcd_conv_split",
+        "driver": "Verify/current/drivers/zeta_gcd_conv_main.cpp",
+        "old_driver_sha256": "aa9c18d1b16b274207b7a68d041ddd8a5594e1f82a5796b5c0ab282efe767b98",
+        "new_driver_sha256": "cf0b62cbf487ac68d82e3e46dfd96ad92da5e4b51e3c896f5866b6b1e5af5b0f",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_gcd_transform_full",
+        "driver": "Verify/current/drivers/zeta_gcd_transform_main.cpp",
+        "old_driver_sha256": "0823bdb01aa748293eebf0f248d17fb5b04f1e562e7de1734cc76b277911e4e9",
+        "new_driver_sha256": "72486bbb800914468f18c666f0b1e5f7e2692fb9273b0f7b4c64192de1a9d7ab",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_gcd_transform_split",
+        "driver": "Verify/current/drivers/zeta_gcd_transform_main.cpp",
+        "old_driver_sha256": "0823bdb01aa748293eebf0f248d17fb5b04f1e562e7de1734cc76b277911e4e9",
+        "new_driver_sha256": "72486bbb800914468f18c666f0b1e5f7e2692fb9273b0f7b4c64192de1a9d7ab",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_lcm_conv_full",
+        "driver": "Verify/current/drivers/zeta_lcm_conv_main.cpp",
+        "old_driver_sha256": "405eb08067b25fa4b73554ad6fc114f691353bb8a5765e621fbe4ef5513529a5",
+        "new_driver_sha256": "3846f26958f8bd93dc850b1a8b9bc7250f88bf2c6c7aec5ecce881f64eeecb11",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_lcm_conv_split",
+        "driver": "Verify/current/drivers/zeta_lcm_conv_main.cpp",
+        "old_driver_sha256": "405eb08067b25fa4b73554ad6fc114f691353bb8a5765e621fbe4ef5513529a5",
+        "new_driver_sha256": "3846f26958f8bd93dc850b1a8b9bc7250f88bf2c6c7aec5ecce881f64eeecb11",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_lcm_transform_full",
+        "driver": "Verify/current/drivers/zeta_lcm_transform_main.cpp",
+        "old_driver_sha256": "31979c74a7077d934a700ee5313f1f2b5a076918cf960f7b281088c4152ac49a",
+        "new_driver_sha256": "84011f87858285e897bda44b1417ebcacebc9cd0dcb10684d83e8dc82c249b33",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_lcm_transform_split",
+        "driver": "Verify/current/drivers/zeta_lcm_transform_main.cpp",
+        "old_driver_sha256": "31979c74a7077d934a700ee5313f1f2b5a076918cf960f7b281088c4152ac49a",
+        "new_driver_sha256": "84011f87858285e897bda44b1417ebcacebc9cd0dcb10684d83e8dc82c249b33",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_sieve_factorize_full",
+        "driver": "Verify/current/drivers/sieve_div_game_main.cpp",
+        "old_driver_sha256": "2e7da6db46a10dab88dfb4c1565ef34b51e5747b66a1e844a2026a4722eef602",
+        "new_driver_sha256": "eaf1f5620d14ec6c169d331b9fc2948f5f47d29a69ab15c0acfad1d4268369a9",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_sieve_factorize_split",
+        "driver": "Verify/current/drivers/sieve_div_game_main.cpp",
+        "old_driver_sha256": "2e7da6db46a10dab88dfb4c1565ef34b51e5747b66a1e844a2026a4722eef602",
+        "new_driver_sha256": "eaf1f5620d14ec6c169d331b9fc2948f5f47d29a69ab15c0acfad1d4268369a9",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "nearest_two_points",
+        "driver": "Verify/current/drivers/nearest_two_points_main.cpp",
+        "old_driver_sha256": "56b3e5f65b12a05f75b01e0f90db2e7749a2e2a948897170b467a1b0db0f7a9f",
+        "new_driver_sha256": "3ef5cdedba89f836901d35940fdb9d273bab6d1d64752d85d2fb61801600e517",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "angle_sort",
+        "driver": "Verify/current/drivers/angle_sort_main.cpp",
+        "old_driver_sha256": "a1a866f4d2bdb210b42aebfb225b4e2776231ea087372b17d03a6df34e56d791",
+        "new_driver_sha256": "4c21141daca45fd55027fe62ae4bdf7c50c05570e8d394e1b2a7f68263217d45",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "angle_sort_std",
+        "driver": "Verify/current/drivers/angle_sort_std_main.cpp",
+        "old_driver_sha256": "6130d24e7805aa9ec964ebc65623177a679223bee8935a34b90d1df69a7af676",
+        "new_driver_sha256": "90ebda406a404360fdb48a4dd80609ea4978481d55d1c1640aca69bfb017028c",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "radix_sort",
+        "driver": "Verify/current/drivers/radix_sort_greater_sum_main.cpp",
+        "old_driver_sha256": "b5e1c5034fe1688de2968e20a39338656c699e6ce734074b426ba40bd7a960c3",
+        "new_driver_sha256": "b96ddf7776904c4c2ba2f727b6b3b4ff2e0061e7f578ed6de68ce8f2a928d3ab",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "project_selection",
+        "driver": "Verify/current/drivers/project_selection_main.cpp",
+        "old_driver_sha256": "4df6ce24dc73668074df2f354cc0142ac41b823c5faefdcd91e2c981d85bf0cf",
+        "new_driver_sha256": "250b98a7c2785922b37c1817d9f74e69066a03c640b8854b27e5809acff60fa4",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_sparse_gcd_full",
+        "driver": "Verify/current/drivers/zeta_sparse_gcd_main.cpp",
+        "old_driver_sha256": "dca9a8160a52a1fe5149be5c75f0e4b061a7f8e08a30394fb8eec7188d0ac8b7",
+        "new_driver_sha256": "a97afe17ba4e7fda6c471fc2f60b4338b391f8a1e489d67b7caf35dfd44be1ae",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "zeta_sparse_gcd_split",
+        "driver": "Verify/current/drivers/zeta_sparse_gcd_main.cpp",
+        "old_driver_sha256": "dca9a8160a52a1fe5149be5c75f0e4b061a7f8e08a30394fb8eec7188d0ac8b7",
+        "new_driver_sha256": "a97afe17ba4e7fda6c471fc2f60b4338b391f8a1e489d67b7caf35dfd44be1ae",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_convex_hull_full",
+        "driver": "Verify/current/drivers/geometry_convex_hull_main.cpp",
+        "old_driver_sha256": "aa32f2abb761e617ab6abf453480ccd3c929d5fcb12556150fd3bb6f1aa5a9cb",
+        "new_driver_sha256": "138537e3e1c8fac7c923493e502d36379a675f6321773a2e19397a3015821d56",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_convex_hull_split",
+        "driver": "Verify/current/drivers/geometry_convex_hull_main.cpp",
+        "old_driver_sha256": "aa32f2abb761e617ab6abf453480ccd3c929d5fcb12556150fd3bb6f1aa5a9cb",
+        "new_driver_sha256": "138537e3e1c8fac7c923493e502d36379a675f6321773a2e19397a3015821d56",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_orientation_atcoder_full",
+        "driver": "Verify/current/drivers/geometry_quadrilateral_main.cpp",
+        "old_driver_sha256": "0a09d6c77d3baebfb8b3e0b7a2b95af28de4b4a7ae62916e12fbf34f23f215fc",
+        "new_driver_sha256": "1c559face6966ad79caa46f44a5897e060afb1f22f2820251de724f4ff9138ad",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_orientation_atcoder_split",
+        "driver": "Verify/current/drivers/geometry_quadrilateral_main.cpp",
+        "old_driver_sha256": "0a09d6c77d3baebfb8b3e0b7a2b95af28de4b4a7ae62916e12fbf34f23f215fc",
+        "new_driver_sha256": "1c559face6966ad79caa46f44a5897e060afb1f22f2820251de724f4ff9138ad",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_segment_intersection_atcoder_full",
+        "driver": "Verify/current/drivers/geometry_segment_intersection_atcoder_main.cpp",
+        "old_driver_sha256": "35875c30c4978679757ca0e4b10b4e87c5082c4db9db09563fbcf5c925f379bd",
+        "new_driver_sha256": "cc36d71985e776480a6a0a6bcd2b002dff33836e2ca87bb0244a87c5b9720e58",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_segment_intersection_atcoder_split",
+        "driver": "Verify/current/drivers/geometry_segment_intersection_atcoder_main.cpp",
+        "old_driver_sha256": "35875c30c4978679757ca0e4b10b4e87c5082c4db9db09563fbcf5c925f379bd",
+        "new_driver_sha256": "cc36d71985e776480a6a0a6bcd2b002dff33836e2ca87bb0244a87c5b9720e58",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_triangle_area_full",
+        "driver": "Verify/current/drivers/geometry_triangle_area_main.cpp",
+        "old_driver_sha256": "5a652249d225f73cec82a5aa760140612e3bd6c8b97c94aff30389b0026e57a6",
+        "new_driver_sha256": "3e910af24a1efb5e2b6648369de9e02d3f31a81555e16ab9aa7356afe4faac3c",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_triangle_area_split",
+        "driver": "Verify/current/drivers/geometry_triangle_area_main.cpp",
+        "old_driver_sha256": "5a652249d225f73cec82a5aa760140612e3bd6c8b97c94aff30389b0026e57a6",
+        "new_driver_sha256": "3e910af24a1efb5e2b6648369de9e02d3f31a81555e16ab9aa7356afe4faac3c",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_contains_atcoder_full",
+        "driver": "Verify/current/drivers/geometry_contains_atcoder_main.cpp",
+        "old_driver_sha256": "2adbb73132ac14271e0e1298e68f7b6ebb1334f52edac63cdfb44e2b2aeb83ec",
+        "new_driver_sha256": "5581c87cd09ecdbd12093e79c23abfbcd3722f683cc1ece1e592f01685924dc2",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_contains_atcoder_split",
+        "driver": "Verify/current/drivers/geometry_contains_atcoder_main.cpp",
+        "old_driver_sha256": "2adbb73132ac14271e0e1298e68f7b6ebb1334f52edac63cdfb44e2b2aeb83ec",
+        "new_driver_sha256": "5581c87cd09ecdbd12093e79c23abfbcd3722f683cc1ece1e592f01685924dc2",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_circle_relation_full",
+        "driver": "Verify/current/drivers/geometry_circle_relation_main.cpp",
+        "old_driver_sha256": "17b1c5cbf219caa9c632baf36d3733fc0412453864240a82c4b23e3a4a51ba7d",
+        "new_driver_sha256": "22d1ca151e6c7759c786b25d9081372b2e33523904227fa073bb69fb5d92b97e",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_circle_relation_split",
+        "driver": "Verify/current/drivers/geometry_circle_relation_main.cpp",
+        "old_driver_sha256": "17b1c5cbf219caa9c632baf36d3733fc0412453864240a82c4b23e3a4a51ba7d",
+        "new_driver_sha256": "22d1ca151e6c7759c786b25d9081372b2e33523904227fa073bb69fb5d92b97e",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_point_segment_distance_full",
+        "driver": "Verify/current/drivers/geometry_point_segment_distance_main.cpp",
+        "old_driver_sha256": "ea8be2810f672684cae55c1581eaca2fbff25ecbcf03c6bb944142e42d3aba0d",
+        "new_driver_sha256": "235ff1769178c61b7f04af45abfa39f88f7e89c18f3824a8fdcb91f1905e44b3",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "geometry_point_segment_distance_split",
+        "driver": "Verify/current/drivers/geometry_point_segment_distance_main.cpp",
+        "old_driver_sha256": "ea8be2810f672684cae55c1581eaca2fbff25ecbcf03c6bb944142e42d3aba0d",
+        "new_driver_sha256": "235ff1769178c61b7f04af45abfa39f88f7e89c18f3824a8fdcb91f1905e44b3",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "union_find",
+        "driver": "Verify/current/drivers/union_find_main.cpp",
+        "old_driver_sha256": "4ffda2c0adcca8d5d1ac054037c5ff4285a2d33401ad0925dca0d2e868197aef",
+        "new_driver_sha256": "4eaa2d1fb03798169633d103a7a3cf4b93e1b99b8986f7abd05b35183bd3a84d",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "weighted_union_find",
+        "driver": "Verify/current/drivers/weighted_union_find_potential_main.cpp",
+        "old_driver_sha256": "8cf8fbabf8e2e2df6ec803b0244f9d0002629e5692fcb9cdae8817b2ed290deb",
+        "new_driver_sha256": "918239c6779de3889687d870b8558bd5b954e9a50c1807edcfda02fbf1f94f55",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "rollback_weighted_union_find",
+        "driver": "Verify/current/drivers/rollback_weighted_union_find_potential_main.cpp",
+        "old_driver_sha256": "95a1ac9e729bcf6ccd1d59009c397e37f6562e3c021e093ad813b5823c5716eb",
+        "new_driver_sha256": "3fb2181607a62ff3bac9232f1c3df2b0bb3b85a757d3e0a9c76dd6fb72a65b22",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "persistent_union_find",
+        "driver": "Verify/current/drivers/persistent_union_find_main.cpp",
+        "old_driver_sha256": "c208e7ebfe8e61b7c77f6cf8c7f3a4cbf27cf2ad8aee46597d7af071904f6e4b",
+        "new_driver_sha256": "22c250df7a6f9f378ab792ea56e8204419103648eed046cffa42400fc33eae71",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "rollback_union_find",
+        "driver": "Verify/current/drivers/rollback_union_find_main.cpp",
+        "old_driver_sha256": "ee4be11172f8af67890942fc37147643b818c6ae611604ef9c776e77e0b6b2a9",
+        "new_driver_sha256": "8c6dad142331e1dcb3d367ff3a18a6fb138bfd193494541b5eb3bff790369417",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "trie_dictionary",
+        "driver": "Verify/current/drivers/trie_gacha_main.cpp",
+        "old_driver_sha256": "ebe9a1e835a57cbc324a71d8695d14c02a92ec6f4a3d34013786a959f3b4355f",
+        "new_driver_sha256": "5fc9518bc1e13a41cb0f4e3ea45878df17cf5ea569d5cd0b168d7495356415b7",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "rolling_hash",
+        "driver": "Verify/current/drivers/rolling_hash_zalgorithm_main.cpp",
+        "old_driver_sha256": "0d324b5b52f810719f4ca457bd6594aef60fced70bf52dc824e9d03331732ff3",
+        "new_driver_sha256": "7a607fffa2d5726c705ca3b487e95c6063f298e48922dc968935616ac9a5c528",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "lca",
+        "driver": "Verify/current/drivers/lca_main.cpp",
+        "old_driver_sha256": "b80798cdb68609cfa0d73a763bbe5082e3ea1bc584e693fc3c44da5afe08c137",
+        "new_driver_sha256": "bb1f6d6feef463ff6be7e1b9052c03082ed8155f9a006fb441580078dee8f3bb",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "lis",
+        "driver": "Verify/current/drivers/lis_main.cpp",
+        "old_driver_sha256": "04f523839eb4f5c5045ad342c5a65d905921c4afaa2f2b70d882e469174ba8c8",
+        "new_driver_sha256": "a29976f6877b9608c0f81b5d9397d55462ec6d9d1e237f2032abd8c16ec7f26a",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "topological",
+        "driver": "Verify/current/drivers/topological_longest_path_main.cpp",
+        "old_driver_sha256": "d8d3d03aa480daefb6f221222f59de077d8c3849d8fe71889f76d458b2ecda70",
+        "new_driver_sha256": "c55c2601e7863c90ee58a2bac8ff39fb79fc3a5921134d039cca17da5871387f",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "topological_lexicographical",
+        "driver": "Verify/current/drivers/topological_lexicographical_main.cpp",
+        "old_driver_sha256": "cfb3c17fc6c69b57ffc5bd7bb3a83ee52fad7304ea30ab95ad87af53a462efb7",
+        "new_driver_sha256": "04e14b31a2767f6e9964f73a118e53e11118dbcf3ba3588baa9768f641c500bb",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "next_combination",
+        "driver": "Verify/current/drivers/next_combination_main.cpp",
+        "old_driver_sha256": "9250ce5d3e3f956b69074b8b62805220a34b063c79f3c89ba87d678b0fc1e15a",
+        "new_driver_sha256": "4d155206c67fe88a61cbf6d784a5f1f92c44a02a313542ed3299c9dab381ce3f",
+        "computation_same_after_io_normalization": true
+      },
+      {
+        "id": "matrix_rotate",
+        "driver": "Verify/current/drivers/matrix_rotate_main.cpp",
+        "old_driver_sha256": "07ae1cdc3e9caedae0df9521ed6f6cc16fd14acc1f5833e0f438319b8c67347b",
+        "new_driver_sha256": "b8a05bb69548cf03db49426ffb15e1e883af147d71fd6a0a3f71688c7744f73a",
+        "computation_same_after_io_normalization": true
+      }
+    ]
+  },
+  "validation": {
+    "format": 1,
+    "common_io_sha256": "cba66d85b9c17e034da75f4b14b03ae0de281be213aea5e0561f78072209043a",
+    "native": {
+      "configurations": 340,
+      "sample_runs": 708,
+      "passed": 340,
+      "warnings": 0,
+      "reused_exact_source_configurations": 116,
+      "rebuilt_after_driver_value_initialization": 224
+    },
+    "standard_fallback": {
+      "configurations": 64,
+      "sample_runs": 108,
+      "passed": 64,
+      "warnings": 0
+    },
+    "all_tested_sources_match_current_render": true,
+    "external_submissions_performed": false,
+    "performance_measurements_performed": false,
+    "comparison_conditions": "C++23 -O2 -Wall -Wextra; GCC and Clang; checks enabled/disabled; max two concurrent compilers; samples evaluated with prepare_verify.matches"
+  },
+  "unit_io_tests": {
+    "source_sha256": "cba66d85b9c17e034da75f4b14b03ae0de281be213aea5e0561f78072209043a",
+    "results": [
+      {
+        "name": "gcc_checked",
+        "command": [
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "/tmp/atcoder_verify_fast_io_20261020/test.cpp",
+          "-o",
+          "/tmp/atcoder_verify_fast_io_20261020/gcc_checked"
+        ],
+        "compile_returncode": 0,
+        "warnings": "",
+        "run_returncode": 0,
+        "stdout": "OK 600791 checks\n",
+        "stderr": ""
+      },
+      {
+        "name": "gcc_skip",
+        "command": [
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/atcoder_verify_fast_io_20261020/test.cpp",
+          "-o",
+          "/tmp/atcoder_verify_fast_io_20261020/gcc_skip"
+        ],
+        "compile_returncode": 0,
+        "warnings": "",
+        "run_returncode": 0,
+        "stdout": "OK 600727 checks\n",
+        "stderr": ""
+      },
+      {
+        "name": "clang_checked",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-O2",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "/tmp/atcoder_verify_fast_io_20261020/test.cpp",
+          "-o",
+          "/tmp/atcoder_verify_fast_io_20261020/clang_checked"
+        ],
+        "compile_returncode": 0,
+        "warnings": "",
+        "run_returncode": 0,
+        "stdout": "OK 600791 checks\n",
+        "stderr": ""
+      },
+      {
+        "name": "clang_skip",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-O2",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/atcoder_verify_fast_io_20261020/test.cpp",
+          "-o",
+          "/tmp/atcoder_verify_fast_io_20261020/clang_skip"
+        ],
+        "compile_returncode": 0,
+        "warnings": "",
+        "run_returncode": 0,
+        "stdout": "OK 600727 checks\n",
+        "stderr": ""
+      },
+      {
+        "name": "sanitizers_checked",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "/tmp/atcoder_verify_fast_io_20261020/test.cpp",
+          "-o",
+          "/tmp/atcoder_verify_fast_io_20261020/sanitizers_checked"
+        ],
+        "compile_returncode": 0,
+        "warnings": "",
+        "run_returncode": 1,
+        "stdout": "",
+        "stderr": "==28==LeakSanitizer has encountered a fatal error.\n==28==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1\n==28==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)\n"
+      },
+      {
+        "name": "sanitizers_skip",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/atcoder_verify_fast_io_20261020/test.cpp",
+          "-o",
+          "/tmp/atcoder_verify_fast_io_20261020/sanitizers_skip"
+        ],
+        "compile_returncode": 0,
+        "warnings": "",
+        "run_returncode": 1,
+        "stdout": "",
+        "stderr": "==33==LeakSanitizer has encountered a fatal error.\n==33==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1\n==33==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)\n"
+      }
+    ],
+    "sanitizer_reruns": [
+      {
+        "name": "sanitizers_checked",
+        "ASAN_OPTIONS": "detect_leaks=0",
+        "returncode": 0,
+        "stdout": "OK 600791 checks\n",
+        "stderr": ""
+      },
+      {
+        "name": "sanitizers_skip",
+        "ASAN_OPTIONS": "detect_leaks=0",
+        "returncode": 0,
+        "stdout": "OK 600727 checks\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "persisted_unit_test": {
+    "path": "Verify/current/tests/fast_io_test.cpp",
+    "sha256": "36f4e1d448edf4246baa8ad60af566bc7c8744e88abbee81ad81d73b67a15e1b",
+    "gcc_checked_and_skip": "いずれも警告0・600791/600727 checks合格。元の境界ハーネスからincludeを相対パスへ変更しSPDXを追加。"
+  },
+  "history": {
+    "judgements_byte_exact": true,
+    "judgements_sha256": "8f66a00cf04fd9a2cb86bcd227f2668f193437ac4ed6365ad9d8f33dbcba3089",
+    "historical_submissions": "過去の提出URL・AC・実行時間は当時のmainによる記録として保持。現在のオンラインコードへACを移さない。",
+    "online_status": {
+      "未提出": 78,
+      "要再提出（ソース変更）": 7
+    }
+  },
+  "limitations": [
+    "オンライン再提出は実施していない。サンプル検査は全入力・全APIの正しさを保証するものではない。",
+    "今回の性能測定は行っていない。過去の通常入出力の時間と比較して、本体の高速化とは説明しない。",
+    "IO単体のASan/UBSanは合格。LSanは実行環境のptrace制約のためdetect_leaks=0で実施。",
+    "元から座標圧縮等のAPI変換に必要な照会保持は維持。速度のための照会バッチ化・並べ替え・法別切り替えは追加していない。"
+  ]
+}

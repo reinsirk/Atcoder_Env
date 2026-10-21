@@ -1,0 +1,321 @@
+{
+  "date": "2026-10-18",
+  "license": "CC0-1.0",
+  "files": {
+    "geometory.cpp": {
+      "sha256": "e2c7dd9ac7095785341f67523dc72eef8215f6548218f854280cab022d6b9476",
+      "SPDX": "CC0-1.0"
+    },
+    "rollback-union-findw.cpp": {
+      "sha256": "c84b79a28d177612af1d1a2c3b8043ac7b685d00e283b0a0a277d26479773c9f",
+      "SPDX": "CC0-1.0"
+    }
+  },
+  "creation": {
+    "method": "旧コード・原典・Readme・git履歴を渡さない別担当へAPI仕様と数学的な定義を渡して全面新規実装。実装を読まない担当の幾何独立試験、およびrootの独立BFS照合・旧新版性能比較に基づき調整。",
+    "implementation_authors_received_legacy_source": false,
+    "implementation_author_scope": "この2項目は初回の全面新規実装を担当した独立担当を指す。rootは旧コードをAPI抽出・性能比較のため参照し、新規部品の設置・文書化と高速経路の適用範囲を調整。旧コード本文を新規実装へ取り込んでいない。",
+    "implementation_authors_accessed_external_implementation": false,
+    "third_party_legacy_terms": "旧版の由来・許諾の確認限界はmain監査のhistorical_auditに保存。新規寄与のCC0は旧配布物を再許諾しない。"
+  },
+  "organization": {
+    "geometry_targets": [
+      "Geometry/Point.cpp",
+      "Geometry/Line_Segment.cpp",
+      "Geometry/Polygon.cpp",
+      "Geometry/Circle.cpp",
+      "geometory.cpp"
+    ],
+    "authority": "Geometry/components",
+    "generator": "Scripts/generate_geometry.py",
+    "check": "python3 Scripts/generate_geometry.py --check",
+    "standalone": "各ファイルは必要な部品と標準includeを展開。独自include不要。各部品の共有ガードで併用可能。Circleへcircumcircle、Pointへ点間distanceを整理。",
+    "namespace": "既存のgeo::公開呼出名互換のためgeoを維持。新しい名前空間は追加しない。"
+  },
+  "verification": {
+    "geometry": {
+      "compilers": [
+        "GCC15.3",
+        "Clang21"
+      ],
+      "language": "C++23",
+      "configurations": 8,
+      "axes": [
+        "runtime checks ON/OFF",
+        "native128/standard arithmetic"
+      ],
+      "checks_per_configuration": {
+        "checked": 248908,
+        "skip": 248906
+      },
+      "independent_oracles": "整数述語の数式参照、gift wrapping凸包、解析的面積/重心、距離と円交点の残差、1219 convex_cut例（600乱数矩形の両向き等）。",
+      "modules": "単独4本×8構成=32、24順列×GCC/Clang=48、逆順・重複・全機能版併用×8構成=8、計88ビルドと実行。最終整数凸包判定修正後は全機能版の8構成を再確認。",
+      "edge_cases": "空/一点/一直線/零半径/接線/重なり/ほぼ同心、極大・極小座標のarg_cmp推移性、normがoverflowする非零方向の射影、int64全域distの標準経路。",
+      "sanitizers": "Clang ASan/UBSan（凸包の局所性能修正前）。整数凸包修正後は通常8構成再確認。"
+    },
+    "rollback_weighted": {
+      "compilers": [
+        "GCC15.3",
+        "Clang21"
+      ],
+      "language": "C++23",
+      "configurations": 8,
+      "axes": [
+        "runtime checks ON/OFF",
+        "native128/standard arithmetic"
+      ],
+      "independent_oracles": "70系列×1000操作の独立グラフBFSと履歴モデル。140000 connectivity/potential照合、冗長/矛盾追加も1履歴、undo/snapshot/clamp/rollback、copy/move/reset、整数端点/相殺/最終overflow、双方root相対値がT範囲外の差の相殺、int8/int16/int32/int64の上限付き深木、上限超過オブジェクトのcopy/move/swap。",
+      "author_checks": "独立BFS、途中の整数相殺、符号なし剰余、==なし独自加法群、標準代替・検査省略。",
+      "results": {
+        "sha256": "c84b79a28d177612af1d1a2c3b8043ac7b685d00e283b0a0a277d26479773c9f",
+        "results": [
+          {
+            "name": "gcc_native_checked",
+            "output": "140000 independent rollback connectivity/potential checks passed",
+            "passed": true
+          },
+          {
+            "name": "gcc_native_skip",
+            "output": "140000 independent rollback connectivity/potential checks passed",
+            "passed": true
+          },
+          {
+            "name": "gcc_standard_checked",
+            "output": "140000 independent rollback connectivity/potential checks passed",
+            "passed": true
+          },
+          {
+            "name": "gcc_standard_skip",
+            "output": "140000 independent rollback connectivity/potential checks passed",
+            "passed": true
+          },
+          {
+            "name": "clang_native_checked",
+            "output": "140000 independent rollback connectivity/potential checks passed",
+            "passed": true
+          },
+          {
+            "name": "clang_native_skip",
+            "output": "140000 independent rollback connectivity/potential checks passed",
+            "passed": true
+          },
+          {
+            "name": "clang_standard_checked",
+            "output": "140000 independent rollback connectivity/potential checks passed",
+            "passed": true
+          },
+          {
+            "name": "clang_standard_skip",
+            "output": "140000 independent rollback connectivity/potential checks passed",
+            "passed": true
+          },
+          {
+            "name": "ASan_UBSan",
+            "passed": true,
+            "output": "140000 independent rollback connectivity/potential checks passed"
+          },
+          {
+            "name": "ASan_UBSan_standard",
+            "passed": true,
+            "output": "140000 independent rollback connectivity/potential checks passed"
+          }
+        ]
+      }
+    },
+    "leak_sanitizer": "実行環境の制約により無効"
+  },
+  "API_changes": {
+    "geometry": "既存型・公開操作を維持。free distance(P,P)とconvex_cutを追加。ほぼ同心の交差円を不正な1接点へ潰す旧挙動を修正。浮動arg_cmpは固定atan2キーと距離・最大成分で順序を維持。有限座標・整数Cの演算範囲を前提とする。",
+    "rollback_weighted": "旧公開data/weight/history/HistoryState/inner_snapを内部へ整理。unite_checked/try_diff/consistent/root_with_weight/component_count/groups/reserve_history/reset/clear/size()/empty/copy/move/swapを追加。root相対重みは最終T範囲内が前提、diffは途中T範囲外でも相殺を保持。保存辺の絶対値上限とサイズ併合深さによる安全保証で途中の反復加算検査を省く。保証が崩れたフラグはrollbackでも保守的に保持しreset/clearで戻す。全走査や追加履歴なし。"
+  },
+  "benchmark": {
+    "compiler": "GCC15.3.0",
+    "flags": [
+      "-std=c++23",
+      "-O2"
+    ],
+    "cpu_affinity": 8,
+    "repetitions": 7,
+    "statistic": "median",
+    "ordering": "old/new alternated",
+    "unit": "milliseconds",
+    "geometry_baseline": "旧本体のnamespace名変更とpragma once除去のみ。",
+    "geometry_inputs": "point:20万三点組のdot/cross/dist2×12。predicate:orientationとsegment intersects×12。linear:projection/点線距離/点線分距離×6。hull:20万乱数点×6（確保・sort含む）。polygon:四角形contains/area/centroid×6。circle:20万対×3、両交点xの和で順序不問の照合。偏角sort:20万点を整数4回/long double2回。",
+    "geometry_results": {
+      "point": {
+        "old": 29.444977,
+        "new": 29.192796
+      },
+      "predicate": {
+        "old": 32.002069,
+        "new": 22.732063
+      },
+      "linear": {
+        "old": 167.525603,
+        "new": 124.210708
+      },
+      "hull": {
+        "old": 73.355942,
+        "new": 73.7619
+      },
+      "polygon": {
+        "old": 23.574088,
+        "new": 22.748574
+      },
+      "circle": {
+        "old": 52.049396,
+        "new": 42.181972
+      },
+      "sort_integer": {
+        "old": 75.951077,
+        "new": 74.747296
+      },
+      "sort_real": {
+        "old": 643.450685,
+        "new": 612.229042
+      }
+    },
+    "rollback_baseline": "旧版の未使用ACL include/usingとpragma onceを比較用だけ除去、クラス名変更。",
+    "rollback_inputs": "tiny:32頂点31追加と100queryを20000回。merge_random:20万頂点40万追加。queries_random:20万頂点の乱数親の木、60万対のsame/diff/get_weight。balanced:262144頂点の均衡木、60万対。find_balancedはfind/size/sameのみ。rollback:20万頂点の木を状態0へ全巻戻し。初期化・領域確保は構築時間に含む。",
+    "checksum": "整数は旧新checksum一致、幾何実数は点順に依存しない集計を相対1e-9で照合。",
+    "limitations": "測定した入力・環境の結果。全入力で同等以上の速度を保証するものではない。",
+    "rollback_results": {
+      "tiny": {
+        "old": [
+          2.007239,
+          3.827339
+        ],
+        "new": [
+          2.166871,
+          2.092428
+        ]
+      },
+      "merge_random": {
+        "old": [
+          11.330128,
+          0.00019
+        ],
+        "new": [
+          9.774102,
+          0.0001
+        ]
+      },
+      "queries_random": {
+        "old": [
+          2.36571,
+          1.924168
+        ],
+        "new": [
+          1.951257,
+          1.292405
+        ]
+      },
+      "queries_balanced": {
+        "old": [
+          3.040071,
+          34.005289
+        ],
+        "new": [
+          2.403163,
+          33.658862
+        ]
+      },
+      "find_balanced": {
+        "old": [
+          3.039146,
+          27.713016
+        ],
+        "new": [
+          2.448132,
+          27.904811
+        ]
+      },
+      "rollback": {
+        "old": [
+          2.380703,
+          0.364593
+        ],
+        "new": [
+          1.932821,
+          0.190973
+        ]
+      }
+    },
+    "rollback_variants": {
+      "skip": {
+        "tiny": {
+          "old": [
+            2.036277,
+            3.82587
+          ],
+          "new": [
+            2.037512,
+            1.690253
+          ]
+        },
+        "queries_random": {
+          "old": [
+            2.386939,
+            1.910372
+          ],
+          "new": [
+            1.910187,
+            1.096247
+          ]
+        },
+        "queries_balanced": {
+          "old": [
+            3.038601,
+            34.27756
+          ],
+          "new": [
+            2.422071,
+            34.0351
+          ]
+        }
+      },
+      "standard": {
+        "tiny": {
+          "old": [
+            2.0069,
+            4.048597
+          ],
+          "new": [
+            2.150083,
+            2.282263
+          ]
+        },
+        "queries_random": {
+          "old": [
+            2.373457,
+            1.945615
+          ],
+          "new": [
+            1.963645,
+            1.435098
+          ]
+        },
+        "queries_balanced": {
+          "old": [
+            3.01706,
+            34.08711
+          ],
+          "new": [
+            2.406736,
+            33.709044
+          ]
+        },
+        "merge_random": {
+          "old": [
+            11.356082,
+            0.000121
+          ],
+          "new": [
+            9.650857,
+            0.000129
+          ]
+        }
+      }
+    }
+  }
+}

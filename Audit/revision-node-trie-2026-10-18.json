@@ -1,0 +1,706 @@
+{
+  "date": "2026-10-18",
+  "license": "CC0-1.0",
+  "files": {
+    "Node.cpp": {
+      "sha256": "80cfe8319fdb74552a4a55aeb465bacbb02734adf1457995a3bd9bef24815bfd",
+      "SPDX": "CC0-1.0"
+    },
+    "Trie.cpp": {
+      "sha256": "65993a76e52da97a82ffd11aba6cb35d2a6a845729827a34c9ac4e6e48c2a560",
+      "SPDX": "CC0-1.0"
+    }
+  },
+  "creation": {
+    "method": "著者本人が自作と明示した既存のCC0骨組みを整備し、新しい便利な操作を実装。独立担当がAPI仕様と別モデルのみから試験。",
+    "authorship_record": "Audit/authorship-node-trie-2026-10-18.json",
+    "scope": "外部許諾不明の実装の全面新規置換ではない。本人申告時のSPDXのみの更新と、今回の実装整備を区別する。過去の監査・申告snapshotを保持。"
+  },
+  "API": {
+    "Node": {
+      "preserved": [
+        "public shared_ptr<Node> n",
+        "Node{next} construction",
+        "copy shares successor",
+        "move transfers successor"
+      ],
+      "added": [
+        "make_node",
+        "make_chain",
+        "chain_size",
+        "chain_tail",
+        "chain_nth",
+        "push_front_node",
+        "pop_front_node",
+        "reverse_chain",
+        "clone_chain",
+        "cycle_entry",
+        "has_cycle",
+        "break_cycle",
+        "clear_chain"
+      ],
+      "checks": "chain_size/tail/cloneの通常走査にBrent循環検査を統合。SKIP_RUNTIME_CHECKSでは検査と専用状態を除く。事前走査なし。容量overflow保護は常時。reverseは両モードで非循環が前提。",
+      "ownership": "通常のshared_ptrで指すNode自体を所有する。別対象所有のaliasingやno-op deleterは対象外。n変更は共有者へ見える。uniqueな後続を反復解放し、外部共有された末尾は保持。循環はbreak_cycleで切ってから解放。",
+      "compatibility": "コンストラクタ追加により非aggregateとなり指定初期化は不可。make_shared<Node>()/Node{next}は対応。"
+    },
+    "Trie": {
+      "preserved": [
+        "TrieNode public unordered_map<char,shared_ptr<TrieNode>> children",
+        "legacy copy shares children"
+      ],
+      "added": [
+        "Trie",
+        "insert with multiplicity",
+        "erase with multiplicity",
+        "erase_all",
+        "count",
+        "contains",
+        "prefix_count",
+        "starts_with",
+        "size",
+        "distinct_size",
+        "empty",
+        "node_count",
+        "capacity",
+        "longest_prefix",
+        "count_less",
+        "kth",
+        "lower_bound",
+        "items with prefix and limit",
+        "clear",
+        "reserve_nodes",
+        "swap",
+        "independent copy and reusable moved-from state"
+      ],
+      "semantics": "全256バイト・NUL・空文字列・重複に対応。符号なしバイト辞書順。kthは0始まり重複込み、itemsは異なる語と個数。starts_with(empty)は空集合でfalse。",
+      "representation": "ノードpool＋ソート済み兄弟リスト。次数16で256-entry索引を追加、8未満でfree listへ返却。ノードと索引再利用。64文字までのinsert既存経路を固定arrayへ保存。削除時は切断箇所だけ兄弟link探索。",
+      "storage": "今回の64bit環境でNode40B、Table2048B。capacity()はノードpoolのみ。clearは両poolのcapacityを保持。",
+      "checks": "全string_view入力が有効。SKIP専用状態なし。個数・容量overflowは常時length_error。insertとcopy assignmentは論理内容の強い例外保証。",
+      "legacy_ownership": "TrieNodeは通常のshared_ptrで指す子を所有。private pendingリンクで深い木・共有DAGを反復解放。循環回収はしない。legacy copyは子を共有、Trie copyは独立。",
+      "compatibility": "TrieNode{children}に対応。非aggregateとなり指定初期化は不可。不要なbits/stdc++.h/ACL/using namespace/TEMPL/補助関数prototypeを削除。"
+    }
+  },
+  "verification": {
+    "Node": {
+      "status": "pass",
+      "implementation_read": false,
+      "implementation_path": "/tmp/atcoder_node_trie_20261018/new_Node.cpp",
+      "implementation_sha256": "6c21d5594f34719db498fb1393be46dc5b7218594772e5e8bf318f6d0ace7f27",
+      "test_path": "/tmp/atcoder_node_trie_20261018/node_independent_test.cpp",
+      "test_sha256": "579777f022fb955428ed2102e58be879f599e3150ed47e0f891bd2cdfc5107ff",
+      "standard": "c++23",
+      "cpu_affinity": 12,
+      "randomized_trials": 16000,
+      "maximum_chain_nodes": 1000000,
+      "configurations": [
+        {
+          "compiler": "GCC",
+          "checks": "enabled",
+          "optimization": "-O2",
+          "assertions": 3035108,
+          "exit_code": 0
+        },
+        {
+          "compiler": "GCC",
+          "checks": "SKIP_RUNTIME_CHECKS",
+          "optimization": "-O2",
+          "assertions": 3033626,
+          "exit_code": 0
+        },
+        {
+          "compiler": "Clang",
+          "checks": "enabled",
+          "optimization": "-O2",
+          "assertions": 3035108,
+          "exit_code": 0
+        },
+        {
+          "compiler": "Clang",
+          "checks": "SKIP_RUNTIME_CHECKS",
+          "optimization": "-O2",
+          "assertions": 3033626,
+          "exit_code": 0
+        },
+        {
+          "compiler": "Clang",
+          "checks": "enabled",
+          "optimization": "-O1",
+          "sanitizers": [
+            "address",
+            "undefined"
+          ],
+          "ASAN_OPTIONS": "detect_leaks=0",
+          "assertions": 3035108,
+          "exit_code": 0
+        }
+      ],
+      "coverage": [
+        "header included first and twice",
+        "empty and one-element chains",
+        "make_chain zero count and tail sharing",
+        "Node copy and move construction and assignment",
+        "push_front_node and pop_front_node with shared old head",
+        "member n reference arguments for push/pop/clear/break_cycle",
+        "independent vector of raw node identities for nth/reverse/size/tail/cycle_entry",
+        "clone length, distinct corresponding identities, and preservation after original reversal",
+        "shared observer sees reversed links",
+        "self cycle and prefix cycle detection and finite nth",
+        "checked chain_size/chain_tail/clone_chain reject cycles with invalid_argument",
+        "break_cycle removes exact closing edge and repeated call returns false",
+        "million-node automatic destruction verified with weak_ptr expiration",
+        "unique prefix release and externally owned suffix preservation",
+        "clear_chain empties head and preserves externally owned suffix"
+      ],
+      "scope_exclusions": [
+        "shared_ptr aliasing",
+        "non-owning or custom-deleter shared_ptr links"
+      ],
+      "findings": []
+    },
+    "Node_final_comment_only_change": {
+      "detail": "chain_nthの計算量説明を循環/非循環で区別。独立試験対象のcandidateと最終Nodeの前処理結果は検査ON/OFFとも完全一致。",
+      "final_sha256": "80cfe8319fdb74552a4a55aeb465bacbb02734adf1457995a3bd9bef24815bfd",
+      "preprocessed_sha256": {
+        "checked": "d781051e0d5d52240019d1be4038cd173326f496a0fbc0f930faed5e43a4f144",
+        "skip": "0a4d2e6176fab93a038a1a64b0a57cff7357f76322ee1a748460a73a751485a8"
+      }
+    },
+    "Trie": {
+      "header": "/home/reinsirk/Atcoder_Env/Trie.cpp",
+      "header_sha256": "65993a76e52da97a82ffd11aba6cb35d2a6a845729827a34c9ac4e6e48c2a560",
+      "test_source": "/tmp/atcoder_node_trie_20261018/trie_independent_test.cpp",
+      "test_source_sha256": "69007a864af169911780f63d2a51c2ce9f67fb899ecd155e28a63160ac4bfe14",
+      "independence": "Only AGENTS.md and the public API contract supplied by the parent were consulted. Neither previous/new implementation nor README/Audit was read. The header is included twice.",
+      "oracle": "std::map<string,size_t,UnsignedLex> with an independent unsigned-byte comparator, linear reference queries, and a set of all registered prefixes for node_count.",
+      "coverage": [
+        "Empty words/trie, duplicate multiplicities, zero-copy insert/erase, all 256 byte values, embedded NUL, unsigned-byte lexicographic boundaries",
+        "insert/erase/erase_all/count/contains/prefix_count/starts_with/longest_prefix/count_less/kth/lower_bound/items including limits 0/1/4/SIZE_MAX",
+        "14,000 seeded randomized operations with reference comparisons, prefix queries, and periodic whole-state checks",
+        "Independent copies, replacement copy assignment, self-copy assignment, move construction/assignment and moved-from reuse, swap, clear, reserve_nodes",
+        "Exact live-node count, node-capacity reuse after deletion, read-only query node/capacity invariance",
+        "Degree transitions 7/8/15/16/17/256 and reverse, repeated promotion/demotion/reuse at root and depths 1/2; copy/move/copy assignment/self-assignment/swap/clear at every stage",
+        "SIZE_MAX multiplicity at empty word and total multiplicity split across two words, huge kth and count_less, protected overflow and unchanged state, insufficient erase, impossible reserve",
+        "160,000-byte word insertion/copy/enumeration/queries/erase/clear/destruction without recursion",
+        "Compatibility TrieNode map constructor including null child, shared children across copy/assignment, move/reuse",
+        "Compatibility destruction: 160,000-node chain, 90,000-node children.clear path, 70,000-node comb, 100,000-layer shared DAG, external shared suffix survival and final weak_ptr expiration"
+      ],
+      "summary": {
+        "normal_configurations_passed": 4,
+        "sandbox_asan_ubsan_configurations_passed": 2,
+        "outside_sandbox_asan_ubsan_lsan_configurations_passed": 2,
+        "sandbox_lsan_status": "Unavailable due to ptrace restriction; distinct outside-sandbox runs passed.",
+        "source_diagnostics": []
+      },
+      "runs": [
+        {
+          "compiler": "gcc",
+          "version": "15.2.0",
+          "mode": "checked",
+          "flags": [
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-pedantic",
+            "-DTRIE_HEADER=\"/home/reinsirk/Atcoder_Env/Trie.cpp\""
+          ],
+          "cpu": 10,
+          "binary": "/tmp/atcoder_node_trie_20261018/trie_independent_final_gcc_checked",
+          "build_exit_code": 0,
+          "run_exit_code": 0,
+          "warnings": [],
+          "stdout": "trie independent tests passed\n",
+          "status": "passed"
+        },
+        {
+          "compiler": "gcc",
+          "version": "15.2.0",
+          "mode": "skip",
+          "flags": [
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-pedantic",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DTRIE_HEADER=\"/home/reinsirk/Atcoder_Env/Trie.cpp\""
+          ],
+          "cpu": 10,
+          "binary": "/tmp/atcoder_node_trie_20261018/trie_independent_final_gcc_skip",
+          "build_exit_code": 0,
+          "run_exit_code": 0,
+          "warnings": [],
+          "stdout": "trie independent tests passed\n",
+          "status": "passed"
+        },
+        {
+          "compiler": "clang",
+          "version": "21.1.8",
+          "mode": "checked",
+          "flags": [
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-pedantic",
+            "-DTRIE_HEADER=\"/home/reinsirk/Atcoder_Env/Trie.cpp\""
+          ],
+          "cpu": 10,
+          "binary": "/tmp/atcoder_node_trie_20261018/trie_independent_final_clang_checked",
+          "build_exit_code": 0,
+          "run_exit_code": 0,
+          "warnings": [],
+          "stdout": "trie independent tests passed\n",
+          "status": "passed"
+        },
+        {
+          "compiler": "clang",
+          "version": "21.1.8",
+          "mode": "skip",
+          "flags": [
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-pedantic",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DTRIE_HEADER=\"/home/reinsirk/Atcoder_Env/Trie.cpp\""
+          ],
+          "cpu": 10,
+          "binary": "/tmp/atcoder_node_trie_20261018/trie_independent_final_clang_skip",
+          "build_exit_code": 0,
+          "run_exit_code": 0,
+          "warnings": [],
+          "stdout": "trie independent tests passed\n",
+          "status": "passed"
+        },
+        {
+          "compiler": "clang",
+          "version": "21.1.8",
+          "mode": "checked",
+          "flags": [
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-pedantic",
+            "-fsanitize=address,undefined",
+            "-fno-omit-frame-pointer",
+            "-DTRIE_HEADER=\"/home/reinsirk/Atcoder_Env/Trie.cpp\""
+          ],
+          "cpu": 10,
+          "binary": "/tmp/atcoder_node_trie_20261018/trie_independent_san_checked",
+          "build_exit_code": 0,
+          "warnings": [],
+          "UBSAN_OPTIONS": "halt_on_error=1",
+          "environment": "sandbox",
+          "ASAN_OPTIONS": "detect_leaks=1:abort_on_error=1",
+          "run_exit_code": 134,
+          "status": "environment_failure",
+          "diagnostic": "LeakSanitizer has encountered a fatal error. LeakSanitizer does not work under ptrace (strace, gdb, etc)."
+        },
+        {
+          "compiler": "clang",
+          "version": "21.1.8",
+          "mode": "checked",
+          "flags": [
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-pedantic",
+            "-fsanitize=address,undefined",
+            "-fno-omit-frame-pointer",
+            "-DTRIE_HEADER=\"/home/reinsirk/Atcoder_Env/Trie.cpp\""
+          ],
+          "cpu": 10,
+          "binary": "/tmp/atcoder_node_trie_20261018/trie_independent_san_checked",
+          "build_exit_code": 0,
+          "warnings": [],
+          "UBSAN_OPTIONS": "halt_on_error=1",
+          "environment": "outside_sandbox",
+          "ASAN_OPTIONS": "detect_leaks=1:abort_on_error=1",
+          "run_exit_code": 0,
+          "status": "passed",
+          "stdout": "trie independent tests passed\n",
+          "note": "The already requested rerun completed before the later instruction to avoid further outside-sandbox execution was received. No further outside-sandbox runs were made."
+        },
+        {
+          "compiler": "clang",
+          "version": "21.1.8",
+          "mode": "checked",
+          "flags": [
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-pedantic",
+            "-fsanitize=address,undefined",
+            "-fno-omit-frame-pointer",
+            "-DTRIE_HEADER=\"/home/reinsirk/Atcoder_Env/Trie.cpp\""
+          ],
+          "cpu": 10,
+          "binary": "/tmp/atcoder_node_trie_20261018/trie_independent_san_checked",
+          "build_exit_code": 0,
+          "warnings": [],
+          "UBSAN_OPTIONS": "halt_on_error=1",
+          "environment": "sandbox",
+          "ASAN_OPTIONS": "detect_leaks=0:abort_on_error=1",
+          "run_exit_code": 0,
+          "status": "passed",
+          "stdout": "trie independent tests passed\n"
+        },
+        {
+          "compiler": "clang",
+          "version": "21.1.8",
+          "mode": "skip",
+          "flags": [
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-pedantic",
+            "-fsanitize=address,undefined",
+            "-fno-omit-frame-pointer",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DTRIE_HEADER=\"/home/reinsirk/Atcoder_Env/Trie.cpp\""
+          ],
+          "cpu": 10,
+          "binary": "/tmp/atcoder_node_trie_20261018/trie_independent_san_skip",
+          "build_exit_code": 0,
+          "warnings": [],
+          "UBSAN_OPTIONS": "halt_on_error=1",
+          "environment": "sandbox",
+          "ASAN_OPTIONS": "detect_leaks=1:abort_on_error=1",
+          "run_exit_code": 134,
+          "status": "environment_failure",
+          "diagnostic": "LeakSanitizer has encountered a fatal error. LeakSanitizer does not work under ptrace (strace, gdb, etc)."
+        },
+        {
+          "compiler": "clang",
+          "version": "21.1.8",
+          "mode": "skip",
+          "flags": [
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-pedantic",
+            "-fsanitize=address,undefined",
+            "-fno-omit-frame-pointer",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DTRIE_HEADER=\"/home/reinsirk/Atcoder_Env/Trie.cpp\""
+          ],
+          "cpu": 10,
+          "binary": "/tmp/atcoder_node_trie_20261018/trie_independent_san_skip",
+          "build_exit_code": 0,
+          "warnings": [],
+          "UBSAN_OPTIONS": "halt_on_error=1",
+          "environment": "outside_sandbox",
+          "ASAN_OPTIONS": "detect_leaks=1:abort_on_error=1",
+          "run_exit_code": 0,
+          "status": "passed",
+          "stdout": "trie independent tests passed\n",
+          "note": "The already requested rerun completed before the later instruction to avoid further outside-sandbox execution was received. No further outside-sandbox runs were made."
+        },
+        {
+          "compiler": "clang",
+          "version": "21.1.8",
+          "mode": "skip",
+          "flags": [
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-pedantic",
+            "-fsanitize=address,undefined",
+            "-fno-omit-frame-pointer",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DTRIE_HEADER=\"/home/reinsirk/Atcoder_Env/Trie.cpp\""
+          ],
+          "cpu": 10,
+          "binary": "/tmp/atcoder_node_trie_20261018/trie_independent_san_skip",
+          "build_exit_code": 0,
+          "warnings": [],
+          "UBSAN_OPTIONS": "halt_on_error=1",
+          "environment": "sandbox",
+          "ASAN_OPTIONS": "detect_leaks=0:abort_on_error=1",
+          "run_exit_code": 0,
+          "status": "passed",
+          "stdout": "trie independent tests passed\n"
+        }
+      ]
+    },
+    "integration": {
+      "examples": [
+        {
+          "compiler": "g++",
+          "skip_runtime_checks": false,
+          "example": "node",
+          "output": "4\n1\n3\n3\n1 1\n",
+          "exit_code": 0
+        },
+        {
+          "compiler": "g++",
+          "skip_runtime_checks": false,
+          "example": "trie",
+          "output": "5 4\n2 1\n3 1\n3\n4 apple\nbanana\napp:1\napple:2\n1\n1\n1 12\n",
+          "exit_code": 0
+        },
+        {
+          "compiler": "g++",
+          "skip_runtime_checks": true,
+          "example": "node",
+          "output": "4\n1\n3\n3\n1 1\n",
+          "exit_code": 0
+        },
+        {
+          "compiler": "g++",
+          "skip_runtime_checks": true,
+          "example": "trie",
+          "output": "5 4\n2 1\n3 1\n3\n4 apple\nbanana\napp:1\napple:2\n1\n1\n1 12\n",
+          "exit_code": 0
+        },
+        {
+          "compiler": "clang++",
+          "skip_runtime_checks": false,
+          "example": "node",
+          "output": "4\n1\n3\n3\n1 1\n",
+          "exit_code": 0
+        },
+        {
+          "compiler": "clang++",
+          "skip_runtime_checks": false,
+          "example": "trie",
+          "output": "5 4\n2 1\n3 1\n3\n4 apple\nbanana\napp:1\napple:2\n1\n1\n1 12\n",
+          "exit_code": 0
+        },
+        {
+          "compiler": "clang++",
+          "skip_runtime_checks": true,
+          "example": "node",
+          "output": "4\n1\n3\n3\n1 1\n",
+          "exit_code": 0
+        },
+        {
+          "compiler": "clang++",
+          "skip_runtime_checks": true,
+          "example": "trie",
+          "output": "5 4\n2 1\n3 1\n3\n4 apple\nbanana\napp:1\napple:2\n1\n1\n1 12\n",
+          "exit_code": 0
+        }
+      ],
+      "duplicate_include_with_geometry": true,
+      "node_comment_only_preprocess_equivalence": {
+        "checked": "d781051e0d5d52240019d1be4038cd173326f496a0fbc0f930faed5e43a4f144",
+        "skip": "0a4d2e6176fab93a038a1a64b0a57cff7357f76322ee1a748460a73a751485a8"
+      }
+    },
+    "scope": "独立モデル照合、GCC/Clang C++23 checked/SKIP、sanitizer、例8構成、重複include＋geometry2構成。独立試験担当は対象実装を読まずにモデルと試験を作成。"
+  },
+  "performance": {
+    "conditions": {
+      "compiler": "GCC 15.3.0",
+      "flags": "-std=c++23 -O2",
+      "cpu_affinity": 8,
+      "repetitions": 7,
+      "order": "参照側/新版を交互、奇偶回で順序入替",
+      "statistic": "median",
+      "unit": "milliseconds"
+    },
+    "Node": {
+      "reference": "元のnだけの構造体と同じmake_shared構築/reset破棄を測定。長さ照会のみ今回作成した単純走査で、元のAPIではない。",
+      "columns": [
+        "build",
+        "four length walks",
+        "destruction"
+      ],
+      "workloads": {
+        "tiny": "32 nodes x 20000 rounds",
+        "medium": "4096 nodes x 200 rounds"
+      },
+      "results": {
+        "checked_tiny": {
+          "old": [
+            3.882677,
+            1.175198,
+            3.67164
+          ],
+          "new": [
+            3.540017,
+            1.530145,
+            4.937624
+          ]
+        },
+        "checked_medium": {
+          "old": [
+            5.251363,
+            7.382146,
+            6.952442
+          ],
+          "new": [
+            5.154642,
+            7.397497,
+            7.136929
+          ]
+        },
+        "skip_tiny": {
+          "old": [
+            3.899534,
+            1.035804,
+            3.751651
+          ],
+          "new": [
+            3.586133,
+            1.312591,
+            4.619819
+          ]
+        },
+        "skip_medium": {
+          "old": [
+            5.114858,
+            7.381458,
+            7.238352
+          ],
+          "new": [
+            5.287289,
+            7.391882,
+            6.578989
+          ]
+        }
+      },
+      "limitation": "小規模破棄は反復解放の判定で3.672→4.938ms（32ノード1列あたり約63ns増）。巨大連結は再帰スタックを使わず解放できるが、小規模で常に高速とは主張しない。"
+    },
+    "Trie": {
+      "reference": "旧TrieNodeのunordered_map＋shared_ptr構成に今回用意した追加/個数/接頭辞/削除。元は骨組みで操作APIがないため、旧APIそのもののベンチではない。raw pointerでfind、operator[]でinsert、削除時に0枝を切る。",
+      "columns": [
+        "build",
+        "count and prefix lookup pairs",
+        "erase",
+        "destruction"
+      ],
+      "generation": "seed731777、入力生成は計測外。tiny32語長6 x3000回、他50000語長12。照会語は登録語から選び1/4の末尾バイトを変更。",
+      "workloads": {
+        "tiny": "alphabet26,128 query pairs and16 erases per round",
+        "latin": "alphabet26,200000 query pairs and25000 erases",
+        "binary": "alphabet2,200000 query pairs and25000 erases",
+        "prefix": "first8 bytes fixed, remaining alphabet26,200000 query pairs and25000 erases",
+        "bytes": "alphabet256,200000 query pairs and25000 erases"
+      },
+      "results": {
+        "tiny": {
+          "old": [
+            16.997723,
+            10.244672,
+            6.897434,
+            7.324888
+          ],
+          "new": [
+            2.136304,
+            2.917223,
+            0.607323,
+            0.081634
+          ]
+        },
+        "latin": {
+          "old": [
+            41.980245,
+            103.331997,
+            26.966128,
+            22.081557
+          ],
+          "new": [
+            15.034313,
+            19.224638,
+            2.58534,
+            0.387244
+          ]
+        },
+        "binary": {
+          "old": [
+            5.16193,
+            20.060604,
+            4.092903,
+            0.236452
+          ],
+          "new": [
+            3.836358,
+            18.997224,
+            3.225332,
+            0.00743
+          ]
+        },
+        "prefix": {
+          "old": [
+            8.856487,
+            26.705117,
+            5.167251,
+            1.556886
+          ],
+          "new": [
+            5.393282,
+            12.202341,
+            1.850313,
+            0.062027
+          ]
+        },
+        "bytes": {
+          "old": [
+            47.963615,
+            109.634151,
+            26.691643,
+            24.168723
+          ],
+          "new": [
+            24.8725,
+            14.287408,
+            9.418787,
+            0.500794
+          ]
+        }
+      },
+      "checksums": "各回・各入力の集計値が参照側/新版で一致",
+      "tuning": "閾値8/16/32を作者側CPU14で比較し16を選択。root側CPU8で最終ソースを独立に再計測。入力依存の結果であり普遍的な倍率ではない。"
+    },
+    "artifacts": {
+      "node_bench.cpp": {
+        "path": "/tmp/atcoder_node_trie_20261018/node_bench.cpp",
+        "sha256": "395fddee9877d068fd53ff7f8db338c706a2473c48f8357b042267d761282f59"
+      },
+      "trie_bench.cpp": {
+        "path": "/tmp/atcoder_node_trie_20261018/trie_bench.cpp",
+        "sha256": "afc56fd3e7f65c77162f4f5553d47283905c0cf453b0cd9ea0cd0e98d918fcff"
+      },
+      "measure_node.py": {
+        "path": "/tmp/atcoder_node_trie_20261018/measure_node.py",
+        "sha256": "ff11592c091811ca9ebd38539fc77da3a628be28c4671d021e7a0eb821415076"
+      },
+      "measure_trie_final.py": {
+        "path": "/tmp/atcoder_node_trie_20261018/measure_trie_final.py",
+        "sha256": "e8e9e2eeb92e23f8ec58ad015402e0d00a114f87e0e626b145294e15fdf417ff"
+      }
+    }
+  },
+  "examples": {
+    "Examples/node_example.cpp": "8f7a5619c75d9d9ae2251966dfeab1a1677654c11cd105fff67070228dc8c256",
+    "Examples/trie_example.cpp": "6aa9fb9605843a5b63684eb36b108fbaacca564eb6d0ca2e145015fa0e15e1fc"
+  },
+  "distribution": {
+    "script": "Scripts/package_revised_libraries.py",
+    "standalone_examples": "Node/Trie本体を各例へ埋込み、他の整備済み資料と同期。ZIPに記録自体も同梱。"
+  }
+}

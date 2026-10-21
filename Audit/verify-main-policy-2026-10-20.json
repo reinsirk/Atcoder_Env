@@ -1,0 +1,894 @@
+{
+  "date": "2026-10-20",
+  "policy": "全Verifyのmainは通常入出力・必要な初期化/API接続・API呼出・出力だけを素直に書く。本体比較は同mainで実施。",
+  "driver_count": 89,
+  "changed_driver_count": 11,
+  "generated_configurations": 120,
+  "files": [
+    {
+      "path": "Verify/current/drivers/binary_trie_local_main.cpp",
+      "changed": false,
+      "old_sha256": "fe2d984384707e644227fae29c1329361e060fc0f294f3d6f4e396076a34aa7e",
+      "new_sha256": "fe2d984384707e644227fae29c1329361e060fc0f294f3d6f4e396076a34aa7e",
+      "local_test": true,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "独立ローカル照合のため既存テストを保持。",
+      "current_sha256": "fe2d984384707e644227fae29c1329361e060fc0f294f3d6f4e396076a34aa7e"
+    },
+    {
+      "path": "Verify/current/drivers/binary_trie_main.cpp",
+      "changed": true,
+      "old_sha256": "afb5e0f5ad4b74c35c1a4377db992d35382cccecb712ee9111487e420dc636b9",
+      "new_sha256": "09a2a4cd28461024797ea1292bd915a1920f72dbeb892f83ff12992e4c013c57",
+      "local_test": false,
+      "issue_before_change": true,
+      "issue_remaining": false,
+      "note": "独自fread/fwriteバッファとto_charsを除き、cin/coutで照会ごとにAPIを呼び出す。",
+      "current_sha256": "09a2a4cd28461024797ea1292bd915a1920f72dbeb892f83ff12992e4c013c57"
+    },
+    {
+      "path": "Verify/current/drivers/compressed_binary_trie_local_main.cpp",
+      "changed": false,
+      "old_sha256": "e03296f47f1a7988ed646d94fea3ddf3e273d3a5b53ec16f9a7ac417b33db139",
+      "new_sha256": "e03296f47f1a7988ed646d94fea3ddf3e273d3a5b53ec16f9a7ac417b33db139",
+      "local_test": true,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "独立ローカル照合のため既存テストを保持。",
+      "current_sha256": "e03296f47f1a7988ed646d94fea3ddf3e273d3a5b53ec16f9a7ac417b33db139"
+    },
+    {
+      "path": "Verify/current/drivers/compressed_binary_trie_main.cpp",
+      "changed": true,
+      "old_sha256": "522ef14e5f955a5a79b6c3e0892d3bc096eeac154f33815a2aecb187bf40be76",
+      "new_sha256": "84987355456539022b61d2bdb0d6619a49110e3974714a2e52bb6064ec589f49",
+      "local_test": false,
+      "issue_before_change": true,
+      "issue_remaining": false,
+      "note": "独自fread/fwriteバッファとto_chars、reserve(q)を除き、cin/coutで照会ごとにAPIを呼び出す。",
+      "current_sha256": "84987355456539022b61d2bdb0d6619a49110e3974714a2e52bb6064ec589f49"
+    },
+    {
+      "path": "Verify/current/drivers/dynamic_fenwick_2d_rectangle_main.cpp",
+      "changed": true,
+      "old_sha256": "f25384a1ab2047fa31c6a52ace07c5a04eddcbe4fda4a487dbffbaca736315e9",
+      "new_sha256": "899ddc5c0afedb1ee70d5955aab1f454d4972dc10a8c66cb4606b10f0cbc4ff2",
+      "local_test": false,
+      "issue_before_change": true,
+      "issue_remaining": false,
+      "note": "座標配列の性能目的reserveを除去。API接続に必要な座標圧縮は保持。",
+      "current_sha256": "899ddc5c0afedb1ee70d5955aab1f454d4972dc10a8c66cb4606b10f0cbc4ff2"
+    },
+    {
+      "path": "Verify/current/drivers/dynamic_fenwick_range_main.cpp",
+      "changed": false,
+      "old_sha256": "1625eedf86370f314e4962d5af5d12835bb82f79e30662e2a478273770e47b08",
+      "new_sha256": "1625eedf86370f314e4962d5af5d12835bb82f79e30662e2a478273770e47b08",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "1625eedf86370f314e4962d5af5d12835bb82f79e30662e2a478273770e47b08"
+    },
+    {
+      "path": "Verify/current/drivers/dynamic_fenwick_rectangle_main.cpp",
+      "changed": true,
+      "old_sha256": "1dc2585a8dc601b75fefae5d7e2c49de30b14361ac01c526ba5f99e27814f6ed",
+      "new_sha256": "000fce4e3d246d478d5754ce084b442f9481e24dcfe231becc218495c75e57cc",
+      "local_test": false,
+      "issue_before_change": true,
+      "issue_remaining": false,
+      "note": "座標配列と外側BIT行の性能目的reserveを除去。座標圧縮・外側BITは保持。",
+      "current_sha256": "000fce4e3d246d478d5754ce084b442f9481e24dcfe231becc218495c75e57cc"
+    },
+    {
+      "path": "Verify/current/drivers/dynamic_hash_local_main.cpp",
+      "changed": false,
+      "old_sha256": "6910d7192198a41e5fee9bb4b790cf94efbbd44f2d743a63eb667dc8356f7726",
+      "new_sha256": "6910d7192198a41e5fee9bb4b790cf94efbbd44f2d743a63eb667dc8356f7726",
+      "local_test": true,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "独立ローカル照合のため既存テストを保持。",
+      "current_sha256": "6910d7192198a41e5fee9bb4b790cf94efbbd44f2d743a63eb667dc8356f7726"
+    },
+    {
+      "path": "Verify/current/drivers/dynamic_lichao_line_main.cpp",
+      "changed": false,
+      "old_sha256": "d89c3d827d26ca4750fe958490f56bc3948ec41e489f58bff58f6a366fc99479",
+      "new_sha256": "d89c3d827d26ca4750fe958490f56bc3948ec41e489f58bff58f6a366fc99479",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "d89c3d827d26ca4750fe958490f56bc3948ec41e489f58bff58f6a366fc99479"
+    },
+    {
+      "path": "Verify/current/drivers/dynamic_lichao_segment_main.cpp",
+      "changed": false,
+      "old_sha256": "c703f05ce4e6e7abdc36eb84e375cc387ca66bc002d793277fbe14d36acbb7f6",
+      "new_sha256": "c703f05ce4e6e7abdc36eb84e375cc387ca66bc002d793277fbe14d36acbb7f6",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "c703f05ce4e6e7abdc36eb84e375cc387ca66bc002d793277fbe14d36acbb7f6"
+    },
+    {
+      "path": "Verify/current/drivers/dynamic_union_find_main.cpp",
+      "changed": false,
+      "old_sha256": "0c027e8ee12f63d392c1653f1b450c16ff25fe08dd5e6f5983a6e41b464f9ecf",
+      "new_sha256": "0c027e8ee12f63d392c1653f1b450c16ff25fe08dd5e6f5983a6e41b464f9ecf",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "0c027e8ee12f63d392c1653f1b450c16ff25fe08dd5e6f5983a6e41b464f9ecf"
+    },
+    {
+      "path": "Verify/current/drivers/erasable_priority_queue_double_main.cpp",
+      "changed": false,
+      "old_sha256": "0218f37a1b09e512fc0c665ba30284d3aedb98b713d7a879f22e4bf4c26f518c",
+      "new_sha256": "0218f37a1b09e512fc0c665ba30284d3aedb98b713d7a879f22e4bf4c26f518c",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "0218f37a1b09e512fc0c665ba30284d3aedb98b713d7a879f22e4bf4c26f518c"
+    },
+    {
+      "path": "Verify/current/drivers/erasable_priority_queue_unit_main.cpp",
+      "changed": false,
+      "old_sha256": "1ef07650c434dcaaf9e59786e1d32be161f0679cb8e6ed72fbf8d3c682284d41",
+      "new_sha256": "1ef07650c434dcaaf9e59786e1d32be161f0679cb8e6ed72fbf8d3c682284d41",
+      "local_test": true,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "独立ローカル照合のため既存テストを保持。",
+      "current_sha256": "1ef07650c434dcaaf9e59786e1d32be161f0679cb8e6ed72fbf8d3c682284d41"
+    },
+    {
+      "path": "Verify/current/drivers/hash_map_main.cpp",
+      "changed": false,
+      "old_sha256": "ba3dd0443e25da50f108c682fdca97b303bc26a76f8505d1cf28b77cd171b348",
+      "new_sha256": "ba3dd0443e25da50f108c682fdca97b303bc26a76f8505d1cf28b77cd171b348",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "ba3dd0443e25da50f108c682fdca97b303bc26a76f8505d1cf28b77cd171b348"
+    },
+    {
+      "path": "Verify/current/drivers/hash_set_unit_main.cpp",
+      "changed": false,
+      "old_sha256": "c704b245e443e4d91fe78b2616251a41ff536afc69a6d3945878aa3b0259df91",
+      "new_sha256": "c704b245e443e4d91fe78b2616251a41ff536afc69a6d3945878aa3b0259df91",
+      "local_test": true,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "独立ローカル照合のため既存テストを保持。",
+      "current_sha256": "c704b245e443e4d91fe78b2616251a41ff536afc69a6d3945878aa3b0259df91"
+    },
+    {
+      "path": "Verify/current/drivers/heap_priority_queue_main.cpp",
+      "changed": false,
+      "old_sha256": "8713607ea435ed3e08489996a16a8a656f8ebfb5970546596432b7d004afc097",
+      "new_sha256": "8713607ea435ed3e08489996a16a8a656f8ebfb5970546596432b7d004afc097",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "8713607ea435ed3e08489996a16a8a656f8ebfb5970546596432b7d004afc097"
+    },
+    {
+      "path": "Verify/current/drivers/implicit_treap_affine_main.cpp",
+      "changed": true,
+      "old_sha256": "0fd2f639abfd0434d74563f7ebbed63ea1b242762fa5a36f4d251a1f77a5ae91",
+      "new_sha256": "57c0ccb38208883f815da9769ddc907276e4403356940101ab43f46230a1609c",
+      "local_test": false,
+      "issue_before_change": true,
+      "issue_remaining": false,
+      "note": "性能目的sequence.reserve(n + q)を除去。",
+      "current_sha256": "57c0ccb38208883f815da9769ddc907276e4403356940101ab43f46230a1609c"
+    },
+    {
+      "path": "Verify/current/drivers/internal_hash_map_main.cpp",
+      "changed": false,
+      "old_sha256": "49d094ac2716e25649ac0ca96203e2d82498a0970ef6fb7db4ade056b3806b7d",
+      "new_sha256": "49d094ac2716e25649ac0ca96203e2d82498a0970ef6fb7db4ade056b3806b7d",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "49d094ac2716e25649ac0ca96203e2d82498a0970ef6fb7db4ade056b3806b7d"
+    },
+    {
+      "path": "Verify/current/drivers/line_container_2d_triangle_main.cpp",
+      "changed": false,
+      "old_sha256": "b745435ea3c9b4607c441d5f341b5d920a0cb17489b562d270d1c85c9f451332",
+      "new_sha256": "b745435ea3c9b4607c441d5f341b5d920a0cb17489b562d270d1c85c9f451332",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "b745435ea3c9b4607c441d5f341b5d920a0cb17489b562d270d1c85c9f451332"
+    },
+    {
+      "path": "Verify/current/drivers/line_container_min_main.cpp",
+      "changed": false,
+      "old_sha256": "48cf1d149768fddb568757d4e8107b32a6c7ac590a412db61029e5684c7236a4",
+      "new_sha256": "48cf1d149768fddb568757d4e8107b32a6c7ac590a412db61029e5684c7236a4",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "48cf1d149768fddb568757d4e8107b32a6c7ac590a412db61029e5684c7236a4"
+    },
+    {
+      "path": "Verify/current/drivers/line_container_triangle_main.cpp",
+      "changed": false,
+      "old_sha256": "4f7721a9409c922f5cd7bbaac17c2e3c148cd1c688527f5a1bc811720336fbdc",
+      "new_sha256": "4f7721a9409c922f5cd7bbaac17c2e3c148cd1c688527f5a1bc811720336fbdc",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "4f7721a9409c922f5cd7bbaac17c2e3c148cd1c688527f5a1bc811720336fbdc"
+    },
+    {
+      "path": "Verify/current/drivers/node_local_main.cpp",
+      "changed": false,
+      "old_sha256": "4d884bc3ad9e4d4c321bfad486002b510d939313a9de11979faba9b07c279eca",
+      "new_sha256": "4d884bc3ad9e4d4c321bfad486002b510d939313a9de11979faba9b07c279eca",
+      "local_test": true,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "独立ローカル照合のため既存テストを保持。",
+      "current_sha256": "4d884bc3ad9e4d4c321bfad486002b510d939313a9de11979faba9b07c279eca"
+    },
+    {
+      "path": "Verify/current/drivers/persistent_union_find_main.cpp",
+      "changed": false,
+      "old_sha256": "c208e7ebfe8e61b7c77f6cf8c7f3a4cbf27cf2ad8aee46597d7af071904f6e4b",
+      "new_sha256": "c208e7ebfe8e61b7c77f6cf8c7f3a4cbf27cf2ad8aee46597d7af071904f6e4b",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "c208e7ebfe8e61b7c77f6cf8c7f3a4cbf27cf2ad8aee46597d7af071904f6e4b"
+    },
+    {
+      "path": "Verify/current/drivers/rollback_union_find_main.cpp",
+      "changed": true,
+      "old_sha256": "ee112e564778110f63d52674b24b78591f69ecaef3791fda83ca43093768cada",
+      "new_sha256": "ee4be11172f8af67890942fc37147643b818c6ae611604ef9c776e77e0b6b2a9",
+      "local_test": false,
+      "issue_before_change": true,
+      "issue_remaining": false,
+      "note": "性能目的reserve_history(q)を除去。永続問題のバージョン木走査は保持。",
+      "current_sha256": "ee4be11172f8af67890942fc37147643b818c6ae611604ef9c776e77e0b6b2a9"
+    },
+    {
+      "path": "Verify/current/drivers/rollback_weighted_local_main.cpp",
+      "changed": false,
+      "old_sha256": "a0f73abe5de6ceb41cb679061c4511c981001aa937e869597a11a1d0c0f34319",
+      "new_sha256": "a0f73abe5de6ceb41cb679061c4511c981001aa937e869597a11a1d0c0f34319",
+      "local_test": true,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "独立ローカル照合のため既存テストを保持。",
+      "current_sha256": "a0f73abe5de6ceb41cb679061c4511c981001aa937e869597a11a1d0c0f34319"
+    },
+    {
+      "path": "Verify/current/drivers/rollback_weighted_union_find_main.cpp",
+      "changed": false,
+      "old_sha256": "2946c47f28ac53a01b44e2c7f1682d11e8435028a593da4186630f436d121316",
+      "new_sha256": "2946c47f28ac53a01b44e2c7f1682d11e8435028a593da4186630f436d121316",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "2946c47f28ac53a01b44e2c7f1682d11e8435028a593da4186630f436d121316"
+    },
+    {
+      "path": "Verify/current/drivers/union_find_main.cpp",
+      "changed": false,
+      "old_sha256": "4ffda2c0adcca8d5d1ac054037c5ff4285a2d33401ad0925dca0d2e868197aef",
+      "new_sha256": "4ffda2c0adcca8d5d1ac054037c5ff4285a2d33401ad0925dca0d2e868197aef",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "4ffda2c0adcca8d5d1ac054037c5ff4285a2d33401ad0925dca0d2e868197aef"
+    },
+    {
+      "path": "Verify/current/drivers/weighted_union_find_main.cpp",
+      "changed": false,
+      "old_sha256": "8f7f04eab20007b9b61ecd0525c345b39492d7245c605e708bf2f8dcaee0f033",
+      "new_sha256": "8f7f04eab20007b9b61ecd0525c345b39492d7245c605e708bf2f8dcaee0f033",
+      "local_test": false,
+      "issue_before_change": false,
+      "issue_remaining": false,
+      "note": "通常のcin/coutとAPI呼び出しであり変更不要。",
+      "current_sha256": "8f7f04eab20007b9b61ecd0525c345b39492d7245c605e708bf2f8dcaee0f033"
+    },
+    {
+      "before_sha256": "ebfe46fb276b1a5e213d7edba2bec400bd98b9a33408fff1431cf849bf5322b9",
+      "changed": true,
+      "category": "online",
+      "reason": "独自の入出力バッファをcin/coutへ置換し、角度範囲の変換をstd::rotateで明示する。比較する二版の入出力を一致させる。",
+      "after_sha256": "a1a866f4d2bdb210b42aebfb225b4e2776231ea087372b17d03a6df34e56d791",
+      "path": "Verify/current/drivers/angle_sort_main.cpp",
+      "current_sha256": "a1a866f4d2bdb210b42aebfb225b4e2776231ea087372b17d03a6df34e56d791"
+    },
+    {
+      "before_sha256": "f660ccd7981a6c74024fb236a862db9ed0e598b5fef557123e2bb4fa540532a0",
+      "changed": false,
+      "category": "local_reference",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "f660ccd7981a6c74024fb236a862db9ed0e598b5fef557123e2bb4fa540532a0",
+      "path": "Verify/current/drivers/angle_sort_reference_main.cpp",
+      "current_sha256": "f660ccd7981a6c74024fb236a862db9ed0e598b5fef557123e2bb4fa540532a0"
+    },
+    {
+      "before_sha256": "e59020f0c56c119d01595e3567cbffde9e7091b845e26c1ecd582660cb58aa1e",
+      "changed": true,
+      "category": "online",
+      "reason": "独自の入出力バッファをcin/coutへ置換し、角度範囲の変換をstd::rotateで明示する。比較する二版の入出力を一致させる。",
+      "after_sha256": "6130d24e7805aa9ec964ebc65623177a679223bee8935a34b90d1df69a7af676",
+      "path": "Verify/current/drivers/angle_sort_std_main.cpp",
+      "current_sha256": "6130d24e7805aa9ec964ebc65623177a679223bee8935a34b90d1df69a7af676"
+    },
+    {
+      "before_sha256": "6a18d0515a10c0f2f13a6d87235215483b8f41c9cdc06796b78e5cd72c37a7e8",
+      "changed": false,
+      "category": "local_reference",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "6a18d0515a10c0f2f13a6d87235215483b8f41c9cdc06796b78e5cd72c37a7e8",
+      "path": "Verify/current/drivers/combination_masks_local_main.cpp",
+      "current_sha256": "6a18d0515a10c0f2f13a6d87235215483b8f41c9cdc06796b78e5cd72c37a7e8"
+    },
+    {
+      "before_sha256": "651ddc99ca84a746105ce2d23c9fcf2514be02561dd7ca2955ec7a0e7b68eda7",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "651ddc99ca84a746105ce2d23c9fcf2514be02561dd7ca2955ec7a0e7b68eda7",
+      "path": "Verify/current/drivers/geometry_area_main.cpp",
+      "current_sha256": "651ddc99ca84a746105ce2d23c9fcf2514be02561dd7ca2955ec7a0e7b68eda7"
+    },
+    {
+      "before_sha256": "1ce5698f90e35e2d90579cf1e6c917526b4cefba1046a06028574c97c57456dd",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "1ce5698f90e35e2d90579cf1e6c917526b4cefba1046a06028574c97c57456dd",
+      "path": "Verify/current/drivers/geometry_circle_circle_main.cpp",
+      "current_sha256": "1ce5698f90e35e2d90579cf1e6c917526b4cefba1046a06028574c97c57456dd"
+    },
+    {
+      "before_sha256": "4d5a7f0a44632e398971e5db07365e047e4a4a997468bbb8a7d8d16918e523d7",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "4d5a7f0a44632e398971e5db07365e047e4a4a997468bbb8a7d8d16918e523d7",
+      "path": "Verify/current/drivers/geometry_circle_line_main.cpp",
+      "current_sha256": "4d5a7f0a44632e398971e5db07365e047e4a4a997468bbb8a7d8d16918e523d7"
+    },
+    {
+      "before_sha256": "fc09e1a01165da093d274efc1b6d0e95b4136bc940601dc93d26c8b51eede966",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "fc09e1a01165da093d274efc1b6d0e95b4136bc940601dc93d26c8b51eede966",
+      "path": "Verify/current/drivers/geometry_contains_main.cpp",
+      "current_sha256": "fc09e1a01165da093d274efc1b6d0e95b4136bc940601dc93d26c8b51eede966"
+    },
+    {
+      "before_sha256": "85ebb8431cc52bf0af48ee1fe6691b79b4e552d3304ea99b13580b5da4f45b05",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "85ebb8431cc52bf0af48ee1fe6691b79b4e552d3304ea99b13580b5da4f45b05",
+      "path": "Verify/current/drivers/geometry_convex_cut_main.cpp",
+      "current_sha256": "85ebb8431cc52bf0af48ee1fe6691b79b4e552d3304ea99b13580b5da4f45b05"
+    },
+    {
+      "before_sha256": "6a74f38f1da298a8db8788b4c43e666234e368272c946f4b4012c45c6ec7d395",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "6a74f38f1da298a8db8788b4c43e666234e368272c946f4b4012c45c6ec7d395",
+      "path": "Verify/current/drivers/geometry_orientation_main.cpp",
+      "current_sha256": "6a74f38f1da298a8db8788b4c43e666234e368272c946f4b4012c45c6ec7d395"
+    },
+    {
+      "before_sha256": "74c9cdcd1bbc42552eee48f862ece624f574da04d8633685e95ae8b2cd3102dc",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "74c9cdcd1bbc42552eee48f862ece624f574da04d8633685e95ae8b2cd3102dc",
+      "path": "Verify/current/drivers/geometry_projection_main.cpp",
+      "current_sha256": "74c9cdcd1bbc42552eee48f862ece624f574da04d8633685e95ae8b2cd3102dc"
+    },
+    {
+      "before_sha256": "5976a656675cd9d857d0f8610e480716008d2c18c310deb398aa9254a8a4ba6c",
+      "changed": false,
+      "category": "local_reference",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "5976a656675cd9d857d0f8610e480716008d2c18c310deb398aa9254a8a4ba6c",
+      "path": "Verify/current/drivers/geometry_reference_main.cpp",
+      "current_sha256": "5976a656675cd9d857d0f8610e480716008d2c18c310deb398aa9254a8a4ba6c"
+    },
+    {
+      "before_sha256": "2ec2a2dcc770fdf238002a54db8fd39fb67c4f88d88b5e1da5262c8eb8903287",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "2ec2a2dcc770fdf238002a54db8fd39fb67c4f88d88b5e1da5262c8eb8903287",
+      "path": "Verify/current/drivers/geometry_reflection_main.cpp",
+      "current_sha256": "2ec2a2dcc770fdf238002a54db8fd39fb67c4f88d88b5e1da5262c8eb8903287"
+    },
+    {
+      "before_sha256": "86775d2ab9bf9d15990fc9a7e7d4818c15a0cb72059a4c3a3b81b72b9e0eef73",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "86775d2ab9bf9d15990fc9a7e7d4818c15a0cb72059a4c3a3b81b72b9e0eef73",
+      "path": "Verify/current/drivers/geometry_segment_distance_main.cpp",
+      "current_sha256": "86775d2ab9bf9d15990fc9a7e7d4818c15a0cb72059a4c3a3b81b72b9e0eef73"
+    },
+    {
+      "before_sha256": "7ad62f86ef478c4ff44e97aa172c43c066d77e02bcc67911411d36151f6e5e0b",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "7ad62f86ef478c4ff44e97aa172c43c066d77e02bcc67911411d36151f6e5e0b",
+      "path": "Verify/current/drivers/geometry_segment_intersection_main.cpp",
+      "current_sha256": "7ad62f86ef478c4ff44e97aa172c43c066d77e02bcc67911411d36151f6e5e0b"
+    },
+    {
+      "before_sha256": "24c80a51d7fecd091b126a56f05d27368f894578769819942b7682e32bd68881",
+      "changed": false,
+      "category": "local_reference",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "24c80a51d7fecd091b126a56f05d27368f894578769819942b7682e32bd68881",
+      "path": "Verify/current/drivers/lis_local_main.cpp",
+      "current_sha256": "24c80a51d7fecd091b126a56f05d27368f894578769819942b7682e32bd68881"
+    },
+    {
+      "before_sha256": "04f523839eb4f5c5045ad342c5a65d905921c4afaa2f2b70d882e469174ba8c8",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "04f523839eb4f5c5045ad342c5a65d905921c4afaa2f2b70d882e469174ba8c8",
+      "path": "Verify/current/drivers/lis_main.cpp",
+      "current_sha256": "04f523839eb4f5c5045ad342c5a65d905921c4afaa2f2b70d882e469174ba8c8"
+    },
+    {
+      "before_sha256": "07ae1cdc3e9caedae0df9521ed6f6cc16fd14acc1f5833e0f438319b8c67347b",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "07ae1cdc3e9caedae0df9521ed6f6cc16fd14acc1f5833e0f438319b8c67347b",
+      "path": "Verify/current/drivers/matrix_rotate_main.cpp",
+      "current_sha256": "07ae1cdc3e9caedae0df9521ed6f6cc16fd14acc1f5833e0f438319b8c67347b"
+    },
+    {
+      "before_sha256": "7eaefc10256f318db7043e9ddbfe9eb8b2e23788dd88da9a5ee3595eb6c6e556",
+      "changed": false,
+      "category": "local_reference",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "7eaefc10256f318db7043e9ddbfe9eb8b2e23788dd88da9a5ee3595eb6c6e556",
+      "path": "Verify/current/drivers/matrix_transform_local_main.cpp",
+      "current_sha256": "7eaefc10256f318db7043e9ddbfe9eb8b2e23788dd88da9a5ee3595eb6c6e556"
+    },
+    {
+      "before_sha256": "56b3e5f65b12a05f75b01e0f90db2e7749a2e2a948897170b467a1b0db0f7a9f",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "56b3e5f65b12a05f75b01e0f90db2e7749a2e2a948897170b467a1b0db0f7a9f",
+      "path": "Verify/current/drivers/nearest_two_points_main.cpp",
+      "current_sha256": "56b3e5f65b12a05f75b01e0f90db2e7749a2e2a948897170b467a1b0db0f7a9f"
+    },
+    {
+      "before_sha256": "859711aa0b99ff5c1396dcad1727ba564dfd6d8d33ae125620f1bd7651da8d2b",
+      "changed": false,
+      "category": "local_reference",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "859711aa0b99ff5c1396dcad1727ba564dfd6d8d33ae125620f1bd7651da8d2b",
+      "path": "Verify/current/drivers/nearest_two_points_reference_main.cpp",
+      "current_sha256": "859711aa0b99ff5c1396dcad1727ba564dfd6d8d33ae125620f1bd7651da8d2b"
+    },
+    {
+      "before_sha256": "9250ce5d3e3f956b69074b8b62805220a34b063c79f3c89ba87d678b0fc1e15a",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "9250ce5d3e3f956b69074b8b62805220a34b063c79f3c89ba87d678b0fc1e15a",
+      "path": "Verify/current/drivers/next_combination_main.cpp",
+      "current_sha256": "9250ce5d3e3f956b69074b8b62805220a34b063c79f3c89ba87d678b0fc1e15a"
+    },
+    {
+      "before_sha256": "f1db93d67e8f95ff638d5e84643af18d3cd3cd3ca371d8894ccd469a6f593496",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "f1db93d67e8f95ff638d5e84643af18d3cd3cd3ca371d8894ccd469a6f593496",
+      "path": "Verify/current/drivers/radix_sort_main.cpp",
+      "current_sha256": "f1db93d67e8f95ff638d5e84643af18d3cd3cd3ca371d8894ccd469a6f593496"
+    },
+    {
+      "before_sha256": "23157fb5a1c1995da3d7be9151d10c9958ede8120b89b190ec97dcc3b8e61d6e",
+      "changed": false,
+      "category": "local_reference",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "23157fb5a1c1995da3d7be9151d10c9958ede8120b89b190ec97dcc3b8e61d6e",
+      "path": "Verify/current/drivers/radix_sort_reference_main.cpp",
+      "current_sha256": "23157fb5a1c1995da3d7be9151d10c9958ede8120b89b190ec97dcc3b8e61d6e"
+    },
+    {
+      "before_sha256": "13b65ce0905d2309e5eb05e667fd77f5069a069b4191af7d91c43d05b70742e6",
+      "changed": false,
+      "category": "local_reference",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "13b65ce0905d2309e5eb05e667fd77f5069a069b4191af7d91c43d05b70742e6",
+      "path": "Verify/current/drivers/rolling_hash_local_main.cpp",
+      "current_sha256": "13b65ce0905d2309e5eb05e667fd77f5069a069b4191af7d91c43d05b70742e6"
+    },
+    {
+      "before_sha256": "d5555fd83c49c03b104b9a230ddd81347edd1547dd4d185b8c377fa073249d5f",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "d5555fd83c49c03b104b9a230ddd81347edd1547dd4d185b8c377fa073249d5f",
+      "path": "Verify/current/drivers/rolling_hash_main.cpp",
+      "current_sha256": "d5555fd83c49c03b104b9a230ddd81347edd1547dd4d185b8c377fa073249d5f"
+    },
+    {
+      "before_sha256": "337d952c0b9321d38398c986415cb178f7c4970a1d27aae2419436193c4af4c5",
+      "changed": false,
+      "category": "online",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "337d952c0b9321d38398c986415cb178f7c4970a1d27aae2419436193c4af4c5",
+      "path": "Verify/current/drivers/trie_dictionary_main.cpp",
+      "current_sha256": "337d952c0b9321d38398c986415cb178f7c4970a1d27aae2419436193c4af4c5"
+    },
+    {
+      "before_sha256": "a53e42db5f45e42fe4effb9907e8326743fd1770ba329f1e3261489ef6968471",
+      "changed": false,
+      "category": "local_reference",
+      "reason": "既存の通常cin/coutと問題に必要な処理、または独立参照・境界/API検査であり変更不要。",
+      "after_sha256": "a53e42db5f45e42fe4effb9907e8326743fd1770ba329f1e3261489ef6968471",
+      "path": "Verify/current/drivers/trie_local_main.cpp",
+      "current_sha256": "a53e42db5f45e42fe4effb9907e8326743fd1770ba329f1e3261489ef6968471"
+    },
+    {
+      "path": "Verify/current/drivers/bellman_ford_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "f0889610f077798379f45c59d6b6708fce8b58fe22df7fe61e1a295393473578",
+      "current_sha256": "f0889610f077798379f45c59d6b6708fce8b58fe22df7fe61e1a295393473578"
+    },
+    {
+      "path": "Verify/current/drivers/binomial_integer_main.cpp",
+      "changed": true,
+      "reason": "独自I/Oを通常のcin/coutへ変更。前計算設定とCOM呼び出しだけを残す。",
+      "sha256": "c0f7422cb7b84f8def7208c0b1b4b6f23d21ef4f67cb70c86bc3622df0fdc883",
+      "current_sha256": "c0f7422cb7b84f8def7208c0b1b4b6f23d21ef4f67cb70c86bc3622df0fdc883"
+    },
+    {
+      "path": "Verify/current/drivers/binomial_integer_prime_mod_main.cpp",
+      "changed": true,
+      "reason": "独自I/Oを通常のcin/coutへ変更。問題上限用のoptions設定とCOM呼び出しだけを残す。",
+      "sha256": "fce6572ce73e4fdb21eecc67775b0f9840c4b3cb9bdc5dffbebffd0ee32376ed",
+      "current_sha256": "fce6572ce73e4fdb21eecc67775b0f9840c4b3cb9bdc5dffbebffd0ee32376ed"
+    },
+    {
+      "path": "Verify/current/drivers/binomial_local_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "5028eee590d7ea984e1699224c4aae95e66be01874ec400f8953ac6a351a3798",
+      "current_sha256": "5028eee590d7ea984e1699224c4aae95e66be01874ec400f8953ac6a351a3798"
+    },
+    {
+      "path": "Verify/current/drivers/binomial_lucas_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "f6900e30020884b57bd68a0b7fea2fdc34f7ffc4e14abddd4ba1fe00d136ad48",
+      "current_sha256": "f6900e30020884b57bd68a0b7fea2fdc34f7ffc4e14abddd4ba1fe00d136ad48"
+    },
+    {
+      "path": "Verify/current/drivers/binomial_modint_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "f700b05ec75d7da5a978f1f6f7c39a021ab465fc15e02a57cd1bef04ce2598b6",
+      "current_sha256": "f700b05ec75d7da5a978f1f6f7c39a021ab465fc15e02a57cd1bef04ce2598b6"
+    },
+    {
+      "path": "Verify/current/drivers/binomial_prime_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "fcfe9113e8da84a0a875150d3ff5af1bec01061b999bbb2de7da49daa76b2f23",
+      "current_sha256": "fcfe9113e8da84a0a875150d3ff5af1bec01061b999bbb2de7da49daa76b2f23"
+    },
+    {
+      "path": "Verify/current/drivers/dijkstra_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "e7fa1af5d19c6e2e1118195bf4d4cef87e8d34aee3204be9304719d16f274d52",
+      "current_sha256": "e7fa1af5d19c6e2e1118195bf4d4cef87e8d34aee3204be9304719d16f274d52"
+    },
+    {
+      "path": "Verify/current/drivers/eratosthenes_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "53fb022d3cb46e5a8b839a9589db3dd380af497152fd6ca7981e2aa0693e9cdf",
+      "current_sha256": "53fb022d3cb46e5a8b839a9589db3dd380af497152fd6ca7981e2aa0693e9cdf"
+    },
+    {
+      "path": "Verify/current/drivers/floyd_warshall_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "ce687955e40078ce668f1335eb018f0c62f52649ae159fc759881be04e515ee9",
+      "current_sha256": "ce687955e40078ce668f1335eb018f0c62f52649ae159fc759881be04e515ee9"
+    },
+    {
+      "path": "Verify/current/drivers/graph_local_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "e30d595009ea402e399343837efc4222ac12a2e5f38fd0dc05d0f629900a1c12",
+      "current_sha256": "e30d595009ea402e399343837efc4222ac12a2e5f38fd0dc05d0f629900a1c12"
+    },
+    {
+      "path": "Verify/current/drivers/lca_local_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "2b021b30a7bdc7befed9d27fe8a2da3c0524e1fe46798dcf1a9db912b8cc1e3d",
+      "current_sha256": "2b021b30a7bdc7befed9d27fe8a2da3c0524e1fe46798dcf1a9db912b8cc1e3d"
+    },
+    {
+      "path": "Verify/current/drivers/lca_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "b80798cdb68609cfa0d73a763bbe5082e3ea1bc584e693fc3c44da5afe08c137",
+      "current_sha256": "b80798cdb68609cfa0d73a763bbe5082e3ea1bc584e693fc3c44da5afe08c137"
+    },
+    {
+      "path": "Verify/current/drivers/primality_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "c656acf5b27adb4308c883a810e1b23bac37b3e04a253564c00e5fef95c2e198",
+      "current_sha256": "c656acf5b27adb4308c883a810e1b23bac37b3e04a253564c00e5fef95c2e198"
+    },
+    {
+      "path": "Verify/current/drivers/primality_sieve_local_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "37fecb006f41ca655baf41960671b22e51814874bf104052f02fcebb3132ff7b",
+      "current_sha256": "37fecb006f41ca655baf41960671b22e51814874bf104052f02fcebb3132ff7b"
+    },
+    {
+      "path": "Verify/current/drivers/project_selection_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "4df6ce24dc73668074df2f354cc0142ac41b823c5faefdcd91e2c981d85bf0cf",
+      "current_sha256": "4df6ce24dc73668074df2f354cc0142ac41b823c5faefdcd91e2c981d85bf0cf"
+    },
+    {
+      "path": "Verify/current/drivers/project_selection_reference_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "bdfc53d92db3c60a63e9e13654a19afb3b4bc440c69a624653d1b383740eca33",
+      "current_sha256": "bdfc53d92db3c60a63e9e13654a19afb3b4bc440c69a624653d1b383740eca33"
+    },
+    {
+      "path": "Verify/current/drivers/spfa_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "dad9b90cbe6f92f4d35657a49075a24b2461961b76d22c36f407ea929fb4991e",
+      "current_sha256": "dad9b90cbe6f92f4d35657a49075a24b2461961b76d22c36f407ea929fb4991e"
+    },
+    {
+      "path": "Verify/current/drivers/topological_lexicographical_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "cfb3c17fc6c69b57ffc5bd7bb3a83ee52fad7304ea30ab95ad87af53a462efb7",
+      "current_sha256": "cfb3c17fc6c69b57ffc5bd7bb3a83ee52fad7304ea30ab95ad87af53a462efb7"
+    },
+    {
+      "path": "Verify/current/drivers/topological_local_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "954ba894cca16ff73c78e58004c3f24c60dbae408e3e5ab24cf3da08a5c82cb7",
+      "current_sha256": "954ba894cca16ff73c78e58004c3f24c60dbae408e3e5ab24cf3da08a5c82cb7"
+    },
+    {
+      "path": "Verify/current/drivers/topological_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "6b0857245b9de584b6ecd5a157e76efb5b3bce83c7b37559ad9999e38dde9642",
+      "current_sha256": "6b0857245b9de584b6ecd5a157e76efb5b3bce83c7b37559ad9999e38dde9642"
+    },
+    {
+      "path": "Verify/current/drivers/zeta_and_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "fddad9a6df4d93bd2f140768144b35f1bb4b4e611d2db8af61b055887d4d7393",
+      "current_sha256": "fddad9a6df4d93bd2f140768144b35f1bb4b4e611d2db8af61b055887d4d7393"
+    },
+    {
+      "path": "Verify/current/drivers/zeta_gcd_conv_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "aa9c18d1b16b274207b7a68d041ddd8a5594e1f82a5796b5c0ab282efe767b98",
+      "current_sha256": "aa9c18d1b16b274207b7a68d041ddd8a5594e1f82a5796b5c0ab282efe767b98"
+    },
+    {
+      "path": "Verify/current/drivers/zeta_gcd_transform_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "0823bdb01aa748293eebf0f248d17fb5b04f1e562e7de1734cc76b277911e4e9",
+      "current_sha256": "0823bdb01aa748293eebf0f248d17fb5b04f1e562e7de1734cc76b277911e4e9"
+    },
+    {
+      "path": "Verify/current/drivers/zeta_lcm_conv_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "405eb08067b25fa4b73554ad6fc114f691353bb8a5765e621fbe4ef5513529a5",
+      "current_sha256": "405eb08067b25fa4b73554ad6fc114f691353bb8a5765e621fbe4ef5513529a5"
+    },
+    {
+      "path": "Verify/current/drivers/zeta_lcm_transform_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "31979c74a7077d934a700ee5313f1f2b5a076918cf960f7b281088c4152ac49a",
+      "current_sha256": "31979c74a7077d934a700ee5313f1f2b5a076918cf960f7b281088c4152ac49a"
+    },
+    {
+      "path": "Verify/current/drivers/zeta_or_as_and_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "7497cff931314e1051f713a7d945f79a6eac2afbd75c7de96ef5f6f24a2556c5",
+      "current_sha256": "7497cff931314e1051f713a7d945f79a6eac2afbd75c7de96ef5f6f24a2556c5"
+    },
+    {
+      "path": "Verify/current/drivers/zeta_set_as_and_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "70badf888c9f573c05e007809bd3776e531480581f9037240a97f3edc93b9b0c",
+      "current_sha256": "70badf888c9f573c05e007809bd3776e531480581f9037240a97f3edc93b9b0c"
+    },
+    {
+      "path": "Verify/current/drivers/zeta_set_reference_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "d1bd450a5ad1779469d3e489d0e871d72b01640e16317796e0fe61e7a0a8ee27",
+      "current_sha256": "d1bd450a5ad1779469d3e489d0e871d72b01640e16317796e0fe61e7a0a8ee27"
+    },
+    {
+      "path": "Verify/current/drivers/zeta_sieve_factorize_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "3a8e16f8d287f43d871668fd31e286c8da76c48081a418a13ac016d2de3ca12b",
+      "current_sha256": "3a8e16f8d287f43d871668fd31e286c8da76c48081a418a13ac016d2de3ca12b"
+    },
+    {
+      "path": "Verify/current/drivers/zeta_sieve_reference_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "788343d58fc2d18b6f82c17f3a0b1c67d511cbca178e5e8bd1c8fcf94ed7686b",
+      "current_sha256": "788343d58fc2d18b6f82c17f3a0b1c67d511cbca178e5e8bd1c8fcf94ed7686b"
+    },
+    {
+      "path": "Verify/current/drivers/zeta_sparse_gcd_main.cpp",
+      "changed": true,
+      "reason": "速度目的のreserveを除去。変換・積・逆変換は検証するAPI操作として保持。",
+      "sha256": "dca9a8160a52a1fe5149be5c75f0e4b061a7f8e08a30394fb8eec7188d0ac8b7",
+      "current_sha256": "dca9a8160a52a1fe5149be5c75f0e4b061a7f8e08a30394fb8eec7188d0ac8b7"
+    },
+    {
+      "path": "Verify/current/drivers/zeta_sparse_reference_main.cpp",
+      "changed": false,
+      "reason": "通常入出力とAPI呼び出し、または独立参照・境界・公開APIの検査。速度専用の入出力や分岐なし。",
+      "sha256": "2c9b46cfc84a8e8bef1799ddac9fc777eca09335bdfffc898e5c43ed7ac73f82",
+      "current_sha256": "2c9b46cfc84a8e8bef1799ddac9fc777eca09335bdfffc898e5c43ed7ac73f82"
+    }
+  ],
+  "checks": [
+    {
+      "path": "Verify/current/local_main_policy_clang.json",
+      "configurations": 34,
+      "passed": true,
+      "sha256": "bf86f3ca7b06cd4318269001c523842ee59b2640670619d5e209004171db1d86"
+    },
+    {
+      "path": "Verify/current/local_main_policy_gcc.json",
+      "configurations": 34,
+      "passed": true,
+      "sha256": "5bcf6c02480c3812cf31c26e1d7c2fd3f5d78bc08f9438f1b1b9f026aa809bb4"
+    },
+    {
+      "path": "Verify/current/local_main_policy_portable_clang.json",
+      "configurations": 14,
+      "passed": true,
+      "sha256": "42f94692f01804e80deca868297a35e4d75caf02d05ad1ba7fef0ba0b81bc0ff"
+    },
+    {
+      "path": "Verify/current/local_main_policy_portable_gcc.json",
+      "configurations": 14,
+      "passed": true,
+      "sha256": "32d8b7d2e0152d8cc3dcd3f2b4c8c80fccd0c32a6678c783dbf40a8756897d62"
+    }
+  ],
+  "build_configurations": 96,
+  "exceptions": [
+    {
+      "files": [
+        "dynamic_fenwick_rectangle_main.cpp",
+        "dynamic_fenwick_2d_rectangle_main.cpp"
+      ],
+      "reason": "座標圧縮はAPIの座標領域に合わせるため必要。クエリ先読みと標準ソート・lower_boundを維持。"
+    },
+    {
+      "files": [
+        "dynamic_fenwick_rectangle_main.cpp"
+      ],
+      "reason": "1次元BITを原典の2次元Verify問題につなぐ外側Fenwickは問題を解くための補助として維持。"
+    },
+    {
+      "files": [
+        "rollback_union_find_main.cpp"
+      ],
+      "reason": "永続UnionFind問題へRollback APIを接続するため、バージョン木の走査と回答順の復元を維持。"
+    },
+    {
+      "files": [
+        "line_container_triangle_main.cpp"
+      ],
+      "reason": "1次元包絡のAPIを原典の2次元三角形問題へ接続する変換と点の保持を維持。"
+    },
+    {
+      "files": [
+        "compressed_binary_trie_local_main.cpp",
+        "dynamic_hash_local_main.cpp",
+        "hash_set_unit_main.cpp"
+      ],
+      "reason": "reserveの動作を確認するローカル独立テストは維持。"
+    },
+    "角度ソート二版はライブラリと問題の角度範囲が異なるため、find_ifとrotateの順序変換を残す。",
+    "geometry_circle_*の点の複製と結果順ソートは問題の出力仕様に必要。",
+    "next_combination_mainの辺部分集合列挙と連結性判定は問題を解くために必要。",
+    "trie_local_mainのreserve_nodesは公開APIの検査として保持。",
+    "公開APIのreserve等を直接検査するローカル検証は保持。",
+    "Graph/数学の独立参照・境界・公開API検査はmain単純化によって削除しない。"
+  ],
+  "historical_records": "過去のACと所要時間は当時のmain込みの記録として保持。今回ソース変更の構成はmanifestで要再提出とする。",
+  "performance_attribution": {
+    "204_to_61_ms": "本体とmain入出力の両方が変更されている。",
+    "61_to_54_ms": "mainのハッシュは一致。",
+    "binary_trie_times": "過去の値であり、通常入出力へ変更した現在版の速度値として扱わない。"
+  },
+  "generated_manifest_sha256": "40b460cfab4ad6c5634cae0ffe01c633d9031d6589ec5983e6e4e5bfc16a8550",
+  "affected_configurations": [
+    "dynamic_fenwick_rectangle",
+    "dynamic_fenwick_2d_rectangle",
+    "implicit_treap_affine",
+    "binary_trie",
+    "compressed_binary_trie",
+    "binomial_integer",
+    "binomial_integer_split",
+    "binomial_modint",
+    "binomial_modint_split",
+    "binomial_integer_prime_mod",
+    "binomial_integer_prime_mod_split",
+    "binomial_local",
+    "angle_sort",
+    "angle_sort_std",
+    "zeta_sparse_gcd_full",
+    "zeta_sparse_gcd_split",
+    "rollback_union_find"
+  ]
+}
