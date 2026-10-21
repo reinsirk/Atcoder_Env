@@ -1,5 +1,5 @@
-#ifndef REINSIRK_GEO_EPSILON_DEFINED
-#define REINSIRK_GEO_EPSILON_DEFINED
+#ifndef SIRKIT_GEO_EPSILON_DEFINED
+#define SIRKIT_GEO_EPSILON_DEFINED
 namespace geo {
 // tolerance(scale): 非負有限の abs/rel から許容幅を返す。O(1)。
 struct Epsilon {

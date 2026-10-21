@@ -2,8 +2,8 @@
 // 準備済みのn<modはO(1)、n>=modはLucas。表外は積で計算する。
 // dynamic_modintの法を変更したら、計算器も作り直す。
 // SKIP_RUNTIME_CHECKSで入力検査を省略する。ACLは利用側で読み込む。
-#ifndef REINSIRK_PRIME_BINOMIAL_DEFINED
-#define REINSIRK_PRIME_BINOMIAL_DEFINED
+#ifndef SIRKIT_PRIME_BINOMIAL_DEFINED
+#define SIRKIT_PRIME_BINOMIAL_DEFINED
 template <class Mint>
 class PrimeBinomial
 {

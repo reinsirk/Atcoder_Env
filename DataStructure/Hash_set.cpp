@@ -18,8 +18,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_GENERIC_HASH_DEFINED
-#define REINSIRK_GENERIC_HASH_DEFINED
+#ifndef SIRKIT_GENERIC_HASH_DEFINED
+#define SIRKIT_GENERIC_HASH_DEFINED
 struct GenericHash {
     // GenericHash(): 実行時に選んだ種で構築する。同じオブジェクトでは結果は一定。
     // GenericHash(seed): 指定した種で構築する。std::hash対応型の結果はその実装にも依存する。
@@ -94,8 +94,8 @@ public:
 };
 #endif
 
-#ifndef REINSIRK_HASH_SET_DEFINED
-#define REINSIRK_HASH_SET_DEFINED
+#ifndef SIRKIT_HASH_SET_DEFINED
+#define SIRKIT_HASH_SET_DEFINED
 // Flat table。検索・追加・次iteratorを求めない削除は期待償却O(1)。列キーのハッシュ計算は列長に比例する。
 // 次iteratorへの移動は空き区間長に比例する。削除では自動縮小しないため、疎になればrehash(0)で縮小する。
 // 再配置・clear・swap・ムーブでiterator/参照は無効。eraseは対象だけを無効にする。

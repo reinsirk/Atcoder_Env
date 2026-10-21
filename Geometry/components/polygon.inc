@@ -1,5 +1,5 @@
-#ifndef REINSIRK_GEO_POLYGON_DEFINED
-#define REINSIRK_GEO_POLYGON_DEFINED
+#ifndef SIRKIT_GEO_POLYGON_DEFINED
+#define SIRKIT_GEO_POLYGON_DEFINED
 namespace geo {
 // 多角形は vector<Point<T,C>>。先頭点の重複による閉包は不要。
 // signed_area2(poly): 符号付き面積の2倍を C で返す。反時計回りが正。O(N)、空は0。

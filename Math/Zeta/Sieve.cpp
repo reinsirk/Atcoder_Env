@@ -9,8 +9,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_INTEGER_SIEVE_DEFINED
-#define REINSIRK_INTEGER_SIEVE_DEFINED
+#ifndef SIRKIT_INTEGER_SIEVE_DEFINED
+#define SIRKIT_INTEGER_SIEVE_DEFINED
 // IntegerSieve(maxn): maxn>=0の最小素因数表・昇順素数列をO(maxn)時間・領域で作る。0,1の最小素因数は0。
 // least_prime_factor[x]は最小素因数、prime_listは昇順素数列。表は書き換えず利用する。
 // コピーは独立、コピー代入は強保証。ムーブ元は空となりmax_value()=-1。

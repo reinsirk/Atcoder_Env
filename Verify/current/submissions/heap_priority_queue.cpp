@@ -13,8 +13,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_HEAP_DEFINED
-#define REINSIRK_HEAP_DEFINED
+#ifndef SIRKIT_HEAP_DEFINED
+#define SIRKIT_HEAP_DEFINED
 
 // int の最小ヒープ。値を所有し、コピー・ムーブ可能。
 // Heap(): 空を構築。Heap(vector<int>): 値を受け取り O(N) で構築。
@@ -166,8 +166,8 @@ public:
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

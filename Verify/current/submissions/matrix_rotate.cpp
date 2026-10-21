@@ -26,8 +26,8 @@
 // flip_i_inplace(a): 行の交換で上下反転しvoidを返す。要素のswap不要。O(H)時間・追加O(1)、外側が空なら何もしない。
 // flip_j_inplace(a): 各行を左右反転しvoidを返す。Tはswap可能。O(H+HW)時間・追加O(1)、外側が空なら何もしない。
 
-#ifndef REINSIRK_MATRIX_TRANSFORM_DETAIL_DEFINED
-#define REINSIRK_MATRIX_TRANSFORM_DETAIL_DEFINED
+#ifndef SIRKIT_MATRIX_TRANSFORM_DETAIL_DEFINED
+#define SIRKIT_MATRIX_TRANSFORM_DETAIL_DEFINED
 namespace reinsirk::detail {
 
 // 内部用。Mode: 0=転置、1=時計回り、3=反時計回り。
@@ -176,8 +176,8 @@ std::vector<Row> matrix_quarter(const std::vector<Row>& a, int turns) {
 } // namespace reinsirk::detail
 #endif
 
-#ifndef REINSIRK_ROTATE_90R_DEFINED
-#define REINSIRK_ROTATE_90R_DEFINED
+#ifndef SIRKIT_ROTATE_90R_DEFINED
+#define SIRKIT_ROTATE_90R_DEFINED
 template <class T>
 std::vector<std::vector<T>> rotate_90r(const std::vector<std::vector<T>>& a) {
     if (a.empty()) return std::vector<std::vector<T>>(1);
@@ -189,8 +189,8 @@ inline std::vector<std::string> rotate_90r(const std::vector<std::string>& a) {
 }
 #endif
 
-#ifndef REINSIRK_FLIP_J_DEFINED
-#define REINSIRK_FLIP_J_DEFINED
+#ifndef SIRKIT_FLIP_J_DEFINED
+#define SIRKIT_FLIP_J_DEFINED
 template <class T>
 std::vector<std::vector<T>> flip_j(const std::vector<std::vector<T>>& a) {
     if (a.empty()) return std::vector<std::vector<T>>(1);
@@ -202,8 +202,8 @@ inline std::vector<std::string> flip_j(const std::vector<std::string>& a) {
 }
 #endif
 
-#ifndef REINSIRK_FLIP_I_DEFINED
-#define REINSIRK_FLIP_I_DEFINED
+#ifndef SIRKIT_FLIP_I_DEFINED
+#define SIRKIT_FLIP_I_DEFINED
 template <class T>
 std::vector<std::vector<T>> flip_i(const std::vector<std::vector<T>>& a) {
     if (a.empty()) return std::vector<std::vector<T>>(1);
@@ -215,8 +215,8 @@ inline std::vector<std::string> flip_i(const std::vector<std::string>& a) {
 }
 #endif
 
-#ifndef REINSIRK_ROTATE_90L_DEFINED
-#define REINSIRK_ROTATE_90L_DEFINED
+#ifndef SIRKIT_ROTATE_90L_DEFINED
+#define SIRKIT_ROTATE_90L_DEFINED
 template <class T>
 std::vector<std::vector<T>> rotate_90l(const std::vector<std::vector<T>>& a) {
     return reinsirk::detail::matrix_turn<3>(a);
@@ -226,8 +226,8 @@ inline std::vector<std::string> rotate_90l(const std::vector<std::string>& a) {
 }
 #endif
 
-#ifndef REINSIRK_ROTATE_180_DEFINED
-#define REINSIRK_ROTATE_180_DEFINED
+#ifndef SIRKIT_ROTATE_180_DEFINED
+#define SIRKIT_ROTATE_180_DEFINED
 template <class T>
 std::vector<std::vector<T>> rotate_180(const std::vector<std::vector<T>>& a) {
     return reinsirk::detail::matrix_copy<true, true>(a);
@@ -237,8 +237,8 @@ inline std::vector<std::string> rotate_180(const std::vector<std::string>& a) {
 }
 #endif
 
-#ifndef REINSIRK_ROTATE_QUARTER_DEFINED
-#define REINSIRK_ROTATE_QUARTER_DEFINED
+#ifndef SIRKIT_ROTATE_QUARTER_DEFINED
+#define SIRKIT_ROTATE_QUARTER_DEFINED
 template <class T>
 std::vector<std::vector<T>> rotate_quarter(const std::vector<std::vector<T>>& a, int clockwise_turns) {
     return reinsirk::detail::matrix_quarter(a, clockwise_turns);
@@ -248,8 +248,8 @@ inline std::vector<std::string> rotate_quarter(const std::vector<std::string>& a
 }
 #endif
 
-#ifndef REINSIRK_TRANSPOSE_DEFINED
-#define REINSIRK_TRANSPOSE_DEFINED
+#ifndef SIRKIT_TRANSPOSE_DEFINED
+#define SIRKIT_TRANSPOSE_DEFINED
 template <class T>
 std::vector<std::vector<T>> transpose(const std::vector<std::vector<T>>& a) {
     return reinsirk::detail::matrix_turn<0>(a);
@@ -259,8 +259,8 @@ inline std::vector<std::string> transpose(const std::vector<std::string>& a) {
 }
 #endif
 
-#ifndef REINSIRK_FLIP_I_INPLACE_DEFINED
-#define REINSIRK_FLIP_I_INPLACE_DEFINED
+#ifndef SIRKIT_FLIP_I_INPLACE_DEFINED
+#define SIRKIT_FLIP_I_INPLACE_DEFINED
 template <class T>
 void flip_i_inplace(std::vector<std::vector<T>>& a) {
     reinsirk::detail::matrix_flip_i_inplace(a);
@@ -270,8 +270,8 @@ inline void flip_i_inplace(std::vector<std::string>& a) {
 }
 #endif
 
-#ifndef REINSIRK_FLIP_J_INPLACE_DEFINED
-#define REINSIRK_FLIP_J_INPLACE_DEFINED
+#ifndef SIRKIT_FLIP_J_INPLACE_DEFINED
+#define SIRKIT_FLIP_J_INPLACE_DEFINED
 template <class T>
 void flip_j_inplace(std::vector<std::vector<T>>& a) {
     reinsirk::detail::matrix_flip_j_inplace(a);
@@ -300,8 +300,8 @@ inline void flip_j_inplace(std::vector<std::string>& a) {
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

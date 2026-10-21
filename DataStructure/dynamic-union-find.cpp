@@ -18,8 +18,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_INTERNAL_HASH_MAP_DEFINED
-#define REINSIRK_INTERNAL_HASH_MAP_DEFINED
+#ifndef SIRKIT_INTERNAL_HASH_MAP_DEFINED
+#define SIRKIT_INTERNAL_HASH_MAP_DEFINED
 namespace reinsirk::detail {
 // dynamic系で共有する内部用の整数ハッシュ表。参照・ポインタは再確保で無効。
 // Packedは占有フラグのbit化、Denominatorは空き容量の比率1/Denominatorを指定する。
@@ -207,11 +207,11 @@ public:
 };
 
 }  // namespace reinsirk::detail
-#endif  // REINSIRK_INTERNAL_HASH_MAP_DEFINED
+#endif  // SIRKIT_INTERNAL_HASH_MAP_DEFINED
 
 
-#ifndef REINSIRK_DYNAMIC_UNION_FIND_DEFINED
-#define REINSIRK_DYNAMIC_UNION_FIND_DEFINED
+#ifndef SIRKIT_DYNAMIC_UNION_FIND_DEFINED
+#define SIRKIT_DYNAMIC_UNION_FIND_DEFINED
 // intの全域をキーにできる。要素は問い合わせ時に自動登録する。
 // ハッシュ表の検索は期待O(1)、併合・探索は償却O(α(N))、空間O(N)。
 class DynamicUnionFind {

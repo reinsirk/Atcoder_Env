@@ -15,8 +15,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_TWO_VARIABLE_SUBMODULAR_OPT_DEFINED
-#define REINSIRK_TWO_VARIABLE_SUBMODULAR_OPT_DEFINED
+#ifndef SIRKIT_TWO_VARIABLE_SUBMODULAR_OPT_DEFINED
+#define SIRKIT_TWO_VARIABLE_SUBMODULAR_OPT_DEFINED
 
 // COSTは64bit以下の符号付き整数。true側を始点側とする最小カット。
 // 分解途中の符号付きコスト・offsetもCOST範囲内が必要。
@@ -417,8 +417,8 @@ public:
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

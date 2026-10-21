@@ -1,7 +1,7 @@
-#ifndef REINSIRK_GEO_POINT_DEFINED
-#define REINSIRK_GEO_POINT_DEFINED
+#ifndef SIRKIT_GEO_POINT_DEFINED
+#define SIRKIT_GEO_POINT_DEFINED
 namespace geo {
-#if defined(__SIZEOF_INT128__) && !defined(GEO_DISABLE_INT128) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if defined(__SIZEOF_INT128__) && !defined(GEO_DISABLE_INT128) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, __int128_t, T>;
 #else
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, std::int64_t, T>;

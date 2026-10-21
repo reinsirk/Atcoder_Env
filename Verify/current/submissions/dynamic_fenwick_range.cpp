@@ -1,7 +1,6 @@
 #define SKIP_RUNTIME_CHECKS
 // Verify: https://judge.yosupo.jp/problem/point_add_range_sum
-// Submission: https://judge.yosupo.jp/submission/412246
-// Submission: https://judge.yosupo.jp/submission/412278
+// Submission: https://judge.yosupo.jp/submission/412301
 
 // Library: DataStructure/dynamic-binary-indexed-tree.cpp
 // SPDX-License-Identifier: CC0-1.0
@@ -26,8 +25,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_INTERNAL_HASH_MAP_DEFINED
-#define REINSIRK_INTERNAL_HASH_MAP_DEFINED
+#ifndef SIRKIT_INTERNAL_HASH_MAP_DEFINED
+#define SIRKIT_INTERNAL_HASH_MAP_DEFINED
 namespace reinsirk::detail {
 // dynamic系で共有する内部用の整数ハッシュ表。参照・ポインタは再確保で無効。
 // Packedは占有フラグのbit化、Denominatorは空き容量の比率1/Denominatorを指定する。
@@ -215,7 +214,7 @@ public:
 };
 
 }  // namespace reinsirk::detail
-#endif  // REINSIRK_INTERNAL_HASH_MAP_DEFINED
+#endif  // SIRKIT_INTERNAL_HASH_MAP_DEFINED
 
 
 
@@ -223,8 +222,8 @@ public:
 #include <array>
 #include <memory>
 #include <variant>
-#ifndef REINSIRK_DYNAMIC_FENWICK_BPLUS_ROW_DEFINED
-#define REINSIRK_DYNAMIC_FENWICK_BPLUS_ROW_DEFINED
+#ifndef SIRKIT_DYNAMIC_FENWICK_BPLUS_ROW_DEFINED
+#define SIRKIT_DYNAMIC_FENWICK_BPLUS_ROW_DEFINED
 namespace reinsirk::detail {
 // 元列の値を葉32点・内部16子で保持する。累積値はT幅の剰余で扱う。
 template <class T, bool DirectReads = false>
@@ -263,10 +262,63 @@ class BPlusFenwickRow {
   bool dense_used(U c) const noexcept {
     return (dense_flags_[(c-1)/64]&(std::uint64_t{1}<<((c-1)%64)))!=0;
   }
+  // dense中のroot_は、連続追加中だけ完了済みprefix長を保持する。
+  V append_prefix(U endpoint) const noexcept {
+    V result{};for(U x=std::min(endpoint,root_);x;x-=lowbit(x))result=plus(result,dense_values_[x]);
+    return result;
+  }
+#if defined(__GNUC__) || defined(__clang__)
+  [[gnu::noinline]]
+#endif
+  void finish_append() noexcept {
+    const U prefix=root_;
+    std::fill_n(dense_flags_.begin(),prefix/64,~std::uint64_t{0});
+    if(prefix%64)dense_flags_[prefix/64]=(std::uint64_t{1}<<(prefix%64))-1;
+    cells_=prefix;
+    U cell=prefix;
+    for(U next=cell+lowbit(cell);next<=dense_width_;next=cell+lowbit(cell)) {
+      V value=dense_values_[cell];const U stop=next-lowbit(next);
+      for(U x=cell-lowbit(cell);x>stop;x-=lowbit(x))value=plus(value,dense_values_[x]);
+      dense_values_[next]=value;cell=next;
+      dense_flags_[(cell-1)/64]|=std::uint64_t{1}<<((cell-1)%64);++cells_;
+    }
+    root_=absent;if constexpr(DirectReads)dense_clean_=true;
+  }
+#if defined(__GNUC__) || defined(__clang__)
+  [[gnu::noinline]]
+#endif
+  bool append_add(U col,V delta) noexcept {
+    if(col!=root_+1){finish_append();return false;}
+    // 完了したセルの和を親1個だけへ伝える。
+    const V value=plus(dense_values_[col],delta);
+    dense_values_[col]=value;
+    const U parent=col+lowbit(col);
+    if(parent<=dense_width_)dense_values_[parent]=plus(dense_values_[parent],value);
+    root_=col;
+    if(root_==dense_width_)finish_append();
+    return true;
+  }
+  template<bool Upper>U append_bound(V w,U m)const noexcept {
+    if(Upper?append_prefix(root_)<=w:append_prefix(root_)<w)return m;
+    U x=0;for(U step=std::bit_floor(root_);step;step>>=1) {
+      const U next=x+step;if(next>root_)continue;
+      const V cell=dense_values_[next];
+      if(Upper?cell<=w:cell<w){w=minus(w,cell);x=next;}
+    }
+    return x;
+  }
   void dense_add(U col,V delta) noexcept {
     if(cells_==dense_width_) {
       for(U c=col;c<=dense_width_;c+=lowbit(c))dense_values_[c]=plus(dense_values_[c],delta);
       return;
+    }
+    if constexpr(DirectReads) {
+      if(root_!=absent && append_add(col,delta))return;
+      // 占有済みセルの祖先もすべて占有済み。
+      if(dense_used(col)) {
+        for(U c=col;c<=dense_width_;c+=lowbit(c))dense_values_[c]=plus(dense_values_[c],delta);
+        return;
+      }
     }
     for(U c=col;c<=dense_width_;c+=lowbit(c)) {
       std::uint64_t& flags=dense_flags_[(c-1)/64];
@@ -284,6 +336,7 @@ class BPlusFenwickRow {
       for(U c=ml;c!=common;c-=lowbit(c))result=minus(result,dense_values_[c]);
       return static_cast<T>(result);
     }
+    if constexpr(DirectReads)if(root_!=absent)return static_cast<T>(minus(append_prefix(mr),append_prefix(ml)));
     for(U c=mr;c!=common;c-=lowbit(c)) {
       const V mask=static_cast<V>(A{0}-static_cast<A>(dense_used(c)));
       result=plus(result,static_cast<V>(dense_values_[c]&mask));
@@ -447,7 +500,18 @@ class BPlusFenwickRow {
     }
   }
  public:
-  void promote_prefix(U m) noexcept {maybe_dense<true>(m);}
+  void promote_prefix(U m,U prefix=0) noexcept {
+    maybe_dense<true>(m);
+    if constexpr(DirectReads)if(prefix && prefix<m && direct_dense_read() && !dense_values_.empty()) {
+      // 重複する下位の部分和を除き、線形構築の途中状態へ揃える。
+      V previous{};
+      for(U x=prefix+lowbit(prefix);x<=m;x+=lowbit(x)) {
+        const V partial=dense_values_[x];
+        dense_values_[x]=minus(partial,previous);previous=partial;
+      }
+      root_=prefix;cells_=prefix;dense_clean_=false;
+    }
+  }
   BPlusFenwickRow() noexcept = default;
   BPlusFenwickRow(const BPlusFenwickRow&)=default;
   BPlusFenwickRow(BPlusFenwickRow&& other) noexcept { swap(other); }
@@ -458,7 +522,13 @@ class BPlusFenwickRow {
     std::swap(dense_width_,other.dense_width_);std::swap(dense_failed_,other.dense_failed_);
     if constexpr(DirectReads)std::swap(dense_clean_,other.dense_clean_);
   }
-  std::size_t size() const noexcept { return cells_; }
+  std::size_t size() const noexcept {
+    if constexpr(DirectReads)if(root_!=absent && !dense_values_.empty()) {
+      std::size_t count=root_;for(U x=root_+lowbit(root_);x<=dense_width_;x+=lowbit(x))++count;
+      return count;
+    }
+    return cells_;
+  }
   bool empty() const noexcept { return cells_==0; }
   void clear() noexcept {
     nodes_.clear();root_=absent;cells_=0;dense_failed_=false;
@@ -475,6 +545,13 @@ class BPlusFenwickRow {
     if (points > std::numeric_limits<std::size_t>::max()-15)
       throw std::length_error("BPlusFenwickRow: point capacity overflow");
     ensure_nodes((points+15)/16+1);
+  }
+#if defined(__GNUC__) || defined(__clang__)
+  [[gnu::always_inline]]
+#endif
+  inline bool try_dense_add(U col,const T& value) noexcept {
+    if(dense_values_.empty())return false;
+    dense_add(col,static_cast<V>(value));return true;
   }
   void add(U col, const T& value, U m) {
     const V delta=static_cast<V>(value);
@@ -552,6 +629,7 @@ class BPlusFenwickRow {
     if(cells_==0)return m;
     V remaining=static_cast<V>(w);
     if(!dense_values_.empty()) {
+      if constexpr(DirectReads)if(root_!=absent)return append_bound<Upper>(remaining,m);
       U x=0;
       const bool full=cells_==dense_width_ || direct_dense_read();
       for(U step=std::bit_floor(m);step;step>>=1) {
@@ -599,6 +677,12 @@ class BPlusFenwickRow {
       for(U c=col-1;c!=common;c-=lowbit(c))result=minus(result,dense_values_[c]);
       return static_cast<T>(result);
     }
+    if constexpr(DirectReads)if(root_!=absent) {
+      if(col>root_)return T{};
+      V result=dense_values_[col];
+      for(U x=col-1;x!=common;x-=lowbit(x))result=minus(result,dense_values_[x]);
+      return static_cast<T>(result);
+    }
     V result=dense_used(col) ? dense_values_[col] : V{};
     for(U c=col-1;c!=common;c-=lowbit(c)) {
       const V mask=static_cast<V>(A{0}-static_cast<A>(dense_used(c)));
@@ -608,6 +692,7 @@ class BPlusFenwickRow {
   }
   T prefix(U endpoint) const noexcept {
     if(dense_values_.empty())return static_cast<T>(prefix_from(root_,endpoint));
+    if constexpr(DirectReads)if(root_!=absent)return static_cast<T>(append_prefix(endpoint));
     V result{};
     if(cells_==dense_width_ || direct_dense_read()) {
       for(U c=endpoint;c;c-=lowbit(c))result=plus(result,dense_values_[c]);
@@ -625,8 +710,8 @@ class BPlusFenwickRow {
 } // namespace reinsirk::detail
 #endif
 
-#ifndef REINSIRK_DYNAMIC_FENWICK_SMALL_ROW_DEFINED
-#define REINSIRK_DYNAMIC_FENWICK_SMALL_ROW_DEFINED
+#ifndef SIRKIT_DYNAMIC_FENWICK_SMALL_ROW_DEFINED
+#define SIRKIT_DYNAMIC_FENWICK_SMALL_ROW_DEFINED
 namespace reinsirk::detail {
 // 少数点を直接保持し、列幅に応じてFenwickセル表または集約木へ移す。
 template <class T, bool DirectReads = false>
@@ -821,7 +906,7 @@ class SmallFenwickRow {
     for(U i=0;i<inline_count();++i)put(small().inline_columns_[i],small().inline_values_[i]);
     for(const Point& point:small().overflow_)put(point.col,point.value);
   }
-  void promote_prefix(U m) noexcept {if(auto* tree=std::get_if<2>(&storage_))tree->promote_prefix(m);}
+  void promote_prefix(U m,U prefix=0) noexcept {if(auto* tree=std::get_if<2>(&storage_))tree->promote_prefix(m,prefix);}
   SmallFenwickRow() noexcept = default;
   SmallFenwickRow(const SmallFenwickRow&) = default;
   SmallFenwickRow(SmallFenwickRow&& other) noexcept { swap(other); }
@@ -904,6 +989,14 @@ class SmallFenwickRow {
     if (fenwick_map()) add_mode<false>(col,value,m);
     else if (std::get_if<2>(&storage_) || std::get_if<3>(&storage_) || uses_tree(m)) add_mode<true>(col,value,m);
     else add_mode<false>(col,value,m);
+  }
+  template <bool UseTree>
+#if defined(__GNUC__) || defined(__clang__)
+  [[gnu::always_inline]]
+#endif
+  inline void add_direct(U col,const T& value,U m) {
+    if constexpr(UseTree && DirectReads)if(auto* tree=std::get_if<2>(&storage_))if(tree->try_dense_add(col,value))return;
+    add_mode<UseTree>(col,value,m);
   }
   template <bool UseTree>
   void add_mode(U col, const T& value, U m) {
@@ -1199,11 +1292,11 @@ class SmallFenwickRow {
   }
 };
 }  // namespace reinsirk::detail
-#endif  // REINSIRK_DYNAMIC_FENWICK_SMALL_ROW_DEFINED
+#endif  // SIRKIT_DYNAMIC_FENWICK_SMALL_ROW_DEFINED
 
 
-#ifndef REINSIRK_DYNAMIC_FENWICK_TREE_DEFINED
-#define REINSIRK_DYNAMIC_FENWICK_TREE_DEFINED
+#ifndef SIRKIT_DYNAMIC_FENWICK_TREE_DEFINED
+#define SIRKIT_DYNAMIC_FENWICK_TREE_DEFINED
 namespace reinsirk::detail {
 template <typename S, typename T>
 class FenwickFallback {
@@ -1354,7 +1447,19 @@ class FenwickFallback {
  public:
   explicit FenwickFallback(S n = 0) : n_(checked_size(n)) {}
   FenwickFallback(const FenwickFallback&) = default;
-  FenwickFallback& operator=(const FenwickFallback&) = default;
+  FenwickFallback& operator=(const FenwickFallback& other) {
+    if (this == &other) return *this;
+    try {
+      data_ = other.data_; sparse_ = other.sparse_;
+      small_ = other.small_; dense_used_ = other.dense_used_;
+      small_used_ = other.small_used_; n_ = other.n_;
+    } catch (...) {
+      // コピー失敗時は元の長さの零状態へ戻し、確保済み容量は再利用する。
+      clear();
+      throw;
+    }
+    return *this;
+  }
   FenwickFallback(FenwickFallback&& other) noexcept(
       std::is_nothrow_move_constructible_v<reinsirk::detail::InternalHashMap<U,T,false,4>>)
       : n_(std::exchange(other.n_, 0)), data_(std::move(other.data_)), sparse_(std::move(other.sparse_)),
@@ -1628,7 +1733,12 @@ class CompactFenwick {
         tiny->values.resize(capacity+1);
         std::fill(tiny->values.begin()+static_cast<std::size_t>(n_)+1,tiny->values.end(),std::numeric_limits<T>::max());
       }
-      if(n_<=64)for(U c=i+1;static_cast<U>(c-U{1})<n_;c+=lowbit(c)){tiny->values[c]+=value;tiny->used|=UINT64_C(1)<<(c-1);}
+      if(n_<=64) {
+        // 登録済みセルの祖先も登録済みなので、ビットの書き戻しを省く。
+        if(tiny->used&(UINT64_C(1)<<i))
+          for(U c=i+1;static_cast<U>(c-U{1})<n_;c+=lowbit(c))tiny->values[c]+=value;
+        else for(U c=i+1;static_cast<U>(c-U{1})<n_;c+=lowbit(c)){tiny->values[c]+=value;tiny->used|=UINT64_C(1)<<(c-1);}
+      }
       else if(tiny->used==n_)for(U c=i+1;static_cast<U>(c-U{1})<n_;c+=lowbit(c))tiny->values[c]+=value;
       else for(U c=i+1;static_cast<U>(c-U{1})<n_;c+=lowbit(c)) {
         tiny->values[c]+=value;if(!tiny->flags[c]){tiny->flags[c]=1;++tiny->used;}
@@ -1636,8 +1746,8 @@ class CompactFenwick {
       return;
     }
     if(auto* row=std::get_if<0>(&storage_)){
-      if(n_<8192)row->template add_mode<false>(static_cast<std::uint32_t>(i)+1,value,static_cast<std::uint32_t>(n_));
-      else row->template add_mode<true>(static_cast<std::uint32_t>(i)+1,value,static_cast<std::uint32_t>(n_));
+      if(n_<8192)row->template add_direct<false>(static_cast<std::uint32_t>(i)+1,value,static_cast<std::uint32_t>(n_));
+      else row->template add_direct<true>(static_cast<std::uint32_t>(i)+1,value,static_cast<std::uint32_t>(n_));
       if(n_<8192 && !dense_failed_ && row->size()>=(static_cast<std::size_t>(n_)+7)/8) {
         try {Tiny next;next.used=row->size();row->export_cells(static_cast<std::uint32_t>(n_),next.values,next.flags);storage_.template emplace<1>(std::move(next));return;}
         catch(const std::bad_alloc&){dense_failed_=true;}
@@ -1645,7 +1755,7 @@ class CompactFenwick {
       if(prefix_!=std::numeric_limits<U>::max()) {
         if(i!=prefix_)prefix_=std::numeric_limits<U>::max();
         else if(++prefix_>128 && row->size()>=(static_cast<std::size_t>(n_)+31)/32 && n_<=1'000'000){
-          row->promote_prefix(static_cast<std::uint32_t>(n_));prefix_=std::numeric_limits<U>::max();
+          row->promote_prefix(static_cast<std::uint32_t>(n_),static_cast<std::uint32_t>(prefix_));prefix_=std::numeric_limits<U>::max();
         }
       }
       return;
@@ -1665,8 +1775,13 @@ class CompactFenwick {
     if(const auto* row=std::get_if<0>(&storage_)) {
       const auto end=static_cast<std::uint32_t>(r);
       if(const auto* values=row->direct_values()) {
-        for(std::uint32_t c=end;c;c-=c&(std::uint32_t{0}-c))result+=static_cast<T>(values[c]);
-        return result;
+        using Value=std::make_unsigned_t<T>;using Arithmetic=decltype(Value{}+0u);Value row_result{};
+        auto c=end;
+        while(c) {
+          row_result=static_cast<Value>(static_cast<Arithmetic>(row_result)+static_cast<Arithmetic>(values[c]));c-=c&(std::uint32_t{0}-c);
+          row_result=static_cast<Value>(static_cast<Arithmetic>(row_result)+static_cast<Arithmetic>(values[c]));c-=c&(std::uint32_t{0}-c);
+        }
+        return static_cast<T>(row_result);
       }
       return row->prefix(end);
     }
@@ -1689,10 +1804,26 @@ class CompactFenwick {
     if(const auto* row=std::get_if<0>(&storage_)) {
       if(l==r)return T{};
       if(const auto* values=row->direct_values()) {
-      T result{};
-      for(std::uint32_t c=static_cast<std::uint32_t>(r);c;c-=c&(std::uint32_t{0}-c))result+=static_cast<T>(values[c]);
-      for(std::uint32_t c=static_cast<std::uint32_t>(l);c;c-=c&(std::uint32_t{0}-c))result-=static_cast<T>(values[c]);
-      return result;
+      using Value=std::make_unsigned_t<T>;using Arithmetic=decltype(Value{}+0u);
+      if(l==0) {
+        Value result{};auto c=static_cast<std::uint32_t>(r);
+        while(c) {
+          result=static_cast<Value>(static_cast<Arithmetic>(result)+static_cast<Arithmetic>(values[c]));c-=c&(std::uint32_t{0}-c);
+          result=static_cast<Value>(static_cast<Arithmetic>(result)+static_cast<Arithmetic>(values[c]));c-=c&(std::uint32_t{0}-c);
+        }
+        return static_cast<T>(result);
+      }
+      Value left_sum{},right_sum{};
+      auto left=static_cast<std::uint32_t>(l),right=static_cast<std::uint32_t>(r);
+      while(left|right){
+        right_sum=static_cast<Value>(static_cast<Arithmetic>(right_sum)+static_cast<Arithmetic>(values[right]));
+        left_sum=static_cast<Value>(static_cast<Arithmetic>(left_sum)+static_cast<Arithmetic>(values[left]));
+        right-=right&(std::uint32_t{0}-right);left-=left&(std::uint32_t{0}-left);
+        right_sum=static_cast<Value>(static_cast<Arithmetic>(right_sum)+static_cast<Arithmetic>(values[right]));
+        left_sum=static_cast<Value>(static_cast<Arithmetic>(left_sum)+static_cast<Arithmetic>(values[left]));
+        right-=right&(std::uint32_t{0}-right);left-=left&(std::uint32_t{0}-left);
+      }
+      return static_cast<T>(static_cast<Value>(static_cast<Arithmetic>(right_sum)-static_cast<Arithmetic>(left_sum)));
       }
     }
     return interval(static_cast<U>(l),static_cast<U>(r));
@@ -1794,8 +1925,8 @@ class DynamicFenwickTree : public reinsirk::detail::FenwickBase<S,T> {
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

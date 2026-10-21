@@ -15,8 +15,8 @@
 // angle_sort: 配列をその場でソート。angle_sort_indices: 入力不変で添字順を返す。O(n log n)。
 // いずれもint64_t全域で有効なため入力検査は不要。SKIP_RUNTIME_CHECKSで動作は変わらない。
 
-#ifndef REINSIRK_ANGLE_ARITHMETIC_DEFINED
-#define REINSIRK_ANGLE_ARITHMETIC_DEFINED
+#ifndef SIRKIT_ANGLE_ARITHMETIC_DEFINED
+#define SIRKIT_ANGLE_ARITHMETIC_DEFINED
 namespace reinsirk::detail {
 struct AngleArithmetic {
     static constexpr std::uint64_t magnitude(std::int64_t x) noexcept {
@@ -52,7 +52,7 @@ struct AngleArithmetic {
         return p.first == 0 && p.second == 0;
     }
 
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
     [[gnu::noinline]] static constexpr bool less_wide(
         const std::pair<std::int64_t, std::int64_t>& a,
         const std::pair<std::int64_t, std::int64_t>& b) noexcept {
@@ -65,13 +65,13 @@ struct AngleArithmetic {
 } // namespace reinsirk::detail
 #endif
 
-#ifndef REINSIRK_ANGLE_CROSS_SIGN_DEFINED
-#define REINSIRK_ANGLE_CROSS_SIGN_DEFINED
+#ifndef SIRKIT_ANGLE_CROSS_SIGN_DEFINED
+#define SIRKIT_ANGLE_CROSS_SIGN_DEFINED
 // a,b の外積の符号を -1/0/1 で返す。int64_t 全域で厳密、O(1)。
 inline constexpr int angle_cross_sign(
     const std::pair<std::int64_t, std::int64_t>& a,
     const std::pair<std::int64_t, std::int64_t>& b) noexcept {
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
     const __int128 p = static_cast<__int128>(a.first) * b.second;
     const __int128 q = static_cast<__int128>(a.second) * b.first;
     return (p > q) - (p < q);
@@ -99,8 +99,8 @@ inline constexpr int angle_cross_sign(
 }
 #endif
 
-#ifndef REINSIRK_ANGLE_STANDARD_LESS_WIDE_DEFINED
-#define REINSIRK_ANGLE_STANDARD_LESS_WIDE_DEFINED
+#ifndef SIRKIT_ANGLE_STANDARD_LESS_WIDE_DEFINED
+#define SIRKIT_ANGLE_STANDARD_LESS_WIDE_DEFINED
 namespace reinsirk::detail {
 #if defined(__GNUC__) || defined(__clang__)
 [[gnu::noinline]]
@@ -113,8 +113,8 @@ inline constexpr bool AngleStandardLessWide(
 } // namespace reinsirk::detail
 #endif
 
-#ifndef REINSIRK_ARCCMP_LESS_DEFINED
-#define REINSIRK_ARCCMP_LESS_DEFINED
+#ifndef SIRKIT_ARCCMP_LESS_DEFINED
+#define SIRKIT_ARCCMP_LESS_DEFINED
 // [0,2π) の偏角で a<b を返す。零は先頭、同方向は等値、O(1)。
 inline constexpr bool arccmp_less(
     const std::pair<std::int64_t, std::int64_t>& a,
@@ -131,7 +131,7 @@ inline constexpr bool arccmp_less(
     const bool ah = a.second < 0;
     const bool bh = b.second < 0;
     if (ah != bh) return ah < bh;
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
     std::int64_t p, q;
     if (__builtin_mul_overflow(a.first, b.second, &p)
         || __builtin_mul_overflow(a.second, b.first, &q))
@@ -153,8 +153,8 @@ inline constexpr bool arccmp_less(
 }
 #endif
 
-#ifndef REINSIRK_ARCCMP_G_DEFINED
-#define REINSIRK_ARCCMP_G_DEFINED
+#ifndef SIRKIT_ARCCMP_G_DEFINED
+#define SIRKIT_ARCCMP_G_DEFINED
 // 偏角で a>b を返す。零は降順末尾、同方向は等値、O(1)。
 inline constexpr bool arccmp_g(
     const std::pair<std::int64_t, std::int64_t>& a,
@@ -163,8 +163,8 @@ inline constexpr bool arccmp_g(
 }
 #endif
 
-#ifndef REINSIRK_ARCCMP_LESS_EQ_DEFINED
-#define REINSIRK_ARCCMP_LESS_EQ_DEFINED
+#ifndef SIRKIT_ARCCMP_LESS_EQ_DEFINED
+#define SIRKIT_ARCCMP_LESS_EQ_DEFINED
 // 零を先頭とする偏角で a<=b を返す。同方向は真、O(1)。
 inline constexpr bool arccmp_less_eq(
     const std::pair<std::int64_t, std::int64_t>& a,
@@ -173,8 +173,8 @@ inline constexpr bool arccmp_less_eq(
 }
 #endif
 
-#ifndef REINSIRK_ARCCMP_G_EQ_DEFINED
-#define REINSIRK_ARCCMP_G_EQ_DEFINED
+#ifndef SIRKIT_ARCCMP_G_EQ_DEFINED
+#define SIRKIT_ARCCMP_G_EQ_DEFINED
 // 零を先頭とする偏角で a>=b を返す。同方向は真、O(1)。
 inline constexpr bool arccmp_g_eq(
     const std::pair<std::int64_t, std::int64_t>& a,
@@ -183,8 +183,8 @@ inline constexpr bool arccmp_g_eq(
 }
 #endif
 
-#ifndef REINSIRK_SAME_ANGLE_DEFINED
-#define REINSIRK_SAME_ANGLE_DEFINED
+#ifndef SIRKIT_SAME_ANGLE_DEFINED
+#define SIRKIT_SAME_ANGLE_DEFINED
 // a,b が同方向なら真。零は零とのみ同方向、長さを問わず O(1)。
 inline constexpr bool same_angle(
     const std::pair<std::int64_t, std::int64_t>& a,
@@ -196,8 +196,8 @@ inline constexpr bool same_angle(
 }
 #endif
 
-#ifndef REINSIRK_ANGLE_LESS_DEFINED
-#define REINSIRK_ANGLE_LESS_DEFINED
+#ifndef SIRKIT_ANGLE_LESS_DEFINED
+#define SIRKIT_ANGLE_LESS_DEFINED
 // std::sort 用の昇順偏角比較器。零は先頭、同方向は等値、O(1)。
 struct AngleLess {
     constexpr bool operator()(const std::pair<std::int64_t, std::int64_t>& a,
@@ -207,8 +207,8 @@ struct AngleLess {
 };
 #endif
 
-#ifndef REINSIRK_ANGLE_GREATER_DEFINED
-#define REINSIRK_ANGLE_GREATER_DEFINED
+#ifndef SIRKIT_ANGLE_GREATER_DEFINED
+#define SIRKIT_ANGLE_GREATER_DEFINED
 // std::sort 用の降順偏角比較器。零は末尾、同方向は等値、O(1)。
 struct AngleGreater {
     constexpr bool operator()(const std::pair<std::int64_t, std::int64_t>& a,
@@ -218,8 +218,8 @@ struct AngleGreater {
 };
 #endif
 
-#ifndef REINSIRK_ANGLE_SORT_LARGE_DEFINED
-#define REINSIRK_ANGLE_SORT_LARGE_DEFINED
+#ifndef SIRKIT_ANGLE_SORT_LARGE_DEFINED
+#define SIRKIT_ANGLE_SORT_LARGE_DEFINED
 namespace reinsirk::detail {
 #if defined(__GNUC__) || defined(__clang__)
 [[gnu::noinline]]
@@ -258,7 +258,7 @@ inline void AngleSortLarge(std::vector<std::pair<std::int64_t, std::int64_t>>& p
         });
     } else {
         sort_parts([](const auto& a, const auto& b) {
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
             return static_cast<__int128>(a.first) * b.second
                  > static_cast<__int128>(a.second) * b.first;
 #else
@@ -270,8 +270,8 @@ inline void AngleSortLarge(std::vector<std::pair<std::int64_t, std::int64_t>>& p
 } // namespace reinsirk::detail
 #endif
 
-#ifndef REINSIRK_ANGLE_SORT_DEFINED
-#define REINSIRK_ANGLE_SORT_DEFINED
+#ifndef SIRKIT_ANGLE_SORT_DEFINED
+#define SIRKIT_ANGLE_SORT_DEFINED
 // pをその場で偏角順にソート。descending=trueは降順、同角の順序は任意、O(n log n)。
 inline void angle_sort(std::vector<std::pair<std::int64_t, std::int64_t>>& p,
                        bool descending = false) {
@@ -284,8 +284,8 @@ inline void angle_sort(std::vector<std::pair<std::int64_t, std::int64_t>>& p,
 }
 #endif
 
-#ifndef REINSIRK_ANGLE_SORT_INDICES_DEFINED
-#define REINSIRK_ANGLE_SORT_INDICES_DEFINED
+#ifndef SIRKIT_ANGLE_SORT_INDICES_DEFINED
+#define SIRKIT_ANGLE_SORT_INDICES_DEFINED
 // p を変更せず偏角順の添字を返す。descending=true は降順、O(n log n)、追加領域 O(n)。
 inline std::vector<std::size_t> angle_sort_indices(
     const std::vector<std::pair<std::int64_t, std::int64_t>>& p,

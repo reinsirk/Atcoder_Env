@@ -7,8 +7,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_UNION_FIND_DEFINED
-#define REINSIRK_UNION_FIND_DEFINED
+#ifndef SIRKIT_UNION_FIND_DEFINED
+#define SIRKIT_UNION_FIND_DEFINED
 // UnionFind(n=0): n要素を独立成分として構築。O(n)時間・領域。頂点はintで表せる範囲。
 // root(i)/leader(i): 代表頂点、unite(a,b): 結合、merge(a,b): 新規結合ならtrue。償却O(α(n))。
 // issame(a,b)/same(a,b): 同一成分か、size(i): 成分の要素数。償却O(α(n))。

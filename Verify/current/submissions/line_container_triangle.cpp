@@ -16,8 +16,8 @@
 #include <type_traits>
 #include <utility>
 
-#ifndef REINSIRK_LINE_CONTAINER_DEFINED
-#define REINSIRK_LINE_CONTAINER_DEFINED
+#ifndef SIRKIT_LINE_CONTAINER_DEFINED
+#define SIRKIT_LINE_CONTAINER_DEFINED
 
 enum Objective { MAXIMIZE = +1, MINIMIZE = -1 };
 
@@ -122,7 +122,7 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
         throw std::overflow_error("LineContainer: value overflow");
       return static_cast<T>(result);
     } else {
-#if defined(__SIZEOF_INT128__) && !defined(REINSIRK_LINE_CONTAINER_FORCE_PORTABLE)
+#if defined(__SIZEOF_INT128__) && !defined(SIRKIT_LINE_CONTAINER_FORCE_PORTABLE)
       T fast;
       if (!__builtin_mul_overflow(k, x, &fast) && !__builtin_add_overflow(fast, m, &fast))
 #if defined(__clang__)

@@ -60,7 +60,7 @@ def load_sources(directory: Path) -> tuple[dict[str, str], dict[str, str]]:
     guards: set[str] = set()
     for name in (*PARTS, "primality32"):
         content = (directory / f"{name}.inc").read_text(encoding="utf-8")
-        opening = re.search(r"^#ifndef (REINSIRK_[A-Z0-9_]+)\n#define \1\n", content, re.MULTILINE)
+        opening = re.search(r"^#ifndef (SIRKIT_[A-Z0-9_]+)\n#define \1\n", content, re.MULTILINE)
         if opening is None or not content.endswith("\n#endif\n"):
             raise ValueError(f"部品のガード形式が不正です: {name}")
         if opening[1] in guards:
@@ -73,9 +73,9 @@ def load_sources(directory: Path) -> tuple[dict[str, str], dict[str, str]]:
 
 
 def render(kind: str, roots: tuple[str, ...], headers: dict[str, str], pieces: dict[str, str]) -> str:
-    condition = "#ifndef REINSIRK_PRIMALITY32_DEFINED"
+    condition = "#ifndef SIRKIT_PRIMALITY32_DEFINED"
     if kind == "prime":
-        condition = "#if !defined(SKIP_RUNTIME_CHECKS) && !defined(REINSIRK_PRIMALITY32_DEFINED)"
+        condition = "#if !defined(SKIP_RUNTIME_CHECKS) && !defined(SIRKIT_PRIMALITY32_DEFINED)"
     prototype = (
         condition + "\n"
         "// 内部の素数判定。定義はファイル末尾。\n"
@@ -86,7 +86,7 @@ def render(kind: str, roots: tuple[str, ...], headers: dict[str, str], pieces: d
     )
     definition = pieces["primality32"]
     if kind == "prime":
-        definition = definition.replace("#ifndef REINSIRK_PRIMALITY32_DEFINED", condition, 1)
+        definition = definition.replace("#ifndef SIRKIT_PRIMALITY32_DEFINED", condition, 1)
     content = "// SPDX-License-Identifier: CC0-1.0\n\n" + headers[kind] + "\n" + prototype + "\n"
     content += "\n".join(pieces[name] for name in dependency_order(roots))
     return content + "\n" + definition

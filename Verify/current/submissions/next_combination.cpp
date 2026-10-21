@@ -11,8 +11,8 @@
 #include <stdexcept>
 #include <type_traits>
 
-#ifndef REINSIRK_NEXT_COMBINATION_DEFINED
-#define REINSIRK_NEXT_COMBINATION_DEFINED
+#ifndef SIRKIT_NEXT_COMBINATION_DEFINED
+#define SIRKIT_NEXT_COMBINATION_DEFINED
 // next_combination(sub): 同じ1の個数で次に大きいマスク。0・型内に次がなければ0。O(1)。
 // unsigned整数型に対応。既存int版は非負が前提で、正のintに収まらない次も0。
 template <std::unsigned_integral UInt> requires (!std::same_as<UInt, bool>)
@@ -33,8 +33,8 @@ inline constexpr int next_combination(int sub) {
 }
 #endif
 
-#ifndef REINSIRK_COMBINATION_MASK_UTILITIES_DEFINED
-#define REINSIRK_COMBINATION_MASK_UTILITIES_DEFINED
+#ifndef SIRKIT_COMBINATION_MASK_UTILITIES_DEFINED
+#define SIRKIT_COMBINATION_MASK_UTILITIES_DEFINED
 // first_combination<UInt=uint64_t>(k): 下位kビットが1の最小マスク。0<=k<=型幅。O(1)。
 // next_combination(sub, n): 下位nビット内の次へsubを進める。次がなければfalseでsub不変。O(1)。
 // for_each_combination<UInt=uint64_t>(n,k,visit): nビット内のk個の1を持つ全マスクを昇順にvisit(mask)へ渡す。k=0も1回。
@@ -101,8 +101,8 @@ constexpr void for_each_combination(int n, int k, Visitor&& visit) {
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

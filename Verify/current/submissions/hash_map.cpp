@@ -21,8 +21,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_GENERIC_HASH_DEFINED
-#define REINSIRK_GENERIC_HASH_DEFINED
+#ifndef SIRKIT_GENERIC_HASH_DEFINED
+#define SIRKIT_GENERIC_HASH_DEFINED
 struct GenericHash {
     // GenericHash(): 実行時に選んだ種で構築する。同じオブジェクトでは結果は一定。
     // GenericHash(seed): 指定した種で構築する。std::hash対応型の結果はその実装にも依存する。
@@ -97,8 +97,8 @@ public:
 };
 #endif
 
-#ifndef REINSIRK_HASH_MAP_DEFINED
-#define REINSIRK_HASH_MAP_DEFINED
+#ifndef SIRKIT_HASH_MAP_DEFINED
+#define SIRKIT_HASH_MAP_DEFINED
 // Flat table。検索・追加・削除は期待償却O(1)、列キーのハッシュ計算は列長に比例する。
 // 再配置・clear・swap・ムーブでiterator/参照は無効。eraseは対象だけを無効にする。
 // Key/Valはコピー可能、またはvalue_typeのムーブ構築がnoexceptであること。
@@ -471,8 +471,8 @@ public:
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

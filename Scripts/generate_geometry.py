@@ -66,7 +66,7 @@ def load_sources(directory: Path) -> tuple[str, dict[str, str]]:
     guards: set[str] = set()
     for name in PARTS:
         piece = (directory / f"{name}.inc").read_text(encoding="utf-8")
-        opening = re.match(r"#ifndef (REINSIRK_GEO_[A-Z_]+)\n#define \1\nnamespace geo \{\n", piece)
+        opening = re.match(r"#ifndef (SIRKIT_GEO_[A-Z_]+)\n#define \1\nnamespace geo \{\n", piece)
         if opening is None or not piece.endswith("\n}\n#endif\n"):
             raise ValueError(f"部品のガード形式が不正です: {name}")
         if opening[1] in guards:

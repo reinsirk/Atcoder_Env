@@ -1,5 +1,5 @@
-#ifndef REINSIRK_PRIMALITY32_DEFINED
-#define REINSIRK_PRIMALITY32_DEFINED
+#ifndef SIRKIT_PRIMALITY32_DEFINED
+#define SIRKIT_PRIMALITY32_DEFINED
 namespace reinsirk::detail {
 // uint32_t全域の素数判定。Miller-Rabinの底2,7,61を使う。
 // 理論参考: G. Jaeschke (1993), https://doi.org/10.1090/S0025-5718-1993-1192971-8

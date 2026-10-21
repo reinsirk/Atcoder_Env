@@ -14,8 +14,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_RADIX_SORT_DETAIL_DEFINED
-#define REINSIRK_RADIX_SORT_DETAIL_DEFINED
+#ifndef SIRKIT_RADIX_SORT_DETAIL_DEFINED
+#define SIRKIT_RADIX_SORT_DETAIL_DEFINED
 namespace reinsirk::detail {
 template <class T>
 concept RadixInteger = std::integral<T> && !std::same_as<T, bool> &&
@@ -114,8 +114,8 @@ template <RadixInteger T> struct RadixSortDetail {
 } // namespace reinsirk::detail
 #endif
 
-#ifndef REINSIRK_RADIX_SORT_WORKSPACE_DEFINED
-#define REINSIRK_RADIX_SORT_WORKSPACE_DEFINED
+#ifndef SIRKIT_RADIX_SORT_WORKSPACE_DEFINED
+#define SIRKIT_RADIX_SORT_WORKSPACE_DEFINED
 // RadixSortWorkspace<T>(): boolを除く8/16/32/64bit整数用の再利用作業領域。
 // sort(values): 符号付きも全域で安定昇順ソート。B=sizeof(T)としてO(Bn)、追加領域O(n)。
 // sort(values,maximum): 同じ処理。全要素<=maximumが前提で、通常処理中に検査する。
@@ -136,8 +136,8 @@ public:
 };
 #endif
 
-#ifndef REINSIRK_RADIX_SORT_DEFINED
-#define REINSIRK_RADIX_SORT_DEFINED
+#ifndef SIRKIT_RADIX_SORT_DEFINED
+#define SIRKIT_RADIX_SORT_DEFINED
 // RadixSort(values): 符号付きも全域で安定昇順ソート、O(sizeof(T)*n)時間・O(n)追加領域。
 // RadixSort(values,maximum): 同じ処理。全要素<=maximumが前提（負の値・負のmaximumも可）。
 // 小配列は確保せず挿入ソート。整列済みは変更せず、一定のbyteは散布を省く。
@@ -152,8 +152,8 @@ template <reinsirk::detail::RadixInteger T> void RadixSort(std::vector<T>& value
 }
 #endif
 
-#ifndef REINSIRK_RADIX_SORT_ORDER_DEFINED
-#define REINSIRK_RADIX_SORT_ORDER_DEFINED
+#ifndef SIRKIT_RADIX_SORT_ORDER_DEFINED
+#define SIRKIT_RADIX_SORT_ORDER_DEFINED
 // RadixSortOrder(values): 昇順の元添字列を返す。同値は元の順、入力不変。
 // boolを除く8/16/32/64bit整数。O(sizeof(T)*n)時間・O(n)追加領域。
 template <reinsirk::detail::RadixInteger T> std::vector<std::size_t> RadixSortOrder(const std::vector<T>& values) {
@@ -221,8 +221,8 @@ template <reinsirk::detail::RadixInteger T> std::vector<std::size_t> RadixSortOr
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

@@ -22,8 +22,8 @@
 // get_kth は重複込み・1始まり。ID は重複可、-1 は匿名（ID一覧には含めない）。
 // ID省略の削除は匿名を優先し、なければ任意のID付き要素を削除する。
 // ID一覧は順序不定の読み取り専用参照。次の更新または破棄まで有効。
-#ifndef REINSIRK_BINARY_TRIE_DEFINED
-#define REINSIRK_BINARY_TRIE_DEFINED
+#ifndef SIRKIT_BINARY_TRIE_DEFINED
+#define SIRKIT_BINARY_TRIE_DEFINED
 template <typename T, int MAX_LOG, std::size_t NODES = 16777216>
 class BinaryTrie
 {

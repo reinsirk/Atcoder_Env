@@ -1,5 +1,5 @@
-#ifndef REINSIRK_GEO_POINT_FUNCTIONS_DEFINED
-#define REINSIRK_GEO_POINT_FUNCTIONS_DEFINED
+#ifndef SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
+#define SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 namespace geo {
 // 点の関数。座標は有限、整数の差・積は C に収まる入力を扱う。
 // predicate_sign<T,C>(value,scale,eps): 整数は厳密、実数は許容幅で -1/0/1 を返す。O(1)。

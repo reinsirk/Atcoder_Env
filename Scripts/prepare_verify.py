@@ -85,7 +85,7 @@ def render(entry: dict, *, skip_runtime_checks: bool | None = None) -> tuple[byt
     local_label = ("ローカル入力例回帰" if entry.get("verification_kind") == "local_regression"
                    else "ローカル独立検査")
     header = prefix + "// Verify: " + (entry.get("problem_url") or local_label) + "\n"
-    header += "".join("// Submission: " + url + "\n" for url in entry.get("submission_urls", []))
+    header += "".join("// Submission: " + url + "\n" for url in entry.get("submission_urls", [])[-1:])
     pieces = [header]
     hashes = {}
     for name in entry["libraries"]:
@@ -129,7 +129,10 @@ def prepare(check: bool) -> list[dict]:
         record = journal.get(entry["id"])
         status = "未提出"
         if record:
-            status = record["status"] if record["submission_sha256"] == digest(data) else "要再提出（ソース変更）"
+            if record.get("submission_sha256") is None:
+                status = record["status"] + "（提出ソース未照合）"
+            else:
+                status = record["status"] if record["submission_sha256"] == digest(data) else "要再提出（ソース変更）"
             entry["judge_record"] = record
         entry.update(source_hashes=hashes, submission_sha256=digest(data),
                      submission=str(output.relative_to(ROOT)), bytes=len(data),
@@ -245,8 +248,8 @@ def run_tests(entries: list[dict], compiler: str, fallback: bool, output: Path) 
                 if "clang" in Path(compiler).name and Path("/usr/lib/gcc/x86_64-linux-gnu/15").is_dir():
                     command += ["--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15"]
                 if fallback:
-                    command += ["-U__SIZEOF_INT128__", "-DREINSIRK_FORCE_STANDARD_ARITHMETIC",
-                                "-DREINSIRK_LINE_CONTAINER_FORCE_PORTABLE"]
+                    command += ["-U__SIZEOF_INT128__", "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+                                "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE", "-DSIRKIT_DISABLE_SIMD"]
                 command += [str(source_path), "-o", str(binary)]
                 built = subprocess.run(command, capture_output=True, text=True, timeout=180)
                 result = dict(id=entry["id"], compiler=compiler, skip_runtime_checks=skip,

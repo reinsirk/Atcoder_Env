@@ -7,3 +7,6 @@
 - [Dijkstra](dijkstra.md)
 - [二項係数](binomial_coefficient.md)
 - [ゼータ／メビウス変換と整数篩](zeta_mobius.md)
+- [SIMDによる内部処理](simd.md)
+- [Floyd–Warshall](floyd_warshall.md)
+- [エラトステネスの篩](prime_sieve.md)

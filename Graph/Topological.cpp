@@ -9,13 +9,13 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_UNWEIGHTED_GRAPH_DEFINED
-#define REINSIRK_UNWEIGHTED_GRAPH_DEFINED
+#ifndef SIRKIT_UNWEIGHTED_GRAPH_DEFINED
+#define SIRKIT_UNWEIGHTED_GRAPH_DEFINED
 using Graph = std::vector<std::vector<int>>;
 #endif
 
-#ifndef REINSIRK_TOPOLOGICAL_RESULT_DEFINED
-#define REINSIRK_TOPOLOGICAL_RESULT_DEFINED
+#ifndef SIRKIT_TOPOLOGICAL_RESULT_DEFINED
+#define SIRKIT_TOPOLOGICAL_RESULT_DEFINED
 // order: 閉路があっても取り出せた頂点列。position: 列中の位置、未処理は-1。
 // acyclic: DAGか。unique: DAGで順序が一意か（空グラフはtrue）。
 struct TopologicalResult {
@@ -26,8 +26,8 @@ struct TopologicalResult {
 };
 #endif
 
-#ifndef REINSIRK_TOPOLOGICAL_CORE_DEFINED
-#define REINSIRK_TOPOLOGICAL_CORE_DEFINED
+#ifndef SIRKIT_TOPOLOGICAL_CORE_DEFINED
+#define SIRKIT_TOPOLOGICAL_CORE_DEFINED
 namespace reinsirk::detail {
 template <bool Lexicographical, bool Details>
 inline TopologicalResult TopologicalRun(const Graph& graph) {
@@ -88,22 +88,22 @@ inline TopologicalResult TopologicalRun(const Graph& graph) {
 } // namespace reinsirk::detail
 #endif
 
-#ifndef REINSIRK_TOPOLOGICAL_SORT_DEFINED
-#define REINSIRK_TOPOLOGICAL_SORT_DEFINED
+#ifndef SIRKIT_TOPOLOGICAL_SORT_DEFINED
+#define SIRKIT_TOPOLOGICAL_SORT_DEFINED
 // TopologicalSort(graph): FIFO順のトポロジカル順を返す。閉路なら空、空グラフも空。O(V+E)時間・O(V)領域。
 inline std::vector<int> TopologicalSort(const Graph& graph) {
     return reinsirk::detail::TopologicalRun<false, false>(graph).order;
 }
 #endif
-#ifndef REINSIRK_TOPOLOGICAL_SORT_LEXICOGRAPHICAL_DEFINED
-#define REINSIRK_TOPOLOGICAL_SORT_LEXICOGRAPHICAL_DEFINED
+#ifndef SIRKIT_TOPOLOGICAL_SORT_LEXICOGRAPHICAL_DEFINED
+#define SIRKIT_TOPOLOGICAL_SORT_LEXICOGRAPHICAL_DEFINED
 // TopologicalSortLexicographical(graph): 辞書順最小のトポロジカル順。閉路なら空。O(E+V log(V+1))時間・O(V)領域。
 inline std::vector<int> TopologicalSortLexicographical(const Graph& graph) {
     return reinsirk::detail::TopologicalRun<true, false>(graph).order;
 }
 #endif
-#ifndef REINSIRK_TOPOLOGICAL_DETAILS_DEFINED
-#define REINSIRK_TOPOLOGICAL_DETAILS_DEFINED
+#ifndef SIRKIT_TOPOLOGICAL_DETAILS_DEFINED
+#define SIRKIT_TOPOLOGICAL_DETAILS_DEFINED
 // TopologicalSortDetails(graph, lexicographical=false): 順序・各頂点の位置・DAG判定・一意性を返す。時間は対応するsortと同じ。
 // IsDAG(graph): DAGかを返す。空はtrue。O(V+E)時間・O(V)領域。
 // 全辺を使う入次数集計中に終点を検査し、2回目では繰り返さない。SKIPで検査を省く。

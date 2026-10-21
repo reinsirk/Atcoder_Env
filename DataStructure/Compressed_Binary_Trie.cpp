@@ -18,8 +18,8 @@
 // SKIP_RUNTIME_CHECKSで入力検査を除く。容量・オーバーフロー対策は常に有効。
 // キー・XORマスクは 0 <= x < 2^B。NODESは未圧縮時の根込みノード上限。
 // IDは重複可、-1は匿名。ID一覧は順序不定、次の更新または破棄まで有効。
-#ifndef REINSIRK_COMPRESSED_BINARY_TRIE_DEFINED
-#define REINSIRK_COMPRESSED_BINARY_TRIE_DEFINED
+#ifndef SIRKIT_COMPRESSED_BINARY_TRIE_DEFINED
+#define SIRKIT_COMPRESSED_BINARY_TRIE_DEFINED
 template <typename T, int MAX_LOG, std::size_t NODES = 16777216>
 class CompressedBinaryTrie
 {

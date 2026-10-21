@@ -1,5 +1,5 @@
-#ifndef REINSIRK_BINOMIAL_MOD_DEFINED
-#define REINSIRK_BINOMIAL_MOD_DEFINED
+#ifndef SIRKIT_BINOMIAL_MOD_DEFINED
+#define SIRKIT_BINOMIAL_MOD_DEFINED
 // SKIP_RUNTIME_CHECKSで入力検査を省略する。
 // 二項係数（C++20以降）。法は1〜UINT32_MAX、n・kはint64_t。
 // n<0、k<0、k>n、法1は0。Lucasは素数専用。

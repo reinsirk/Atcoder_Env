@@ -6,8 +6,8 @@
 #include <limits>
 #include <type_traits>
 
-#ifndef REINSIRK_PRIMALITY32_DEFINED
-#define REINSIRK_PRIMALITY32_DEFINED
+#ifndef SIRKIT_PRIMALITY32_DEFINED
+#define SIRKIT_PRIMALITY32_DEFINED
 namespace reinsirk::detail {
 // uint32_t全域の素数判定。Miller-Rabinの底2,7,61を使う。
 // 理論参考: G. Jaeschke (1993), https://doi.org/10.1090/S0025-5718-1993-1192971-8
@@ -125,8 +125,8 @@ inline bool is_prime_u32(std::uint32_t n) noexcept
 #endif
 
 // C++20以降。64ビット整数用の内部演算。状態は判定ごとに持つ。
-#ifndef REINSIRK_MILLER_RABIN64_DEFINED
-#define REINSIRK_MILLER_RABIN64_DEFINED
+#ifndef SIRKIT_MILLER_RABIN64_DEFINED
+#define SIRKIT_MILLER_RABIN64_DEFINED
 namespace reinsirk::detail {
 template <bool Relaxed>
 class MillerRabin64
@@ -284,8 +284,8 @@ public:
 } // namespace reinsirk::detail
 #endif
 
-#ifndef REINSIRK_MILLER_RABIN_DEFINED
-#define REINSIRK_MILLER_RABIN_DEFINED
+#ifndef SIRKIT_MILLER_RABIN_DEFINED
+#define SIRKIT_MILLER_RABIN_DEFINED
 // MillerRabin(n, bases): 指定した底の強擬素数検査を通ればtrue。底の選択により合成数も通る。
 // n<2はfalse。底はnで剰余を取り、0なら省く。奇数n>=3で空の底列ならtrue。
 template <class Integer, class Bases>
@@ -314,8 +314,8 @@ inline bool MillerRabin(Integer n, std::initializer_list<std::uint64_t> bases) n
 }
 #endif
 
-#ifndef REINSIRK_IS_PRIME_DEFINED
-#define REINSIRK_IS_PRIME_DEFINED
+#ifndef SIRKIT_IS_PRIME_DEFINED
+#define SIRKIT_IS_PRIME_DEFINED
 // is_prime(n): 符号付きの負数はfalse、非負整数はuint64_t全域で素数かを確定する。
 // 32ビット以下は共通判定、4'759'123'141未満は3個、それ以上は7個の底。動的確保なし。
 // 底の理論参考: Jim Sinclair, https://miller-rabin.appspot.com/

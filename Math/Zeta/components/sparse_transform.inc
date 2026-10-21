@@ -1,5 +1,5 @@
-#ifndef REINSIRK_INTERNAL_SPARSE_INTEGER_TRANSFORM_DEFINED
-#define REINSIRK_INTERNAL_SPARSE_INTEGER_TRANSFORM_DEFINED
+#ifndef SIRKIT_INTERNAL_SPARSE_INTEGER_TRANSFORM_DEFINED
+#define SIRKIT_INTERNAL_SPARSE_INTEGER_TRANSFORM_DEFINED
 namespace reinsirk::detail {
 // 内部用。密な範囲は位置配列、疎な範囲は素数別の伝播列を使う。
 template <bool Inverse, std::integral Int, class Val>
@@ -165,8 +165,8 @@ void sparse_integer_transform(std::vector<std::pair<Int, Val>>& f,
 } // namespace reinsirk::detail
 #endif
 
-#ifndef REINSIRK_SPARSE_FAST_INTEGER_ZETA_DEFINED
-#define REINSIRK_SPARSE_FAST_INTEGER_ZETA_DEFINED
+#ifndef SIRKIT_SPARSE_FAST_INTEGER_ZETA_DEFINED
+#define SIRKIT_SPARSE_FAST_INTEGER_ZETA_DEFINED
 // m=f.size()、rは各keyの素因数を重複込みで数えた総数（以下の両API共通）。
 // 正で一意なkeyの全約数を含むfをkey昇順にし、各値を倍数和へ置換。key<=sieve.max_value()、Valは+=対応。O((m+r)log(m+1))時間、O(m+r)補助領域。
 template <std::integral Int, class Val>
@@ -176,8 +176,8 @@ void sparse_multiple_zeta_transform(std::vector<std::pair<Int, Val>>& f,
 }
 #endif
 
-#ifndef REINSIRK_SPARSE_FAST_INTEGER_MOEBIUS_DEFINED
-#define REINSIRK_SPARSE_FAST_INTEGER_MOEBIUS_DEFINED
+#ifndef SIRKIT_SPARSE_FAST_INTEGER_MOEBIUS_DEFINED
+#define SIRKIT_SPARSE_FAST_INTEGER_MOEBIUS_DEFINED
 // 正で一意なkeyの全約数を含むfをkey昇順にし、倍数和の逆変換を実行。key<=sieve.max_value()、Valは-=対応。O((m+r)log(m+1))時間、O(m+r)補助領域。
 template <std::integral Int, class Val>
 void sparse_multiple_mobius_transform(std::vector<std::pair<Int, Val>>& f,

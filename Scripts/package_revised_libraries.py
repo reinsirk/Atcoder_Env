@@ -101,7 +101,7 @@ def package(output: Path) -> None:
     for license_path in sorted((root / "LICENSES").glob("*.txt")):
         entries[license_path.relative_to(root).as_posix()] = license_path.read_bytes()
     for audit_path in sorted((root / "Audit").iterdir()):
-        if audit_path.is_file() and audit_path.suffix in (".json", ".md"):
+        if audit_path.is_file() and audit_path.suffix in (".json", ".md", ".png"):
             entries[audit_path.relative_to(root).as_posix()] = audit_path.read_bytes()
     output.parent.mkdir(parents=True, exist_ok=True)
     with ZipFile(output, "w", compression=ZIP_DEFLATED) as archive:

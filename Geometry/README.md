@@ -34,7 +34,7 @@ int main() {
 
 - `Point<T,C>` の座標型はT、内積・外積・差・積の計算型はCです。整数座標では途中計算もCに収まる必要があります。
 - `PointI/PointD/PointLD` はそれぞれ `int64_t/double/long double` 座標、交点・重心は `RealPoint`（long double）です。
-- 整数座標のCは、利用できればGCC／Clangの128ビット拡張、その他ではint64_tです。`REINSIRK_FORCE_STANDARD_ARITHMETIC` または既存の `GEO_DISABLE_INT128` で後者を選べます。
+- 整数座標のCは、利用できればGCC／Clangの128ビット拡張、その他ではint64_tです。`SIRKIT_FORCE_STANDARD_ARITHMETIC` または既存の `GEO_DISABLE_INT128` で後者を選べます。
 - 座標・通常の座標演算結果は有限、`Epsilon` のabs/relは非負有限が前提です。整数の向き・線分判定は厳密、実数の判定は指定の許容幅を使います。全座標を検査する走査は行いません。
 - `Line` は異なる2点、`Segment` は同一点でも使えます。円の中心は有限、半径は非負有限です。円と直線・線分の交点APIには `Line<long double>/Segment<long double>` を渡します。
 - `contains(poly,p)`・面積重心は単純多角形、`convex_cut(poly,line)` は順に並べた凸多角形が前提です。cutは有向直線の左側を境界ごと残します。

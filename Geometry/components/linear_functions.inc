@@ -1,5 +1,5 @@
-#ifndef REINSIRK_GEO_LINEAR_DEFINED
-#define REINSIRK_GEO_LINEAR_DEFINED
+#ifndef SIRKIT_GEO_LINEAR_DEFINED
+#define SIRKIT_GEO_LINEAR_DEFINED
 namespace geo {
 // 点・直線・閉線分の関数。交点・射影・距離は long double で近似する。
 // projection(p,l): long double 変換後も非零長の直線 l 上への射影。O(1)。

@@ -5,8 +5,8 @@
 #include <limits>
 #include <vector>
 
-#ifndef REINSIRK_LIS_LENGTHS_DEFINED
-#define REINSIRK_LIS_LENGTHS_DEFINED
+#ifndef SIRKIT_LIS_LENGTHS_DEFINED
+#define SIRKIT_LIS_LENGTHS_DEFINED
 // LIS<Strict>(v): 各接頭辞のLIS長を返す。trueは狭義、falseは広義。空入力は空。
 // LISLength<Strict=true>(v): LIS長だけを返す。入力は変更せず、比較はoperator<を使う。
 // 時間O(N log(L+1))、追加領域はLISがO(N+L)、LISLengthがO(L)。整列済みの増加列はO(N)。
@@ -41,8 +41,8 @@ std::size_t LISLength(const std::vector<T>& v) {
 }
 #endif
 
-#ifndef REINSIRK_LIS_RESTORE_DEFINED
-#define REINSIRK_LIS_RESTORE_DEFINED
+#ifndef SIRKIT_LIS_RESTORE_DEFINED
+#define SIRKIT_LIS_RESTORE_DEFINED
 // LISIndices<Strict=true>(v): LISを1つ復元し、元配列の添字を昇順で返す。同長の解の選択は任意。
 // LISSequence<Strict=true>(v): LISを1つ値の列としてコピーする。空なら空。いずれもO(N log(L+1))時間・O(N)追加領域。
 template <bool Strict = true, class T>

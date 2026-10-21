@@ -13,8 +13,8 @@
 #include <variant>
 #include <vector>
 
-#ifndef REINSIRK_PERSISTENT_ARRAY_DEFINED
-#define REINSIRK_PERSISTENT_ARRAY_DEFINED
+#ifndef SIRKIT_PERSISTENT_ARRAY_DEFINED
+#define SIRKIT_PERSISTENT_ARRAY_DEFINED
 // PersistentArray<T,shift=4>(n=0,ID=T{}): [0,n)の初期値ID、O(2^shift)。Tはコピー構築・代入可能。
 // PersistentArray(vector,ID): 配列から構築。O(n log_(2^shift)(n+1))時間、O(n+2^shift)領域。
 // get(k)/get(version,k): 現在/指定版の値を返す。O(log_(2^shift)(n+1))。
@@ -155,8 +155,8 @@ private:
 };
 #endif
 
-#ifndef REINSIRK_PERSISTENT_UNION_FIND_DEFINED
-#define REINSIRK_PERSISTENT_UNION_FIND_DEFINED
+#ifndef SIRKIT_PERSISTENT_UNION_FIND_DEFINED
+#define SIRKIT_PERSISTENT_UNION_FIND_DEFINED
 // PersistentUnionFind(n=0): n要素の完全永続UF。初期確保O(1)。頂点はintで表せる範囲。
 // find(i[,version])/root_of(i[,version])/leader(i[,version]): 代表、size(i[,version]): 成分サイズ。O(log²(n+1))。
 // find_with_size(i[,version]): {代表,負の成分サイズ}。same(a,b[,version]): 同一成分か。O(log²(n+1))。

@@ -12,13 +12,13 @@
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_INF_DEFINED
-#define REINSIRK_INF_DEFINED
+#ifndef SIRKIT_INF_DEFINED
+#define SIRKIT_INF_DEFINED
 inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 #endif
 
-#ifndef REINSIRK_GRAPH_TYPES_DEFINED
-#define REINSIRK_GRAPH_TYPES_DEFINED
+#ifndef SIRKIT_GRAPH_TYPES_DEFINED
+#define SIRKIT_GRAPH_TYPES_DEFINED
 // 有向辺。出発点は隣接リストの添字。
 struct Edge
 {
@@ -38,8 +38,8 @@ using WGraph = std::vector<std::vector<Edge>>;
 // distancesは成功時に全上書き。有限距離が(-INF, INF)の範囲外ならoverflow_error。
 // 重みは[-1e9, 1e9]。O(VE+V+E)時間・O(V)追加領域。
 // 小規模・少数始点は隣接リストを走査し、多数パスでは更新頂点に処理を絞る。
-#ifndef REINSIRK_BELLMAN_FORD_DEFINED
-#define REINSIRK_BELLMAN_FORD_DEFINED
+#ifndef SIRKIT_BELLMAN_FORD_DEFINED
+#define SIRKIT_BELLMAN_FORD_DEFINED
 namespace reinsirk::detail {
 // 3パス目以降は距離が更新された始点だけを次のパスへ送る。
 // 1パスで各頂点を高々1回処理するので、時間上限O(VE)を保つ。

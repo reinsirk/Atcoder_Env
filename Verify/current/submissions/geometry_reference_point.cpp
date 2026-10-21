@@ -17,8 +17,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_GEO_EPSILON_DEFINED
-#define REINSIRK_GEO_EPSILON_DEFINED
+#ifndef SIRKIT_GEO_EPSILON_DEFINED
+#define SIRKIT_GEO_EPSILON_DEFINED
 namespace geo {
 // tolerance(scale): 非負有限の abs/rel から許容幅を返す。O(1)。
 struct Epsilon {
@@ -31,10 +31,10 @@ struct Epsilon {
 }
 #endif
 
-#ifndef REINSIRK_GEO_POINT_DEFINED
-#define REINSIRK_GEO_POINT_DEFINED
+#ifndef SIRKIT_GEO_POINT_DEFINED
+#define SIRKIT_GEO_POINT_DEFINED
 namespace geo {
-#if defined(__SIZEOF_INT128__) && !defined(GEO_DISABLE_INT128) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if defined(__SIZEOF_INT128__) && !defined(GEO_DISABLE_INT128) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, __int128_t, T>;
 #else
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, std::int64_t, T>;
@@ -172,8 +172,8 @@ using RealPoint = PointLD;
 }
 #endif
 
-#ifndef REINSIRK_GEO_POINT_FUNCTIONS_DEFINED
-#define REINSIRK_GEO_POINT_FUNCTIONS_DEFINED
+#ifndef SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
+#define SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 namespace geo {
 // 点の関数。座標は有限、整数の差・積は C に収まる入力を扱う。
 // predicate_sign<T,C>(value,scale,eps): 整数は厳密、実数は許容幅で -1/0/1 を返す。O(1)。
@@ -223,14 +223,14 @@ int main() {
     assert(geo::orientation(a, b, c) == 1);
     const geo::PointLD p{3, 4};
     assert(std::abs(p.normalized().norm() - 1) < 1e-12L);
-#ifdef REINSIRK_GEO_LINEAR_DEFINED
+#ifdef SIRKIT_GEO_LINEAR_DEFINED
     const geo::Segment<std::int64_t> first{{0, 0}, {4, 0}}, overlap{{2, 0}, {6, 0}}, singleton{{1, 0}, {1, 0}};
     assert(geo::intersection(first, overlap).kind == geo::SegmentIntersectionKind::Overlap);
     assert(geo::intersection(first, singleton).kind == geo::SegmentIntersectionKind::Point);
     assert(geo::intersection(geo::Line<std::int64_t>{{0, 0}, {1, 0}}, geo::Line<std::int64_t>{{0, 1}, {1, 1}}).kind == geo::LineIntersectionKind::None);
     assert(std::abs(geo::distance(geo::PointI{1, 2}, singleton) - 2) < 1e-12L);
 #endif
-#ifdef REINSIRK_GEO_POLYGON_DEFINED
+#ifdef SIRKIT_GEO_POLYGON_DEFINED
     const auto hull = geo::convex_hull(std::vector<geo::PointI>{a, b, c, {1, 1}, a});
     assert(hull.size() == 3 && geo::area(hull) == 6);
     assert(geo::contains(hull, geo::PointI{1, 1}) == geo::Location::Inside);
@@ -240,7 +240,7 @@ int main() {
     assert(!geo::centroid(std::vector<geo::PointI>{a, b}));
     assert(geo::convex_hull(std::vector<geo::PointI>{{0, 0}, {1, 0}, {2, 0}}).size() == 2);
 #endif
-#ifdef REINSIRK_GEO_CIRCLE_DEFINED
+#ifdef SIRKIT_GEO_CIRCLE_DEFINED
     const auto circle = geo::circumcircle(a, b, c);
     assert(circle && std::abs(circle->radius - 2.5L) < 1e-12L);
     assert(!geo::circumcircle(a, a, b));

@@ -12,8 +12,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_DYNAMIC_LI_CHAO_TREE_DEFINED
-#define REINSIRK_DYNAMIC_LI_CHAO_TREE_DEFINED
+#ifndef SIRKIT_DYNAMIC_LI_CHAO_TREE_DEFINED
+#define SIRKIT_DYNAMIC_LI_CHAO_TREE_DEFINED
 // 整数座標の閉区間で直線・線分の最小値を管理する。Tは符号付き64ビット以下の整数。
 // 追加する線の対象区間では、数学的なa*x+bがTの範囲内かつINF未満であること。
 // Wを座標数とすると直線追加・取得はO(log W)、線分追加はO(log² W)。

@@ -16,8 +16,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_TRIE_NODE_DEFINED
-#define REINSIRK_TRIE_NODE_DEFINED
+#ifndef SIRKIT_TRIE_NODE_DEFINED
+#define SIRKIT_TRIE_NODE_DEFINED
 // TrieNode(): 空で生成。TrieNode(children): 子mapを受け取り、コピーは子を共有する。
 // children: 指すノード自体を所有する子（別対象の所有を借りるaliasingは対象外）。
 // 破棄は反復処理。循環所有は解消しない。指定初期化は不可。
@@ -55,8 +55,8 @@ private:
 };
 #endif
 
-#ifndef REINSIRK_TRIE_DEFINED
-#define REINSIRK_TRIE_DEFINED
+#ifndef SIRKIT_TRIE_DEFINED
+#define SIRKIT_TRIE_DEFINED
 // 全バイトを扱う多重集合。辞書順は符号なしバイト順、空文字列も登録可。
 // Trie(): 空で生成。コピーは独立、move元は空で再利用可。
 // insert(word, copies=1): copies個追加し、その語の個数を返す。0なら照会のみ。
@@ -420,8 +420,8 @@ public:
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

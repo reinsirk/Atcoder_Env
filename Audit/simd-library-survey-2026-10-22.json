@@ -1,0 +1,1409 @@
+{
+  "date": "2026-10-22",
+  "scope": "現行の全ライブラリをSIMD候補としてコード構造から確認。各群の性能を全て測定したという意味ではない。",
+  "files_reviewed": 55,
+  "families": 31,
+  "groups": [
+    {
+      "family": "Bellman-Ford / SPFA",
+      "files": [
+        "Graph/Bellman-Ford.cpp",
+        "Graph/Bellman-Ford_SFPA.cpp"
+      ],
+      "decision": "defer",
+      "reason": "緩和した距離を次の辺で参照し得る。重複行先・負閉路伝播・処理順に依存するため、単純な並列gather/scatterでは旧順序と収束性能を保てない。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Dijkstra",
+      "files": [
+        "Graph/Dijkstra.cpp"
+      ],
+      "decision": "defer",
+      "reason": "単発照会では優先度キューから取り出す頂点と次の隣接先が逐次決まる。SIMD化には辺をまとめる構造変更が必要で、短い隣接列への選択負荷を先に評価する必要がある。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Floyd-Warshall",
+      "files": [
+        "Graph/Floyd-Warshall.cpp"
+      ],
+      "decision": "owned_by_floyd_agent",
+      "reason": "行方向の独立な最短距離更新が候補。負閉路・INF/-INF・整数幅・経路復元の意味を維持する条件を別担当が検討。",
+      "measurement": "別担当の実測・独立検査を参照。"
+    },
+    {
+      "family": "LCA",
+      "files": [
+        "Graph/LCA.cpp"
+      ],
+      "decision": "defer",
+      "reason": "照会上位祖先は前の段の結果を添字に使う。構築も祖先表の間接参照が中心で、単独照会をSIMD化する直接の連続ループが少ない。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Topological sort",
+      "files": [
+        "Graph/Topological.cpp",
+        "Graph/Topological_sort.cpp"
+      ],
+      "decision": "defer",
+      "reason": "入次数更新とqueue/heapへの追加の依存がある。独立辺の同時減算は重複頂点の衝突に対応する必要がある。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Project Selection / Dinic",
+      "files": [
+        "Graph/Project_Selection.cpp"
+      ],
+      "decision": "defer",
+      "reason": "残余容量更新・増加路・queueの依存と不規則アクセスが中心。SIMDを導入するだけでは規模小の分岐負荷を上回る根拠がない。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Binary Trie",
+      "files": [
+        "DataStructure/Binary_Trie.cpp",
+        "DataStructure/Compressed_Binary_Trie.cpp"
+      ],
+      "decision": "defer",
+      "reason": "次の子ノードが現在のノードと検索bitから決まり、挿入・削除は各経路の非連続セルを更新する。独立照会のバッチ化をmainに導入しない条件では単純なSIMD化が難しい。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Dynamic Fenwick Tree",
+      "files": [
+        "DataStructure/dynamic-binary-indexed-tree.cpp",
+        "DataStructure/dynamic-binary-indexed-tree-2d.cpp"
+      ],
+      "decision": "owned_by_root",
+      "reason": "B+木の固定幅キー比較と累積値更新が候補。木/ハッシュ/直接配列各経路および標準実装との比較をrootが実施。",
+      "measurement": "rootのベンチマーク・判断を参照。"
+    },
+    {
+      "family": "Dynamic Li Chao Tree",
+      "files": [
+        "DataStructure/dynamic-li-chao-tree.cpp"
+      ],
+      "decision": "defer",
+      "reason": "挿入・照会の次の節点は比較結果に依存し、ノード型と整数/浮動の計算型も汎用。単発処理の比較は少数で、ISA選択の固定費に注意。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Union Find family",
+      "files": [
+        "DataStructure/union_find.cpp",
+        "DataStructure/union_find_w.cpp",
+        "DataStructure/rollback-union-find.cpp",
+        "DataStructure/rollback-union-findw.cpp",
+        "DataStructure/persistent-union-find.cpp",
+        "DataStructure/dynamic-union-find.cpp"
+      ],
+      "decision": "defer",
+      "reason": "親ポインタ追跡・圧縮・rollback履歴・永続ノードが中心。複数操作の順序に依存し、単独APIでの独立laneが少ない。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "HashMap / HashSet / InternalHashMap",
+      "files": [
+        "DataStructure/Hash_map.cpp",
+        "DataStructure/Hash_set.cpp",
+        "Internal/Nyaan_hash_map_min.cpp"
+      ],
+      "decision": "future_layout_candidate",
+      "reason": "現実装は1バケットずつ状態とキーを調べ、空で停止する線形探索。16/32バケットのmetadata比較は候補だが、wraparound・墓石・汎用KeyEqual・例外・容量管理を含む新しいgroup構造が必要。低侵襲の変更としては今回保留。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Heaps / erasable priority queue",
+      "files": [
+        "DataStructure/heap.cpp",
+        "DataStructure/erasable-priority-queue.cpp"
+      ],
+      "decision": "defer",
+      "reason": "ヒープの次の子・親は比較結果に依存し、結合ヒープはポインタ参照中心。少数兄弟比較へのSIMDは型制約と固定費が大きい。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Implicit Treap",
+      "files": [
+        "DataStructure/implicit_treap.cpp"
+      ],
+      "decision": "defer",
+      "reason": "ノード追跡・split/mergeと利用側の汎用演算が中心。SIMD向けに型と集約演算を固定する変更は汎用性を損なう。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Line containers",
+      "files": [
+        "DataStructure/line-container.cpp",
+        "DataStructure/line-container-2d.cpp"
+      ],
+      "decision": "defer",
+      "reason": "std::multiset上の比較・交点更新が中心。照会ごとの候補数は少数で、連続した独立laneを得るには保持方法の変更が必要。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Node / singly linked components",
+      "files": [
+        "DataStructure/Node.cpp"
+      ],
+      "decision": "defer",
+      "reason": "所有権の移動・非再帰の連結破棄・ポインタ追跡が中心。ベクトル化できる連続データ演算がない。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Binomial coefficient family",
+      "files": [
+        "Math/Combination_AtCoderMod.cpp",
+        "Math/Combination_Mod.cpp",
+        "Math/Combination/Prime_Binomial.cpp",
+        "Math/Combination/Binomial_Mod.cpp",
+        "Math/Combination/ModInt_Binomial.cpp"
+      ],
+      "decision": "defer",
+      "reason": "階乗/逆階乗表や素数冪の積は前項に依存する剰余乗算。既存の複数項展開を保ち、任意法・Mint・64/128bit演算を支えるため、AVX2へ置換するだけでは同等の除算/還元が得られない。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Miller-Rabin",
+      "files": [
+        "Math/prime_judge(Miller-Rabin).cpp"
+      ],
+      "decision": "defer",
+      "reason": "Montgomeryの64x64→128bit積と累乗の依存が中心。独立の底は並列化候補だが、AVX2には64bit各laneの上位積がなく、素数/合成数の早期終了と両立する追加実装が必要。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "PrimeSieve",
+      "files": [
+        "Math/Eratosthenes.cpp"
+      ],
+      "decision": "measured_popcount_candidate",
+      "reason": "prime_countの占有語に対するpopcount和は連続かつ独立。AVX2 nibble lookup+byte sumを試し、小さい表を標準ループに残す閾値も評価。",
+      "measurement": "popcount_probe_*のGCC自動ベクトル化記録、popcount_{native,plain}.csv、erat_*screen*.jsonを参照。構築や列挙の高速化とは区別。"
+    },
+    {
+      "family": "Set and bitwise transforms",
+      "files": [
+        "Math/Zeta/Set_Transform.cpp",
+        "Math/Zeta/Bitwise_Convolution.cpp"
+      ],
+      "decision": "owned_by_zeta_agent",
+      "reason": "連続した半区間の加減算はlane独立。整数/Mintの意味と小規模の閾値を別担当が検討。",
+      "measurement": "別担当の実測・独立検査を参照。"
+    },
+    {
+      "family": "Integer sieve and integer transforms",
+      "files": [
+        "Math/Zeta/Sieve.cpp",
+        "Math/Zeta/Divisor_Multiple_Transform.cpp",
+        "Math/Zeta/Sparse_Transform.cpp",
+        "Math/Zeta/Gcd_Lcm_Convolution.cpp"
+      ],
+      "decision": "defer",
+      "reason": "最小素因数構築は内側の素数ごとに条件終了し、約数/倍数変換はstridedな依存更新。GCD/LCM畳み込みの一部は要素積が独立だがMint等の乗算に依存し、自動ベクトル化との比較が必要。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Zeta combined distribution",
+      "files": [
+        "Math/Zeta_Mebius.cpp"
+      ],
+      "decision": "generated_composition",
+      "reason": "用途別部品の全機能版。各部品の採用判断と検査を共有し、独立したSIMD実装を重複して持たない。",
+      "measurement": "Zeta担当の生成同期と各部品の検査を参照。"
+    },
+    {
+      "family": "Trie",
+      "files": [
+        "String/Trie.cpp"
+      ],
+      "decision": "defer",
+      "reason": "子・兄弟ノードの辿りと文字列所有の操作が中心。連続文字のSIMD比較にはエッジ圧縮など表現変更が必要。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "RollingHash",
+      "files": [
+        "String/RollingHash.cpp"
+      ],
+      "decision": "defer",
+      "reason": "構築のhashとpowerは前項に依存し、2^61-1法の64x64→128bit乗算を使う。照会は数回の乗算・減算で、長い独立な連続ループがない。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Geometry primitives and full distribution",
+      "files": [
+        "Geometry/Point.cpp",
+        "Geometry/Line_Segment.cpp",
+        "Geometry/Circle.cpp",
+        "Geometry/geometory.cpp"
+      ],
+      "decision": "defer",
+      "reason": "汎用T/Cの点・外積・交点など単発の少数演算が中心。doubleのみのSIMD化は候補だが、long double・整数拡張の正確性を維持しながら差し替える直接の長いループが少ない。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Polygon",
+      "files": [
+        "Geometry/Polygon.cpp"
+      ],
+      "decision": "defer",
+      "reason": "面積・周長の連続reduceは候補。ただしCによる厳密整数やlong double、浮動加算順を保つ必要があり、全型へfast-mathやdouble固定を入れない。凸包は比較とstack依存が中心。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Nearest two points",
+      "files": [
+        "Geometry/Nearest_Two_points.cpp"
+      ],
+      "decision": "defer",
+      "reason": "分割統治と短いstrip候補比較。現在の長精度計算と候補選択順を保つ必要があり、小さいstripでのSIMD固定費を先に測定する必要がある。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Angle sort",
+      "files": [
+        "Geometry/偏角ソート.cpp"
+      ],
+      "decision": "defer",
+      "reason": "64bit全域の外積符号の厳密比較とsortの分岐が中心。AVX2では64bit乗算の上位語が直接得られず、安易なdouble化は正確性を失う。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "LIS",
+      "files": [
+        "Algorithm/LIS.cpp"
+      ],
+      "decision": "defer",
+      "reason": "tailsに対する二分探索と各入力の更新が逐次依存する。小さい固定幅の整数tailsのみ比較を並列化する候補はあるが、std::lower_boundと汎用比較を置換する根拠が必要。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Radix sort",
+      "files": [
+        "Algorithm/Radix_sort.cpp"
+      ],
+      "decision": "future_layout_candidate",
+      "reason": "histogramの同bucket更新とstable scatterの順序が依存する。SIMD向けの分割histogram/partitionは追加作業領域と小規模条件を伴い、単純なpacked比較より大きな変更。std::copy/reverse部分は実装によるSIMDを利用し得る。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Matrix rotation / reflection / transpose",
+      "files": [
+        "Algorithm/rotate.cpp"
+      ],
+      "decision": "future_tile_candidate",
+      "reason": "32x32 blockの中にSIMD転置タイルを置く候補。要素型・bool・string・矩形検査・例外・余り行列を保つ専用経路が必要。今回はコード量を増やすタイル再設計を保留。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    },
+    {
+      "family": "Next combination",
+      "files": [
+        "Algorithm/next_combination.cpp"
+      ],
+      "decision": "defer",
+      "reason": "pivot探索と交換・回転が中心で比較型も汎用。標準ライブラリ部分の最適化を使い、専用SIMDの小規模利得は未測定。",
+      "measurement": "コード構造の確認のみ。この群のSIMD性能は未測定。"
+    }
+  ],
+  "observed_source_sha256": {
+    "Algorithm/LIS.cpp": "7f16f92c939fdce2d15ca1cd769c0c8e9d6a16fddb7ea407594897029da5e80a",
+    "Algorithm/Radix_sort.cpp": "ba9f864eacfbe7986e03abb89db4061922bf494adf06c86ee8200bf352516540",
+    "Algorithm/next_combination.cpp": "5b71a1e2a3785b45b4fe757a3ba56da2b8f2a43211561e4217da6999f21bd295",
+    "Algorithm/rotate.cpp": "1043be71fe431c3f5b10709fc7144601e7c6eaedaed29d86e7c018bb243fc9dc",
+    "DataStructure/Binary_Trie.cpp": "ebc2b6d837c283613d02cd0ee3ca9fa5f0f9584f979676705eeb7b3cc2cda624",
+    "DataStructure/Compressed_Binary_Trie.cpp": "427e82273653467078b838f940b8767deeb770aa160658f075fd739998d6599d",
+    "DataStructure/Hash_map.cpp": "9dd4b1cd93b0e59d203169548951304388069a657cea4c30c3cffca568bece19",
+    "DataStructure/Hash_set.cpp": "d28f0a159fb72cd7a32bf7afba8d49ee55c8d9e1b3ca5ba7b1f550d7987e8baa",
+    "DataStructure/Node.cpp": "ff1390fb399864e36236f992f454a9c5ae56fe09fd54aaa95e9b22f56925ab01",
+    "DataStructure/dynamic-binary-indexed-tree-2d.cpp": "33f1c33b308d635475ccb5169ad934d3ce4437c944fcd943d29b06228cb6415e",
+    "DataStructure/dynamic-binary-indexed-tree.cpp": "ed83957ce3611cc15a63bacb10bec65156ef675fb0ab0dea47a53bf03e8ddfe0",
+    "DataStructure/dynamic-li-chao-tree.cpp": "6e1c6bb0a11a07f23e5924561cc3c0b2167d0aff2d53d2258f1ece53ec2c3212",
+    "DataStructure/dynamic-union-find.cpp": "5cc183625a2907aaf2be0c8de85404281503d443578b19831c04bd8e30215e3a",
+    "DataStructure/erasable-priority-queue.cpp": "e05c7ef5765267eba02b0f12eacf0b4714dded9f83d188e2b86e57a314cf08f0",
+    "DataStructure/heap.cpp": "85cba94388966b020a8b41afedd87b0461ba8f2966aba63e6c5e3c61672a86c2",
+    "DataStructure/implicit_treap.cpp": "9a6c881208b407e0d4978696d12e4ebcca376c6e0804353602f73fb5fd189c83",
+    "DataStructure/line-container-2d.cpp": "0a155a006903ed9eb2067ddcd6b9f0d206077e19e56b2207edb406daa053693e",
+    "DataStructure/line-container.cpp": "be85bd2d7ce7fb561affa9c69aa0a9128b56247ca884973a0ead77784378e155",
+    "DataStructure/persistent-union-find.cpp": "dac91aa555fb69756485b0de84802d1d98102d5be19d2e87c76ee2a727fc4171",
+    "DataStructure/rollback-union-find.cpp": "5025c20930bb00ae4826895e49a8fcf7a5bd220f0ecd28192281495fb206f61d",
+    "DataStructure/rollback-union-findw.cpp": "841d376c908152c3ac4da5a3f7d503bfb81445eb5cf03e8b970c77b1a1161421",
+    "DataStructure/union_find.cpp": "420f5562121769c1061655b5391deddc3b6f2ccbb8e482982124b8aaa760485b",
+    "DataStructure/union_find_w.cpp": "9b732b7570f8b3e1fd41ab2d70e92f3f479ada0bd4cfc24e193cffc1a583b52c",
+    "Geometry/Circle.cpp": "f0a6d5b90fbb584fc97d6e866a484c1055a119e9d2011b010060d67b9825167d",
+    "Geometry/Line_Segment.cpp": "977985e1932b215c2a631e13755c71696928d1a099531e6fb03992cbdcbc3862",
+    "Geometry/Nearest_Two_points.cpp": "e8d483ab0ce38193cc21583b81366b0bedf202363bc77ade7bbea86dde0d13f2",
+    "Geometry/Point.cpp": "3dbbae5610bfec439a5c47112436e5c239c96fc3446e9eb86b8ff4896462e038",
+    "Geometry/Polygon.cpp": "f111d12c1823984bcb6882a4485478ccecd59a565adda4e829d61b6305ebdf3e",
+    "Geometry/geometory.cpp": "ad04ed23699e03cc51b516dbf04585a1f30e56d7d12b9de1d31530357eb2e3f5",
+    "Geometry/偏角ソート.cpp": "0a813627eb9aa3a77b4ec0727310b74de9ec17eda1f3a604c140e3725fad05d4",
+    "Graph/Bellman-Ford.cpp": "bed5c41a391367800a93bf7bb7f601a8b6f2c0dca5b03125d1bf69a208f8f4e6",
+    "Graph/Bellman-Ford_SFPA.cpp": "6ab7f98ecf29a767dd972a094f3f2ae2a94b79b0ae8e788c3a07f56337d8da10",
+    "Graph/Dijkstra.cpp": "318458b5654a5c233e91d997e7cc43ae64b0db089372e0d6b0c683f6862b93cb",
+    "Graph/Floyd-Warshall.cpp": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+    "Graph/LCA.cpp": "5b063b5316c02255ffba8daaac77297a0a99e6c60debd16346a18fbbb3ddc574",
+    "Graph/Project_Selection.cpp": "d70fbe582c7ad4353cc3a5e33e8f8ef2ab1bbadeee709fa5dcfe595692be2e82",
+    "Graph/Topological.cpp": "852b7fb1bea5cbaabce4c20670d429626122144bdc6affa53c69ae86ab45539f",
+    "Graph/Topological_sort.cpp": "852b7fb1bea5cbaabce4c20670d429626122144bdc6affa53c69ae86ab45539f",
+    "Internal/Nyaan_hash_map_min.cpp": "db162e5cc383adc97b18da1a2d1693843791522ed50759efbd8c15ea50a4640f",
+    "Math/Combination/Binomial_Mod.cpp": "211b3476d22482a38f82cfa716dd8ec9466d11261888194e510439880166cc8d",
+    "Math/Combination/ModInt_Binomial.cpp": "bf445e356d5c721c3681cfb405f42d9c2ad6dfb0ef78ba2f8129908af6045ce8",
+    "Math/Combination/Prime_Binomial.cpp": "b35fe0a3c6c68413accee46099323897f499b45b52fb59ef47724735c66f48c5",
+    "Math/Combination_AtCoderMod.cpp": "b35fe0a3c6c68413accee46099323897f499b45b52fb59ef47724735c66f48c5",
+    "Math/Combination_Mod.cpp": "bf445e356d5c721c3681cfb405f42d9c2ad6dfb0ef78ba2f8129908af6045ce8",
+    "Math/Eratosthenes.cpp": "2deb949ed0a7ac44415c01b3b1c20c7101481af3302dd5eea9dc29b0c6caea52",
+    "Math/Zeta/Bitwise_Convolution.cpp": "f569e832c2094ac52ecc87e9ae9591869b194ba9c174f744a1f975aba4e4b7f2",
+    "Math/Zeta/Divisor_Multiple_Transform.cpp": "da6e33c32f43caa5607539937cbd73ead81c2b8eb7c6e1a7eeffc05fd1dcf1b2",
+    "Math/Zeta/Gcd_Lcm_Convolution.cpp": "29b2233639095860e83d1a66876edf71e19bc3a3d0d57fb08dfa8dece7d37b0c",
+    "Math/Zeta/Set_Transform.cpp": "4b2445ddf7583b6dc587515fcf143e1cdf3d021ff45714921d9b8b05717bd066",
+    "Math/Zeta/Sieve.cpp": "741104f7581c3c7683813f49797c3d189c769aaf95093929fa972a207bb85517",
+    "Math/Zeta/Sparse_Transform.cpp": "a3a1f5ad42c5ceb4ca841467c8ed94bd5c75907ca21d378a57c1aca4f61eca99",
+    "Math/Zeta_Mebius.cpp": "46ebffbd5cb8721fcd85fcc3769de7121880db00716a600a0ab7c67cceaec14b",
+    "Math/prime_judge(Miller-Rabin).cpp": "aa2b24bdb1cf65534ca7b5b630c2a4fd91a4726c5b824a4199b92a5b3101c7cb",
+    "String/RollingHash.cpp": "8e798c366a408f167028b48471c9e8498a22dd57c44976e21304314b4d0d2717",
+    "String/Trie.cpp": "90646b09ed7d83ab0a6db432e6a6c74d32215df5b7420b9d41446c8680efa49a"
+  },
+  "active_legacy_macro_prefix_files": [],
+  "macro_note": "AuditやVerifyの過去提出・測定JSON内に保存されたREINSIRK_は当時の記録であり、現行コードの取り残しとは区別。",
+  "measurement_scope": "PrimeSieveの連続popcountだけをこの担当で実測。他担当の調査を含めた総合結果はrootが統合。",
+  "final_decisions": {
+    "Floyd-Warshall": "整数64bit4列の更新をAVX2化。小規模・Clang自動ベクトル化・広幅演算は標準処理を使う。",
+    "集合変換": "整数の4集合変換をAVX2化。Mint/浮動型/独自型は従来ループ。公開always_inlineは汎用Mintに遅れを生んだため不採用。",
+    "PrimeSieve": "prime_countのみAVX2化。構築・単点判定・素数列挙は従来処理。",
+    "動的Fenwick": "手書きAVX2は一部で遅くなり改善も小さかったため不採用。既存の自動ベクトル化を維持。"
+  },
+  "final_source_hashes": {
+    "Graph/Topological_sort.cpp": "852b7fb1bea5cbaabce4c20670d429626122144bdc6affa53c69ae86ab45539f",
+    "Graph/Floyd-Warshall.cpp": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+    "Graph/Project_Selection.cpp": "d70fbe582c7ad4353cc3a5e33e8f8ef2ab1bbadeee709fa5dcfe595692be2e82",
+    "Graph/Bellman-Ford_SFPA.cpp": "6ab7f98ecf29a767dd972a094f3f2ae2a94b79b0ae8e788c3a07f56337d8da10",
+    "Graph/Dijkstra.cpp": "318458b5654a5c233e91d997e7cc43ae64b0db089372e0d6b0c683f6862b93cb",
+    "Graph/Bellman-Ford.cpp": "bed5c41a391367800a93bf7bb7f601a8b6f2c0dca5b03125d1bf69a208f8f4e6",
+    "Graph/LCA.cpp": "5b063b5316c02255ffba8daaac77297a0a99e6c60debd16346a18fbbb3ddc574",
+    "Graph/Topological.cpp": "852b7fb1bea5cbaabce4c20670d429626122144bdc6affa53c69ae86ab45539f",
+    "DataStructure/Node.cpp": "ff1390fb399864e36236f992f454a9c5ae56fe09fd54aaa95e9b22f56925ab01",
+    "DataStructure/erasable-priority-queue.cpp": "e05c7ef5765267eba02b0f12eacf0b4714dded9f83d188e2b86e57a314cf08f0",
+    "DataStructure/Compressed_Binary_Trie.cpp": "427e82273653467078b838f940b8767deeb770aa160658f075fd739998d6599d",
+    "DataStructure/dynamic-union-find.cpp": "5cc183625a2907aaf2be0c8de85404281503d443578b19831c04bd8e30215e3a",
+    "DataStructure/dynamic-li-chao-tree.cpp": "6e1c6bb0a11a07f23e5924561cc3c0b2167d0aff2d53d2258f1ece53ec2c3212",
+    "DataStructure/union_find.cpp": "420f5562121769c1061655b5391deddc3b6f2ccbb8e482982124b8aaa760485b",
+    "DataStructure/Hash_set.cpp": "d28f0a159fb72cd7a32bf7afba8d49ee55c8d9e1b3ca5ba7b1f550d7987e8baa",
+    "DataStructure/union_find_w.cpp": "9b732b7570f8b3e1fd41ab2d70e92f3f479ada0bd4cfc24e193cffc1a583b52c",
+    "DataStructure/rollback-union-findw.cpp": "841d376c908152c3ac4da5a3f7d503bfb81445eb5cf03e8b970c77b1a1161421",
+    "DataStructure/Hash_map.cpp": "9dd4b1cd93b0e59d203169548951304388069a657cea4c30c3cffca568bece19",
+    "DataStructure/Binary_Trie.cpp": "ebc2b6d837c283613d02cd0ee3ca9fa5f0f9584f979676705eeb7b3cc2cda624",
+    "DataStructure/rollback-union-find.cpp": "5025c20930bb00ae4826895e49a8fcf7a5bd220f0ecd28192281495fb206f61d",
+    "DataStructure/heap.cpp": "85cba94388966b020a8b41afedd87b0461ba8f2966aba63e6c5e3c61672a86c2",
+    "DataStructure/dynamic-binary-indexed-tree-2d.cpp": "33f1c33b308d635475ccb5169ad934d3ce4437c944fcd943d29b06228cb6415e",
+    "DataStructure/persistent-union-find.cpp": "dac91aa555fb69756485b0de84802d1d98102d5be19d2e87c76ee2a727fc4171",
+    "DataStructure/line-container.cpp": "be85bd2d7ce7fb561affa9c69aa0a9128b56247ca884973a0ead77784378e155",
+    "DataStructure/implicit_treap.cpp": "9a6c881208b407e0d4978696d12e4ebcca376c6e0804353602f73fb5fd189c83",
+    "DataStructure/line-container-2d.cpp": "0a155a006903ed9eb2067ddcd6b9f0d206077e19e56b2207edb406daa053693e",
+    "DataStructure/dynamic-binary-indexed-tree.cpp": "ed83957ce3611cc15a63bacb10bec65156ef675fb0ab0dea47a53bf03e8ddfe0",
+    "Math/Combination_Mod.cpp": "bf445e356d5c721c3681cfb405f42d9c2ad6dfb0ef78ba2f8129908af6045ce8",
+    "Math/prime_judge(Miller-Rabin).cpp": "aa2b24bdb1cf65534ca7b5b630c2a4fd91a4726c5b824a4199b92a5b3101c7cb",
+    "Math/Zeta_Mebius.cpp": "598e5078217b82383c4cb0d2a2041f98a022fbda264de550fc16e493e21dd8aa",
+    "Math/Combination_AtCoderMod.cpp": "b35fe0a3c6c68413accee46099323897f499b45b52fb59ef47724735c66f48c5",
+    "Math/Eratosthenes.cpp": "2deb949ed0a7ac44415c01b3b1c20c7101481af3302dd5eea9dc29b0c6caea52",
+    "Math/Combination/Binomial_Mod.cpp": "211b3476d22482a38f82cfa716dd8ec9466d11261888194e510439880166cc8d",
+    "Math/Combination/Prime_Binomial.cpp": "b35fe0a3c6c68413accee46099323897f499b45b52fb59ef47724735c66f48c5",
+    "Math/Combination/ModInt_Binomial.cpp": "bf445e356d5c721c3681cfb405f42d9c2ad6dfb0ef78ba2f8129908af6045ce8",
+    "Math/Zeta/Divisor_Multiple_Transform.cpp": "da6e33c32f43caa5607539937cbd73ead81c2b8eb7c6e1a7eeffc05fd1dcf1b2",
+    "Math/Zeta/Sparse_Transform.cpp": "a3a1f5ad42c5ceb4ca841467c8ed94bd5c75907ca21d378a57c1aca4f61eca99",
+    "Math/Zeta/Set_Transform.cpp": "adcd542e8eb9ffb13176a5560349584fd4fbe4e28a2d59f7335385cd57424f25",
+    "Math/Zeta/Sieve.cpp": "741104f7581c3c7683813f49797c3d189c769aaf95093929fa972a207bb85517",
+    "Math/Zeta/Gcd_Lcm_Convolution.cpp": "29b2233639095860e83d1a66876edf71e19bc3a3d0d57fb08dfa8dece7d37b0c",
+    "Math/Zeta/Bitwise_Convolution.cpp": "69cd0892bc474fe95aa2f051e0a18bf0597518c88e828a9f3a8efc41659b191d",
+    "String/Trie.cpp": "90646b09ed7d83ab0a6db432e6a6c74d32215df5b7420b9d41446c8680efa49a",
+    "String/RollingHash.cpp": "8e798c366a408f167028b48471c9e8498a22dd57c44976e21304314b4d0d2717",
+    "Geometry/Polygon.cpp": "f111d12c1823984bcb6882a4485478ccecd59a565adda4e829d61b6305ebdf3e",
+    "Geometry/Circle.cpp": "f0a6d5b90fbb584fc97d6e866a484c1055a119e9d2011b010060d67b9825167d",
+    "Geometry/Point.cpp": "3dbbae5610bfec439a5c47112436e5c239c96fc3446e9eb86b8ff4896462e038",
+    "Geometry/Line_Segment.cpp": "977985e1932b215c2a631e13755c71696928d1a099531e6fb03992cbdcbc3862",
+    "Geometry/geometory.cpp": "ad04ed23699e03cc51b516dbf04585a1f30e56d7d12b9de1d31530357eb2e3f5",
+    "Geometry/Nearest_Two_points.cpp": "e8d483ab0ce38193cc21583b81366b0bedf202363bc77ade7bbea86dde0d13f2",
+    "Geometry/偏角ソート.cpp": "0a813627eb9aa3a77b4ec0727310b74de9ec17eda1f3a604c140e3725fad05d4",
+    "Algorithm/rotate.cpp": "1043be71fe431c3f5b10709fc7144601e7c6eaedaed29d86e7c018bb243fc9dc",
+    "Algorithm/next_combination.cpp": "5b71a1e2a3785b45b4fe757a3ba56da2b8f2a43211561e4217da6999f21bd295",
+    "Algorithm/Radix_sort.cpp": "ba9f864eacfbe7986e03abb89db4061922bf494adf06c86ee8200bf352516540",
+    "Algorithm/LIS.cpp": "7f16f92c939fdce2d15ca1cd769c0c8e9d6a16fddb7ea407594897029da5e80a",
+    "Internal/Nyaan_hash_map_min.cpp": "db162e5cc383adc97b18da1a2d1693843791522ed50759efbd8c15ea50a4640f"
+  },
+  "fenwick_rejected_probe": {
+    "compiler": "GCC15.3 -std=c++23 -O2 -march=native",
+    "scope": "同一main・共有入出力の2D/1D長方形Verify公式代表3ケース。warmup1+5回。CPU14固定・共通lock。",
+    "raw": {
+      "builds": [
+        {
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-march=native",
+            "/tmp/sirkit_simd_20261022/fenwick/dynamic_fenwick_2d_rectangle_base.cpp",
+            "-o",
+            "/tmp/sirkit_simd_20261022/fenwick/two_base_native"
+          ],
+          "warnings": ""
+        },
+        {
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-march=native",
+            "/tmp/sirkit_simd_20261022/fenwick/two_position.cpp",
+            "-o",
+            "/tmp/sirkit_simd_20261022/fenwick/two_position_native"
+          ],
+          "warnings": ""
+        },
+        {
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-march=native",
+            "/tmp/sirkit_simd_20261022/fenwick/two_reads.cpp",
+            "-o",
+            "/tmp/sirkit_simd_20261022/fenwick/two_reads_native"
+          ],
+          "warnings": ""
+        },
+        {
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-march=native",
+            "/tmp/sirkit_simd_20261022/fenwick/two_suffix.cpp",
+            "-o",
+            "/tmp/sirkit_simd_20261022/fenwick/two_suffix_native"
+          ],
+          "warnings": ""
+        },
+        {
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-march=native",
+            "/tmp/sirkit_simd_20261022/fenwick/dynamic_fenwick_rectangle_base.cpp",
+            "-o",
+            "/tmp/sirkit_simd_20261022/fenwick/rectangle_base_native"
+          ],
+          "warnings": ""
+        },
+        {
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-march=native",
+            "/tmp/sirkit_simd_20261022/fenwick/rectangle_position.cpp",
+            "-o",
+            "/tmp/sirkit_simd_20261022/fenwick/rectangle_position_native"
+          ],
+          "warnings": ""
+        },
+        {
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-march=native",
+            "/tmp/sirkit_simd_20261022/fenwick/rectangle_reads.cpp",
+            "-o",
+            "/tmp/sirkit_simd_20261022/fenwick/rectangle_reads_native"
+          ],
+          "warnings": ""
+        },
+        {
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-march=native",
+            "/tmp/sirkit_simd_20261022/fenwick/rectangle_suffix.cpp",
+            "-o",
+            "/tmp/sirkit_simd_20261022/fenwick/rectangle_suffix_native"
+          ],
+          "warnings": ""
+        }
+      ],
+      "rows": [
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "position",
+          "rep": 0,
+          "ns": 240613627
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "reads",
+          "rep": 0,
+          "ns": 237344233
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "suffix",
+          "rep": 0,
+          "ns": 252129547
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "base",
+          "rep": 0,
+          "ns": 237584205
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "position",
+          "rep": 1,
+          "ns": 242732705
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "base",
+          "rep": 1,
+          "ns": 259734569
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "suffix",
+          "rep": 1,
+          "ns": 265972529
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "reads",
+          "rep": 1,
+          "ns": 254956121
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "suffix",
+          "rep": 2,
+          "ns": 240377728
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "base",
+          "rep": 2,
+          "ns": 225355971
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "position",
+          "rep": 2,
+          "ns": 231580502
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "reads",
+          "rep": 2,
+          "ns": 227014430
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "suffix",
+          "rep": 3,
+          "ns": 229634979
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "reads",
+          "rep": 3,
+          "ns": 226222373
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "position",
+          "rep": 3,
+          "ns": 224440156
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "base",
+          "rep": 3,
+          "ns": 234178555
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "position",
+          "rep": 4,
+          "ns": 225252575
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "reads",
+          "rep": 4,
+          "ns": 225901723
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "suffix",
+          "rep": 4,
+          "ns": 229649439
+        },
+        {
+          "mode": "two",
+          "case": "max_random_00",
+          "variant": "base",
+          "rep": 4,
+          "ns": 229826762
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "position",
+          "rep": 0,
+          "ns": 207550899
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "reads",
+          "rep": 0,
+          "ns": 209982834
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "suffix",
+          "rep": 0,
+          "ns": 211507484
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "base",
+          "rep": 0,
+          "ns": 208904975
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "position",
+          "rep": 1,
+          "ns": 207003847
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "base",
+          "rep": 1,
+          "ns": 211751917
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "suffix",
+          "rep": 1,
+          "ns": 214288363
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "reads",
+          "rep": 1,
+          "ns": 206927717
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "suffix",
+          "rep": 2,
+          "ns": 266240907
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "base",
+          "rep": 2,
+          "ns": 216682131
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "position",
+          "rep": 2,
+          "ns": 225110041
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "reads",
+          "rep": 2,
+          "ns": 222308188
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "suffix",
+          "rep": 3,
+          "ns": 229892607
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "reads",
+          "rep": 3,
+          "ns": 222394755
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "position",
+          "rep": 3,
+          "ns": 219322996
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "base",
+          "rep": 3,
+          "ns": 211943337
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "position",
+          "rep": 4,
+          "ns": 207064563
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "reads",
+          "rep": 4,
+          "ns": 205797061
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "suffix",
+          "rep": 4,
+          "ns": 208754276
+        },
+        {
+          "mode": "two",
+          "case": "many_queries_00",
+          "variant": "base",
+          "rep": 4,
+          "ns": 206652541
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "position",
+          "rep": 0,
+          "ns": 46887195
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "reads",
+          "rep": 0,
+          "ns": 46531129
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "suffix",
+          "rep": 0,
+          "ns": 46292878
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "base",
+          "rep": 0,
+          "ns": 46504669
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "position",
+          "rep": 1,
+          "ns": 46434307
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "base",
+          "rep": 1,
+          "ns": 46906387
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "suffix",
+          "rep": 1,
+          "ns": 46531782
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "reads",
+          "rep": 1,
+          "ns": 46433935
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "suffix",
+          "rep": 2,
+          "ns": 46570961
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "base",
+          "rep": 2,
+          "ns": 46409215
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "position",
+          "rep": 2,
+          "ns": 46486337
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "reads",
+          "rep": 2,
+          "ns": 46576403
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "suffix",
+          "rep": 3,
+          "ns": 46593732
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "reads",
+          "rep": 3,
+          "ns": 46724652
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "position",
+          "rep": 3,
+          "ns": 46797051
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "base",
+          "rep": 3,
+          "ns": 46550797
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "position",
+          "rep": 4,
+          "ns": 46735398
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "reads",
+          "rep": 4,
+          "ns": 47008732
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "suffix",
+          "rep": 4,
+          "ns": 49058332
+        },
+        {
+          "mode": "two",
+          "case": "xy_concentrate_00",
+          "variant": "base",
+          "rep": 4,
+          "ns": 53852500
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "position",
+          "rep": 0,
+          "ns": 283316262
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "reads",
+          "rep": 0,
+          "ns": 261320341
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "suffix",
+          "rep": 0,
+          "ns": 270838416
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "base",
+          "rep": 0,
+          "ns": 269145970
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "position",
+          "rep": 1,
+          "ns": 276252140
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "base",
+          "rep": 1,
+          "ns": 268386455
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "suffix",
+          "rep": 1,
+          "ns": 272233843
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "reads",
+          "rep": 1,
+          "ns": 261160164
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "suffix",
+          "rep": 2,
+          "ns": 256012266
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "base",
+          "rep": 2,
+          "ns": 242704965
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "position",
+          "rep": 2,
+          "ns": 238808189
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "reads",
+          "rep": 2,
+          "ns": 243793330
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "suffix",
+          "rep": 3,
+          "ns": 249930679
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "reads",
+          "rep": 3,
+          "ns": 238021995
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "position",
+          "rep": 3,
+          "ns": 239016179
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "base",
+          "rep": 3,
+          "ns": 238573452
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "position",
+          "rep": 4,
+          "ns": 245846936
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "reads",
+          "rep": 4,
+          "ns": 238946808
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "suffix",
+          "rep": 4,
+          "ns": 243464806
+        },
+        {
+          "mode": "rectangle",
+          "case": "max_random_00",
+          "variant": "base",
+          "rep": 4,
+          "ns": 240359628
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "position",
+          "rep": 0,
+          "ns": 210050832
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "reads",
+          "rep": 0,
+          "ns": 217058493
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "suffix",
+          "rep": 0,
+          "ns": 212246037
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "base",
+          "rep": 0,
+          "ns": 210784956
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "position",
+          "rep": 1,
+          "ns": 208633149
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "base",
+          "rep": 1,
+          "ns": 210395708
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "suffix",
+          "rep": 1,
+          "ns": 223502248
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "reads",
+          "rep": 1,
+          "ns": 209277347
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "suffix",
+          "rep": 2,
+          "ns": 215580207
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "base",
+          "rep": 2,
+          "ns": 213172177
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "position",
+          "rep": 2,
+          "ns": 211364342
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "reads",
+          "rep": 2,
+          "ns": 217378758
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "suffix",
+          "rep": 3,
+          "ns": 213884872
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "reads",
+          "rep": 3,
+          "ns": 211297554
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "position",
+          "rep": 3,
+          "ns": 210086474
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "base",
+          "rep": 3,
+          "ns": 212208244
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "position",
+          "rep": 4,
+          "ns": 216473722
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "reads",
+          "rep": 4,
+          "ns": 210748442
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "suffix",
+          "rep": 4,
+          "ns": 214747568
+        },
+        {
+          "mode": "rectangle",
+          "case": "many_queries_00",
+          "variant": "base",
+          "rep": 4,
+          "ns": 214268671
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "position",
+          "rep": 0,
+          "ns": 54056595
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "reads",
+          "rep": 0,
+          "ns": 53285487
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "suffix",
+          "rep": 0,
+          "ns": 53075863
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "base",
+          "rep": 0,
+          "ns": 53261120
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "position",
+          "rep": 1,
+          "ns": 53221894
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "base",
+          "rep": 1,
+          "ns": 53419128
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "suffix",
+          "rep": 1,
+          "ns": 53078958
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "reads",
+          "rep": 1,
+          "ns": 52958604
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "suffix",
+          "rep": 2,
+          "ns": 52961901
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "base",
+          "rep": 2,
+          "ns": 52668144
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "position",
+          "rep": 2,
+          "ns": 53173984
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "reads",
+          "rep": 2,
+          "ns": 53105316
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "suffix",
+          "rep": 3,
+          "ns": 52935558
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "reads",
+          "rep": 3,
+          "ns": 53334577
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "position",
+          "rep": 3,
+          "ns": 53352099
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "base",
+          "rep": 3,
+          "ns": 53482164
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "position",
+          "rep": 4,
+          "ns": 53063444
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "reads",
+          "rep": 4,
+          "ns": 53630908
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "suffix",
+          "rep": 4,
+          "ns": 54305014
+        },
+        {
+          "mode": "rectangle",
+          "case": "xy_concentrate_00",
+          "variant": "base",
+          "rep": 4,
+          "ns": 54364010
+        }
+      ]
+    },
+    "notes": [
+      "大規模2Dの差は主に0〜3%、1D長方形には+0.5〜1.3%、suffix-loop変更には数%の遅れがあり不採用。",
+      "公開している現在のFenwickはマクロ名だけの変更。"
+    ]
+  },
+  "licensing_note": "今回のSIMD専用処理はこの整備作業で記述したCC0寄与。コンパイラ拡張・組み込み関数を使い、第三者のSIMD実装コードを取り込んでいない。原典の出典・ライセンス表示は保持。"
+}

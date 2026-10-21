@@ -13,8 +13,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_ROLLBACK_WEIGHTED_UNION_FIND_DEFINED
-#define REINSIRK_ROLLBACK_WEIGHTED_UNION_FIND_DEFINED
+#ifndef SIRKIT_ROLLBACK_WEIGHTED_UNION_FIND_DEFINED
+#define SIRKIT_ROLLBACK_WEIGHTED_UNION_FIND_DEFINED
 // TはT(0), +, -を備える加法群。consistent/unite_checkedのみ==も必要。
 // 標準の符号付き整数Tは最終結果の範囲外でoverflow_error。符号なし整数は剰余演算。
 // find/same/size(v)はO(log n)、root_with_weight/get_weight/diff/try_diff/consistentもO(log n)。
@@ -40,7 +40,7 @@ private:
 
     // 根までの高々O(log n)個の整数を、途中の相殺を保って加算する。
     struct SignedSum {
-#if defined(__SIZEOF_INT128__) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
         __int128 value = 0;
         SignedSum() = default;
         explicit SignedSum(T x) : value(x) {}
@@ -165,7 +165,7 @@ private:
     }
     static bool try_add(T a, T b, T& out) {
         if constexpr (checked_integer) {
-#if (defined(__GNUC__) || defined(__clang__)) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if (defined(__GNUC__) || defined(__clang__)) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
             return !__builtin_add_overflow(a, b, &out);
 #else
             using U = std::make_unsigned_t<T>;
@@ -183,7 +183,7 @@ private:
     }
     static bool try_subtract(T a, T b, T& out) {
         if constexpr (checked_integer) {
-#if (defined(__GNUC__) || defined(__clang__)) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if (defined(__GNUC__) || defined(__clang__)) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
             return !__builtin_sub_overflow(a, b, &out);
 #else
             using U = std::make_unsigned_t<T>;

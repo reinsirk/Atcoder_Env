@@ -12,8 +12,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_INTEGER_SIEVE_DEFINED
-#define REINSIRK_INTEGER_SIEVE_DEFINED
+#ifndef SIRKIT_INTEGER_SIEVE_DEFINED
+#define SIRKIT_INTEGER_SIEVE_DEFINED
 // IntegerSieve(maxn): maxn>=0の最小素因数表・昇順素数列をO(maxn)時間・領域で作る。0,1の最小素因数は0。
 // least_prime_factor[x]は最小素因数、prime_listは昇順素数列。表は書き換えず利用する。
 // コピーは独立、コピー代入は強保証。ムーブ元は空となりmax_value()=-1。
@@ -261,8 +261,8 @@ private:
 };
 #endif
 
-#ifndef REINSIRK_INTEGER_TRANSFORM_DETAIL_DEFINED
-#define REINSIRK_INTEGER_TRANSFORM_DETAIL_DEFINED
+#ifndef SIRKIT_INTEGER_TRANSFORM_DETAIL_DEFINED
+#define SIRKIT_INTEGER_TRANSFORM_DETAIL_DEFINED
 namespace reinsirk::detail {
 struct IntegerTransform {
     // 素数pについて、指数を1段進める／戻す伝播を行う。
@@ -334,8 +334,8 @@ struct IntegerTransform {
 // divisor_mobius_transform(f): 約数ゼータ変換を元に戻す。
 // 各(f,sieve)版: sieve.max_value()>=f.size()-1の素数表を再利用し、追加領域O(1)。
 // 各(f)版: 素数表も作る。f.size()-1<=INT_MAX、追加領域O(n)。
-#ifndef REINSIRK_MULTIPLE_ZETA_DEFINED
-#define REINSIRK_MULTIPLE_ZETA_DEFINED
+#ifndef SIRKIT_MULTIPLE_ZETA_DEFINED
+#define SIRKIT_MULTIPLE_ZETA_DEFINED
 template <class T> void multiple_zeta_transform(std::vector<T>& f, const IntegerSieve& sieve) {
 #ifndef SKIP_RUNTIME_CHECKS
     reinsirk::detail::IntegerTransform::require_sieve(f.size(), sieve);
@@ -348,8 +348,8 @@ template <class T> void multiple_zeta_transform(std::vector<T>& f) {
     reinsirk::detail::IntegerTransform::propagate<false, false>(f, primes);
 }
 #endif
-#ifndef REINSIRK_MULTIPLE_MOEBIUS_DEFINED
-#define REINSIRK_MULTIPLE_MOEBIUS_DEFINED
+#ifndef SIRKIT_MULTIPLE_MOEBIUS_DEFINED
+#define SIRKIT_MULTIPLE_MOEBIUS_DEFINED
 template <class T> void multiple_mobius_transform(std::vector<T>& f, const IntegerSieve& sieve) {
 #ifndef SKIP_RUNTIME_CHECKS
     reinsirk::detail::IntegerTransform::require_sieve(f.size(), sieve);
@@ -362,8 +362,8 @@ template <class T> void multiple_mobius_transform(std::vector<T>& f) {
     reinsirk::detail::IntegerTransform::propagate<false, true>(f, primes);
 }
 #endif
-#ifndef REINSIRK_DIVISOR_ZETA_DEFINED
-#define REINSIRK_DIVISOR_ZETA_DEFINED
+#ifndef SIRKIT_DIVISOR_ZETA_DEFINED
+#define SIRKIT_DIVISOR_ZETA_DEFINED
 template <class T> void divisor_zeta_transform(std::vector<T>& f, const IntegerSieve& sieve) {
 #ifndef SKIP_RUNTIME_CHECKS
     reinsirk::detail::IntegerTransform::require_sieve(f.size(), sieve);
@@ -376,8 +376,8 @@ template <class T> void divisor_zeta_transform(std::vector<T>& f) {
     reinsirk::detail::IntegerTransform::propagate<true, false>(f, primes);
 }
 #endif
-#ifndef REINSIRK_DIVISOR_MOEBIUS_DEFINED
-#define REINSIRK_DIVISOR_MOEBIUS_DEFINED
+#ifndef SIRKIT_DIVISOR_MOEBIUS_DEFINED
+#define SIRKIT_DIVISOR_MOEBIUS_DEFINED
 template <class T> void divisor_mobius_transform(std::vector<T>& f, const IntegerSieve& sieve) {
 #ifndef SKIP_RUNTIME_CHECKS
     reinsirk::detail::IntegerTransform::require_sieve(f.size(), sieve);

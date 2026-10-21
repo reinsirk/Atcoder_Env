@@ -14,8 +14,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_GEO_EPSILON_DEFINED
-#define REINSIRK_GEO_EPSILON_DEFINED
+#ifndef SIRKIT_GEO_EPSILON_DEFINED
+#define SIRKIT_GEO_EPSILON_DEFINED
 namespace geo {
 // tolerance(scale): 非負有限の abs/rel から許容幅を返す。O(1)。
 struct Epsilon {
@@ -28,10 +28,10 @@ struct Epsilon {
 }
 #endif
 
-#ifndef REINSIRK_GEO_POINT_DEFINED
-#define REINSIRK_GEO_POINT_DEFINED
+#ifndef SIRKIT_GEO_POINT_DEFINED
+#define SIRKIT_GEO_POINT_DEFINED
 namespace geo {
-#if defined(__SIZEOF_INT128__) && !defined(GEO_DISABLE_INT128) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if defined(__SIZEOF_INT128__) && !defined(GEO_DISABLE_INT128) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, __int128_t, T>;
 #else
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, std::int64_t, T>;
@@ -169,8 +169,8 @@ using RealPoint = PointLD;
 }
 #endif
 
-#ifndef REINSIRK_GEO_POINT_FUNCTIONS_DEFINED
-#define REINSIRK_GEO_POINT_FUNCTIONS_DEFINED
+#ifndef SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
+#define SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 namespace geo {
 // 点の関数。座標は有限、整数の差・積は C に収まる入力を扱う。
 // predicate_sign<T,C>(value,scale,eps): 整数は厳密、実数は許容幅で -1/0/1 を返す。O(1)。

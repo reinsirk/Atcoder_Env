@@ -12,15 +12,15 @@
 #include <stdexcept>
 #include <vector>
 
-#ifndef REINSIRK_PRIMALITY32_DEFINED
+#ifndef SIRKIT_PRIMALITY32_DEFINED
 // 内部の素数判定。定義はファイル末尾。
 namespace reinsirk::detail {
 inline bool is_prime_u32(std::uint32_t n) noexcept;
 } // namespace reinsirk::detail
 #endif
 
-#ifndef REINSIRK_BINOMIAL_OPTIONS_DEFINED
-#define REINSIRK_BINOMIAL_OPTIONS_DEFINED
+#ifndef SIRKIT_BINOMIAL_OPTIONS_DEFINED
+#define SIRKIT_BINOMIAL_OPTIONS_DEFINED
 // 事前計算と、積による代替計算の上限。
 struct BinomialOptions
 {
@@ -32,8 +32,8 @@ struct BinomialOptions
 };
 #endif
 
-#ifndef REINSIRK_BINOMIAL_MOD_DEFINED
-#define REINSIRK_BINOMIAL_MOD_DEFINED
+#ifndef SIRKIT_BINOMIAL_MOD_DEFINED
+#define SIRKIT_BINOMIAL_MOD_DEFINED
 // SKIP_RUNTIME_CHECKSで入力検査を省略する。
 // 二項係数（C++20以降）。法は1〜UINT32_MAX、n・kはint64_t。
 // n<0、k<0、k>n、法1は0。Lucasは素数専用。
@@ -1104,8 +1104,8 @@ public:
 };
 #endif
 
-#ifndef REINSIRK_MODINT_BINOMIAL_DEFINED
-#define REINSIRK_MODINT_BINOMIAL_DEFINED
+#ifndef SIRKIT_MODINT_BINOMIAL_DEFINED
+#define SIRKIT_MODINT_BINOMIAL_DEFINED
 // AtCoder modint用。素数ではMintの階乗表、合成数ではBinomialModを使う。
 // dynamic_modintの法を変えたら作り直す。
 template <class Mint>
@@ -1445,8 +1445,8 @@ class ModIntBinomial {
 };
 #endif
 
-#ifndef REINSIRK_PRIMALITY32_DEFINED
-#define REINSIRK_PRIMALITY32_DEFINED
+#ifndef SIRKIT_PRIMALITY32_DEFINED
+#define SIRKIT_PRIMALITY32_DEFINED
 namespace reinsirk::detail {
 // uint32_t全域の素数判定。Miller-Rabinの底2,7,61を使う。
 // 理論参考: G. Jaeschke (1993), https://doi.org/10.1090/S0025-5718-1993-1192971-8
@@ -1576,7 +1576,7 @@ inline bool is_prime_u32(std::uint32_t n) noexcept
 #include <type_traits>
 #include <vector>
 
-#if !defined(SKIP_RUNTIME_CHECKS) && !defined(REINSIRK_PRIMALITY32_DEFINED)
+#if !defined(SKIP_RUNTIME_CHECKS) && !defined(SIRKIT_PRIMALITY32_DEFINED)
 // 内部の素数判定。定義はファイル末尾。
 namespace reinsirk::detail {
 inline bool is_prime_u32(std::uint32_t n) noexcept;
@@ -1587,8 +1587,8 @@ inline bool is_prime_u32(std::uint32_t n) noexcept;
 // 準備済みのn<modはO(1)、n>=modはLucas。表外は積で計算する。
 // dynamic_modintの法を変更したら、計算器も作り直す。
 // SKIP_RUNTIME_CHECKSで入力検査を省略する。ACLは利用側で読み込む。
-#ifndef REINSIRK_PRIME_BINOMIAL_DEFINED
-#define REINSIRK_PRIME_BINOMIAL_DEFINED
+#ifndef SIRKIT_PRIME_BINOMIAL_DEFINED
+#define SIRKIT_PRIME_BINOMIAL_DEFINED
 template <class Mint>
 class PrimeBinomial
 {
@@ -1906,8 +1906,8 @@ public:
 };
 #endif
 
-#if !defined(SKIP_RUNTIME_CHECKS) && !defined(REINSIRK_PRIMALITY32_DEFINED)
-#define REINSIRK_PRIMALITY32_DEFINED
+#if !defined(SKIP_RUNTIME_CHECKS) && !defined(SIRKIT_PRIMALITY32_DEFINED)
+#define SIRKIT_PRIMALITY32_DEFINED
 namespace reinsirk::detail {
 // uint32_t全域の素数判定。Miller-Rabinの底2,7,61を使う。
 // 理論参考: G. Jaeschke (1993), https://doi.org/10.1090/S0025-5718-1993-1192971-8

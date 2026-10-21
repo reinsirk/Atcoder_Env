@@ -13,8 +13,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_RANGE_ADD_MIN_DEFINED
-#define REINSIRK_RANGE_ADD_MIN_DEFINED
+#ifndef SIRKIT_RANGE_ADD_MIN_DEFINED
+#define SIRKIT_RANGE_ADD_MIN_DEFINED
 // 区間加算・最小値。値と加算後の値は INF 以下、各演算は int64_t に収まること。
 // op(a,b)/e(): 最小値/単位元。mapping(f,x): 加算。composition(f,g)/id(): 加算の合成/0。
 struct RangeAddMin {
@@ -29,8 +29,8 @@ struct RangeAddMin {
 };
 #endif
 
-#ifndef REINSIRK_RANGE_ADD_SUM_DEFINED
-#define REINSIRK_RANGE_ADD_SUM_DEFINED
+#ifndef SIRKIT_RANGE_ADD_SUM_DEFINED
+#define SIRKIT_RANGE_ADD_SUM_DEFINED
 // 区間加算・和。各要素は S{値, 1} とし、演算結果は int64_t に収まること。
 // op(a,b)/e(): 和と個数の合計/空。mapping(f,x): 各要素へ加算。composition(f,g)/id(): 合成/0。
 struct RangeAddSum {
@@ -48,8 +48,8 @@ struct RangeAddSum {
 };
 #endif
 
-#ifndef REINSIRK_IMPLICIT_TREAP_DEFINED
-#define REINSIRK_IMPLICIT_TREAP_DEFINED
+#ifndef SIRKIT_IMPLICIT_TREAP_DEFINED
+#define SIRKIT_IMPLICIT_TREAP_DEFINED
 // 可変長列。通常操作は期待 O(log N)、erase は O(削除数 + log N)、領域 O(最大要素数)。
 // op は結合的、e は単位元。mapping は集約に分配し、composition(f,g) は g の後に f。
 // op・mapping等の計算時間をO(1)として記す。
@@ -517,8 +517,8 @@ public:
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

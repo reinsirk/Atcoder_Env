@@ -1,5 +1,5 @@
-#ifndef REINSIRK_GEO_CIRCLE_DEFINED
-#define REINSIRK_GEO_CIRCLE_DEFINED
+#ifndef SIRKIT_GEO_CIRCLE_DEFINED
+#define SIRKIT_GEO_CIRCLE_DEFINED
 namespace geo {
 // 円周・円盤の関数。eps は絶対・相対許容幅、交点は RealPoint。
 // circumcircle(a,b,c,eps): 3点を通る円。一直線・重複点なら nullopt。O(1)。

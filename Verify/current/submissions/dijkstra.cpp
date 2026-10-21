@@ -1,8 +1,5 @@
 #define SKIP_RUNTIME_CHECKS
 // Verify: https://judge.yosupo.jp/problem/shortest_path
-// Submission: https://judge.yosupo.jp/submission/411982
-// Submission: https://judge.yosupo.jp/submission/411988
-// Submission: https://judge.yosupo.jp/submission/411999
 // Submission: https://judge.yosupo.jp/submission/412033
 
 // Library: Graph/Dijkstra.cpp
@@ -23,13 +20,13 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_INF_DEFINED
-#define REINSIRK_INF_DEFINED
+#ifndef SIRKIT_INF_DEFINED
+#define SIRKIT_INF_DEFINED
 inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 #endif
 
-#ifndef REINSIRK_GRAPH_TYPES_DEFINED
-#define REINSIRK_GRAPH_TYPES_DEFINED
+#ifndef SIRKIT_GRAPH_TYPES_DEFINED
+#define SIRKIT_GRAPH_TYPES_DEFINED
 // 有向辺。出発点は隣接リストの添字。
 struct Edge
 {
@@ -45,12 +42,12 @@ using WGraph = std::vector<std::vector<Edge>>;
 // 小規模は二分ヒープ、大規模はキューが64件を超えたらradix heapへ切り替える。
 // SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
 // 検査は始点・終点と処理中に参照する辺のみ。未到達成分は走査しない。
-#ifndef REINSIRK_DIJKSTRA_DEFINED
-#define REINSIRK_DIJKSTRA_DEFINED
+#ifndef SIRKIT_DIJKSTRA_DEFINED
+#define SIRKIT_DIJKSTRA_DEFINED
 namespace reinsirk::detail {
 // 内部用の単調整数ヒープ。格納する有限距離はINF未満。
-#ifndef REINSIRK_DIJKSTRA_RADIX_HEAP_DEFINED
-#define REINSIRK_DIJKSTRA_RADIX_HEAP_DEFINED
+#ifndef SIRKIT_DIJKSTRA_RADIX_HEAP_DEFINED
+#define SIRKIT_DIJKSTRA_RADIX_HEAP_DEFINED
 class DijkstraRadixHeap
 {
     // 待機距離はlastから最大辺重み以内なので、下位32bitから復元できる。
@@ -900,8 +897,8 @@ inline void Dijkstra(const WGraph &graph, std::vector<std::int64_t> &distances,
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

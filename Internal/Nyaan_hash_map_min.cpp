@@ -11,8 +11,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_INTERNAL_HASH_MAP_DEFINED
-#define REINSIRK_INTERNAL_HASH_MAP_DEFINED
+#ifndef SIRKIT_INTERNAL_HASH_MAP_DEFINED
+#define SIRKIT_INTERNAL_HASH_MAP_DEFINED
 namespace reinsirk::detail {
 // dynamic系で共有する内部用の整数ハッシュ表。参照・ポインタは再確保で無効。
 // Packedは占有フラグのbit化、Denominatorは空き容量の比率1/Denominatorを指定する。
@@ -200,4 +200,4 @@ public:
 };
 
 }  // namespace reinsirk::detail
-#endif  // REINSIRK_INTERNAL_HASH_MAP_DEFINED
+#endif  // SIRKIT_INTERNAL_HASH_MAP_DEFINED

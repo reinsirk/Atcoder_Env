@@ -1,5 +1,5 @@
-#ifndef REINSIRK_GEO_ON_SEGMENT_DEFINED
-#define REINSIRK_GEO_ON_SEGMENT_DEFINED
+#ifndef SIRKIT_GEO_ON_SEGMENT_DEFINED
+#define SIRKIT_GEO_ON_SEGMENT_DEFINED
 namespace geo {
 // on_segment(p,s,eps): 閉線分上（端点を含む）なら true。整数では厳密。O(1)。
 template<class T, class C> bool on_segment(const Point<T, C>& p, const Segment<T, C>& s, Epsilon eps = {}) {

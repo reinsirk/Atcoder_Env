@@ -29,7 +29,7 @@ TARGETS: dict[str, tuple[str, ...]] = {
     "Math/Zeta/Sparse_Transform.cpp": ("sparse_transform",),
 }
 HEADERS: dict[str, tuple[str, ...]] = {
-    "set_transform": ("bit", "cstddef", "stdexcept", "vector"),
+    "set_transform": ("bit", "cstddef", "cstring", "stdexcept", "type_traits", "utility", "vector"),
     "bitwise_convolution": (),
     "sieve": ("algorithm", "concepts", "cstddef", "cstdint", "limits", "map", "stdexcept", "utility", "vector"),
     "integer_transform_detail": ("array", "span"),
@@ -76,7 +76,7 @@ def load_sources(directory: Path) -> tuple[str, list[str], dict[str, str]]:
     guards: set[str] = set()
     for name in PARTS:
         piece = (directory / f"{name}.inc").read_text(encoding="utf-8")
-        found = re.findall(r"^#ifndef (REINSIRK_[A-Z_]+)\n#define \1$", piece, re.MULTILINE)
+        found = re.findall(r"^#ifndef (SIRKIT_[A-Z_]+)\n#define \1$", piece, re.MULTILINE)
         if not found or not piece.rstrip().endswith("#endif"):
             raise ValueError(f"部品のガード形式が不正です: {name}")
         if guards.intersection(found) or len(found) != len(set(found)):

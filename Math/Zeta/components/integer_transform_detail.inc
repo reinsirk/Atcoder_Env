@@ -1,5 +1,5 @@
-#ifndef REINSIRK_INTEGER_TRANSFORM_DETAIL_DEFINED
-#define REINSIRK_INTEGER_TRANSFORM_DETAIL_DEFINED
+#ifndef SIRKIT_INTEGER_TRANSFORM_DETAIL_DEFINED
+#define SIRKIT_INTEGER_TRANSFORM_DETAIL_DEFINED
 namespace reinsirk::detail {
 struct IntegerTransform {
     // 素数pについて、指数を1段進める／戻す伝播を行う。

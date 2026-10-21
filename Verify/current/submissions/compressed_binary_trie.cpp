@@ -1,6 +1,5 @@
 #define SKIP_RUNTIME_CHECKS
 // Verify: https://judge.yosupo.jp/problem/set_xor_min
-// Submission: https://judge.yosupo.jp/submission/411638
 // Submission: https://judge.yosupo.jp/submission/411981
 
 // Library: DataStructure/Compressed_Binary_Trie.cpp
@@ -24,8 +23,8 @@
 // SKIP_RUNTIME_CHECKSで入力検査を除く。容量・オーバーフロー対策は常に有効。
 // キー・XORマスクは 0 <= x < 2^B。NODESは未圧縮時の根込みノード上限。
 // IDは重複可、-1は匿名。ID一覧は順序不定、次の更新または破棄まで有効。
-#ifndef REINSIRK_COMPRESSED_BINARY_TRIE_DEFINED
-#define REINSIRK_COMPRESSED_BINARY_TRIE_DEFINED
+#ifndef SIRKIT_COMPRESSED_BINARY_TRIE_DEFINED
+#define SIRKIT_COMPRESSED_BINARY_TRIE_DEFINED
 template <typename T, int MAX_LOG, std::size_t NODES = 16777216>
 class CompressedBinaryTrie
 {
@@ -370,8 +369,8 @@ public:
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

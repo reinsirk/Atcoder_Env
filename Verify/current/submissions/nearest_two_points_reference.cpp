@@ -15,8 +15,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_NEAREST_TWO_POINTS_TYPES_DEFINED
-#define REINSIRK_NEAREST_TWO_POINTS_TYPES_DEFINED
+#ifndef SIRKIT_NEAREST_TWO_POINTS_TYPES_DEFINED
+#define SIRKIT_NEAREST_TWO_POINTS_TYPES_DEFINED
 using P = std::pair<std::int32_t, std::int32_t>;
 
 // distance_squaredは最短距離の二乗、添字は元入力の0始まり（first_index < second_index）。
@@ -27,8 +27,8 @@ struct NearestTwoPointsResult {
 };
 #endif
 
-#ifndef REINSIRK_INTERNAL_NEAREST_TWO_POINTS_DEFINED
-#define REINSIRK_INTERNAL_NEAREST_TWO_POINTS_DEFINED
+#ifndef SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED
+#define SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED
 namespace reinsirk::detail {
 class NearestTwoPointsSolver {
     struct Node {
@@ -37,7 +37,7 @@ class NearestTwoPointsSolver {
         std::size_t index;
     };
 #if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \
-    !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
     // GCC/Clangの整数拡張。標準C++の型ではない。
     using Distance = unsigned __int128;
     static Distance square(std::uint64_t d) { return Distance(d) * d; }
@@ -184,8 +184,8 @@ public:
 } // namespace reinsirk::detail
 #endif
 
-#ifndef REINSIRK_NEAREST_TWO_POINTS_DEFINED
-#define REINSIRK_NEAREST_TWO_POINTS_DEFINED
+#ifndef SIRKIT_NEAREST_TWO_POINTS_DEFINED
+#define SIRKIT_NEAREST_TWO_POINTS_DEFINED
 // [first,last)の整数pair列から最近点対を返す。int32座標・未整列可・入力不変、O(N log N)時間/O(N)領域。
 // 2点未満はnullopt。同距離の対は任意。最小二乗距離がuint64_tを超える場合は常時overflow_error。
 template<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>
@@ -209,8 +209,8 @@ std::optional<NearestTwoPointsResult> nearest_two_points(const std::vector<Point
 }
 #endif
 
-#ifndef REINSIRK_CLOSEST_PAIR_DEFINED
-#define REINSIRK_CLOSEST_PAIR_DEFINED
+#ifndef SIRKIT_CLOSEST_PAIR_DEFINED
+#define SIRKIT_CLOSEST_PAIR_DEFINED
 // 互換呼出: firstからn個の最短距離二乗をuint64_tで返す。n<2はINT32_MAX（負数は検査時に例外）。
 // int32座標・未整列可・入力不変、O(N log N)時間/O(N)領域。uint64_t超過は常時overflow_error。
 template<std::input_iterator Iterator>

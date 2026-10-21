@@ -9,8 +9,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_ROLLING_HASH_DEFINED
-#define REINSIRK_ROLLING_HASH_DEFINED
+#ifndef SIRKIT_ROLLING_HASH_DEFINED
+#define SIRKIT_ROLLING_HASH_DEFINED
 
 // RollingHash(s, base): 符号なしバイト列をO(|s|)時間・空間で構築。base<2は10、base>modulus-2はmodulus-10に補正。
 // modulus: ハッシュの法2^61-1。ハッシュ値は常に[0,modulus)。
@@ -211,7 +211,7 @@ private:
     static constexpr std::uint64_t multiply_raw(std::uint64_t a,
                                             std::uint64_t b) noexcept {
 #if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \
-    !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
         const __uint128_t product = static_cast<__uint128_t>(a) * b;
         const std::uint64_t folded =
             (static_cast<std::uint64_t>(product) & modulus) +
@@ -235,7 +235,7 @@ private:
 
     static constexpr std::uint64_t multiply(std::uint64_t a, std::uint64_t b) noexcept {
         std::uint64_t folded = multiply_raw(a, b);
-#if !((defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)) || defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if !((defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)) || defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
         folded = (folded & modulus) + (folded >> 61);
 #endif
         return folded >= modulus ? folded - modulus : folded;
@@ -244,7 +244,7 @@ private:
     // byteは0..255。乗算結果への加算を正規化前にまとめる。
     static constexpr std::uint64_t multiply_add_byte(
         std::uint64_t a, std::uint64_t b, unsigned char byte) noexcept {
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
         const __uint128_t product = static_cast<__uint128_t>(a) * b + byte;
         const std::uint64_t folded =
             (static_cast<std::uint64_t>(product) & modulus) +
@@ -263,7 +263,7 @@ private:
         }
         const std::uint64_t right = data_[r].value;
         const std::uint64_t left = multiply_raw(data_[l].value, powers_[r - l].value);
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
         const std::uint64_t difference = right + 2 * modulus - left;
 #else
         // raw積は4p未満、右辺全体は5p未満で64bitに収まる。

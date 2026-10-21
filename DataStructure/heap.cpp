@@ -9,8 +9,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_HEAP_DEFINED
-#define REINSIRK_HEAP_DEFINED
+#ifndef SIRKIT_HEAP_DEFINED
+#define SIRKIT_HEAP_DEFINED
 
 // int の最小ヒープ。値を所有し、コピー・ムーブ可能。
 // Heap(): 空を構築。Heap(vector<int>): 値を受け取り O(N) で構築。

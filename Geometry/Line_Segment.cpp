@@ -14,8 +14,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_GEO_EPSILON_DEFINED
-#define REINSIRK_GEO_EPSILON_DEFINED
+#ifndef SIRKIT_GEO_EPSILON_DEFINED
+#define SIRKIT_GEO_EPSILON_DEFINED
 namespace geo {
 // tolerance(scale): 非負有限の abs/rel から許容幅を返す。O(1)。
 struct Epsilon {
@@ -28,10 +28,10 @@ struct Epsilon {
 }
 #endif
 
-#ifndef REINSIRK_GEO_POINT_DEFINED
-#define REINSIRK_GEO_POINT_DEFINED
+#ifndef SIRKIT_GEO_POINT_DEFINED
+#define SIRKIT_GEO_POINT_DEFINED
 namespace geo {
-#if defined(__SIZEOF_INT128__) && !defined(GEO_DISABLE_INT128) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if defined(__SIZEOF_INT128__) && !defined(GEO_DISABLE_INT128) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, __int128_t, T>;
 #else
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, std::int64_t, T>;
@@ -169,8 +169,8 @@ using RealPoint = PointLD;
 }
 #endif
 
-#ifndef REINSIRK_GEO_POINT_FUNCTIONS_DEFINED
-#define REINSIRK_GEO_POINT_FUNCTIONS_DEFINED
+#ifndef SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
+#define SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 namespace geo {
 // 点の関数。座標は有限、整数の差・積は C に収まる入力を扱う。
 // predicate_sign<T,C>(value,scale,eps): 整数は厳密、実数は許容幅で -1/0/1 を返す。O(1)。
@@ -199,8 +199,8 @@ template<class T, class C> typename Point<T, C>::Real distance(const Point<T, C>
 }
 #endif
 
-#ifndef REINSIRK_GEO_LINEAR_TYPES_DEFINED
-#define REINSIRK_GEO_LINEAR_TYPES_DEFINED
+#ifndef SIRKIT_GEO_LINEAR_TYPES_DEFINED
+#define SIRKIT_GEO_LINEAR_TYPES_DEFINED
 namespace geo {
 // Segment{a,b} は閉線分（零長可）、Line{a,b} は相異なる2点で表す直線。
 template<class T, class C = DefaultCalc<T>> struct Segment { Point<T, C> a, b; };
@@ -208,8 +208,8 @@ template<class T, class C = DefaultCalc<T>> struct Line { Point<T, C> a, b; };
 }
 #endif
 
-#ifndef REINSIRK_GEO_ON_SEGMENT_DEFINED
-#define REINSIRK_GEO_ON_SEGMENT_DEFINED
+#ifndef SIRKIT_GEO_ON_SEGMENT_DEFINED
+#define SIRKIT_GEO_ON_SEGMENT_DEFINED
 namespace geo {
 // on_segment(p,s,eps): 閉線分上（端点を含む）なら true。整数では厳密。O(1)。
 template<class T, class C> bool on_segment(const Point<T, C>& p, const Segment<T, C>& s, Epsilon eps = {}) {
@@ -222,8 +222,8 @@ template<class T, class C> bool on_segment(const Point<T, C>& p, const Segment<T
 }
 #endif
 
-#ifndef REINSIRK_GEO_SEGMENT_PREDICATES_DEFINED
-#define REINSIRK_GEO_SEGMENT_PREDICATES_DEFINED
+#ifndef SIRKIT_GEO_SEGMENT_PREDICATES_DEFINED
+#define SIRKIT_GEO_SEGMENT_PREDICATES_DEFINED
 namespace geo {
 // intersects(s,t,eps): 閉線分同士が端点・重なりを含め交わるか。O(1)。
 template<class T, class C> bool intersects(const Segment<T, C>& s, const Segment<T, C>& t, Epsilon eps = {}) {
@@ -241,8 +241,8 @@ template<class T, class C> bool intersects(const Segment<T, C>& s, const Segment
 }
 #endif
 
-#ifndef REINSIRK_GEO_LINEAR_RESULTS_DEFINED
-#define REINSIRK_GEO_LINEAR_RESULTS_DEFINED
+#ifndef SIRKIT_GEO_LINEAR_RESULTS_DEFINED
+#define SIRKIT_GEO_LINEAR_RESULTS_DEFINED
 namespace geo {
 // 直線・線分の交差種別。交点は RealPoint、重なりは辞書順の両端点。
 enum class LineIntersectionKind { None, Point, Coincident };
@@ -252,8 +252,8 @@ struct SegmentIntersection { SegmentIntersectionKind kind = SegmentIntersectionK
 }
 #endif
 
-#ifndef REINSIRK_GEO_LINEAR_DEFINED
-#define REINSIRK_GEO_LINEAR_DEFINED
+#ifndef SIRKIT_GEO_LINEAR_DEFINED
+#define SIRKIT_GEO_LINEAR_DEFINED
 namespace geo {
 // 点・直線・閉線分の関数。交点・射影・距離は long double で近似する。
 // projection(p,l): long double 変換後も非零長の直線 l 上への射影。O(1)。

@@ -1,5 +1,6 @@
 #define SKIP_RUNTIME_CHECKS
 // Verify: https://judge.yosupo.jp/problem/enumerate_primes
+// Submission: https://judge.yosupo.jp/submission/412289
 
 // Library: Math/Eratosthenes.cpp
 // SPDX-License-Identifier: CC0-1.0
@@ -11,8 +12,45 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_PRIME_SIEVE_DEFINED
-#define REINSIRK_PRIME_SIEVE_DEFINED
+
+#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+#include <immintrin.h>
+#endif
+
+#ifndef SIRKIT_PRIME_SIEVE_POPCOUNT_DEFINED
+#define SIRKIT_PRIME_SIEVE_POPCOUNT_DEFINED
+namespace reinsirk::detail {
+#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+// 内部用。4語ずつ数え、端の1〜3語だけ標準のpopcountを使う。
+[[gnu::target("avx2"), gnu::noinline]] inline std::uint64_t popcount_words_avx2(
+    const std::uint64_t* words, std::size_t count) noexcept {
+    const auto table = _mm256_setr_epi8(
+        0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4,
+        0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4);
+    const auto mask = _mm256_set1_epi8(15);
+    const auto zero = _mm256_setzero_si256();
+    auto sum = zero;
+    std::size_t i = 0;
+    for (; count - i >= 4; i += 4) {
+        const auto value = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(words + i));
+        const auto low = _mm256_and_si256(value, mask);
+        const auto high = _mm256_and_si256(_mm256_srli_epi16(value, 4), mask);
+        const auto bits = _mm256_add_epi8(_mm256_shuffle_epi8(table, low),
+                                         _mm256_shuffle_epi8(table, high));
+        sum = _mm256_add_epi64(sum, _mm256_sad_epu8(bits, zero));
+    }
+    alignas(32) std::uint64_t lanes[4];
+    _mm256_store_si256(reinterpret_cast<__m256i*>(lanes), sum);
+    std::uint64_t result = lanes[0] + lanes[1] + lanes[2] + lanes[3];
+    for (; i < count; ++i) result += std::popcount(words[i]);
+    return result;
+}
+#endif
+} // namespace reinsirk::detail
+#endif
+
+#ifndef SIRKIT_PRIME_SIEVE_DEFINED
+#define SIRKIT_PRIME_SIEVE_DEFINED
 
 // PrimeSieve(limit=0): [0,limit]の素数表を構築する。O(limit log log limit)、奇数1個につき1bit。
 // コピーは独立した表を持ち、移動元はlimit=0の空の素数表として再利用できる。
@@ -69,6 +107,13 @@ public:
     }
     std::uint64_t limit() const noexcept { return limit_; }
     std::uint64_t prime_count() const noexcept {
+#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+#if !(defined(__clang__) && defined(__AVX2__))
+        if (limit_ >= 3969 && __builtin_cpu_supports("avx2")) [[unlikely]]
+            return static_cast<std::uint64_t>(limit_ >= 2) +
+                   reinsirk::detail::popcount_words_avx2(flags_.data(), flags_.size());
+#endif
+#endif
         std::uint64_t count = limit_ >= 2;
         for (std::uint64_t word : flags_) count += std::popcount(word);
         return count;
@@ -96,8 +141,8 @@ private:
 };
 #endif
 
-#ifndef REINSIRK_ERATOSTHENES_DEFINED
-#define REINSIRK_ERATOSTHENES_DEFINED
+#ifndef SIRKIT_ERATOSTHENES_DEFINED
+#define SIRKIT_ERATOSTHENES_DEFINED
 // eratosthenes(limit, ans): limit以下の素数を昇順でansの末尾へ追加する。O(limit log log limit)。
 // eratosthenes(limit): limit以下の素数を昇順のvectorで返す。同じ計算量。
 inline void eratosthenes(std::uint64_t limit, std::vector<std::uint64_t>& ans) {
@@ -127,8 +172,8 @@ inline std::vector<std::uint64_t> eratosthenes(std::uint64_t limit) {
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

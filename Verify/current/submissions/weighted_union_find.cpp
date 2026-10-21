@@ -12,8 +12,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_UNION_FIND_W_DEFINED
-#define REINSIRK_UNION_FIND_W_DEFINED
+#ifndef SIRKIT_UNION_FIND_W_DEFINED
+#define SIRKIT_UNION_FIND_W_DEFINED
 // UnionFindW<T>(n=0): n要素を構築。T{}は零、加減算・符号反転・等値比較が必要。O(n)時間・領域。
 // root(i)/leader(i): 代表、issame(a,b)/same(a,b): 同一成分か、size(i): 成分サイズ。償却O(α(n))。
 // unite(a,b,w): weight(b)-weight(a)=wとして未接続なら結合。既接続の矛盾は従来どおり無視。
@@ -141,8 +141,8 @@ public:
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

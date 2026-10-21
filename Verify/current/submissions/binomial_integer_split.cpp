@@ -1,9 +1,5 @@
 #define SKIP_RUNTIME_CHECKS
 // Verify: https://judge.yosupo.jp/problem/binomial_coefficient
-// Submission: https://judge.yosupo.jp/submission/411622
-// Submission: https://judge.yosupo.jp/submission/411667
-// Submission: https://judge.yosupo.jp/submission/411677
-// Submission: https://judge.yosupo.jp/submission/411681
 // Submission: https://judge.yosupo.jp/submission/411977
 
 // Library: Math/Combination/Binomial_Mod.cpp
@@ -18,15 +14,15 @@
 #include <stdexcept>
 #include <vector>
 
-#ifndef REINSIRK_PRIMALITY32_DEFINED
+#ifndef SIRKIT_PRIMALITY32_DEFINED
 // 内部の素数判定。定義はファイル末尾。
 namespace reinsirk::detail {
 inline bool is_prime_u32(std::uint32_t n) noexcept;
 } // namespace reinsirk::detail
 #endif
 
-#ifndef REINSIRK_BINOMIAL_OPTIONS_DEFINED
-#define REINSIRK_BINOMIAL_OPTIONS_DEFINED
+#ifndef SIRKIT_BINOMIAL_OPTIONS_DEFINED
+#define SIRKIT_BINOMIAL_OPTIONS_DEFINED
 // 事前計算と、積による代替計算の上限。
 struct BinomialOptions
 {
@@ -38,8 +34,8 @@ struct BinomialOptions
 };
 #endif
 
-#ifndef REINSIRK_BINOMIAL_MOD_DEFINED
-#define REINSIRK_BINOMIAL_MOD_DEFINED
+#ifndef SIRKIT_BINOMIAL_MOD_DEFINED
+#define SIRKIT_BINOMIAL_MOD_DEFINED
 // SKIP_RUNTIME_CHECKSで入力検査を省略する。
 // 二項係数（C++20以降）。法は1〜UINT32_MAX、n・kはint64_t。
 // n<0、k<0、k>n、法1は0。Lucasは素数専用。
@@ -1110,8 +1106,8 @@ public:
 };
 #endif
 
-#ifndef REINSIRK_PRIMALITY32_DEFINED
-#define REINSIRK_PRIMALITY32_DEFINED
+#ifndef SIRKIT_PRIMALITY32_DEFINED
+#define SIRKIT_PRIMALITY32_DEFINED
 namespace reinsirk::detail {
 // uint32_t全域の素数判定。Miller-Rabinの底2,7,61を使う。
 // 理論参考: G. Jaeschke (1993), https://doi.org/10.1090/S0025-5718-1993-1192971-8
@@ -1247,8 +1243,8 @@ inline bool is_prime_u32(std::uint32_t n) noexcept
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

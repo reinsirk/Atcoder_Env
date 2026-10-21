@@ -1,5 +1,5 @@
-#ifndef REINSIRK_INTEGER_CONVOLUTION_DETAIL_DEFINED
-#define REINSIRK_INTEGER_CONVOLUTION_DETAIL_DEFINED
+#ifndef SIRKIT_INTEGER_CONVOLUTION_DETAIL_DEFINED
+#define SIRKIT_INTEGER_CONVOLUTION_DETAIL_DEFINED
 namespace reinsirk::detail {
 struct IntegerConvolution {
     template <bool Gcd, class T, class PrimeRange>

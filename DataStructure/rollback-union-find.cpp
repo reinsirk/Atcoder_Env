@@ -7,8 +7,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_ROLLBACK_UNION_FIND_DEFINED
-#define REINSIRK_ROLLBACK_UNION_FIND_DEFINED
+#ifndef SIRKIT_ROLLBACK_UNION_FIND_DEFINED
+#define SIRKIT_ROLLBACK_UNION_FIND_DEFINED
 // RollbackUnionFind(n=0): n要素を構築。O(n)時間・領域。コピーは履歴を含め独立、移動元は空。
 // find(i)/root(i)/leader(i): 代表、same(a,b)/issame(a,b): 同一成分か、size(i): 成分サイズ。O(log n)。
 // unite(a,b)/merge(a,b): 新規結合ならtrue。失敗した結合も履歴1回分を消費。O(log n)。

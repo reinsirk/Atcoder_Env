@@ -1,10 +1,5 @@
 #define SKIP_RUNTIME_CHECKS
 // Verify: https://judge.yosupo.jp/problem/set_xor_min
-// Submission: https://judge.yosupo.jp/submission/411621
-// Submission: https://judge.yosupo.jp/submission/411640
-// Submission: https://judge.yosupo.jp/submission/411646
-// Submission: https://judge.yosupo.jp/submission/411650
-// Submission: https://judge.yosupo.jp/submission/411664
 // Submission: https://judge.yosupo.jp/submission/411975
 
 // Library: DataStructure/Binary_Trie.cpp
@@ -29,8 +24,8 @@
 // get_kth は重複込み・1始まり。ID は重複可、-1 は匿名（ID一覧には含めない）。
 // ID省略の削除は匿名を優先し、なければ任意のID付き要素を削除する。
 // ID一覧は順序不定の読み取り専用参照。次の更新または破棄まで有効。
-#ifndef REINSIRK_BINARY_TRIE_DEFINED
-#define REINSIRK_BINARY_TRIE_DEFINED
+#ifndef SIRKIT_BINARY_TRIE_DEFINED
+#define SIRKIT_BINARY_TRIE_DEFINED
 template <typename T, int MAX_LOG, std::size_t NODES = 16777216>
 class BinaryTrie
 {
@@ -749,8 +744,8 @@ public:
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

@@ -14,8 +14,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_GEO_EPSILON_DEFINED
-#define REINSIRK_GEO_EPSILON_DEFINED
+#ifndef SIRKIT_GEO_EPSILON_DEFINED
+#define SIRKIT_GEO_EPSILON_DEFINED
 namespace geo {
 // tolerance(scale): 非負有限の abs/rel から許容幅を返す。O(1)。
 struct Epsilon {
@@ -28,10 +28,10 @@ struct Epsilon {
 }
 #endif
 
-#ifndef REINSIRK_GEO_POINT_DEFINED
-#define REINSIRK_GEO_POINT_DEFINED
+#ifndef SIRKIT_GEO_POINT_DEFINED
+#define SIRKIT_GEO_POINT_DEFINED
 namespace geo {
-#if defined(__SIZEOF_INT128__) && !defined(GEO_DISABLE_INT128) && !defined(REINSIRK_FORCE_STANDARD_ARITHMETIC)
+#if defined(__SIZEOF_INT128__) && !defined(GEO_DISABLE_INT128) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, __int128_t, T>;
 #else
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, std::int64_t, T>;
@@ -169,8 +169,8 @@ using RealPoint = PointLD;
 }
 #endif
 
-#ifndef REINSIRK_GEO_POINT_FUNCTIONS_DEFINED
-#define REINSIRK_GEO_POINT_FUNCTIONS_DEFINED
+#ifndef SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
+#define SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 namespace geo {
 // 点の関数。座標は有限、整数の差・積は C に収まる入力を扱う。
 // predicate_sign<T,C>(value,scale,eps): 整数は厳密、実数は許容幅で -1/0/1 を返す。O(1)。
@@ -199,8 +199,8 @@ template<class T, class C> typename Point<T, C>::Real distance(const Point<T, C>
 }
 #endif
 
-#ifndef REINSIRK_GEO_LINEAR_TYPES_DEFINED
-#define REINSIRK_GEO_LINEAR_TYPES_DEFINED
+#ifndef SIRKIT_GEO_LINEAR_TYPES_DEFINED
+#define SIRKIT_GEO_LINEAR_TYPES_DEFINED
 namespace geo {
 // Segment{a,b} は閉線分（零長可）、Line{a,b} は相異なる2点で表す直線。
 template<class T, class C = DefaultCalc<T>> struct Segment { Point<T, C> a, b; };
@@ -208,8 +208,8 @@ template<class T, class C = DefaultCalc<T>> struct Line { Point<T, C> a, b; };
 }
 #endif
 
-#ifndef REINSIRK_GEO_ON_SEGMENT_DEFINED
-#define REINSIRK_GEO_ON_SEGMENT_DEFINED
+#ifndef SIRKIT_GEO_ON_SEGMENT_DEFINED
+#define SIRKIT_GEO_ON_SEGMENT_DEFINED
 namespace geo {
 // on_segment(p,s,eps): 閉線分上（端点を含む）なら true。整数では厳密。O(1)。
 template<class T, class C> bool on_segment(const Point<T, C>& p, const Segment<T, C>& s, Epsilon eps = {}) {
@@ -222,16 +222,16 @@ template<class T, class C> bool on_segment(const Point<T, C>& p, const Segment<T
 }
 #endif
 
-#ifndef REINSIRK_GEO_LOCATION_DEFINED
-#define REINSIRK_GEO_LOCATION_DEFINED
+#ifndef SIRKIT_GEO_LOCATION_DEFINED
+#define SIRKIT_GEO_LOCATION_DEFINED
 namespace geo {
 // contains の戻り値: 外部・境界・内部。
 enum class Location { Outside, Boundary, Inside };
 }
 #endif
 
-#ifndef REINSIRK_GEO_CIRCLE_TYPES_DEFINED
-#define REINSIRK_GEO_CIRCLE_TYPES_DEFINED
+#ifndef SIRKIT_GEO_CIRCLE_TYPES_DEFINED
+#define SIRKIT_GEO_CIRCLE_TYPES_DEFINED
 namespace geo {
 // 円の交差種別と近似交点。一致する正半径円には交点を格納しない。
 enum class CircleIntersectionKind { None, Tangent, TwoPoints, Coincident };
@@ -241,8 +241,8 @@ struct Circle { RealPoint center; long double radius = 0; };
 }
 #endif
 
-#ifndef REINSIRK_GEO_CIRCLE_DEFINED
-#define REINSIRK_GEO_CIRCLE_DEFINED
+#ifndef SIRKIT_GEO_CIRCLE_DEFINED
+#define SIRKIT_GEO_CIRCLE_DEFINED
 namespace geo {
 // 円周・円盤の関数。eps は絶対・相対許容幅、交点は RealPoint。
 // circumcircle(a,b,c,eps): 3点を通る円。一直線・重複点なら nullopt。O(1)。

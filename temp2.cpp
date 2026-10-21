@@ -12,18 +12,18 @@ using namespace std;
 
 #define SKIP_RUNTIME_CHECKS
 
-#ifndef REINSIRK_INF_DEFINED
-#define REINSIRK_INF_DEFINED
+#ifndef SIRKIT_INF_DEFINED
+#define SIRKIT_INF_DEFINED
 inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 #endif
 
-#ifndef REINSIRK_UNWEIGHTED_GRAPH_DEFINED
-#define REINSIRK_UNWEIGHTED_GRAPH_DEFINED
+#ifndef SIRKIT_UNWEIGHTED_GRAPH_DEFINED
+#define SIRKIT_UNWEIGHTED_GRAPH_DEFINED
 using Graph = std::vector<std::vector<int>>;
 #endif
 
-#ifndef REINSIRK_GRAPH_TYPES_DEFINED
-#define REINSIRK_GRAPH_TYPES_DEFINED
+#ifndef SIRKIT_GRAPH_TYPES_DEFINED
+#define SIRKIT_GRAPH_TYPES_DEFINED
 // 有向辺。出発点は隣接リストの添字。
 struct Edge {
     int to;
@@ -33,30 +33,30 @@ struct Edge {
 using WGraph = std::vector<std::vector<Edge>>;
 #endif
 
-#ifndef REINSIRK_CHMIN_DEFINED
-#define REINSIRK_CHMIN_DEFINED
-#define REINSIRK_TEMP_DEFINE_CHMIN
+#ifndef SIRKIT_CHMIN_DEFINED
+#define SIRKIT_CHMIN_DEFINED
+#define SIRKIT_TEMP_DEFINE_CHMIN
 // chmin(a, b): b < a なら a を更新して true を返す。比較・代入各1回以下。
 template <class T> constexpr bool chmin(T& a, T b);
 #endif
 
-#ifndef REINSIRK_CHMAX_DEFINED
-#define REINSIRK_CHMAX_DEFINED
-#define REINSIRK_TEMP_DEFINE_CHMAX
+#ifndef SIRKIT_CHMAX_DEFINED
+#define SIRKIT_CHMAX_DEFINED
+#define SIRKIT_TEMP_DEFINE_CHMAX
 // chmax(a, b): a < b なら a を更新して true を返す。比較・代入各1回以下。
 template <class T> constexpr bool chmax(T& a, T b);
 #endif
 
-#ifndef REINSIRK_POW64I_DEFINED
-#define REINSIRK_POW64I_DEFINED
-#define REINSIRK_TEMP_DEFINE_POW64I
+#ifndef SIRKIT_POW64I_DEFINED
+#define SIRKIT_POW64I_DEFINED
+#define SIRKIT_TEMP_DEFINE_POW64I
 // pow64i(x, n): x^n mod 2^64 を O(log(n + 1)) で返す。0^0 は1。
 constexpr std::uint64_t pow64i(std::uint64_t x, std::uint64_t n);
 #endif
 
-#ifndef REINSIRK_IS_MUL_OVERFLOW_DEFINED
-#define REINSIRK_IS_MUL_OVERFLOW_DEFINED
-#define REINSIRK_TEMP_DEFINE_IS_MUL_OVERFLOW
+#ifndef SIRKIT_IS_MUL_OVERFLOW_DEFINED
+#define SIRKIT_IS_MUL_OVERFLOW_DEFINED
+#define SIRKIT_TEMP_DEFINE_IS_MUL_OVERFLOW
 // is_mul_overflow(a, b): a*b が符号付き64ビット整数の範囲外なら true。O(1)。
 constexpr bool is_mul_overflow(std::int64_t a, std::int64_t b);
 #endif
@@ -68,8 +68,8 @@ int main() {
     return 0;
 }
 
-#ifdef REINSIRK_TEMP_DEFINE_CHMIN
-#undef REINSIRK_TEMP_DEFINE_CHMIN
+#ifdef SIRKIT_TEMP_DEFINE_CHMIN
+#undef SIRKIT_TEMP_DEFINE_CHMIN
 template <class T>
 constexpr bool chmin(T& a, T b) {
     if (b < a) {
@@ -80,8 +80,8 @@ constexpr bool chmin(T& a, T b) {
 }
 #endif
 
-#ifdef REINSIRK_TEMP_DEFINE_CHMAX
-#undef REINSIRK_TEMP_DEFINE_CHMAX
+#ifdef SIRKIT_TEMP_DEFINE_CHMAX
+#undef SIRKIT_TEMP_DEFINE_CHMAX
 template <class T>
 constexpr bool chmax(T& a, T b) {
     if (a < b) {
@@ -92,8 +92,8 @@ constexpr bool chmax(T& a, T b) {
 }
 #endif
 
-#ifdef REINSIRK_TEMP_DEFINE_POW64I
-#undef REINSIRK_TEMP_DEFINE_POW64I
+#ifdef SIRKIT_TEMP_DEFINE_POW64I
+#undef SIRKIT_TEMP_DEFINE_POW64I
 constexpr std::uint64_t pow64i(std::uint64_t x, std::uint64_t n) {
     std::uint64_t result = 1;
     while (n != 0) {
@@ -105,10 +105,10 @@ constexpr std::uint64_t pow64i(std::uint64_t x, std::uint64_t n) {
 }
 #endif
 
-#ifdef REINSIRK_TEMP_DEFINE_IS_MUL_OVERFLOW
-#undef REINSIRK_TEMP_DEFINE_IS_MUL_OVERFLOW
+#ifdef SIRKIT_TEMP_DEFINE_IS_MUL_OVERFLOW
+#undef SIRKIT_TEMP_DEFINE_IS_MUL_OVERFLOW
 constexpr bool is_mul_overflow(std::int64_t a, std::int64_t b) {
-#if (defined(__GNUC__) || defined(__clang__)) && !defined(REINSIRK_FORCE_STANDARD_MUL_OVERFLOW)
+#if (defined(__GNUC__) || defined(__clang__)) && !defined(SIRKIT_FORCE_STANDARD_MUL_OVERFLOW)
     std::int64_t product;
     return __builtin_mul_overflow(a, b, &product);
 #else

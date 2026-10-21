@@ -9,7 +9,7 @@
 #include <type_traits>
 #include <vector>
 
-#if !defined(SKIP_RUNTIME_CHECKS) && !defined(REINSIRK_PRIMALITY32_DEFINED)
+#if !defined(SKIP_RUNTIME_CHECKS) && !defined(SIRKIT_PRIMALITY32_DEFINED)
 // 内部の素数判定。定義はファイル末尾。
 namespace reinsirk::detail {
 inline bool is_prime_u32(std::uint32_t n) noexcept;
@@ -20,8 +20,8 @@ inline bool is_prime_u32(std::uint32_t n) noexcept;
 // 準備済みのn<modはO(1)、n>=modはLucas。表外は積で計算する。
 // dynamic_modintの法を変更したら、計算器も作り直す。
 // SKIP_RUNTIME_CHECKSで入力検査を省略する。ACLは利用側で読み込む。
-#ifndef REINSIRK_PRIME_BINOMIAL_DEFINED
-#define REINSIRK_PRIME_BINOMIAL_DEFINED
+#ifndef SIRKIT_PRIME_BINOMIAL_DEFINED
+#define SIRKIT_PRIME_BINOMIAL_DEFINED
 template <class Mint>
 class PrimeBinomial
 {
@@ -339,8 +339,8 @@ public:
 };
 #endif
 
-#if !defined(SKIP_RUNTIME_CHECKS) && !defined(REINSIRK_PRIMALITY32_DEFINED)
-#define REINSIRK_PRIMALITY32_DEFINED
+#if !defined(SKIP_RUNTIME_CHECKS) && !defined(SIRKIT_PRIMALITY32_DEFINED)
+#define SIRKIT_PRIMALITY32_DEFINED
 namespace reinsirk::detail {
 // uint32_t全域の素数判定。Miller-Rabinの底2,7,61を使う。
 // 理論参考: G. Jaeschke (1993), https://doi.org/10.1090/S0025-5718-1993-1192971-8

@@ -8,9 +8,13 @@
 #include <limits>
 #include <stdexcept>
 #include <vector>
+#include <type_traits>
+#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+#include <immintrin.h>
+#endif
 
-#ifndef REINSIRK_INF_DEFINED
-#define REINSIRK_INF_DEFINED
+#ifndef SIRKIT_INF_DEFINED
+#define SIRKIT_INF_DEFINED
 inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 #endif
 
@@ -21,8 +25,8 @@ inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 // 出力は未到達INF、負閉路を経由できる組だけ-INF。有限距離が(-INF, INF)外ならoverflow_error。
 // 算術範囲の算出を兼ねて初期行列を走査する。SKIP_RUNTIME_CHECKSで形状・入力値・頂点の検査を除く。
 // 通常版の追加領域はO(V)。大きな重みで広幅演算が必要な場合はO(V^2)。例外時の行列の内容は未規定。
-#ifndef REINSIRK_FLOYD_WARSHALL_DEFINED
-#define REINSIRK_FLOYD_WARSHALL_DEFINED
+#ifndef SIRKIT_FLOYD_WARSHALL_DEFINED
+#define SIRKIT_FLOYD_WARSHALL_DEFINED
 namespace reinsirk::detail {
 
 #if defined(__SIZEOF_INT128__) && (defined(__GNUC__) || defined(__clang__))
@@ -68,38 +72,114 @@ inline FloydWarshallWide FloydWarshallLimit(std::size_t n)
 #endif
 }
 
-template <bool RestorePath, bool HasNegative, bool FiniteRange = false, bool Dense = false, class Distance>
-inline bool FloydWarshallRun(std::vector<std::vector<Distance>> &distance,
-                                    Distance unreachable, Distance lower,
-                                    std::vector<std::vector<int>> *next)
+#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+template <bool RestorePath, bool HasNegative, bool Dense>
+[[gnu::target("avx2")]]
+inline void FloydWarshallRelaxAvx2(std::vector<std::vector<std::int64_t>> &distance,
+                                 std::int64_t unreachable, std::int64_t lower,
+                                 std::vector<std::vector<int>> *next)
 {
     const std::size_t n = distance.size();
+    const __m256i v_unreachable = _mm256_set1_epi64x(unreachable);
+    const __m256i v_lower = _mm256_set1_epi64x(lower);
     for (std::size_t via = 0; via < n; ++via)
     {
         const auto *through = distance[via].data();
         for (std::size_t from = 0; from < n; ++from)
         {
             auto *row = distance[from].data();
-            const Distance prefix = row[via];
+            const auto prefix = row[via];
             if (prefix == unreachable)
                 continue;
-            for (std::size_t to = 0; to < n; ++to)
+            const __m256i v_prefix = _mm256_set1_epi64x(prefix);
+            int *path = nullptr;
+            int following = 0;
+            if constexpr (RestorePath)
             {
-                if constexpr (!Dense) if (through[to] == unreachable)
-                    continue;
-                Distance candidate = prefix + through[to];
+                path = (*next)[from].data();
+                following = path[via];
+            }
+            std::size_t to = 0;
+            for (; to + 4 <= n; to += 4)
+            {
+                const __m256i values = _mm256_loadu_si256(reinterpret_cast<const __m256i *>(through + to));
+                const __m256i old = _mm256_loadu_si256(reinterpret_cast<const __m256i *>(row + to));
+                __m256i candidate = _mm256_add_epi64(v_prefix, values);
                 if constexpr (HasNegative)
-                    candidate = std::max(candidate, lower);
+                    candidate = _mm256_blendv_epi8(candidate, v_lower, _mm256_cmpgt_epi64(v_lower, candidate));
+                __m256i improve = _mm256_cmpgt_epi64(old, candidate);
+                // 未到達laneの加算結果は捨て、到達済みのlaneだけ更新する。
+                if constexpr (!Dense)
+                    improve = _mm256_andnot_si256(_mm256_cmpeq_epi64(values, v_unreachable), improve);
+                _mm256_storeu_si256(reinterpret_cast<__m256i *>(row + to), _mm256_blendv_epi8(old, candidate, improve));
                 if constexpr (RestorePath)
                 {
-                    if (candidate < row[to])
-                    {
-                        row[to] = candidate;
-                        (*next)[from][to] = (*next)[from][via];
-                    }
+                    const __m128 lo = _mm_castsi128_ps(_mm256_castsi256_si128(improve));
+                    const __m128 hi = _mm_castsi128_ps(_mm256_extracti128_si256(improve, 1));
+                    const __m128i mask = _mm_castps_si128(_mm_shuffle_ps(lo, hi, _MM_SHUFFLE(2, 0, 2, 0)));
+                    const __m128i previous = _mm_loadu_si128(reinterpret_cast<const __m128i *>(path + to));
+                    _mm_storeu_si128(reinterpret_cast<__m128i *>(path + to),
+                                     _mm_blendv_epi8(previous, _mm_set1_epi32(following), mask));
                 }
-                else
-                    row[to] = std::min(row[to], candidate);
+            }
+            for (; to < n; ++to)
+            {
+                if constexpr (!Dense)
+                    if (through[to] == unreachable)
+                        continue;
+                auto candidate = prefix + through[to];
+                if constexpr (HasNegative)
+                    candidate = std::max(candidate, lower);
+                if (candidate < row[to])
+                {
+                    row[to] = candidate;
+                    if constexpr (RestorePath)
+                        path[to] = following;
+                }
+            }
+        }
+    }
+}
+#endif
+template <bool RestorePath, bool HasNegative, bool FiniteRange = false, bool Dense = false, class Distance, bool UseSimd = false>
+inline bool FloydWarshallRun(std::vector<std::vector<Distance>> &distance,
+                                    Distance unreachable, Distance lower,
+                                    std::vector<std::vector<int>> *next)
+{
+    const std::size_t n = distance.size();
+#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+    if constexpr (UseSimd && std::is_same_v<Distance, std::int64_t>)
+        FloydWarshallRelaxAvx2<RestorePath, HasNegative, Dense>(distance, unreachable, lower, next);
+    else
+#endif
+    {
+        for (std::size_t via = 0; via < n; ++via)
+        {
+            const auto *through = distance[via].data();
+            for (std::size_t from = 0; from < n; ++from)
+            {
+                auto *row = distance[from].data();
+                const Distance prefix = row[via];
+                if (prefix == unreachable)
+                    continue;
+                for (std::size_t to = 0; to < n; ++to)
+                {
+                    if constexpr (!Dense) if (through[to] == unreachable)
+                        continue;
+                    Distance candidate = prefix + through[to];
+                    if constexpr (HasNegative)
+                        candidate = std::max(candidate, lower);
+                    if constexpr (RestorePath)
+                    {
+                        if (candidate < row[to])
+                        {
+                            row[to] = candidate;
+                            (*next)[from][to] = (*next)[from][via];
+                        }
+                    }
+                    else
+                        row[to] = std::min(row[to], candidate);
+                }
             }
         }
     }
@@ -140,7 +220,7 @@ inline bool FloydWarshallRun(std::vector<std::vector<Distance>> &distance,
     return !negative.empty();
 }
 
-template <bool RestorePath>
+template <bool RestorePath, bool UseSimd = false>
 inline bool FloydWarshallImpl(std::vector<std::vector<std::int64_t>> &distance,
                                      std::vector<std::vector<int>> *next)
 {
@@ -197,8 +277,8 @@ inline bool FloydWarshallImpl(std::vector<std::vector<std::int64_t>> &distance,
     }
     // 非負で最長単純路もINF未満なら、未接続値と出力の変換が要らない。
     if (!has_negative && maximum <= (INF - 1) / static_cast<std::int64_t>(n)) {
-        if (dense) return FloydWarshallRun<RestorePath, false, true, true>(distance, INF, std::int64_t{0}, next);
-        return FloydWarshallRun<RestorePath, false, true>(distance, INF, std::int64_t{0}, next);
+        if (dense) return FloydWarshallRun<RestorePath, false, true, true, std::int64_t, UseSimd>(distance, INF, std::int64_t{0}, next);
+        return FloydWarshallRun<RestorePath, false, true, false, std::int64_t, UseSimd>(distance, INF, std::int64_t{0}, next);
     }
     for (auto& row : distance)
         for (auto& value : row)
@@ -208,8 +288,8 @@ inline bool FloydWarshallImpl(std::vector<std::vector<std::int64_t>> &distance,
     {
         const auto lower = -static_cast<std::int64_t>(n) * maximum;
         if (has_negative)
-            return FloydWarshallRun<RestorePath, true>(distance, unreachable, lower, next);
-        return FloydWarshallRun<RestorePath, false>(distance, unreachable, lower, next);
+            return FloydWarshallRun<RestorePath, true, false, false, std::int64_t, UseSimd>(distance, unreachable, lower, next);
+        return FloydWarshallRun<RestorePath, false, false, false, std::int64_t, UseSimd>(distance, unreachable, lower, next);
     }
 
     using Wide = FloydWarshallWide;
@@ -227,16 +307,43 @@ inline bool FloydWarshallImpl(std::vector<std::vector<std::int64_t>> &distance,
     return negative;
 }
 
+#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+template <bool RestorePath>
+[[gnu::noinline]] inline bool FloydWarshallVectorized(
+    std::vector<std::vector<std::int64_t>> &distance, std::vector<std::vector<int>> *next)
+{
+    return FloydWarshallImpl<RestorePath, true>(distance, next);
+}
+#endif
+
 } // namespace reinsirk::detail
 
 inline bool FloydWarshall(std::vector<std::vector<std::int64_t>> &distances)
 {
+#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__)) && !(defined(__clang__) && defined(__AVX2__))
+#if defined(__clang__)
+    constexpr std::size_t threshold = 32;
+#else
+    constexpr std::size_t threshold = 8;
+#endif
+    if (distances.size() >= threshold && __builtin_cpu_supports("avx2"))
+        return reinsirk::detail::FloydWarshallVectorized<false>(distances, nullptr);
+#endif
     return reinsirk::detail::FloydWarshallImpl<false>(distances, nullptr);
 }
 
 inline bool FloydWarshall(std::vector<std::vector<std::int64_t>> &distances,
                           std::vector<std::vector<int>> &next)
 {
+#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+#if defined(__clang__)
+    constexpr std::size_t threshold = 16;
+#else
+    constexpr std::size_t threshold = 8;
+#endif
+    if (distances.size() >= threshold && __builtin_cpu_supports("avx2"))
+        return reinsirk::detail::FloydWarshallVectorized<true>(distances, &next);
+#endif
     return reinsirk::detail::FloydWarshallImpl<true>(distances, &next);
 }
 

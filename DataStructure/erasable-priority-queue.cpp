@@ -10,8 +10,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_ERASABLE_PRIORITY_QUEUE_DEFINED
-#define REINSIRK_ERASABLE_PRIORITY_QUEUE_DEFINED
+#ifndef SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED
+#define SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED
 
 // ErasablePriorityQueue<T, Minimize>: trueなら最小値、falseなら最大値を先頭にする。
 // ErasablePriorityQueue(values): vectorを受け取りO(n)で一括構築する。

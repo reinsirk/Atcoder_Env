@@ -1,5 +1,5 @@
-#ifndef REINSIRK_MODINT_BINOMIAL_DEFINED
-#define REINSIRK_MODINT_BINOMIAL_DEFINED
+#ifndef SIRKIT_MODINT_BINOMIAL_DEFINED
+#define SIRKIT_MODINT_BINOMIAL_DEFINED
 // AtCoder modint用。素数ではMintの階乗表、合成数ではBinomialModを使う。
 // dynamic_modintの法を変えたら作り直す。
 template <class Mint>

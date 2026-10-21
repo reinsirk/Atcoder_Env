@@ -14,8 +14,8 @@
 #include <utility>
 #include <vector>
 
-#ifndef REINSIRK_LCA_DEFINED
-#define REINSIRK_LCA_DEFINED
+#ifndef SIRKIT_LCA_DEFINED
+#define SIRKIT_LCA_DEFINED
 
 // 無向森のLCA。隣接リストの対称性は前提。頂点番号は[0, size())。
 // LCA(): 空を作成。LCA(g, root=0): buildと同じ。
@@ -343,8 +343,8 @@ public:
 #include <type_traits>
 #include <vector>
 
-#ifndef REINSIRK_VERIFY_FAST_IO_DEFINED
-#define REINSIRK_VERIFY_FAST_IO_DEFINED
+#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
+#define SIRKIT_VERIFY_FAST_IO_DEFINED
 
 // VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
 // >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。

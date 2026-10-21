@@ -1,5 +1,5 @@
-#ifndef REINSIRK_GEO_SEGMENT_PREDICATES_DEFINED
-#define REINSIRK_GEO_SEGMENT_PREDICATES_DEFINED
+#ifndef SIRKIT_GEO_SEGMENT_PREDICATES_DEFINED
+#define SIRKIT_GEO_SEGMENT_PREDICATES_DEFINED
 namespace geo {
 // intersects(s,t,eps): 閉線分同士が端点・重なりを含め交わるか。O(1)。
 template<class T, class C> bool intersects(const Segment<T, C>& s, const Segment<T, C>& t, Epsilon eps = {}) {

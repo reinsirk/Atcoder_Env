@@ -13,8 +13,8 @@
 #include <type_traits>
 #include <utility>
 
-#ifndef REINSIRK_LINE_CONTAINER_DEFINED
-#define REINSIRK_LINE_CONTAINER_DEFINED
+#ifndef SIRKIT_LINE_CONTAINER_DEFINED
+#define SIRKIT_LINE_CONTAINER_DEFINED
 
 enum Objective { MAXIMIZE = +1, MINIMIZE = -1 };
 
@@ -119,7 +119,7 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
         throw std::overflow_error("LineContainer: value overflow");
       return static_cast<T>(result);
     } else {
-#if defined(__SIZEOF_INT128__) && !defined(REINSIRK_LINE_CONTAINER_FORCE_PORTABLE)
+#if defined(__SIZEOF_INT128__) && !defined(SIRKIT_LINE_CONTAINER_FORCE_PORTABLE)
       T fast;
       if (!__builtin_mul_overflow(k, x, &fast) && !__builtin_add_overflow(fast, m, &fast))
 #if defined(__clang__)
@@ -274,8 +274,8 @@ template <typename T> using MinLineContainer = LineContainer<T, MINIMIZE>;
 template <typename T> using MaxLineContainer = LineContainer<T, MAXIMIZE>;
 #endif
 
-#ifndef REINSIRK_LINE_CONTAINER_2D_DEFINED
-#define REINSIRK_LINE_CONTAINER_2D_DEFINED
+#ifndef SIRKIT_LINE_CONTAINER_2D_DEFINED
+#define SIRKIT_LINE_CONTAINER_2D_DEFINED
 
 // add(x,y): 有限の点を追加、償却O(log h)。確保失敗時は空に戻して例外を伝える。
 // max_ld(a,b)/min_ld(a,b): ax+byの最大/最小をO(log h)で返す。有限係数・非空が前提。

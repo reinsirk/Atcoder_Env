@@ -10,13 +10,13 @@
 #include <stdexcept>
 #include <vector>
 
-#ifndef REINSIRK_INF_DEFINED
-#define REINSIRK_INF_DEFINED
+#ifndef SIRKIT_INF_DEFINED
+#define SIRKIT_INF_DEFINED
 inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 #endif
 
-#ifndef REINSIRK_GRAPH_TYPES_DEFINED
-#define REINSIRK_GRAPH_TYPES_DEFINED
+#ifndef SIRKIT_GRAPH_TYPES_DEFINED
+#define SIRKIT_GRAPH_TYPES_DEFINED
 // 有向辺。出発点は隣接リストの添字。
 struct Edge
 {
@@ -36,8 +36,8 @@ using WGraph = std::vector<std::vector<Edge>>;
 // 更新された頂点だけをFIFOキューで処理するSPFA。標準C++23、重みは[-1e9, 1e9]。
 // 到達可能な負閉路があればtrue。距離は成功時に全上書きし、未到達INF・負影響-INF。
 // 最悪O(VE+V+E)時間・O(V)追加領域。有限距離のINF/-INF衝突はoverflow_error。
-#ifndef REINSIRK_SPFA_DEFINED
-#define REINSIRK_SPFA_DEFINED
+#ifndef SIRKIT_SPFA_DEFINED
+#define SIRKIT_SPFA_DEFINED
 namespace reinsirk::detail {
 template <bool Small, bool Bounded>
 inline bool SPFARun(const WGraph &graph, std::vector<std::int64_t> &distances,
