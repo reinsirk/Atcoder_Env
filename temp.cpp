@@ -1,4 +1,15 @@
 // Library Codes are in: https://github.com/reinsirk/sirkit-cpp-library
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/template.md
+//
+// API一覧
+// [共有型・定数]
+// Graph: 無重み隣接リスト。Edge{to,w}/WGraph: 行先int・重みint64_tの隣接リスト。
+// INF: int64_t{1}<<60。型・定数はライブラリの共通ガードで共有する。
+// [補助関数]
+// chmin(a, b): b < a なら a を更新して true を返す。比較・代入各1回以下。
+// chmax(a, b): a < b なら a を更新して true を返す。比較・代入各1回以下。
+// pow64i(x, n): x^n mod 2^64 を O(log(n + 1)) で返す。0^0 は1。
+// is_mul_overflow(a, b): a*b が符号付き64ビット整数の範囲外なら true。O(1)。
 
 #include <bits/stdc++.h>
 #include <atcoder/all>

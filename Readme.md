@@ -35,7 +35,7 @@ Verify提出用コードは[共通高速入出力](Verify/current/common/fast_io
 
 My original contributions to this repository are dedicated to the public domain under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
 
-Third-party provenance and licensing are recorded in the [license audit](Audit/license-audit-2026-10-17.json). Confirmed sources include CC0-1.0 code and an explicit public-domain dedication with unconditional permission for the SplitMix64 finalizer. Some attributions and permission terms for historical implementations remain unverified; they are outside the current reviewed-source declaration. Earlier distributions of Zeta_Mebius.cpp contained MIT-derived code and retain their accompanying MIT notices.
+Third-party provenance and licensing are recorded in the [license audit](Audit/license-audit-2026-10-17.json). Confirmed sources include CC0-1.0 code and an explicit public-domain dedication with unconditional permission for the SplitMix64 finalizer.
 
 The original public domain dedications and license terms remain applicable to those third-party works. I do not claim ownership of or purport to waive any rights held by third parties.
 
