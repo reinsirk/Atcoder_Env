@@ -6,6 +6,7 @@
 // [CompressedBinaryTrie<T,MAX_LOG,NODES>]
 // C++20以降。重複を許す非負整数の圧縮二分トライ。B = MAX_LOG + 1。
 // Tはbool・const・volatileを除く整数型。MAX_LOGは最高位ビット番号。
+// MAX_LOGの既定値はstd::numeric_limits<T>::digits - 1。第2テンプレート引数で手動指定も可。
 // SKIP_RUNTIME_CHECKSで入力検査を除く。容量・オーバーフロー対策は常に有効。
 // キー・XORマスクは 0 <= x < 2^B。NODESは未圧縮時の根込みノード上限。
 // IDは重複可、-1は匿名。ID一覧は順序不定、次の更新または破棄まで有効。
@@ -44,7 +45,8 @@
 
 #ifndef SIRKIT_COMPRESSED_BINARY_TRIE_DEFINED
 #define SIRKIT_COMPRESSED_BINARY_TRIE_DEFINED
-template <typename T, int MAX_LOG, std::size_t NODES = 16777216>
+template <typename T, int MAX_LOG = std::numeric_limits<T>::digits - 1,
+          std::size_t NODES = 16777216>
 class CompressedBinaryTrie
 {
     static_assert(std::is_integral_v<T> && !std::is_same_v<T, bool>);

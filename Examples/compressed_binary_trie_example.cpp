@@ -5,7 +5,7 @@
 
 int main()
 {
-    CompressedBinaryTrie<std::uint32_t, 29> trie; // 30bitの非負整数。
+    CompressedBinaryTrie<std::uint32_t> trie; // 既定で32bit。30bitに絞るならCompressedBinaryTrie<std::uint32_t, 29>。
     trie.reserve(100); // 異なる値の予定数。
     trie.add(5, 10);
     trie.add(5);
@@ -36,7 +36,7 @@ int main()
     std::cout << trie.max_xor(3).first << '\n';   // 5（3 ^ 6）
     std::cout << trie.count_xor_less(3, 5) << '\n'; // 1
     // 64bitの共通接頭辞を持つ集合。接頭辞の外にある値は存在しない。
-    CompressedBinaryTrie<std::uint64_t, 63> prefix;
+    CompressedBinaryTrie<std::uint64_t> prefix;
     const auto high = std::uint64_t{1} << 63;
     prefix.add(high, 1);
     prefix.add(high + 1, 2);

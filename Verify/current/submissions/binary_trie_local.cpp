@@ -9,6 +9,7 @@
 // [BinaryTrie<T,MAX_LOG,NODES>]
 // C++20以降。重複を許す非負整数の二分トライ。T は bool / const / volatile を除く整数型。
 // キーと XOR マスクは 0 <= x < 2^(MAX_LOG + 1)。MAX_LOG は最高位ビット番号。
+// MAX_LOGの既定値はstd::numeric_limits<T>::digits - 1。第2テンプレート引数で手動指定も可。
 // NODES は根込みのノード上限。以下 B = MAX_LOG + 1。
 // SKIP_RUNTIME_CHECKS を定義すると入力検査を省く。容量保護は常に有効。
 // get_kth は重複込み・1始まり。ID は重複可、-1 は匿名（ID一覧には含めない）。
@@ -52,7 +53,8 @@
 
 #ifndef SIRKIT_BINARY_TRIE_DEFINED
 #define SIRKIT_BINARY_TRIE_DEFINED
-template <typename T, int MAX_LOG, std::size_t NODES = 16777216>
+template <typename T, int MAX_LOG = std::numeric_limits<T>::digits - 1,
+          std::size_t NODES = 16777216>
 class BinaryTrie
 {
     static_assert(std::is_integral_v<T> && !std::is_same_v<T, bool>,

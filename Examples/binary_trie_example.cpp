@@ -3,7 +3,7 @@
 
 int main()
 {
-    BinaryTrie<std::uint32_t, 29> trie; // 30bitの非負整数。
+    BinaryTrie<std::uint32_t> trie; // 既定で32bit。30bitに絞るならBinaryTrie<std::uint32_t, 29>。
     trie.add(5, 10);
     trie.add(5);
     trie.add(2, 20);

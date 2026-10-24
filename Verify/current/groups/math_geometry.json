@@ -1142,7 +1142,7 @@
       "reference_url": null,
       "evidence_url": "https://judge.yosupo.jp/problem/closest_pair",
       "coverage": "最近点対と元入力添字",
-      "limitations": "オンライン未提出。本体/main/共通FastIOを維持。公式29入力の2026-10-22保存版を各8構成でofficial checkerに照合（独立sweep参照出力を答として利用）。24日の公式ケース一覧/制約と一致するが最新generator本文のコミット一致は未確認。GCC/Clang×checked/skip×通常/標準代替で既存3テスト+値返しiterator補足を32実行、ASan/UBSan4実行。全int32・65bitoverflow・sorted/input/MoveOnly/value iterator・入力不変・不正座標・読取/確保失敗を補足。基数整列/leaf閾値/距離枝刈り/SIMD候補は他条件の退行とコード規模を踏まえ不採用。Audit/verify-nearest-ready-2026-10-24.json。",
+      "limitations": "提出413074はAC・89ms。CRLFとSubmissionコメントを除いて現行生成コードと一致。10/11/11bitの3パス版。本体/main/共通FastIOを維持。前回の公式29保存入力×8構成・独立参照・標準代替・例外・ASan/UBSanの対象と本体/main/I/O/テストが同一。追加の未使用バケット走査省略・カウンタ平坦化・prefix集約は安定した改善がなく不採用。Audit/verify-nearest-current-2026-10-24.json。",
       "samples": [
         {
           "input": "4\n5\n-1 -1\n-6 4\n-9 -7\n2 5\n-7 6\n2\n1 2\n3 4\n3\n1 1\n1 1\n1 1\n2\n-1000000000 1000000000\n1000000000 -1000000000\n",
@@ -1151,7 +1151,10 @@
         }
       ],
       "acl_required": false,
-      "sample_checker": "closest_pair"
+      "sample_checker": "closest_pair",
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/413074"
+      ]
     },
     {
       "id": "angle_sort",
@@ -1219,7 +1222,7 @@
       "reference_url": null,
       "evidence_url": "https://atcoder.jp/contests/abc331/tasks/abc331_c",
       "coverage": "RadixSortによる最大20万要素の非負整数整列、重複を含む数列。",
-      "limitations": "8整数型と安定添字順はtests/radix_reference_test.cpp、64bit AVX2と標準経路の閾値/端数/上限違反位置はtests/radix_simd_reference_test.cpp、確保失敗はtests/radix_trie_allocation_test.cppで補足。二巡目のAPI/同main・自動ベクトル化との比較はAudit/performance-radix-sort-second-round-four-hours-2026-10-22.json参照。",
+      "limitations": "オンライン未提出。int64_t版とuint32_t版は同じmain手順/FastIOで整列を使う。32bitの4表集計だけ展開し、64bit経路は機械語同一を確認。8整数型全域・安定添字・SIMD境界/最大値・コピー/ムーブ・確保失敗は独立参照とradix_exception_testで補足。Audit/verify-radix-ready-2026-10-24.json参照。",
       "samples": [
         {
           "input": "5\n1 4 1 4 2\n",
@@ -1260,6 +1263,41 @@
           "status": "historical（旧提出先・旧ドライバー。移行後の検証とは別）"
         }
       ]
+    },
+    {
+      "id": "radix_sort_uint32",
+      "libraries": [
+        "Algorithm/Radix_sort.cpp"
+      ],
+      "driver": "Verify/current/drivers/radix_sort_uint32_greater_sum_main.cpp",
+      "problem_url": "https://atcoder.jp/contests/abc331/tasks/abc331_c",
+      "title": "C - Sum of Numbers Greater Than Me (uint32_t)",
+      "selection_reason": "同じAtCoder問題を32bit APIでも実行。値域1..10^6はuint32_tに収まり、mainの計算手順は64bit版と同一。",
+      "reference_url": null,
+      "evidence_url": "https://atcoder.jp/contests/abc331/tasks/abc331_c",
+      "coverage": "RadixSort<uint32_t>による最大20万要素の整列、重複と端の値。和はint64_tで保持。",
+      "limitations": "オンライン未提出。int64_t版とuint32_t版は同じmain手順/FastIOで整列を使う。32bitの4表集計だけ展開し、64bit経路は機械語同一を確認。8整数型全域・安定添字・SIMD境界/最大値・コピー/ムーブ・確保失敗は独立参照とradix_exception_testで補足。Audit/verify-radix-ready-2026-10-24.json参照。",
+      "samples": [
+        {
+          "input": "5\n1 4 1 4 2\n",
+          "output": "10 0 10 0 8\n",
+          "source": "https://atcoder.jp/contests/abc331/tasks/abc331_c",
+          "origin": "公式問題ページの入力例・出力例"
+        },
+        {
+          "input": "10\n31 42 59 26 53 58 97 93 23 54\n",
+          "output": "456 414 190 487 361 249 0 97 513 307\n",
+          "source": "https://atcoder.jp/contests/abc331/tasks/abc331_c",
+          "origin": "公式問題ページの入力例・出力例"
+        },
+        {
+          "input": "50\n1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n",
+          "output": "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n",
+          "source": "https://atcoder.jp/contests/abc331/tasks/abc331_c",
+          "origin": "公式問題ページの入力例・出力例"
+        }
+      ],
+      "acl_required": false
     },
     {
       "id": "project_selection",
@@ -1540,7 +1578,7 @@
       "reference_url": null,
       "evidence_url": null,
       "coverage": "8整数型全域をstd::stable_sortと照合。小配列閾値の前後、昇降順、作業領域、安定添字順。",
-      "limitations": "8整数型と安定添字順はtests/radix_reference_test.cpp、64bit AVX2と標準経路の閾値/端数/上限違反位置はtests/radix_simd_reference_test.cpp、確保失敗はtests/radix_trie_allocation_test.cppで補足。二巡目のAPI/同main・自動ベクトル化との比較はAudit/performance-radix-sort-second-round-four-hours-2026-10-22.json参照。",
+      "limitations": "オンライン未提出。int64_t版とuint32_t版は同じmain手順/FastIOで整列を使う。32bitの4表集計だけ展開し、64bit経路は機械語同一を確認。8整数型全域・安定添字・SIMD境界/最大値・コピー/ムーブ・確保失敗は独立参照とradix_exception_testで補足。Audit/verify-radix-ready-2026-10-24.json参照。",
       "samples": [
         {
           "input": "",

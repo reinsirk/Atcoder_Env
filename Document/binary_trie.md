@@ -6,6 +6,17 @@
 
 `T`は`bool`・`const`・`volatile`を除く整数型です。`MAX_LOG`は最高位ビット番号で、B=`MAX_LOG+1`とします。キーとXORマスクは`0 <= x < 2^B`の範囲とし、符号付きTでは非負の範囲に収めます。例えば`std::uint32_t,29`は30bit、`std::uint64_t,63`は64bitすべてを使えます。
 
+`MAX_LOG`は省略でき、既定値は`std::numeric_limits<T>::digits - 1`です。両クラスとも、符号なし型では全ビット、符号付き型では符号ビットを除く非負の範囲を扱います。第2テンプレート引数による手動指定もできます。
+
+```cpp
+BinaryTrie<std::uint32_t> full;                  // 32bit（MAX_LOG=31）。
+BinaryTrie<std::uint32_t, 29> limited;           // 手動で30bitに限定。
+CompressedBinaryTrie<std::uint64_t> compressed; // 64bit（MAX_LOG=63）。
+CompressedBinaryTrie<std::uint64_t, 29> small;   // 手動で30bitに限定。
+```
+
+通常版はビットごとに木をたどるため、値の範囲が分かっている場合は`MAX_LOG`を小さく指定すると、探索する段数と必要なノード数を抑えられます。
+
 `NODES`は根を含む未圧縮の二分トライのノード上限です。圧縮版も同じ制限を使い、圧縮した実ノードの個数だけで判定するものではありません。どちらもコピー・ムーブはできません。ノードとID配列はライブラリが所有し、再確保や破棄に利用者の処理は不要です。
 
 ## 操作

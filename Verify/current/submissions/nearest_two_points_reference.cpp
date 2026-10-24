@@ -46,11 +46,15 @@ struct NearestTwoPointsResult {
 #ifndef SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED
 #define SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED
 namespace reinsirk::detail {
+template<class Index>
 class NearestTwoPointsSolver {
     struct Node {
         std::int32_t x;
         std::int32_t y;
-        std::size_t index;
+        Index index;
+        // 作業領域は各整列パスで全要素を代入してから読む。
+        Node() noexcept {}
+        Node(std::int32_t a, std::int32_t b, Index i) noexcept : x(a), y(b), index(i) {}
     };
 #if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \
     !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
@@ -120,29 +124,37 @@ class NearestTwoPointsSolver {
             best_ = d;
             best_first_ = std::min(a.index, b.index);
             best_second_ = std::max(a.index, b.index);
+#if defined(__GNUC__) && !defined(__clang__)
+            // GCCでは計算済みの65bit距離を使う。Clangは座標比較を維持する。
+            zero_ = !(square(0) < d);
+#else
             zero_ = a.x == b.x && a.y == b.y;
+#endif
         }
     }
-    // 大入力では符号bitを反転したxを基数整列する。
+    // 符号bitを反転したxを10/11/11bitの3パスで基数整列する。
     void sort_by_x() {
-        std::array<std::array<std::size_t, 256>, 4> counts{};
+        // Indexの範囲内の点数を扱うので、合計と最終offsetも同じ型に収まる。
+        std::array<std::array<Index, 2048>, 3> counts{};
         for (const auto& node : nodes_) {
             const auto key = static_cast<std::uint32_t>(node.x) ^ UINT32_C(0x80000000);
-            for (unsigned pass = 0; pass < 4; ++pass) ++counts[pass][(key >> (pass * 8)) & 255U];
+            ++counts[0][key & 1023U];
+            ++counts[1][(key >> 10) & 2047U];
+            ++counts[2][key >> 21];
         }
         buffer_.resize(nodes_.size());
         Node* input = nodes_.data();
         Node* output = buffer_.data();
-        for (unsigned pass = 0; pass < 4; ++pass) {
+        for (unsigned pass = 0; pass < 3; ++pass) {
             auto& offsets = counts[pass];
             std::size_t active = 0;
             for (const auto count : offsets) active += count != 0;
             if (active <= 1) continue;
-            std::size_t sum = 0;
+            Index sum = 0;
             for (auto& count : offsets) { const auto n = count; count = sum; sum += n; }
             for (std::size_t i = 0; i < nodes_.size(); ++i) {
                 const auto key = static_cast<std::uint32_t>(input[i].x) ^ UINT32_C(0x80000000);
-                output[offsets[(key >> (pass * 8)) & 255U]++] = input[i];
+                output[offsets[(key >> (pass == 0 ? 0 : pass == 1 ? 10 : 21)) & (pass == 0 ? 1023U : 2047U)]++] = input[i];
             }
             std::swap(input, output);
         }
@@ -162,7 +174,9 @@ class NearestTwoPointsSolver {
         solve(output, input, left, middle);
         solve(output, input, middle, right);
         if (zero_) return;
-        std::merge(input + left, input + middle, input + middle, input + right, output + left, by_y);
+        // 左半分のxは右半分以下。同じyでは左を先にすればよい。
+        std::merge(input + left, input + middle, input + middle, input + right,
+                   output + left, [](const Node& a, const Node& b) { return a.y < b.y; });
         auto used = left;
         for (auto i = left; i < right; ++i) {
             const Node current = output[i];
@@ -214,7 +228,7 @@ public:
 #endif
             solver.nodes_.push_back({static_cast<std::int32_t>(point.first),
                                      static_cast<std::int32_t>(point.second),
-                                     solver.nodes_.size()});
+                                     static_cast<Index>(solver.nodes_.size())});
         }
         if (solver.nodes_.size() < 2) return std::nullopt;
         if constexpr (!Sorted) {
@@ -249,7 +263,13 @@ public:
 #define SIRKIT_NEAREST_TWO_POINTS_DEFINED
 template<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>
 std::optional<NearestTwoPointsResult> nearest_two_points(Iterator first, Sentinel last) {
-    return reinsirk::detail::NearestTwoPointsSolver::run(std::move(first), std::move(last));
+    // 小入力はsize_t経路を保ち、大入力だけ点ごとの添字を圧縮する。
+    if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {
+        const auto n = last - first;
+        if (n >= 2048 && std::cmp_less_equal(n, std::numeric_limits<std::uint32_t>::max()))
+            return reinsirk::detail::NearestTwoPointsSolver<std::uint32_t>::run(std::move(first), std::move(last));
+    }
+    return reinsirk::detail::NearestTwoPointsSolver<std::size_t>::run(std::move(first), std::move(last));
 }
 
 template<std::input_iterator Iterator>
@@ -279,7 +299,13 @@ std::uint64_t closest_pair(Iterator first, int n) {
 #define SIRKIT_NEAREST_TWO_POINTS_SORTED_DEFINED
 template<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>
 std::optional<NearestTwoPointsResult> nearest_two_points_sorted(Iterator first, Sentinel last) {
-    return reinsirk::detail::NearestTwoPointsSolver::run<true>(std::move(first), std::move(last));
+    // 小入力はsize_t経路を保ち、大入力だけ点ごとの添字を圧縮する。
+    if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {
+        const auto n = last - first;
+        if (n >= 2048 && std::cmp_less_equal(n, std::numeric_limits<std::uint32_t>::max()))
+            return reinsirk::detail::NearestTwoPointsSolver<std::uint32_t>::run<true>(std::move(first), std::move(last));
+    }
+    return reinsirk::detail::NearestTwoPointsSolver<std::size_t>::run<true>(std::move(first), std::move(last));
 }
 template<std::input_iterator Iterator>
 std::optional<NearestTwoPointsResult> nearest_two_points_sorted(Iterator first, std::ptrdiff_t count) {

@@ -1,0 +1,956 @@
+{
+  "date": "2026-10-24",
+  "scope": "両BinaryTrieのMAX_LOGに型依存の既定値を追加。明示指定とNODES指定を維持。",
+  "default": "std::numeric_limits<T>::digits - 1",
+  "source_sha256": {
+    "DataStructure/Binary_Trie.cpp": "4677afa7d61f5d7b87201e77f68367489c28aa65eaaac84dc4d6bfe1d7ac6229",
+    "DataStructure/Compressed_Binary_Trie.cpp": "06defaf3fdf09780dd283e3077477142b0373b82fff7e3823c5c37a03a1c5f0d",
+    "Examples/binary_trie_example.cpp": "a1970d67ac1b70c06868913057b8ac6f0cf8a284738a3e84b374a165a804b4fe",
+    "Examples/compressed_binary_trie_example.cpp": "cf21521ab5e56b9d38701fcca228fc960c88220c9caaf6b466c50e9c28555446",
+    "Document/binary_trie.md": "03e1bd9fa45e037fbaf9a46691da13267c7c3139314940df408fd74354022824"
+  },
+  "validation": {
+    "standard": "C++23",
+    "compilers": [
+      "GCC",
+      "Clang"
+    ],
+    "runtime_checks": [
+      "enabled",
+      "disabled"
+    ],
+    "boundary_cases": [
+      "両クラスの符号付き・符号なし32/64bitで、既定型と明示型の一致を確認",
+      "0・最高位ビット・最大値の追加、順位、XOR、削除",
+      "手動MAX_LOGとNODESの指定、検査有効時の範囲外拒否"
+    ],
+    "builds_runs": [
+      {
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "name": "boundary",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "/tmp/sirkit_binary_trie_defaults_20261024/boundary.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/g++_False_boundary"
+        ],
+        "source_sha256": "aab7de0611dabee641193ed09bdf80c8fc228a0b08be1cb677c42b6f4f92635a",
+        "status": "PASS",
+        "stdout": ""
+      },
+      {
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "name": "binary_trie_example",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "/home/reinsirk/Atcoder_Env/Examples/binary_trie_example.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/g++_False_binary_trie_example"
+        ],
+        "source_sha256": "a1970d67ac1b70c06868913057b8ac6f0cf8a284738a3e84b374a165a804b4fe",
+        "status": "PASS",
+        "stdout": "1\n6\n6\n2\n10\n1\n1\n0\n1\n0\n1\n2\n20\n5\n1\n1\n0\n40\n"
+      },
+      {
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "name": "binary_trie_reference",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "-DTRIE_CLASS=BinaryTrie",
+          "-DTRIE_SOURCE=\"../../../DataStructure/Binary_Trie.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/binary_trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/g++_False_binary_trie_reference"
+        ],
+        "source_sha256": "01b1d8771091242e8f2a97636a54b319a3a001178e5189b3a1f450fb4534edbb",
+        "status": "PASS",
+        "stdout": "{\"checks\":1319425,\"operations\":42300,\"capacity_failures\":1595}\n"
+      },
+      {
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "name": "compressed_binary_trie_example",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "/home/reinsirk/Atcoder_Env/Examples/compressed_binary_trie_example.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/g++_False_compressed_binary_trie_example"
+        ],
+        "source_sha256": "cf21521ab5e56b9d38701fcca228fc960c88220c9caaf6b466c50e9c28555446",
+        "status": "PASS",
+        "stdout": "1\n0\n1\n6\n6\n2\n10\n1\n1\n0\n1\n0\n1\n2\n20\n5\n1\n1 0\n"
+      },
+      {
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "name": "compressed_binary_trie_reference",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/binary_trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/g++_False_compressed_binary_trie_reference"
+        ],
+        "source_sha256": "01b1d8771091242e8f2a97636a54b319a3a001178e5189b3a1f450fb4534edbb",
+        "status": "PASS",
+        "stdout": "{\"checks\":1319425,\"operations\":42300,\"capacity_failures\":1595}\n"
+      },
+      {
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "name": "boundary",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_binary_trie_defaults_20261024/boundary.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/g++_True_boundary"
+        ],
+        "source_sha256": "aab7de0611dabee641193ed09bdf80c8fc228a0b08be1cb677c42b6f4f92635a",
+        "status": "PASS",
+        "stdout": ""
+      },
+      {
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "name": "binary_trie_example",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Examples/binary_trie_example.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/g++_True_binary_trie_example"
+        ],
+        "source_sha256": "a1970d67ac1b70c06868913057b8ac6f0cf8a284738a3e84b374a165a804b4fe",
+        "status": "PASS",
+        "stdout": "1\n6\n6\n2\n10\n1\n1\n0\n1\n0\n1\n2\n20\n5\n1\n1\n0\n40\n"
+      },
+      {
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "name": "binary_trie_reference",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DTRIE_CLASS=BinaryTrie",
+          "-DTRIE_SOURCE=\"../../../DataStructure/Binary_Trie.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/binary_trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/g++_True_binary_trie_reference"
+        ],
+        "source_sha256": "01b1d8771091242e8f2a97636a54b319a3a001178e5189b3a1f450fb4534edbb",
+        "status": "PASS",
+        "stdout": "{\"checks\":1319182,\"operations\":42300,\"capacity_failures\":1595}\n"
+      },
+      {
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "name": "compressed_binary_trie_example",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Examples/compressed_binary_trie_example.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/g++_True_compressed_binary_trie_example"
+        ],
+        "source_sha256": "cf21521ab5e56b9d38701fcca228fc960c88220c9caaf6b466c50e9c28555446",
+        "status": "PASS",
+        "stdout": "1\n0\n1\n6\n6\n2\n10\n1\n1\n0\n1\n0\n1\n2\n20\n5\n1\n1 0\n"
+      },
+      {
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "name": "compressed_binary_trie_reference",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/binary_trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/g++_True_compressed_binary_trie_reference"
+        ],
+        "source_sha256": "01b1d8771091242e8f2a97636a54b319a3a001178e5189b3a1f450fb4534edbb",
+        "status": "PASS",
+        "stdout": "{\"checks\":1319182,\"operations\":42300,\"capacity_failures\":1595}\n"
+      },
+      {
+        "compiler": "clang++",
+        "skip_runtime_checks": false,
+        "name": "boundary",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "/tmp/sirkit_binary_trie_defaults_20261024/boundary.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/clang++_False_boundary"
+        ],
+        "source_sha256": "aab7de0611dabee641193ed09bdf80c8fc228a0b08be1cb677c42b6f4f92635a",
+        "status": "PASS",
+        "stdout": ""
+      },
+      {
+        "compiler": "clang++",
+        "skip_runtime_checks": false,
+        "name": "binary_trie_example",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "/home/reinsirk/Atcoder_Env/Examples/binary_trie_example.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/clang++_False_binary_trie_example"
+        ],
+        "source_sha256": "a1970d67ac1b70c06868913057b8ac6f0cf8a284738a3e84b374a165a804b4fe",
+        "status": "PASS",
+        "stdout": "1\n6\n6\n2\n10\n1\n1\n0\n1\n0\n1\n2\n20\n5\n1\n1\n0\n40\n"
+      },
+      {
+        "compiler": "clang++",
+        "skip_runtime_checks": false,
+        "name": "binary_trie_reference",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-DTRIE_CLASS=BinaryTrie",
+          "-DTRIE_SOURCE=\"../../../DataStructure/Binary_Trie.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/binary_trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/clang++_False_binary_trie_reference"
+        ],
+        "source_sha256": "01b1d8771091242e8f2a97636a54b319a3a001178e5189b3a1f450fb4534edbb",
+        "status": "PASS",
+        "stdout": "{\"checks\":1319425,\"operations\":42300,\"capacity_failures\":1595}\n"
+      },
+      {
+        "compiler": "clang++",
+        "skip_runtime_checks": false,
+        "name": "compressed_binary_trie_example",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "/home/reinsirk/Atcoder_Env/Examples/compressed_binary_trie_example.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/clang++_False_compressed_binary_trie_example"
+        ],
+        "source_sha256": "cf21521ab5e56b9d38701fcca228fc960c88220c9caaf6b466c50e9c28555446",
+        "status": "PASS",
+        "stdout": "1\n0\n1\n6\n6\n2\n10\n1\n1\n0\n1\n0\n1\n2\n20\n5\n1\n1 0\n"
+      },
+      {
+        "compiler": "clang++",
+        "skip_runtime_checks": false,
+        "name": "compressed_binary_trie_reference",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/binary_trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/clang++_False_compressed_binary_trie_reference"
+        ],
+        "source_sha256": "01b1d8771091242e8f2a97636a54b319a3a001178e5189b3a1f450fb4534edbb",
+        "status": "PASS",
+        "stdout": "{\"checks\":1319425,\"operations\":42300,\"capacity_failures\":1595}\n"
+      },
+      {
+        "compiler": "clang++",
+        "skip_runtime_checks": true,
+        "name": "boundary",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_binary_trie_defaults_20261024/boundary.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/clang++_True_boundary"
+        ],
+        "source_sha256": "aab7de0611dabee641193ed09bdf80c8fc228a0b08be1cb677c42b6f4f92635a",
+        "status": "PASS",
+        "stdout": ""
+      },
+      {
+        "compiler": "clang++",
+        "skip_runtime_checks": true,
+        "name": "binary_trie_example",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Examples/binary_trie_example.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/clang++_True_binary_trie_example"
+        ],
+        "source_sha256": "a1970d67ac1b70c06868913057b8ac6f0cf8a284738a3e84b374a165a804b4fe",
+        "status": "PASS",
+        "stdout": "1\n6\n6\n2\n10\n1\n1\n0\n1\n0\n1\n2\n20\n5\n1\n1\n0\n40\n"
+      },
+      {
+        "compiler": "clang++",
+        "skip_runtime_checks": true,
+        "name": "binary_trie_reference",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DTRIE_CLASS=BinaryTrie",
+          "-DTRIE_SOURCE=\"../../../DataStructure/Binary_Trie.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/binary_trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/clang++_True_binary_trie_reference"
+        ],
+        "source_sha256": "01b1d8771091242e8f2a97636a54b319a3a001178e5189b3a1f450fb4534edbb",
+        "status": "PASS",
+        "stdout": "{\"checks\":1319182,\"operations\":42300,\"capacity_failures\":1595}\n"
+      },
+      {
+        "compiler": "clang++",
+        "skip_runtime_checks": true,
+        "name": "compressed_binary_trie_example",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Examples/compressed_binary_trie_example.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/clang++_True_compressed_binary_trie_example"
+        ],
+        "source_sha256": "cf21521ab5e56b9d38701fcca228fc960c88220c9caaf6b466c50e9c28555446",
+        "status": "PASS",
+        "stdout": "1\n0\n1\n6\n6\n2\n10\n1\n1\n0\n1\n0\n1\n2\n20\n5\n1\n1 0\n"
+      },
+      {
+        "compiler": "clang++",
+        "skip_runtime_checks": true,
+        "name": "compressed_binary_trie_reference",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-pedantic",
+          "-I",
+          "/home/reinsirk/Atcoder_Env",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/binary_trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_binary_trie_defaults_20261024/clang++_True_compressed_binary_trie_reference"
+        ],
+        "source_sha256": "01b1d8771091242e8f2a97636a54b319a3a001178e5189b3a1f450fb4534edbb",
+        "status": "PASS",
+        "stdout": "{\"checks\":1319182,\"operations\":42300,\"capacity_failures\":1595}\n"
+      }
+    ],
+    "verify": [
+      {
+        "id": "binary_trie",
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "standard_fallback": false,
+        "submission_sha256": "b2610563853fcefbaeefa218445c6307bdeee3fe5e737d47ba949bcab890c2e0",
+        "tested_source_sha256": "646862d885bc96c2c357048ea8ad281462c3e3a0081db82dbd524e4f22870331",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "/tmp/atcoder_verify_k1fyfnto/binary_trie_checked.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "2\n1\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "binary_trie",
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "standard_fallback": false,
+        "submission_sha256": "b2610563853fcefbaeefa218445c6307bdeee3fe5e737d47ba949bcab890c2e0",
+        "tested_source_sha256": "b2610563853fcefbaeefa218445c6307bdeee3fe5e737d47ba949bcab890c2e0",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/binary_trie.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "2\n1\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "compressed_binary_trie",
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "standard_fallback": false,
+        "submission_sha256": "91c58ff3fbfef46a7225fa08a7aef9445bfde1d8cedfda403593014c453bfe74",
+        "tested_source_sha256": "6b219dea8ad9517a9b1489c5d1e507043a454951cf63de54ad171a8460e83b44",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "/tmp/atcoder_verify_k1fyfnto/compressed_binary_trie_checked.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "2\n1\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "compressed_binary_trie",
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "standard_fallback": false,
+        "submission_sha256": "91c58ff3fbfef46a7225fa08a7aef9445bfde1d8cedfda403593014c453bfe74",
+        "tested_source_sha256": "91c58ff3fbfef46a7225fa08a7aef9445bfde1d8cedfda403593014c453bfe74",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/compressed_binary_trie.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "2\n1\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "binary_trie_local",
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "standard_fallback": false,
+        "submission_sha256": "3cb5c6e8ad36133ac5a6d9bea1543265efbf9ea4785d974edb775dd0632e8a65",
+        "tested_source_sha256": "3cb5c6e8ad36133ac5a6d9bea1543265efbf9ea4785d974edb775dd0632e8a65",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/binary_trie_local.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "/home/reinsirk/Atcoder_Env/Verify/current/submissions/binary_trie_local.cpp: In function 'int main()':\n/home/reinsirk/Atcoder_Env/Verify/current/submissions/binary_trie_local.cpp:730:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]\n  730 |             if(found)model.erase(it);break;\n      |             ^~\n/home/reinsirk/Atcoder_Env/Verify/current/submissions/binary_trie_local.cpp:730:38: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'\n  730 |             if(found)model.erase(it);break;\n      |                                      ^~~~~\n/home/reinsirk/Atcoder_Env/Verify/current/submissions/binary_trie_local.cpp:734:13: warning: this 'for' clause does not guard... [-Wmisleading-indentation]\n  734 |             for(auto y:model)next.insert(y^x);model.swap(next);break;\n      |             ^~~\n/home/reinsirk/Atcoder_Env/Verify/current/submissions/binary_trie_local.cpp:734:47: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'\n  734 |             for(auto y:model)next.insert(y^x);model.swap(next);break;\n      |                                               ^~~~~\n/home/reinsirk/Atcoder_Env/Verify/current/submissions/binary_trie_local.cpp:739:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]\n  739 |             if(absent)model.insert(x);break;\n      |             ^~\n/home/reinsirk/Atcoder_Env/Verify/current/submissions/binary_trie_local.cpp:739:39: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'\n  739 |             if(absent)model.insert(x);break;\n      |                                       ^~~~~\n",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "OK\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "binary_trie_local",
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "standard_fallback": false,
+        "submission_sha256": "3cb5c6e8ad36133ac5a6d9bea1543265efbf9ea4785d974edb775dd0632e8a65",
+        "tested_source_sha256": "686dfeff766aae594202fa0bf3d0ef24606179efb6bd6ac8756a6697c66bdc22",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "/tmp/atcoder_verify_k1fyfnto/binary_trie_local_skip.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "/tmp/atcoder_verify_k1fyfnto/binary_trie_local_skip.cpp: In function 'int main()':\n/tmp/atcoder_verify_k1fyfnto/binary_trie_local_skip.cpp:731:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]\n  731 |             if(found)model.erase(it);break;\n      |             ^~\n/tmp/atcoder_verify_k1fyfnto/binary_trie_local_skip.cpp:731:38: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'\n  731 |             if(found)model.erase(it);break;\n      |                                      ^~~~~\n/tmp/atcoder_verify_k1fyfnto/binary_trie_local_skip.cpp:735:13: warning: this 'for' clause does not guard... [-Wmisleading-indentation]\n  735 |             for(auto y:model)next.insert(y^x);model.swap(next);break;\n      |             ^~~\n/tmp/atcoder_verify_k1fyfnto/binary_trie_local_skip.cpp:735:47: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'\n  735 |             for(auto y:model)next.insert(y^x);model.swap(next);break;\n      |                                               ^~~~~\n/tmp/atcoder_verify_k1fyfnto/binary_trie_local_skip.cpp:740:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]\n  740 |             if(absent)model.insert(x);break;\n      |             ^~\n/tmp/atcoder_verify_k1fyfnto/binary_trie_local_skip.cpp:740:39: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'\n  740 |             if(absent)model.insert(x);break;\n      |                                       ^~~~~\n",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "OK\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "compressed_binary_trie_local",
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "standard_fallback": false,
+        "submission_sha256": "13e6d52809092f0a933c52eb325577cec9711956cffd41b70217bf54c51bf01b",
+        "tested_source_sha256": "13e6d52809092f0a933c52eb325577cec9711956cffd41b70217bf54c51bf01b",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/compressed_binary_trie_local.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "/home/reinsirk/Atcoder_Env/Verify/current/submissions/compressed_binary_trie_local.cpp: In function 'int main()':\n/home/reinsirk/Atcoder_Env/Verify/current/submissions/compressed_binary_trie_local.cpp:383:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]\n  383 |             if(found)model.erase(it);break;\n      |             ^~\n/home/reinsirk/Atcoder_Env/Verify/current/submissions/compressed_binary_trie_local.cpp:383:38: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'\n  383 |             if(found)model.erase(it);break;\n      |                                      ^~~~~\n/home/reinsirk/Atcoder_Env/Verify/current/submissions/compressed_binary_trie_local.cpp:387:13: warning: this 'for' clause does not guard... [-Wmisleading-indentation]\n  387 |             for(auto y:model)next.insert(y^x);model.swap(next);break;\n      |             ^~~\n/home/reinsirk/Atcoder_Env/Verify/current/submissions/compressed_binary_trie_local.cpp:387:47: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'\n  387 |             for(auto y:model)next.insert(y^x);model.swap(next);break;\n      |                                               ^~~~~\n",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "OK\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "compressed_binary_trie_local",
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "standard_fallback": false,
+        "submission_sha256": "13e6d52809092f0a933c52eb325577cec9711956cffd41b70217bf54c51bf01b",
+        "tested_source_sha256": "82990c26c4a22138691fd35c5d84f7711f136f29b7c71498b86a22b66df44226",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "/tmp/atcoder_verify_k1fyfnto/compressed_binary_trie_local_skip.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "/tmp/atcoder_verify_k1fyfnto/compressed_binary_trie_local_skip.cpp: In function 'int main()':\n/tmp/atcoder_verify_k1fyfnto/compressed_binary_trie_local_skip.cpp:384:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]\n  384 |             if(found)model.erase(it);break;\n      |             ^~\n/tmp/atcoder_verify_k1fyfnto/compressed_binary_trie_local_skip.cpp:384:38: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'\n  384 |             if(found)model.erase(it);break;\n      |                                      ^~~~~\n/tmp/atcoder_verify_k1fyfnto/compressed_binary_trie_local_skip.cpp:388:13: warning: this 'for' clause does not guard... [-Wmisleading-indentation]\n  388 |             for(auto y:model)next.insert(y^x);model.swap(next);break;\n      |             ^~~\n/tmp/atcoder_verify_k1fyfnto/compressed_binary_trie_local_skip.cpp:388:47: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'\n  388 |             for(auto y:model)next.insert(y^x);model.swap(next);break;\n      |                                               ^~~~~\n",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "OK\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "binary_trie",
+        "compiler": "clang++",
+        "skip_runtime_checks": false,
+        "standard_fallback": true,
+        "submission_sha256": "b2610563853fcefbaeefa218445c6307bdeee3fe5e737d47ba949bcab890c2e0",
+        "tested_source_sha256": "646862d885bc96c2c357048ea8ad281462c3e3a0081db82dbd524e4f22870331",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/tmp/atcoder_verify_rdh21o1e/binary_trie_checked.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "2\n1\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "binary_trie",
+        "compiler": "clang++",
+        "skip_runtime_checks": true,
+        "standard_fallback": true,
+        "submission_sha256": "b2610563853fcefbaeefa218445c6307bdeee3fe5e737d47ba949bcab890c2e0",
+        "tested_source_sha256": "b2610563853fcefbaeefa218445c6307bdeee3fe5e737d47ba949bcab890c2e0",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/binary_trie.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "2\n1\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "compressed_binary_trie",
+        "compiler": "clang++",
+        "skip_runtime_checks": false,
+        "standard_fallback": true,
+        "submission_sha256": "91c58ff3fbfef46a7225fa08a7aef9445bfde1d8cedfda403593014c453bfe74",
+        "tested_source_sha256": "6b219dea8ad9517a9b1489c5d1e507043a454951cf63de54ad171a8460e83b44",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/tmp/atcoder_verify_rdh21o1e/compressed_binary_trie_checked.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "2\n1\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "compressed_binary_trie",
+        "compiler": "clang++",
+        "skip_runtime_checks": true,
+        "standard_fallback": true,
+        "submission_sha256": "91c58ff3fbfef46a7225fa08a7aef9445bfde1d8cedfda403593014c453bfe74",
+        "tested_source_sha256": "91c58ff3fbfef46a7225fa08a7aef9445bfde1d8cedfda403593014c453bfe74",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/compressed_binary_trie.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "2\n1\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "binary_trie_local",
+        "compiler": "clang++",
+        "skip_runtime_checks": false,
+        "standard_fallback": true,
+        "submission_sha256": "3cb5c6e8ad36133ac5a6d9bea1543265efbf9ea4785d974edb775dd0632e8a65",
+        "tested_source_sha256": "3cb5c6e8ad36133ac5a6d9bea1543265efbf9ea4785d974edb775dd0632e8a65",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/binary_trie_local.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "OK\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "binary_trie_local",
+        "compiler": "clang++",
+        "skip_runtime_checks": true,
+        "standard_fallback": true,
+        "submission_sha256": "3cb5c6e8ad36133ac5a6d9bea1543265efbf9ea4785d974edb775dd0632e8a65",
+        "tested_source_sha256": "686dfeff766aae594202fa0bf3d0ef24606179efb6bd6ac8756a6697c66bdc22",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/tmp/atcoder_verify_rdh21o1e/binary_trie_local_skip.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "OK\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "compressed_binary_trie_local",
+        "compiler": "clang++",
+        "skip_runtime_checks": false,
+        "standard_fallback": true,
+        "submission_sha256": "13e6d52809092f0a933c52eb325577cec9711956cffd41b70217bf54c51bf01b",
+        "tested_source_sha256": "13e6d52809092f0a933c52eb325577cec9711956cffd41b70217bf54c51bf01b",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/compressed_binary_trie_local.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "OK\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "compressed_binary_trie_local",
+        "compiler": "clang++",
+        "skip_runtime_checks": true,
+        "standard_fallback": true,
+        "submission_sha256": "13e6d52809092f0a933c52eb325577cec9711956cffd41b70217bf54c51bf01b",
+        "tested_source_sha256": "82990c26c4a22138691fd35c5d84f7711f136f29b7c71498b86a22b66df44226",
+        "command": [
+          "clang++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/tmp/atcoder_verify_rdh21o1e/compressed_binary_trie_local_skip.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "OK\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      }
+    ]
+  },
+  "notes": [
+    "本体の操作実装は変更していない。",
+    "オンライン提出は行わず、過去の提出記録は更新していない。"
+  ]
+}

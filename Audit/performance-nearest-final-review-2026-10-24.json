@@ -1,0 +1,3214 @@
+{
+  "date": "2026-10-24",
+  "status": "PASS",
+  "body_changed": false,
+  "main_changed": false,
+  "io_changed": false,
+  "baseline_submission": "https://judge.yosupo.jp/submission/413074",
+  "decision": "追加3案は不採用。現行版を維持。今回比較した範囲では大規模に安定した追加短縮なし。アルゴリズム上の絶対的限界を主張しない。",
+  "conditions": {
+    "cpu": "Intel i9-14900K, CPU14 fixed, per-CPU and shared benchmark locks; compile not CPU-pinned in this small screening",
+    "compiler": "/usr/bin/g++15.2.0 -O2 -march=native / -march=znver2、Clang21.1.8 -O2標準target。全てC++23、SKIP_RUNTIME_CHECKS。znver2も実行はIntel。",
+    "measurement": "19条件×3構成×4候補×7反復。順序回転し中央値。入力生成とpresortは計測外、コピー/確保/整列/solve/解放/checksumは計測内。固定同一bench.cppで入出力効果なし。"
+  },
+  "screening": {
+    "builds": [
+      [
+        "/usr/bin/g++",
+        "-march=znver2",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_nearest_radixfinish_20261024/baseline.hpp\"",
+        "/tmp/sirkit_nearest_radixfinish_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_nearest_radixfinish_20261024/znver2_baseline"
+      ],
+      [
+        "/usr/bin/g++",
+        "-march=znver2",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_nearest_radixfinish_20261024/used_buckets.hpp\"",
+        "/tmp/sirkit_nearest_radixfinish_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_nearest_radixfinish_20261024/znver2_used_buckets"
+      ],
+      [
+        "/usr/bin/g++",
+        "-march=znver2",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_nearest_radixfinish_20261024/flat.hpp\"",
+        "/tmp/sirkit_nearest_radixfinish_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_nearest_radixfinish_20261024/znver2_flat"
+      ],
+      [
+        "/usr/bin/g++",
+        "-march=znver2",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_nearest_radixfinish_20261024/flat_prefix.hpp\"",
+        "/tmp/sirkit_nearest_radixfinish_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_nearest_radixfinish_20261024/znver2_flat_prefix"
+      ],
+      [
+        "/usr/bin/g++",
+        "-march=native",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_nearest_radixfinish_20261024/baseline.hpp\"",
+        "/tmp/sirkit_nearest_radixfinish_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_nearest_radixfinish_20261024/native_baseline"
+      ],
+      [
+        "/usr/bin/g++",
+        "-march=native",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_nearest_radixfinish_20261024/used_buckets.hpp\"",
+        "/tmp/sirkit_nearest_radixfinish_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_nearest_radixfinish_20261024/native_used_buckets"
+      ],
+      [
+        "/usr/bin/g++",
+        "-march=native",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_nearest_radixfinish_20261024/flat.hpp\"",
+        "/tmp/sirkit_nearest_radixfinish_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_nearest_radixfinish_20261024/native_flat"
+      ],
+      [
+        "/usr/bin/g++",
+        "-march=native",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_nearest_radixfinish_20261024/flat_prefix.hpp\"",
+        "/tmp/sirkit_nearest_radixfinish_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_nearest_radixfinish_20261024/native_flat_prefix"
+      ],
+      [
+        "clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_nearest_radixfinish_20261024/baseline.hpp\"",
+        "/tmp/sirkit_nearest_radixfinish_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_nearest_radixfinish_20261024/clang_baseline"
+      ],
+      [
+        "clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_nearest_radixfinish_20261024/used_buckets.hpp\"",
+        "/tmp/sirkit_nearest_radixfinish_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_nearest_radixfinish_20261024/clang_used_buckets"
+      ],
+      [
+        "clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_nearest_radixfinish_20261024/flat.hpp\"",
+        "/tmp/sirkit_nearest_radixfinish_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_nearest_radixfinish_20261024/clang_flat"
+      ],
+      [
+        "clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_nearest_radixfinish_20261024/flat_prefix.hpp\"",
+        "/tmp/sirkit_nearest_radixfinish_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_nearest_radixfinish_20261024/clang_flat_prefix"
+      ]
+    ],
+    "results": {
+      "znver2/2/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            0.855685,
+            0.85764,
+            0.857021,
+            0.805628,
+            0.804683,
+            0.805334,
+            0.801708
+          ],
+          "used_buckets": [
+            0.870509,
+            0.829965,
+            0.855718,
+            0.808,
+            0.816244,
+            0.804951,
+            0.886001
+          ],
+          "flat": [
+            0.85367,
+            0.814196,
+            0.810984,
+            0.85501,
+            0.857966,
+            0.852243,
+            0.808494
+          ],
+          "flat_prefix": [
+            0.844552,
+            0.858237,
+            0.820131,
+            0.851376,
+            0.849565,
+            0.850888,
+            0.813103
+          ]
+        },
+        "median_ms": {
+          "baseline": 0.805628,
+          "used_buckets": 0.829965,
+          "flat": 0.852243,
+          "flat_prefix": 0.849565
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0302,
+          "flat": 1.0579,
+          "flat_prefix": 1.0545
+        },
+        "loops": 20000
+      },
+      "znver2/32/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            3.25604,
+            3.2664,
+            3.33704,
+            3.26464,
+            3.23786,
+            1.98317,
+            1.86276
+          ],
+          "used_buckets": [
+            3.21938,
+            3.29035,
+            3.32437,
+            3.1805,
+            3.20107,
+            3.24294,
+            1.81761
+          ],
+          "flat": [
+            3.20701,
+            3.28589,
+            3.30418,
+            3.22996,
+            3.34407,
+            3.29804,
+            1.88012
+          ],
+          "flat_prefix": [
+            3.20854,
+            3.24041,
+            3.17198,
+            3.24259,
+            3.31249,
+            2.25904,
+            1.85017
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.25604,
+          "used_buckets": 3.21938,
+          "flat": 3.28589,
+          "flat_prefix": 3.20854
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9887,
+          "flat": 1.0092,
+          "flat_prefix": 0.9854
+        },
+        "loops": 4000
+      },
+      "znver2/4096/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            3.2645,
+            3.14783,
+            3.28114,
+            3.28331,
+            3.23326,
+            3.16427,
+            3.27965
+          ],
+          "used_buckets": [
+            3.21699,
+            3.28279,
+            3.27641,
+            3.20935,
+            3.20551,
+            3.26241,
+            3.24433
+          ],
+          "flat": [
+            3.22971,
+            3.18584,
+            3.31106,
+            3.28152,
+            3.21599,
+            3.24677,
+            3.18747
+          ],
+          "flat_prefix": [
+            3.28308,
+            3.28505,
+            3.2754,
+            3.2718,
+            3.23208,
+            3.22376,
+            3.29613
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.2645,
+          "used_buckets": 3.24433,
+          "flat": 3.22971,
+          "flat_prefix": 3.2754
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9938,
+          "flat": 0.9893,
+          "flat_prefix": 1.0033
+        },
+        "loops": 16
+      },
+      "znver2/131072/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            19.1001,
+            19.1526,
+            19.5301,
+            18.9249,
+            19.0729,
+            18.9563,
+            19.0226
+          ],
+          "used_buckets": [
+            18.8964,
+            21.3794,
+            18.9554,
+            19.0287,
+            18.915,
+            18.9009,
+            18.9414
+          ],
+          "flat": [
+            18.9137,
+            19.6358,
+            18.9844,
+            19.0008,
+            18.9992,
+            18.9783,
+            18.9605
+          ],
+          "flat_prefix": [
+            19.0409,
+            19.4215,
+            18.9536,
+            19.0925,
+            18.9476,
+            18.9357,
+            19.0312
+          ]
+        },
+        "median_ms": {
+          "baseline": 19.0729,
+          "used_buckets": 18.9414,
+          "flat": 18.9844,
+          "flat_prefix": 19.0312
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9931,
+          "flat": 0.9954,
+          "flat_prefix": 0.9978
+        },
+        "loops": 2
+      },
+      "znver2/131072/1/normal": {
+        "raw_ms": {
+          "baseline": [
+            8.29364,
+            8.40136,
+            8.30519,
+            8.34681,
+            8.38797,
+            8.33912,
+            8.31631
+          ],
+          "used_buckets": [
+            8.30807,
+            8.34565,
+            8.32379,
+            8.33392,
+            8.33111,
+            8.39299,
+            8.36933
+          ],
+          "flat": [
+            8.39628,
+            8.31255,
+            8.30851,
+            8.38242,
+            8.29931,
+            8.36674,
+            8.32689
+          ],
+          "flat_prefix": [
+            8.32372,
+            8.49065,
+            8.3304,
+            8.40888,
+            8.30149,
+            8.32666,
+            8.35101
+          ]
+        },
+        "median_ms": {
+          "baseline": 8.33912,
+          "used_buckets": 8.33392,
+          "flat": 8.32689,
+          "flat_prefix": 8.3304
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9994,
+          "flat": 0.9985,
+          "flat_prefix": 0.999
+        },
+        "loops": 2
+      },
+      "znver2/131072/2/normal": {
+        "raw_ms": {
+          "baseline": [
+            10.415,
+            10.4613,
+            10.5175,
+            10.4745,
+            10.4235,
+            10.4553,
+            10.4485
+          ],
+          "used_buckets": [
+            10.492,
+            10.6218,
+            10.4849,
+            10.5144,
+            10.4024,
+            10.5339,
+            10.5099
+          ],
+          "flat": [
+            10.4076,
+            10.4445,
+            10.5154,
+            10.3271,
+            10.5375,
+            10.4843,
+            10.4745
+          ],
+          "flat_prefix": [
+            10.3972,
+            10.4528,
+            10.4259,
+            10.438,
+            10.4125,
+            10.5481,
+            10.476
+          ]
+        },
+        "median_ms": {
+          "baseline": 10.4553,
+          "used_buckets": 10.5099,
+          "flat": 10.4745,
+          "flat_prefix": 10.438
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0052,
+          "flat": 1.0018,
+          "flat_prefix": 0.9983
+        },
+        "loops": 2
+      },
+      "znver2/131072/3/normal": {
+        "raw_ms": {
+          "baseline": [
+            9.47179,
+            9.50577,
+            9.45626,
+            9.5038,
+            9.52886,
+            9.48577,
+            9.51088
+          ],
+          "used_buckets": [
+            9.50669,
+            9.51089,
+            9.54387,
+            9.52475,
+            9.48919,
+            9.57624,
+            9.49525
+          ],
+          "flat": [
+            9.51323,
+            9.47404,
+            9.53848,
+            9.64945,
+            9.48681,
+            9.52004,
+            9.54026
+          ],
+          "flat_prefix": [
+            9.49451,
+            9.50092,
+            9.44334,
+            9.60929,
+            9.50851,
+            9.56364,
+            9.51959
+          ]
+        },
+        "median_ms": {
+          "baseline": 9.5038,
+          "used_buckets": 9.51089,
+          "flat": 9.52004,
+          "flat_prefix": 9.50851
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0007,
+          "flat": 1.0017,
+          "flat_prefix": 1.0005
+        },
+        "loops": 2
+      },
+      "znver2/131072/4/normal": {
+        "raw_ms": {
+          "baseline": [
+            8.86875,
+            8.96436,
+            8.98707,
+            8.86206,
+            9.02338,
+            8.90128,
+            8.86981
+          ],
+          "used_buckets": [
+            8.89901,
+            9.06318,
+            8.87424,
+            8.97024,
+            9.00147,
+            8.96532,
+            8.86003
+          ],
+          "flat": [
+            8.99882,
+            8.93149,
+            8.916,
+            9.10996,
+            8.91914,
+            8.90725,
+            9.07381
+          ],
+          "flat_prefix": [
+            8.94848,
+            8.90587,
+            8.88164,
+            8.88009,
+            8.85509,
+            8.94604,
+            8.86754
+          ]
+        },
+        "median_ms": {
+          "baseline": 8.90128,
+          "used_buckets": 8.96532,
+          "flat": 8.93149,
+          "flat_prefix": 8.88164
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0072,
+          "flat": 1.0034,
+          "flat_prefix": 0.9978
+        },
+        "loops": 2
+      },
+      "znver2/131072/5/normal": {
+        "raw_ms": {
+          "baseline": [
+            14.5964,
+            14.7553,
+            14.5555,
+            14.536,
+            14.5373,
+            14.585,
+            14.6565
+          ],
+          "used_buckets": [
+            14.5695,
+            14.6065,
+            14.5257,
+            14.5571,
+            14.6598,
+            14.5653,
+            14.5942
+          ],
+          "flat": [
+            14.503,
+            14.5651,
+            14.6278,
+            14.4739,
+            14.5777,
+            14.5437,
+            14.5068
+          ],
+          "flat_prefix": [
+            14.5574,
+            14.6828,
+            14.6062,
+            14.5898,
+            14.5705,
+            14.6223,
+            14.5411
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.585,
+          "used_buckets": 14.5695,
+          "flat": 14.5437,
+          "flat_prefix": 14.5898
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9989,
+          "flat": 0.9972,
+          "flat_prefix": 1.0003
+        },
+        "loops": 2
+      },
+      "znver2/131072/6/normal": {
+        "raw_ms": {
+          "baseline": [
+            0.549955,
+            0.553667,
+            0.552033,
+            0.581003,
+            0.553487,
+            0.554337,
+            0.553742
+          ],
+          "used_buckets": [
+            0.550108,
+            0.551242,
+            0.551591,
+            0.576579,
+            0.578022,
+            0.55234,
+            0.551867
+          ],
+          "flat": [
+            0.551873,
+            0.550721,
+            0.551377,
+            0.548378,
+            0.548347,
+            0.548624,
+            0.546944
+          ],
+          "flat_prefix": [
+            0.54843,
+            0.548807,
+            0.548868,
+            0.548822,
+            0.548358,
+            0.548461,
+            0.549215
+          ]
+        },
+        "median_ms": {
+          "baseline": 0.553667,
+          "used_buckets": 0.551867,
+          "flat": 0.548624,
+          "flat_prefix": 0.548807
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9967,
+          "flat": 0.9909,
+          "flat_prefix": 0.9912
+        },
+        "loops": 2
+      },
+      "znver2/131072/7/normal": {
+        "raw_ms": {
+          "baseline": [
+            9.60171,
+            9.42659,
+            9.4155,
+            9.51283,
+            9.39306,
+            9.18692,
+            9.20199
+          ],
+          "used_buckets": [
+            9.30355,
+            9.40147,
+            9.44501,
+            9.33713,
+            9.34426,
+            9.00008,
+            8.99555
+          ],
+          "flat": [
+            9.29055,
+            9.29361,
+            9.45114,
+            9.35703,
+            9.35131,
+            8.98716,
+            9.12983
+          ],
+          "flat_prefix": [
+            9.23524,
+            9.3241,
+            9.22334,
+            9.26938,
+            8.98316,
+            8.88376,
+            8.88774
+          ]
+        },
+        "median_ms": {
+          "baseline": 9.4155,
+          "used_buckets": 9.33713,
+          "flat": 9.29361,
+          "flat_prefix": 9.22334
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9917,
+          "flat": 0.9871,
+          "flat_prefix": 0.9796
+        },
+        "loops": 2
+      },
+      "znver2/131072/8/normal": {
+        "raw_ms": {
+          "baseline": [
+            17.667,
+            17.7016,
+            17.6486,
+            17.6506,
+            17.6327,
+            17.7351,
+            17.6685
+          ],
+          "used_buckets": [
+            17.6709,
+            17.6266,
+            17.6959,
+            17.6877,
+            17.6266,
+            17.7638,
+            17.592
+          ],
+          "flat": [
+            17.6805,
+            17.8081,
+            17.7404,
+            17.6,
+            17.6853,
+            17.7462,
+            17.8142
+          ],
+          "flat_prefix": [
+            17.6114,
+            17.585,
+            17.7327,
+            17.7835,
+            17.7455,
+            17.62,
+            17.6938
+          ]
+        },
+        "median_ms": {
+          "baseline": 17.667,
+          "used_buckets": 17.6709,
+          "flat": 17.7404,
+          "flat_prefix": 17.6938
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0002,
+          "flat": 1.0042,
+          "flat_prefix": 1.0015
+        },
+        "loops": 2
+      },
+      "znver2/150001/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            10.2068,
+            10.0698,
+            10.1285,
+            10.1374,
+            10.153,
+            10.142,
+            10.1206
+          ],
+          "used_buckets": [
+            10.1165,
+            10.1495,
+            10.1616,
+            10.0747,
+            10.1302,
+            10.0627,
+            10.1179
+          ],
+          "flat": [
+            10.046,
+            10.0922,
+            10.1377,
+            10.1358,
+            10.0943,
+            10.0818,
+            10.1363
+          ],
+          "flat_prefix": [
+            10.1741,
+            10.0962,
+            10.0909,
+            10.0695,
+            10.1644,
+            10.1515,
+            10.1293
+          ]
+        },
+        "median_ms": {
+          "baseline": 10.1374,
+          "used_buckets": 10.1179,
+          "flat": 10.0943,
+          "flat_prefix": 10.1293
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9981,
+          "flat": 0.9957,
+          "flat_prefix": 0.9992
+        },
+        "loops": 1
+      },
+      "znver2/150001/3/normal": {
+        "raw_ms": {
+          "baseline": [
+            4.75601,
+            4.72791,
+            4.72031,
+            4.78714,
+            4.81313,
+            4.77015,
+            4.77451
+          ],
+          "used_buckets": [
+            4.72912,
+            4.73179,
+            4.74093,
+            4.76457,
+            4.76201,
+            4.77299,
+            4.77845
+          ],
+          "flat": [
+            4.74461,
+            4.72107,
+            4.73518,
+            4.79854,
+            4.75823,
+            4.79144,
+            4.74904
+          ],
+          "flat_prefix": [
+            4.75776,
+            4.7245,
+            4.72771,
+            4.74071,
+            4.77195,
+            4.78034,
+            4.81329
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.77015,
+          "used_buckets": 4.76201,
+          "flat": 4.74904,
+          "flat_prefix": 4.75776
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9983,
+          "flat": 0.9956,
+          "flat_prefix": 0.9974
+        },
+        "loops": 1
+      },
+      "znver2/150001/7/normal": {
+        "raw_ms": {
+          "baseline": [
+            5.00711,
+            4.98433,
+            5.03519,
+            4.99969,
+            4.98342,
+            4.98094,
+            4.99806
+          ],
+          "used_buckets": [
+            4.95928,
+            4.92947,
+            4.90103,
+            4.94713,
+            4.89858,
+            4.93638,
+            4.90885
+          ],
+          "flat": [
+            4.89828,
+            4.90642,
+            4.86095,
+            4.84812,
+            4.9481,
+            4.89557,
+            4.93077
+          ],
+          "flat_prefix": [
+            4.90905,
+            4.89665,
+            4.93361,
+            4.88123,
+            4.8904,
+            4.91656,
+            4.91818
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.99806,
+          "used_buckets": 4.92947,
+          "flat": 4.89828,
+          "flat_prefix": 4.90905
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9863,
+          "flat": 0.98,
+          "flat_prefix": 0.9822
+        },
+        "loops": 1
+      },
+      "znver2/500000/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            37.656,
+            37.1224,
+            37.1109,
+            37.0537,
+            37.0307,
+            37.0369,
+            37.3594
+          ],
+          "used_buckets": [
+            37.1628,
+            37.2014,
+            36.9456,
+            37.1148,
+            36.9781,
+            37.1699,
+            37.0771
+          ],
+          "flat": [
+            38.0474,
+            37.0253,
+            37.0479,
+            37.0716,
+            37.049,
+            36.9955,
+            37.162
+          ],
+          "flat_prefix": [
+            38.026,
+            37.1202,
+            37.0878,
+            37.1842,
+            37.2095,
+            37.1037,
+            37.9039
+          ]
+        },
+        "median_ms": {
+          "baseline": 37.1109,
+          "used_buckets": 37.1148,
+          "flat": 37.049,
+          "flat_prefix": 37.1842
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0001,
+          "flat": 0.9983,
+          "flat_prefix": 1.002
+        },
+        "loops": 1
+      },
+      "znver2/500000/3/normal": {
+        "raw_ms": {
+          "baseline": [
+            18.1658,
+            18.3138,
+            18.3716,
+            18.215,
+            18.2956,
+            18.1439,
+            18.1602
+          ],
+          "used_buckets": [
+            18.3608,
+            18.2415,
+            18.325,
+            18.3859,
+            18.3942,
+            18.209,
+            18.3169
+          ],
+          "flat": [
+            18.3756,
+            18.4187,
+            18.3647,
+            18.3642,
+            18.446,
+            18.3389,
+            18.3525
+          ],
+          "flat_prefix": [
+            18.5241,
+            18.3176,
+            18.227,
+            18.4261,
+            18.3572,
+            18.2414,
+            18.4984
+          ]
+        },
+        "median_ms": {
+          "baseline": 18.215,
+          "used_buckets": 18.325,
+          "flat": 18.3647,
+          "flat_prefix": 18.3572
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.006,
+          "flat": 1.0082,
+          "flat_prefix": 1.0078
+        },
+        "loops": 1
+      },
+      "znver2/500000/7/normal": {
+        "raw_ms": {
+          "baseline": [
+            19.286,
+            19.215,
+            19.3904,
+            19.2471,
+            19.1981,
+            19.3192,
+            19.1226
+          ],
+          "used_buckets": [
+            19.6493,
+            19.2245,
+            19.152,
+            18.9816,
+            18.9704,
+            21.752,
+            18.8949
+          ],
+          "flat": [
+            19.5831,
+            19.131,
+            18.9956,
+            18.8683,
+            19.9283,
+            20.4708,
+            18.928
+          ],
+          "flat_prefix": [
+            19.3224,
+            18.8855,
+            19.0906,
+            19.1779,
+            19.7911,
+            19.2028,
+            19.0046
+          ]
+        },
+        "median_ms": {
+          "baseline": 19.2471,
+          "used_buckets": 19.152,
+          "flat": 19.131,
+          "flat_prefix": 19.1779
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9951,
+          "flat": 0.994,
+          "flat_prefix": 0.9964
+        },
+        "loops": 1
+      },
+      "znver2/500000/0/sorted": {
+        "raw_ms": {
+          "baseline": [
+            34.3078,
+            34.3195,
+            34.2939,
+            34.2131,
+            34.4179,
+            34.467,
+            34.4935
+          ],
+          "used_buckets": [
+            34.346,
+            34.419,
+            34.387,
+            34.4144,
+            34.4672,
+            34.2935,
+            34.3708
+          ],
+          "flat": [
+            34.2469,
+            34.2579,
+            34.3789,
+            34.4852,
+            34.3326,
+            35.1611,
+            34.3568
+          ],
+          "flat_prefix": [
+            34.4194,
+            34.4967,
+            34.2985,
+            34.31,
+            34.5829,
+            34.3356,
+            35.423
+          ]
+        },
+        "median_ms": {
+          "baseline": 34.3195,
+          "used_buckets": 34.387,
+          "flat": 34.3568,
+          "flat_prefix": 34.4194
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.002,
+          "flat": 1.0011,
+          "flat_prefix": 1.0029
+        },
+        "loops": 1
+      },
+      "native/2/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            0.454574,
+            0.413865,
+            0.43049,
+            0.476692,
+            0.422465,
+            0.426614,
+            0.423843
+          ],
+          "used_buckets": [
+            0.441604,
+            0.432066,
+            0.429173,
+            0.4223,
+            0.433154,
+            0.409389,
+            0.433483
+          ],
+          "flat": [
+            0.463815,
+            0.431955,
+            0.470617,
+            0.506921,
+            0.426044,
+            0.424828,
+            0.4304
+          ],
+          "flat_prefix": [
+            0.420976,
+            0.396182,
+            0.404492,
+            0.421555,
+            0.435429,
+            0.402533,
+            0.416024
+          ]
+        },
+        "median_ms": {
+          "baseline": 0.426614,
+          "used_buckets": 0.432066,
+          "flat": 0.431955,
+          "flat_prefix": 0.416024
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0128,
+          "flat": 1.0125,
+          "flat_prefix": 0.9752
+        },
+        "loops": 20000
+      },
+      "native/32/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            1.78288,
+            1.84708,
+            1.81698,
+            1.75749,
+            1.89491,
+            1.81615,
+            1.80214
+          ],
+          "used_buckets": [
+            1.77422,
+            1.86445,
+            1.76997,
+            1.76439,
+            1.78038,
+            1.84839,
+            1.87578
+          ],
+          "flat": [
+            1.96357,
+            1.96276,
+            1.89574,
+            1.9024,
+            1.85201,
+            1.85803,
+            1.91802
+          ],
+          "flat_prefix": [
+            1.86768,
+            1.82896,
+            1.81138,
+            1.86234,
+            1.82544,
+            1.78175,
+            1.88692
+          ]
+        },
+        "median_ms": {
+          "baseline": 1.81615,
+          "used_buckets": 1.78038,
+          "flat": 1.9024,
+          "flat_prefix": 1.82896
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9803,
+          "flat": 1.0475,
+          "flat_prefix": 1.0071
+        },
+        "loops": 4000
+      },
+      "native/4096/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            2.99669,
+            3.03715,
+            3.0229,
+            2.9863,
+            3.00497,
+            3.00412,
+            3.03695
+          ],
+          "used_buckets": [
+            3.07349,
+            2.99205,
+            3.04973,
+            3.00395,
+            3.0417,
+            3.10084,
+            2.99828
+          ],
+          "flat": [
+            3.0115,
+            3.07409,
+            3.10291,
+            3.04228,
+            3.00942,
+            3.04581,
+            3.05445
+          ],
+          "flat_prefix": [
+            3.08099,
+            3.02825,
+            3.0011,
+            2.99071,
+            3.08608,
+            3.0159,
+            2.97927
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.00497,
+          "used_buckets": 3.0417,
+          "flat": 3.04581,
+          "flat_prefix": 3.0159
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0122,
+          "flat": 1.0136,
+          "flat_prefix": 1.0036
+        },
+        "loops": 16
+      },
+      "native/131072/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            17.9697,
+            17.5344,
+            17.5576,
+            17.508,
+            17.488,
+            18.5728,
+            17.5055
+          ],
+          "used_buckets": [
+            17.688,
+            17.4689,
+            17.5448,
+            17.5347,
+            17.4603,
+            17.4901,
+            17.4677
+          ],
+          "flat": [
+            17.6305,
+            17.4956,
+            17.5981,
+            17.6133,
+            17.5577,
+            17.5412,
+            17.5031
+          ],
+          "flat_prefix": [
+            17.4796,
+            17.4723,
+            17.5194,
+            17.5377,
+            17.479,
+            17.457,
+            17.6242
+          ]
+        },
+        "median_ms": {
+          "baseline": 17.5344,
+          "used_buckets": 17.4901,
+          "flat": 17.5577,
+          "flat_prefix": 17.4796
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9975,
+          "flat": 1.0013,
+          "flat_prefix": 0.9969
+        },
+        "loops": 2
+      },
+      "native/131072/1/normal": {
+        "raw_ms": {
+          "baseline": [
+            7.05011,
+            7.01135,
+            7.07264,
+            7.03535,
+            7.0332,
+            7.00288,
+            7.05333
+          ],
+          "used_buckets": [
+            7.23422,
+            7.18966,
+            7.19759,
+            7.15539,
+            7.19054,
+            7.18953,
+            7.16632
+          ],
+          "flat": [
+            7.16138,
+            7.19224,
+            7.17666,
+            7.17825,
+            7.22755,
+            7.23763,
+            7.16478
+          ],
+          "flat_prefix": [
+            7.26468,
+            7.24469,
+            7.2222,
+            7.17369,
+            7.20686,
+            7.20147,
+            7.19844
+          ]
+        },
+        "median_ms": {
+          "baseline": 7.03535,
+          "used_buckets": 7.18966,
+          "flat": 7.17825,
+          "flat_prefix": 7.20686
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0219,
+          "flat": 1.0203,
+          "flat_prefix": 1.0244
+        },
+        "loops": 2
+      },
+      "native/131072/2/normal": {
+        "raw_ms": {
+          "baseline": [
+            9.76906,
+            9.81549,
+            9.75937,
+            9.77798,
+            9.7561,
+            9.77143,
+            9.76382
+          ],
+          "used_buckets": [
+            9.77492,
+            9.79193,
+            9.78641,
+            9.75641,
+            9.7696,
+            9.76301,
+            9.78357
+          ],
+          "flat": [
+            9.80601,
+            9.774,
+            9.78462,
+            9.74605,
+            9.78756,
+            9.75985,
+            9.76862
+          ],
+          "flat_prefix": [
+            9.80621,
+            9.82455,
+            9.8123,
+            9.74188,
+            9.84336,
+            9.88557,
+            9.86962
+          ]
+        },
+        "median_ms": {
+          "baseline": 9.76906,
+          "used_buckets": 9.77492,
+          "flat": 9.774,
+          "flat_prefix": 9.82455
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0006,
+          "flat": 1.0005,
+          "flat_prefix": 1.0057
+        },
+        "loops": 2
+      },
+      "native/131072/3/normal": {
+        "raw_ms": {
+          "baseline": [
+            9.04369,
+            9.01814,
+            9.00565,
+            9.08872,
+            9.0724,
+            9.03268,
+            9.03589
+          ],
+          "used_buckets": [
+            9.04008,
+            9.08203,
+            9.07739,
+            9.05582,
+            9.11114,
+            9.05313,
+            9.05279
+          ],
+          "flat": [
+            9.09569,
+            9.10912,
+            9.04518,
+            9.06069,
+            9.07527,
+            9.06679,
+            9.04801
+          ],
+          "flat_prefix": [
+            9.05423,
+            9.06329,
+            9.0906,
+            9.09318,
+            9.09303,
+            9.13208,
+            9.06368
+          ]
+        },
+        "median_ms": {
+          "baseline": 9.03589,
+          "used_buckets": 9.05582,
+          "flat": 9.06679,
+          "flat_prefix": 9.0906
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0022,
+          "flat": 1.0034,
+          "flat_prefix": 1.0061
+        },
+        "loops": 2
+      },
+      "native/131072/4/normal": {
+        "raw_ms": {
+          "baseline": [
+            7.75992,
+            7.80187,
+            7.84187,
+            7.76603,
+            7.81152,
+            7.95115,
+            7.76375
+          ],
+          "used_buckets": [
+            7.77469,
+            7.85563,
+            7.79927,
+            7.97377,
+            7.83709,
+            7.88221,
+            7.85583
+          ],
+          "flat": [
+            7.78892,
+            7.82437,
+            7.78244,
+            7.86887,
+            7.81123,
+            7.82275,
+            7.7552
+          ],
+          "flat_prefix": [
+            7.8089,
+            7.75771,
+            7.74614,
+            7.81359,
+            7.73415,
+            7.73617,
+            7.82647
+          ]
+        },
+        "median_ms": {
+          "baseline": 7.80187,
+          "used_buckets": 7.85563,
+          "flat": 7.81123,
+          "flat_prefix": 7.75771
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0069,
+          "flat": 1.0012,
+          "flat_prefix": 0.9943
+        },
+        "loops": 2
+      },
+      "native/131072/5/normal": {
+        "raw_ms": {
+          "baseline": [
+            13.215,
+            13.367,
+            13.236,
+            13.205,
+            13.2795,
+            13.2412,
+            13.1892
+          ],
+          "used_buckets": [
+            13.2207,
+            13.2593,
+            13.2396,
+            13.2571,
+            13.2086,
+            13.2514,
+            13.189
+          ],
+          "flat": [
+            13.3038,
+            13.2922,
+            13.4064,
+            13.2533,
+            13.2434,
+            13.275,
+            13.227
+          ],
+          "flat_prefix": [
+            13.2698,
+            13.2507,
+            13.3023,
+            13.2246,
+            13.1943,
+            13.2022,
+            13.2121
+          ]
+        },
+        "median_ms": {
+          "baseline": 13.236,
+          "used_buckets": 13.2396,
+          "flat": 13.275,
+          "flat_prefix": 13.2246
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0003,
+          "flat": 1.0029,
+          "flat_prefix": 0.9991
+        },
+        "loops": 2
+      },
+      "native/131072/6/normal": {
+        "raw_ms": {
+          "baseline": [
+            0.569343,
+            0.557854,
+            0.557361,
+            0.55753,
+            0.558599,
+            0.55838,
+            0.559421
+          ],
+          "used_buckets": [
+            0.555343,
+            0.554135,
+            0.565686,
+            0.585045,
+            0.577042,
+            0.559527,
+            0.555636
+          ],
+          "flat": [
+            0.560211,
+            0.572119,
+            0.561376,
+            0.555863,
+            0.555533,
+            0.553421,
+            0.555489
+          ],
+          "flat_prefix": [
+            0.557742,
+            0.553733,
+            0.552598,
+            0.553858,
+            0.55806,
+            0.583355,
+            0.554341
+          ]
+        },
+        "median_ms": {
+          "baseline": 0.55838,
+          "used_buckets": 0.559527,
+          "flat": 0.555863,
+          "flat_prefix": 0.554341
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0021,
+          "flat": 0.9955,
+          "flat_prefix": 0.9928
+        },
+        "loops": 2
+      },
+      "native/131072/7/normal": {
+        "raw_ms": {
+          "baseline": [
+            9.06662,
+            9.1694,
+            9.06089,
+            9.0045,
+            9.03885,
+            9.02033,
+            9.06169
+          ],
+          "used_buckets": [
+            8.94311,
+            8.93276,
+            8.93941,
+            8.93254,
+            8.89621,
+            8.89561,
+            8.9272
+          ],
+          "flat": [
+            9.05131,
+            9.04928,
+            9.16564,
+            9.09434,
+            9.03805,
+            9.18456,
+            8.97718
+          ],
+          "flat_prefix": [
+            8.93156,
+            8.93927,
+            8.89741,
+            8.92116,
+            8.92136,
+            8.88505,
+            8.9256
+          ]
+        },
+        "median_ms": {
+          "baseline": 9.06089,
+          "used_buckets": 8.93254,
+          "flat": 9.05131,
+          "flat_prefix": 8.92136
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9858,
+          "flat": 0.9989,
+          "flat_prefix": 0.9846
+        },
+        "loops": 2
+      },
+      "native/131072/8/normal": {
+        "raw_ms": {
+          "baseline": [
+            17.5322,
+            17.6011,
+            17.5453,
+            17.5382,
+            17.6177,
+            17.5148,
+            17.542
+          ],
+          "used_buckets": [
+            17.5538,
+            17.5819,
+            17.51,
+            17.5575,
+            17.572,
+            17.5781,
+            17.5636
+          ],
+          "flat": [
+            17.5535,
+            17.6019,
+            17.5989,
+            17.6188,
+            17.6494,
+            17.6096,
+            17.5367
+          ],
+          "flat_prefix": [
+            17.5817,
+            17.5669,
+            17.565,
+            17.5725,
+            17.6076,
+            17.5849,
+            17.5408
+          ]
+        },
+        "median_ms": {
+          "baseline": 17.542,
+          "used_buckets": 17.5636,
+          "flat": 17.6019,
+          "flat_prefix": 17.5725
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0012,
+          "flat": 1.0034,
+          "flat_prefix": 1.0017
+        },
+        "loops": 2
+      },
+      "native/150001/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            10.0342,
+            9.98035,
+            10.0334,
+            10.0283,
+            10.178,
+            9.98346,
+            10.0394
+          ],
+          "used_buckets": [
+            10.0484,
+            9.97409,
+            10.0152,
+            10.02,
+            10.0002,
+            9.99504,
+            9.96976
+          ],
+          "flat": [
+            10.0216,
+            9.99147,
+            10.012,
+            10.008,
+            10.0198,
+            10.0126,
+            10.0065
+          ],
+          "flat_prefix": [
+            10.0164,
+            9.98186,
+            9.99732,
+            10.0232,
+            10.0071,
+            10.0212,
+            10.0006
+          ]
+        },
+        "median_ms": {
+          "baseline": 10.0334,
+          "used_buckets": 10.0002,
+          "flat": 10.012,
+          "flat_prefix": 10.0071
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9967,
+          "flat": 0.9979,
+          "flat_prefix": 0.9974
+        },
+        "loops": 1
+      },
+      "native/150001/3/normal": {
+        "raw_ms": {
+          "baseline": [
+            4.62406,
+            4.62356,
+            4.64015,
+            4.62999,
+            4.70223,
+            4.72306,
+            4.64043
+          ],
+          "used_buckets": [
+            4.63934,
+            4.67892,
+            4.67781,
+            4.63887,
+            4.67737,
+            4.66067,
+            4.70155
+          ],
+          "flat": [
+            4.68588,
+            4.65222,
+            4.69893,
+            4.66144,
+            4.68401,
+            4.6431,
+            4.6665
+          ],
+          "flat_prefix": [
+            4.68427,
+            4.69262,
+            4.69896,
+            4.67518,
+            4.68655,
+            4.67921,
+            4.68122
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.64015,
+          "used_buckets": 4.67737,
+          "flat": 4.6665,
+          "flat_prefix": 4.68427
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.008,
+          "flat": 1.0057,
+          "flat_prefix": 1.0095
+        },
+        "loops": 1
+      },
+      "native/150001/7/normal": {
+        "raw_ms": {
+          "baseline": [
+            4.98625,
+            4.97998,
+            4.98712,
+            4.96561,
+            4.99106,
+            4.96941,
+            4.98457
+          ],
+          "used_buckets": [
+            4.8795,
+            4.90248,
+            4.86471,
+            4.93904,
+            4.8875,
+            4.95572,
+            4.86935
+          ],
+          "flat": [
+            4.92582,
+            4.96257,
+            4.92192,
+            4.97354,
+            4.90559,
+            4.93354,
+            4.94196
+          ],
+          "flat_prefix": [
+            4.87568,
+            4.89371,
+            4.94526,
+            4.89641,
+            4.88462,
+            4.87313,
+            4.87124
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.98457,
+          "used_buckets": 4.8875,
+          "flat": 4.93354,
+          "flat_prefix": 4.88462
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9805,
+          "flat": 0.9898,
+          "flat_prefix": 0.9799
+        },
+        "loops": 1
+      },
+      "native/500000/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            37.3692,
+            37.381,
+            36.6621,
+            36.648,
+            36.6276,
+            36.5578,
+            36.6193
+          ],
+          "used_buckets": [
+            36.7471,
+            37.4318,
+            36.792,
+            36.5899,
+            36.7428,
+            36.6021,
+            36.6883
+          ],
+          "flat": [
+            36.8056,
+            37.3494,
+            36.7243,
+            36.6817,
+            36.635,
+            36.6619,
+            36.642
+          ],
+          "flat_prefix": [
+            37.6044,
+            36.8694,
+            36.6372,
+            36.7901,
+            36.7573,
+            36.7474,
+            36.7102
+          ]
+        },
+        "median_ms": {
+          "baseline": 36.648,
+          "used_buckets": 36.7428,
+          "flat": 36.6817,
+          "flat_prefix": 36.7573
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0026,
+          "flat": 1.0009,
+          "flat_prefix": 1.003
+        },
+        "loops": 1
+      },
+      "native/500000/3/normal": {
+        "raw_ms": {
+          "baseline": [
+            17.8331,
+            17.7564,
+            17.8118,
+            17.9586,
+            17.8898,
+            17.8806,
+            17.8263
+          ],
+          "used_buckets": [
+            17.8215,
+            17.8072,
+            17.8746,
+            17.9043,
+            17.9068,
+            17.957,
+            17.9653
+          ],
+          "flat": [
+            17.7218,
+            17.8738,
+            17.9135,
+            17.8883,
+            18.0367,
+            17.7662,
+            17.8298
+          ],
+          "flat_prefix": [
+            17.8507,
+            18.0558,
+            18.0215,
+            17.8938,
+            18.265,
+            17.9395,
+            18.0784
+          ]
+        },
+        "median_ms": {
+          "baseline": 17.8331,
+          "used_buckets": 17.9043,
+          "flat": 17.8738,
+          "flat_prefix": 18.0215
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.004,
+          "flat": 1.0023,
+          "flat_prefix": 1.0106
+        },
+        "loops": 1
+      },
+      "native/500000/7/normal": {
+        "raw_ms": {
+          "baseline": [
+            19.0297,
+            18.9485,
+            19.0307,
+            19.097,
+            19.0968,
+            20.1756,
+            19.2195
+          ],
+          "used_buckets": [
+            18.8474,
+            19.7696,
+            18.7786,
+            18.837,
+            18.818,
+            19.1042,
+            18.8158
+          ],
+          "flat": [
+            19.4591,
+            19.3973,
+            18.928,
+            18.9523,
+            19.004,
+            19.4194,
+            19.5681
+          ],
+          "flat_prefix": [
+            19.596,
+            19.2882,
+            18.8236,
+            18.7933,
+            18.8156,
+            19.0723,
+            19.2226
+          ]
+        },
+        "median_ms": {
+          "baseline": 19.0968,
+          "used_buckets": 18.837,
+          "flat": 19.3973,
+          "flat_prefix": 19.0723
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9864,
+          "flat": 1.0157,
+          "flat_prefix": 0.9987
+        },
+        "loops": 1
+      },
+      "native/500000/0/sorted": {
+        "raw_ms": {
+          "baseline": [
+            34.0734,
+            34.0652,
+            34.2642,
+            34.1526,
+            34.0694,
+            33.9832,
+            34.126
+          ],
+          "used_buckets": [
+            34.2978,
+            34.1803,
+            34.0451,
+            34.0912,
+            34.1661,
+            34.3716,
+            34.3005
+          ],
+          "flat": [
+            34.7728,
+            34.0197,
+            34.0877,
+            34.1585,
+            34.0708,
+            34.114,
+            34.5962
+          ],
+          "flat_prefix": [
+            35.3624,
+            34.0453,
+            34.2171,
+            34.1376,
+            34.1816,
+            33.9932,
+            34.9421
+          ]
+        },
+        "median_ms": {
+          "baseline": 34.0734,
+          "used_buckets": 34.1803,
+          "flat": 34.114,
+          "flat_prefix": 34.1816
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0031,
+          "flat": 1.0012,
+          "flat_prefix": 1.0032
+        },
+        "loops": 1
+      },
+      "clang/2/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            0.486777,
+            0.476934,
+            0.486459,
+            0.48642,
+            0.51095,
+            0.493519,
+            0.50704
+          ],
+          "used_buckets": [
+            0.508082,
+            0.741439,
+            0.475808,
+            0.476735,
+            0.497021,
+            0.482399,
+            0.486394
+          ],
+          "flat": [
+            0.511476,
+            0.503946,
+            0.486485,
+            0.510994,
+            0.482872,
+            0.486381,
+            0.513412
+          ],
+          "flat_prefix": [
+            0.491949,
+            0.48505,
+            0.507471,
+            0.546901,
+            0.472576,
+            0.48913,
+            0.518048
+          ]
+        },
+        "median_ms": {
+          "baseline": 0.486777,
+          "used_buckets": 0.486394,
+          "flat": 0.503946,
+          "flat_prefix": 0.491949
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9992,
+          "flat": 1.0353,
+          "flat_prefix": 1.0106
+        },
+        "loops": 20000
+      },
+      "clang/32/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            1.5466,
+            1.50843,
+            1.51537,
+            1.49397,
+            1.57816,
+            1.50939,
+            1.50951
+          ],
+          "used_buckets": [
+            1.6645,
+            1.53703,
+            1.5698,
+            1.50914,
+            1.50239,
+            1.50212,
+            1.57772
+          ],
+          "flat": [
+            1.58729,
+            1.50211,
+            1.58882,
+            1.5013,
+            1.50885,
+            1.57517,
+            1.58618
+          ],
+          "flat_prefix": [
+            1.50102,
+            1.58377,
+            1.59364,
+            1.57786,
+            1.59168,
+            1.52472,
+            1.53821
+          ]
+        },
+        "median_ms": {
+          "baseline": 1.50951,
+          "used_buckets": 1.53703,
+          "flat": 1.57517,
+          "flat_prefix": 1.57786
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0182,
+          "flat": 1.0435,
+          "flat_prefix": 1.0453
+        },
+        "loops": 4000
+      },
+      "clang/4096/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            2.82762,
+            2.80172,
+            2.85493,
+            2.73827,
+            2.81928,
+            2.87634,
+            2.8369
+          ],
+          "used_buckets": [
+            2.81238,
+            2.78191,
+            2.88909,
+            2.7562,
+            2.81186,
+            2.78615,
+            2.87369
+          ],
+          "flat": [
+            2.78638,
+            2.79398,
+            2.76177,
+            2.83459,
+            2.8258,
+            2.77974,
+            2.86993
+          ],
+          "flat_prefix": [
+            2.86722,
+            2.78412,
+            2.77732,
+            2.82763,
+            2.79882,
+            2.89707,
+            2.85073
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.82762,
+          "used_buckets": 2.81186,
+          "flat": 2.79398,
+          "flat_prefix": 2.82763
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9944,
+          "flat": 0.9881,
+          "flat_prefix": 1.0
+        },
+        "loops": 16
+      },
+      "clang/131072/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            17.4092,
+            17.0781,
+            17.2468,
+            17.1245,
+            17.1283,
+            17.1603,
+            17.1131
+          ],
+          "used_buckets": [
+            17.2397,
+            17.1261,
+            17.0508,
+            17.0714,
+            17.1191,
+            17.105,
+            17.0887
+          ],
+          "flat": [
+            17.1362,
+            17.0221,
+            17.0777,
+            17.0467,
+            17.0683,
+            17.0431,
+            17.0478
+          ],
+          "flat_prefix": [
+            17.1081,
+            17.0648,
+            17.0738,
+            17.0826,
+            17.1162,
+            17.0375,
+            17.1746
+          ]
+        },
+        "median_ms": {
+          "baseline": 17.1283,
+          "used_buckets": 17.105,
+          "flat": 17.0478,
+          "flat_prefix": 17.0826
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9986,
+          "flat": 0.9953,
+          "flat_prefix": 0.9973
+        },
+        "loops": 2
+      },
+      "clang/131072/1/normal": {
+        "raw_ms": {
+          "baseline": [
+            6.87725,
+            6.89937,
+            6.88466,
+            6.8975,
+            6.86007,
+            6.87297,
+            6.92354
+          ],
+          "used_buckets": [
+            6.83582,
+            6.9095,
+            6.93522,
+            6.94822,
+            6.98511,
+            6.89338,
+            7.00459
+          ],
+          "flat": [
+            6.93315,
+            6.82906,
+            6.75619,
+            6.94738,
+            6.82674,
+            6.87954,
+            6.7895
+          ],
+          "flat_prefix": [
+            6.88635,
+            6.86127,
+            6.69676,
+            6.80892,
+            6.72497,
+            6.85111,
+            6.80983
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.88466,
+          "used_buckets": 6.93522,
+          "flat": 6.82906,
+          "flat_prefix": 6.80983
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0073,
+          "flat": 0.9919,
+          "flat_prefix": 0.9891
+        },
+        "loops": 2
+      },
+      "clang/131072/2/normal": {
+        "raw_ms": {
+          "baseline": [
+            7.58916,
+            7.52406,
+            7.55413,
+            7.57289,
+            7.55178,
+            7.52275,
+            7.57732
+          ],
+          "used_buckets": [
+            7.52754,
+            7.52156,
+            7.53762,
+            7.51485,
+            7.51437,
+            7.5482,
+            7.52314
+          ],
+          "flat": [
+            7.54306,
+            7.58321,
+            7.49507,
+            7.49402,
+            7.62338,
+            7.64401,
+            7.52361
+          ],
+          "flat_prefix": [
+            7.54497,
+            7.54995,
+            7.53746,
+            7.50333,
+            7.50758,
+            7.54273,
+            7.49445
+          ]
+        },
+        "median_ms": {
+          "baseline": 7.55413,
+          "used_buckets": 7.52314,
+          "flat": 7.54306,
+          "flat_prefix": 7.53746
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9959,
+          "flat": 0.9985,
+          "flat_prefix": 0.9978
+        },
+        "loops": 2
+      },
+      "clang/131072/3/normal": {
+        "raw_ms": {
+          "baseline": [
+            8.00063,
+            8.05898,
+            8.09017,
+            8.13977,
+            8.12443,
+            8.15214,
+            8.07709
+          ],
+          "used_buckets": [
+            8.10384,
+            8.11101,
+            8.1396,
+            8.12348,
+            8.11188,
+            8.06253,
+            8.08803
+          ],
+          "flat": [
+            8.10832,
+            8.18071,
+            8.04785,
+            8.20515,
+            8.20284,
+            8.14312,
+            8.12243
+          ],
+          "flat_prefix": [
+            8.12088,
+            8.12528,
+            8.16422,
+            8.14497,
+            8.37538,
+            8.15471,
+            8.08207
+          ]
+        },
+        "median_ms": {
+          "baseline": 8.09017,
+          "used_buckets": 8.11101,
+          "flat": 8.14312,
+          "flat_prefix": 8.14497
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0026,
+          "flat": 1.0065,
+          "flat_prefix": 1.0068
+        },
+        "loops": 2
+      },
+      "clang/131072/4/normal": {
+        "raw_ms": {
+          "baseline": [
+            7.44833,
+            7.47766,
+            7.41133,
+            7.84673,
+            7.49125,
+            7.58049,
+            7.59194
+          ],
+          "used_buckets": [
+            7.42682,
+            7.43987,
+            7.6603,
+            7.80848,
+            7.45666,
+            7.42439,
+            7.94663
+          ],
+          "flat": [
+            7.49296,
+            7.38917,
+            7.48017,
+            7.48161,
+            7.46874,
+            7.54054,
+            7.46813
+          ],
+          "flat_prefix": [
+            7.34841,
+            7.45403,
+            7.43147,
+            7.65341,
+            7.48025,
+            7.44846,
+            7.51046
+          ]
+        },
+        "median_ms": {
+          "baseline": 7.49125,
+          "used_buckets": 7.45666,
+          "flat": 7.48017,
+          "flat_prefix": 7.45403
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9954,
+          "flat": 0.9985,
+          "flat_prefix": 0.995
+        },
+        "loops": 2
+      },
+      "clang/131072/5/normal": {
+        "raw_ms": {
+          "baseline": [
+            13.4031,
+            12.9136,
+            12.8395,
+            12.8774,
+            12.8881,
+            13.0155,
+            12.882
+          ],
+          "used_buckets": [
+            13.3021,
+            12.9106,
+            12.8599,
+            12.8887,
+            12.8866,
+            12.8806,
+            12.865
+          ],
+          "flat": [
+            13.0769,
+            12.886,
+            12.9926,
+            12.8643,
+            12.8774,
+            12.8564,
+            12.859
+          ],
+          "flat_prefix": [
+            12.9284,
+            12.7715,
+            13.0048,
+            12.97,
+            12.8825,
+            12.8508,
+            12.8858
+          ]
+        },
+        "median_ms": {
+          "baseline": 12.8881,
+          "used_buckets": 12.8866,
+          "flat": 12.8774,
+          "flat_prefix": 12.8858
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9999,
+          "flat": 0.9992,
+          "flat_prefix": 0.9998
+        },
+        "loops": 2
+      },
+      "clang/131072/6/normal": {
+        "raw_ms": {
+          "baseline": [
+            0.564191,
+            0.562014,
+            0.579851,
+            0.560595,
+            0.564391,
+            0.561421,
+            0.56461
+          ],
+          "used_buckets": [
+            0.562877,
+            0.592244,
+            0.561087,
+            0.566155,
+            0.559933,
+            0.562291,
+            0.563962
+          ],
+          "flat": [
+            0.559997,
+            0.569086,
+            0.580777,
+            0.565099,
+            0.559058,
+            0.579244,
+            0.55925
+          ],
+          "flat_prefix": [
+            0.567688,
+            0.560985,
+            0.564354,
+            0.560624,
+            0.559604,
+            0.562572,
+            0.560199
+          ]
+        },
+        "median_ms": {
+          "baseline": 0.564191,
+          "used_buckets": 0.562877,
+          "flat": 0.565099,
+          "flat_prefix": 0.560985
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9977,
+          "flat": 1.0016,
+          "flat_prefix": 0.9943
+        },
+        "loops": 2
+      },
+      "clang/131072/7/normal": {
+        "raw_ms": {
+          "baseline": [
+            8.19794,
+            8.2049,
+            8.23286,
+            8.09673,
+            8.11139,
+            8.11399,
+            8.09217
+          ],
+          "used_buckets": [
+            8.22533,
+            8.16856,
+            8.12816,
+            8.11379,
+            8.14711,
+            8.10847,
+            8.13928
+          ],
+          "flat": [
+            8.26574,
+            8.18123,
+            8.16402,
+            8.21709,
+            8.24593,
+            8.23054,
+            8.1096
+          ],
+          "flat_prefix": [
+            8.16572,
+            8.23391,
+            8.16055,
+            8.16462,
+            8.2332,
+            8.23477,
+            8.19495
+          ]
+        },
+        "median_ms": {
+          "baseline": 8.11399,
+          "used_buckets": 8.13928,
+          "flat": 8.21709,
+          "flat_prefix": 8.19495
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0031,
+          "flat": 1.0127,
+          "flat_prefix": 1.01
+        },
+        "loops": 2
+      },
+      "clang/131072/8/normal": {
+        "raw_ms": {
+          "baseline": [
+            17.1638,
+            17.2454,
+            17.1147,
+            17.1753,
+            17.1623,
+            17.2553,
+            17.2036
+          ],
+          "used_buckets": [
+            17.1951,
+            17.2031,
+            17.243,
+            17.1777,
+            17.3291,
+            17.1615,
+            17.2203
+          ],
+          "flat": [
+            17.1501,
+            17.1716,
+            17.1735,
+            17.1738,
+            17.1783,
+            17.086,
+            17.14
+          ],
+          "flat_prefix": [
+            17.0951,
+            17.1252,
+            17.1921,
+            17.1504,
+            17.1432,
+            17.1247,
+            17.0897
+          ]
+        },
+        "median_ms": {
+          "baseline": 17.1753,
+          "used_buckets": 17.2031,
+          "flat": 17.1716,
+          "flat_prefix": 17.1252
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0016,
+          "flat": 0.9998,
+          "flat_prefix": 0.9971
+        },
+        "loops": 2
+      },
+      "clang/150001/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            10.0611,
+            10.0517,
+            10.0368,
+            10.0712,
+            10.0521,
+            10.0444,
+            9.99037
+          ],
+          "used_buckets": [
+            10.0959,
+            10.031,
+            10.0964,
+            10.0629,
+            10.0425,
+            10.0553,
+            10.0384
+          ],
+          "flat": [
+            10.0856,
+            10.0355,
+            10.0386,
+            10.0574,
+            10.0222,
+            10.0508,
+            10.039
+          ],
+          "flat_prefix": [
+            9.9899,
+            10.018,
+            10.0703,
+            9.96667,
+            10.0017,
+            10.0392,
+            10.005
+          ]
+        },
+        "median_ms": {
+          "baseline": 10.0517,
+          "used_buckets": 10.0553,
+          "flat": 10.039,
+          "flat_prefix": 10.005
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0004,
+          "flat": 0.9987,
+          "flat_prefix": 0.9954
+        },
+        "loops": 1
+      },
+      "clang/150001/3/normal": {
+        "raw_ms": {
+          "baseline": [
+            4.18549,
+            4.12745,
+            4.18756,
+            4.13982,
+            4.14651,
+            4.14971,
+            4.09401
+          ],
+          "used_buckets": [
+            4.15861,
+            4.18914,
+            4.14509,
+            4.11728,
+            4.20013,
+            4.19669,
+            4.22011
+          ],
+          "flat": [
+            4.12536,
+            4.10963,
+            4.20928,
+            4.11094,
+            4.13295,
+            4.11974,
+            4.18371
+          ],
+          "flat_prefix": [
+            4.21143,
+            4.17131,
+            4.1573,
+            4.16128,
+            4.18299,
+            4.15635,
+            4.17719
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.14651,
+          "used_buckets": 4.18914,
+          "flat": 4.12536,
+          "flat_prefix": 4.17131
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0103,
+          "flat": 0.9949,
+          "flat_prefix": 1.006
+        },
+        "loops": 1
+      },
+      "clang/150001/7/normal": {
+        "raw_ms": {
+          "baseline": [
+            4.50047,
+            4.50376,
+            4.49921,
+            4.47218,
+            4.51917,
+            4.48742,
+            4.57267
+          ],
+          "used_buckets": [
+            4.52035,
+            4.50778,
+            4.53739,
+            4.50791,
+            4.48143,
+            4.55968,
+            4.50417
+          ],
+          "flat": [
+            4.56968,
+            4.49852,
+            4.46559,
+            4.52976,
+            4.56446,
+            4.57361,
+            4.57448
+          ],
+          "flat_prefix": [
+            4.52278,
+            4.53907,
+            4.55992,
+            4.51882,
+            4.54237,
+            4.55425,
+            4.53976
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.50047,
+          "used_buckets": 4.50791,
+          "flat": 4.56446,
+          "flat_prefix": 4.53976
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0017,
+          "flat": 1.0142,
+          "flat_prefix": 1.0087
+        },
+        "loops": 1
+      },
+      "clang/500000/0/normal": {
+        "raw_ms": {
+          "baseline": [
+            37.5751,
+            36.3376,
+            36.2652,
+            36.1808,
+            36.195,
+            36.1856,
+            36.3061
+          ],
+          "used_buckets": [
+            36.9853,
+            36.4066,
+            36.2323,
+            36.2928,
+            36.3361,
+            36.2648,
+            36.3489
+          ],
+          "flat": [
+            37.287,
+            36.2233,
+            36.3058,
+            36.2429,
+            36.2726,
+            36.2817,
+            36.3089
+          ],
+          "flat_prefix": [
+            37.1056,
+            36.229,
+            36.0571,
+            36.377,
+            36.317,
+            36.3815,
+            36.2636
+          ]
+        },
+        "median_ms": {
+          "baseline": 36.2652,
+          "used_buckets": 36.3361,
+          "flat": 36.2817,
+          "flat_prefix": 36.317
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.002,
+          "flat": 1.0005,
+          "flat_prefix": 1.0014
+        },
+        "loops": 1
+      },
+      "clang/500000/3/normal": {
+        "raw_ms": {
+          "baseline": [
+            15.526,
+            15.3462,
+            15.5207,
+            15.6111,
+            15.5577,
+            15.4766,
+            15.5048
+          ],
+          "used_buckets": [
+            15.4864,
+            15.6162,
+            15.5906,
+            15.55,
+            15.5785,
+            15.4367,
+            15.3879
+          ],
+          "flat": [
+            15.6621,
+            15.5814,
+            15.343,
+            15.3425,
+            15.4896,
+            15.5226,
+            15.5684
+          ],
+          "flat_prefix": [
+            15.5632,
+            15.5117,
+            15.4809,
+            15.6009,
+            15.4525,
+            15.4467,
+            15.7194
+          ]
+        },
+        "median_ms": {
+          "baseline": 15.5207,
+          "used_buckets": 15.55,
+          "flat": 15.5226,
+          "flat_prefix": 15.5117
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 1.0019,
+          "flat": 1.0001,
+          "flat_prefix": 0.9994
+        },
+        "loops": 1
+      },
+      "clang/500000/7/normal": {
+        "raw_ms": {
+          "baseline": [
+            16.3935,
+            16.4332,
+            16.4837,
+            16.5917,
+            16.745,
+            17.4212,
+            16.6412
+          ],
+          "used_buckets": [
+            16.3912,
+            16.9351,
+            16.6475,
+            16.3987,
+            16.5844,
+            16.4193,
+            16.4202
+          ],
+          "flat": [
+            16.575,
+            16.9386,
+            16.5335,
+            16.6539,
+            16.5251,
+            16.8655,
+            17.278
+          ],
+          "flat_prefix": [
+            17.2666,
+            16.6671,
+            16.4955,
+            16.6833,
+            16.5832,
+            17.3749,
+            17.174
+          ]
+        },
+        "median_ms": {
+          "baseline": 16.5917,
+          "used_buckets": 16.4202,
+          "flat": 16.6539,
+          "flat_prefix": 16.6833
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9897,
+          "flat": 1.0037,
+          "flat_prefix": 1.0055
+        },
+        "loops": 1
+      },
+      "clang/500000/0/sorted": {
+        "raw_ms": {
+          "baseline": [
+            33.4125,
+            33.534,
+            33.4099,
+            33.5135,
+            33.1917,
+            33.5288,
+            34.5675
+          ],
+          "used_buckets": [
+            33.4691,
+            33.5416,
+            33.3261,
+            33.629,
+            33.4594,
+            33.3479,
+            33.9508
+          ],
+          "flat": [
+            68.8615,
+            33.3971,
+            33.3366,
+            33.3669,
+            33.2983,
+            33.3986,
+            33.4108
+          ],
+          "flat_prefix": [
+            33.4822,
+            33.5746,
+            33.4716,
+            33.4628,
+            33.3539,
+            33.6325,
+            34.4004
+          ]
+        },
+        "median_ms": {
+          "baseline": 33.5135,
+          "used_buckets": 33.4691,
+          "flat": 33.3971,
+          "flat_prefix": 33.4822
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "used_buckets": 0.9987,
+          "flat": 0.9965,
+          "flat_prefix": 0.9991
+        },
+        "loops": 1
+      }
+    }
+  },
+  "candidates": {
+    "used_buckets": "3パスの先頭で使わない1024バケットの走査を省く。",
+    "flat": "カウンタを5120要素に平坦化し、固定作業領域を20/40KiBへ縮小する案。",
+    "flat_prefix": "平坦化に加えてactive集計とprefixsumを同一ループへまとめる。"
+  },
+  "result_limits": "大規模は大半が±1%程度。一部クラスタで約2%短縮する一方、水平や小規模の一部で約2～6%後退。Clangの一部クラスタでも約1～1.5%後退。追加3案は採用せず、正しさの全マトリクスは再実行していない。各ベンチでは返却添字範囲と距離checksumを照合。現行本体は前回検証版と同一。",
+  "frozen_files": {
+    "baseline.hpp": {
+      "sha256": "f4b64c919a4c6e733f8ca37deda0bbc71a48e0aa95a8abf37b1b0ea3934319c6",
+      "source": "// SPDX-License-Identifier: CC0-1.0\n// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/nearest_two_points.md\n//\n// API一覧\n// [最近点対]\n// P: pair<int32_t,int32_t>の別名。NearestTwoPointsResultはdistance_squared:uint64_tとfirst_index/second_index:size_tを所有。\n// NearestTwoPointsResult::distance_squaredは最短距離の二乗、添字は元入力の0始まり（first_index < second_index）。\n// nearest_two_points(first,last): [first,last)の整数pair-like列からoptional<NearestTwoPointsResult>を返す。int32座標・未整列可・入力不変、O(N log N)時間/O(N)領域。\n// 2点未満はnullopt。同距離の対は任意。最小二乗距離がuint64_tを超える場合は常時overflow_error。\n// nearest_two_points(first,count): firstからptrdiff_t型のcount個を処理する。同じ戻り値・計算量。count>=0で、指定個数を参照できること。\n// nearest_two_points(points): vector全体を処理する。同じ戻り値・計算量。元入力の点番号を結果に保持する。\n// closest_pair(first,n): firstからn個の最短距離二乗をuint64_tで返す。n<2はINT32_MAX（負数は検査時に例外）。\n// int32座標・未整列可・入力不変、O(N log N)時間/O(N)領域。uint64_t超過は常時overflow_error。\n// nearest_two_points_sorted(first,last): 整列済み範囲版。(x,y)辞書順の非減少を前提に初回sortを省く。検査時はコピー中に順序を確認。\n// 戻り値はnearest_two_pointsと同じで、添字は渡した列内。O(N log N)時間/O(N)領域、入力不変。\n// nearest_two_points_sorted(first,count): 整列済みfirstからcount個の版。count>=0かつ指定個数を参照可能。戻り値・計算量は範囲版と同じ。\n// nearest_two_points_sorted(points): 整列済みvector全体版。戻り値・前提・計算量は範囲版と同じ。\n\n#include <algorithm>\n#include <array>\n#include <concepts>\n#include <cstddef>\n#include <cstdint>\n#include <iterator>\n#include <limits>\n#include <optional>\n#include <stdexcept>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_TYPES_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_TYPES_DEFINED\nusing P = std::pair<std::int32_t, std::int32_t>;\n\nstruct NearestTwoPointsResult {\n    std::uint64_t distance_squared;\n    std::size_t first_index;\n    std::size_t second_index;\n};\n#endif\n\n#ifndef SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED\n#define SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED\nnamespace reinsirk::detail {\ntemplate<class Index>\nclass NearestTwoPointsSolver {\n    struct Node {\n        std::int32_t x;\n        std::int32_t y;\n        Index index;\n        // 作業領域は各整列パスで全要素を代入してから読む。\n        Node() noexcept {}\n        Node(std::int32_t a, std::int32_t b, Index i) noexcept : x(a), y(b), index(i) {}\n    };\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \\\n    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n    // GCC/Clangの整数拡張。標準C++の型ではない。\n    __extension__ using Distance = unsigned __int128;\n    // 差はUINT32_MAX以下なので、単独の二乗は64bitに収まる。\n    static Distance square(std::uint64_t d) { return Distance(d * d); }\n    static Distance add(Distance a, Distance b) { return a + b; }\n    static std::uint64_t narrow(Distance d) {\n        if (d > std::numeric_limits<std::uint64_t>::max())\n            throw std::overflow_error(\"nearest_two_points: squared distance exceeds uint64_t\");\n        return static_cast<std::uint64_t>(d);\n    }\n#else\n    // 座標差は32ビット以内。二乗和だけ65ビット必要になる。\n    struct Distance {\n        std::uint64_t low;\n        bool high;\n        friend bool operator<(Distance a, Distance b) {\n            return a.high != b.high ? !a.high : a.low < b.low;\n        }\n    };\n    static Distance square(std::uint64_t d) { return {d * d, false}; }\n    static Distance add(Distance a, Distance b) {\n        const auto low = a.low + b.low;\n        return {low, low < a.low};\n    }\n    static std::uint64_t narrow(Distance d) {\n        if (d.high)\n            throw std::overflow_error(\"nearest_two_points: squared distance exceeds uint64_t\");\n        return d.low;\n    }\n#endif\n    std::vector<Node> nodes_;\n    std::vector<Node> buffer_;\n    Distance best_{};\n    std::size_t best_first_ = 0;\n    std::size_t best_second_ = 1;\n    bool zero_ = false;\n\n#ifndef SKIP_RUNTIME_CHECKS\n    template<std::integral Integer>\n    static bool valid_coordinate(Integer value) {\n        if constexpr (std::numeric_limits<Integer>::digits <= 31) {\n            return true;\n        } else if constexpr (std::is_signed_v<Integer>) {\n            return value >= static_cast<Integer>(std::numeric_limits<std::int32_t>::min()) &&\n                   value <= static_cast<Integer>(std::numeric_limits<std::int32_t>::max());\n        } else {\n            return value <= static_cast<Integer>(std::numeric_limits<std::int32_t>::max());\n        }\n    }\n#endif\n    static std::uint64_t difference(std::int32_t a, std::int32_t b) {\n        const std::int64_t d = std::int64_t(a) - b;\n        return static_cast<std::uint64_t>(d < 0 ? -d : d);\n    }\n    static Distance distance(const Node& a, const Node& b) {\n        return add(square(difference(a.x, b.x)), square(difference(a.y, b.y)));\n    }\n    static bool by_y(const Node& a, const Node& b) {\n        return a.y != b.y ? a.y < b.y : a.x < b.x;\n    }\n    void update(const Node& a, const Node& b) {\n        const auto d = distance(a, b);\n        if (d < best_) {\n            best_ = d;\n            best_first_ = std::min(a.index, b.index);\n            best_second_ = std::max(a.index, b.index);\n#if defined(__GNUC__) && !defined(__clang__)\n            // GCCでは計算済みの65bit距離を使う。Clangは座標比較を維持する。\n            zero_ = !(square(0) < d);\n#else\n            zero_ = a.x == b.x && a.y == b.y;\n#endif\n        }\n    }\n    // 符号bitを反転したxを10/11/11bitの3パスで基数整列する。\n    void sort_by_x() {\n        // Indexの範囲内の点数を扱うので、合計と最終offsetも同じ型に収まる。\n        std::array<std::array<Index, 2048>, 3> counts{};\n        for (const auto& node : nodes_) {\n            const auto key = static_cast<std::uint32_t>(node.x) ^ UINT32_C(0x80000000);\n            ++counts[0][key & 1023U];\n            ++counts[1][(key >> 10) & 2047U];\n            ++counts[2][key >> 21];\n        }\n        buffer_.resize(nodes_.size());\n        Node* input = nodes_.data();\n        Node* output = buffer_.data();\n        for (unsigned pass = 0; pass < 3; ++pass) {\n            auto& offsets = counts[pass];\n            std::size_t active = 0;\n            for (const auto count : offsets) active += count != 0;\n            if (active <= 1) continue;\n            Index sum = 0;\n            for (auto& count : offsets) { const auto n = count; count = sum; sum += n; }\n            for (std::size_t i = 0; i < nodes_.size(); ++i) {\n                const auto key = static_cast<std::uint32_t>(input[i].x) ^ UINT32_C(0x80000000);\n                output[offsets[(key >> (pass == 0 ? 0 : pass == 1 ? 10 : 21)) & (pass == 0 ? 1023U : 2047U)]++] = input[i];\n            }\n            std::swap(input, output);\n        }\n        if (input != nodes_.data()) nodes_.swap(buffer_);\n    }\n    // 同区間の両配列をx順で開始し、outputをy順で返す。inputは作業用。\n    void solve(Node* input, Node* output, std::size_t left, std::size_t right) {\n        if (zero_) return;\n        if (right - left <= 16) {\n            for (auto i = left; i < right; ++i)\n                for (auto j = i + 1; j < right; ++j) update(output[i], output[j]);\n            std::sort(output + left, output + right, by_y);\n            return;\n        }\n        const auto middle = left + (right - left) / 2;\n        const auto split_x = input[middle].x;\n        solve(output, input, left, middle);\n        solve(output, input, middle, right);\n        if (zero_) return;\n        // 左半分のxは右半分以下。同じyでは左を先にすればよい。\n        std::merge(input + left, input + middle, input + middle, input + right,\n                   output + left, [](const Node& a, const Node& b) { return a.y < b.y; });\n        auto used = left;\n        for (auto i = left; i < right; ++i) {\n            const Node current = output[i];\n            if (!(square(difference(current.x, split_x)) < best_)) continue;\n            for (auto j = used; j > left;) {\n                const Node& previous = input[--j];\n                if (!(square(difference(current.y, previous.y)) < best_)) break;\n                update(current, previous);\n                if (zero_) return;\n            }\n            input[used++] = current;\n        }\n    }\n\npublic:\n    template<bool Sorted = false, std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\n    static std::optional<NearestTwoPointsResult> run(Iterator first, Sentinel last) {\n        NearestTwoPointsSolver solver;\n        if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n            const auto count = last - first;\n#ifndef SKIP_RUNTIME_CHECKS\n            if (count < 0) throw std::invalid_argument(\"nearest_two_points: reversed range\");\n#endif\n            if (std::cmp_greater(count, solver.nodes_.max_size()))\n                throw std::length_error(\"nearest_two_points: too many points\");\n            solver.nodes_.reserve(static_cast<std::size_t>(count));\n        }\n        for (; first != last; ++first) {\n            const auto& point = *first;\n            static_assert(std::integral<std::remove_cvref_t<decltype(point.first)>> &&\n                          std::integral<std::remove_cvref_t<decltype(point.second)>>,\n                          \"nearest_two_points requires integral pair coordinates\");\n#ifndef SKIP_RUNTIME_CHECKS\n            if (!valid_coordinate(point.first) || !valid_coordinate(point.second))\n                throw std::out_of_range(\"nearest_two_points: coordinates must fit int32_t\");\n#endif\n            if (solver.nodes_.size() == solver.nodes_.max_size())\n                throw std::length_error(\"nearest_two_points: too many points\");\n#ifndef SKIP_RUNTIME_CHECKS\n            if constexpr (Sorted) {\n                if (!solver.nodes_.empty()) {\n                    const auto& previous = solver.nodes_.back();\n                    if (static_cast<std::int32_t>(point.first) < previous.x ||\n                        (static_cast<std::int32_t>(point.first) == previous.x &&\n                         static_cast<std::int32_t>(point.second) < previous.y))\n                        throw std::invalid_argument(\"nearest_two_points_sorted: unordered input\");\n                }\n            }\n#endif\n            solver.nodes_.push_back({static_cast<std::int32_t>(point.first),\n                                     static_cast<std::int32_t>(point.second),\n                                     static_cast<Index>(solver.nodes_.size())});\n        }\n        if (solver.nodes_.size() < 2) return std::nullopt;\n        if constexpr (!Sorted) {\n\n            if (solver.nodes_.size() >= 2048) {\n                if (solver.nodes_[0].x == solver.nodes_[1].x &&\n                    solver.nodes_[0].y == solver.nodes_[1].y)\n                    return NearestTwoPointsResult{0, 0, 1};\n                solver.sort_by_x();\n            }\n            else std::sort(solver.nodes_.begin(), solver.nodes_.end(), [](const Node& a, const Node& b) {\n                return a.x != b.x ? a.x < b.x : a.y < b.y;\n            });\n        }\n        solver.best_ = distance(solver.nodes_[0], solver.nodes_[1]);\n        solver.best_first_ = std::min(solver.nodes_[0].index, solver.nodes_[1].index);\n        solver.best_second_ = std::max(solver.nodes_[0].index, solver.nodes_[1].index);\n        solver.zero_ = solver.nodes_[0].x == solver.nodes_[1].x &&\n                       solver.nodes_[0].y == solver.nodes_[1].y;\n        if (!solver.zero_) {\n            // 最初だけ両配列のx順を揃える。\n            solver.buffer_ = solver.nodes_;\n            solver.solve(solver.nodes_.data(), solver.buffer_.data(), 0, solver.nodes_.size());\n        }\n        return NearestTwoPointsResult{narrow(solver.best_), solver.best_first_, solver.best_second_};\n    }\n};\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_DEFINED\ntemplate<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\nstd::optional<NearestTwoPointsResult> nearest_two_points(Iterator first, Sentinel last) {\n    // 小入力はsize_t経路を保ち、大入力だけ点ごとの添字を圧縮する。\n    if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n        const auto n = last - first;\n        if (n >= 2048 && std::cmp_less_equal(n, std::numeric_limits<std::uint32_t>::max()))\n            return reinsirk::detail::NearestTwoPointsSolver<std::uint32_t>::run(std::move(first), std::move(last));\n    }\n    return reinsirk::detail::NearestTwoPointsSolver<std::size_t>::run(std::move(first), std::move(last));\n}\n\ntemplate<std::input_iterator Iterator>\nstd::optional<NearestTwoPointsResult> nearest_two_points(Iterator first, std::ptrdiff_t count) {\n#ifndef SKIP_RUNTIME_CHECKS\n    if (count < 0) throw std::invalid_argument(\"nearest_two_points: negative count\");\n#endif\n    return nearest_two_points(std::counted_iterator(std::move(first), count), std::default_sentinel);\n}\n\ntemplate<class Point, class Allocator>\nstd::optional<NearestTwoPointsResult> nearest_two_points(const std::vector<Point, Allocator>& points) {\n    return nearest_two_points(points.begin(), points.end());\n}\n#endif\n\n#ifndef SIRKIT_CLOSEST_PAIR_DEFINED\n#define SIRKIT_CLOSEST_PAIR_DEFINED\ntemplate<std::input_iterator Iterator>\nstd::uint64_t closest_pair(Iterator first, int n) {\n    const auto result = nearest_two_points(std::move(first), static_cast<std::ptrdiff_t>(n));\n    return result ? result->distance_squared : std::numeric_limits<std::int32_t>::max();\n}\n#endif\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_SORTED_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_SORTED_DEFINED\ntemplate<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(Iterator first, Sentinel last) {\n    // 小入力はsize_t経路を保ち、大入力だけ点ごとの添字を圧縮する。\n    if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n        const auto n = last - first;\n        if (n >= 2048 && std::cmp_less_equal(n, std::numeric_limits<std::uint32_t>::max()))\n            return reinsirk::detail::NearestTwoPointsSolver<std::uint32_t>::run<true>(std::move(first), std::move(last));\n    }\n    return reinsirk::detail::NearestTwoPointsSolver<std::size_t>::run<true>(std::move(first), std::move(last));\n}\ntemplate<std::input_iterator Iterator>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(Iterator first, std::ptrdiff_t count) {\n#ifndef SKIP_RUNTIME_CHECKS\n    if (count < 0) throw std::invalid_argument(\"nearest_two_points_sorted: negative count\");\n#endif\n    return nearest_two_points_sorted(std::counted_iterator(std::move(first), count), std::default_sentinel);\n}\ntemplate<class Point, class Allocator>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(const std::vector<Point, Allocator>& points) {\n    return nearest_two_points_sorted(points.begin(), points.end());\n}\n#endif\n"
+    },
+    "baseline_main.cpp": {
+      "sha256": "30e9b57891acfda55aa928c6b97ae23a21b3a7dcd12b39396b4dcae7f50df129",
+      "source": "#define SKIP_RUNTIME_CHECKS\n// Verify: https://judge.yosupo.jp/problem/closest_pair\n// Submission: https://judge.yosupo.jp/submission/413074\n\n// Library: Geometry/Nearest_Two_points.cpp\n// SPDX-License-Identifier: CC0-1.0\n// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/nearest_two_points.md\n//\n// API一覧\n// [最近点対]\n// P: pair<int32_t,int32_t>の別名。NearestTwoPointsResultはdistance_squared:uint64_tとfirst_index/second_index:size_tを所有。\n// NearestTwoPointsResult::distance_squaredは最短距離の二乗、添字は元入力の0始まり（first_index < second_index）。\n// nearest_two_points(first,last): [first,last)の整数pair-like列からoptional<NearestTwoPointsResult>を返す。int32座標・未整列可・入力不変、O(N log N)時間/O(N)領域。\n// 2点未満はnullopt。同距離の対は任意。最小二乗距離がuint64_tを超える場合は常時overflow_error。\n// nearest_two_points(first,count): firstからptrdiff_t型のcount個を処理する。同じ戻り値・計算量。count>=0で、指定個数を参照できること。\n// nearest_two_points(points): vector全体を処理する。同じ戻り値・計算量。元入力の点番号を結果に保持する。\n// closest_pair(first,n): firstからn個の最短距離二乗をuint64_tで返す。n<2はINT32_MAX（負数は検査時に例外）。\n// int32座標・未整列可・入力不変、O(N log N)時間/O(N)領域。uint64_t超過は常時overflow_error。\n// nearest_two_points_sorted(first,last): 整列済み範囲版。(x,y)辞書順の非減少を前提に初回sortを省く。検査時はコピー中に順序を確認。\n// 戻り値はnearest_two_pointsと同じで、添字は渡した列内。O(N log N)時間/O(N)領域、入力不変。\n// nearest_two_points_sorted(first,count): 整列済みfirstからcount個の版。count>=0かつ指定個数を参照可能。戻り値・計算量は範囲版と同じ。\n// nearest_two_points_sorted(points): 整列済みvector全体版。戻り値・前提・計算量は範囲版と同じ。\n\n#include <algorithm>\n#include <array>\n#include <concepts>\n#include <cstddef>\n#include <cstdint>\n#include <iterator>\n#include <limits>\n#include <optional>\n#include <stdexcept>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_TYPES_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_TYPES_DEFINED\nusing P = std::pair<std::int32_t, std::int32_t>;\n\nstruct NearestTwoPointsResult {\n    std::uint64_t distance_squared;\n    std::size_t first_index;\n    std::size_t second_index;\n};\n#endif\n\n#ifndef SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED\n#define SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED\nnamespace reinsirk::detail {\ntemplate<class Index>\nclass NearestTwoPointsSolver {\n    struct Node {\n        std::int32_t x;\n        std::int32_t y;\n        Index index;\n        // 作業領域は各整列パスで全要素を代入してから読む。\n        Node() noexcept {}\n        Node(std::int32_t a, std::int32_t b, Index i) noexcept : x(a), y(b), index(i) {}\n    };\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \\\n    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n    // GCC/Clangの整数拡張。標準C++の型ではない。\n    __extension__ using Distance = unsigned __int128;\n    // 差はUINT32_MAX以下なので、単独の二乗は64bitに収まる。\n    static Distance square(std::uint64_t d) { return Distance(d * d); }\n    static Distance add(Distance a, Distance b) { return a + b; }\n    static std::uint64_t narrow(Distance d) {\n        if (d > std::numeric_limits<std::uint64_t>::max())\n            throw std::overflow_error(\"nearest_two_points: squared distance exceeds uint64_t\");\n        return static_cast<std::uint64_t>(d);\n    }\n#else\n    // 座標差は32ビット以内。二乗和だけ65ビット必要になる。\n    struct Distance {\n        std::uint64_t low;\n        bool high;\n        friend bool operator<(Distance a, Distance b) {\n            return a.high != b.high ? !a.high : a.low < b.low;\n        }\n    };\n    static Distance square(std::uint64_t d) { return {d * d, false}; }\n    static Distance add(Distance a, Distance b) {\n        const auto low = a.low + b.low;\n        return {low, low < a.low};\n    }\n    static std::uint64_t narrow(Distance d) {\n        if (d.high)\n            throw std::overflow_error(\"nearest_two_points: squared distance exceeds uint64_t\");\n        return d.low;\n    }\n#endif\n    std::vector<Node> nodes_;\n    std::vector<Node> buffer_;\n    Distance best_{};\n    std::size_t best_first_ = 0;\n    std::size_t best_second_ = 1;\n    bool zero_ = false;\n\n#ifndef SKIP_RUNTIME_CHECKS\n    template<std::integral Integer>\n    static bool valid_coordinate(Integer value) {\n        if constexpr (std::numeric_limits<Integer>::digits <= 31) {\n            return true;\n        } else if constexpr (std::is_signed_v<Integer>) {\n            return value >= static_cast<Integer>(std::numeric_limits<std::int32_t>::min()) &&\n                   value <= static_cast<Integer>(std::numeric_limits<std::int32_t>::max());\n        } else {\n            return value <= static_cast<Integer>(std::numeric_limits<std::int32_t>::max());\n        }\n    }\n#endif\n    static std::uint64_t difference(std::int32_t a, std::int32_t b) {\n        const std::int64_t d = std::int64_t(a) - b;\n        return static_cast<std::uint64_t>(d < 0 ? -d : d);\n    }\n    static Distance distance(const Node& a, const Node& b) {\n        return add(square(difference(a.x, b.x)), square(difference(a.y, b.y)));\n    }\n    static bool by_y(const Node& a, const Node& b) {\n        return a.y != b.y ? a.y < b.y : a.x < b.x;\n    }\n    void update(const Node& a, const Node& b) {\n        const auto d = distance(a, b);\n        if (d < best_) {\n            best_ = d;\n            best_first_ = std::min(a.index, b.index);\n            best_second_ = std::max(a.index, b.index);\n#if defined(__GNUC__) && !defined(__clang__)\n            // GCCでは計算済みの65bit距離を使う。Clangは座標比較を維持する。\n            zero_ = !(square(0) < d);\n#else\n            zero_ = a.x == b.x && a.y == b.y;\n#endif\n        }\n    }\n    // 符号bitを反転したxを10/11/11bitの3パスで基数整列する。\n    void sort_by_x() {\n        // Indexの範囲内の点数を扱うので、合計と最終offsetも同じ型に収まる。\n        std::array<std::array<Index, 2048>, 3> counts{};\n        for (const auto& node : nodes_) {\n            const auto key = static_cast<std::uint32_t>(node.x) ^ UINT32_C(0x80000000);\n            ++counts[0][key & 1023U];\n            ++counts[1][(key >> 10) & 2047U];\n            ++counts[2][key >> 21];\n        }\n        buffer_.resize(nodes_.size());\n        Node* input = nodes_.data();\n        Node* output = buffer_.data();\n        for (unsigned pass = 0; pass < 3; ++pass) {\n            auto& offsets = counts[pass];\n            std::size_t active = 0;\n            for (const auto count : offsets) active += count != 0;\n            if (active <= 1) continue;\n            Index sum = 0;\n            for (auto& count : offsets) { const auto n = count; count = sum; sum += n; }\n            for (std::size_t i = 0; i < nodes_.size(); ++i) {\n                const auto key = static_cast<std::uint32_t>(input[i].x) ^ UINT32_C(0x80000000);\n                output[offsets[(key >> (pass == 0 ? 0 : pass == 1 ? 10 : 21)) & (pass == 0 ? 1023U : 2047U)]++] = input[i];\n            }\n            std::swap(input, output);\n        }\n        if (input != nodes_.data()) nodes_.swap(buffer_);\n    }\n    // 同区間の両配列をx順で開始し、outputをy順で返す。inputは作業用。\n    void solve(Node* input, Node* output, std::size_t left, std::size_t right) {\n        if (zero_) return;\n        if (right - left <= 16) {\n            for (auto i = left; i < right; ++i)\n                for (auto j = i + 1; j < right; ++j) update(output[i], output[j]);\n            std::sort(output + left, output + right, by_y);\n            return;\n        }\n        const auto middle = left + (right - left) / 2;\n        const auto split_x = input[middle].x;\n        solve(output, input, left, middle);\n        solve(output, input, middle, right);\n        if (zero_) return;\n        // 左半分のxは右半分以下。同じyでは左を先にすればよい。\n        std::merge(input + left, input + middle, input + middle, input + right,\n                   output + left, [](const Node& a, const Node& b) { return a.y < b.y; });\n        auto used = left;\n        for (auto i = left; i < right; ++i) {\n            const Node current = output[i];\n            if (!(square(difference(current.x, split_x)) < best_)) continue;\n            for (auto j = used; j > left;) {\n                const Node& previous = input[--j];\n                if (!(square(difference(current.y, previous.y)) < best_)) break;\n                update(current, previous);\n                if (zero_) return;\n            }\n            input[used++] = current;\n        }\n    }\n\npublic:\n    template<bool Sorted = false, std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\n    static std::optional<NearestTwoPointsResult> run(Iterator first, Sentinel last) {\n        NearestTwoPointsSolver solver;\n        if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n            const auto count = last - first;\n#ifndef SKIP_RUNTIME_CHECKS\n            if (count < 0) throw std::invalid_argument(\"nearest_two_points: reversed range\");\n#endif\n            if (std::cmp_greater(count, solver.nodes_.max_size()))\n                throw std::length_error(\"nearest_two_points: too many points\");\n            solver.nodes_.reserve(static_cast<std::size_t>(count));\n        }\n        for (; first != last; ++first) {\n            const auto& point = *first;\n            static_assert(std::integral<std::remove_cvref_t<decltype(point.first)>> &&\n                          std::integral<std::remove_cvref_t<decltype(point.second)>>,\n                          \"nearest_two_points requires integral pair coordinates\");\n#ifndef SKIP_RUNTIME_CHECKS\n            if (!valid_coordinate(point.first) || !valid_coordinate(point.second))\n                throw std::out_of_range(\"nearest_two_points: coordinates must fit int32_t\");\n#endif\n            if (solver.nodes_.size() == solver.nodes_.max_size())\n                throw std::length_error(\"nearest_two_points: too many points\");\n#ifndef SKIP_RUNTIME_CHECKS\n            if constexpr (Sorted) {\n                if (!solver.nodes_.empty()) {\n                    const auto& previous = solver.nodes_.back();\n                    if (static_cast<std::int32_t>(point.first) < previous.x ||\n                        (static_cast<std::int32_t>(point.first) == previous.x &&\n                         static_cast<std::int32_t>(point.second) < previous.y))\n                        throw std::invalid_argument(\"nearest_two_points_sorted: unordered input\");\n                }\n            }\n#endif\n            solver.nodes_.push_back({static_cast<std::int32_t>(point.first),\n                                     static_cast<std::int32_t>(point.second),\n                                     static_cast<Index>(solver.nodes_.size())});\n        }\n        if (solver.nodes_.size() < 2) return std::nullopt;\n        if constexpr (!Sorted) {\n\n            if (solver.nodes_.size() >= 2048) {\n                if (solver.nodes_[0].x == solver.nodes_[1].x &&\n                    solver.nodes_[0].y == solver.nodes_[1].y)\n                    return NearestTwoPointsResult{0, 0, 1};\n                solver.sort_by_x();\n            }\n            else std::sort(solver.nodes_.begin(), solver.nodes_.end(), [](const Node& a, const Node& b) {\n                return a.x != b.x ? a.x < b.x : a.y < b.y;\n            });\n        }\n        solver.best_ = distance(solver.nodes_[0], solver.nodes_[1]);\n        solver.best_first_ = std::min(solver.nodes_[0].index, solver.nodes_[1].index);\n        solver.best_second_ = std::max(solver.nodes_[0].index, solver.nodes_[1].index);\n        solver.zero_ = solver.nodes_[0].x == solver.nodes_[1].x &&\n                       solver.nodes_[0].y == solver.nodes_[1].y;\n        if (!solver.zero_) {\n            // 最初だけ両配列のx順を揃える。\n            solver.buffer_ = solver.nodes_;\n            solver.solve(solver.nodes_.data(), solver.buffer_.data(), 0, solver.nodes_.size());\n        }\n        return NearestTwoPointsResult{narrow(solver.best_), solver.best_first_, solver.best_second_};\n    }\n};\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_DEFINED\ntemplate<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\nstd::optional<NearestTwoPointsResult> nearest_two_points(Iterator first, Sentinel last) {\n    // 小入力はsize_t経路を保ち、大入力だけ点ごとの添字を圧縮する。\n    if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n        const auto n = last - first;\n        if (n >= 2048 && std::cmp_less_equal(n, std::numeric_limits<std::uint32_t>::max()))\n            return reinsirk::detail::NearestTwoPointsSolver<std::uint32_t>::run(std::move(first), std::move(last));\n    }\n    return reinsirk::detail::NearestTwoPointsSolver<std::size_t>::run(std::move(first), std::move(last));\n}\n\ntemplate<std::input_iterator Iterator>\nstd::optional<NearestTwoPointsResult> nearest_two_points(Iterator first, std::ptrdiff_t count) {\n#ifndef SKIP_RUNTIME_CHECKS\n    if (count < 0) throw std::invalid_argument(\"nearest_two_points: negative count\");\n#endif\n    return nearest_two_points(std::counted_iterator(std::move(first), count), std::default_sentinel);\n}\n\ntemplate<class Point, class Allocator>\nstd::optional<NearestTwoPointsResult> nearest_two_points(const std::vector<Point, Allocator>& points) {\n    return nearest_two_points(points.begin(), points.end());\n}\n#endif\n\n#ifndef SIRKIT_CLOSEST_PAIR_DEFINED\n#define SIRKIT_CLOSEST_PAIR_DEFINED\ntemplate<std::input_iterator Iterator>\nstd::uint64_t closest_pair(Iterator first, int n) {\n    const auto result = nearest_two_points(std::move(first), static_cast<std::ptrdiff_t>(n));\n    return result ? result->distance_squared : std::numeric_limits<std::int32_t>::max();\n}\n#endif\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_SORTED_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_SORTED_DEFINED\ntemplate<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(Iterator first, Sentinel last) {\n    // 小入力はsize_t経路を保ち、大入力だけ点ごとの添字を圧縮する。\n    if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n        const auto n = last - first;\n        if (n >= 2048 && std::cmp_less_equal(n, std::numeric_limits<std::uint32_t>::max()))\n            return reinsirk::detail::NearestTwoPointsSolver<std::uint32_t>::run<true>(std::move(first), std::move(last));\n    }\n    return reinsirk::detail::NearestTwoPointsSolver<std::size_t>::run<true>(std::move(first), std::move(last));\n}\ntemplate<std::input_iterator Iterator>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(Iterator first, std::ptrdiff_t count) {\n#ifndef SKIP_RUNTIME_CHECKS\n    if (count < 0) throw std::invalid_argument(\"nearest_two_points_sorted: negative count\");\n#endif\n    return nearest_two_points_sorted(std::counted_iterator(std::move(first), count), std::default_sentinel);\n}\ntemplate<class Point, class Allocator>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(const std::vector<Point, Allocator>& points) {\n    return nearest_two_points_sorted(points.begin(), points.end());\n}\n#endif\n\n\n// SPDX-License-Identifier: CC0-1.0\n// Verify I/O: Verify/current/common/fast_io.hpp\n// SPDX-License-Identifier: CC0-1.0\n#include <algorithm>\n#include <array>\n#include <charconv>\n#include <cstddef>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#include <cstring>\n#include <limits>\n#include <stdexcept>\n#include <string>\n#include <string_view>\n#include <type_traits>\n#include <vector>\n\n#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED\n#define SIRKIT_VERIFY_FAST_IO_DEFINED\n\n// VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。\n// >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。\n// >> char/string: 空白を飛ばし、1文字／空白までの文字列を読む。\n// >> 浮動小数点: 十進文字列を変換する。通常のCロケールで使う。\n// bool / !: 直前までの読み取りが成功しているか／失敗したかを返す。\nclass VerifyInput {\n    static constexpr std::size_t buffer_size = 1 << 17;\n    std::FILE* file_;\n    std::array<unsigned char, buffer_size> buffer_;\n    std::size_t position_ = 0, size_ = 0;\n    bool good_ = true;\n\n    int peek() {\n        if (position_ == size_) {\n            size_ = std::fread(buffer_.data(), 1, buffer_.size(), file_);\n            position_ = 0;\n            if (size_ == 0) return EOF;\n        }\n        return buffer_[position_];\n    }\n\n    int skip_space() {\n        int c;\n        while ((c = peek()) != EOF && c <= ' ') ++position_;\n        if (c == EOF) good_ = false;\n        return c;\n    }\n\npublic:\n    explicit VerifyInput(std::FILE* file = stdin) : file_(file) {}\n    VerifyInput(const VerifyInput&) = delete;\n    VerifyInput& operator=(const VerifyInput&) = delete;\n\n    explicit operator bool() const noexcept { return good_; }\n    bool operator!() const noexcept { return !good_; }\n\n    template<class T>\n        requires (std::is_integral_v<T> && sizeof(T) <= sizeof(std::uint64_t)\n                  && !std::is_same_v<T, char>)\n    VerifyInput& operator>>(T& result) {\n        if (!good_) return *this;\n        int c = skip_space();\n        if (c == EOF) return *this;\n        bool negative = false;\n        if (c == '-' || c == '+') {\n            negative = c == '-';\n            ++position_;\n            c = peek();\n        }\n        if (c == EOF) {\n            good_ = false;\n            return *this;\n        }\n#ifndef SKIP_RUNTIME_CHECKS\n        if (c < '0' || c > '9') {\n            good_ = false;\n            return *this;\n        }\n        // 先頭の0を除けば、20桁以下の末尾直前の値はuint64_tに収まる。\n        while (c == '0') {\n            ++position_;\n            c = peek();\n        }\n        std::uint64_t previous = 0;\n        unsigned last_digit = 0;\n        std::size_t digits = 0;\n#endif\n        std::uint64_t value = 0;\n        while (c >= '0' && c <= '9') {\n#ifndef SKIP_RUNTIME_CHECKS\n            previous = value;\n            last_digit = static_cast<unsigned>(c - '0');\n            if (digits <= 20) ++digits;\n#endif\n            value = value * 10 + static_cast<unsigned>(c - '0');\n            ++position_;\n            c = peek();\n        }\n#ifndef SKIP_RUNTIME_CHECKS\n        constexpr auto maximum = std::numeric_limits<std::uint64_t>::max();\n        if ((c != EOF && c > ' ') || digits > 20\n            || (digits == 20 && (previous > maximum / 10\n                || (previous == maximum / 10 && last_digit > maximum % 10)))) {\n            good_ = false;\n            return *this;\n        }\n        std::uint64_t limit = static_cast<std::uint64_t>(std::numeric_limits<T>::max());\n        if constexpr (std::is_signed_v<T>) limit += negative;\n        else if (negative && value != 0) good_ = false;\n        if (value > limit) good_ = false;\n        if (!good_) return *this;\n#endif\n        if constexpr (std::is_signed_v<T>) {\n            constexpr std::uint64_t minimum_magnitude =\n                static_cast<std::uint64_t>(std::numeric_limits<T>::max()) + 1;\n            // -(最小値)は評価せず、絶対値が最大値+1のときだけ最小値を使う。\n            result = negative\n                ? (value == minimum_magnitude ? std::numeric_limits<T>::min()\n                                  : static_cast<T>(-static_cast<T>(value)))\n                : static_cast<T>(value);\n        } else result = static_cast<T>(value);\n        return *this;\n    }\n\n    VerifyInput& operator>>(char& result) {\n        if (!good_) return *this;\n        const int c = skip_space();\n        if (c != EOF) {\n            result = static_cast<char>(c);\n            ++position_;\n        }\n        return *this;\n    }\n\n    VerifyInput& operator>>(std::string& result) {\n        if (!good_) return *this;\n        int c = skip_space();\n        if (c == EOF) return *this;\n        result.clear();\n        do {\n            result.push_back(static_cast<char>(c));\n            ++position_;\n            c = peek();\n        } while (c != EOF && c > ' ');\n        return *this;\n    }\n\n    template<class T> requires std::is_floating_point_v<T>\n    VerifyInput& operator>>(T& result) {\n        std::string token;\n        *this >> token;\n        if (!good_) return *this;\n#ifndef SKIP_RUNTIME_CHECKS\n        char* end = nullptr;\n        const long double value = std::strtold(token.c_str(), &end);\n        if (end != token.c_str() + token.size()) good_ = false;\n        else result = static_cast<T>(value);\n#else\n        result = static_cast<T>(std::strtold(token.c_str(), nullptr));\n#endif\n        return *this;\n    }\n};\n\n// VerifyOutput(file=stdout): 非所有のFILEへ書く。破棄時にflushし、FILEは閉じない。\n// << 整数/char/文字列/浮動小数点: 値を出力する。整数は64bit以下に対応する。\n// fixed(digits): 浮動小数点を小数点以下digits桁で出力する（digits>=0）。\n// flush(): バッファの内容をFILEへ渡す。bool / !で書き込み失敗を確認できる。\nclass VerifyOutput {\n    static constexpr std::size_t buffer_size = 1 << 17;\n    std::FILE* file_;\n    std::array<char, buffer_size> buffer_;\n    std::size_t size_ = 0;\n    int precision_ = 6;\n    bool fixed_ = false, good_ = true;\n\n    void write(std::string_view text) {\n        while (!text.empty() && good_) {\n            if (size_ == buffer_.size()) flush();\n            const auto count = std::min(text.size(), buffer_.size() - size_);\n            std::memcpy(buffer_.data() + size_, text.data(), count);\n            size_ += count;\n            text.remove_prefix(count);\n        }\n    }\n\npublic:\n    explicit VerifyOutput(std::FILE* file = stdout) : file_(file) {}\n    VerifyOutput(const VerifyOutput&) = delete;\n    VerifyOutput& operator=(const VerifyOutput&) = delete;\n    ~VerifyOutput() { flush(); }\n\n    explicit operator bool() const noexcept { return good_; }\n    bool operator!() const noexcept { return !good_; }\n\n    VerifyOutput& fixed(int digits) {\n        if (digits < 0) throw std::invalid_argument(\"negative output precision\");\n        fixed_ = true;\n        precision_ = digits;\n        return *this;\n    }\n\n    void flush() noexcept {\n        std::size_t written = 0;\n        while (written < size_ && good_) {\n            const auto count = std::fwrite(buffer_.data() + written, 1, size_ - written, file_);\n            if (count == 0) good_ = false;\n            written += count;\n        }\n        size_ = 0;\n    }\n\n    template<class T>\n        requires (std::is_integral_v<T> && sizeof(T) <= sizeof(std::uint64_t)\n                  && !std::is_same_v<T, char>)\n    VerifyOutput& operator<<(T value) {\n        if constexpr (std::is_same_v<T, bool>) return *this << static_cast<char>('0' + value);\n        else {\n            char digits[std::numeric_limits<std::uint64_t>::digits10 + 3];\n            const auto end = std::to_chars(digits, digits + sizeof(digits), value).ptr;\n            write(std::string_view(digits, static_cast<std::size_t>(end - digits)));\n            return *this;\n        }\n    }\n\n    VerifyOutput& operator<<(char value) {\n        if (size_ == buffer_.size()) flush();\n        if (good_) buffer_[size_++] = value;\n        return *this;\n    }\n\n    VerifyOutput& operator<<(std::string_view value) { write(value); return *this; }\n    VerifyOutput& operator<<(const std::string& value) { write(value); return *this; }\n    VerifyOutput& operator<<(const char* value) { write(value); return *this; }\n\n    template<class T> requires std::is_floating_point_v<T>\n    VerifyOutput& operator<<(T value) {\n        char local[128];\n        const char* format = fixed_ ? \"%.*Lf\" : \"%.*Lg\";\n        const int count = std::snprintf(local, sizeof(local), format, precision_,\n                                        static_cast<long double>(value));\n        if (count < 0) good_ = false;\n        else if (static_cast<std::size_t>(count) < sizeof(local))\n            write(std::string_view(local, static_cast<std::size_t>(count)));\n        else {\n            std::vector<char> text(static_cast<std::size_t>(count) + 1);\n            std::snprintf(text.data(), text.size(), format, precision_, static_cast<long double>(value));\n            write(std::string_view(text.data(), static_cast<std::size_t>(count)));\n        }\n        return *this;\n    }\n};\n\ninline VerifyInput verify_in;\ninline VerifyOutput verify_out;\n#endif\n\n#include <algorithm>\n#include <cassert>\n#include <cmath>\n#include <cstdint>\n#include <numeric>\n#include <random>\n#include <string>\n#include <utility>\n#include <vector>\n\nint main() {\n    int tests; verify_in >> tests;\n    while (tests--) {\n        int n; verify_in >> n;\n        std::vector<P> points(n);\n        for (auto& [x, y] : points) verify_in >> x >> y;\n        const auto answer = nearest_two_points(points);\n        verify_out << answer->first_index << ' ' << answer->second_index << '\\n';\n    }\n}\n"
+    },
+    "used_buckets.hpp": {
+      "sha256": "433eff6c051c48f2e53411cf67cd46493c94becfd759fe071c85b8a70171124e",
+      "source": "// SPDX-License-Identifier: CC0-1.0\n// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/nearest_two_points.md\n//\n// API一覧\n// [最近点対]\n// P: pair<int32_t,int32_t>の別名。NearestTwoPointsResultはdistance_squared:uint64_tとfirst_index/second_index:size_tを所有。\n// NearestTwoPointsResult::distance_squaredは最短距離の二乗、添字は元入力の0始まり（first_index < second_index）。\n// nearest_two_points(first,last): [first,last)の整数pair-like列からoptional<NearestTwoPointsResult>を返す。int32座標・未整列可・入力不変、O(N log N)時間/O(N)領域。\n// 2点未満はnullopt。同距離の対は任意。最小二乗距離がuint64_tを超える場合は常時overflow_error。\n// nearest_two_points(first,count): firstからptrdiff_t型のcount個を処理する。同じ戻り値・計算量。count>=0で、指定個数を参照できること。\n// nearest_two_points(points): vector全体を処理する。同じ戻り値・計算量。元入力の点番号を結果に保持する。\n// closest_pair(first,n): firstからn個の最短距離二乗をuint64_tで返す。n<2はINT32_MAX（負数は検査時に例外）。\n// int32座標・未整列可・入力不変、O(N log N)時間/O(N)領域。uint64_t超過は常時overflow_error。\n// nearest_two_points_sorted(first,last): 整列済み範囲版。(x,y)辞書順の非減少を前提に初回sortを省く。検査時はコピー中に順序を確認。\n// 戻り値はnearest_two_pointsと同じで、添字は渡した列内。O(N log N)時間/O(N)領域、入力不変。\n// nearest_two_points_sorted(first,count): 整列済みfirstからcount個の版。count>=0かつ指定個数を参照可能。戻り値・計算量は範囲版と同じ。\n// nearest_two_points_sorted(points): 整列済みvector全体版。戻り値・前提・計算量は範囲版と同じ。\n\n#include <algorithm>\n#include <array>\n#include <concepts>\n#include <cstddef>\n#include <cstdint>\n#include <iterator>\n#include <limits>\n#include <optional>\n#include <stdexcept>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_TYPES_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_TYPES_DEFINED\nusing P = std::pair<std::int32_t, std::int32_t>;\n\nstruct NearestTwoPointsResult {\n    std::uint64_t distance_squared;\n    std::size_t first_index;\n    std::size_t second_index;\n};\n#endif\n\n#ifndef SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED\n#define SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED\nnamespace reinsirk::detail {\ntemplate<class Index>\nclass NearestTwoPointsSolver {\n    struct Node {\n        std::int32_t x;\n        std::int32_t y;\n        Index index;\n        // 作業領域は各整列パスで全要素を代入してから読む。\n        Node() noexcept {}\n        Node(std::int32_t a, std::int32_t b, Index i) noexcept : x(a), y(b), index(i) {}\n    };\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \\\n    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n    // GCC/Clangの整数拡張。標準C++の型ではない。\n    __extension__ using Distance = unsigned __int128;\n    // 差はUINT32_MAX以下なので、単独の二乗は64bitに収まる。\n    static Distance square(std::uint64_t d) { return Distance(d * d); }\n    static Distance add(Distance a, Distance b) { return a + b; }\n    static std::uint64_t narrow(Distance d) {\n        if (d > std::numeric_limits<std::uint64_t>::max())\n            throw std::overflow_error(\"nearest_two_points: squared distance exceeds uint64_t\");\n        return static_cast<std::uint64_t>(d);\n    }\n#else\n    // 座標差は32ビット以内。二乗和だけ65ビット必要になる。\n    struct Distance {\n        std::uint64_t low;\n        bool high;\n        friend bool operator<(Distance a, Distance b) {\n            return a.high != b.high ? !a.high : a.low < b.low;\n        }\n    };\n    static Distance square(std::uint64_t d) { return {d * d, false}; }\n    static Distance add(Distance a, Distance b) {\n        const auto low = a.low + b.low;\n        return {low, low < a.low};\n    }\n    static std::uint64_t narrow(Distance d) {\n        if (d.high)\n            throw std::overflow_error(\"nearest_two_points: squared distance exceeds uint64_t\");\n        return d.low;\n    }\n#endif\n    std::vector<Node> nodes_;\n    std::vector<Node> buffer_;\n    Distance best_{};\n    std::size_t best_first_ = 0;\n    std::size_t best_second_ = 1;\n    bool zero_ = false;\n\n#ifndef SKIP_RUNTIME_CHECKS\n    template<std::integral Integer>\n    static bool valid_coordinate(Integer value) {\n        if constexpr (std::numeric_limits<Integer>::digits <= 31) {\n            return true;\n        } else if constexpr (std::is_signed_v<Integer>) {\n            return value >= static_cast<Integer>(std::numeric_limits<std::int32_t>::min()) &&\n                   value <= static_cast<Integer>(std::numeric_limits<std::int32_t>::max());\n        } else {\n            return value <= static_cast<Integer>(std::numeric_limits<std::int32_t>::max());\n        }\n    }\n#endif\n    static std::uint64_t difference(std::int32_t a, std::int32_t b) {\n        const std::int64_t d = std::int64_t(a) - b;\n        return static_cast<std::uint64_t>(d < 0 ? -d : d);\n    }\n    static Distance distance(const Node& a, const Node& b) {\n        return add(square(difference(a.x, b.x)), square(difference(a.y, b.y)));\n    }\n    static bool by_y(const Node& a, const Node& b) {\n        return a.y != b.y ? a.y < b.y : a.x < b.x;\n    }\n    void update(const Node& a, const Node& b) {\n        const auto d = distance(a, b);\n        if (d < best_) {\n            best_ = d;\n            best_first_ = std::min(a.index, b.index);\n            best_second_ = std::max(a.index, b.index);\n#if defined(__GNUC__) && !defined(__clang__)\n            // GCCでは計算済みの65bit距離を使う。Clangは座標比較を維持する。\n            zero_ = !(square(0) < d);\n#else\n            zero_ = a.x == b.x && a.y == b.y;\n#endif\n        }\n    }\n    // 符号bitを反転したxを10/11/11bitの3パスで基数整列する。\n    void sort_by_x() {\n        // Indexの範囲内の点数を扱うので、合計と最終offsetも同じ型に収まる。\n        std::array<std::array<Index, 2048>, 3> counts{};\n        for (const auto& node : nodes_) {\n            const auto key = static_cast<std::uint32_t>(node.x) ^ UINT32_C(0x80000000);\n            ++counts[0][key & 1023U];\n            ++counts[1][(key >> 10) & 2047U];\n            ++counts[2][key >> 21];\n        }\n        buffer_.resize(nodes_.size());\n        Node* input = nodes_.data();\n        Node* output = buffer_.data();\n        for (unsigned pass = 0; pass < 3; ++pass) {\n            auto* offsets = counts[pass].data();\n            const auto buckets = pass == 0 ? 1024U : 2048U;\n            std::size_t active = 0;\n            for (unsigned j = 0; j < buckets; ++j) active += offsets[j] != 0;\n            if (active <= 1) continue;\n            Index sum = 0;\n            for (unsigned j = 0; j < buckets; ++j) { const auto n = offsets[j]; offsets[j] = sum; sum += n; }\n            for (std::size_t i = 0; i < nodes_.size(); ++i) {\n                const auto key = static_cast<std::uint32_t>(input[i].x) ^ UINT32_C(0x80000000);\n                output[offsets[(key >> (pass == 0 ? 0 : pass == 1 ? 10 : 21)) & (pass == 0 ? 1023U : 2047U)]++] = input[i];\n            }\n            std::swap(input, output);\n        }\n        if (input != nodes_.data()) nodes_.swap(buffer_);\n    }\n    // 同区間の両配列をx順で開始し、outputをy順で返す。inputは作業用。\n    void solve(Node* input, Node* output, std::size_t left, std::size_t right) {\n        if (zero_) return;\n        if (right - left <= 16) {\n            for (auto i = left; i < right; ++i)\n                for (auto j = i + 1; j < right; ++j) update(output[i], output[j]);\n            std::sort(output + left, output + right, by_y);\n            return;\n        }\n        const auto middle = left + (right - left) / 2;\n        const auto split_x = input[middle].x;\n        solve(output, input, left, middle);\n        solve(output, input, middle, right);\n        if (zero_) return;\n        // 左半分のxは右半分以下。同じyでは左を先にすればよい。\n        std::merge(input + left, input + middle, input + middle, input + right,\n                   output + left, [](const Node& a, const Node& b) { return a.y < b.y; });\n        auto used = left;\n        for (auto i = left; i < right; ++i) {\n            const Node current = output[i];\n            if (!(square(difference(current.x, split_x)) < best_)) continue;\n            for (auto j = used; j > left;) {\n                const Node& previous = input[--j];\n                if (!(square(difference(current.y, previous.y)) < best_)) break;\n                update(current, previous);\n                if (zero_) return;\n            }\n            input[used++] = current;\n        }\n    }\n\npublic:\n    template<bool Sorted = false, std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\n    static std::optional<NearestTwoPointsResult> run(Iterator first, Sentinel last) {\n        NearestTwoPointsSolver solver;\n        if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n            const auto count = last - first;\n#ifndef SKIP_RUNTIME_CHECKS\n            if (count < 0) throw std::invalid_argument(\"nearest_two_points: reversed range\");\n#endif\n            if (std::cmp_greater(count, solver.nodes_.max_size()))\n                throw std::length_error(\"nearest_two_points: too many points\");\n            solver.nodes_.reserve(static_cast<std::size_t>(count));\n        }\n        for (; first != last; ++first) {\n            const auto& point = *first;\n            static_assert(std::integral<std::remove_cvref_t<decltype(point.first)>> &&\n                          std::integral<std::remove_cvref_t<decltype(point.second)>>,\n                          \"nearest_two_points requires integral pair coordinates\");\n#ifndef SKIP_RUNTIME_CHECKS\n            if (!valid_coordinate(point.first) || !valid_coordinate(point.second))\n                throw std::out_of_range(\"nearest_two_points: coordinates must fit int32_t\");\n#endif\n            if (solver.nodes_.size() == solver.nodes_.max_size())\n                throw std::length_error(\"nearest_two_points: too many points\");\n#ifndef SKIP_RUNTIME_CHECKS\n            if constexpr (Sorted) {\n                if (!solver.nodes_.empty()) {\n                    const auto& previous = solver.nodes_.back();\n                    if (static_cast<std::int32_t>(point.first) < previous.x ||\n                        (static_cast<std::int32_t>(point.first) == previous.x &&\n                         static_cast<std::int32_t>(point.second) < previous.y))\n                        throw std::invalid_argument(\"nearest_two_points_sorted: unordered input\");\n                }\n            }\n#endif\n            solver.nodes_.push_back({static_cast<std::int32_t>(point.first),\n                                     static_cast<std::int32_t>(point.second),\n                                     static_cast<Index>(solver.nodes_.size())});\n        }\n        if (solver.nodes_.size() < 2) return std::nullopt;\n        if constexpr (!Sorted) {\n\n            if (solver.nodes_.size() >= 2048) {\n                if (solver.nodes_[0].x == solver.nodes_[1].x &&\n                    solver.nodes_[0].y == solver.nodes_[1].y)\n                    return NearestTwoPointsResult{0, 0, 1};\n                solver.sort_by_x();\n            }\n            else std::sort(solver.nodes_.begin(), solver.nodes_.end(), [](const Node& a, const Node& b) {\n                return a.x != b.x ? a.x < b.x : a.y < b.y;\n            });\n        }\n        solver.best_ = distance(solver.nodes_[0], solver.nodes_[1]);\n        solver.best_first_ = std::min(solver.nodes_[0].index, solver.nodes_[1].index);\n        solver.best_second_ = std::max(solver.nodes_[0].index, solver.nodes_[1].index);\n        solver.zero_ = solver.nodes_[0].x == solver.nodes_[1].x &&\n                       solver.nodes_[0].y == solver.nodes_[1].y;\n        if (!solver.zero_) {\n            // 最初だけ両配列のx順を揃える。\n            solver.buffer_ = solver.nodes_;\n            solver.solve(solver.nodes_.data(), solver.buffer_.data(), 0, solver.nodes_.size());\n        }\n        return NearestTwoPointsResult{narrow(solver.best_), solver.best_first_, solver.best_second_};\n    }\n};\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_DEFINED\ntemplate<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\nstd::optional<NearestTwoPointsResult> nearest_two_points(Iterator first, Sentinel last) {\n    // 小入力はsize_t経路を保ち、大入力だけ点ごとの添字を圧縮する。\n    if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n        const auto n = last - first;\n        if (n >= 2048 && std::cmp_less_equal(n, std::numeric_limits<std::uint32_t>::max()))\n            return reinsirk::detail::NearestTwoPointsSolver<std::uint32_t>::run(std::move(first), std::move(last));\n    }\n    return reinsirk::detail::NearestTwoPointsSolver<std::size_t>::run(std::move(first), std::move(last));\n}\n\ntemplate<std::input_iterator Iterator>\nstd::optional<NearestTwoPointsResult> nearest_two_points(Iterator first, std::ptrdiff_t count) {\n#ifndef SKIP_RUNTIME_CHECKS\n    if (count < 0) throw std::invalid_argument(\"nearest_two_points: negative count\");\n#endif\n    return nearest_two_points(std::counted_iterator(std::move(first), count), std::default_sentinel);\n}\n\ntemplate<class Point, class Allocator>\nstd::optional<NearestTwoPointsResult> nearest_two_points(const std::vector<Point, Allocator>& points) {\n    return nearest_two_points(points.begin(), points.end());\n}\n#endif\n\n#ifndef SIRKIT_CLOSEST_PAIR_DEFINED\n#define SIRKIT_CLOSEST_PAIR_DEFINED\ntemplate<std::input_iterator Iterator>\nstd::uint64_t closest_pair(Iterator first, int n) {\n    const auto result = nearest_two_points(std::move(first), static_cast<std::ptrdiff_t>(n));\n    return result ? result->distance_squared : std::numeric_limits<std::int32_t>::max();\n}\n#endif\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_SORTED_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_SORTED_DEFINED\ntemplate<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(Iterator first, Sentinel last) {\n    // 小入力はsize_t経路を保ち、大入力だけ点ごとの添字を圧縮する。\n    if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n        const auto n = last - first;\n        if (n >= 2048 && std::cmp_less_equal(n, std::numeric_limits<std::uint32_t>::max()))\n            return reinsirk::detail::NearestTwoPointsSolver<std::uint32_t>::run<true>(std::move(first), std::move(last));\n    }\n    return reinsirk::detail::NearestTwoPointsSolver<std::size_t>::run<true>(std::move(first), std::move(last));\n}\ntemplate<std::input_iterator Iterator>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(Iterator first, std::ptrdiff_t count) {\n#ifndef SKIP_RUNTIME_CHECKS\n    if (count < 0) throw std::invalid_argument(\"nearest_two_points_sorted: negative count\");\n#endif\n    return nearest_two_points_sorted(std::counted_iterator(std::move(first), count), std::default_sentinel);\n}\ntemplate<class Point, class Allocator>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(const std::vector<Point, Allocator>& points) {\n    return nearest_two_points_sorted(points.begin(), points.end());\n}\n#endif\n"
+    },
+    "flat.hpp": {
+      "sha256": "0f00e395ca0c8fc81ecea0344d0aee3c986b010e2f263874260ad533a4629805",
+      "source": "// SPDX-License-Identifier: CC0-1.0\n// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/nearest_two_points.md\n//\n// API一覧\n// [最近点対]\n// P: pair<int32_t,int32_t>の別名。NearestTwoPointsResultはdistance_squared:uint64_tとfirst_index/second_index:size_tを所有。\n// NearestTwoPointsResult::distance_squaredは最短距離の二乗、添字は元入力の0始まり（first_index < second_index）。\n// nearest_two_points(first,last): [first,last)の整数pair-like列からoptional<NearestTwoPointsResult>を返す。int32座標・未整列可・入力不変、O(N log N)時間/O(N)領域。\n// 2点未満はnullopt。同距離の対は任意。最小二乗距離がuint64_tを超える場合は常時overflow_error。\n// nearest_two_points(first,count): firstからptrdiff_t型のcount個を処理する。同じ戻り値・計算量。count>=0で、指定個数を参照できること。\n// nearest_two_points(points): vector全体を処理する。同じ戻り値・計算量。元入力の点番号を結果に保持する。\n// closest_pair(first,n): firstからn個の最短距離二乗をuint64_tで返す。n<2はINT32_MAX（負数は検査時に例外）。\n// int32座標・未整列可・入力不変、O(N log N)時間/O(N)領域。uint64_t超過は常時overflow_error。\n// nearest_two_points_sorted(first,last): 整列済み範囲版。(x,y)辞書順の非減少を前提に初回sortを省く。検査時はコピー中に順序を確認。\n// 戻り値はnearest_two_pointsと同じで、添字は渡した列内。O(N log N)時間/O(N)領域、入力不変。\n// nearest_two_points_sorted(first,count): 整列済みfirstからcount個の版。count>=0かつ指定個数を参照可能。戻り値・計算量は範囲版と同じ。\n// nearest_two_points_sorted(points): 整列済みvector全体版。戻り値・前提・計算量は範囲版と同じ。\n\n#include <algorithm>\n#include <array>\n#include <concepts>\n#include <cstddef>\n#include <cstdint>\n#include <iterator>\n#include <limits>\n#include <optional>\n#include <stdexcept>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_TYPES_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_TYPES_DEFINED\nusing P = std::pair<std::int32_t, std::int32_t>;\n\nstruct NearestTwoPointsResult {\n    std::uint64_t distance_squared;\n    std::size_t first_index;\n    std::size_t second_index;\n};\n#endif\n\n#ifndef SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED\n#define SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED\nnamespace reinsirk::detail {\ntemplate<class Index>\nclass NearestTwoPointsSolver {\n    struct Node {\n        std::int32_t x;\n        std::int32_t y;\n        Index index;\n        // 作業領域は各整列パスで全要素を代入してから読む。\n        Node() noexcept {}\n        Node(std::int32_t a, std::int32_t b, Index i) noexcept : x(a), y(b), index(i) {}\n    };\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \\\n    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n    // GCC/Clangの整数拡張。標準C++の型ではない。\n    __extension__ using Distance = unsigned __int128;\n    // 差はUINT32_MAX以下なので、単独の二乗は64bitに収まる。\n    static Distance square(std::uint64_t d) { return Distance(d * d); }\n    static Distance add(Distance a, Distance b) { return a + b; }\n    static std::uint64_t narrow(Distance d) {\n        if (d > std::numeric_limits<std::uint64_t>::max())\n            throw std::overflow_error(\"nearest_two_points: squared distance exceeds uint64_t\");\n        return static_cast<std::uint64_t>(d);\n    }\n#else\n    // 座標差は32ビット以内。二乗和だけ65ビット必要になる。\n    struct Distance {\n        std::uint64_t low;\n        bool high;\n        friend bool operator<(Distance a, Distance b) {\n            return a.high != b.high ? !a.high : a.low < b.low;\n        }\n    };\n    static Distance square(std::uint64_t d) { return {d * d, false}; }\n    static Distance add(Distance a, Distance b) {\n        const auto low = a.low + b.low;\n        return {low, low < a.low};\n    }\n    static std::uint64_t narrow(Distance d) {\n        if (d.high)\n            throw std::overflow_error(\"nearest_two_points: squared distance exceeds uint64_t\");\n        return d.low;\n    }\n#endif\n    std::vector<Node> nodes_;\n    std::vector<Node> buffer_;\n    Distance best_{};\n    std::size_t best_first_ = 0;\n    std::size_t best_second_ = 1;\n    bool zero_ = false;\n\n#ifndef SKIP_RUNTIME_CHECKS\n    template<std::integral Integer>\n    static bool valid_coordinate(Integer value) {\n        if constexpr (std::numeric_limits<Integer>::digits <= 31) {\n            return true;\n        } else if constexpr (std::is_signed_v<Integer>) {\n            return value >= static_cast<Integer>(std::numeric_limits<std::int32_t>::min()) &&\n                   value <= static_cast<Integer>(std::numeric_limits<std::int32_t>::max());\n        } else {\n            return value <= static_cast<Integer>(std::numeric_limits<std::int32_t>::max());\n        }\n    }\n#endif\n    static std::uint64_t difference(std::int32_t a, std::int32_t b) {\n        const std::int64_t d = std::int64_t(a) - b;\n        return static_cast<std::uint64_t>(d < 0 ? -d : d);\n    }\n    static Distance distance(const Node& a, const Node& b) {\n        return add(square(difference(a.x, b.x)), square(difference(a.y, b.y)));\n    }\n    static bool by_y(const Node& a, const Node& b) {\n        return a.y != b.y ? a.y < b.y : a.x < b.x;\n    }\n    void update(const Node& a, const Node& b) {\n        const auto d = distance(a, b);\n        if (d < best_) {\n            best_ = d;\n            best_first_ = std::min(a.index, b.index);\n            best_second_ = std::max(a.index, b.index);\n#if defined(__GNUC__) && !defined(__clang__)\n            // GCCでは計算済みの65bit距離を使う。Clangは座標比較を維持する。\n            zero_ = !(square(0) < d);\n#else\n            zero_ = a.x == b.x && a.y == b.y;\n#endif\n        }\n    }\n    // 符号bitを反転したxを10/11/11bitの3パスで基数整列する。\n    void sort_by_x() {\n        // Indexの範囲内の点数を扱うので、合計と最終offsetも同じ型に収まる。\n        std::array<Index, 5120> counts{};\n        for (const auto& node : nodes_) {\n            const auto key = static_cast<std::uint32_t>(node.x) ^ UINT32_C(0x80000000);\n            ++counts[key & 1023U];\n            ++counts[1024U + ((key >> 10) & 2047U)];\n            ++counts[3072U + (key >> 21)];\n        }\n        buffer_.resize(nodes_.size());\n        Node* input = nodes_.data();\n        Node* output = buffer_.data();\n        for (unsigned pass = 0; pass < 3; ++pass) {\n            auto* offsets = counts.data() + (pass == 0 ? 0U : pass == 1 ? 1024U : 3072U);\n            const auto buckets = pass == 0 ? 1024U : 2048U;\n            std::size_t active = 0;\n            for (unsigned j = 0; j < buckets; ++j) active += offsets[j] != 0;\n            if (active <= 1) continue;\n            Index sum = 0;\n            for (unsigned j = 0; j < buckets; ++j) { const auto n = offsets[j]; offsets[j] = sum; sum += n; }\n            for (std::size_t i = 0; i < nodes_.size(); ++i) {\n                const auto key = static_cast<std::uint32_t>(input[i].x) ^ UINT32_C(0x80000000);\n                output[offsets[(key >> (pass == 0 ? 0 : pass == 1 ? 10 : 21)) & (pass == 0 ? 1023U : 2047U)]++] = input[i];\n            }\n            std::swap(input, output);\n        }\n        if (input != nodes_.data()) nodes_.swap(buffer_);\n    }\n    // 同区間の両配列をx順で開始し、outputをy順で返す。inputは作業用。\n    void solve(Node* input, Node* output, std::size_t left, std::size_t right) {\n        if (zero_) return;\n        if (right - left <= 16) {\n            for (auto i = left; i < right; ++i)\n                for (auto j = i + 1; j < right; ++j) update(output[i], output[j]);\n            std::sort(output + left, output + right, by_y);\n            return;\n        }\n        const auto middle = left + (right - left) / 2;\n        const auto split_x = input[middle].x;\n        solve(output, input, left, middle);\n        solve(output, input, middle, right);\n        if (zero_) return;\n        // 左半分のxは右半分以下。同じyでは左を先にすればよい。\n        std::merge(input + left, input + middle, input + middle, input + right,\n                   output + left, [](const Node& a, const Node& b) { return a.y < b.y; });\n        auto used = left;\n        for (auto i = left; i < right; ++i) {\n            const Node current = output[i];\n            if (!(square(difference(current.x, split_x)) < best_)) continue;\n            for (auto j = used; j > left;) {\n                const Node& previous = input[--j];\n                if (!(square(difference(current.y, previous.y)) < best_)) break;\n                update(current, previous);\n                if (zero_) return;\n            }\n            input[used++] = current;\n        }\n    }\n\npublic:\n    template<bool Sorted = false, std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\n    static std::optional<NearestTwoPointsResult> run(Iterator first, Sentinel last) {\n        NearestTwoPointsSolver solver;\n        if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n            const auto count = last - first;\n#ifndef SKIP_RUNTIME_CHECKS\n            if (count < 0) throw std::invalid_argument(\"nearest_two_points: reversed range\");\n#endif\n            if (std::cmp_greater(count, solver.nodes_.max_size()))\n                throw std::length_error(\"nearest_two_points: too many points\");\n            solver.nodes_.reserve(static_cast<std::size_t>(count));\n        }\n        for (; first != last; ++first) {\n            const auto& point = *first;\n            static_assert(std::integral<std::remove_cvref_t<decltype(point.first)>> &&\n                          std::integral<std::remove_cvref_t<decltype(point.second)>>,\n                          \"nearest_two_points requires integral pair coordinates\");\n#ifndef SKIP_RUNTIME_CHECKS\n            if (!valid_coordinate(point.first) || !valid_coordinate(point.second))\n                throw std::out_of_range(\"nearest_two_points: coordinates must fit int32_t\");\n#endif\n            if (solver.nodes_.size() == solver.nodes_.max_size())\n                throw std::length_error(\"nearest_two_points: too many points\");\n#ifndef SKIP_RUNTIME_CHECKS\n            if constexpr (Sorted) {\n                if (!solver.nodes_.empty()) {\n                    const auto& previous = solver.nodes_.back();\n                    if (static_cast<std::int32_t>(point.first) < previous.x ||\n                        (static_cast<std::int32_t>(point.first) == previous.x &&\n                         static_cast<std::int32_t>(point.second) < previous.y))\n                        throw std::invalid_argument(\"nearest_two_points_sorted: unordered input\");\n                }\n            }\n#endif\n            solver.nodes_.push_back({static_cast<std::int32_t>(point.first),\n                                     static_cast<std::int32_t>(point.second),\n                                     static_cast<Index>(solver.nodes_.size())});\n        }\n        if (solver.nodes_.size() < 2) return std::nullopt;\n        if constexpr (!Sorted) {\n\n            if (solver.nodes_.size() >= 2048) {\n                if (solver.nodes_[0].x == solver.nodes_[1].x &&\n                    solver.nodes_[0].y == solver.nodes_[1].y)\n                    return NearestTwoPointsResult{0, 0, 1};\n                solver.sort_by_x();\n            }\n            else std::sort(solver.nodes_.begin(), solver.nodes_.end(), [](const Node& a, const Node& b) {\n                return a.x != b.x ? a.x < b.x : a.y < b.y;\n            });\n        }\n        solver.best_ = distance(solver.nodes_[0], solver.nodes_[1]);\n        solver.best_first_ = std::min(solver.nodes_[0].index, solver.nodes_[1].index);\n        solver.best_second_ = std::max(solver.nodes_[0].index, solver.nodes_[1].index);\n        solver.zero_ = solver.nodes_[0].x == solver.nodes_[1].x &&\n                       solver.nodes_[0].y == solver.nodes_[1].y;\n        if (!solver.zero_) {\n            // 最初だけ両配列のx順を揃える。\n            solver.buffer_ = solver.nodes_;\n            solver.solve(solver.nodes_.data(), solver.buffer_.data(), 0, solver.nodes_.size());\n        }\n        return NearestTwoPointsResult{narrow(solver.best_), solver.best_first_, solver.best_second_};\n    }\n};\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_DEFINED\ntemplate<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\nstd::optional<NearestTwoPointsResult> nearest_two_points(Iterator first, Sentinel last) {\n    // 小入力はsize_t経路を保ち、大入力だけ点ごとの添字を圧縮する。\n    if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n        const auto n = last - first;\n        if (n >= 2048 && std::cmp_less_equal(n, std::numeric_limits<std::uint32_t>::max()))\n            return reinsirk::detail::NearestTwoPointsSolver<std::uint32_t>::run(std::move(first), std::move(last));\n    }\n    return reinsirk::detail::NearestTwoPointsSolver<std::size_t>::run(std::move(first), std::move(last));\n}\n\ntemplate<std::input_iterator Iterator>\nstd::optional<NearestTwoPointsResult> nearest_two_points(Iterator first, std::ptrdiff_t count) {\n#ifndef SKIP_RUNTIME_CHECKS\n    if (count < 0) throw std::invalid_argument(\"nearest_two_points: negative count\");\n#endif\n    return nearest_two_points(std::counted_iterator(std::move(first), count), std::default_sentinel);\n}\n\ntemplate<class Point, class Allocator>\nstd::optional<NearestTwoPointsResult> nearest_two_points(const std::vector<Point, Allocator>& points) {\n    return nearest_two_points(points.begin(), points.end());\n}\n#endif\n\n#ifndef SIRKIT_CLOSEST_PAIR_DEFINED\n#define SIRKIT_CLOSEST_PAIR_DEFINED\ntemplate<std::input_iterator Iterator>\nstd::uint64_t closest_pair(Iterator first, int n) {\n    const auto result = nearest_two_points(std::move(first), static_cast<std::ptrdiff_t>(n));\n    return result ? result->distance_squared : std::numeric_limits<std::int32_t>::max();\n}\n#endif\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_SORTED_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_SORTED_DEFINED\ntemplate<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(Iterator first, Sentinel last) {\n    // 小入力はsize_t経路を保ち、大入力だけ点ごとの添字を圧縮する。\n    if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n        const auto n = last - first;\n        if (n >= 2048 && std::cmp_less_equal(n, std::numeric_limits<std::uint32_t>::max()))\n            return reinsirk::detail::NearestTwoPointsSolver<std::uint32_t>::run<true>(std::move(first), std::move(last));\n    }\n    return reinsirk::detail::NearestTwoPointsSolver<std::size_t>::run<true>(std::move(first), std::move(last));\n}\ntemplate<std::input_iterator Iterator>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(Iterator first, std::ptrdiff_t count) {\n#ifndef SKIP_RUNTIME_CHECKS\n    if (count < 0) throw std::invalid_argument(\"nearest_two_points_sorted: negative count\");\n#endif\n    return nearest_two_points_sorted(std::counted_iterator(std::move(first), count), std::default_sentinel);\n}\ntemplate<class Point, class Allocator>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(const std::vector<Point, Allocator>& points) {\n    return nearest_two_points_sorted(points.begin(), points.end());\n}\n#endif\n"
+    },
+    "flat_prefix.hpp": {
+      "sha256": "a5b1e14aad7cc252ecee00ae8c24a99b3c8a0ea24f8930edb70f80dc9e940905",
+      "source": "// SPDX-License-Identifier: CC0-1.0\n// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/nearest_two_points.md\n//\n// API一覧\n// [最近点対]\n// P: pair<int32_t,int32_t>の別名。NearestTwoPointsResultはdistance_squared:uint64_tとfirst_index/second_index:size_tを所有。\n// NearestTwoPointsResult::distance_squaredは最短距離の二乗、添字は元入力の0始まり（first_index < second_index）。\n// nearest_two_points(first,last): [first,last)の整数pair-like列からoptional<NearestTwoPointsResult>を返す。int32座標・未整列可・入力不変、O(N log N)時間/O(N)領域。\n// 2点未満はnullopt。同距離の対は任意。最小二乗距離がuint64_tを超える場合は常時overflow_error。\n// nearest_two_points(first,count): firstからptrdiff_t型のcount個を処理する。同じ戻り値・計算量。count>=0で、指定個数を参照できること。\n// nearest_two_points(points): vector全体を処理する。同じ戻り値・計算量。元入力の点番号を結果に保持する。\n// closest_pair(first,n): firstからn個の最短距離二乗をuint64_tで返す。n<2はINT32_MAX（負数は検査時に例外）。\n// int32座標・未整列可・入力不変、O(N log N)時間/O(N)領域。uint64_t超過は常時overflow_error。\n// nearest_two_points_sorted(first,last): 整列済み範囲版。(x,y)辞書順の非減少を前提に初回sortを省く。検査時はコピー中に順序を確認。\n// 戻り値はnearest_two_pointsと同じで、添字は渡した列内。O(N log N)時間/O(N)領域、入力不変。\n// nearest_two_points_sorted(first,count): 整列済みfirstからcount個の版。count>=0かつ指定個数を参照可能。戻り値・計算量は範囲版と同じ。\n// nearest_two_points_sorted(points): 整列済みvector全体版。戻り値・前提・計算量は範囲版と同じ。\n\n#include <algorithm>\n#include <array>\n#include <concepts>\n#include <cstddef>\n#include <cstdint>\n#include <iterator>\n#include <limits>\n#include <optional>\n#include <stdexcept>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_TYPES_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_TYPES_DEFINED\nusing P = std::pair<std::int32_t, std::int32_t>;\n\nstruct NearestTwoPointsResult {\n    std::uint64_t distance_squared;\n    std::size_t first_index;\n    std::size_t second_index;\n};\n#endif\n\n#ifndef SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED\n#define SIRKIT_INTERNAL_NEAREST_TWO_POINTS_DEFINED\nnamespace reinsirk::detail {\ntemplate<class Index>\nclass NearestTwoPointsSolver {\n    struct Node {\n        std::int32_t x;\n        std::int32_t y;\n        Index index;\n        // 作業領域は各整列パスで全要素を代入してから読む。\n        Node() noexcept {}\n        Node(std::int32_t a, std::int32_t b, Index i) noexcept : x(a), y(b), index(i) {}\n    };\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \\\n    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n    // GCC/Clangの整数拡張。標準C++の型ではない。\n    __extension__ using Distance = unsigned __int128;\n    // 差はUINT32_MAX以下なので、単独の二乗は64bitに収まる。\n    static Distance square(std::uint64_t d) { return Distance(d * d); }\n    static Distance add(Distance a, Distance b) { return a + b; }\n    static std::uint64_t narrow(Distance d) {\n        if (d > std::numeric_limits<std::uint64_t>::max())\n            throw std::overflow_error(\"nearest_two_points: squared distance exceeds uint64_t\");\n        return static_cast<std::uint64_t>(d);\n    }\n#else\n    // 座標差は32ビット以内。二乗和だけ65ビット必要になる。\n    struct Distance {\n        std::uint64_t low;\n        bool high;\n        friend bool operator<(Distance a, Distance b) {\n            return a.high != b.high ? !a.high : a.low < b.low;\n        }\n    };\n    static Distance square(std::uint64_t d) { return {d * d, false}; }\n    static Distance add(Distance a, Distance b) {\n        const auto low = a.low + b.low;\n        return {low, low < a.low};\n    }\n    static std::uint64_t narrow(Distance d) {\n        if (d.high)\n            throw std::overflow_error(\"nearest_two_points: squared distance exceeds uint64_t\");\n        return d.low;\n    }\n#endif\n    std::vector<Node> nodes_;\n    std::vector<Node> buffer_;\n    Distance best_{};\n    std::size_t best_first_ = 0;\n    std::size_t best_second_ = 1;\n    bool zero_ = false;\n\n#ifndef SKIP_RUNTIME_CHECKS\n    template<std::integral Integer>\n    static bool valid_coordinate(Integer value) {\n        if constexpr (std::numeric_limits<Integer>::digits <= 31) {\n            return true;\n        } else if constexpr (std::is_signed_v<Integer>) {\n            return value >= static_cast<Integer>(std::numeric_limits<std::int32_t>::min()) &&\n                   value <= static_cast<Integer>(std::numeric_limits<std::int32_t>::max());\n        } else {\n            return value <= static_cast<Integer>(std::numeric_limits<std::int32_t>::max());\n        }\n    }\n#endif\n    static std::uint64_t difference(std::int32_t a, std::int32_t b) {\n        const std::int64_t d = std::int64_t(a) - b;\n        return static_cast<std::uint64_t>(d < 0 ? -d : d);\n    }\n    static Distance distance(const Node& a, const Node& b) {\n        return add(square(difference(a.x, b.x)), square(difference(a.y, b.y)));\n    }\n    static bool by_y(const Node& a, const Node& b) {\n        return a.y != b.y ? a.y < b.y : a.x < b.x;\n    }\n    void update(const Node& a, const Node& b) {\n        const auto d = distance(a, b);\n        if (d < best_) {\n            best_ = d;\n            best_first_ = std::min(a.index, b.index);\n            best_second_ = std::max(a.index, b.index);\n#if defined(__GNUC__) && !defined(__clang__)\n            // GCCでは計算済みの65bit距離を使う。Clangは座標比較を維持する。\n            zero_ = !(square(0) < d);\n#else\n            zero_ = a.x == b.x && a.y == b.y;\n#endif\n        }\n    }\n    // 符号bitを反転したxを10/11/11bitの3パスで基数整列する。\n    void sort_by_x() {\n        // Indexの範囲内の点数を扱うので、合計と最終offsetも同じ型に収まる。\n        std::array<Index, 5120> counts{};\n        for (const auto& node : nodes_) {\n            const auto key = static_cast<std::uint32_t>(node.x) ^ UINT32_C(0x80000000);\n            ++counts[key & 1023U];\n            ++counts[1024U + ((key >> 10) & 2047U)];\n            ++counts[3072U + (key >> 21)];\n        }\n        buffer_.resize(nodes_.size());\n        Node* input = nodes_.data();\n        Node* output = buffer_.data();\n        for (unsigned pass = 0; pass < 3; ++pass) {\n            auto* offsets = counts.data() + (pass == 0 ? 0U : pass == 1 ? 1024U : 3072U);\n            const auto buckets = pass == 0 ? 1024U : 2048U;\n            std::size_t active = 0;\n            Index sum = 0;\n            for (unsigned j = 0; j < buckets; ++j) { const auto n = offsets[j]; active += n != 0; offsets[j] = sum; sum += n; }\n            if (active <= 1) continue;\n            for (std::size_t i = 0; i < nodes_.size(); ++i) {\n                const auto key = static_cast<std::uint32_t>(input[i].x) ^ UINT32_C(0x80000000);\n                output[offsets[(key >> (pass == 0 ? 0 : pass == 1 ? 10 : 21)) & (pass == 0 ? 1023U : 2047U)]++] = input[i];\n            }\n            std::swap(input, output);\n        }\n        if (input != nodes_.data()) nodes_.swap(buffer_);\n    }\n    // 同区間の両配列をx順で開始し、outputをy順で返す。inputは作業用。\n    void solve(Node* input, Node* output, std::size_t left, std::size_t right) {\n        if (zero_) return;\n        if (right - left <= 16) {\n            for (auto i = left; i < right; ++i)\n                for (auto j = i + 1; j < right; ++j) update(output[i], output[j]);\n            std::sort(output + left, output + right, by_y);\n            return;\n        }\n        const auto middle = left + (right - left) / 2;\n        const auto split_x = input[middle].x;\n        solve(output, input, left, middle);\n        solve(output, input, middle, right);\n        if (zero_) return;\n        // 左半分のxは右半分以下。同じyでは左を先にすればよい。\n        std::merge(input + left, input + middle, input + middle, input + right,\n                   output + left, [](const Node& a, const Node& b) { return a.y < b.y; });\n        auto used = left;\n        for (auto i = left; i < right; ++i) {\n            const Node current = output[i];\n            if (!(square(difference(current.x, split_x)) < best_)) continue;\n            for (auto j = used; j > left;) {\n                const Node& previous = input[--j];\n                if (!(square(difference(current.y, previous.y)) < best_)) break;\n                update(current, previous);\n                if (zero_) return;\n            }\n            input[used++] = current;\n        }\n    }\n\npublic:\n    template<bool Sorted = false, std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\n    static std::optional<NearestTwoPointsResult> run(Iterator first, Sentinel last) {\n        NearestTwoPointsSolver solver;\n        if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n            const auto count = last - first;\n#ifndef SKIP_RUNTIME_CHECKS\n            if (count < 0) throw std::invalid_argument(\"nearest_two_points: reversed range\");\n#endif\n            if (std::cmp_greater(count, solver.nodes_.max_size()))\n                throw std::length_error(\"nearest_two_points: too many points\");\n            solver.nodes_.reserve(static_cast<std::size_t>(count));\n        }\n        for (; first != last; ++first) {\n            const auto& point = *first;\n            static_assert(std::integral<std::remove_cvref_t<decltype(point.first)>> &&\n                          std::integral<std::remove_cvref_t<decltype(point.second)>>,\n                          \"nearest_two_points requires integral pair coordinates\");\n#ifndef SKIP_RUNTIME_CHECKS\n            if (!valid_coordinate(point.first) || !valid_coordinate(point.second))\n                throw std::out_of_range(\"nearest_two_points: coordinates must fit int32_t\");\n#endif\n            if (solver.nodes_.size() == solver.nodes_.max_size())\n                throw std::length_error(\"nearest_two_points: too many points\");\n#ifndef SKIP_RUNTIME_CHECKS\n            if constexpr (Sorted) {\n                if (!solver.nodes_.empty()) {\n                    const auto& previous = solver.nodes_.back();\n                    if (static_cast<std::int32_t>(point.first) < previous.x ||\n                        (static_cast<std::int32_t>(point.first) == previous.x &&\n                         static_cast<std::int32_t>(point.second) < previous.y))\n                        throw std::invalid_argument(\"nearest_two_points_sorted: unordered input\");\n                }\n            }\n#endif\n            solver.nodes_.push_back({static_cast<std::int32_t>(point.first),\n                                     static_cast<std::int32_t>(point.second),\n                                     static_cast<Index>(solver.nodes_.size())});\n        }\n        if (solver.nodes_.size() < 2) return std::nullopt;\n        if constexpr (!Sorted) {\n\n            if (solver.nodes_.size() >= 2048) {\n                if (solver.nodes_[0].x == solver.nodes_[1].x &&\n                    solver.nodes_[0].y == solver.nodes_[1].y)\n                    return NearestTwoPointsResult{0, 0, 1};\n                solver.sort_by_x();\n            }\n            else std::sort(solver.nodes_.begin(), solver.nodes_.end(), [](const Node& a, const Node& b) {\n                return a.x != b.x ? a.x < b.x : a.y < b.y;\n            });\n        }\n        solver.best_ = distance(solver.nodes_[0], solver.nodes_[1]);\n        solver.best_first_ = std::min(solver.nodes_[0].index, solver.nodes_[1].index);\n        solver.best_second_ = std::max(solver.nodes_[0].index, solver.nodes_[1].index);\n        solver.zero_ = solver.nodes_[0].x == solver.nodes_[1].x &&\n                       solver.nodes_[0].y == solver.nodes_[1].y;\n        if (!solver.zero_) {\n            // 最初だけ両配列のx順を揃える。\n            solver.buffer_ = solver.nodes_;\n            solver.solve(solver.nodes_.data(), solver.buffer_.data(), 0, solver.nodes_.size());\n        }\n        return NearestTwoPointsResult{narrow(solver.best_), solver.best_first_, solver.best_second_};\n    }\n};\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_DEFINED\ntemplate<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\nstd::optional<NearestTwoPointsResult> nearest_two_points(Iterator first, Sentinel last) {\n    // 小入力はsize_t経路を保ち、大入力だけ点ごとの添字を圧縮する。\n    if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n        const auto n = last - first;\n        if (n >= 2048 && std::cmp_less_equal(n, std::numeric_limits<std::uint32_t>::max()))\n            return reinsirk::detail::NearestTwoPointsSolver<std::uint32_t>::run(std::move(first), std::move(last));\n    }\n    return reinsirk::detail::NearestTwoPointsSolver<std::size_t>::run(std::move(first), std::move(last));\n}\n\ntemplate<std::input_iterator Iterator>\nstd::optional<NearestTwoPointsResult> nearest_two_points(Iterator first, std::ptrdiff_t count) {\n#ifndef SKIP_RUNTIME_CHECKS\n    if (count < 0) throw std::invalid_argument(\"nearest_two_points: negative count\");\n#endif\n    return nearest_two_points(std::counted_iterator(std::move(first), count), std::default_sentinel);\n}\n\ntemplate<class Point, class Allocator>\nstd::optional<NearestTwoPointsResult> nearest_two_points(const std::vector<Point, Allocator>& points) {\n    return nearest_two_points(points.begin(), points.end());\n}\n#endif\n\n#ifndef SIRKIT_CLOSEST_PAIR_DEFINED\n#define SIRKIT_CLOSEST_PAIR_DEFINED\ntemplate<std::input_iterator Iterator>\nstd::uint64_t closest_pair(Iterator first, int n) {\n    const auto result = nearest_two_points(std::move(first), static_cast<std::ptrdiff_t>(n));\n    return result ? result->distance_squared : std::numeric_limits<std::int32_t>::max();\n}\n#endif\n\n#ifndef SIRKIT_NEAREST_TWO_POINTS_SORTED_DEFINED\n#define SIRKIT_NEAREST_TWO_POINTS_SORTED_DEFINED\ntemplate<std::input_iterator Iterator, std::sentinel_for<Iterator> Sentinel>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(Iterator first, Sentinel last) {\n    // 小入力はsize_t経路を保ち、大入力だけ点ごとの添字を圧縮する。\n    if constexpr (std::sized_sentinel_for<Sentinel, Iterator>) {\n        const auto n = last - first;\n        if (n >= 2048 && std::cmp_less_equal(n, std::numeric_limits<std::uint32_t>::max()))\n            return reinsirk::detail::NearestTwoPointsSolver<std::uint32_t>::run<true>(std::move(first), std::move(last));\n    }\n    return reinsirk::detail::NearestTwoPointsSolver<std::size_t>::run<true>(std::move(first), std::move(last));\n}\ntemplate<std::input_iterator Iterator>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(Iterator first, std::ptrdiff_t count) {\n#ifndef SKIP_RUNTIME_CHECKS\n    if (count < 0) throw std::invalid_argument(\"nearest_two_points_sorted: negative count\");\n#endif\n    return nearest_two_points_sorted(std::counted_iterator(std::move(first), count), std::default_sentinel);\n}\ntemplate<class Point, class Allocator>\nstd::optional<NearestTwoPointsResult> nearest_two_points_sorted(const std::vector<Point, Allocator>& points) {\n    return nearest_two_points_sorted(points.begin(), points.end());\n}\n#endif\n"
+    },
+    "bench.cpp": {
+      "sha256": "bf6ec46195540dcb075861f812e003dd71c9f90a526ada80e0682de2422c5e5d",
+      "source": "// SPDX-License-Identifier: CC0-1.0\n#include HEADER\n#include <chrono>\n#include <cmath>\n#include <cstdint>\n#include <cstdlib>\n#include <iostream>\n#include <limits>\n#include <random>\n#include <string>\n#include <vector>\nint main(int argc,char**argv){\n if(argc!=5)return 1;const std::size_t n=std::strtoull(argv[1],nullptr,10);int loops=std::atoi(argv[2]),shape=std::atoi(argv[3]);bool sorted=std::string(argv[4])==\"sorted\";\n std::vector<P>v(n);std::mt19937_64 rng(621731);\n for(std::size_t i=0;i<n;++i){auto x=std::int32_t(std::int64_t(rng()%2000000001)-1000000000),y=std::int32_t(std::int64_t(rng()%2000000001)-1000000000);\n  if(shape==1){x=std::int32_t(i*8191);y=0;}\n  if(shape==2){x=19;y=std::int32_t(i*8191);}\n  if(shape==3){x=std::int32_t(i%512)*1000;y=std::int32_t(i/512)*1000;}\n  if(shape==4){const long double angle=2*3.1415926535897932384626433832795L*static_cast<long double>(i)/static_cast<long double>(n);x=std::int32_t(1000000000*std::cos(angle));y=std::int32_t(1000000000*std::sin(angle));}\n  if(shape==7){std::size_t j=i/4;x=std::int32_t(j%512)*1000+(i%2?900000000:-900000000);y=std::int32_t(j/512)*1000+(i%4>=2?900000000:-900000000);}\n  if(shape==8){x=std::int32_t(rng());y=std::int32_t(rng());}\n  v[i]={x,y};\n }\n if(shape==5&&n>=2)v[n-1]=v[n-2];if(shape==6&&n>=2)v[1]=v[0];if(sorted)std::sort(v.begin(),v.end());\n std::uint64_t sum=0;const auto start=std::chrono::steady_clock::now();\n for(int k=0;k<loops;++k){auto answer=sorted?nearest_two_points_sorted(v):nearest_two_points(v);if(!answer||answer->first_index>=answer->second_index||answer->second_index>=n)std::abort();sum+=answer->distance_squared;}\n const auto end=std::chrono::steady_clock::now();std::cout<<std::chrono::duration<double,std::milli>(end-start).count()<<' '<<sum<<'\\n';\n}\n"
+    },
+    "prepare.py": {
+      "sha256": "8522f3721b19d85dbdceb002ab02acaab5192f37dc79a91289c41274c9262e18",
+      "source": "from pathlib import Path\np=Path(__file__).parent;s=(p/'baseline.hpp').read_text()\nold='''            auto& offsets = counts[pass];\n            std::size_t active = 0;\n            for (const auto count : offsets) active += count != 0;\n            if (active <= 1) continue;\n            Index sum = 0;\n            for (auto& count : offsets) { const auto n = count; count = sum; sum += n; }'''\nassert s.count(old)==1\nnew='''            auto* offsets = counts[pass].data();\n            const auto buckets = pass == 0 ? 1024U : 2048U;\n            std::size_t active = 0;\n            for (unsigned j = 0; j < buckets; ++j) active += offsets[j] != 0;\n            if (active <= 1) continue;\n            Index sum = 0;\n            for (unsigned j = 0; j < buckets; ++j) { const auto n = offsets[j]; offsets[j] = sum; sum += n; }'''\nv=s.replace(old,new);(p/'used_buckets.hpp').write_text(v)\nw=v.replace('std::array<std::array<Index, 2048>, 3> counts{};','std::array<Index, 5120> counts{};').replace('++counts[0][key & 1023U];','++counts[key & 1023U];').replace('++counts[1][(key >> 10) & 2047U];','++counts[1024U + ((key >> 10) & 2047U)];').replace('++counts[2][key >> 21];','++counts[3072U + (key >> 21)];').replace('auto* offsets = counts[pass].data();','auto* offsets = counts.data() + (pass == 0 ? 0U : pass == 1 ? 1024U : 3072U);')\n(p/'flat.hpp').write_text(w)\nold='''            std::size_t active = 0;\n            for (unsigned j = 0; j < buckets; ++j) active += offsets[j] != 0;\n            if (active <= 1) continue;\n            Index sum = 0;\n            for (unsigned j = 0; j < buckets; ++j) { const auto n = offsets[j]; offsets[j] = sum; sum += n; }'''\nnew='''            std::size_t active = 0;\n            Index sum = 0;\n            for (unsigned j = 0; j < buckets; ++j) { const auto n = offsets[j]; active += n != 0; offsets[j] = sum; sum += n; }\n            if (active <= 1) continue;'''\nassert w.count(old)==1;(p/'flat_prefix.hpp').write_text(w.replace(old,new))\n(p/'bench.cpp').write_bytes(Path('/tmp/sirkit_nearest_radixscan_20261024/experiment/bench.cpp').read_bytes())\ns=Path('/tmp/sirkit_nearest_finalscan_20261024/bench.py').read_text().replace(\"vs=['baseline','reuse_dy','zero_distance','combined']\",\"vs=['baseline','used_buckets','flat','flat_prefix']\").replace(\"'gcc':['/usr/bin/g++']\",\"'znver2':['/usr/bin/g++','-march=znver2']\").replace(\"['gcc','native','clang']\",\"['znver2','native','clang']\")\na=s.index('  cases=');b=s.index('\\n  for n,loops,shape,api',a);s=s[:a]+\"  cases=[(2,20000,0,'normal'),(32,4000,0,'normal'),(4096,16,0,'normal'),*[(131072,2,k,'normal')for k in [0,1,2,3,4,5,6,7,8]],*[(150001,1,k,'normal')for k in [0,3,7]],*[(500000,1,k,'normal')for k in [0,3,7]],(500000,1,0,'sorted')]\"+s[b:];(p/'bench.py').write_text(s)\n"
+    },
+    "bench.py": {
+      "sha256": "da1a4edb18f48d704404c4a32898df8ed5654e17f6ebe5a2fc43af5211b10e6e",
+      "source": "from pathlib import Path\nimport json,fcntl,subprocess,statistics\np=Path(__file__).parent;vs=['baseline','used_buckets','flat','flat_prefix'];res={'builds':[],'results':{}}\nfor mode,cc in {'znver2':['/usr/bin/g++','-march=znver2'],'native':['/usr/bin/g++','-march=native'],'clang':['clang++','--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15']}.items():\n for v in vs:\n  cmd=[*cc,'-std=c++23','-O2','-DSKIP_RUNTIME_CHECKS','-DHEADER=\"'+str(p/(v+'.hpp'))+'\"',str(p/'bench.cpp'),'-o',str(p/(mode+'_'+v))];subprocess.run(cmd,check=True,capture_output=True);res['builds'].append(cmd)\n print('compiled',mode,flush=True)\nwith open('/tmp/sirkit_performance_cpu14.lock','a')as a,open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as b:\n fcntl.flock(a,fcntl.LOCK_EX);fcntl.flock(b,fcntl.LOCK_EX)\n for mode in ['znver2','native','clang']:\n  cases=[(2,20000,0,'normal'),(32,4000,0,'normal'),(4096,16,0,'normal'),*[(131072,2,k,'normal')for k in [0,1,2,3,4,5,6,7,8]],*[(150001,1,k,'normal')for k in [0,3,7]],*[(500000,1,k,'normal')for k in [0,3,7]],(500000,1,0,'sorted')]\n  for n,loops,shape,api in cases:\n   raw={v:[]for v in vs};checksum=None\n   for rep in range(7):\n    for v in vs[rep%len(vs):]+vs[:rep%len(vs)]:\n     out=subprocess.check_output(['taskset','-c','14',str(p/(mode+'_'+v)),str(n),str(loops),str(shape),api]).decode().split();raw[v].append(float(out[0]));check=out[1];checksum=check if checksum is None else checksum;assert check==checksum\n   med={v:statistics.median(x)for v,x in raw.items()};ratio={v:round(x/med['baseline'],4)for v,x in med.items()};res['results'][f'{mode}/{n}/{shape}/{api}']={'raw_ms':raw,'median_ms':med,'ratio':ratio,'loops':loops};print(mode,n,shape,api,ratio,flush=True)\n(p/'bench.json').write_text(json.dumps(res,indent=2)+'\\n')\n"
+    }
+  },
+  "reproduction": "frozen_filesを/tmp/sirkit_nearest_radixfinish_20261024へ復元しbench.pyを実行。CPU番号は環境に合わせる。"
+}

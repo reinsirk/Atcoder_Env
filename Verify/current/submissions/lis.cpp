@@ -21,7 +21,8 @@
 // LISSequence<Strict=true>(v): LISを1つ値の列としてコピーする。空なら空。いずれもO(N log(L+1))時間・O(N)追加領域。
 //
 // [各末尾の長さ]
-// LISEndingLengths<Strict=true>(v): 各要素を末尾とする最長長。狭義/広義、空なら空、O(N log(L+1))時間・O(N+L)領域。
+// LISEndingLengths<Strct=true>(v): 各要素を末尾とする最長長。狭義/広義、空なら空、O(N log(L+1))時間・O(N+L)領域。
+// https://miscalc.hatenablog.com/entry/2024/07/25/212618
 
 #include <algorithm>
 #include <type_traits>
