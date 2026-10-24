@@ -5,6 +5,35 @@
 // Library: DataStructure/Compressed_Binary_Trie.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://nyaannyaan.github.io/library/data-structure/binary-trie.hpp
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/binary_trie.md
+//
+// API一覧
+// [CompressedBinaryTrie<T,MAX_LOG,NODES>]
+// C++20以降。重複を許す非負整数の圧縮二分トライ。B = MAX_LOG + 1。
+// Tはbool・const・volatileを除く整数型。MAX_LOGは最高位ビット番号。
+// SKIP_RUNTIME_CHECKSで入力検査を除く。容量・オーバーフロー対策は常に有効。
+// キー・XORマスクは 0 <= x < 2^B。NODESは未圧縮時の根込みノード上限。
+// IDは重複可、-1は匿名。ID一覧は順序不定、次の更新または破棄まで有効。
+// CompressedBinaryTrie(): 空集合を構築する。コピー・ムーブは不可。
+// reserve(n): 異なる値n個分の圧縮ノード領域を上限内で事前確保。再配置時O(現在のノード数)。
+// size(): 重複込みの要素数をO(1)で返す。
+// empty(): 空集合ならtrueをO(1)で返す。
+// add(x,id=-1): xを1個追加する。id=-1は匿名。失敗時は値・件数・IDを保持。
+// insert_unique(x,id=-1): 未登録時だけ追加しtrue。登録済みならIDも変えずfalse。
+// del(x,id=-1): 1個削除してtrue。値・指定IDがなければfalse。ID省略時は匿名優先、なければ任意のIDを削除。
+// find(x): {xの件数, ID一覧}。未登録は{0,空配列}。
+// min_element(): {最小値, ID一覧}。空でないこと。
+// max_element(): {最大値, ID一覧}。空でないこと。
+// get_kth(k): {重複込み昇順1始まりk番目の値, ID一覧}。1 <= k <= size()。
+// operate_xor(x): 全要素にXORをO(1)で適用する。
+// count(x): 匿名・重複を含むxの件数を返す。
+// contains(x): xが存在すればtrueを返す。
+// count_less(upper): upper未満の要素数。upper<=0なら0、範囲外ならsize()。
+// min_xor(x): {x^yの最小値, yのID一覧}。空でないこと。
+// max_xor(x): {x^yの最大値, yのID一覧}。空でないこと。
+// count_xor_less(x,upper): x^y<upperの件数。upperはcount_lessと同様。
+// 検索・削除はO(B)、追加は償却O(B)（再配置時O(ノード数)）。
+// 指定IDの削除はさらにその値のID数に比例する。
 
 #include <algorithm>
 #include <array>
@@ -18,36 +47,11 @@
 #include <utility>
 #include <vector>
 
-// C++20以降。重複を許す非負整数の圧縮二分トライ。B = MAX_LOG + 1。
-// Tはbool・const・volatileを除く整数型。MAX_LOGは最高位ビット番号。
-// SKIP_RUNTIME_CHECKSで入力検査を除く。容量・オーバーフロー対策は常に有効。
-// キー・XORマスクは 0 <= x < 2^B。NODESは未圧縮時の根込みノード上限。
-// IDは重複可、-1は匿名。ID一覧は順序不定、次の更新または破棄まで有効。
 #ifndef SIRKIT_COMPRESSED_BINARY_TRIE_DEFINED
 #define SIRKIT_COMPRESSED_BINARY_TRIE_DEFINED
 template <typename T, int MAX_LOG, std::size_t NODES = 16777216>
 class CompressedBinaryTrie
 {
-    // CompressedBinaryTrie(): 空集合を構築する。コピー・ムーブは不可。
-    // reserve(n): 異なる値n個分の圧縮ノード領域を上限内で事前確保。再配置時O(現在のノード数)。
-    // size(): 重複込みの要素数をO(1)で返す。
-    // empty(): 空集合ならtrueをO(1)で返す。
-    // add(x,id=-1): xを1個追加する。id=-1は匿名。失敗時は値・件数・IDを保持。
-    // insert_unique(x,id=-1): 未登録時だけ追加しtrue。登録済みならIDも変えずfalse。
-    // del(x,id=-1): 1個削除してtrue。ID省略時は匿名優先、なければ任意のIDを削除。
-    // find(x): {xの件数, ID一覧}。未登録は{0,空配列}。
-    // min_element(): {最小値, ID一覧}。空でないこと。
-    // max_element(): {最大値, ID一覧}。空でないこと。
-    // get_kth(k): {重複込み昇順1始まりk番目の値, ID一覧}。1 <= k <= size()。
-    // operate_xor(x): 全要素にXORをO(1)で適用する。
-    // count(x): 匿名・重複を含むxの件数を返す。
-    // contains(x): xが存在すればtrueを返す。
-    // count_less(upper): upper未満の要素数。upper<=0なら0、範囲外ならsize()。
-    // min_xor(x): {x^yの最小値, yのID一覧}。空でないこと。
-    // max_xor(x): {x^yの最大値, yのID一覧}。空でないこと。
-    // count_xor_less(x,upper): x^y<upperの件数。upperはcount_lessと同様。
-    // 検索・削除はO(B)、追加は償却O(B)（再配置時O(ノード数)）。
-    // 指定IDの削除はさらにその値のID数に比例する。
     static_assert(std::is_integral_v<T> && !std::is_same_v<T, bool>);
     static_assert(std::is_same_v<T, std::remove_cv_t<T>>);
     static_assert(MAX_LOG >= 0 && MAX_LOG < std::numeric_limits<T>::digits);
@@ -95,7 +99,11 @@ private:
     }
     Index leaf_for(U key) const noexcept {
         Index p = root_;
-        while (p != nil && nodes_[p].split >= 0)
+        if (p == nil) return nil;
+        const int split = nodes_[p].split;
+        // 根の分岐より上で異なるキーは、この部分木に存在しない。
+        if (split >= 0 && ((key ^ nodes_[p].key) >> split) > U{1}) return nil;
+        while (nodes_[p].split >= 0)
             p = nodes_[p].child[bit(key, nodes_[p].split)];
         return p;
     }
@@ -274,11 +282,15 @@ public:
         std::array<Index, kBits> path;
         size_type depth = 0;
         Index p = root_;
-        while (p != nil && nodes_[p].split >= 0) {
+        if (p == nil) return false;
+        const int split = nodes_[p].split;
+        // 根の分岐より上で異なるキーは、この部分木に存在しない。
+        if (split >= 0 && ((key ^ nodes_[p].key) >> split) > U{1}) return false;
+        while (nodes_[p].split >= 0) {
             path[depth++] = p;
             p = nodes_[p].child[bit(key, nodes_[p].split)];
         }
-        if (p == nil || nodes_[p].key != key) return false;
+        if (nodes_[p].key != key) return false;
         const Index ids = nodes_[p].child[0];
         if (id != -1) {
             if (ids == nil) return false;

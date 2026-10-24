@@ -25,6 +25,7 @@ int main() {
     scores["bob"] = 5;
     const auto& view = scores;
     std::cout << view.at("alice") << ' ' << view.contains("bob") << '\n'; // 8 1
+    scores.erase("bob", false); // 次要素が不要なときは探索を省く。
     for (auto p = scores.begin(); p != scores.end();) p = scores.erase(p);
     std::cout << scores.empty() << '\n'; // 1
 

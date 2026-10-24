@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: CC0-1.0
-#include "Verify/current/common/fast_io.hpp"
 #include <algorithm>
 #include <cstdint>
 #include <random>
@@ -48,5 +47,4 @@ int main() {
     HashSet<std::vector<int>> vectors;
     vectors.insert({1, 2}); vectors.insert({2, 1}); vectors.insert({});
     require(vectors.size() == 3 && vectors.contains({1, 2}) && vectors.contains({}));
-    std::int64_t a, b; if (verify_in >> a >> b) verify_out << a + b << '\n';
 }

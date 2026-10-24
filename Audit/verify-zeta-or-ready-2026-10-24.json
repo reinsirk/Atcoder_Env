@@ -1,0 +1,1113 @@
+{
+  "date": "2026-10-24",
+  "status": "PASS",
+  "scope": "OR畳み込みを補集合でAND問題へ変換した提出2本の確認",
+  "source_hashes": {
+    "Math/Zeta_Mebius.cpp": "166fd187113832dd635532f0dd80499a89f520792136918a7e6433d04f5d584c",
+    "Math/Zeta/Bitwise_Convolution.cpp": "85c958bd7f18b05818e0ec71f5b9250d5c8ee75b80549597c1a1b3812d51c1d6",
+    "Math/Zeta/Set_Transform.cpp": "eb0d4cd15a2ecd3041dc313cebf240421b28945b7e7f6b9d80398e0b5e18225b",
+    "Math/Zeta/components/set_transform.inc": "fb1ae2f4c2ae9e46e040de3607a16e5bb3ca4f02c31d5b9ca80377fd49b6ca6d",
+    "Verify/current/drivers/zeta_or_as_and_main.cpp": "d240ce163f247a9e75f5c677340cb282ecf058e2099f55f1bac18e5a3f0f01b4",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+    "Verify/current/submissions/zeta_or_as_and_full.cpp": "50c4db6014ec4783df7cd62c9cf910cfdcc07688e9469d6ee64a2bfd3f8e7b49",
+    "Verify/current/submissions/zeta_or_as_and_split.cpp": "85537de17ad28214db9fe7b32dfe2a23b2fc43fc8e7b1f9856b18887bce53384"
+  },
+  "body_changed": false,
+  "driver_changed": false,
+  "io_changed": false,
+  "online_submitted": false,
+  "problem_url": "https://judge.yosupo.jp/problem/bitwise_and_convolution",
+  "or_problem_probe": {
+    "endpoint": "https://v3.api.judge.yosupo.jp/problems/bitwise_or_convolution",
+    "http_status": 404,
+    "body": "problem not found\n"
+  },
+  "and_problem": {
+    "overall_version": "045a4c36f1c918b53d7d47ffb772417f7931cd7d897ba0c0e559f0cf3f412c23",
+    "source_url": "https://github.com/yosupo06/library-checker-problems/tree/master/convolution/bitwise_and_convolution",
+    "testcases_version": "c97f8a8c85d15ed2a131b04bd2e4d50e08bcc961c1f2b6fe7ddaa5ac33f90568",
+    "time_limit": 5,
+    "title": "Bitwise And Convolution",
+    "version": "98e63452c6b9712847ea17f854c5bcda0cd98dc01508cb809995c97f2103c198"
+  },
+  "mapping": "n=2^N, mask=n-1。a逆順でA[i]=a[mask^i]、bも同様。OR結果Cを逆順にするとc[k]=sum_{i&j=k}a[i]b[j]。補集合は全添字の全単射であり全出力を検証。",
+  "prior_api_verification": "Audit/performance-zeta-and-412842-2026-10-24.json",
+  "previous_or_driver_verification": "Audit/verify-zeta-and-2026-10-22.json",
+  "fixtures": [
+    {
+      "name": "example_00.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/example_00.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/example_00.in.out",
+      "input_sha256": "acecdd59db4150b807eb79c681f856a496e449c3d25c5b59d5dd201432d2fd34",
+      "output_sha256": "adf4ad81a410a87742a99bf343792e7887cf784cc3dd51ec969204f61e99fd31"
+    },
+    {
+      "name": "tiny_00.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/tiny_00.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/tiny_00.in.out",
+      "input_sha256": "947296ca99b67d6aefc325f816469314843b816c1412e418e5be0348bac132ff",
+      "output_sha256": "b086d8c94719f50a63743fbba701b852975a768400520b3285f0855ab77882a8"
+    },
+    {
+      "name": "tiny_01.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/tiny_01.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/tiny_01.in.out",
+      "input_sha256": "04cc7c3cefbe422c1e6a0b137a8acbff1778e5d74b8a741df851bd0ab1123932",
+      "output_sha256": "19416e2bafb9c4d75bc658cdb3707814373d7fa07af89864193aaeec05e24e44"
+    },
+    {
+      "name": "tiny_02.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/tiny_02.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/tiny_02.in.out",
+      "input_sha256": "fa33fbc674bdaffcac30b3125ce5637611cf822f741fb332335961931ef171b7",
+      "output_sha256": "fac70923747669fe9b73cb2ab9a3b3925bf573e9abfa5f3f9e36818b4f20132e"
+    },
+    {
+      "name": "small_00.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/small_00.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/small_00.in.out",
+      "input_sha256": "dce2d25b1b6c1bc190190ccce12fec224a7c82a7fdb7ca9b45d44c53353c177a",
+      "output_sha256": "3b46de5a76c1b5f18daedd1795a88f050805c9be371f711b5a0184a80764190c"
+    },
+    {
+      "name": "small_01.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/small_01.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/small_01.in.out",
+      "input_sha256": "6da618786f5c42ec5602e2c6d51e9fcbfdd973869a74fd04ab0c261a25fa4039",
+      "output_sha256": "74e7491088bba307ee2b23d7b52c7f6d6d95ff41b86147ebfc617c8845b04dac"
+    },
+    {
+      "name": "small_02.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/small_02.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/small_02.in.out",
+      "input_sha256": "f8df55ad5420f6e6d98b0c44e203d101afd0f967c3ba9f2fd6e13e78bbc482c7",
+      "output_sha256": "3ea92c2060bbcb1b89ad8cce1b0f951e61d54919e13097efc12e65f83babc9ac"
+    },
+    {
+      "name": "random_00.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/random_00.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/random_00.in.out",
+      "input_sha256": "22eaeeee9115f05cc2bcb0eeff6d0780767ac495c43c9227f7f10bc1adcf4967",
+      "output_sha256": "616827d03a9d452f49416302b0bfccd91bf53034b099cf4b3751f765084ffb7a"
+    },
+    {
+      "name": "random_01.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/random_01.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/random_01.in.out",
+      "input_sha256": "9bb1969bb2a19756f9c600483b2bf5c95e2e69ceba2ba4665e9ac1dc0eeaa704",
+      "output_sha256": "b34c601716e085ae3fda7359dc8b057b60e53d678b1be39858b07f7f82dceb58"
+    },
+    {
+      "name": "random_02.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/random_02.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/random_02.in.out",
+      "input_sha256": "132abd7410d2dd82149406ab8d9cb3aa32e1ce789387b8a507f41eb6e6a2795b",
+      "output_sha256": "c6dc60b8982a25fa2af6c86fe6aa714eb4b9f2794cc23cf5a773a6316a284723"
+    },
+    {
+      "name": "max_random_00.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/max_random_00.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/max_random_00.in.out",
+      "input_sha256": "b3be9a73ed5193a85dfd2349d49cc25689937ade6027ae03c78d7d137d16f3dc",
+      "output_sha256": "4a4e6456debede930233744f195d3f58356f1f48dd4bdebc3b7a7c790395b7c6"
+    },
+    {
+      "name": "max_random_01.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/max_random_01.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/max_random_01.in.out",
+      "input_sha256": "f6c52618432a922b2fed36b54ed803469133c9ad0fbf7df1b2911e6564b599e8",
+      "output_sha256": "1d72c90f97b400dcbd5caff97222583d78e0e275472da139c1f0645999f3c87c"
+    },
+    {
+      "name": "max_random_02.in",
+      "scope": "official",
+      "input": "/tmp/sirkit_zeta_and_20261022/official/max_random_02.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/max_random_02.in.out",
+      "input_sha256": "57d91c4d58dcfe3575c2449dfb246920e88f11fbc21ba17a50dc1a2308e4643a",
+      "output_sha256": "824e95b7e0f35e8484759b9f81a76e9060e910aa962b6531218eb44ca489eb79"
+    },
+    {
+      "name": "singleton.in",
+      "scope": "custom",
+      "input": "/tmp/sirkit_zeta_and_20261022/custom/singleton.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/singleton.in.out",
+      "input_sha256": "6987e42d35d5932367de775081f5b737c90742fd1e7ecd2ee732ef8666d38e06",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "name": "all_max.in",
+      "scope": "custom",
+      "input": "/tmp/sirkit_zeta_and_20261022/custom/all_max.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/all_max.in.out",
+      "input_sha256": "53027384f35acd5b85064749ad6ed33aa67ce140d3eb21c3cbb98145629324a7",
+      "output_sha256": "3c53cbc2bb0ffde1eba995755212e33c99268e8b6cdef7dd7dadf7e7b24404cd"
+    },
+    {
+      "name": "one_hot.in",
+      "scope": "custom",
+      "input": "/tmp/sirkit_zeta_and_20261022/custom/one_hot.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/one_hot.in.out",
+      "input_sha256": "2e16cea4c198cdea5fd78e25fe9c13f59700f4e978a2760be29094519edc9680",
+      "output_sha256": "dfe0275fbcb63410587c8fa6c48a732eabba96e9801fb8938e569ef43cb27507"
+    },
+    {
+      "name": "alternating.in",
+      "scope": "custom",
+      "input": "/tmp/sirkit_zeta_and_20261022/custom/alternating.in",
+      "output": "/tmp/sirkit_zeta_and_20261022/reference_outputs/alternating.in.out",
+      "input_sha256": "0c4a597f13f6dd0861fea23b58d1676a93f1c50dc1683facb055f4b579d72802",
+      "output_sha256": "ecd79f3c112db103da00da47f41de4e2c53456eead9161c58a22bc1b412b04d9"
+    }
+  ],
+  "builds": [
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "/home/reinsirk/Atcoder_Env/Verify/current/submissions/zeta_or_as_and_full.cpp",
+        "-o",
+        "/tmp/sirkit_zeta_or_ready_20261024/gcc_zeta_or_as_and_full"
+      ]
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "/home/reinsirk/Atcoder_Env/Verify/current/submissions/zeta_or_as_and_split.cpp",
+        "-o",
+        "/tmp/sirkit_zeta_or_ready_20261024/gcc_zeta_or_as_and_split"
+      ]
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_DISABLE_SIMD",
+        "/home/reinsirk/Atcoder_Env/Verify/current/submissions/zeta_or_as_and_full.cpp",
+        "-o",
+        "/tmp/sirkit_zeta_or_ready_20261024/gcc_standard_zeta_or_as_and_full"
+      ]
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_DISABLE_SIMD",
+        "/home/reinsirk/Atcoder_Env/Verify/current/submissions/zeta_or_as_and_split.cpp",
+        "-o",
+        "/tmp/sirkit_zeta_or_ready_20261024/gcc_standard_zeta_or_as_and_split"
+      ]
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "/home/reinsirk/Atcoder_Env/Verify/current/submissions/zeta_or_as_and_full.cpp",
+        "-o",
+        "/tmp/sirkit_zeta_or_ready_20261024/clang_zeta_or_as_and_full"
+      ]
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "/home/reinsirk/Atcoder_Env/Verify/current/submissions/zeta_or_as_and_split.cpp",
+        "-o",
+        "/tmp/sirkit_zeta_or_ready_20261024/clang_zeta_or_as_and_split"
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "example_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "adf4ad81a410a87742a99bf343792e7887cf784cc3dd51ec969204f61e99fd31"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "tiny_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "b086d8c94719f50a63743fbba701b852975a768400520b3285f0855ab77882a8"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "tiny_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "19416e2bafb9c4d75bc658cdb3707814373d7fa07af89864193aaeec05e24e44"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "tiny_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "fac70923747669fe9b73cb2ab9a3b3925bf573e9abfa5f3f9e36818b4f20132e"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "small_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "3b46de5a76c1b5f18daedd1795a88f050805c9be371f711b5a0184a80764190c"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "small_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "74e7491088bba307ee2b23d7b52c7f6d6d95ff41b86147ebfc617c8845b04dac"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "small_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "3ea92c2060bbcb1b89ad8cce1b0f951e61d54919e13097efc12e65f83babc9ac"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "random_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "616827d03a9d452f49416302b0bfccd91bf53034b099cf4b3751f765084ffb7a"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "random_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "b34c601716e085ae3fda7359dc8b057b60e53d678b1be39858b07f7f82dceb58"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "random_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "c6dc60b8982a25fa2af6c86fe6aa714eb4b9f2794cc23cf5a773a6316a284723"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "max_random_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "4a4e6456debede930233744f195d3f58356f1f48dd4bdebc3b7a7c790395b7c6"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "max_random_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "1d72c90f97b400dcbd5caff97222583d78e0e275472da139c1f0645999f3c87c"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "max_random_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "824e95b7e0f35e8484759b9f81a76e9060e910aa962b6531218eb44ca489eb79"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "singleton.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "all_max.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "3c53cbc2bb0ffde1eba995755212e33c99268e8b6cdef7dd7dadf7e7b24404cd"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "one_hot.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "dfe0275fbcb63410587c8fa6c48a732eabba96e9801fb8938e569ef43cb27507"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_full",
+      "case": "alternating.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "ecd79f3c112db103da00da47f41de4e2c53456eead9161c58a22bc1b412b04d9"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "example_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "adf4ad81a410a87742a99bf343792e7887cf784cc3dd51ec969204f61e99fd31"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "tiny_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "b086d8c94719f50a63743fbba701b852975a768400520b3285f0855ab77882a8"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "tiny_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "19416e2bafb9c4d75bc658cdb3707814373d7fa07af89864193aaeec05e24e44"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "tiny_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "fac70923747669fe9b73cb2ab9a3b3925bf573e9abfa5f3f9e36818b4f20132e"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "small_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "3b46de5a76c1b5f18daedd1795a88f050805c9be371f711b5a0184a80764190c"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "small_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "74e7491088bba307ee2b23d7b52c7f6d6d95ff41b86147ebfc617c8845b04dac"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "small_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "3ea92c2060bbcb1b89ad8cce1b0f951e61d54919e13097efc12e65f83babc9ac"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "random_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "616827d03a9d452f49416302b0bfccd91bf53034b099cf4b3751f765084ffb7a"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "random_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "b34c601716e085ae3fda7359dc8b057b60e53d678b1be39858b07f7f82dceb58"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "random_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "c6dc60b8982a25fa2af6c86fe6aa714eb4b9f2794cc23cf5a773a6316a284723"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "max_random_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "4a4e6456debede930233744f195d3f58356f1f48dd4bdebc3b7a7c790395b7c6"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "max_random_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "1d72c90f97b400dcbd5caff97222583d78e0e275472da139c1f0645999f3c87c"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "max_random_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "824e95b7e0f35e8484759b9f81a76e9060e910aa962b6531218eb44ca489eb79"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "singleton.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "all_max.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "3c53cbc2bb0ffde1eba995755212e33c99268e8b6cdef7dd7dadf7e7b24404cd"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "one_hot.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "dfe0275fbcb63410587c8fa6c48a732eabba96e9801fb8938e569ef43cb27507"
+    },
+    {
+      "compiler": "gcc",
+      "id": "zeta_or_as_and_split",
+      "case": "alternating.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "ecd79f3c112db103da00da47f41de4e2c53456eead9161c58a22bc1b412b04d9"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "example_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "adf4ad81a410a87742a99bf343792e7887cf784cc3dd51ec969204f61e99fd31"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "tiny_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "b086d8c94719f50a63743fbba701b852975a768400520b3285f0855ab77882a8"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "tiny_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "19416e2bafb9c4d75bc658cdb3707814373d7fa07af89864193aaeec05e24e44"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "tiny_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "fac70923747669fe9b73cb2ab9a3b3925bf573e9abfa5f3f9e36818b4f20132e"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "small_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "3b46de5a76c1b5f18daedd1795a88f050805c9be371f711b5a0184a80764190c"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "small_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "74e7491088bba307ee2b23d7b52c7f6d6d95ff41b86147ebfc617c8845b04dac"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "small_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "3ea92c2060bbcb1b89ad8cce1b0f951e61d54919e13097efc12e65f83babc9ac"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "random_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "616827d03a9d452f49416302b0bfccd91bf53034b099cf4b3751f765084ffb7a"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "random_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "b34c601716e085ae3fda7359dc8b057b60e53d678b1be39858b07f7f82dceb58"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "random_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "c6dc60b8982a25fa2af6c86fe6aa714eb4b9f2794cc23cf5a773a6316a284723"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "max_random_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "4a4e6456debede930233744f195d3f58356f1f48dd4bdebc3b7a7c790395b7c6"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "max_random_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "1d72c90f97b400dcbd5caff97222583d78e0e275472da139c1f0645999f3c87c"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "max_random_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "824e95b7e0f35e8484759b9f81a76e9060e910aa962b6531218eb44ca489eb79"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "singleton.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "all_max.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "3c53cbc2bb0ffde1eba995755212e33c99268e8b6cdef7dd7dadf7e7b24404cd"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "one_hot.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "dfe0275fbcb63410587c8fa6c48a732eabba96e9801fb8938e569ef43cb27507"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_full",
+      "case": "alternating.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "ecd79f3c112db103da00da47f41de4e2c53456eead9161c58a22bc1b412b04d9"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "example_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "adf4ad81a410a87742a99bf343792e7887cf784cc3dd51ec969204f61e99fd31"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "tiny_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "b086d8c94719f50a63743fbba701b852975a768400520b3285f0855ab77882a8"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "tiny_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "19416e2bafb9c4d75bc658cdb3707814373d7fa07af89864193aaeec05e24e44"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "tiny_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "fac70923747669fe9b73cb2ab9a3b3925bf573e9abfa5f3f9e36818b4f20132e"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "small_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "3b46de5a76c1b5f18daedd1795a88f050805c9be371f711b5a0184a80764190c"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "small_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "74e7491088bba307ee2b23d7b52c7f6d6d95ff41b86147ebfc617c8845b04dac"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "small_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "3ea92c2060bbcb1b89ad8cce1b0f951e61d54919e13097efc12e65f83babc9ac"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "random_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "616827d03a9d452f49416302b0bfccd91bf53034b099cf4b3751f765084ffb7a"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "random_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "b34c601716e085ae3fda7359dc8b057b60e53d678b1be39858b07f7f82dceb58"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "random_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "c6dc60b8982a25fa2af6c86fe6aa714eb4b9f2794cc23cf5a773a6316a284723"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "max_random_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "4a4e6456debede930233744f195d3f58356f1f48dd4bdebc3b7a7c790395b7c6"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "max_random_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "1d72c90f97b400dcbd5caff97222583d78e0e275472da139c1f0645999f3c87c"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "max_random_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "824e95b7e0f35e8484759b9f81a76e9060e910aa962b6531218eb44ca489eb79"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "singleton.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "all_max.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "3c53cbc2bb0ffde1eba995755212e33c99268e8b6cdef7dd7dadf7e7b24404cd"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "one_hot.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "dfe0275fbcb63410587c8fa6c48a732eabba96e9801fb8938e569ef43cb27507"
+    },
+    {
+      "compiler": "gcc_standard",
+      "id": "zeta_or_as_and_split",
+      "case": "alternating.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "ecd79f3c112db103da00da47f41de4e2c53456eead9161c58a22bc1b412b04d9"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "example_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "adf4ad81a410a87742a99bf343792e7887cf784cc3dd51ec969204f61e99fd31"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "tiny_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "b086d8c94719f50a63743fbba701b852975a768400520b3285f0855ab77882a8"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "tiny_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "19416e2bafb9c4d75bc658cdb3707814373d7fa07af89864193aaeec05e24e44"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "tiny_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "fac70923747669fe9b73cb2ab9a3b3925bf573e9abfa5f3f9e36818b4f20132e"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "small_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "3b46de5a76c1b5f18daedd1795a88f050805c9be371f711b5a0184a80764190c"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "small_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "74e7491088bba307ee2b23d7b52c7f6d6d95ff41b86147ebfc617c8845b04dac"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "small_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "3ea92c2060bbcb1b89ad8cce1b0f951e61d54919e13097efc12e65f83babc9ac"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "random_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "616827d03a9d452f49416302b0bfccd91bf53034b099cf4b3751f765084ffb7a"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "random_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "b34c601716e085ae3fda7359dc8b057b60e53d678b1be39858b07f7f82dceb58"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "random_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "c6dc60b8982a25fa2af6c86fe6aa714eb4b9f2794cc23cf5a773a6316a284723"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "max_random_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "4a4e6456debede930233744f195d3f58356f1f48dd4bdebc3b7a7c790395b7c6"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "max_random_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "1d72c90f97b400dcbd5caff97222583d78e0e275472da139c1f0645999f3c87c"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "max_random_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "824e95b7e0f35e8484759b9f81a76e9060e910aa962b6531218eb44ca489eb79"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "singleton.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "all_max.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "3c53cbc2bb0ffde1eba995755212e33c99268e8b6cdef7dd7dadf7e7b24404cd"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "one_hot.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "dfe0275fbcb63410587c8fa6c48a732eabba96e9801fb8938e569ef43cb27507"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_full",
+      "case": "alternating.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "ecd79f3c112db103da00da47f41de4e2c53456eead9161c58a22bc1b412b04d9"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "example_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "adf4ad81a410a87742a99bf343792e7887cf784cc3dd51ec969204f61e99fd31"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "tiny_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "b086d8c94719f50a63743fbba701b852975a768400520b3285f0855ab77882a8"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "tiny_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "19416e2bafb9c4d75bc658cdb3707814373d7fa07af89864193aaeec05e24e44"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "tiny_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "fac70923747669fe9b73cb2ab9a3b3925bf573e9abfa5f3f9e36818b4f20132e"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "small_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "3b46de5a76c1b5f18daedd1795a88f050805c9be371f711b5a0184a80764190c"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "small_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "74e7491088bba307ee2b23d7b52c7f6d6d95ff41b86147ebfc617c8845b04dac"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "small_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "3ea92c2060bbcb1b89ad8cce1b0f951e61d54919e13097efc12e65f83babc9ac"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "random_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "616827d03a9d452f49416302b0bfccd91bf53034b099cf4b3751f765084ffb7a"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "random_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "b34c601716e085ae3fda7359dc8b057b60e53d678b1be39858b07f7f82dceb58"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "random_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "c6dc60b8982a25fa2af6c86fe6aa714eb4b9f2794cc23cf5a773a6316a284723"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "max_random_00.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "4a4e6456debede930233744f195d3f58356f1f48dd4bdebc3b7a7c790395b7c6"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "max_random_01.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "1d72c90f97b400dcbd5caff97222583d78e0e275472da139c1f0645999f3c87c"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "max_random_02.in",
+      "scope": "official",
+      "status": "PASS",
+      "output_sha256": "824e95b7e0f35e8484759b9f81a76e9060e910aa962b6531218eb44ca489eb79"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "singleton.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "all_max.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "3c53cbc2bb0ffde1eba995755212e33c99268e8b6cdef7dd7dadf7e7b24404cd"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "one_hot.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "dfe0275fbcb63410587c8fa6c48a732eabba96e9801fb8938e569ef43cb27507"
+    },
+    {
+      "compiler": "clang",
+      "id": "zeta_or_as_and_split",
+      "case": "alternating.in",
+      "scope": "custom",
+      "status": "PASS",
+      "output_sha256": "ecd79f3c112db103da00da47f41de4e2c53456eead9161c58a22bc1b412b04d9"
+    }
+  ],
+  "runner_source": "from pathlib import Path\nimport subprocess,json,hashlib\nr=Path('/home/reinsirk/Atcoder_Env');p=Path(__file__).parent;sha=lambda b:hashlib.sha256(b).hexdigest();prior=json.load(open(r/'Audit/performance-zeta-and-412842-2026-10-24.json'));ready=json.load(open(r/'Audit/verify-zeta-and-ready-2026-10-23.json'))\npaths=['Math/Zeta_Mebius.cpp','Math/Zeta/Bitwise_Convolution.cpp','Math/Zeta/Set_Transform.cpp','Math/Zeta/components/set_transform.inc','Verify/current/drivers/zeta_or_as_and_main.cpp','Verify/current/common/fast_io.hpp','Verify/current/submissions/zeta_or_as_and_full.cpp','Verify/current/submissions/zeta_or_as_and_split.cpp'];hashes={f:sha((r/f).read_bytes())for f in paths}\nfor f,digest in prior['source_hashes'].items():assert sha((r/f).read_bytes())==digest\nold=json.load(open(r/'Audit/verify-zeta-and-2026-10-22.json'));assert hashes['Verify/current/drivers/zeta_or_as_and_main.cpp']==old['driver_io_hashes_unchanged']['Verify/current/drivers/zeta_or_as_and_main.cpp'];assert hashes['Verify/current/common/fast_io.hpp']==prior['io_sha256']\nd={'date':'2026-10-24','status':'INCOMPLETE','scope':'OR畳み込みを補集合でAND問題へ変換した提出2本の確認','source_hashes':hashes,'body_changed':False,'driver_changed':False,'io_changed':False,'online_submitted':False,'problem_url':'https://judge.yosupo.jp/problem/bitwise_and_convolution','or_problem_probe':{'endpoint':'https://v3.api.judge.yosupo.jp/problems/bitwise_or_convolution','http_status':404,'body':(p/'or_problem.json').read_text()},'and_problem':json.load(open(p/'and_problem.json')),'mapping':'n=2^N, mask=n-1。a逆順でA[i]=a[mask^i]、bも同様。OR結果Cを逆順にするとc[k]=sum_{i&j=k}a[i]b[j]。補集合は全添字の全単射であり全出力を検証。','prior_api_verification':'Audit/performance-zeta-and-412842-2026-10-24.json','previous_or_driver_verification':'Audit/verify-zeta-and-2026-10-22.json','fixtures':ready['fixtures'],'builds':[],'runs':[]}\nfor cc,args,defs in [('gcc',['/usr/bin/g++'],[]),('gcc_standard',['/usr/bin/g++'],['-DSIRKIT_DISABLE_SIMD']),('clang',['clang++','--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15'],[])]:\n for name in ['zeta_or_as_and_full','zeta_or_as_and_split']:\n  src=r/'Verify/current/submissions'/(name+'.cpp');exe=p/(cc+'_'+name);cmd=['taskset','-c','6',*args,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',*defs,str(src),'-o',str(exe)];q=subprocess.run(cmd,capture_output=True,text=True);assert q.returncode==0 and not q.stderr,(cmd,q.stderr);d['builds'].append({'compiler':cc,'id':name,'command':cmd})\n  for f in d['fixtures']:\n   data=Path(f['input']).read_bytes();ref=Path(f['output']).read_bytes();assert sha(data)==f['input_sha256']and sha(ref)==f['output_sha256']\n   q=subprocess.run(['taskset','-c','14',str(exe)],input=data,capture_output=True);assert q.returncode==0 and not q.stderr and sha(q.stdout)==f['output_sha256'],(cc,name,f['name'],q.stderr);d['runs'].append({'compiler':cc,'id':name,'case':f['name'],'scope':f['scope'],'status':'PASS','output_sha256':sha(q.stdout)})\n  print(cc,name,'17 cases PASS',flush=True)\nd['status']='PASS';d['runner_source']=Path(__file__).read_text();(r/'Audit/verify-zeta-or-ready-2026-10-24.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\\n');print('ALL PASS',flush=True)\n"
+}

@@ -4,6 +4,28 @@
 // SPDX-License-Identifier: CC0-1.0
 // Original Source: https://nyaannyaan.github.io/library/data-structure/line-container.hpp.html
 // Original Source: https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/LineContainer.h
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/line_container.md
+//
+// API一覧
+// [LineContainer<T,objective>・MinLineContainer<T>・MaxLineContainer<T>]
+// add(k,m): y=k*x+mを追加、償却O(log h)。整数は符号付き64bit以下、浮動係数は有限値。
+// query(x): 最適値をO(log h)で返す。空は検査時例外、省略時は非空が前提。整数範囲外は常に例外。
+// query_optional(x): 空ならnullopt、それ以外はqueryと同じ。xは浮動小数点なら有限値。
+// query_line(x): 選択した元の(k,m)をO(log h)で返す。同点の係数は未規定。
+// query_line_optional(x): 空ならnullopt、それ以外はquery_lineと同じ。
+// query_with_line(x): 1回の探索でResult{最適値,k,m}を返す。queryと同じ前提・O(log h)。
+// query_with_line_optional(x): 空ならnullopt、それ以外はquery_with_lineと同じ。
+// size()/empty()/clear(): 有効な包絡直線の本数・空判定・全削除、O(1)/O(1)/O(h)。
+// begin()/end()/lower_bound(x): 元係数と交点を参照。最小化の傾き順は降順。直接変更は不変条件を壊す。
+// insect(x,y): 旧互換の内部交点更新。正しい包絡iterator以外では呼び出さない。
+// コピーは独立した包絡。hは有効直線数。浮動小数点版の交点・最適値には丸め誤差がある。
+// objectiveはMINIMIZE/MAXIMIZE。MinLineContainer<T>/MaxLineContainer<T>は最小化/最大化の別名。
+//
+// [Line<T>・補助関数]
+// Line<T>のk,m: 元の係数。p: この直線が選ばれる右端(整数は型の範囲に制限)。
+// lc_inf<T>(): 整数では最大値、浮動小数点では正の無限大を返す。
+// lc_div(a,b): 整数は床除算、浮動小数点は通常除算。0除算・整数結果の範囲外は例外。
+
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
@@ -21,7 +43,6 @@
 
 enum Objective { MAXIMIZE = +1, MINIMIZE = -1 };
 
-// k,m: 元の係数。p: この直線が選ばれる右端(整数は型の範囲に制限)。
 template <typename T>
 struct Line {
   mutable T k, m, p;
@@ -29,14 +50,12 @@ struct Line {
   bool operator<(T x) const { return p < x; }
 };
 
-// lc_inf<T>(): 整数では最大値、浮動小数点では正の無限大を返す。
 template <typename T>
 constexpr T lc_inf() {
   if constexpr (std::is_floating_point_v<T>) return std::numeric_limits<T>::infinity();
   else return std::numeric_limits<T>::max();
 }
 
-// lc_div(a,b): 整数は床除算、浮動小数点は通常除算。0除算・整数結果の範囲外は例外。
 template <typename T>
 T lc_div(T a, T b) {
   if (b == 0) throw std::domain_error("lc_div: division by zero");
@@ -61,15 +80,6 @@ struct LineComparator {
 };
 }  // namespace reinsirk::detail
 
-// add(k,m): y=k*x+mを追加、償却O(log h)。整数は符号付き64bit以下、浮動係数は有限値。
-// query(x): 最適値をO(log h)で返す。空は検査時例外、省略時は非空が前提。整数範囲外は常に例外。
-// query_optional(x): 空ならnullopt、それ以外はqueryと同じ。xは浮動小数点なら有限値。
-// query_line(x): 選択した元の(k,m)をO(log h)で返す。同点の係数は未規定。
-// query_line_optional(x): 空ならnullopt、それ以外はquery_lineと同じ。
-// size()/empty()/clear(): 有効な包絡直線の本数・空判定・全削除、O(1)/O(1)/O(h)。
-// begin()/end()/lower_bound(x): 元係数と交点を参照。最小化の傾き順は降順。直接変更は不変条件を壊す。
-// insect(x,y): 旧互換の内部交点更新。正しい包絡iterator以外では呼び出さない。
-// コピーは独立した包絡。hは有効直線数。浮動小数点版の交点・最適値には丸め誤差がある。
 template <typename T, Objective objective>
 struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T, objective>> {
   static_assert((std::is_integral_v<T> && std::is_signed_v<T> && sizeof(T) <= 8) ||
@@ -79,6 +89,7 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
   using super::begin, super::end, super::insert, super::erase;
   using super::empty, super::lower_bound;
   static constexpr T inf = lc_inf<T>();
+  struct Result { T value, k, m; };
 
  private:
   static bool boundary_less(const Line<T>& a, const Line<T>& b) {
@@ -218,6 +229,52 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
  private:
   friend struct LineContainer2D;
   void add_unchecked(T k, T m) {
+    if constexpr (std::is_integral_v<T>) {
+      // 小さい包絡では、確保前に不要な直線を除く。
+      if (super::size() <= 256) {
+        Line<T> candidate{k, m, inf};
+        auto z = lower_bound(candidate);
+        if (z != end() && z->k == k) {
+          const bool better = objective == MAXIMIZE ? m > z->m : m < z->m;
+          if (!better) return;
+        } else if (z != end() && intersection(candidate, *z)) return;
+        auto x = z;
+        const bool has_previous = z != begin();
+        Line<T> previous{};
+        // 下端だけで選ばれる直線と、選択域が型の範囲外の直線を区別する。
+        bool previous_below = false;
+        if (has_previous) {
+          --x;
+          previous = *x;
+          previous_below = intersection(previous, candidate);
+          if (!previous_below && previous.p >= candidate.p &&
+              (z == end() || candidate.p < z->p)) return;
+        }
+        auto y = insert(z, candidate);
+        while (z != end() && !boundary_less(*y, *z)) {
+          z = erase(z);
+          insect(y, z);
+        }
+        if (has_previous) {
+          x->p = previous.p;
+          if (!previous_below && !boundary_less(*x, *y)) insect(x, y = erase(y));
+        } else x = y;
+        while ((y = x) != begin() && !boundary_less(*--x, *y)) insect(x, erase(y));
+        // floorが最小値の直線はその点で最適になり得る。真の域外だけ除く。
+        if constexpr (std::is_integral_v<T>) {
+          const auto first = begin();
+          if (first->p == std::numeric_limits<T>::min()) [[unlikely]] {
+            const auto next = std::next(first);
+            if (next != end()) {
+              bool first_below;
+              insect_impl(first, next, first_below);
+              if (first_below) erase(first);
+            }
+          }
+        }
+        return;
+      }
+    }
     auto z = insert({k, m, 0}), y = z++, x = y;
     bool below;
     while (insect_impl(y, z, below)) z = erase(z);
@@ -271,6 +328,22 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
     if (empty()) return std::nullopt;
     const auto line = lower_bound(x);
     return std::pair<T,T>{line->k, line->m};
+  }
+#if defined(__GNUC__) || defined(__clang__)
+  __attribute__((always_inline))
+#endif
+  Result query_with_line(T x) const {
+    const auto line = selected(x);
+    return {evaluate(line->k, line->m, x), line->k, line->m};
+  }
+#if defined(__GNUC__) || defined(__clang__)
+  __attribute__((always_inline))
+#endif
+  std::optional<Result> query_with_line_optional(T x) const {
+    check_x(x);
+    if (empty()) return std::nullopt;
+    const auto line = lower_bound(x);
+    return Result{evaluate(line->k, line->m, x), line->k, line->m};
   }
 };
 template <typename T> using MinLineContainer = LineContainer<T, MINIMIZE>;

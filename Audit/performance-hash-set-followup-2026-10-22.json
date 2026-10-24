@@ -1,0 +1,1232 @@
+{
+  "recommendation": "Retain baseline; no candidate satisfies the no-regression requirement.",
+  "baseline_sha256": "15894f05f002ab111f0eb206ee0f53813ddfd81ec25035780bfed05bc843f658",
+  "production_edited": false,
+  "settings": {
+    "GCC": "g++ (GCC) 15.3.0",
+    "flags": [
+      "-std=c++23",
+      "-O2",
+      "-DSKIP_RUNTIME_CHECKS"
+    ],
+    "native": false,
+    "compile_cpu": 6,
+    "measure_cpu": 14,
+    "lock": "/tmp/sirkit_performance_cpu14.lock",
+    "rounds": 7,
+    "seeds": [
+      123,
+      777,
+      194734
+    ],
+    "main_and_io": "frozen existing programs"
+  },
+  "variants": {
+    "baseline": {
+      "sha256": "15894f05f002ab111f0eb206ee0f53813ddfd81ec25035780bfed05bc843f658"
+    },
+    "guarded": {
+      "sha256": "3ca2601a6eda305807a17a83252bb7de34f09a624cbdfb60c107a7515a7d7987"
+    },
+    "isolated": {
+      "sha256": "8f9235ceca62a5362b05233acc09c07cf00130e9bd89a6f84f74c09b44ff71b6"
+    }
+  },
+  "main_ms": {
+    "strings_all_same": {
+      "baseline": 4.70023,
+      "control": 4.856416,
+      "guarded": 4.83531,
+      "isolated": 5.063345
+    },
+    "strings_mixed": {
+      "baseline": 25.470816,
+      "control": 25.233768,
+      "guarded": 23.415034,
+      "isolated": 23.762799
+    },
+    "strings_prefix": {
+      "baseline": 26.682745,
+      "control": 26.496232,
+      "guarded": 25.560985,
+      "isolated": 25.940843
+    },
+    "strings_unique": {
+      "baseline": 26.800213,
+      "control": 26.388197,
+      "guarded": 25.791421,
+      "isolated": 24.946536
+    },
+    "sums_arithmetic": {
+      "baseline": 20.824162,
+      "control": 20.406778,
+      "guarded": 20.96689,
+      "isolated": 20.993372
+    },
+    "toggle_random": {
+      "baseline": 4.071932,
+      "control": 3.964319,
+      "guarded": 4.203794,
+      "isolated": 4.379838
+    }
+  },
+  "string_direct_ns_per_op": {
+    "string_churn_16": {
+      "baseline": 17.7672,
+      "control": 18.0146,
+      "guarded": 17.8764,
+      "isolated": 18.2168
+    },
+    "string_churn_8192": {
+      "baseline": 30.5231,
+      "control": 30.5824,
+      "guarded": 30.5746,
+      "isolated": 30.5285
+    },
+    "string_clear_16": {
+      "baseline": 3.92145,
+      "control": 3.91692,
+      "guarded": 3.93428,
+      "isolated": 3.92025
+    },
+    "string_clear_8192": {
+      "baseline": 20.5962,
+      "control": 20.6207,
+      "guarded": 20.6476,
+      "isolated": 20.6301
+    },
+    "string_duplicate_16": {
+      "baseline": 5.62826,
+      "control": 5.62369,
+      "guarded": 5.49126,
+      "isolated": 5.54803
+    },
+    "string_duplicate_8192": {
+      "baseline": 11.1288,
+      "control": 11.1075,
+      "guarded": 11.1322,
+      "isolated": 11.0625
+    },
+    "string_erase_16": {
+      "baseline": 9.59551,
+      "control": 9.88407,
+      "guarded": 9.57959,
+      "isolated": 9.92209
+    },
+    "string_erase_8192": {
+      "baseline": 20.2087,
+      "control": 20.2359,
+      "guarded": 20.1993,
+      "isolated": 20.2326
+    },
+    "string_hit_16": {
+      "baseline": 5.27237,
+      "control": 5.265,
+      "guarded": 5.27702,
+      "isolated": 5.28175
+    },
+    "string_hit_8192": {
+      "baseline": 10.4405,
+      "control": 10.4232,
+      "guarded": 10.4275,
+      "isolated": 10.3307
+    },
+    "string_insert_16": {
+      "baseline": 69.0575,
+      "control": 69.0575,
+      "guarded": 66.5059,
+      "isolated": 66.5092
+    },
+    "string_insert_8192": {
+      "baseline": 93.8848,
+      "control": 93.9788,
+      "guarded": 90.0069,
+      "isolated": 90.2597
+    },
+    "string_iterate_16": {
+      "baseline": 2.33891,
+      "control": 2.33591,
+      "guarded": 2.34378,
+      "isolated": 2.34662
+    },
+    "string_iterate_8192": {
+      "baseline": 5.81999,
+      "control": 5.82058,
+      "guarded": 5.81533,
+      "isolated": 5.83912
+    },
+    "string_miss_16": {
+      "baseline": 3.13937,
+      "control": 3.10769,
+      "guarded": 3.10785,
+      "isolated": 3.18883
+    },
+    "string_miss_8192": {
+      "baseline": 6.85021,
+      "control": 6.82924,
+      "guarded": 6.84353,
+      "isolated": 6.84028
+    },
+    "string_reserve_insert_16": {
+      "baseline": 22.5126,
+      "control": 22.5046,
+      "guarded": 23.5182,
+      "isolated": 23.3135
+    },
+    "string_reserve_insert_8192": {
+      "baseline": 41.2451,
+      "control": 41.2262,
+      "guarded": 41.1671,
+      "isolated": 41.215
+    }
+  },
+  "date": "2026-10-22",
+  "decision": "現行本体を維持。大規模の改善より、小規模の別操作の悪化が残るため、候補を採用しない。",
+  "retained_source": "DataStructure/Hash_set.cpp",
+  "frozen_hashes": {
+    "DataStructure/Hash_set.cpp": "15894f05f002ab111f0eb206ee0f53813ddfd81ec25035780bfed05bc843f658",
+    "Verify/current/drivers/hash_set_membership_main.cpp": "19e69ca68dfd3602025b8fba752c213a16849d225c3edabcf2d51b9e48712c46",
+    "Verify/current/drivers/hash_set_strings_main.cpp": "712a369dd961e562a1ce4b940941e644f95b8fad83c7a199c5fccbbd9b9350f8",
+    "Verify/current/drivers/hash_set_toggle_main.cpp": "d89f6362562f0e21cfd7db21024d888c73f9f7ff6cb12c6d3f15aed2fbabb887",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "integer_text_section_hashes": {
+    "baseline_membership": "5a0f3938def8772c8a0b349585f515bb2556b397489637b0ac38ae6fc7ee7f6a",
+    "control_membership": "5a0f3938def8772c8a0b349585f515bb2556b397489637b0ac38ae6fc7ee7f6a",
+    "guarded_membership": "5a0f3938def8772c8a0b349585f515bb2556b397489637b0ac38ae6fc7ee7f6a",
+    "isolated_membership": "5a0f3938def8772c8a0b349585f515bb2556b397489637b0ac38ae6fc7ee7f6a",
+    "baseline_toggle": "99efa2264ab906a47ecde3c94ff532191f588beaab80e9c7068bef7b129033e8",
+    "control_toggle": "99efa2264ab906a47ecde3c94ff532191f588beaab80e9c7068bef7b129033e8",
+    "guarded_toggle": "99efa2264ab906a47ecde3c94ff532191f588beaab80e9c7068bef7b129033e8",
+    "isolated_toggle": "99efa2264ab906a47ecde3c94ff532191f588beaab80e9c7068bef7b129033e8"
+  },
+  "cpu": "Intel Core i9-14900K",
+  "initial_rounds": 3,
+  "initial_main_cases": 25,
+  "confirmation_main_cases": 6,
+  "notes": [
+    "オンラインの50/46/9msは画像で確認した現行版の記録。候補のオンライン測定ではない。",
+    "全候補でmainと共通入出力を固定。初回はGCC/Clang、再確認はGCC。容量予約済み16文字列の挿入で約4.5%の悪化が再現した。",
+    "標準文字列ハッシュと非例外ムーブを条件に再配置の一時配列を省く案。共有GenericHashと公開APIは変更しない候補。",
+    "候補の非インライン関数化でも悪化を解消できず棄却。墓石比較の追加案も棄却。現行版の有効スロットだけを比較する処理を維持。"
+  ],
+  "rejected_source_diffs": {
+    "string.hpp": "--- baseline.hpp\n+++ string.hpp\n@@ -13,6 +13,7 @@\n #include <memory>\n #include <optional>\n #include <stdexcept>\n+#include <string>\n #include <tuple>\n #include <type_traits>\n #include <utility>\n@@ -248,7 +249,10 @@\n         std::vector<std::uint8_t> state(capacity, 0);\n         const auto shift = static_cast<unsigned>(64 - std::countr_zero(capacity));\n         if constexpr (std::is_nothrow_move_constructible_v<value_type> &&\n-                      std::is_nothrow_invocable_v<const Hasher&, const Key&>) {\n+                      (std::is_nothrow_invocable_v<const Hasher&, const Key&> ||\n+                       (std::is_same_v<Hasher, GenericHash> &&\n+                        std::is_same_v<std::remove_cv_t<Key>, std::string> &&\n+                        noexcept(std::hash<std::string>{}(std::declval<const std::string&>()))))) {\n             for (size_type i = 0; i < slots_.size(); ++i) {\n                 if (state_[i] != 1) continue;\n                 size_type p = bucket(*slots_[i], shift);\n",
+    "guarded.hpp": "--- baseline.hpp\n+++ guarded.hpp\n@@ -13,6 +13,7 @@\n #include <memory>\n #include <optional>\n #include <stdexcept>\n+#include <string>\n #include <tuple>\n #include <type_traits>\n #include <utility>\n@@ -248,7 +249,13 @@\n         std::vector<std::uint8_t> state(capacity, 0);\n         const auto shift = static_cast<unsigned>(64 - std::countr_zero(capacity));\n         if constexpr (std::is_nothrow_move_constructible_v<value_type> &&\n-                      std::is_nothrow_invocable_v<const Hasher&, const Key&>) {\n+                      (std::is_nothrow_invocable_v<const Hasher&, const Key&>\n+#if defined(__GNUC__) && !defined(__clang__)\n+                       || (std::is_same_v<Hasher, GenericHash> &&\n+                        std::is_same_v<std::remove_cv_t<Key>, std::string> &&\n+                        noexcept(std::hash<std::string>{}(std::declval<const std::string&>())))\n+#endif\n+                      )) {\n             for (size_type i = 0; i < slots_.size(); ++i) {\n                 if (state_[i] != 1) continue;\n                 size_type p = bucket(*slots_[i], shift);\n",
+    "isolated.hpp": "--- baseline.hpp\n+++ isolated.hpp\n@@ -13,6 +13,7 @@\n #include <memory>\n #include <optional>\n #include <stdexcept>\n+#include <string>\n #include <tuple>\n #include <type_traits>\n #include <utility>\n@@ -227,7 +228,33 @@\n         occupied_ = size_; shift_ = shift; invalidate();\n     }\n #endif\n+#if defined(__GNUC__) && !defined(__clang__)\n+    [[gnu::noinline]] void rebuild_string(size_type capacity) {\n+        if (capacity > max_capacity()) throw std::length_error(\"HashSet: capacity overflow\");\n+        std::vector<Slot> next(capacity);\n+        std::vector<std::uint8_t> state(capacity, 0);\n+        const auto shift = static_cast<unsigned>(64 - std::countr_zero(capacity));\n+        for (size_type i = 0; i < slots_.size(); ++i) {\n+            if (state_[i] != 1) continue;\n+            size_type p = bucket(*slots_[i], shift);\n+            while (state[p]) p = (p + 1) & (capacity - 1);\n+            next[p].emplace(std::move(*slots_[i]));\n+            state[p] = 1;\n+        }\n+        slots_.swap(next); state_.swap(state);\n+        occupied_ = size_; shift_ = shift; invalidate();\n+    }\n+#endif\n     void rebuild(size_type capacity) {\n+#if defined(__GNUC__) && !defined(__clang__)\n+        if constexpr (std::is_same_v<Hasher, GenericHash> &&\n+                      std::is_same_v<std::remove_cv_t<Key>, std::string> &&\n+                      std::is_nothrow_move_constructible_v<value_type> &&\n+                      noexcept(std::hash<std::string>{}(std::declval<const std::string&>()))) {\n+            rebuild_string(capacity);\n+            return;\n+        }\n+#endif\n         if (capacity > max_capacity()) throw std::length_error(\"HashSet: capacity overflow\");\n #if !defined(SIRKIT_DISABLE_SIMD) && defined(__SSE2__) && (defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__)\n         if constexpr (std::is_same_v<Slot, CompactSlot>) {\n"
+  },
+  "raw_confirmation": {
+    "main": [
+      {
+        "rep": 0,
+        "variant": "guarded",
+        "case": "sums_arithmetic",
+        "ms": 24.208839
+      },
+      {
+        "rep": 0,
+        "variant": "baseline",
+        "case": "sums_arithmetic",
+        "ms": 22.666951
+      },
+      {
+        "rep": 0,
+        "variant": "control",
+        "case": "sums_arithmetic",
+        "ms": 22.316371
+      },
+      {
+        "rep": 0,
+        "variant": "isolated",
+        "case": "sums_arithmetic",
+        "ms": 20.026858
+      },
+      {
+        "rep": 0,
+        "variant": "guarded",
+        "case": "toggle_random",
+        "ms": 4.786684
+      },
+      {
+        "rep": 0,
+        "variant": "baseline",
+        "case": "toggle_random",
+        "ms": 3.76718
+      },
+      {
+        "rep": 0,
+        "variant": "control",
+        "case": "toggle_random",
+        "ms": 3.937885
+      },
+      {
+        "rep": 0,
+        "variant": "isolated",
+        "case": "toggle_random",
+        "ms": 3.919439
+      },
+      {
+        "rep": 0,
+        "variant": "guarded",
+        "case": "strings_unique",
+        "ms": 25.791421
+      },
+      {
+        "rep": 0,
+        "variant": "baseline",
+        "case": "strings_unique",
+        "ms": 30.106916
+      },
+      {
+        "rep": 0,
+        "variant": "control",
+        "case": "strings_unique",
+        "ms": 28.031885
+      },
+      {
+        "rep": 0,
+        "variant": "isolated",
+        "case": "strings_unique",
+        "ms": 26.505096
+      },
+      {
+        "rep": 0,
+        "variant": "guarded",
+        "case": "strings_all_same",
+        "ms": 5.5021
+      },
+      {
+        "rep": 0,
+        "variant": "baseline",
+        "case": "strings_all_same",
+        "ms": 5.363171
+      },
+      {
+        "rep": 0,
+        "variant": "control",
+        "case": "strings_all_same",
+        "ms": 4.88171
+      },
+      {
+        "rep": 0,
+        "variant": "isolated",
+        "case": "strings_all_same",
+        "ms": 5.052801
+      },
+      {
+        "rep": 0,
+        "variant": "guarded",
+        "case": "strings_prefix",
+        "ms": 29.508691
+      },
+      {
+        "rep": 0,
+        "variant": "baseline",
+        "case": "strings_prefix",
+        "ms": 27.956631
+      },
+      {
+        "rep": 0,
+        "variant": "control",
+        "case": "strings_prefix",
+        "ms": 26.463047
+      },
+      {
+        "rep": 0,
+        "variant": "isolated",
+        "case": "strings_prefix",
+        "ms": 24.772906
+      },
+      {
+        "rep": 0,
+        "variant": "guarded",
+        "case": "strings_mixed",
+        "ms": 23.415034
+      },
+      {
+        "rep": 0,
+        "variant": "baseline",
+        "case": "strings_mixed",
+        "ms": 25.291489
+      },
+      {
+        "rep": 0,
+        "variant": "control",
+        "case": "strings_mixed",
+        "ms": 25.345699
+      },
+      {
+        "rep": 0,
+        "variant": "isolated",
+        "case": "strings_mixed",
+        "ms": 23.762799
+      },
+      {
+        "rep": 1,
+        "variant": "isolated",
+        "case": "sums_arithmetic",
+        "ms": 22.152028
+      },
+      {
+        "rep": 1,
+        "variant": "baseline",
+        "case": "sums_arithmetic",
+        "ms": 20.488763
+      },
+      {
+        "rep": 1,
+        "variant": "guarded",
+        "case": "sums_arithmetic",
+        "ms": 20.96689
+      },
+      {
+        "rep": 1,
+        "variant": "control",
+        "case": "sums_arithmetic",
+        "ms": 20.406778
+      },
+      {
+        "rep": 1,
+        "variant": "isolated",
+        "case": "toggle_random",
+        "ms": 4.495956
+      },
+      {
+        "rep": 1,
+        "variant": "baseline",
+        "case": "toggle_random",
+        "ms": 3.627184
+      },
+      {
+        "rep": 1,
+        "variant": "guarded",
+        "case": "toggle_random",
+        "ms": 3.900291
+      },
+      {
+        "rep": 1,
+        "variant": "control",
+        "case": "toggle_random",
+        "ms": 4.164562
+      },
+      {
+        "rep": 1,
+        "variant": "isolated",
+        "case": "strings_unique",
+        "ms": 24.453818
+      },
+      {
+        "rep": 1,
+        "variant": "baseline",
+        "case": "strings_unique",
+        "ms": 26.016708
+      },
+      {
+        "rep": 1,
+        "variant": "guarded",
+        "case": "strings_unique",
+        "ms": 26.778177
+      },
+      {
+        "rep": 1,
+        "variant": "control",
+        "case": "strings_unique",
+        "ms": 26.102665
+      },
+      {
+        "rep": 1,
+        "variant": "isolated",
+        "case": "strings_all_same",
+        "ms": 5.217418
+      },
+      {
+        "rep": 1,
+        "variant": "baseline",
+        "case": "strings_all_same",
+        "ms": 4.583029
+      },
+      {
+        "rep": 1,
+        "variant": "guarded",
+        "case": "strings_all_same",
+        "ms": 4.529029
+      },
+      {
+        "rep": 1,
+        "variant": "control",
+        "case": "strings_all_same",
+        "ms": 5.178503
+      },
+      {
+        "rep": 1,
+        "variant": "isolated",
+        "case": "strings_prefix",
+        "ms": 26.593538
+      },
+      {
+        "rep": 1,
+        "variant": "baseline",
+        "case": "strings_prefix",
+        "ms": 26.682745
+      },
+      {
+        "rep": 1,
+        "variant": "guarded",
+        "case": "strings_prefix",
+        "ms": 24.911247
+      },
+      {
+        "rep": 1,
+        "variant": "control",
+        "case": "strings_prefix",
+        "ms": 26.606204
+      },
+      {
+        "rep": 1,
+        "variant": "isolated",
+        "case": "strings_mixed",
+        "ms": 23.829349
+      },
+      {
+        "rep": 1,
+        "variant": "baseline",
+        "case": "strings_mixed",
+        "ms": 25.113475
+      },
+      {
+        "rep": 1,
+        "variant": "guarded",
+        "case": "strings_mixed",
+        "ms": 22.78721
+      },
+      {
+        "rep": 1,
+        "variant": "control",
+        "case": "strings_mixed",
+        "ms": 25.00636
+      },
+      {
+        "rep": 2,
+        "variant": "control",
+        "case": "sums_arithmetic",
+        "ms": 21.215655
+      },
+      {
+        "rep": 2,
+        "variant": "guarded",
+        "case": "sums_arithmetic",
+        "ms": 21.291211
+      },
+      {
+        "rep": 2,
+        "variant": "isolated",
+        "case": "sums_arithmetic",
+        "ms": 20.289365
+      },
+      {
+        "rep": 2,
+        "variant": "baseline",
+        "case": "sums_arithmetic",
+        "ms": 20.554085
+      },
+      {
+        "rep": 2,
+        "variant": "control",
+        "case": "toggle_random",
+        "ms": 4.6263
+      },
+      {
+        "rep": 2,
+        "variant": "guarded",
+        "case": "toggle_random",
+        "ms": 4.277445
+      },
+      {
+        "rep": 2,
+        "variant": "isolated",
+        "case": "toggle_random",
+        "ms": 4.379838
+      },
+      {
+        "rep": 2,
+        "variant": "baseline",
+        "case": "toggle_random",
+        "ms": 4.142506
+      },
+      {
+        "rep": 2,
+        "variant": "control",
+        "case": "strings_unique",
+        "ms": 28.43555
+      },
+      {
+        "rep": 2,
+        "variant": "guarded",
+        "case": "strings_unique",
+        "ms": 28.092011
+      },
+      {
+        "rep": 2,
+        "variant": "isolated",
+        "case": "strings_unique",
+        "ms": 24.946536
+      },
+      {
+        "rep": 2,
+        "variant": "baseline",
+        "case": "strings_unique",
+        "ms": 27.820397
+      },
+      {
+        "rep": 2,
+        "variant": "control",
+        "case": "strings_all_same",
+        "ms": 5.027168
+      },
+      {
+        "rep": 2,
+        "variant": "guarded",
+        "case": "strings_all_same",
+        "ms": 4.772372
+      },
+      {
+        "rep": 2,
+        "variant": "isolated",
+        "case": "strings_all_same",
+        "ms": 4.825495
+      },
+      {
+        "rep": 2,
+        "variant": "baseline",
+        "case": "strings_all_same",
+        "ms": 4.950956
+      },
+      {
+        "rep": 2,
+        "variant": "control",
+        "case": "strings_prefix",
+        "ms": 29.051779
+      },
+      {
+        "rep": 2,
+        "variant": "guarded",
+        "case": "strings_prefix",
+        "ms": 25.560985
+      },
+      {
+        "rep": 2,
+        "variant": "isolated",
+        "case": "strings_prefix",
+        "ms": 27.959311
+      },
+      {
+        "rep": 2,
+        "variant": "baseline",
+        "case": "strings_prefix",
+        "ms": 27.732736
+      },
+      {
+        "rep": 2,
+        "variant": "control",
+        "case": "strings_mixed",
+        "ms": 25.233768
+      },
+      {
+        "rep": 2,
+        "variant": "guarded",
+        "case": "strings_mixed",
+        "ms": 24.720421
+      },
+      {
+        "rep": 2,
+        "variant": "isolated",
+        "case": "strings_mixed",
+        "ms": 23.614011
+      },
+      {
+        "rep": 2,
+        "variant": "baseline",
+        "case": "strings_mixed",
+        "ms": 25.470816
+      },
+      {
+        "rep": 3,
+        "variant": "isolated",
+        "case": "sums_arithmetic",
+        "ms": 22.118919
+      },
+      {
+        "rep": 3,
+        "variant": "baseline",
+        "case": "sums_arithmetic",
+        "ms": 20.824162
+      },
+      {
+        "rep": 3,
+        "variant": "guarded",
+        "case": "sums_arithmetic",
+        "ms": 20.775951
+      },
+      {
+        "rep": 3,
+        "variant": "control",
+        "case": "sums_arithmetic",
+        "ms": 20.660035
+      },
+      {
+        "rep": 3,
+        "variant": "isolated",
+        "case": "toggle_random",
+        "ms": 4.531767
+      },
+      {
+        "rep": 3,
+        "variant": "baseline",
+        "case": "toggle_random",
+        "ms": 4.071932
+      },
+      {
+        "rep": 3,
+        "variant": "guarded",
+        "case": "toggle_random",
+        "ms": 3.533229
+      },
+      {
+        "rep": 3,
+        "variant": "control",
+        "case": "toggle_random",
+        "ms": 3.882593
+      },
+      {
+        "rep": 3,
+        "variant": "isolated",
+        "case": "strings_unique",
+        "ms": 24.647168
+      },
+      {
+        "rep": 3,
+        "variant": "baseline",
+        "case": "strings_unique",
+        "ms": 26.800213
+      },
+      {
+        "rep": 3,
+        "variant": "guarded",
+        "case": "strings_unique",
+        "ms": 24.976983
+      },
+      {
+        "rep": 3,
+        "variant": "control",
+        "case": "strings_unique",
+        "ms": 25.856138
+      },
+      {
+        "rep": 3,
+        "variant": "isolated",
+        "case": "strings_all_same",
+        "ms": 5.368206
+      },
+      {
+        "rep": 3,
+        "variant": "baseline",
+        "case": "strings_all_same",
+        "ms": 4.682128
+      },
+      {
+        "rep": 3,
+        "variant": "guarded",
+        "case": "strings_all_same",
+        "ms": 4.617083
+      },
+      {
+        "rep": 3,
+        "variant": "control",
+        "case": "strings_all_same",
+        "ms": 4.856416
+      },
+      {
+        "rep": 3,
+        "variant": "isolated",
+        "case": "strings_prefix",
+        "ms": 25.940843
+      },
+      {
+        "rep": 3,
+        "variant": "baseline",
+        "case": "strings_prefix",
+        "ms": 25.866167
+      },
+      {
+        "rep": 3,
+        "variant": "guarded",
+        "case": "strings_prefix",
+        "ms": 25.031507
+      },
+      {
+        "rep": 3,
+        "variant": "control",
+        "case": "strings_prefix",
+        "ms": 25.721731
+      },
+      {
+        "rep": 3,
+        "variant": "isolated",
+        "case": "strings_mixed",
+        "ms": 24.721722
+      },
+      {
+        "rep": 3,
+        "variant": "baseline",
+        "case": "strings_mixed",
+        "ms": 28.866015
+      },
+      {
+        "rep": 3,
+        "variant": "guarded",
+        "case": "strings_mixed",
+        "ms": 26.228528
+      },
+      {
+        "rep": 3,
+        "variant": "control",
+        "case": "strings_mixed",
+        "ms": 28.120475
+      },
+      {
+        "rep": 4,
+        "variant": "guarded",
+        "case": "sums_arithmetic",
+        "ms": 21.491309
+      },
+      {
+        "rep": 4,
+        "variant": "baseline",
+        "case": "sums_arithmetic",
+        "ms": 19.542462
+      },
+      {
+        "rep": 4,
+        "variant": "isolated",
+        "case": "sums_arithmetic",
+        "ms": 20.356623
+      },
+      {
+        "rep": 4,
+        "variant": "control",
+        "case": "sums_arithmetic",
+        "ms": 20.057264
+      },
+      {
+        "rep": 4,
+        "variant": "guarded",
+        "case": "toggle_random",
+        "ms": 4.349813
+      },
+      {
+        "rep": 4,
+        "variant": "baseline",
+        "case": "toggle_random",
+        "ms": 4.43055
+      },
+      {
+        "rep": 4,
+        "variant": "isolated",
+        "case": "toggle_random",
+        "ms": 4.150438
+      },
+      {
+        "rep": 4,
+        "variant": "control",
+        "case": "toggle_random",
+        "ms": 3.738136
+      },
+      {
+        "rep": 4,
+        "variant": "guarded",
+        "case": "strings_unique",
+        "ms": 29.539373
+      },
+      {
+        "rep": 4,
+        "variant": "baseline",
+        "case": "strings_unique",
+        "ms": 30.6801
+      },
+      {
+        "rep": 4,
+        "variant": "isolated",
+        "case": "strings_unique",
+        "ms": 29.724928
+      },
+      {
+        "rep": 4,
+        "variant": "control",
+        "case": "strings_unique",
+        "ms": 26.656449
+      },
+      {
+        "rep": 4,
+        "variant": "guarded",
+        "case": "strings_all_same",
+        "ms": 5.224276
+      },
+      {
+        "rep": 4,
+        "variant": "baseline",
+        "case": "strings_all_same",
+        "ms": 4.70023
+      },
+      {
+        "rep": 4,
+        "variant": "isolated",
+        "case": "strings_all_same",
+        "ms": 5.087485
+      },
+      {
+        "rep": 4,
+        "variant": "control",
+        "case": "strings_all_same",
+        "ms": 4.569004
+      },
+      {
+        "rep": 4,
+        "variant": "guarded",
+        "case": "strings_prefix",
+        "ms": 26.237431
+      },
+      {
+        "rep": 4,
+        "variant": "baseline",
+        "case": "strings_prefix",
+        "ms": 26.614973
+      },
+      {
+        "rep": 4,
+        "variant": "isolated",
+        "case": "strings_prefix",
+        "ms": 25.362911
+      },
+      {
+        "rep": 4,
+        "variant": "control",
+        "case": "strings_prefix",
+        "ms": 25.821173
+      },
+      {
+        "rep": 4,
+        "variant": "guarded",
+        "case": "strings_mixed",
+        "ms": 23.820295
+      },
+      {
+        "rep": 4,
+        "variant": "baseline",
+        "case": "strings_mixed",
+        "ms": 25.33393
+      },
+      {
+        "rep": 4,
+        "variant": "isolated",
+        "case": "strings_mixed",
+        "ms": 24.264679
+      },
+      {
+        "rep": 4,
+        "variant": "control",
+        "case": "strings_mixed",
+        "ms": 25.625692
+      },
+      {
+        "rep": 5,
+        "variant": "baseline",
+        "case": "sums_arithmetic",
+        "ms": 21.481345
+      },
+      {
+        "rep": 5,
+        "variant": "control",
+        "case": "sums_arithmetic",
+        "ms": 19.695148
+      },
+      {
+        "rep": 5,
+        "variant": "isolated",
+        "case": "sums_arithmetic",
+        "ms": 20.993372
+      },
+      {
+        "rep": 5,
+        "variant": "guarded",
+        "case": "sums_arithmetic",
+        "ms": 20.22062
+      },
+      {
+        "rep": 5,
+        "variant": "baseline",
+        "case": "toggle_random",
+        "ms": 4.462359
+      },
+      {
+        "rep": 5,
+        "variant": "control",
+        "case": "toggle_random",
+        "ms": 4.047893
+      },
+      {
+        "rep": 5,
+        "variant": "isolated",
+        "case": "toggle_random",
+        "ms": 3.993918
+      },
+      {
+        "rep": 5,
+        "variant": "guarded",
+        "case": "toggle_random",
+        "ms": 3.603944
+      },
+      {
+        "rep": 5,
+        "variant": "baseline",
+        "case": "strings_unique",
+        "ms": 26.534706
+      },
+      {
+        "rep": 5,
+        "variant": "control",
+        "case": "strings_unique",
+        "ms": 25.976735
+      },
+      {
+        "rep": 5,
+        "variant": "isolated",
+        "case": "strings_unique",
+        "ms": 26.18368
+      },
+      {
+        "rep": 5,
+        "variant": "guarded",
+        "case": "strings_unique",
+        "ms": 24.745991
+      },
+      {
+        "rep": 5,
+        "variant": "baseline",
+        "case": "strings_all_same",
+        "ms": 5.10146
+      },
+      {
+        "rep": 5,
+        "variant": "control",
+        "case": "strings_all_same",
+        "ms": 4.589523
+      },
+      {
+        "rep": 5,
+        "variant": "isolated",
+        "case": "strings_all_same",
+        "ms": 4.734918
+      },
+      {
+        "rep": 5,
+        "variant": "guarded",
+        "case": "strings_all_same",
+        "ms": 4.83531
+      },
+      {
+        "rep": 5,
+        "variant": "baseline",
+        "case": "strings_prefix",
+        "ms": 26.332758
+      },
+      {
+        "rep": 5,
+        "variant": "control",
+        "case": "strings_prefix",
+        "ms": 27.233541
+      },
+      {
+        "rep": 5,
+        "variant": "isolated",
+        "case": "strings_prefix",
+        "ms": 28.776948
+      },
+      {
+        "rep": 5,
+        "variant": "guarded",
+        "case": "strings_prefix",
+        "ms": 25.665741
+      },
+      {
+        "rep": 5,
+        "variant": "baseline",
+        "case": "strings_mixed",
+        "ms": 25.621812
+      },
+      {
+        "rep": 5,
+        "variant": "control",
+        "case": "strings_mixed",
+        "ms": 24.921735
+      },
+      {
+        "rep": 5,
+        "variant": "isolated",
+        "case": "strings_mixed",
+        "ms": 22.977065
+      },
+      {
+        "rep": 5,
+        "variant": "guarded",
+        "case": "strings_mixed",
+        "ms": 22.884803
+      },
+      {
+        "rep": 6,
+        "variant": "isolated",
+        "case": "sums_arithmetic",
+        "ms": 21.825553
+      },
+      {
+        "rep": 6,
+        "variant": "guarded",
+        "case": "sums_arithmetic",
+        "ms": 20.132439
+      },
+      {
+        "rep": 6,
+        "variant": "control",
+        "case": "sums_arithmetic",
+        "ms": 20.278076
+      },
+      {
+        "rep": 6,
+        "variant": "baseline",
+        "case": "sums_arithmetic",
+        "ms": 21.094576
+      },
+      {
+        "rep": 6,
+        "variant": "isolated",
+        "case": "toggle_random",
+        "ms": 4.940823
+      },
+      {
+        "rep": 6,
+        "variant": "guarded",
+        "case": "toggle_random",
+        "ms": 4.203794
+      },
+      {
+        "rep": 6,
+        "variant": "control",
+        "case": "toggle_random",
+        "ms": 3.964319
+      },
+      {
+        "rep": 6,
+        "variant": "baseline",
+        "case": "toggle_random",
+        "ms": 3.94854
+      },
+      {
+        "rep": 6,
+        "variant": "isolated",
+        "case": "strings_unique",
+        "ms": 24.680652
+      },
+      {
+        "rep": 6,
+        "variant": "guarded",
+        "case": "strings_unique",
+        "ms": 24.939289
+      },
+      {
+        "rep": 6,
+        "variant": "control",
+        "case": "strings_unique",
+        "ms": 26.388197
+      },
+      {
+        "rep": 6,
+        "variant": "baseline",
+        "case": "strings_unique",
+        "ms": 26.7778
+      },
+      {
+        "rep": 6,
+        "variant": "isolated",
+        "case": "strings_all_same",
+        "ms": 5.063345
+      },
+      {
+        "rep": 6,
+        "variant": "guarded",
+        "case": "strings_all_same",
+        "ms": 5.12184
+      },
+      {
+        "rep": 6,
+        "variant": "control",
+        "case": "strings_all_same",
+        "ms": 4.493815
+      },
+      {
+        "rep": 6,
+        "variant": "baseline",
+        "case": "strings_all_same",
+        "ms": 4.610211
+      },
+      {
+        "rep": 6,
+        "variant": "isolated",
+        "case": "strings_prefix",
+        "ms": 25.238695
+      },
+      {
+        "rep": 6,
+        "variant": "guarded",
+        "case": "strings_prefix",
+        "ms": 24.523688
+      },
+      {
+        "rep": 6,
+        "variant": "control",
+        "case": "strings_prefix",
+        "ms": 26.496232
+      },
+      {
+        "rep": 6,
+        "variant": "baseline",
+        "case": "strings_prefix",
+        "ms": 27.149513
+      },
+      {
+        "rep": 6,
+        "variant": "isolated",
+        "case": "strings_mixed",
+        "ms": 23.44409
+      },
+      {
+        "rep": 6,
+        "variant": "guarded",
+        "case": "strings_mixed",
+        "ms": 22.9156
+      },
+      {
+        "rep": 6,
+        "variant": "control",
+        "case": "strings_mixed",
+        "ms": 24.712801
+      },
+      {
+        "rep": 6,
+        "variant": "baseline",
+        "case": "strings_mixed",
+        "ms": 25.48251
+      }
+    ],
+    "direct_data_file_sha256": "d5500c4ff4387230e85a6d2eced9a7033c31745289d024163cd66cc40c92f9f2",
+    "temporary_data_path": "/tmp/sirkit_hash_set_followup_opt_20261022/confirm_results.json"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-22",
+  "file": "Graph/Project_Selection.cpp",
+  "source_sha256": "b7e9db9be3437bbaf2ca93c0f481093f785ec8373388d671e91814885becaa6f",
+  "spdx": "CC0-1.0",
+  "header_label": "参考",
+  "conclusion": "ローカル履歴の初期コードはdrken解説URLを明記した独自Dinic内蔵のProject Selection実装。記事が指す旧パスの実装と同じコミットのCC0 LICENSEを取得して確認した。現在版は非公開の圧縮辺・符号なし容量予算・数値検査・固定深さ探索・増分解・所有権APIへ組み直されているため、参考の表記を維持する。今回、新たな外部実装を取り込んでいない。",
+  "sources": [
+    {
+      "kind": "アルゴリズム解説",
+      "url": "https://drken1215.hatenablog.com/entry/2023/11/24/034300",
+      "note": "記事から参照された旧GraphNetworkFlowパスは現在のmasterでは404。履歴で移動前の版を確認。"
+    },
+    {
+      "kind": "記事が指す旧実装",
+      "url": "https://github.com/drken1215/algorithm/blob/1e4935d8a81436859274f505d2cf6bf9d4abd229/GraphNetworkFlow/two_variable_submodular_optimization.cpp",
+      "sha256": "64342399db82fa11756c6f9fc277c8455350e0990e7feffd50dedeaa6616bb94"
+    },
+    {
+      "kind": "旧実装と同じ固定コミットのライセンス",
+      "url": "https://github.com/drken1215/algorithm/blob/1e4935d8a81436859274f505d2cf6bf9d4abd229/LICENSE",
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license": "CC0 1.0 Universal"
+    },
+    {
+      "kind": "移動後の現行Project Selection実装",
+      "url": "https://github.com/drken1215/algorithm/blob/9536c4af2b27c6e96571d15bcf97a5d537883db2/Flow/project_selection_problem.cpp",
+      "sha256": "cb2fd28f8ece5449dc2ffbf651be7a4301ec8ee75b7cc679aa08e3ce8069d539"
+    },
+    {
+      "kind": "現在版と同じ固定コミットのライセンス",
+      "url": "https://github.com/drken1215/algorithm/blob/9536c4af2b27c6e96571d15bcf97a5d537883db2/LICENSE",
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "license": "CC0 1.0 Universal"
+    },
+    {
+      "kind": "ローカル実装履歴",
+      "git_object": "30c83f07b0f12777217d7098cbb56da372fabfbe:Project_Selection.cpp",
+      "sha256": "73e7f6fe69691ed4dd9d0725e0f9b69b8b20425d04b359cdcadab470a252e134",
+      "note": "参考URL、旧構造体・隣接vector・再帰Dinicを確認。"
+    }
+  ],
+  "scope_limit": "取得した記事参照実装/現行実装/同コミットLICENSEとローカル履歴の調査。外部実装全体の著作権由来を網羅的に証明するものではない。",
+  "implementation_review": [
+    "標準ヘッダーのみ。ACLなど外部ライブラリのincludeに依存しない。",
+    "残余辺は隣接vector所有、参照は探索中のみ。項追加中には探索しない。逆辺は添字で管理し、vector再確保の後も有効。",
+    "PMR案は不採用。コピー・移動・例外後に外部arenaへの参照を残す構造はない。"
+  ],
+  "retrieved_artifacts_sha256": {
+    "local_30c83f0.cpp": "73e7f6fe69691ed4dd9d0725e0f9b69b8b20425d04b359cdcadab470a252e134",
+    "upstream_article_LICENSE": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "upstream_article_implementation.cpp": "64342399db82fa11756c6f9fc277c8455350e0990e7feffd50dedeaa6616bb94",
+    "upstream_old_path_commits.json": "aac82d3fc9f4bfcad34208c6b3f2d98ec02dea6799635c958c31977cce75dc68",
+    "upstream_three_variable.cpp": "10e7957594731ce592d17b75d603a3eb41cc9a9fff52f983f8388bef870876c1",
+    "upstream_LICENSE_fixed": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "upstream.cpp": "cb2fd28f8ece5449dc2ffbf651be7a4301ec8ee75b7cc679aa08e3ce8069d539",
+    "upstream_tree.json": "5de34204cb74cd4ecaf69b00e086198e0777db9e65a5dbf5a606f769a131afca",
+    "upstream_LICENSE": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+  },
+  "previous_audit": "Audit/license-audit-2026-10-17.json を変更せず、以前未取得だった記事参照先と同コミットLICENSEを今回の記録で補完する。"
+}

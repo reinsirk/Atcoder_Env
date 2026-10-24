@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-22",
+  "scope": "NearestTwoPointsの来歴・ライセンスと確定ソースのAPI契約。速度測定と当日検証の記録は別監査に分離する。",
+  "baseline_source": {
+    "path": "Geometry/Nearest_Two_points.cpp",
+    "sha256": "e8d483ab0ce38193cc21583b81366b0bedf202363bc77ade7bbea86dde0d13f2"
+  },
+  "history_bundle": {
+    "path": "/tmp/Atcoder_Env_before_initial_20261021T163122Z/history.bundle",
+    "sha256": "4201f74738404c4d6f7f5ce672f3a782327fa4613daf48b3e73f2918dccc9020"
+  },
+  "snapshots": [
+    {
+      "git": "30c83f0:Nearest_Two_points.cpp",
+      "sha256": "acf4693c6e3602aba5d8bc689f3afe8766e0c9096b5f11b2933b17ee7ab8b93e",
+      "bytes": 1682
+    },
+    {
+      "git": "7f77a51:Nearest_Two_points.cpp",
+      "sha256": "acf4693c6e3602aba5d8bc689f3afe8766e0c9096b5f11b2933b17ee7ab8b93e",
+      "bytes": 1682
+    },
+    {
+      "git": "32fb166:Nearest_Two_points.cpp",
+      "sha256": "8cd082921f1353c4d9a9e77faf56eea6a92d10b178ae8c75357a25f72397bd86",
+      "bytes": 9523
+    },
+    {
+      "git": "b76e70f:Geometry/Nearest_Two_points.cpp",
+      "sha256": "14c5690cf2a7f836e3b60737c2085eb82903255a61a6b50237666015b481250b",
+      "bytes": 9578
+    }
+  ],
+  "local_evidence_sha256": {
+    "Audit/license-audit-2026-10-17.json": "d411536c0d25f4cf2ee0f87cb83aab23a480f054c59cfa9f6486ca22b0927a8c",
+    "Audit/review-size-license-2026-10-19.json": "670f8bdca2d372dc6af35478ebac91a29e57d0792b462cb6c7b9fa2153a2f472",
+    "Audit/library-layout-2026-10-19.json": "a55f8b1d946039fc50d3a1f649ca13290f127ab27e38543b3a65f1307d061943",
+    "Audit/symbol-names-2026-10-20.json": "2b7dc18ebb1c3c69405465072c4c888825dd6bd18e28cd4a472ee437af2fc4d2",
+    "Audit/macro-prefix-sirkit-2026-10-22.json": "f628e53d5b4952d509ba6404881b38d6044633296b63d66b98263f14009f6787",
+    "Readme.md": "01188e6e9ddb747a1e2fb0cb809e821393a2f3e54dda2c7289863e90b51ed389"
+  },
+  "contemporary_rewrite_report": {
+    "path": "/tmp/atcoder_zeta_cc0_20261017/nearest_report.md",
+    "sha256": "03ff6adc6282dac2865da93c7ae20202fe3a6ff636b817dd68ee0c93d773d3ae",
+    "text": "# 最近点対 新規CC0実装の検証（2026-10-17）\n\n旧Nearest_Two_points.cppとgit上の旧実装は読まず、数学的な分割統治法から書き直した。特定の既存実装を写していない。\n\n## 仕様\n\n- `P = std::pair<std::int32_t, std::int32_t>`。\n- `NearestTwoPointsResult { uint64_t distance_squared; size_t first_index; size_t second_index; }`。添字は渡した範囲内の0始まり、first_index < second_index。同距離の対は任意。\n- `nearest_two_points(first,last)`、`nearest_two_points(first,ptrdiff_t count)`、`nearest_two_points(vector)` はoptional結果を返し、2点未満ではnullopt。\n- 整数pair列（各値がint32_tに収まること）、未整列可、非破壊。単一パス入力イテレータにも対応。char/bool/8bit/64bitの座標型も値が範囲内なら対応。\n- 入力をxでソートし、分割統治・yマージ・中央帯比較。時間O(N log N)、追加領域O(N)（16NバイトのNode列2本、vector管理領域と再帰スタックを除く）。重複検出時は停止。\n- 内部では65ビット以上で二乗距離を比較。遠い候補対の二乗和がuint64_tを超えても処理を続行し、最小値自体が超える場合だけ常時overflow_error。\n- GCC/Clangかつ__SIZEOF_INT128__ありではunsigned __int128拡張、他はuint64_t+桁上がりの標準C++代替。`REINSIRK_FORCE_STANDARD_ARITHMETIC`で代替を強制可能。\n- `closest_pair(first,int n)` は呼出名を維持し、戻り型をuint64_tに変更。0または1点ならINT32_MAXを返す。負nは無効。距離取得は二乗値。\n- 通常コピー中に座標範囲を確認し、sized sentinelの逆順・負個数も検査。SKIP_RUNTIME_CHECKSなら検査専用helperを含めて除去。容量対策と距離overflow対策・数学的ゼロ判定は維持。\n- 本体にmainは置かず、Examples/nearest_two_points_example.cppに使用例を追加。\n\n## 正当性確認\n\n`nearest_test.cpp` の独立Boost.Multiprecision uint128_t全点対参照（O(N²)）で15,028データセット。全ケースで距離・結果添字・元入力不変・互換関数結果を照合。\n空/単一/重複/同x/同y/対角線/未整列/int32極値/65bit超過/大距離と小距離の混在、固定seedの乱数14,000件を含む。さらにforward_list・個数版・char/bool/uint8/int8/uint64/int64座標、負個数・逆順・範囲外入力を確認。本体二重includeも確認。\n\nGCC 15.3.0 / Clang 21.1.8、C++23、検査ON/OFF×拡張/標準代替の8構成で全件通過。標準代替は-pedantic-errorsも付与。使用例も同じ8構成でビルド・実行し、出力`1 2 3`を確認。\n\nClang ASan+UBSan、検査ON+拡張と検査OFF+標準代替の2構成で全件通過。ptrace環境のためASAN_OPTIONS=detect_leaks=0（リーク検査は対象外）。GCC 15のASan runtimeはローカルに見つからないためClangを使用。Clangの標準ヘッダー探索には--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15を付与。\n\n## 速度測定\n\n`nearest_bench.cpp` / `nearest_bench.csv`。Intel Core i9-14900K、CPU10固定、GCC15.3 -std=c++23 -O3 -DNDEBUG、検査ON・128拡張使用。入力生成/shuffleは計測外。呼出内の割当・コピー・sortを計測に含む。1回warmup後7回、中央値と最小/最大をCSVへ記録。固定seed。旧実装との比較はしていない。\n\n| 入力 | 10万点 中央値ms | 100万点 中央値ms |\n| --- | ---: | ---: |\n| int32全域の乱数 | 11.8355 | 146.001 |\n| 同じx、y間隔2000 | 8.68607 | 106.001 |\n| 間隔1000の格子 | 8.66292 | 103.322 |\n| 143種類の座標を反復 | 2.84742 | 30.5904 |\n"
+  },
+  "history_findings": [
+    "旧30c83f0と7f77a51はbyte同一。main付き、int型の距離と破壊的inplace_mergeを使い、本文コメントに蟻本の古い実装という自己申告がある。原典の同定や利用許諾を確認したという意味ではない。",
+    "32fb166は元添字・optional・非破壊コピー・65bit以上の距離比較を持つ実装へ置換されている。Oct17の担当記録は旧コードを渡されず数学とAPIから作成したと明記する。これは過去の作成過程に関する記録であり、今回の担当がその過程を再現したという意味ではない。",
+    "Oct17 license-auditとOct19 reviewは当該8cd082...に自己寄与CC0の根拠を認める。Readmeの自己寄与CC0宣言も維持されている。Oct19 reviewの原初コードとの一致長6トークンは当時の補助調査結果で、今回新たな全世界比較はしていない。",
+    "用途別フォルダへの移動は同じ8cd082...を保持し、Oct20の内部名/namespace整備で14c569...へ変化。その後のREINSIRK_からSIRKIT_への置換だけで現在baselineとbyte一致する。"
+  ],
+  "header_decision": {
+    "keep": "// SPDX-License-Identifier: CC0-1.0",
+    "source_url": "追加しない",
+    "reason": "現在の対象は独立再構成として記録された実装を継承する。旧版の推測される由来を現在版のOriginal Sourceに付ける根拠はなく、確認していない外部実装を参考と断定もしない。",
+    "limits": "自己寄与の来歴記録は、世界中の既存実装との非一致を保証せず、旧配布物の未確定な権利条件も変更しない。"
+  },
+  "numeric_contract": {
+    "coordinate_type": "整数pair-likeの.first/.second。各値はint32_tに収める。Pはpair<int32_t,int32_t>。",
+    "maximum_abs_difference": 4294967295,
+    "maximum_single_square": 18446744065119617025,
+    "maximum_sum_of_squares": 36893488130239234050,
+    "distance_comparison": "最大値は65bit必要。途中の遠い候補がuint64_tを超えても選択を続け、最小値自体がuint64_tを超えるときだけoverflow_error。検査省略時も維持する。",
+    "result": "distance_squared:uint64_t、first_index/second_index:size_t。元の渡した範囲内の0始まり、first_index<second_index。同距離の対は任意。"
+  },
+  "api_contract": [
+    "nearest_two_points(first,last)、nearest_two_points(first,ptrdiff_t count)、nearest_two_points(vector)は有効な2点未満入力でnullopt。整数pair-likeを内部Nodeへコピーし、元の並びを変えない。",
+    "closest_pair(first,int n)は互換の距離二乗値。2点未満の有効入力でINT32_MAXをuint64_tへ変換して返す。空を明示する用途はoptional版が分かりやすい。",
+    "checkedは通常コピー中に座標を検査しout_of_range。sized sentinelの逆順と負個数をinvalid_argumentで拒否する。SKIP_RUNTIME_CHECKSで入力検査と検査専用helperを除外する。",
+    "容量対策・距離桁上がり・数学的0判定はSKIPでも保持する。指定した個数を実際に参照できること、正しいiterator/sentinel対であることは利用側の前提。",
+    "単一パスで全点をNodeへ収集する。iteratorの参照/増分や確保が例外を投げた場合は内部所有を解放する。読み取りiteratorを巻き戻す保証はない。",
+    "input_iterator conceptはmove-only iteratorも認める。baselineのnamed lvalue転送によるコピー要件を修正し、確定ソースはrange/count/互換wrapperからstd::move(first/last)を使って引き渡す。利用側もmove-only iteratorを値渡しする際は移動する。",
+    "nearest_two_points_sorted(first,last)、nearest_two_points_sorted(first,ptrdiff_t count)、nearest_two_points_sorted(vector)を追加。(x,y)辞書順で最初のsortを省き、checkedはコピー中に順序違反をinvalid_argumentで拒否、SKIPでは順序を前提にする。元添字は渡した列の位置。戻り値・有効な2点未満の挙動・距離overflow条件は未整列版と同じ。"
+  ],
+  "ownership": "Node列2本をstd::vectorで所有し、返却値に非所有ポインタやiteratorを含めない。内部のNode*は所有vectorの要素参照であり、直接のnew式はない。呼出ごとに独立した状態を使う。",
+  "limits": [
+    "過去の独立検証・測定・オンライン記録は現在版の検証済みという意味へ読み替えない。",
+    "汎用pair-likeのアクセス/iterator操作自体の副作用を復元するものではない。"
+  ],
+  "iterator_concept_evidence": {
+    "path": "/opt/atcoder/gcc/include/c++/15.3.0/bits/iterator_concepts.h",
+    "sha256": "240c08f2d713d42887630445ff5afdf13b0031d768b11d2ef32f7b4af6754e18",
+    "finding": "現環境のlibstdc++のinput_iteratorはinput_or_output_iteratorを要求し、weakly_incrementableはmovableを要求する。copyable/forward_iteratorへ暗黙に限定するものではない。baselineのnamed lvalueによる内部引渡しは公開conceptより狭い。"
+  },
+  "candidate_implementation_provenance": {
+    "developer_report": "/root/nearest_optから2026-10-22に受領。square64・交互merge・cutoff・x-only radixはbaseline本文と数学から構成。外部コード、別repoファイル、他の基数整列実装を閲覧・移植していないと申告。",
+    "report_scope": "担当者の作業来歴に関する申告であり、世界中の既存コードとの非一致の証明ではない。",
+    "generation_evidence": [
+      {
+        "path": "/tmp/sirkit_nearest_20261022/opt/make.py",
+        "sha256": "e7575d95764c256b2e0271994eca11ebba771a97b58ab579df4709e108f987ad"
+      },
+      {
+        "path": "/tmp/sirkit_nearest_20261022/opt/make_radix.py",
+        "sha256": "e9ff676f7a4aafec5c4355bd5adbc2164f13734b8d972af35b84956cf14dc62a"
+      },
+      {
+        "path": "/tmp/sirkit_nearest_20261022/opt/make_split.py",
+        "sha256": "a3c30e9f7722511e1c12ed2de41a8f33b33f714009c7287b139190df89cec745"
+      }
+    ],
+    "mathematical_review": [
+      "int32座標差はuint32最大までで、各二乗はuint64に収まる。単体二乗をuint64で求め、和だけを65bit以上にする候補は厳密性を保つ。",
+      "x-only基数整列は符号なし変換後の符号bit反転でxの数値順を保つ。分割統治は同じxにy順を要求しない。",
+      "交互merge候補は初期の両作業列を同じx順にし、solve(input,output)がoutputを完全なy順で返す。inputは帯のscratchに使われるため、split_xを子呼出前に保存する。"
+    ],
+    "status": "記載した最適化を確定ソースへ採用。履歴を含む旧実装全体の独立再作成を今回改めて行ったとの主張ではない。"
+  },
+  "final_source": {
+    "path": "Geometry/Nearest_Two_points.cpp",
+    "sha256": "3cd3a1977b6b77a8d95b449f4c60142bcc22f6cea85656c7013c4f4f80694ce0",
+    "bytes": 13155,
+    "header": "// SPDX-License-Identifier: CC0-1.0"
+  },
+  "final_implementation": {
+    "initial_sort": "N<2048はx,y辞書順のstd::sort。N>=2048はint32 xの符号bit反転と4byte安定LSD基数整列。xの非減少だけを要し、同xのy順は要求しない。sorted版は初回整列を省く。",
+    "distance": "座標差をint64で正確に求め、各二乗をuint64で計算後にDistanceへ拡張。二乗和はunsigned __int128拡張またはuint64 low+bool carryの標準代替。SIRKIT_FORCE_STANDARD_ARITHMETICで代替を選べる。",
+    "recursion": "16点以下で全対比較しy順sort。大区間は入力/出力配列を交替して子を計算し、y順merge後に帯を比較。分割xは子計算前に保存する。距離0検出では再帰の上位も以降のmergeを行わず終了する。",
+    "complexity": "O(N log N)時間、O(N)追加領域。基数整列自体は固定32bit幅についてO(N)時間。sorted版でも分割統治全体の上界はO(N log N)。",
+    "runtime_checks": "座標・sorted順序の検査は既存コピーに組込み、追加の検査用全走査なし。SKIP_RUNTIME_CHECKS時は検査コード/helperをプリプロセッサで除去。容量対策・数学的0・距離桁あふれは維持。"
+  },
+  "document": {
+    "path": "Document/nearest_two_points.md",
+    "sha256": "f3404eebbd870a42a6988f44f70905562b1fedfb4ba7444b461d4ce30c15aa1c"
+  }
+}

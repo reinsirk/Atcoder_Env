@@ -2,6 +2,28 @@
 
 // Library: Math/Zeta/Sparse_Transform.cpp
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/zeta_mobius.md
+//
+// API一覧
+// [IntegerSieve]
+// IntegerSieve(maxn): maxn>=0の最小素因数表・昇順素数列をO(maxn)時間・領域で作る。0,1の最小素因数は0。
+// least_prime_factor[x]は最小素因数、prime_listは昇順素数列。表は書き換えず利用する。
+// コピーは独立、コピー代入は強保証。ムーブ元は空となりmax_value()=-1。
+// swap(other): 表と素数列をO(1)で交換する。
+// max_value(): 表の上限を返す。is_prime(x): 0<=x<=max_value()の素数判定をO(1)で返す。
+// prime_factorization(x): 1<=x<=max_value()^2の素因数と指数のmapを返す。x=1は空の表でも許す。
+// enumerate_divisors(x), sorted_divisors(x): prime_factorizationと同じ前提で全約数を返す。後者だけ昇順。
+// divisor_totients(x): prime_factorizationと同じ前提で各約数dからphi(d)へのmapを返す。
+// mobius_table(): O(maxn)でmu表を返す。mu[0]=0,mu[1]=1。
+// totient_table(): O(maxn)でphi表を返す。phi[0]=0,phi[1]=1。
+// power_table<Mint>(k,nmax): 0<=nmax<=max_value(),k>=0でn^kの表。0^0=1。
+// べき乗表はO(nmax+pi(nmax)log(k+1))時間・O(nmax)領域。公開配列を変更せず使う。
+//
+// [疎な倍数変換]
+// m=f.size()、rは各keyの素因数を重複込みで数えた総数（以下の両API共通）。
+// sparse_multiple_zeta_transform(f,sieve): 正で一意なkeyの全約数を含むfをkey昇順にし、各値を倍数和へ置換。key<=sieve.max_value()、Valは+=対応。O((m+r)log(m+1))時間、O(m+r)補助領域。
+// sparse_multiple_mobius_transform(f,sieve): 正で一意なkeyの全約数を含むfをkey昇順にし、倍数和の逆変換を実行。key<=sieve.max_value()、Valは-=対応。O((m+r)log(m+1))時間、O(m+r)補助領域。
+
 #include <algorithm>
 #include <array>
 #include <bit>
@@ -17,36 +39,34 @@
 
 #ifndef SIRKIT_INTEGER_SIEVE_DEFINED
 #define SIRKIT_INTEGER_SIEVE_DEFINED
-// IntegerSieve(maxn): maxn>=0の最小素因数表・昇順素数列をO(maxn)時間・領域で作る。0,1の最小素因数は0。
-// least_prime_factor[x]は最小素因数、prime_listは昇順素数列。表は書き換えず利用する。
-// コピーは独立、コピー代入は強保証。ムーブ元は空となりmax_value()=-1。
-// swap(other): 表と素数列をO(1)で交換する。
-// max_value(): 表の上限を返す。is_prime(x): 0<=x<=max_value()の素数判定をO(1)で返す。
-// prime_factorization(x): 1<=x<=max_value()^2の素因数と指数のmapを返す。x=1は空の表でも許す。
-// enumerate_divisors(x), sorted_divisors(x): prime_factorizationと同じ前提で全約数を返す。後者だけ昇順。
-// divisor_totients(x): prime_factorizationと同じ前提で各約数dからphi(d)へのmapを返す。
-// mobius_table(): O(maxn)でmu表を返す。mu[0]=0,mu[1]=1。
-// totient_table(): O(maxn)でphi表を返す。phi[0]=0,phi[1]=1。
-// power_table<Mint>(k,nmax): 0<=nmax<=max_value(),k>=0でn^kの表。0^0=1。
-// べき乗表はO(nmax+pi(nmax)log(k+1))時間・O(nmax)領域。公開配列を変更せず使う。
 struct IntegerSieve {
     std::vector<int> least_prime_factor;
     std::vector<int> prime_list;
 
-    explicit IntegerSieve(int maxn) : least_prime_factor(table_size(maxn)) {
+    explicit IntegerSieve(int maxn) : least_prime_factor(table_size(maxn), 2) {
         const std::size_t limit = least_prime_factor.size();
-        for (std::size_t i = 2; i < limit; ++i) {
-            if (least_prime_factor[i] == 0) {
+        least_prime_factor[0] = 0;
+        if (limit > 1) least_prime_factor[1] = 0;
+        if (limit > 2) prime_list.push_back(2);
+        std::size_t i = 3;
+        for (; i <= (limit - 1) / 3; i += 2) {
+            if (least_prime_factor[i] == 2) {
                 least_prime_factor[i] = static_cast<int>(i);
                 prime_list.push_back(static_cast<int>(i));
             }
             const int first = least_prime_factor[i];
-            for (const int p : prime_list) {
-                const std::uint64_t next = static_cast<std::uint64_t>(i) *
-                                           static_cast<std::uint64_t>(p);
+            for (std::size_t j = 1; j < prime_list.size(); ++j) {
+                const int prime = prime_list[j];
+                const std::uint64_t next = static_cast<std::uint64_t>(i) * static_cast<std::uint64_t>(prime);
                 if (next >= limit) break;
-                least_prime_factor[static_cast<std::size_t>(next)] = p;
-                if (p == first) break;
+                least_prime_factor[static_cast<std::size_t>(next)] = prime;
+                if (prime == first) break;
+            }
+        }
+        for (; i < limit; i += 2) {
+            if (least_prime_factor[i] == 2) {
+                least_prime_factor[i] = static_cast<int>(i);
+                prime_list.push_back(static_cast<int>(i));
             }
         }
     }
@@ -272,6 +292,74 @@ template <bool Inverse, std::integral Int, class Val>
 void sparse_integer_transform(std::vector<std::pair<Int, Val>>& f,
                                       const IntegerSieve& sieve) {
     if (f.empty()) return;
+    // 1..mが順番に並ぶ場合は、添字を直接使い並べ替えと位置配列を省く。
+    const std::size_t dense_size = f.size();
+    if (f.front().first == Int{1}
+        && static_cast<std::uintmax_t>(f.back().first) == dense_size) {
+        bool consecutive = true;
+        for (std::size_t i = 1; i + 1 < dense_size; ++i) {
+            if (static_cast<std::uintmax_t>(f[i].first) != i + 1) {
+                consecutive = false; break;
+            }
+        }
+        if (consecutive) {
+#ifndef SKIP_RUNTIME_CHECKS
+            if (sieve.max_value() < 0 || dense_size > static_cast<std::uintmax_t>(sieve.max_value()))
+                throw std::out_of_range("sparse integer transform: key out of range");
+#endif
+            auto prime = sieve.prime_list.begin();
+            const auto end = sieve.prime_list.end();
+            for (; prime != end; ++prime) {
+                const auto p = static_cast<std::size_t>(*prime);
+                if (p > dense_size / 2) break;
+                const auto count = dense_size / p;
+                if constexpr (Inverse) {
+                    std::size_t from = 1, to = p;
+#if defined(__GNUC__) && !defined(__clang__)
+                    if constexpr (std::is_trivially_copyable_v<Val> && sizeof(Val) <= 8) {
+                        for (; count - from + 1 >= 8; from += 8, to += p * 8) {
+                            f[from - 1].second -= f[to - 1].second;
+                            f[from].second -= f[to + p * 1 - 1].second;
+                            f[from + 1].second -= f[to + p * 2 - 1].second;
+                            f[from + 2].second -= f[to + p * 3 - 1].second;
+                            f[from + 3].second -= f[to + p * 4 - 1].second;
+                            f[from + 4].second -= f[to + p * 5 - 1].second;
+                            f[from + 5].second -= f[to + p * 6 - 1].second;
+                            f[from + 6].second -= f[to + p * 7 - 1].second;
+                        }
+                    }
+#endif
+                    for (; from <= count; ++from, to += p)
+                        f[from - 1].second -= f[to - 1].second;
+                } else {
+                    std::size_t from = count, to = count * p;
+#if defined(__GNUC__) && !defined(__clang__)
+                    if constexpr (std::is_trivially_copyable_v<Val> && sizeof(Val) <= 8) {
+                        for (; from >= 8; from -= 8, to -= p * 8) {
+                            f[from - 1].second += f[to - 1].second;
+                            f[from - 2].second += f[to - p * 1 - 1].second;
+                            f[from - 3].second += f[to - p * 2 - 1].second;
+                            f[from - 4].second += f[to - p * 3 - 1].second;
+                            f[from - 5].second += f[to - p * 4 - 1].second;
+                            f[from - 6].second += f[to - p * 5 - 1].second;
+                            f[from - 7].second += f[to - p * 6 - 1].second;
+                            f[from - 8].second += f[to - p * 7 - 1].second;
+                        }
+                    }
+#endif
+                    for (; from; --from, to -= p)
+                        f[from - 1].second += f[to - 1].second;
+                }
+            }
+            for (; prime != end; ++prime) {
+                const auto p = static_cast<std::size_t>(*prime);
+                if (p > dense_size) break;
+                if constexpr (Inverse) f[0].second -= f[p - 1].second;
+                else f[0].second += f[p - 1].second;
+            }
+            return;
+        }
+    }
     std::sort(f.begin(), f.end(), [](const auto& a, const auto& b) {
         return a.first < b.first;
     });
@@ -433,8 +521,6 @@ void sparse_integer_transform(std::vector<std::pair<Int, Val>>& f,
 
 #ifndef SIRKIT_SPARSE_FAST_INTEGER_ZETA_DEFINED
 #define SIRKIT_SPARSE_FAST_INTEGER_ZETA_DEFINED
-// m=f.size()、rは各keyの素因数を重複込みで数えた総数（以下の両API共通）。
-// 正で一意なkeyの全約数を含むfをkey昇順にし、各値を倍数和へ置換。key<=sieve.max_value()、Valは+=対応。O((m+r)log(m+1))時間、O(m+r)補助領域。
 template <std::integral Int, class Val>
 void sparse_multiple_zeta_transform(std::vector<std::pair<Int, Val>>& f,
                               const IntegerSieve& sieve) {
@@ -444,7 +530,6 @@ void sparse_multiple_zeta_transform(std::vector<std::pair<Int, Val>>& f,
 
 #ifndef SIRKIT_SPARSE_FAST_INTEGER_MOEBIUS_DEFINED
 #define SIRKIT_SPARSE_FAST_INTEGER_MOEBIUS_DEFINED
-// 正で一意なkeyの全約数を含むfをkey昇順にし、倍数和の逆変換を実行。key<=sieve.max_value()、Valは-=対応。O((m+r)log(m+1))時間、O(m+r)補助領域。
 template <std::integral Int, class Val>
 void sparse_multiple_mobius_transform(std::vector<std::pair<Int, Val>>& f,
                                  const IntegerSieve& sieve) {

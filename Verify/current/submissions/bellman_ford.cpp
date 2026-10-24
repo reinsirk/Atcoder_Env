@@ -4,6 +4,20 @@
 // Library: Graph/Bellman-Ford.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/bellman-ford
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/negative_shortest_paths.md
+//
+// API一覧
+// [共通型・定数]
+// Edge(to,w): 行先toとint64_tの重みwを持つ有向辺。
+// WGraph: 出発点を隣接リストの添字とする辺列。INF=std::int64_t{1}<<60。
+//
+// [Bellman-Ford]
+// BellmanFord(graph, distances, start_index): 始点からの最短距離をdistancesに格納し、到達可能な負閉路があればtrueを返す。
+// SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
+// 検査は始点と処理中に参照する辺のみ。未到達頂点の出辺は走査しない。
+// 始点から到達できる負閉路があればtrue。未到達はINF、負閉路の影響下は-INF。
+// distancesは成功時に全上書き。有限距離が(-INF, INF)の範囲外ならoverflow_error。
+// 重みは[-1e9, 1e9]。O(VE+V+E)時間・O(V)追加領域。
 
 #include <algorithm>
 #include <array>
@@ -23,24 +37,15 @@ inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 
 #ifndef SIRKIT_GRAPH_TYPES_DEFINED
 #define SIRKIT_GRAPH_TYPES_DEFINED
-// 有向辺。出発点は隣接リストの添字。
 struct Edge
 {
-    // 行先
     int to;
-    // コスト
     std::int64_t w;
     Edge(int destination, std::int64_t weight) : to(destination), w(weight) {}
 };
 using WGraph = std::vector<std::vector<Edge>>;
 #endif
 
-// BellmanFord(graph, distances, start_index): 始点からの最短距離をdistancesに格納し、到達可能な負閉路があればtrueを返す。
-// SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
-// 検査は始点と処理中に参照する辺のみ。未到達頂点の出辺は走査しない。
-// 始点から到達できる負閉路があればtrue。未到達はINF、負閉路の影響下は-INF。
-// distancesは成功時に全上書き。有限距離が(-INF, INF)の範囲外ならoverflow_error。
-// 重みは[-1e9, 1e9]。O(VE+V+E)時間・O(V)追加領域。
 // 小規模・少数始点は隣接リストを走査し、多数パスでは更新頂点に処理を絞る。
 #ifndef SIRKIT_BELLMAN_FORD_DEFINED
 #define SIRKIT_BELLMAN_FORD_DEFINED
@@ -486,26 +491,29 @@ inline bool BellmanFord(const WGraph& graph, std::vector<std::int64_t>& distance
 #endif
         const int sparse = reinsirk::detail::BellmanFordSparse(graph, distances, start_index);
         if (sparse != 0) return sparse == 2;
-        if (graph.size() <= static_cast<std::size_t>((INF - 1) / 1'000'000'000) &&
-            graph[start_index].size() == 1 && graph[start_index].front().to > start_index) {
+    }
+    if (graph.size() <= static_cast<std::size_t>((INF - 1) / 1'000'000'000)
 #ifndef SKIP_RUNTIME_CHECKS
-            std::vector<std::int64_t> initial;
+        && start_index >= 0 && static_cast<std::size_t>(start_index) < graph.size()
+#endif
+        && graph[start_index].size() == 1 && graph[start_index].front().to > start_index) {
+#ifndef SKIP_RUNTIME_CHECKS
+        std::vector<std::int64_t> initial;
 #else
-            auto& initial = distances;
+        auto& initial = distances;
 #endif
-            const int stopped = reinsirk::detail::BellmanFordForward(graph, initial, start_index);
-            if (stopped < 0) {
+        const int stopped = reinsirk::detail::BellmanFordForward(graph, initial, start_index);
+        if (stopped < 0) {
 #ifndef SKIP_RUNTIME_CHECKS
-                distances.swap(initial);
+            distances.swap(initial);
 #endif
-                return stopped == -2;
-            }
-            return reinsirk::detail::BellmanFordImpl<true, true, true>(graph, distances, start_index, &initial
-#ifndef SKIP_RUNTIME_CHECKS
-                , stopped
-#endif
-            );
+            return stopped == -2;
         }
+        return reinsirk::detail::BellmanFordImpl<true, true, true>(graph, distances, start_index, &initial
+#ifndef SKIP_RUNTIME_CHECKS
+            , stopped
+#endif
+        );
     }
     if (graph.size() <= static_cast<std::size_t>((INF - 1) / 1'000'000'000))
         return reinsirk::detail::BellmanFordImpl<true, true>(graph, distances, start_index);

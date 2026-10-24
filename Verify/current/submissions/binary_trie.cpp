@@ -5,6 +5,41 @@
 // Library: DataStructure/Binary_Trie.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://nyaannyaan.github.io/library/data-structure/binary-trie.hpp
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/binary_trie.md
+//
+// API一覧
+// [BinaryTrie<T,MAX_LOG,NODES>]
+// C++20以降。重複を許す非負整数の二分トライ。T は bool / const / volatile を除く整数型。
+// キーと XOR マスクは 0 <= x < 2^(MAX_LOG + 1)。MAX_LOG は最高位ビット番号。
+// NODES は根込みのノード上限。以下 B = MAX_LOG + 1。
+// SKIP_RUNTIME_CHECKS を定義すると入力検査を省く。容量保護は常に有効。
+// get_kth は重複込み・1始まり。ID は重複可、-1 は匿名（ID一覧には含めない）。
+// ID省略の削除は匿名を優先し、なければ任意のID付き要素を削除する。
+// ID一覧は順序不定の読み取り専用参照。次の更新または破棄まで有効。
+// BinaryTrie(): 空の集合を構築する。
+// size(): 重複・匿名要素を含む要素数を返す（O(1)）。
+// empty(): 空ならtrueを返す（O(1)）。
+// add(x, id=-1): xを1個追加する。id=-1は匿名。
+// insert_unique(x,id=-1): 未登録時だけ追加してtrue。登録済みならIDも変えずfalse。
+// del(x, id=-1): xを1個削除し、削除できればtrue。id指定時はそのIDを削除する。
+// find(x): {xの個数, ID一覧}を返す。未登録なら{0, 空配列}。
+// min_element(): {最小値, ID一覧}を返す。空でないこと。
+// max_element(): {最大値, ID一覧}を返す。空でないこと。
+// get_kth(k): {昇順でk番目の値, ID一覧}を返す。重複込み・1始まり。
+// operate_xor(x): 全要素の値にXORを適用する（O(1)）。
+// count(x): xの個数を返す。匿名要素・重複も数える。
+// contains(x): xが1個以上あればtrueを返す。
+// count_less(upper): upper未満の要素数を重複込みで返す。
+// min_xor(x): {x ^ yの最小値, 対応するyのID一覧}を返す。空でないこと。
+// max_xor(x): {x ^ yの最大値, 対応するyのID一覧}を返す。空でないこと。
+// count_xor_less(x, upper): x ^ y < upperとなる要素数を重複込みで返す。
+// 値の検索・順位・XORクエリはO(B)。整数型のupperが0以下なら個数は0。
+// 構築時に最初のノードブロックを確保する。コピー・ムーブは不可。
+// add/insert_uniqueは償却O(B)、ID追加は償却O(1)。確保失敗時は値・件数・IDを保持する。
+// delはID省略ならO(B)、指定IDの削除はO(B+その値のID数)。値またはIDがなければfalse。
+// get_kthは1<=k<=size()が前提。operate_xor後にadd(y)する値はy。
+// countはID一覧を参照しない。upperはキー型より広い整数型も可、キー範囲を超えればsize()。
+// min_xor/max_xor/count_xor_lessは状態を変更しない。返す値は保存値yではなくx^y。
 
 #include <algorithm>
 #include <array>
@@ -17,36 +52,11 @@
 #include <utility>
 #include <vector>
 
-// C++20以降。重複を許す非負整数の二分トライ。T は bool / const / volatile を除く整数型。
-// キーと XOR マスクは 0 <= x < 2^(MAX_LOG + 1)。MAX_LOG は最高位ビット番号。
-// NODES は根込みのノード上限。以下 B = MAX_LOG + 1。
-// SKIP_RUNTIME_CHECKS を定義すると入力検査を省く。容量保護は常に有効。
-// get_kth は重複込み・1始まり。ID は重複可、-1 は匿名（ID一覧には含めない）。
-// ID省略の削除は匿名を優先し、なければ任意のID付き要素を削除する。
-// ID一覧は順序不定の読み取り専用参照。次の更新または破棄まで有効。
 #ifndef SIRKIT_BINARY_TRIE_DEFINED
 #define SIRKIT_BINARY_TRIE_DEFINED
 template <typename T, int MAX_LOG, std::size_t NODES = 16777216>
 class BinaryTrie
 {
-    // BinaryTrie(): 空の集合を構築する。
-    // size(): 重複・匿名要素を含む要素数を返す（O(1)）。
-    // empty(): 空ならtrueを返す（O(1)）。
-    // add(x, id=-1): xを1個追加する。id=-1は匿名。
-    // insert_unique(x,id=-1): 未登録時だけ追加してtrue。登録済みならIDも変えずfalse。
-    // del(x, id=-1): xを1個削除し、削除できればtrue。id指定時はそのIDを削除する。
-    // find(x): {xの個数, ID一覧}を返す。未登録なら{0, 空配列}。
-    // min_element(): {最小値, ID一覧}を返す。空でないこと。
-    // max_element(): {最大値, ID一覧}を返す。空でないこと。
-    // get_kth(k): {昇順でk番目の値, ID一覧}を返す。重複込み・1始まり。
-    // operate_xor(x): 全要素の値にXORを適用する（O(1)）。
-    // count(x): xの個数を返す。匿名要素・重複も数える。
-    // contains(x): xが1個以上あればtrueを返す。
-    // count_less(upper): upper未満の要素数を重複込みで返す。
-    // min_xor(x): {x ^ yの最小値, 対応するyのID一覧}を返す。空でないこと。
-    // max_xor(x): {x ^ yの最大値, 対応するyのID一覧}を返す。空でないこと。
-    // count_xor_less(x, upper): x ^ y < upperとなる要素数を重複込みで返す。
-    // 値の検索・順位・XORクエリはO(B)。整数型のupperが0以下なら個数は0。
     static_assert(std::is_integral_v<T> && !std::is_same_v<T, bool>,
                   "T must be an integer type other than bool");
     static_assert(std::is_same_v<T, std::remove_cv_t<T>>,
@@ -378,7 +388,6 @@ private:
     }
 
 public:
-    // 空の集合を構築し、最初のブロックだけを確保する。
     BinaryTrie()
     {
         initial_ = std::make_unique_for_overwrite<InitialBlock>();
@@ -387,22 +396,14 @@ public:
         root_ = acquire_node();
     }
 
-    // コピーを禁止する。
     BinaryTrie(const BinaryTrie &) = delete;
-    // コピー代入を禁止する。
     BinaryTrie &operator=(const BinaryTrie &) = delete;
-    // ムーブを禁止する。
     BinaryTrie(BinaryTrie &&) = delete;
-    // ムーブ代入を禁止する。
     BinaryTrie &operator=(BinaryTrie &&) = delete;
 
-    // 重複・匿名要素を含む要素数を返す（O(1)）。
     [[nodiscard]] size_type size() const noexcept { return root_->count; }
-    // 空集合なら true（O(1)）。
     [[nodiscard]] bool empty() const noexcept { return size() == 0; }
 
-    // xを1個追加する（償却O(B)、ID追加は償却O(1)）。失敗時も値・件数・IDを保持する。
-    // 件数超過は overflow_error、容量超過は length_error、確保失敗は bad_alloc。
     void add(T x, int id = -1)
     {
         const U key = checked_key(x) ^ lazy_;
@@ -482,8 +483,6 @@ public:
 #endif
     }
 
-    // 未登録時だけ追加する（償却O(B)、ID追加は償却O(1)）。失敗時も値・件数・IDを保持。
-    // 登録済みなら確保・ID変更を行わずfalse。
     bool insert_unique(T x, int id = -1)
     {
         const U key = checked_key(x) ^ lazy_;
@@ -566,8 +565,6 @@ public:
         return true;
     }
 
-    // x を1個削除する。値または指定IDがなければ false。
-    // ID省略は O(B)、指定ありは O(B + xに付いたID数)。
     bool del(T x, int id = -1)
     {
         const U key = checked_key(x) ^ lazy_;
@@ -609,22 +606,16 @@ public:
         return true;
     }
 
-    // {件数, ID一覧} を返す（O(B)）。未登録なら {0, 空配列}。
-    // 件数には匿名要素も含む。
     [[nodiscard]] FindResult find(T x) const
     {
         const Node *leaf = find_leaf(checked_key(x) ^ lazy_);
         return {leaf ? leaf->count : 0, ids_of(leaf)};
     }
 
-    // {最小値, ID一覧} を返す（O(B)）。空でないこと。
     [[nodiscard]] ElementResult min_element() const { return extreme(false); }
 
-    // {最大値, ID一覧} を返す（O(B)）。空でないこと。
     [[nodiscard]] ElementResult max_element() const { return extreme(true); }
 
-    // {昇順でk番目の値, その値の全ID一覧} を返す（O(B)）。
-    // 1 <= k <= size() を満たすこと。
     [[nodiscard]] ElementResult get_kth(std::int64_t k) const
     {
 #ifndef SKIP_RUNTIME_CHECKS
@@ -681,42 +672,35 @@ public:
         return {static_cast<T>(value), ids_of(node)};
     }
 
-    // 全要素に「値 ^= x」を適用する（O(1)）。以後 add(y) で追加する値は y。
     void operate_xor(T x) { lazy_ ^= checked_key(x); }
 
-    // xの件数。ID一覧を参照せずに数える。
     [[nodiscard]] size_type count(T x) const
     {
         const Node *leaf = find_leaf(checked_key(x) ^ lazy_);
         return leaf ? leaf->count : 0;
     }
 
-    // xが登録されているかを返す。
     [[nodiscard]] bool contains(T x) const
     {
         return find_leaf(checked_key(x) ^ lazy_) != nullptr;
     }
 
-    // upperはキーより広い整数型でもよい。キー範囲を超えればsize()を返す。
     template <class Bound>
     [[nodiscard]] size_type count_less(Bound upper) const noexcept
     {
         return xor_count_less(lazy_, upper);
     }
 
-    // 問い合わせ用XORで集合の状態は変えない。firstは保存値yではなくx ^ y。
     [[nodiscard]] ElementResult min_xor(T x) const
     {
         return xor_extreme(checked_key(x) ^ lazy_, false);
     }
 
-    // 問い合わせ用XORで集合の状態は変えない。firstは保存値yではなくx ^ y。
     [[nodiscard]] ElementResult max_xor(T x) const
     {
         return xor_extreme(checked_key(x) ^ lazy_, true);
     }
 
-    // upperの扱いはcount_lessと同じ。xはキーと同じ範囲のXORマスク。
     template <class Bound>
     [[nodiscard]] size_type count_xor_less(T x, Bound upper) const
     {

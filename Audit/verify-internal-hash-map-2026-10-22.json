@@ -1,0 +1,2878 @@
+{
+  "date": "2026-10-22",
+  "scope": "内部整数HashMapの現在版ローカル検証。オンライン未提出。",
+  "online_submission_performed": false,
+  "online_status": "未提出",
+  "submission_sha256": "4aab622a113b538d75d9f8a8338ef2f79f9eeac6927f354f92e4b737ae187955",
+  "final_source_hashes": {
+    "Internal/Nyaan_hash_map_min.cpp": "45c193856ee6d1562e2a671bc41dd0424660be5db92b6009f23483a2dc5ef500",
+    "DataStructure/dynamic-binary-indexed-tree.cpp": "83d0001d060151679a13ecc91c02f87be2330826ef01f81e1fbb4293fd426689",
+    "DataStructure/dynamic-binary-indexed-tree-2d.cpp": "1fe36a34dbffc1bc6eb4fbc64d021c744955d6bb825cad046a3cce1cb06b99c8",
+    "DataStructure/dynamic-union-find.cpp": "d2627ac9eefeb73e0a7eff02c339e950d6299038dbbcbbe67038305b2169251c"
+  },
+  "measured_snapshot_sha256": "13eaf8a83a9ee6d50a5650da5eb63f3239eec8af122c6b281022deb45ed4a826",
+  "snapshot_equivalence": "測定snapshotと最終本体の差は説明コメントのみ。コメント・空白除外後の同一性を確認。",
+  "problem_url": "https://judge.yosupo.jp/problem/associative_array",
+  "official_sources": [
+    {
+      "source": "common/random.h",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/common/random.h",
+      "sha256": "d0ae9470c3a04425e1ab8c39f376a0e707507659b8f5aa3ca06c5b47f193613c",
+      "bytes": 3742
+    },
+    {
+      "source": "common/testlib.h",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/common/testlib.h",
+      "sha256": "8d6d68c9708ff3f8d094488506a8171802496bd1ae04942b31f2a47057564497",
+      "bytes": 194404
+    },
+    {
+      "source": "data_structure/associative_array/task.md",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/task.md",
+      "sha256": "b09c2d849bd141744824df5c89580a7d2e811a3161bcb51902defc783a27700b",
+      "bytes": 635
+    },
+    {
+      "source": "data_structure/associative_array/gen/example_00.in",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/gen/example_00.in",
+      "sha256": "66d33d73f1386518070480c31c8ecd752a574ddc02bb985fcc2130f76296ad2b",
+      "bytes": 40
+    },
+    {
+      "source": "data_structure/associative_array/gen/random.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/gen/random.cpp",
+      "sha256": "ed0d8397b947c51c5b75763366a11384a4fb6086d3999b42a7512caf137f0477",
+      "bytes": 840
+    },
+    {
+      "source": "data_structure/associative_array/gen/max_random.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/gen/max_random.cpp",
+      "sha256": "a72b4cbfb916c85bcb84c68d0fce51c8e387ec4c019036ea9c523a190a4ea418",
+      "bytes": 814
+    },
+    {
+      "source": "data_structure/associative_array/gen/max_many_updates.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/gen/max_many_updates.cpp",
+      "sha256": "3dfe9a1e4bf28ea5ec271c1403238443013ea6854b0f7da709e69ce21e223d79",
+      "bytes": 765
+    },
+    {
+      "source": "data_structure/associative_array/gen/unordered_map_killer.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/gen/unordered_map_killer.cpp",
+      "sha256": "a0a418fb7f20c1ca4fa14b5002dbedd4e1beae78c3d101d0a5017f59b7e2070a",
+      "bytes": 1493
+    },
+    {
+      "source": "data_structure/associative_array/gen/sparse_keys.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/gen/sparse_keys.cpp",
+      "sha256": "fd169573a0da5cac93a734b94900293147a7aab53a653ae45eeb8ebcca021d10",
+      "bytes": 836
+    },
+    {
+      "source": "data_structure/associative_array/gen/2_powers.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/gen/2_powers.cpp",
+      "sha256": "e9c7adf84307ee640b239068624ce490a190267ecc2fe496bc725e971d72da5e",
+      "bytes": 845
+    },
+    {
+      "source": "data_structure/associative_array/gen/many_0set.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/gen/many_0set.cpp",
+      "sha256": "bcdd8ddb0a4f118f5c0385daa903dd4c55aa0ec104a1e52d8259ec3e07fe6ccd",
+      "bytes": 859
+    },
+    {
+      "source": "data_structure/associative_array/gen/many_0set_sparse.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/gen/many_0set_sparse.cpp",
+      "sha256": "f8f43bd2b04c8ba179c81b491edd3bfd19019bb2568dfdd1c9bf718b341d8a16",
+      "bytes": 881
+    },
+    {
+      "source": "data_structure/associative_array/gen/py_killer.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/gen/py_killer.cpp",
+      "sha256": "4718ced395470f5acfc159e82d9d142b410f218fc59e614e84386c279dc3960e",
+      "bytes": 915
+    },
+    {
+      "source": "data_structure/associative_array/gen/c_sharp_killer.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/gen/c_sharp_killer.cpp",
+      "sha256": "6558c81b30c216ff7690542700e9731963e82d7c03c07fb29feb24b0989abdf3",
+      "bytes": 815
+    },
+    {
+      "source": "data_structure/associative_array/info.toml",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/associative_array/info.toml",
+      "sha256": "235aaecdbf2574f548d50a0327dc38690bf7779b2e64aa0dafdf8a717c81fbfd",
+      "bytes": 866
+    }
+  ],
+  "official_inputs": [
+    {
+      "name": "example_00.in",
+      "bytes": 40,
+      "sha256": "66d33d73f1386518070480c31c8ecd752a574ddc02bb985fcc2130f76296ad2b"
+    },
+    {
+      "name": "random_00.in",
+      "bytes": 11823930,
+      "sha256": "b67a34a02e0a7a24a247155c84dfe74bc652a0fb5f79efdc51f297f892cef290"
+    },
+    {
+      "name": "random_01.in",
+      "bytes": 14055225,
+      "sha256": "36eced38775d63563980571eebbcda88622b38e1890238d8c148b84caf92a764"
+    },
+    {
+      "name": "random_02.in",
+      "bytes": 17518752,
+      "sha256": "8bb2bc777d94732cfc96e9374bac4c6e87d2b9e9d6849fb0f98db9fa79f0af9c"
+    },
+    {
+      "name": "max_random_00.in",
+      "bytes": 30332728,
+      "sha256": "ddb9396b57e0c10e47b3afa4da39fb514ebc571db2d666e9592d72b652dc7852"
+    },
+    {
+      "name": "max_random_01.in",
+      "bytes": 30335397,
+      "sha256": "ecc81e36056a495ce8fb04b497339b9dd0fb7227adea8c710134a8000ee27dd0"
+    },
+    {
+      "name": "max_random_02.in",
+      "bytes": 30329125,
+      "sha256": "f3b673ecbc49d23217dde21bc2e268dcd2ca4aa5dac607c8b121bd6007936c41"
+    },
+    {
+      "name": "max_many_updates_00.in",
+      "bytes": 39588095,
+      "sha256": "77e25b2d16b00854ebc48bf8d7e22b07b04e86543c4dd13834b45fc9cb67428c"
+    },
+    {
+      "name": "unordered_map_killer_00.in",
+      "bytes": 24004891,
+      "sha256": "0dd841bf7a3a02b546b597de6a9eadc22ceae790a28b6d7a4ec3cc5ac02944c8"
+    },
+    {
+      "name": "unordered_map_killer_01.in",
+      "bytes": 23931049,
+      "sha256": "96e853bb9efd434e3a11d115a12f5b29ae85fc15e8bf84477995fcc5643756e3"
+    },
+    {
+      "name": "unordered_map_killer_02.in",
+      "bytes": 23914981,
+      "sha256": "f7d1ae5706bf7db22825738815beb929178482fd50b66fa8bb05cad8da8cf9dd"
+    },
+    {
+      "name": "unordered_map_killer_03.in",
+      "bytes": 23808270,
+      "sha256": "faf8312be882a629a1e20949f53533d096ef8a3c5280d211268143306c0f72dc"
+    },
+    {
+      "name": "sparse_keys_00.in",
+      "bytes": 11830828,
+      "sha256": "751263837fd192b8927fdd6b520292b24000e5ea261dc7cadcc12c2b966d231e"
+    },
+    {
+      "name": "sparse_keys_01.in",
+      "bytes": 14069292,
+      "sha256": "f041c26c7b5944b3e605d73b51fb00bb8b2ad2c1734c5289bbff5f07da35c202"
+    },
+    {
+      "name": "2_powers_00.in",
+      "bytes": 30236331,
+      "sha256": "0cf2f01b872a97cd0124175d9b0c06e59d6bf64e92794c15989e932733c1e97a"
+    },
+    {
+      "name": "many_0set_00.in",
+      "bytes": 26104694,
+      "sha256": "06b1292b14e0bff309167dd41b000472bcfb302e12d5bd380c1024fd6567683b"
+    },
+    {
+      "name": "many_0set_sparse_00.in",
+      "bytes": 10191845,
+      "sha256": "9984d8acc8dcfa1a613bc20f73a940926cb822b505df8d84dad8ac9cce76006a"
+    },
+    {
+      "name": "py_killer_00.in",
+      "bytes": 17247242,
+      "sha256": "ddaa0dfada789179f6036863fc5f9332fc2d8d8608f5b624083a7c88f09a88f4"
+    },
+    {
+      "name": "py_killer_01.in",
+      "bytes": 17247182,
+      "sha256": "2844c281ab07cdff10e8c1d76e2e9f2d54b006cb5eeb8e5aa446e32856934fe7"
+    },
+    {
+      "name": "c_sharp_killer_00.in",
+      "bytes": 16315413,
+      "sha256": "abce139d9ecbc83d6f710d8b9697d769afc0cc38bb8044a252eaeb93ebdd811a"
+    }
+  ],
+  "official_reference": "同じ共通I/Oを使うstd::mapの独立実装で全20入力の出力hashを作成し、GCC/Clang checked/skipの各本体を照合。",
+  "official_outputs": [
+    {
+      "build": "gcc_final_checked",
+      "case": "example_00.in",
+      "output_sha256": "b26b8f857cfa567357696d2e15944a723b3c35f6dde65da9c8eceb841878d8ca"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "random_00.in",
+      "output_sha256": "530c4cec983b2cedac03b734d6b77cc416c764c80057ea911060627498256c0b"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "random_01.in",
+      "output_sha256": "c45731e6ac85f40599d607d878675e24807c09292f08c4a8369e8bd4ad4a9e57"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "random_02.in",
+      "output_sha256": "42b528ac6c590c583d1270eca82affb7de77d5adfc134103b9cc7d6fc1ea7093"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "max_random_00.in",
+      "output_sha256": "e253ab2277192f84b630c7ca47d33fa82d403e14e6b3200b86bf799a20fe5ba2"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "max_random_01.in",
+      "output_sha256": "f50de3f2c2fd8f61857b0b8a5d737196705ef16f7cf5043e50d0c6e328ee26a0"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "max_random_02.in",
+      "output_sha256": "45c5d7866ff24c5403a97c38fdd43b5dad091369060d328244f8ab6137c53a4f"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "max_many_updates_00.in",
+      "output_sha256": "3c004dbece71e0719a38eea36df68cd4998e668c59fad0139e4b4109b759c8bc"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "unordered_map_killer_00.in",
+      "output_sha256": "ec3e0cbc97113d333beb1a5691088baf945de94d7fd89e746912b1770e32141c"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "unordered_map_killer_01.in",
+      "output_sha256": "8785fe632aaa363af4b99d5ce8ef3638c90fe86f36afba83dedf7c5b5903783b"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "unordered_map_killer_02.in",
+      "output_sha256": "4e1bf0c0e07f6edbb5822e7b0d19b36d89c45c5e1e8a604ef4bfbb7610a2c7ac"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "unordered_map_killer_03.in",
+      "output_sha256": "9ead08f2e504331487339a4c0f6258395c1262ac72dc402f34b8acd01ef6057a"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "sparse_keys_00.in",
+      "output_sha256": "7f4af56720a92c1f8fdca39fc66d2ab3f9a64d842504d82cc5c55dedb52054ea"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "sparse_keys_01.in",
+      "output_sha256": "bfb91cd5679cf614a0750c47f00958c492944ae95f3a67dd1146269fe37cb663"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "2_powers_00.in",
+      "output_sha256": "ec3e0cbc97113d333beb1a5691088baf945de94d7fd89e746912b1770e32141c"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "many_0set_00.in",
+      "output_sha256": "2e08197177cabbde372365ce51f966af78aed94128e1193a2294f5b13b14af9a"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "many_0set_sparse_00.in",
+      "output_sha256": "3acfa7b16f91f4bf2fb326ecb09072303e999b17fe8830828183056f4055ff3f"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "py_killer_00.in",
+      "output_sha256": "9e8c74c30823472d9c37e19c2fc724ba540e3fa4c170132be69d1443cdc3c8cb"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "py_killer_01.in",
+      "output_sha256": "6eed7369fb20cf4cbf3f9386de6506b7b65f8db2fdad215a453f2290575554d2"
+    },
+    {
+      "build": "gcc_final_checked",
+      "case": "c_sharp_killer_00.in",
+      "output_sha256": "d1a3c1f9b794bbb43d09482ef0ca85c2f5840b47be1691712fcba49a6685e16f"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "example_00.in",
+      "output_sha256": "b26b8f857cfa567357696d2e15944a723b3c35f6dde65da9c8eceb841878d8ca"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "random_00.in",
+      "output_sha256": "530c4cec983b2cedac03b734d6b77cc416c764c80057ea911060627498256c0b"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "random_01.in",
+      "output_sha256": "c45731e6ac85f40599d607d878675e24807c09292f08c4a8369e8bd4ad4a9e57"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "random_02.in",
+      "output_sha256": "42b528ac6c590c583d1270eca82affb7de77d5adfc134103b9cc7d6fc1ea7093"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "max_random_00.in",
+      "output_sha256": "e253ab2277192f84b630c7ca47d33fa82d403e14e6b3200b86bf799a20fe5ba2"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "max_random_01.in",
+      "output_sha256": "f50de3f2c2fd8f61857b0b8a5d737196705ef16f7cf5043e50d0c6e328ee26a0"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "max_random_02.in",
+      "output_sha256": "45c5d7866ff24c5403a97c38fdd43b5dad091369060d328244f8ab6137c53a4f"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "max_many_updates_00.in",
+      "output_sha256": "3c004dbece71e0719a38eea36df68cd4998e668c59fad0139e4b4109b759c8bc"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "unordered_map_killer_00.in",
+      "output_sha256": "ec3e0cbc97113d333beb1a5691088baf945de94d7fd89e746912b1770e32141c"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "unordered_map_killer_01.in",
+      "output_sha256": "8785fe632aaa363af4b99d5ce8ef3638c90fe86f36afba83dedf7c5b5903783b"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "unordered_map_killer_02.in",
+      "output_sha256": "4e1bf0c0e07f6edbb5822e7b0d19b36d89c45c5e1e8a604ef4bfbb7610a2c7ac"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "unordered_map_killer_03.in",
+      "output_sha256": "9ead08f2e504331487339a4c0f6258395c1262ac72dc402f34b8acd01ef6057a"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "sparse_keys_00.in",
+      "output_sha256": "7f4af56720a92c1f8fdca39fc66d2ab3f9a64d842504d82cc5c55dedb52054ea"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "sparse_keys_01.in",
+      "output_sha256": "bfb91cd5679cf614a0750c47f00958c492944ae95f3a67dd1146269fe37cb663"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "2_powers_00.in",
+      "output_sha256": "ec3e0cbc97113d333beb1a5691088baf945de94d7fd89e746912b1770e32141c"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "many_0set_00.in",
+      "output_sha256": "2e08197177cabbde372365ce51f966af78aed94128e1193a2294f5b13b14af9a"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "many_0set_sparse_00.in",
+      "output_sha256": "3acfa7b16f91f4bf2fb326ecb09072303e999b17fe8830828183056f4055ff3f"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "py_killer_00.in",
+      "output_sha256": "9e8c74c30823472d9c37e19c2fc724ba540e3fa4c170132be69d1443cdc3c8cb"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "py_killer_01.in",
+      "output_sha256": "6eed7369fb20cf4cbf3f9386de6506b7b65f8db2fdad215a453f2290575554d2"
+    },
+    {
+      "build": "gcc_final_skip",
+      "case": "c_sharp_killer_00.in",
+      "output_sha256": "d1a3c1f9b794bbb43d09482ef0ca85c2f5840b47be1691712fcba49a6685e16f"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "example_00.in",
+      "output_sha256": "b26b8f857cfa567357696d2e15944a723b3c35f6dde65da9c8eceb841878d8ca"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "random_00.in",
+      "output_sha256": "530c4cec983b2cedac03b734d6b77cc416c764c80057ea911060627498256c0b"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "random_01.in",
+      "output_sha256": "c45731e6ac85f40599d607d878675e24807c09292f08c4a8369e8bd4ad4a9e57"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "random_02.in",
+      "output_sha256": "42b528ac6c590c583d1270eca82affb7de77d5adfc134103b9cc7d6fc1ea7093"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "max_random_00.in",
+      "output_sha256": "e253ab2277192f84b630c7ca47d33fa82d403e14e6b3200b86bf799a20fe5ba2"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "max_random_01.in",
+      "output_sha256": "f50de3f2c2fd8f61857b0b8a5d737196705ef16f7cf5043e50d0c6e328ee26a0"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "max_random_02.in",
+      "output_sha256": "45c5d7866ff24c5403a97c38fdd43b5dad091369060d328244f8ab6137c53a4f"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "max_many_updates_00.in",
+      "output_sha256": "3c004dbece71e0719a38eea36df68cd4998e668c59fad0139e4b4109b759c8bc"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "unordered_map_killer_00.in",
+      "output_sha256": "ec3e0cbc97113d333beb1a5691088baf945de94d7fd89e746912b1770e32141c"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "unordered_map_killer_01.in",
+      "output_sha256": "8785fe632aaa363af4b99d5ce8ef3638c90fe86f36afba83dedf7c5b5903783b"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "unordered_map_killer_02.in",
+      "output_sha256": "4e1bf0c0e07f6edbb5822e7b0d19b36d89c45c5e1e8a604ef4bfbb7610a2c7ac"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "unordered_map_killer_03.in",
+      "output_sha256": "9ead08f2e504331487339a4c0f6258395c1262ac72dc402f34b8acd01ef6057a"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "sparse_keys_00.in",
+      "output_sha256": "7f4af56720a92c1f8fdca39fc66d2ab3f9a64d842504d82cc5c55dedb52054ea"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "sparse_keys_01.in",
+      "output_sha256": "bfb91cd5679cf614a0750c47f00958c492944ae95f3a67dd1146269fe37cb663"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "2_powers_00.in",
+      "output_sha256": "ec3e0cbc97113d333beb1a5691088baf945de94d7fd89e746912b1770e32141c"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "many_0set_00.in",
+      "output_sha256": "2e08197177cabbde372365ce51f966af78aed94128e1193a2294f5b13b14af9a"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "many_0set_sparse_00.in",
+      "output_sha256": "3acfa7b16f91f4bf2fb326ecb09072303e999b17fe8830828183056f4055ff3f"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "py_killer_00.in",
+      "output_sha256": "9e8c74c30823472d9c37e19c2fc724ba540e3fa4c170132be69d1443cdc3c8cb"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "py_killer_01.in",
+      "output_sha256": "6eed7369fb20cf4cbf3f9386de6506b7b65f8db2fdad215a453f2290575554d2"
+    },
+    {
+      "build": "clang_final_checked",
+      "case": "c_sharp_killer_00.in",
+      "output_sha256": "d1a3c1f9b794bbb43d09482ef0ca85c2f5840b47be1691712fcba49a6685e16f"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "example_00.in",
+      "output_sha256": "b26b8f857cfa567357696d2e15944a723b3c35f6dde65da9c8eceb841878d8ca"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "random_00.in",
+      "output_sha256": "530c4cec983b2cedac03b734d6b77cc416c764c80057ea911060627498256c0b"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "random_01.in",
+      "output_sha256": "c45731e6ac85f40599d607d878675e24807c09292f08c4a8369e8bd4ad4a9e57"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "random_02.in",
+      "output_sha256": "42b528ac6c590c583d1270eca82affb7de77d5adfc134103b9cc7d6fc1ea7093"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "max_random_00.in",
+      "output_sha256": "e253ab2277192f84b630c7ca47d33fa82d403e14e6b3200b86bf799a20fe5ba2"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "max_random_01.in",
+      "output_sha256": "f50de3f2c2fd8f61857b0b8a5d737196705ef16f7cf5043e50d0c6e328ee26a0"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "max_random_02.in",
+      "output_sha256": "45c5d7866ff24c5403a97c38fdd43b5dad091369060d328244f8ab6137c53a4f"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "max_many_updates_00.in",
+      "output_sha256": "3c004dbece71e0719a38eea36df68cd4998e668c59fad0139e4b4109b759c8bc"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "unordered_map_killer_00.in",
+      "output_sha256": "ec3e0cbc97113d333beb1a5691088baf945de94d7fd89e746912b1770e32141c"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "unordered_map_killer_01.in",
+      "output_sha256": "8785fe632aaa363af4b99d5ce8ef3638c90fe86f36afba83dedf7c5b5903783b"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "unordered_map_killer_02.in",
+      "output_sha256": "4e1bf0c0e07f6edbb5822e7b0d19b36d89c45c5e1e8a604ef4bfbb7610a2c7ac"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "unordered_map_killer_03.in",
+      "output_sha256": "9ead08f2e504331487339a4c0f6258395c1262ac72dc402f34b8acd01ef6057a"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "sparse_keys_00.in",
+      "output_sha256": "7f4af56720a92c1f8fdca39fc66d2ab3f9a64d842504d82cc5c55dedb52054ea"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "sparse_keys_01.in",
+      "output_sha256": "bfb91cd5679cf614a0750c47f00958c492944ae95f3a67dd1146269fe37cb663"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "2_powers_00.in",
+      "output_sha256": "ec3e0cbc97113d333beb1a5691088baf945de94d7fd89e746912b1770e32141c"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "many_0set_00.in",
+      "output_sha256": "2e08197177cabbde372365ce51f966af78aed94128e1193a2294f5b13b14af9a"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "many_0set_sparse_00.in",
+      "output_sha256": "3acfa7b16f91f4bf2fb326ecb09072303e999b17fe8830828183056f4055ff3f"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "py_killer_00.in",
+      "output_sha256": "9e8c74c30823472d9c37e19c2fc724ba540e3fa4c170132be69d1443cdc3c8cb"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "py_killer_01.in",
+      "output_sha256": "6eed7369fb20cf4cbf3f9386de6506b7b65f8db2fdad215a453f2290575554d2"
+    },
+    {
+      "build": "clang_final_skip",
+      "case": "c_sharp_killer_00.in",
+      "output_sha256": "d1a3c1f9b794bbb43d09482ef0ca85c2f5840b47be1691712fcba49a6685e16f"
+    }
+  ],
+  "official_expected_outputs": [
+    {
+      "case": "example_00.in",
+      "sha256": "b26b8f857cfa567357696d2e15944a723b3c35f6dde65da9c8eceb841878d8ca",
+      "output_bytes": 10
+    },
+    {
+      "case": "random_00.in",
+      "sha256": "530c4cec983b2cedac03b734d6b77cc416c764c80057ea911060627498256c0b",
+      "output_bytes": 1063091
+    },
+    {
+      "case": "random_01.in",
+      "sha256": "c45731e6ac85f40599d607d878675e24807c09292f08c4a8369e8bd4ad4a9e57",
+      "output_bytes": 1381667
+    },
+    {
+      "case": "random_02.in",
+      "sha256": "42b528ac6c590c583d1270eca82affb7de77d5adfc134103b9cc7d6fc1ea7093",
+      "output_bytes": 1283060
+    },
+    {
+      "case": "max_random_00.in",
+      "sha256": "e253ab2277192f84b630c7ca47d33fa82d403e14e6b3200b86bf799a20fe5ba2",
+      "output_bytes": 4691775
+    },
+    {
+      "case": "max_random_01.in",
+      "sha256": "f50de3f2c2fd8f61857b0b8a5d737196705ef16f7cf5043e50d0c6e328ee26a0",
+      "output_bytes": 4293990
+    },
+    {
+      "case": "max_random_02.in",
+      "sha256": "45c5d7866ff24c5403a97c38fdd43b5dad091369060d328244f8ab6137c53a4f",
+      "output_bytes": 3788490
+    },
+    {
+      "case": "max_many_updates_00.in",
+      "sha256": "3c004dbece71e0719a38eea36df68cd4998e668c59fad0139e4b4109b759c8bc",
+      "output_bytes": 189649
+    },
+    {
+      "case": "unordered_map_killer_00.in",
+      "sha256": "ec3e0cbc97113d333beb1a5691088baf945de94d7fd89e746912b1770e32141c",
+      "output_bytes": 1000638
+    },
+    {
+      "case": "unordered_map_killer_01.in",
+      "sha256": "8785fe632aaa363af4b99d5ce8ef3638c90fe86f36afba83dedf7c5b5903783b",
+      "output_bytes": 1000652
+    },
+    {
+      "case": "unordered_map_killer_02.in",
+      "sha256": "4e1bf0c0e07f6edbb5822e7b0d19b36d89c45c5e1e8a604ef4bfbb7610a2c7ac",
+      "output_bytes": 998932
+    },
+    {
+      "case": "unordered_map_killer_03.in",
+      "sha256": "9ead08f2e504331487339a4c0f6258395c1262ac72dc402f34b8acd01ef6057a",
+      "output_bytes": 999326
+    },
+    {
+      "case": "sparse_keys_00.in",
+      "sha256": "7f4af56720a92c1f8fdca39fc66d2ab3f9a64d842504d82cc5c55dedb52054ea",
+      "output_bytes": 3680825
+    },
+    {
+      "case": "sparse_keys_01.in",
+      "sha256": "bfb91cd5679cf614a0750c47f00958c492944ae95f3a67dd1146269fe37cb663",
+      "output_bytes": 4378692
+    },
+    {
+      "case": "2_powers_00.in",
+      "sha256": "ec3e0cbc97113d333beb1a5691088baf945de94d7fd89e746912b1770e32141c",
+      "output_bytes": 1000638
+    },
+    {
+      "case": "many_0set_00.in",
+      "sha256": "2e08197177cabbde372365ce51f966af78aed94128e1193a2294f5b13b14af9a",
+      "output_bytes": 2853547
+    },
+    {
+      "case": "many_0set_sparse_00.in",
+      "sha256": "3acfa7b16f91f4bf2fb326ecb09072303e999b17fe8830828183056f4055ff3f",
+      "output_bytes": 2037327
+    },
+    {
+      "case": "py_killer_00.in",
+      "sha256": "9e8c74c30823472d9c37e19c2fc724ba540e3fa4c170132be69d1443cdc3c8cb",
+      "output_bytes": 1200153
+    },
+    {
+      "case": "py_killer_01.in",
+      "sha256": "6eed7369fb20cf4cbf3f9386de6506b7b65f8db2fdad215a453f2290575554d2",
+      "output_bytes": 1200152
+    },
+    {
+      "case": "c_sharp_killer_00.in",
+      "sha256": "d1a3c1f9b794bbb43d09482ef0ca85c2f5840b47be1691712fcba49a6685e16f",
+      "output_bytes": 1200000
+    }
+  ],
+  "reference_source": "// SPDX-License-Identifier: CC0-1.0\n#include \"baseline/Verify/current/common/fast_io.hpp\"\n#include <cstdint>\n#include <map>\nint main() {\n    int q{}; if (!(verify_in >> q)) return 0;\n    std::map<std::uint64_t, std::uint64_t> table;\n    while (q--) {\n        int t{}; std::uint64_t key{}; verify_in >> t >> key;\n        if (t == 0) { std::uint64_t value{}; verify_in >> value; table[key] = value; }\n        else verify_out << table[key] << '\\n';\n    }\n}\n",
+  "core_suites": {
+    "new": {
+      "source": "/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp",
+      "source_sha256": "13eaf8a83a9ee6d50a5650da5eb63f3239eec8af122c6b281022deb45ed4a826",
+      "results": [
+        {
+          "name": "new_internal_hash_release_test_gcc_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_release_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/new_internal_hash_release_test_gcc_checked"
+          ],
+          "stdout": "PASS 14225 capacity/load_factor/release checks; no retained array allocation",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "new_internal_hash_release_test_gcc_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_release_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/new_internal_hash_release_test_gcc_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "stdout": "PASS 14225 capacity/load_factor/release checks; no retained array allocation",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "new_internal_hash_release_test_clang_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_release_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/new_internal_hash_release_test_clang_checked"
+          ],
+          "stdout": "PASS 14225 capacity/load_factor/release checks; no retained array allocation",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "new_internal_hash_release_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_release_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/new_internal_hash_release_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "stdout": "PASS 14225 capacity/load_factor/release checks; no retained array allocation",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "new_internal_hash_trivial_value_test_gcc_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_trivial_value_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/new_internal_hash_trivial_value_test_gcc_checked"
+          ],
+          "stdout": "PASS 40016 trivial class/array/non-owning pointer value checks",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "new_internal_hash_trivial_value_test_gcc_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_trivial_value_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/new_internal_hash_trivial_value_test_gcc_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "stdout": "PASS 40016 trivial class/array/non-owning pointer value checks",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "new_internal_hash_trivial_value_test_clang_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_trivial_value_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/new_internal_hash_trivial_value_test_clang_checked"
+          ],
+          "stdout": "PASS 40016 trivial class/array/non-owning pointer value checks",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "new_internal_hash_trivial_value_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_trivial_value_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/new_internal_hash_trivial_value_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "stdout": "PASS 40016 trivial class/array/non-owning pointer value checks",
+          "stderr": "",
+          "returncode": 0
+        }
+      ]
+    },
+    "core": {
+      "source": "/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp",
+      "source_sha256": "13eaf8a83a9ee6d50a5650da5eb63f3239eec8af122c6b281022deb45ed4a826",
+      "results": [
+        {
+          "name": "core_internal_hash_value_exception_test_gcc_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_value_exception_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/core_internal_hash_value_exception_test_gcc_checked"
+          ],
+          "stdout": "PASS 6072 nontrivial value/exception checks",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "core_internal_hash_value_exception_test_gcc_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_value_exception_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/core_internal_hash_value_exception_test_gcc_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "stdout": "PASS 6072 nontrivial value/exception checks",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "core_internal_hash_value_exception_test_clang_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_value_exception_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/core_internal_hash_value_exception_test_clang_checked"
+          ],
+          "stdout": "PASS 6072 nontrivial value/exception checks",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "core_internal_hash_value_exception_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_value_exception_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/core_internal_hash_value_exception_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "stdout": "PASS 6072 nontrivial value/exception checks",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "core_internal_hash_emplace_test_gcc_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_emplace_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/core_internal_hash_emplace_test_gcc_checked"
+          ],
+          "stdout": "{\"status\":\"PASS\",\"checks\":433,\"allocation_failure_points\":32,\"live_delta\":0}",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "core_internal_hash_emplace_test_gcc_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_emplace_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/core_internal_hash_emplace_test_gcc_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "stdout": "{\"status\":\"PASS\",\"checks\":433,\"allocation_failure_points\":32,\"live_delta\":0}",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "core_internal_hash_emplace_test_clang_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_emplace_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/core_internal_hash_emplace_test_clang_checked"
+          ],
+          "stdout": "{\"status\":\"PASS\",\"checks\":433,\"allocation_failure_points\":32,\"live_delta\":0}",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "core_internal_hash_emplace_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_emplace_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/core_internal_hash_emplace_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "stdout": "{\"status\":\"PASS\",\"checks\":433,\"allocation_failure_points\":32,\"live_delta\":0}",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "core_internal_hash_reference_test_gcc_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/core_internal_hash_reference_test_gcc_checked"
+          ],
+          "stdout": "PASS 1420002 independent InternalHashMap checks, 142000 random operations",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "core_internal_hash_reference_test_gcc_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/core_internal_hash_reference_test_gcc_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "stdout": "PASS 1420002 independent InternalHashMap checks, 142000 random operations",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "core_internal_hash_reference_test_clang_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/core_internal_hash_reference_test_clang_checked"
+          ],
+          "stdout": "PASS 1420002 independent InternalHashMap checks, 142000 random operations",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "core_internal_hash_reference_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/core_internal_hash_reference_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "stdout": "PASS 1420002 independent InternalHashMap checks, 142000 random operations",
+          "stderr": "",
+          "returncode": 0
+        }
+      ]
+    },
+    "fallback": {
+      "source": "/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp",
+      "source_sha256": "13eaf8a83a9ee6d50a5650da5eb63f3239eec8af122c6b281022deb45ed4a826",
+      "results": [
+        {
+          "name": "fallback_internal_hash_reference_test_gcc_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/fallback_internal_hash_reference_test_gcc_checked",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD"
+          ],
+          "stdout": "PASS 1420002 independent InternalHashMap checks, 142000 random operations",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "fallback_internal_hash_reference_test_gcc_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/fallback_internal_hash_reference_test_gcc_skip",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD"
+          ],
+          "stdout": "PASS 1420002 independent InternalHashMap checks, 142000 random operations",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "fallback_internal_hash_reference_test_clang_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/fallback_internal_hash_reference_test_clang_checked",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD"
+          ],
+          "stdout": "PASS 1420002 independent InternalHashMap checks, 142000 random operations",
+          "stderr": "",
+          "returncode": 0
+        },
+        {
+          "name": "fallback_internal_hash_reference_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/fallback_internal_hash_reference_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD"
+          ],
+          "stdout": "PASS 1420002 independent InternalHashMap checks, 142000 random operations",
+          "stderr": "",
+          "returncode": 0
+        }
+      ]
+    },
+    "san": {
+      "source": "/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp",
+      "source_sha256": "13eaf8a83a9ee6d50a5650da5eb63f3239eec8af122c6b281022deb45ed4a826",
+      "results": [
+        {
+          "name": "san_internal_hash_release_test_clang_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_release_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/san_internal_hash_release_test_clang_checked",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all"
+          ],
+          "stdout": "PASS 14225 capacity/load_factor/release checks; no retained array allocation",
+          "stderr": "",
+          "returncode": 0,
+          "leak_detection": false
+        },
+        {
+          "name": "san_internal_hash_release_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_release_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/san_internal_hash_release_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all"
+          ],
+          "stdout": "PASS 14225 capacity/load_factor/release checks; no retained array allocation",
+          "stderr": "",
+          "returncode": 0,
+          "leak_detection": false
+        },
+        {
+          "name": "san_internal_hash_trivial_value_test_clang_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_trivial_value_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/san_internal_hash_trivial_value_test_clang_checked",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all"
+          ],
+          "stdout": "PASS 40016 trivial class/array/non-owning pointer value checks",
+          "stderr": "",
+          "returncode": 0,
+          "leak_detection": false
+        },
+        {
+          "name": "san_internal_hash_trivial_value_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_trivial_value_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/san_internal_hash_trivial_value_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all"
+          ],
+          "stdout": "PASS 40016 trivial class/array/non-owning pointer value checks",
+          "stderr": "",
+          "returncode": 0,
+          "leak_detection": false
+        },
+        {
+          "name": "san_internal_hash_value_exception_test_clang_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_value_exception_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/san_internal_hash_value_exception_test_clang_checked",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all"
+          ],
+          "stdout": "PASS 6072 nontrivial value/exception checks",
+          "stderr": "",
+          "returncode": 0,
+          "leak_detection": false
+        },
+        {
+          "name": "san_internal_hash_value_exception_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_value_exception_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/san_internal_hash_value_exception_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all"
+          ],
+          "stdout": "PASS 6072 nontrivial value/exception checks",
+          "stderr": "",
+          "returncode": 0,
+          "leak_detection": false
+        },
+        {
+          "name": "san_internal_hash_emplace_test_clang_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_emplace_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/san_internal_hash_emplace_test_clang_checked",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all"
+          ],
+          "stdout": "{\"status\":\"PASS\",\"checks\":433,\"allocation_failure_points\":32,\"live_delta\":0}",
+          "stderr": "",
+          "returncode": 0,
+          "leak_detection": false
+        },
+        {
+          "name": "san_internal_hash_emplace_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_emplace_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/san_internal_hash_emplace_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all"
+          ],
+          "stdout": "{\"status\":\"PASS\",\"checks\":433,\"allocation_failure_points\":32,\"live_delta\":0}",
+          "stderr": "",
+          "returncode": 0,
+          "leak_detection": false
+        },
+        {
+          "name": "san_internal_hash_reference_test_clang_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/san_internal_hash_reference_test_clang_checked",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all"
+          ],
+          "stdout": "PASS 1420002 independent InternalHashMap checks, 142000 random operations",
+          "stderr": "",
+          "returncode": 0,
+          "leak_detection": false
+        },
+        {
+          "name": "san_internal_hash_reference_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O1",
+            "-g",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DINTERNAL_HASH_SOURCE=\"/tmp/sirkit_internal_hash_20261022/verify/final/header.hpp\"",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/internal_hash_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_internal_hash_20261022/verify/final/san_internal_hash_reference_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all"
+          ],
+          "stdout": "PASS 1420002 independent InternalHashMap checks, 142000 random operations",
+          "stderr": "",
+          "returncode": 0,
+          "leak_detection": false
+        }
+      ]
+    }
+  },
+  "consumer_suites": {
+    "cpu": 6,
+    "standard": "c++23",
+    "optimization": "-O2",
+    "source_sha256": {
+      "Internal/Nyaan_hash_map_min.cpp": "13eaf8a83a9ee6d50a5650da5eb63f3239eec8af122c6b281022deb45ed4a826",
+      "DataStructure/dynamic-binary-indexed-tree.cpp": "aeb2fddc5a81862fb023d7203db2cea5150262f94db97a77f29af68bedee0426",
+      "DataStructure/dynamic-binary-indexed-tree-2d.cpp": "bef1e8c49319f1d5fe31cb7158688a194f1cb414332244af223f78e37f6837c0",
+      "DataStructure/dynamic-union-find.cpp": "a26f830ec6b615d0bfa24efe5d61d7929d15115288b0759ea497ef20813c5146"
+    },
+    "test_sha256": {
+      "dynamic_fenwick_test": "76389875d963cdcf7b9f9ef7632a6b50192821a40a911950a7ad3da36c3d7a19",
+      "dynamic_fenwick_2d_test": "5e95e119d79e0428c1df8bd56aa784901938b13d2866624992f5359caf6ad752",
+      "dynamic_fenwick_2d_ownership_test": "06b137557e7de584a792a0d8d26bb8131344287542451a8ec6bed2fb8e1a69dc",
+      "dynamic_fenwick_fallback_copy_test": "40148f3437a8dc916ee6a3bdb0cde77b96cfba8b462f0928c1dd6e66db5b8321",
+      "dynamic_union_find_test": "f3bc9d189bc65b9b597701f2d5aca141ead2068d7fe865ad07ce8c6ebea76b39",
+      "internal_hash_shared_guard_test": "468df1afd48127f3dc2b9f2e3c395ca17d48e681d3168ecabd18508244b9d069"
+    },
+    "compiler_versions": {
+      "gcc": "g++ (GCC) 15.3.0",
+      "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)"
+    },
+    "results": [
+      {
+        "test": "dynamic_fenwick_test",
+        "compiler": "gcc",
+        "checks": "checked",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_test_gcc_checked"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 49.46325778402388,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_test_gcc_checked"
+        ],
+        "run_exit_code": 0,
+        "stdout": "dynamic_fenwick_test: 1204250 checks passed\n",
+        "stderr": "",
+        "run_seconds": 1.1945172370178625,
+        "binary_sha256": "049398d5c8390292f7e61872c5cfc352938f39848e8b3951dca64a5ea4ec01e6",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_2d_test",
+        "compiler": "gcc",
+        "checks": "checked",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_2d_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_test_gcc_checked"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 22.416605509992223,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_test_gcc_checked"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"scenarios\":364,\"assertions\":581420,\"status\":\"pass\"}\n",
+        "stderr": "",
+        "run_seconds": 1.0707527350168675,
+        "binary_sha256": "4df44690b81e6be28329a8ae24987ef5f6e7492db9e33cb6fc4541c7209c1ae4",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_2d_ownership_test",
+        "compiler": "gcc",
+        "checks": "checked",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_2d_ownership_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_ownership_test_gcc_checked"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 11.007798155013006,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_ownership_test_gcc_checked"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"ownership_scenarios\":100,\"ownership_assertions\":31733,\"promotion_allocations\":3,\"promoted_copy_allocations\":3,\"status\":\"pass\"}\n",
+        "stderr": "",
+        "run_seconds": 0.017841966007836163,
+        "binary_sha256": "b7784f1d9fa4fdcd40207ec15ff400b7eb1fafc039e51b4205ee4f47ad2538ef",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_fallback_copy_test",
+        "compiler": "gcc",
+        "checks": "checked",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_fallback_copy_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_fallback_copy_test_gcc_checked"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 6.520915467001032,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_fallback_copy_test_gcc_checked"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"checks\":198,\"allocation_failures\":10,\"copy_allocations_tiny_with_capacity\":0,\"copy_allocations_dense_with_capacity\":3,\"status\":\"pass\"}\n",
+        "stderr": "",
+        "run_seconds": 0.017883084015920758,
+        "binary_sha256": "0f3253383a72d5658832f323346bc9d43e8a5ed156a24c783e2659844e6a763b",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_union_find_test",
+        "compiler": "gcc",
+        "checks": "checked",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_union_find_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_union_find_test_gcc_checked"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 11.823771609051619,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_union_find_test_gcc_checked"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":601235,\"allocation_failure_points\":31,\"live_delta\":0}\n",
+        "stderr": "",
+        "run_seconds": 0.29644057899713516,
+        "binary_sha256": "5e18cb932bd7893c2d77ae1f801fec145ff9021693279d7636c85c0021ea6eab",
+        "status": "PASS"
+      },
+      {
+        "test": "internal_hash_shared_guard_test",
+        "compiler": "gcc",
+        "checks": "checked",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/internal_hash_shared_guard_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/internal_hash_shared_guard_test_gcc_checked"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 10.36731034697732,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/internal_hash_shared_guard_test_gcc_checked"
+        ],
+        "run_exit_code": 0,
+        "stdout": "PASS shared guard, extreme-key UF, floating 1D/2D Fenwick with internal hash\n",
+        "stderr": "",
+        "run_seconds": 0.007731852994766086,
+        "binary_sha256": "833b346c7f7188bc1a545f7c3388656ed5501ff80b39cfaf8496cf69d6b4f0fc",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_test",
+        "compiler": "gcc",
+        "checks": "skip",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_test_gcc_skip"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 57.4920168070239,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_test_gcc_skip"
+        ],
+        "run_exit_code": 0,
+        "stdout": "dynamic_fenwick_test: 1204235 checks passed\n",
+        "stderr": "",
+        "run_seconds": 1.500675440998748,
+        "binary_sha256": "8fadf27c114ee775ea044008540ffa7ae05a6bbe0c66f5fdcac99fc3ba78fb90",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_2d_test",
+        "compiler": "gcc",
+        "checks": "skip",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_2d_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_test_gcc_skip"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 23.986696273030248,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_test_gcc_skip"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"scenarios\":364,\"assertions\":581402,\"status\":\"pass\"}\n",
+        "stderr": "",
+        "run_seconds": 0.7773964379448444,
+        "binary_sha256": "2bbe6e14ffe2dabdb39c6eda34d438157806ce6ebf78934fa257f7025519bf5e",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_2d_ownership_test",
+        "compiler": "gcc",
+        "checks": "skip",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_2d_ownership_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_ownership_test_gcc_skip"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 8.634269311034586,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_ownership_test_gcc_skip"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"ownership_scenarios\":100,\"ownership_assertions\":31733,\"promotion_allocations\":3,\"promoted_copy_allocations\":3,\"status\":\"pass\"}\n",
+        "stderr": "",
+        "run_seconds": 0.014754898962564766,
+        "binary_sha256": "b7784f1d9fa4fdcd40207ec15ff400b7eb1fafc039e51b4205ee4f47ad2538ef",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_fallback_copy_test",
+        "compiler": "gcc",
+        "checks": "skip",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_fallback_copy_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_fallback_copy_test_gcc_skip"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 5.140858790022321,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_fallback_copy_test_gcc_skip"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"checks\":198,\"allocation_failures\":10,\"copy_allocations_tiny_with_capacity\":0,\"copy_allocations_dense_with_capacity\":3,\"status\":\"pass\"}\n",
+        "stderr": "",
+        "run_seconds": 0.012648625008296221,
+        "binary_sha256": "c4920020d204e48def9fa28000db8e430123daec13360508fedad7ad208f6ab6",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_union_find_test",
+        "compiler": "gcc",
+        "checks": "skip",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_union_find_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_union_find_test_gcc_skip"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 6.885147002991289,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_union_find_test_gcc_skip"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":601235,\"allocation_failure_points\":31,\"live_delta\":0}\n",
+        "stderr": "",
+        "run_seconds": 0.1719866410130635,
+        "binary_sha256": "5e18cb932bd7893c2d77ae1f801fec145ff9021693279d7636c85c0021ea6eab",
+        "status": "PASS"
+      },
+      {
+        "test": "internal_hash_shared_guard_test",
+        "compiler": "gcc",
+        "checks": "skip",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/internal_hash_shared_guard_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/internal_hash_shared_guard_test_gcc_skip"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 4.617442837974522,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/internal_hash_shared_guard_test_gcc_skip"
+        ],
+        "run_exit_code": 0,
+        "stdout": "PASS shared guard, extreme-key UF, floating 1D/2D Fenwick with internal hash\n",
+        "stderr": "",
+        "run_seconds": 0.005969518038909882,
+        "binary_sha256": "1ff912e82b25d18d3b06925ace25a746bd06677cf0938acdc7f6dd2d69b8567d",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_test",
+        "compiler": "clang",
+        "checks": "checked",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_test_clang_checked"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 18.052302483003587,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_test_clang_checked"
+        ],
+        "run_exit_code": 0,
+        "stdout": "dynamic_fenwick_test: 1203314 checks passed\n",
+        "stderr": "",
+        "run_seconds": 0.4043877469957806,
+        "binary_sha256": "3ddb587fadae39bac8acbdf8416c9889b7cf784d7f9bf5f21a4db79737091396",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_2d_test",
+        "compiler": "clang",
+        "checks": "checked",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_2d_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_test_clang_checked"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 4.09387035400141,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_test_clang_checked"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"scenarios\":364,\"assertions\":581420,\"status\":\"pass\"}\n",
+        "stderr": "",
+        "run_seconds": 0.14839775499422103,
+        "binary_sha256": "899c1d91adfacb232055e20bc2eec99f6d14ecfd6328533a7748275106f11685",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_2d_ownership_test",
+        "compiler": "clang",
+        "checks": "checked",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_2d_ownership_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_ownership_test_clang_checked"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 1.1472033360041678,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_ownership_test_clang_checked"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"ownership_scenarios\":100,\"ownership_assertions\":31733,\"promotion_allocations\":3,\"promoted_copy_allocations\":3,\"status\":\"pass\"}\n",
+        "stderr": "",
+        "run_seconds": 0.002747913997154683,
+        "binary_sha256": "198a05793f01fa3892634d92eff1ab788673202942cea5b38217c95e91956ca0",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_fallback_copy_test",
+        "compiler": "clang",
+        "checks": "checked",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_fallback_copy_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_fallback_copy_test_clang_checked"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 0.8364172180299647,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_fallback_copy_test_clang_checked"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"checks\":198,\"allocation_failures\":10,\"copy_allocations_tiny_with_capacity\":0,\"copy_allocations_dense_with_capacity\":3,\"status\":\"pass\"}\n",
+        "stderr": "",
+        "run_seconds": 0.0022379219881258905,
+        "binary_sha256": "31b6386c883c91e333c333609fdb1e88c063b1b4a2c325d6bf51ab2b3586f5b3",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_union_find_test",
+        "compiler": "clang",
+        "checks": "checked",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_union_find_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_union_find_test_clang_checked"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 1.213701639964711,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_union_find_test_clang_checked"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":601235,\"allocation_failure_points\":31,\"live_delta\":0}\n",
+        "stderr": "",
+        "run_seconds": 0.04092273296555504,
+        "binary_sha256": "41015207756eb4f39ffdff0b8d6eea9556135539538381f3201b19a22a4fccca",
+        "status": "PASS"
+      },
+      {
+        "test": "internal_hash_shared_guard_test",
+        "compiler": "clang",
+        "checks": "checked",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/internal_hash_shared_guard_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/internal_hash_shared_guard_test_clang_checked"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 1.1203110259957612,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/internal_hash_shared_guard_test_clang_checked"
+        ],
+        "run_exit_code": 0,
+        "stdout": "PASS shared guard, extreme-key UF, floating 1D/2D Fenwick with internal hash\n",
+        "stderr": "",
+        "run_seconds": 0.0017751790001057088,
+        "binary_sha256": "6ff9cd2ff4ae01d3ae75a88473d18ace9c98e4b06631c838b09c288e069d3132",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_test",
+        "compiler": "clang",
+        "checks": "skip",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_test_clang_skip"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 6.348171191988513,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_test_clang_skip"
+        ],
+        "run_exit_code": 0,
+        "stdout": "dynamic_fenwick_test: 1203299 checks passed\n",
+        "stderr": "",
+        "run_seconds": 0.4036407640087418,
+        "binary_sha256": "a43556ae56fc9628754d791e90d7d7cc68f249fcce9de21fd70d77e2a0f8fcdd",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_2d_test",
+        "compiler": "clang",
+        "checks": "skip",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_2d_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_test_clang_skip"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 3.4221596629940905,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_test_clang_skip"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"scenarios\":364,\"assertions\":581402,\"status\":\"pass\"}\n",
+        "stderr": "",
+        "run_seconds": 0.14973789802752435,
+        "binary_sha256": "f17a02206dc1fc43e4337fb6ed6d0e9d47d9f2f4e4a7f6efd838bc8752c856e9",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_2d_ownership_test",
+        "compiler": "clang",
+        "checks": "skip",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_2d_ownership_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_ownership_test_clang_skip"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 1.1599420770071447,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_2d_ownership_test_clang_skip"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"ownership_scenarios\":100,\"ownership_assertions\":31733,\"promotion_allocations\":3,\"promoted_copy_allocations\":3,\"status\":\"pass\"}\n",
+        "stderr": "",
+        "run_seconds": 0.002890588017180562,
+        "binary_sha256": "198a05793f01fa3892634d92eff1ab788673202942cea5b38217c95e91956ca0",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_fenwick_fallback_copy_test",
+        "compiler": "clang",
+        "checks": "skip",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_fenwick_fallback_copy_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_fallback_copy_test_clang_skip"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 0.8236052360152826,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_fenwick_fallback_copy_test_clang_skip"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"checks\":198,\"allocation_failures\":10,\"copy_allocations_tiny_with_capacity\":0,\"copy_allocations_dense_with_capacity\":3,\"status\":\"pass\"}\n",
+        "stderr": "",
+        "run_seconds": 0.002070886956062168,
+        "binary_sha256": "6662a39fad5ad7861a5e4c8fdb3e606bddfa34b6a748598610b825301cace01e",
+        "status": "PASS"
+      },
+      {
+        "test": "dynamic_union_find_test",
+        "compiler": "clang",
+        "checks": "skip",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/dynamic_union_find_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_union_find_test_clang_skip"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 1.2152633420191705,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/dynamic_union_find_test_clang_skip"
+        ],
+        "run_exit_code": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":601235,\"allocation_failure_points\":31,\"live_delta\":0}\n",
+        "stderr": "",
+        "run_seconds": 0.040976632037200034,
+        "binary_sha256": "41015207756eb4f39ffdff0b8d6eea9556135539538381f3201b19a22a4fccca",
+        "status": "PASS"
+      },
+      {
+        "test": "internal_hash_shared_guard_test",
+        "compiler": "clang",
+        "checks": "skip",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/internal_hash_shared_guard_test.cpp",
+          "-o",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/internal_hash_shared_guard_test_clang_skip"
+        ],
+        "build_exit_code": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "build_seconds": 1.119406469981186,
+        "run_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/tmp/sirkit_internal_hash_20261022/consumers_tests/internal_hash_shared_guard_test_clang_skip"
+        ],
+        "run_exit_code": 0,
+        "stdout": "PASS shared guard, extreme-key UF, floating 1D/2D Fenwick with internal hash\n",
+        "stderr": "",
+        "run_seconds": 0.001577927963808179,
+        "binary_sha256": "12069bc65815ec4289c0875d63297d0b69d9e402401a2da7b861a59174904b6d",
+        "status": "PASS"
+      }
+    ],
+    "status": "PASS",
+    "source_sha256_after": {
+      "Internal/Nyaan_hash_map_min.cpp": "45c193856ee6d1562e2a671bc41dd0424660be5db92b6009f23483a2dc5ef500",
+      "DataStructure/dynamic-binary-indexed-tree.cpp": "83d0001d060151679a13ecc91c02f87be2330826ef01f81e1fbb4293fd426689",
+      "DataStructure/dynamic-binary-indexed-tree-2d.cpp": "1fe36a34dbffc1bc6eb4fbc64d021c744955d6bb825cad046a3cce1cb06b99c8",
+      "DataStructure/dynamic-union-find.cpp": "d2627ac9eefeb73e0a7eff02c339e950d6299038dbbcbbe67038305b2169251c"
+    },
+    "source_unchanged": false,
+    "final_comment_equivalence": {
+      "Internal/Nyaan_hash_map_min.cpp": {
+        "tested_source_sha256": "13eaf8a83a9ee6d50a5650da5eb63f3239eec8af122c6b281022deb45ed4a826",
+        "final_source_sha256": "45c193856ee6d1562e2a671bc41dd0424660be5db92b6009f23483a2dc5ef500",
+        "only_description_comments_differ": true
+      },
+      "DataStructure/dynamic-binary-indexed-tree.cpp": {
+        "tested_source_sha256": "aeb2fddc5a81862fb023d7203db2cea5150262f94db97a77f29af68bedee0426",
+        "final_source_sha256": "83d0001d060151679a13ecc91c02f87be2330826ef01f81e1fbb4293fd426689",
+        "only_description_comments_differ": true
+      },
+      "DataStructure/dynamic-binary-indexed-tree-2d.cpp": {
+        "tested_source_sha256": "bef1e8c49319f1d5fe31cb7158688a194f1cb414332244af223f78e37f6837c0",
+        "final_source_sha256": "1fe36a34dbffc1bc6eb4fbc64d021c744955d6bb825cad046a3cce1cb06b99c8",
+        "only_description_comments_differ": true
+      },
+      "DataStructure/dynamic-union-find.cpp": {
+        "tested_source_sha256": "a26f830ec6b615d0bfa24efe5d61d7929d15115288b0759ea497ef20813c5146",
+        "final_source_sha256": "d2627ac9eefeb73e0a7eff02c339e950d6299038dbbcbbe67038305b2169251c",
+        "only_description_comments_differ": true
+      }
+    },
+    "source_difference_explanation": "source_unchanged=falseは試験中にAPI説明コメントを修正したため。修正した説明コメントだけを元へ戻すと試験開始時の4本体SHAに完全一致することを確認。コードの再試験は不要と判断。"
+  },
+  "gcc_standard_fallback_samples": {
+    "results": [
+      {
+        "id": "dynamic_fenwick_range",
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "standard_fallback": true,
+        "submission_sha256": "c9760833378bdb28acde90c292a7eed91bfceec581748f299146f8f390ed07f8",
+        "tested_source_sha256": "b40ecf086bc405fce0cd823060f6bbb8c231010117fff26c9a6d87982a14d391",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/tmp/atcoder_verify_27bp8z87/dynamic_fenwick_range_checked.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "15\n7\n25\n6\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "dynamic_fenwick_range",
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "standard_fallback": true,
+        "submission_sha256": "c9760833378bdb28acde90c292a7eed91bfceec581748f299146f8f390ed07f8",
+        "tested_source_sha256": "c9760833378bdb28acde90c292a7eed91bfceec581748f299146f8f390ed07f8",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/dynamic_fenwick_range.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "15\n7\n25\n6\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "dynamic_fenwick_rectangle",
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "standard_fallback": true,
+        "submission_sha256": "6a7d232434938ec7e7e3f862a205be7d127d4cb75aa598142508e82384840ab0",
+        "tested_source_sha256": "52012d591f4f320b4d88c88e417931725cd709ee56a4fa7f9953be5ca08693a4",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/tmp/atcoder_verify_27bp8z87/dynamic_fenwick_rectangle_checked.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "11\n1111\n111000\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "dynamic_fenwick_rectangle",
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "standard_fallback": true,
+        "submission_sha256": "6a7d232434938ec7e7e3f862a205be7d127d4cb75aa598142508e82384840ab0",
+        "tested_source_sha256": "6a7d232434938ec7e7e3f862a205be7d127d4cb75aa598142508e82384840ab0",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/dynamic_fenwick_rectangle.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "11\n1111\n111000\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "dynamic_fenwick_2d_rectangle",
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "standard_fallback": true,
+        "submission_sha256": "66f29ac726379da314f47a4b5a43a970e7057dffe1351ad81a5e17c5b6cd26c6",
+        "tested_source_sha256": "9406426b5ac4904e1c476b22721d468bc14e1c27ab7e46eb999ed564096ea4e9",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/tmp/atcoder_verify_27bp8z87/dynamic_fenwick_2d_rectangle_checked.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "11\n1111\n111000\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "dynamic_fenwick_2d_rectangle",
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "standard_fallback": true,
+        "submission_sha256": "66f29ac726379da314f47a4b5a43a970e7057dffe1351ad81a5e17c5b6cd26c6",
+        "tested_source_sha256": "66f29ac726379da314f47a4b5a43a970e7057dffe1351ad81a5e17c5b6cd26c6",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/dynamic_fenwick_2d_rectangle.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "11\n1111\n111000\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "dynamic_union_find",
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "standard_fallback": true,
+        "submission_sha256": "aafb34402ace461fced07e2019f7ffb7fbf7a63dd4ac80dc12cff69ed7417b91",
+        "tested_source_sha256": "5e5c91a6c46b956bce970612a11734ca8bc37dfc1b2a378efa24ebae537f0edb",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/tmp/atcoder_verify_27bp8z87/dynamic_union_find_checked.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "0\n1\n0\n1\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "dynamic_union_find",
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "standard_fallback": true,
+        "submission_sha256": "aafb34402ace461fced07e2019f7ffb7fbf7a63dd4ac80dc12cff69ed7417b91",
+        "tested_source_sha256": "aafb34402ace461fced07e2019f7ffb7fbf7a63dd4ac80dc12cff69ed7417b91",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/dynamic_union_find.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "0\n1\n0\n1\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "internal_hash_map",
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "standard_fallback": true,
+        "submission_sha256": "22717f4296b46a058b1459d060cd1674b19e32325c63cd66d019c97e6df216c1",
+        "tested_source_sha256": "7802a34128e76a0ca449c1be89557fed48a2d6bcf63e47f07628a92827934cef",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/tmp/atcoder_verify_27bp8z87/internal_hash_map_checked.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "2\n0\n2\n3\n1\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "internal_hash_map",
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "standard_fallback": true,
+        "submission_sha256": "22717f4296b46a058b1459d060cd1674b19e32325c63cd66d019c97e6df216c1",
+        "tested_source_sha256": "22717f4296b46a058b1459d060cd1674b19e32325c63cd66d019c97e6df216c1",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/internal_hash_map.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "2\n0\n2\n3\n1\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "dynamic_hash_local",
+        "compiler": "g++",
+        "skip_runtime_checks": false,
+        "standard_fallback": true,
+        "submission_sha256": "30ce0bcdd61547b60ea5ee7c2fb64f8a9b36a850b61aadb534f20249954a19ab",
+        "tested_source_sha256": "30ce0bcdd61547b60ea5ee7c2fb64f8a9b36a850b61aadb534f20249954a19ab",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/dynamic_hash_local.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "OK\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      },
+      {
+        "id": "dynamic_hash_local",
+        "compiler": "g++",
+        "skip_runtime_checks": true,
+        "standard_fallback": true,
+        "submission_sha256": "30ce0bcdd61547b60ea5ee7c2fb64f8a9b36a850b61aadb534f20249954a19ab",
+        "tested_source_sha256": "4d92663b31a37a25676428e9eebc1628d90e0f3d2425b222dae0350a11294b4e",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/tmp/atcoder_verify_27bp8z87/dynamic_hash_local_skip.cpp"
+        ],
+        "compile_ok": true,
+        "diagnostics": "",
+        "samples": [
+          {
+            "passed": true,
+            "returncode": 0,
+            "stdout": "OK\n",
+            "stderr": ""
+          }
+        ],
+        "passed": true
+      }
+    ]
+  },
+  "examples": [
+    {
+      "command": [
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "Examples/internal_hash_map_example.cpp",
+        "-o",
+        "/tmp/sirkit_internal_hash_20261022/example_gpp_checked"
+      ],
+      "output": "1 0\nmissing\nready 1 1\n0 1\n2 2\nready\n1 1\n0 0\nmissing\n1 1\n",
+      "source_sha256": "a7c2008dc79073ea4bc826be22711271b96b9755ecdfd80a795d57b8cdeb4963"
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "Examples/internal_hash_map_example.cpp",
+        "-o",
+        "/tmp/sirkit_internal_hash_20261022/example_gpp_skip",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "output": "1 0\nmissing\nready 1 1\n0 1\n2 2\nready\n1 1\n0 0\nmissing\n1 1\n",
+      "source_sha256": "a7c2008dc79073ea4bc826be22711271b96b9755ecdfd80a795d57b8cdeb4963"
+    },
+    {
+      "command": [
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "Examples/internal_hash_map_example.cpp",
+        "-o",
+        "/tmp/sirkit_internal_hash_20261022/example_clangpp_checked"
+      ],
+      "output": "1 0\nmissing\nready 1 1\n0 1\n2 2\nready\n1 1\n0 0\nmissing\n1 1\n",
+      "source_sha256": "a7c2008dc79073ea4bc826be22711271b96b9755ecdfd80a795d57b8cdeb4963"
+    },
+    {
+      "command": [
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "Examples/internal_hash_map_example.cpp",
+        "-o",
+        "/tmp/sirkit_internal_hash_20261022/example_clangpp_skip",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "output": "1 0\nmissing\nready 1 1\n0 1\n2 2\nready\n1 1\n0 0\nmissing\n1 1\n",
+      "source_sha256": "a7c2008dc79073ea4bc826be22711271b96b9755ecdfd80a795d57b8cdeb4963"
+    }
+  ],
+  "shared_guard": "4本体の内部表ブロックがbyte一致し、重複include・整数キー・double値BITをchecked/skipで検証。",
+  "test_sources_sha256": {
+    "internal_hash_emplace_test.cpp": "551b0de192185547463e972e326fc39a3958160d8311a217c66220049f2236a7",
+    "internal_hash_reference_test.cpp": "839970bfc36cd7dea9e0b9057d686e2ba9c16cf653064c921191cb2895a7b17b",
+    "internal_hash_release_test.cpp": "75e590107a1072bd5f12a518b5fc6f2c8d121d90bf8bf4f11aa10ffa45056b71",
+    "internal_hash_shared_guard_test.cpp": "468df1afd48127f3dc2b9f2e3c395ca17d48e681d3168ecabd18508244b9d069",
+    "internal_hash_trivial_value_test.cpp": "9f2d2be21ba373fe6be274abc37191c6465ebfa63c940eb47af25f95e309109d",
+    "internal_hash_value_exception_test.cpp": "ee14afcd970273604ddc3a513321a3d3012f09c29a437f63503b4999dea9ead5"
+  },
+  "test_copy_equivalence": "保存した一時テストからテスト用macro INTERNAL_HASH_SOURCEをSIRKIT_INTERNAL_HASH_SOURCEへ統一。試験の処理は不変。",
+  "sanitizer_note": "Clang ASan/UBSan、検査有効/無効。実行環境の制約でLeakSanitizerは無効。確保失敗・release試験は確保数の収支も検査。",
+  "limitations": [
+    "オンラインAC・オンライン時間の記録ではない。",
+    "削除・反復子・複合キーのAPIは無い。",
+    "factoryは表を変更せず表内参照を使わない。clearは値の資源を保持し、releaseで配列とスロット値を解放する。",
+    "時刻saltのハッシュは攻撃的入力への最悪計算量保証を持たない。"
+  ]
+}

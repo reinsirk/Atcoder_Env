@@ -1,4 +1,7 @@
+// SPDX-License-Identifier: CC0-1.0
 #include "../Algorithm/Radix_sort.cpp"
+#include <algorithm>
+#include <cassert>
 #include <cstdint>
 #include <iostream>
 #include <vector>
@@ -16,6 +19,11 @@ int main() {
     values = {3, -1, 2};
     workspace.sort(values, std::int64_t{3}); // 全要素が指定した上限以下であること。
     std::cout << values.front() << ' ' << values.back() << '\n'; // -1 3
+    std::vector<std::int64_t> many(257);
+    for (std::size_t i = 0; i < many.size(); ++i)
+        many[i] = static_cast<std::int64_t>(i * 137 % 257) - 128;
+    workspace.sort(many); // 作業領域を別の配列にも再利用する。
+    assert(std::is_sorted(many.begin(), many.end()));
     workspace.release();
     std::cout << workspace.capacity() << '\n'; // 0
 }

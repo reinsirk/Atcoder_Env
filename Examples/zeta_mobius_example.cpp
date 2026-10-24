@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: CC0-1.0
 #include "../Math/Zeta_Mebius.cpp"
 #include <cstdint>
 #include <iostream>
@@ -13,6 +14,8 @@ int main() {
     std::cout << f[3] << '\n'; // 4
     const auto bitwise = bitwise_or_convolution(std::vector<int>{1, 2}, std::vector<int>{3, 4});
     std::cout << bitwise[0] << ' ' << bitwise[1] << '\n'; // 3 18
+    const auto square = bitwise_and_square(std::vector<int>{1, 2});
+    std::cout << square[0] << ' ' << square[1] << '\n'; // 5 4
     IntegerSieve sieve(100);
     std::vector<int> values{0, 1, 2, 3, 4, 5, 6};
     multiple_zeta_transform(values, sieve);

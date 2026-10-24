@@ -1,0 +1,153 @@
+{
+  "date": "2026-10-22",
+  "scope": "LISの初期由来・ライセンス・最終版のAPI契約。履歴と現実装を区別。",
+  "baseline_source": {
+    "path": "Algorithm/LIS.cpp",
+    "sha256": "7f16f92c939fdce2d15ca1cd769c0c8e9d6a16fddb7ea407594897029da5e80a"
+  },
+  "history_bundle": {
+    "path": "/tmp/Atcoder_Env_before_initial_20261021T163122Z/history.bundle",
+    "sha256": "4201f74738404c4d6f7f5ce672f3a782327fa4613daf48b3e73f2918dccc9020"
+  },
+  "snapshots": {
+    "30c83f0:LIS.cpp": {
+      "sha256": "0822d6cfca0c96618e0a8072a6e90e73261ef92c458ecd571a02e9716e047d28",
+      "bytes": 1139
+    },
+    "7f77a51:LIS.cpp": {
+      "sha256": "0822d6cfca0c96618e0a8072a6e90e73261ef92c458ecd571a02e9716e047d28",
+      "bytes": 1139
+    },
+    "32fb166:LIS.cpp": {
+      "sha256": "0822d6cfca0c96618e0a8072a6e90e73261ef92c458ecd571a02e9716e047d28",
+      "bytes": 1139
+    },
+    "b76e70f:Algorithm/LIS.cpp": {
+      "sha256": "4576669c790095be1f4e9e5a9a8b08bb466056c4fa58e91f366d43f0f2f4a929",
+      "bytes": 3528
+    },
+    "6a1e76c:Algorithm/LIS.cpp": {
+      "sha256": "4576669c790095be1f4e9e5a9a8b08bb466056c4fa58e91f366d43f0f2f4a929",
+      "bytes": 3528
+    },
+    "b66b1c5:Algorithm/LIS.cpp": {
+      "sha256": "7f16f92c939fdce2d15ca1cd769c0c8e9d6a16fddb7ea407594897029da5e80a",
+      "bytes": 3520
+    }
+  },
+  "primary_sources": [
+    {
+      "url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming",
+      "access": "web open 2026-10-22",
+      "finding": "著者の書籍トップのライセンス欄で、記事中ソースコードにCC0 1.0を適用すると確認。記事本文やGitHub全ファイル全体をCC0と一括認定しない。"
+    },
+    {
+      "url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/lis",
+      "access": "web open 2026-10-22",
+      "finding": "章と著者を確認。今回web抽出は章見出しまでなので、コードの照合にはraw Markdownを使う。"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Reputeless/Zenn.Public/main/books/standard-cpp-for-competitive-programming/lis.md",
+      "access": "curl public download 2026-10-22",
+      "sha256": "fa5ad631520afd80c5539d490a3192698adccb9dab75089a5689084190810103",
+      "bytes": 14602,
+      "finding": "旧LIS関数と1.3の同名関数を空白除去して今回も完全一致と確認。取得SHAは2026-10-18の記録と同一。原典1.4の復元はpositionsを逆走査する方式。現版のprevious鎖とは区別する。"
+    }
+  ],
+  "old_function_whitespace_match": true,
+  "local_evidence": {
+    "Audit/license-audit-2026-10-17.json": "d411536c0d25f4cf2ee0f87cb83aab23a480f054c59cfa9f6486ca22b0927a8c",
+    "Audit/revision-remaining-libraries-2026-10-18.json": "beb4eefffcef612f4664097955f40ce573b11456ba8e4a6fba3ec14f67eb4046",
+    "Audit/performance-all-libraries-2026-10-18.json": "fab3f94ae65789c709da858dd3cc7e3a7ebfbfcb215057da9ee1735137bd6f17"
+  },
+  "history_findings": [
+    "30c83f0でLIS.cppを追加した履歴と既存監査が対応。7f77a51/32fb166のLIS.cppは同一SHA0822d6...、原典1.3の関数と空白除去完全一致。",
+    "2026-10-18の整備記録はsha b4d586...の版でLISLength・Indices・Sequence、成分ガードと独立検証等を整備したと記録し、通常整備/API追加であって盲検全面置換とは主張していない。",
+    "b76e70fではAlgorithm/LIS.cppへ移動済み、内部helperと前駆鎖による復元を確認。6a1e76cとb66b1c5の相違はREINSIRK_からSIRKIT_へのガード接頭辞の置換で、現baselineはb66b1c5とbyte一致。"
+  ],
+  "header_decision": "CC0-1.0を維持。LISLengthsの境界探索・置換/追加・prefix長記録の実装は原典から通常整備として引き継いでいるため、全体の出典URLはOriginal Sourceとする。復元APIと追加APIは現repoで組み直し/追加した部分として区別。参考だけの独立全面実装とは断定しない。",
+  "current_api_contract": [
+    "比較はconst T同士のoperator<を使い、一貫したstrict弱順序が前提。同値は!(a<b)&&!(b<a)で定義し、狭義では同値を連結せず、広義では連結できる。operator==やoperator<=は必要としない。",
+    "LIS<Strict>は各接頭辞の最大長、LISLengthは全体長、LISIndicesは昇順添字、LISSequenceは選ばれた値列。空入力は空のvectorまたは0。Strictの省略はLISのみ不可、その他既存APIはtrue。",
+    "baselineのLIS/LengthはTのコピー構築とコピー代入が必要。IndicesはTをコピー/代入せず添字とconst比較だけを使い、非default/非copy型を扱える。SequenceはIndicesを使い、選択値のコピー構築が必要でTのdefault構築は不要。",
+    "入力vectorはconst参照で変更しない。戻りvectorは独立所有で入力への参照を保持しない。確保やユーザーの比較/コピーが例外を投げれば、局所vectorのRAIIで後始末する。",
+    "同長解の選択は任意であり、古い版や別APIと同一の添字列を返すとは保証しない。入力を並べ替えず元の位置で復元する。",
+    "標準浮動型のNaNは通常処理中の各要素参照時に検査し、既定ではinvalid_argumentを投げる。SKIP_RUNTIME_CHECKSで検査helperと呼出を除外する。±infは順序が成立する値として許可。汎用Tの比較の一貫性や未参照部分まで検証するものではない。",
+    "LISEndingLengthsは各位置を末尾とする最長長、LISは各接頭辞の最大長を返す。入力[3,1,2,0]ではそれぞれ[1,1,2,1]と[1,1,2,2]。"
+  ],
+  "capacity_review": [
+    "入力サイズはvectorのsize_tで扱い、探索はlo+halfとcountの差を使い、lo+count<=tails.size()を維持する。端の判定後の中間探索はtails.size()>=2であり、hi-1は下溢れしない。",
+    "前駆領域はmake_unique_for_overwrite<size_t[]>が所有する。配列要素数/確保の制限は標準の配列確保とvectorへ委譲する。直接のnew式や所有raw pointerは追加しない。",
+    "順位lo+1が2以上の要素だけprevious[i]を代入。保存した前駆は直前に処理した順位が1小さい要素で、より小さい元添字を指す。復元でresult.size()>1の間だけprevious[p]を読むため、読む全スロットは代入済み。順位1の要素では最後のresult[0]へpを書いて終了し、未代入のpreviousは読まない。",
+    "空入力は配列確保前に返す。例外時は局所vectorとunique_ptrで確保済み領域を破棄し、const入力を変更しない。"
+  ],
+  "limits": [
+    "著者の書籍ソースに対するCC0表明を確認したもので、Zenn本文全体・GitHub全体のライセンス調査ではない。",
+    "過去の監査/AC記録を今回版の検証済みの意味に書き換えていない。"
+  ],
+  "final_requested_input_policy": {
+    "nan": "標準浮動型だけを通常ループで検査し、既定ではinvalid_argument。SKIP_RUNTIME_CHECKSで検査helperと呼出を除外。",
+    "infinity": "正負の無限大は許可。",
+    "generic": "strict弱順序を満たすoperator<が前提。比較の一貫性や未参照領域の検証はしない。"
+  },
+  "current_revision": {
+    "path": "Algorithm/LIS.cpp",
+    "source_sha256": "83840e64868646779fa364b6d1140843e3de9ace73e67acf41334fc68b197c12",
+    "spdx": "CC0-1.0",
+    "source_label": "Original Source",
+    "api_added": "LISEndingLengths<Strict=true>(v)",
+    "implementation": "復元は先頭・末尾の判定とcountによる二分探索、前駆の必要箇所だけを書き、長さ1の前駆は読まない。長さ系と復元の型要件は維持。",
+    "source_attribution": "元のLIS関数と同じ境界探索/尾の更新を引き継ぐ長さ系は原典由来。前駆鎖復元・末尾長API・検査と性能改修は現repoの組み直し/追加として区別。原典1.4のpositions逆走査を現在版と同一実装とは説明しない。"
+  },
+  "predecessor_memory_check": {
+    "scope": "対象を絞ったMemorySanitizer補足。全API・全入力の証明とは区別。",
+    "results": {
+      "command": [
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O1",
+        "-g",
+        "-fsanitize=memory",
+        "-fPIE",
+        "-pie",
+        "-fno-omit-frame-pointer",
+        "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/final.hpp\"",
+        "/tmp/sirkit_lis_20261022/msan_test.cpp",
+        "-o",
+        "/tmp/sirkit_lis_20261022/msan_test"
+      ],
+      "source_sha256": "83840e64868646779fa364b6d1140843e3de9ace73e67acf41334fc68b197c12",
+      "test_sha256": "8c81ced900c5f2e3dd8aa6d4db7344f29a6cd36072e045f572ea0cd98acb628d",
+      "build_returncode": 0,
+      "build_stderr": "",
+      "returncode": 0,
+      "stdout": "PASS MemorySanitizer predecessor chains\n",
+      "stderr": ""
+    }
+  },
+  "additional_api": {
+    "name": "LISEndingLengths<Strict=true>(v)",
+    "meaning": "各位置を末尾とする最長部分列の長さを返す。prefix最大長とは異なる。",
+    "example": {
+      "input": [
+        3,
+        1,
+        2,
+        0
+      ],
+      "ending": [
+        1,
+        1,
+        2,
+        1
+      ],
+      "prefix": [
+        1,
+        1,
+        2,
+        2
+      ]
+    }
+  }
+}

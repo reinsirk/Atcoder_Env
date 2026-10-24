@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: CC0-1.0
 #include "../String/RollingHash.cpp"
 #include <cstdint>
 #include <iostream>
@@ -19,4 +20,10 @@ int main() {
     std::cout << copy.empty() << ' ' << moved.equal(0, moved.size(), first, 0, first.size()) << '\n'; // 1 1
     const RollingHash empty(std::string_view{}, base);
     std::cout << empty.empty() << ' ' << empty.whole() << '\n'; // 1 0
+    moved.assign("abra"); // 現在の底で再構築し、容量と残っている累乗表を再利用する。
+    std::cout << moved.equal(0, moved.size(), second, 0, second.size())
+              << ' ' << (moved.base() == base) << '\n'; // 1 1
+    moved = first; // 容量が足りれば、コピー代入も再確保しない。
+    moved.clear();
+    std::cout << moved.empty() << ' ' << moved.whole() << '\n'; // 1 0
 }

@@ -22,3 +22,5 @@
 用途別版の使い分けは[二項係数](Combination/README.md)・[ゼータ／メビウス変換](Zeta/README.md)を参照してください。Mintは利用側で用意します。
 
 問題URL、追加APIの補足検査、現在版の判定状況は[Verify一覧](../Verify/current/README.md)を参照してください。
+
+64ビット素数判定・指定底の検査・前後の素数探索は[説明](../Document/primality.md)と[使用例](../Examples/primality_example.cpp)を参照してください。

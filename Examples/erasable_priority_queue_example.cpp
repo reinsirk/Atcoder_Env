@@ -12,6 +12,9 @@ int main() {
     if (auto value = queue.try_top()) std::cout << *value << '\n'; // 5
     queue.clear();
     std::cout << queue.empty() << ' ' << queue.try_top().has_value() << '\n'; // 1 0
+    ErasablePriorityQueue<int> other(std::vector<int>{4, 6});
+    queue.swap(other);
+    std::cout << queue.top() << ' ' << other.empty() << '\n'; // 4 1
     ErasablePriorityQueue<int, false> maximum;
     maximum.push(3);
     maximum.push(7);

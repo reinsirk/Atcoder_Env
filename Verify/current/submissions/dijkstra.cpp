@@ -5,6 +5,20 @@
 // Library: Graph/Dijkstra.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/dijkstra
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/dijkstra.md
+//
+// API一覧
+// [共通型・定数]
+// Edge(to,w): 行先toとint64_tの重みwを持つ有向辺。
+// WGraph: 出発点を隣接リストの添字とする辺列。INF=std::int64_t{1}<<60。
+//
+// [Dijkstra]
+// Dijkstra(graph, distances, start_index): 始点から全頂点への最短距離をdistancesへ上書きする。
+// Dijkstra(graph, distances, start_index, target_index, path): 全頂点の距離と始点から終点への頂点列を上書き。到達不能ならpathは空。
+// 重みは[0, 1e9]、未到達はINF。有限距離がINF以上ならoverflow_error。
+// 両版ともO(V+E log(E+1))時間・O(V+E)追加領域。
+// SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
+// 検査は始点・終点と処理中に参照する辺のみ。未到達成分は走査しない。
 
 #include <algorithm>
 #include <array>
@@ -27,7 +41,6 @@ inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 
 #ifndef SIRKIT_GRAPH_TYPES_DEFINED
 #define SIRKIT_GRAPH_TYPES_DEFINED
-// 有向辺。出発点は隣接リストの添字。
 struct Edge
 {
     int to;
@@ -37,11 +50,7 @@ struct Edge
 using WGraph = std::vector<std::vector<Edge>>;
 #endif
 
-// Dijkstra(graph, distances, start_index): 始点から全頂点への最短距離をdistancesに格納する。未到達はINF。
-// Dijkstra(graph, distances, start_index, target_index, path): 全頂点の距離に加え、始点から終点への頂点列をpathに格納する。到達不能なら空。
 // 小規模は二分ヒープ、大規模はキューが64件を超えたらradix heapへ切り替える。
-// SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
-// 検査は始点・終点と処理中に参照する辺のみ。未到達成分は走査しない。
 #ifndef SIRKIT_DIJKSTRA_DEFINED
 #define SIRKIT_DIJKSTRA_DEFINED
 namespace reinsirk::detail {
@@ -844,8 +853,6 @@ inline void DijkstraImpl(const WGraph &graph, std::vector<std::int64_t> &distanc
 
 } // namespace reinsirk::detail
 
-// 全頂点の最短距離を上書きする。重みは[0, 1e9]、未到達はINF。
-// O(V+E log(E+1))時間・O(V+E)追加領域。有限距離がINF以上ならoverflow_error。
 inline void Dijkstra(const WGraph &graph, std::vector<std::int64_t> &distances,
                      int start_index)
 {
@@ -863,8 +870,6 @@ inline void Dijkstra(const WGraph &graph, std::vector<std::int64_t> &distances,
     else reinsirk::detail::DijkstraLarge<false, true, prune_terminal>(graph, distances, start_index, -1, nullptr);
 }
 
-// 全頂点の距離とstart_indexからtarget_indexへの頂点列を上書きする。
-// 到達不能ならpathは空。距離の仕様と計算量は3引数版と同じ。
 inline void Dijkstra(const WGraph &graph, std::vector<std::int64_t> &distances,
                      int start_index, int target_index, std::vector<int> &path)
 {

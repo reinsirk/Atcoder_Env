@@ -2,7 +2,6 @@
 #define SIRKIT_PRIMALITY32_DEFINED
 namespace reinsirk::detail {
 // uint32_t全域の素数判定。Miller-Rabinの底2,7,61を使う。
-// 理論参考: G. Jaeschke (1993), https://doi.org/10.1090/S0025-5718-1993-1192971-8
 inline bool is_prime_u32(std::uint32_t n) noexcept
 {
     // 競技プログラミングでよく使う素数は、累乗計算を省く。
@@ -23,11 +22,11 @@ inline bool is_prime_u32(std::uint32_t n) noexcept
     }
     if (n < 2)
         return false;
-    for (std::uint32_t p : {2u, 3u, 5u, 7u, 11u})
-    {
-        if (n % p == 0)
-            return n == p;
-    }
+    if (n % 2u == 0) return n == 2u;
+    if (n % 3u == 0) return n == 3u;
+    if (n % 5u == 0) return n == 5u;
+    if (n % 7u == 0) return n == 7u;
+    if (n % 11u == 0) return n == 11u;
     std::uint32_t odd = n - 1;
     unsigned shifts = 0;
     while ((odd & 1u) == 0)
@@ -35,7 +34,7 @@ inline bool is_prime_u32(std::uint32_t n) noexcept
         odd >>= 1;
         ++shifts;
     }
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
     // R=2^64。n<2^32なので、累乗中の剰余は2n未満のまま保持できる。
     using u64 = std::uint64_t;
     using u128 = __uint128_t; // GCC/Clangの128ビット整数拡張。

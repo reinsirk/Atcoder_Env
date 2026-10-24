@@ -18,4 +18,6 @@ int main() {
     std::vector<std::uint64_t> copy;
     sieve.append_to(copy);
     std::cout << (primes == copy) << ' ' << eratosthenes(0).empty() << '\n'; // 1 1
+    PrimeSieve(10).for_each_prime([](std::uint64_t p) { std::cout << p << ' '; });
+    std::cout << '\n'; // 2 3 5 7（列挙用vectorを作らない）。
 }

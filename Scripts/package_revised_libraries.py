@@ -23,6 +23,7 @@ LIBRARIES = {
     "dynamic_li_chao_example.cpp": "DataStructure/dynamic-li-chao-tree.cpp",
     "dynamic_union_find_example.cpp": "DataStructure/dynamic-union-find.cpp",
     "hash_map_example.cpp": "DataStructure/Hash_map.cpp",
+    "internal_hash_map_example.cpp": "Internal/Nyaan_hash_map_min.cpp",
     "erasable_priority_queue_example.cpp": "DataStructure/erasable-priority-queue.cpp",
     "eratosthenes_example.cpp": "Math/Eratosthenes.cpp",
     "floyd_warshall_example.cpp": "Graph/Floyd-Warshall.cpp",
@@ -67,6 +68,7 @@ def package(output: Path) -> None:
     root = Path(__file__).resolve().parents[1]
     for generator in ("generate_geometry.py", "generate_zeta.py", "generate_combination.py"):
         subprocess.run([sys.executable, str(root / "Scripts" / generator), "--check"], check=True)
+    subprocess.run([sys.executable, str(root / "Scripts" / "check_source_api_docs.py"), "--check"], check=True)
     subprocess.run([sys.executable, str(root / "Scripts" / "prepare_verify.py"), "--check"], check=True)
     entries = {}
     for library in dict.fromkeys((*LIBRARIES.values(), "Internal/Nyaan_hash_map_min.cpp")):
@@ -88,6 +90,8 @@ def package(output: Path) -> None:
         entries["Scripts/" + generator] = (root / "Scripts" / generator).read_bytes()
     for name in ("Scripts/prepare_verify.py", "Scripts/library_layout.json"):
         entries[name] = (root / name).read_bytes()
+    for name in ("source_api_docs.py", "check_source_api_docs.py"):
+        entries["Scripts/" + name] = (root / "Scripts" / name).read_bytes()
     for directory in ("Graph", "DataStructure", "Math", "String", "Geometry", "Algorithm", "Internal", "Document"):
         for source_path in sorted((root / directory).rglob("*")):
             if source_path.is_file() and source_path.suffix in (".cpp", ".md", ".inc", ".txt"):

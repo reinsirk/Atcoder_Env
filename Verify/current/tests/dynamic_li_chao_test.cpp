@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: CC0-1.0
+// 検査用リンク引数: -Wl,--wrap=malloc,--wrap=realloc
 // 総当たり・多倍長演算で閉区間、全整数幅、所有権、入力検査を照合する。
 #ifndef LI_CHAO_SOURCE
 #define LI_CHAO_SOURCE "../../../DataStructure/dynamic-li-chao-tree.cpp"
@@ -6,16 +7,36 @@
 #include LI_CHAO_SOURCE
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <boost/multiprecision/cpp_int.hpp>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
+#include <limits>
 #include <new>
 #include <random>
 #include <source_location>
-#include <string_view>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
 static int remaining_allocations = -1;
 static std::size_t allocations = 0, checks = 0, failure_points = 0;
+extern "C" void* __real_malloc(std::size_t);
+extern "C" void* __real_realloc(void*, std::size_t);
+static bool deny_allocation() {
+  ++allocations;
+  if (remaining_allocations == 0) return true;
+  if (remaining_allocations > 0) --remaining_allocations;
+  return false;
+}
+extern "C" void* __wrap_malloc(std::size_t bytes) {
+  return deny_allocation() ? nullptr : __real_malloc(bytes);
+}
+extern "C" void* __wrap_realloc(void* pointer, std::size_t bytes) {
+  return deny_allocation() ? nullptr : __real_realloc(pointer, bytes);
+}
+
 [[gnu::noinline]] void* operator new(std::size_t n) {
   ++allocations;
   if (remaining_allocations == 0) throw std::bad_alloc();
@@ -173,6 +194,13 @@ static void boundary_case() {
   singleton.clear();
   singleton.segment(T(1), T(0), lo, lo);
   singleton.verify(lo);
+
+  // 切片INFでも非零の傾きで値域内になる直線・線分は有効。
+  Reference<T> inf_intercept(T(1), T(2));
+  inf_intercept.line(T(-1), hi);
+  inf_intercept.verify(T(1)); inf_intercept.verify(T(2));
+  inf_intercept.segment(T(-2), hi, T(1), T(1));
+  inf_intercept.verify(T(1)); inf_intercept.verify(T(2));
 
   // 公開Lineは中間積が大きい場合も数学的な最終値と一致する。
   using Line = typename Reference<T>::Tree::Line;

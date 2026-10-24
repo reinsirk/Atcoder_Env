@@ -1,0 +1,3873 @@
+{
+  "date": "2026-10-22",
+  "status": "NO_CANDIDATE_ADOPTED",
+  "library": "DataStructure/rollback-union-find.cpp",
+  "decision": "2候補とも他のAPI条件に明瞭な退行があるため不採用。main・共通I/O・既存API・本体1dc8を維持する。",
+  "online_reference": {
+    "url": "https://judge.yosupo.jp/submission/412482",
+    "status": "AC",
+    "time_ms": 39,
+    "cases": 14,
+    "note": "現行1dc8版のオンライン結果。実験候補のACとはしない。"
+  },
+  "frozen_files": {
+    "DataStructure/rollback-union-find.cpp": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+    "Verify/current/drivers/rollback_union_find_main.cpp": "8c6dad142331e1dcb3d367ff3a18a6fb138bfd193494541b5eb3bff790369417",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+    "Verify/current/submissions/rollback_union_find.cpp": "2409e334fa7515c48b2a6ab32b4c82d336c877cf74c8ec03161812c5385a7bab"
+  },
+  "production_source_driver_io_submission_unchanged": true,
+  "results_summary": [
+    "根のサイズを履歴push前にキャッシュする案は、mainで明瞭な利得がない。GCC API操作に約5〜15%、Clang失敗結合+undoに約7〜8%の退行。",
+    "rollbackをローカル添字で逆順復元して履歴を最後に一括縮小する案は、GCC失敗履歴の一括復元で約4〜5%短縮したが、n4096ランダム操作でGCC約2.16倍、Clang約2.12倍。原因は未確定。",
+    "一括rollback候補はmainがrollbackを使わないため、GCC/Clangのmain機械語が現行版と一致。mainの時間差を本体の成果に含めない。"
+  ],
+  "experiment_report": {
+    "status": "COMPLETED_ALL_CANDIDATES_REJECTED",
+    "baseline_source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+    "candidates": {
+      "cached": {
+        "source_sha256": "bfdb9b8a88e2bf96acd71a487c4986708965e1871de9ea57438accc57efb6789",
+        "description": "unite caches root sizes before logging, uses cached values after potentially allocating history push; 16-byte log and mutation/exception order maintained",
+        "decision": "rejected: no fixed-main gain and GCC broad API slowdown5-15%, Clang noop+undo slowdown~7-8%",
+        "unified_diff": "--- baseline.hpp\n+++ cached.hpp\n@@ -73,10 +73,11 @@\n         check(x); check(y); x = leader_unchecked(x); y = leader_unchecked(y);\n         if (history.size() == static_cast<std::size_t>(std::numeric_limits<int>::max()))\n             throw std::length_error(\"RollbackUnionFind: history overflow\");\n-        history.push_back({x, y, data[x], data[y]});\n+        int dx = data[x], dy = data[y];\n+        history.push_back({x, y, dx, dy});\n         if (x == y) return false;\n-        if (data[x] > data[y]) std::swap(x, y);\n-        data[x] += data[y]; data[y] = x; --components_; return true;\n+        if (dx > dy) { std::swap(x, y); std::swap(dx, dy); }\n+        data[x] = dx + dy; data[y] = x; --components_; return true;\n     }\n     bool merge(int a, int b) { return unite(a, b); }\n     bool same(int a, int b) const { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n"
+      },
+      "bulk": {
+        "source_sha256": "9241018b08eed0abd516ca06a261642d43dcb5fb665a835266ff0bd8302cd5ac",
+        "description": "rollback restores entries by descending index then shrinks history once; no success-only counter or noop shortcut",
+        "decision": "rejected: bulk rollback noops GCC4-5% faster, but random n4096 with rollback2.16xGCC/2.12xClang and other API regressions",
+        "unified_diff": "--- baseline.hpp\n+++ bulk.hpp\n@@ -101,7 +101,13 @@\n #ifndef SKIP_RUNTIME_CHECKS\n         if (state < 0 || state > get_state()) throw std::out_of_range(\"RollbackUnionFind: state\");\n #endif\n-        while (get_state() > state) undo_last();\n+        std::size_t count = history.size();\n+        const auto* changes = history.data();\n+        while (count > static_cast<std::size_t>(state)) {\n+            const auto c = changes[--count];\n+            data[c.x] = c.dx; data[c.y] = c.dy; components_ += (c.x != c.y);\n+        }\n+        history.resize(count);\n         if (inner_snap > state) inner_snap = state;\n     }\n     void clear_history() noexcept { history.clear(); inner_snap = 0; }\n"
+      }
+    },
+    "static_review": "PASS both candidates by independent agent; no production edits",
+    "builds": [
+      {
+        "compiler": "gcc",
+        "variant": "baseline",
+        "type": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/tmp/sirkit_ruf_412482_opt/baseline.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/gcc_baseline_main"
+        ],
+        "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "baseline",
+        "type": "api",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSOURCE=\"/tmp/sirkit_ruf_412482_opt/baseline.hpp\"",
+          "/tmp/sirkit_ruf_412482_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/gcc_baseline_api"
+        ],
+        "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66"
+      },
+      {
+        "compiler": "clang",
+        "variant": "baseline",
+        "type": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/tmp/sirkit_ruf_412482_opt/baseline.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/clang_baseline_main"
+        ],
+        "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66"
+      },
+      {
+        "compiler": "clang",
+        "variant": "baseline",
+        "type": "api",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSOURCE=\"/tmp/sirkit_ruf_412482_opt/baseline.hpp\"",
+          "/tmp/sirkit_ruf_412482_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/clang_baseline_api"
+        ],
+        "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "control",
+        "type": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/tmp/sirkit_ruf_412482_opt/control.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/gcc_control_main"
+        ],
+        "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "control",
+        "type": "api",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSOURCE=\"/tmp/sirkit_ruf_412482_opt/control.hpp\"",
+          "/tmp/sirkit_ruf_412482_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/gcc_control_api"
+        ],
+        "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66"
+      },
+      {
+        "compiler": "clang",
+        "variant": "control",
+        "type": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/tmp/sirkit_ruf_412482_opt/control.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/clang_control_main"
+        ],
+        "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66"
+      },
+      {
+        "compiler": "clang",
+        "variant": "control",
+        "type": "api",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSOURCE=\"/tmp/sirkit_ruf_412482_opt/control.hpp\"",
+          "/tmp/sirkit_ruf_412482_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/clang_control_api"
+        ],
+        "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "cached",
+        "type": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/tmp/sirkit_ruf_412482_opt/cached.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/gcc_cached_main"
+        ],
+        "source_sha256": "bfdb9b8a88e2bf96acd71a487c4986708965e1871de9ea57438accc57efb6789"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "cached",
+        "type": "api",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSOURCE=\"/tmp/sirkit_ruf_412482_opt/cached.hpp\"",
+          "/tmp/sirkit_ruf_412482_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/gcc_cached_api"
+        ],
+        "source_sha256": "bfdb9b8a88e2bf96acd71a487c4986708965e1871de9ea57438accc57efb6789"
+      },
+      {
+        "compiler": "clang",
+        "variant": "cached",
+        "type": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/tmp/sirkit_ruf_412482_opt/cached.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/clang_cached_main"
+        ],
+        "source_sha256": "bfdb9b8a88e2bf96acd71a487c4986708965e1871de9ea57438accc57efb6789"
+      },
+      {
+        "compiler": "clang",
+        "variant": "cached",
+        "type": "api",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSOURCE=\"/tmp/sirkit_ruf_412482_opt/cached.hpp\"",
+          "/tmp/sirkit_ruf_412482_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/clang_cached_api"
+        ],
+        "source_sha256": "bfdb9b8a88e2bf96acd71a487c4986708965e1871de9ea57438accc57efb6789"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "bulk",
+        "type": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/tmp/sirkit_ruf_412482_opt/bulk.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/gcc_bulk_main"
+        ],
+        "source_sha256": "9241018b08eed0abd516ca06a261642d43dcb5fb665a835266ff0bd8302cd5ac"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "bulk",
+        "type": "api",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSOURCE=\"/tmp/sirkit_ruf_412482_opt/bulk.hpp\"",
+          "/tmp/sirkit_ruf_412482_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/gcc_bulk_api"
+        ],
+        "source_sha256": "9241018b08eed0abd516ca06a261642d43dcb5fb665a835266ff0bd8302cd5ac"
+      },
+      {
+        "compiler": "clang",
+        "variant": "bulk",
+        "type": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/tmp/sirkit_ruf_412482_opt/bulk.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/clang_bulk_main"
+        ],
+        "source_sha256": "9241018b08eed0abd516ca06a261642d43dcb5fb665a835266ff0bd8302cd5ac"
+      },
+      {
+        "compiler": "clang",
+        "variant": "bulk",
+        "type": "api",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSOURCE=\"/tmp/sirkit_ruf_412482_opt/bulk.hpp\"",
+          "/tmp/sirkit_ruf_412482_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_ruf_412482_opt/clang_bulk_api"
+        ],
+        "source_sha256": "9241018b08eed0abd516ca06a261642d43dcb5fb665a835266ff0bd8302cd5ac"
+      }
+    ],
+    "text_hashes": {
+      "gcc_main": {
+        "baseline": "728372eecf329fedebe2dc25d24c09e0539859ba0fab29b5487fbfe0f3df1df5",
+        "control": "728372eecf329fedebe2dc25d24c09e0539859ba0fab29b5487fbfe0f3df1df5",
+        "cached": "2a584f0a7a5c6fc4c6887424ab4c0d858517c7dbd14b505b42506a6189a5fb33",
+        "bulk": "728372eecf329fedebe2dc25d24c09e0539859ba0fab29b5487fbfe0f3df1df5"
+      },
+      "gcc_api": {
+        "baseline": "f0ad5fb369893467f27cf45bc2d1519bb2e1426cc7de60508ed448e3139d4fba",
+        "control": "f0ad5fb369893467f27cf45bc2d1519bb2e1426cc7de60508ed448e3139d4fba",
+        "cached": "a222858d79c4ab41453548256a264eda6db7eca5d129a020ed0306874c5c719f",
+        "bulk": "abe536f40b16d4bdf675082f0bc2e37a319354b45b615c8a810d618a37e2ca7d"
+      },
+      "clang_main": {
+        "baseline": "dd5649c5cb7089d24e51456ce711d54f6e62959b5b91bd56045c57ed2e767476",
+        "control": "dd5649c5cb7089d24e51456ce711d54f6e62959b5b91bd56045c57ed2e767476",
+        "cached": "77409827d7d932bff1fc694e84781e22867798ee6bdfa123ba6673e0fddbb1ff",
+        "bulk": "dd5649c5cb7089d24e51456ce711d54f6e62959b5b91bd56045c57ed2e767476"
+      },
+      "clang_api": {
+        "baseline": "f498520887aabfba1f9c5cbf2876028e4dd51b068fc3fc39c2f2ae85769b9afe",
+        "control": "f498520887aabfba1f9c5cbf2876028e4dd51b068fc3fc39c2f2ae85769b9afe",
+        "cached": "da7460c8a8d6db79c3e4dcece18f3c041a1c4e3d0fcfd260b6f1b9a7983839cb",
+        "bulk": "eff3cab0af5c8c47be7db02a4d40fb9452d68f705037237b05c970c145cf8561"
+      }
+    },
+    "main": {
+      "raw_ms": {
+        "gcc": {
+          "baseline": {
+            "random_00.in": [
+              14.292993,
+              12.479817,
+              12.514696,
+              13.076862,
+              12.849861,
+              12.428406,
+              12.679839
+            ],
+            "max_random_00.in": [
+              17.042112,
+              16.955523,
+              16.797904,
+              16.970139,
+              16.981875,
+              16.859449,
+              16.717945
+            ],
+            "max_random_01.in": [
+              16.795391,
+              16.773424,
+              16.684566,
+              17.03323,
+              16.836569,
+              16.814781,
+              16.699336
+            ],
+            "conchon_filliatre_tle_00.in": [
+              12.330462,
+              11.696909,
+              11.824842,
+              11.912332,
+              12.330225,
+              11.468755,
+              11.801688
+            ],
+            "conchon_filliatre_tle_01.in": [
+              11.74119,
+              11.722844,
+              12.757309,
+              11.638489,
+              12.115906,
+              11.442749,
+              11.935788
+            ],
+            "branch_many.in": [
+              13.642926,
+              13.204799,
+              12.976006,
+              13.100404,
+              15.138333,
+              13.619519,
+              13.037335
+            ],
+            "balanced.in": [
+              14.670986,
+              13.902244,
+              13.789357,
+              15.267436,
+              14.854246,
+              14.621428,
+              14.582088
+            ],
+            "same_component.in": [
+              11.363656,
+              10.68038,
+              10.914406,
+              11.111,
+              12.86413,
+              11.046469,
+              10.935135
+            ],
+            "small_branch.in": [
+              17.533024,
+              17.056182,
+              17.777978,
+              16.942855,
+              17.441315,
+              16.742452,
+              17.686146
+            ]
+          },
+          "control": {
+            "random_00.in": [
+              12.963288,
+              13.169618,
+              12.557514,
+              12.853023,
+              12.905133,
+              12.865828,
+              12.458789
+            ],
+            "max_random_00.in": [
+              16.949625,
+              17.046509,
+              16.62423,
+              16.74194,
+              16.831839,
+              17.041344,
+              17.055779
+            ],
+            "max_random_01.in": [
+              17.039397,
+              16.936761,
+              16.702321,
+              16.82128,
+              17.632733,
+              16.983576,
+              16.970002
+            ],
+            "conchon_filliatre_tle_00.in": [
+              12.258605,
+              11.93308,
+              11.906453,
+              11.618565,
+              11.997583,
+              11.829784,
+              11.951394
+            ],
+            "conchon_filliatre_tle_01.in": [
+              11.884852,
+              11.767022,
+              13.416183,
+              11.529603,
+              12.977435,
+              11.74708,
+              11.870477
+            ],
+            "branch_many.in": [
+              13.6523,
+              13.399645,
+              12.876849,
+              12.906627,
+              13.630337,
+              13.327202,
+              12.980176
+            ],
+            "balanced.in": [
+              14.458258,
+              14.421479,
+              13.769437,
+              14.64507,
+              15.009083,
+              14.951601,
+              14.560784
+            ],
+            "same_component.in": [
+              11.382585,
+              10.970751,
+              10.783958,
+              10.931736,
+              13.324178,
+              11.52882,
+              10.980317
+            ],
+            "small_branch.in": [
+              17.753212,
+              16.990943,
+              17.792764,
+              17.227454,
+              17.191309,
+              17.246025,
+              18.495322
+            ]
+          },
+          "cached": {
+            "random_00.in": [
+              12.560711,
+              12.822473,
+              13.065182,
+              12.734394,
+              12.573938,
+              12.598996,
+              12.959019
+            ],
+            "max_random_00.in": [
+              16.707334,
+              17.585945,
+              17.386009,
+              16.580926,
+              16.698712,
+              16.888119,
+              16.998618
+            ],
+            "max_random_01.in": [
+              17.13398,
+              16.981482,
+              16.770073,
+              16.785895,
+              17.611122,
+              16.901095,
+              17.913638
+            ],
+            "conchon_filliatre_tle_00.in": [
+              11.769211,
+              11.774856,
+              11.845335,
+              11.387373,
+              12.210442,
+              11.591874,
+              12.433802
+            ],
+            "conchon_filliatre_tle_01.in": [
+              12.317399,
+              11.86903,
+              11.839684,
+              11.394196,
+              13.071787,
+              11.742915,
+              12.10323
+            ],
+            "branch_many.in": [
+              13.331525,
+              13.481497,
+              14.138621,
+              13.259564,
+              13.528651,
+              13.344924,
+              13.375857
+            ],
+            "balanced.in": [
+              14.129555,
+              15.526658,
+              14.204476,
+              14.430384,
+              14.766442,
+              14.891151,
+              14.82047
+            ],
+            "same_component.in": [
+              11.342449,
+              10.955963,
+              11.148594,
+              10.832679,
+              12.398334,
+              11.258714,
+              11.806503
+            ],
+            "small_branch.in": [
+              17.533045,
+              17.028057,
+              17.071327,
+              18.586673,
+              17.989056,
+              17.302184,
+              17.254715
+            ]
+          },
+          "bulk": {
+            "random_00.in": [
+              12.561583,
+              12.598758,
+              12.755735,
+              13.273759,
+              12.477957,
+              12.48351,
+              12.98424
+            ],
+            "max_random_00.in": [
+              16.94962,
+              17.645358,
+              17.150982,
+              17.338248,
+              17.079766,
+              16.77941,
+              16.87253
+            ],
+            "max_random_01.in": [
+              16.852485,
+              16.896374,
+              16.757049,
+              16.92121,
+              16.891155,
+              17.125487,
+              17.046313
+            ],
+            "conchon_filliatre_tle_00.in": [
+              11.711506,
+              11.7815,
+              12.049851,
+              11.916864,
+              12.077576,
+              11.371022,
+              12.06303
+            ],
+            "conchon_filliatre_tle_01.in": [
+              12.386211,
+              11.767191,
+              12.410768,
+              11.675326,
+              13.605128,
+              11.721012,
+              11.968759
+            ],
+            "branch_many.in": [
+              12.966471,
+              13.704301,
+              13.371896,
+              13.284234,
+              13.398851,
+              13.858944,
+              13.154369
+            ],
+            "balanced.in": [
+              13.950321,
+              14.514363,
+              13.894313,
+              14.914758,
+              15.508945,
+              14.812465,
+              14.426496
+            ],
+            "same_component.in": [
+              11.806041,
+              10.888714,
+              10.976073,
+              11.61102,
+              11.593514,
+              11.059032,
+              11.262725
+            ],
+            "small_branch.in": [
+              17.488154,
+              16.820882,
+              17.565521,
+              17.058817,
+              17.855953,
+              16.869243,
+              16.859755
+            ]
+          }
+        },
+        "clang": {
+          "baseline": {
+            "random_00.in": [
+              15.756159,
+              12.583564,
+              13.060992,
+              13.357068,
+              14.065443,
+              12.969207,
+              13.4925
+            ],
+            "max_random_00.in": [
+              16.852015,
+              16.989408,
+              16.904981,
+              17.99086,
+              17.788251,
+              17.085735,
+              17.406064
+            ],
+            "max_random_01.in": [
+              16.74906,
+              17.287234,
+              16.845238,
+              17.871648,
+              19.219709,
+              17.344408,
+              17.342998
+            ],
+            "conchon_filliatre_tle_00.in": [
+              11.63892,
+              11.582744,
+              11.183092,
+              12.153627,
+              11.972289,
+              11.598876,
+              11.748116
+            ],
+            "conchon_filliatre_tle_01.in": [
+              11.894048,
+              11.864103,
+              11.665521,
+              12.065968,
+              12.878269,
+              11.466105,
+              11.583959
+            ],
+            "branch_many.in": [
+              13.504333,
+              13.090805,
+              13.188414,
+              14.077139,
+              13.709977,
+              13.489437,
+              13.439288
+            ],
+            "balanced.in": [
+              15.067136,
+              14.218734,
+              14.603685,
+              14.806974,
+              14.764363,
+              14.296268,
+              14.536808
+            ],
+            "same_component.in": [
+              11.253137,
+              10.912096,
+              11.129452,
+              11.380763,
+              11.550201,
+              10.902152,
+              10.896157
+            ],
+            "small_branch.in": [
+              17.246196,
+              17.274915,
+              17.372783,
+              17.224155,
+              17.208988,
+              17.236629,
+              17.166863
+            ]
+          },
+          "control": {
+            "random_00.in": [
+              12.881226,
+              13.02022,
+              12.888215,
+              13.348388,
+              14.54331,
+              12.972792,
+              13.211161
+            ],
+            "max_random_00.in": [
+              16.854425,
+              17.348074,
+              16.573284,
+              17.825089,
+              18.07826,
+              17.654197,
+              17.512
+            ],
+            "max_random_01.in": [
+              17.099142,
+              16.936715,
+              16.84472,
+              17.866018,
+              19.166533,
+              17.79364,
+              17.010786
+            ],
+            "conchon_filliatre_tle_00.in": [
+              11.737785,
+              11.816765,
+              11.318258,
+              12.28324,
+              11.977959,
+              11.990926,
+              11.605809
+            ],
+            "conchon_filliatre_tle_01.in": [
+              11.917023,
+              11.772779,
+              11.536963,
+              12.086723,
+              11.984514,
+              11.928119,
+              11.454243
+            ],
+            "branch_many.in": [
+              13.314049,
+              13.624979,
+              13.082053,
+              13.968923,
+              13.517658,
+              13.370435,
+              13.3421
+            ],
+            "balanced.in": [
+              14.419025,
+              14.658593,
+              14.534752,
+              15.336864,
+              14.854655,
+              14.804033,
+              14.346234
+            ],
+            "same_component.in": [
+              11.309666,
+              11.261118,
+              11.159856,
+              11.298301,
+              11.347463,
+              11.268213,
+              11.047316
+            ],
+            "small_branch.in": [
+              17.34107,
+              17.40681,
+              17.219977,
+              17.180387,
+              17.223364,
+              17.22843,
+              17.205717
+            ]
+          },
+          "cached": {
+            "random_00.in": [
+              12.539304,
+              12.831313,
+              13.497129,
+              13.178539,
+              14.782189,
+              12.781841,
+              15.547801
+            ],
+            "max_random_00.in": [
+              16.757592,
+              17.044484,
+              17.124334,
+              17.678612,
+              18.972553,
+              17.36625,
+              17.458109
+            ],
+            "max_random_01.in": [
+              20.893822,
+              17.270458,
+              17.123928,
+              17.69868,
+              19.165976,
+              18.271242,
+              17.350318
+            ],
+            "conchon_filliatre_tle_00.in": [
+              11.59457,
+              11.697887,
+              11.685834,
+              12.070135,
+              11.90238,
+              11.909331,
+              11.776857
+            ],
+            "conchon_filliatre_tle_01.in": [
+              11.793741,
+              11.632301,
+              11.452202,
+              11.949591,
+              12.986363,
+              11.751533,
+              11.666608
+            ],
+            "branch_many.in": [
+              13.266845,
+              13.350466,
+              13.524551,
+              14.10402,
+              13.135897,
+              13.087072,
+              14.076584
+            ],
+            "balanced.in": [
+              14.427416,
+              14.374095,
+              14.665549,
+              15.40457,
+              14.527796,
+              14.508323,
+              15.62384
+            ],
+            "same_component.in": [
+              11.211668,
+              10.988271,
+              11.135775,
+              11.378676,
+              11.16723,
+              11.090335,
+              11.373277
+            ],
+            "small_branch.in": [
+              17.084055,
+              17.007534,
+              17.100174,
+              16.804921,
+              17.127696,
+              16.911313,
+              17.021861
+            ]
+          },
+          "bulk": {
+            "random_00.in": [
+              12.371381,
+              12.77769,
+              13.497383,
+              13.743335,
+              13.832644,
+              12.677536,
+              13.45503
+            ],
+            "max_random_00.in": [
+              16.799585,
+              16.944059,
+              17.007314,
+              17.618865,
+              19.519227,
+              17.056907,
+              17.230112
+            ],
+            "max_random_01.in": [
+              16.990665,
+              17.405684,
+              17.174504,
+              17.753172,
+              18.493758,
+              17.600654,
+              17.46406
+            ],
+            "conchon_filliatre_tle_00.in": [
+              11.837065,
+              11.920695,
+              11.413319,
+              12.024242,
+              11.925221,
+              11.730715,
+              11.744425
+            ],
+            "conchon_filliatre_tle_01.in": [
+              11.608629,
+              11.783643,
+              11.573229,
+              12.187533,
+              13.376841,
+              11.504979,
+              11.524414
+            ],
+            "branch_many.in": [
+              13.123813,
+              13.088414,
+              13.217832,
+              13.797324,
+              13.105954,
+              13.656734,
+              13.660249
+            ],
+            "balanced.in": [
+              14.421776,
+              14.330839,
+              14.883299,
+              14.992277,
+              14.398939,
+              14.22176,
+              14.672579
+            ],
+            "same_component.in": [
+              10.868748,
+              10.951169,
+              10.966952,
+              12.065971,
+              11.435876,
+              11.267344,
+              11.081683
+            ],
+            "small_branch.in": [
+              17.274385,
+              17.149885,
+              17.30996,
+              18.271241,
+              17.34357,
+              17.125393,
+              17.19793
+            ]
+          }
+        }
+      },
+      "medians_ms": {
+        "gcc": {
+          "baseline": {
+            "random_00.in": 12.679839,
+            "max_random_00.in": 16.955523,
+            "max_random_01.in": 16.795391,
+            "conchon_filliatre_tle_00.in": 11.824842,
+            "conchon_filliatre_tle_01.in": 11.74119,
+            "branch_many.in": 13.204799,
+            "balanced.in": 14.621428,
+            "same_component.in": 11.046469,
+            "small_branch.in": 17.441315
+          },
+          "control": {
+            "random_00.in": 12.865828,
+            "max_random_00.in": 16.949625,
+            "max_random_01.in": 16.970002,
+            "conchon_filliatre_tle_00.in": 11.93308,
+            "conchon_filliatre_tle_01.in": 11.870477,
+            "branch_many.in": 13.327202,
+            "balanced.in": 14.560784,
+            "same_component.in": 10.980317,
+            "small_branch.in": 17.246025
+          },
+          "cached": {
+            "random_00.in": 12.734394,
+            "max_random_00.in": 16.888119,
+            "max_random_01.in": 16.981482,
+            "conchon_filliatre_tle_00.in": 11.774856,
+            "conchon_filliatre_tle_01.in": 11.86903,
+            "branch_many.in": 13.375857,
+            "balanced.in": 14.766442,
+            "same_component.in": 11.258714,
+            "small_branch.in": 17.302184
+          },
+          "bulk": {
+            "random_00.in": 12.598758,
+            "max_random_00.in": 17.079766,
+            "max_random_01.in": 16.896374,
+            "conchon_filliatre_tle_00.in": 11.916864,
+            "conchon_filliatre_tle_01.in": 11.968759,
+            "branch_many.in": 13.371896,
+            "balanced.in": 14.514363,
+            "same_component.in": 11.262725,
+            "small_branch.in": 17.058817
+          }
+        },
+        "clang": {
+          "baseline": {
+            "random_00.in": 13.357068,
+            "max_random_00.in": 17.085735,
+            "max_random_01.in": 17.342998,
+            "conchon_filliatre_tle_00.in": 11.63892,
+            "conchon_filliatre_tle_01.in": 11.864103,
+            "branch_many.in": 13.489437,
+            "balanced.in": 14.603685,
+            "same_component.in": 11.129452,
+            "small_branch.in": 17.236629
+          },
+          "control": {
+            "random_00.in": 13.02022,
+            "max_random_00.in": 17.512,
+            "max_random_01.in": 17.099142,
+            "conchon_filliatre_tle_00.in": 11.816765,
+            "conchon_filliatre_tle_01.in": 11.917023,
+            "branch_many.in": 13.370435,
+            "balanced.in": 14.658593,
+            "same_component.in": 11.268213,
+            "small_branch.in": 17.223364
+          },
+          "cached": {
+            "random_00.in": 13.178539,
+            "max_random_00.in": 17.36625,
+            "max_random_01.in": 17.69868,
+            "conchon_filliatre_tle_00.in": 11.776857,
+            "conchon_filliatre_tle_01.in": 11.751533,
+            "branch_many.in": 13.350466,
+            "balanced.in": 14.527796,
+            "same_component.in": 11.16723,
+            "small_branch.in": 17.021861
+          },
+          "bulk": {
+            "random_00.in": 13.45503,
+            "max_random_00.in": 17.056907,
+            "max_random_01.in": 17.46406,
+            "conchon_filliatre_tle_00.in": 11.837065,
+            "conchon_filliatre_tle_01.in": 11.608629,
+            "branch_many.in": 13.217832,
+            "balanced.in": 14.421776,
+            "same_component.in": 11.081683,
+            "small_branch.in": 17.274385
+          }
+        }
+      },
+      "ratios": {
+        "gcc": {
+          "baseline": {
+            "random_00.in": 1.0,
+            "max_random_00.in": 1.0,
+            "max_random_01.in": 1.0,
+            "conchon_filliatre_tle_00.in": 1.0,
+            "conchon_filliatre_tle_01.in": 1.0,
+            "branch_many.in": 1.0,
+            "balanced.in": 1.0,
+            "same_component.in": 1.0,
+            "small_branch.in": 1.0
+          },
+          "control": {
+            "random_00.in": 1.0146680884512809,
+            "max_random_00.in": 0.9996521487423302,
+            "max_random_01.in": 1.0103963640977458,
+            "conchon_filliatre_tle_00.in": 1.009153441542813,
+            "conchon_filliatre_tle_01.in": 1.0110114051471784,
+            "branch_many.in": 1.0092695844896995,
+            "balanced.in": 0.9958523886996536,
+            "same_component.in": 0.9940114800485114,
+            "small_branch.in": 0.9888030231665444
+          },
+          "cached": {
+            "random_00.in": 1.00430249942448,
+            "max_random_00.in": 0.9960246581600579,
+            "max_random_01.in": 1.0110798849517704,
+            "conchon_filliatre_tle_00.in": 0.9957727976407633,
+            "conchon_filliatre_tle_01.in": 1.0108881638062241,
+            "branch_many.in": 1.0129542297463219,
+            "balanced.in": 1.0099179095229276,
+            "same_component.in": 1.0192138320399033,
+            "small_branch.in": 0.9920229065296969
+          },
+          "bulk": {
+            "random_00.in": 0.9936055181773208,
+            "max_random_00.in": 1.0073275828766828,
+            "max_random_01.in": 1.006012542369511,
+            "conchon_filliatre_tle_00.in": 1.0077820912955961,
+            "conchon_filliatre_tle_01.in": 1.019382106924426,
+            "branch_many.in": 1.0126542630448219,
+            "balanced.in": 0.9926775278037138,
+            "same_component.in": 1.0195769344937282,
+            "small_branch.in": 0.9780694288246042
+          }
+        },
+        "clang": {
+          "baseline": {
+            "random_00.in": 1.0,
+            "max_random_00.in": 1.0,
+            "max_random_01.in": 1.0,
+            "conchon_filliatre_tle_00.in": 1.0,
+            "conchon_filliatre_tle_01.in": 1.0,
+            "branch_many.in": 1.0,
+            "balanced.in": 1.0,
+            "same_component.in": 1.0,
+            "small_branch.in": 1.0
+          },
+          "control": {
+            "random_00.in": 0.9747812918224269,
+            "max_random_00.in": 1.0249485901543012,
+            "max_random_01.in": 0.9859392245792797,
+            "conchon_filliatre_tle_00.in": 1.0152801978190416,
+            "conchon_filliatre_tle_01.in": 1.0044605142082803,
+            "branch_many.in": 0.9911781344173223,
+            "balanced.in": 1.00375987293618,
+            "same_component.in": 1.012467909471194,
+            "small_branch.in": 0.9992304179662972
+          },
+          "cached": {
+            "random_00.in": 0.9866341176072474,
+            "max_random_00.in": 1.0164180821018236,
+            "max_random_01.in": 1.0205086802178032,
+            "conchon_filliatre_tle_00.in": 1.0118513573424337,
+            "conchon_filliatre_tle_01.in": 0.9905117142020766,
+            "branch_many.in": 0.9896977909456117,
+            "balanced.in": 0.9948034348864687,
+            "same_component.in": 1.003394416903905,
+            "small_branch.in": 0.9875400230520713
+          },
+          "bulk": {
+            "random_00.in": 1.0073340945782414,
+            "max_random_00.in": 0.998312744520502,
+            "max_random_01.in": 1.0069804540137755,
+            "conchon_filliatre_tle_00.in": 1.0170243459015098,
+            "conchon_filliatre_tle_01.in": 0.9784666400822718,
+            "branch_many.in": 0.9798653568714543,
+            "balanced.in": 0.9875436234073797,
+            "same_component.in": 0.9957078749250187,
+            "small_branch.in": 1.0021904515088187
+          }
+        }
+      },
+      "outputs": {
+        "gcc": {
+          "baseline": {
+            "random_00.in": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+            "max_random_00.in": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+            "max_random_01.in": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+            "conchon_filliatre_tle_00.in": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+            "conchon_filliatre_tle_01.in": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+            "branch_many.in": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+            "balanced.in": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+            "same_component.in": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+            "small_branch.in": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c"
+          },
+          "control": {
+            "random_00.in": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+            "max_random_00.in": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+            "max_random_01.in": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+            "conchon_filliatre_tle_00.in": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+            "conchon_filliatre_tle_01.in": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+            "branch_many.in": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+            "balanced.in": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+            "same_component.in": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+            "small_branch.in": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c"
+          },
+          "cached": {
+            "random_00.in": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+            "max_random_00.in": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+            "max_random_01.in": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+            "conchon_filliatre_tle_00.in": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+            "conchon_filliatre_tle_01.in": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+            "branch_many.in": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+            "balanced.in": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+            "same_component.in": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+            "small_branch.in": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c"
+          },
+          "bulk": {
+            "random_00.in": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+            "max_random_00.in": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+            "max_random_01.in": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+            "conchon_filliatre_tle_00.in": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+            "conchon_filliatre_tle_01.in": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+            "branch_many.in": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+            "balanced.in": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+            "same_component.in": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+            "small_branch.in": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c"
+          }
+        },
+        "clang": {
+          "baseline": {
+            "random_00.in": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+            "max_random_00.in": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+            "max_random_01.in": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+            "conchon_filliatre_tle_00.in": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+            "conchon_filliatre_tle_01.in": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+            "branch_many.in": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+            "balanced.in": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+            "same_component.in": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+            "small_branch.in": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c"
+          },
+          "control": {
+            "random_00.in": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+            "max_random_00.in": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+            "max_random_01.in": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+            "conchon_filliatre_tle_00.in": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+            "conchon_filliatre_tle_01.in": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+            "branch_many.in": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+            "balanced.in": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+            "same_component.in": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+            "small_branch.in": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c"
+          },
+          "cached": {
+            "random_00.in": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+            "max_random_00.in": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+            "max_random_01.in": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+            "conchon_filliatre_tle_00.in": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+            "conchon_filliatre_tle_01.in": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+            "branch_many.in": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+            "balanced.in": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+            "same_component.in": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+            "small_branch.in": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c"
+          },
+          "bulk": {
+            "random_00.in": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+            "max_random_00.in": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+            "max_random_01.in": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+            "conchon_filliatre_tle_00.in": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+            "conchon_filliatre_tle_01.in": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+            "branch_many.in": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+            "balanced.in": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+            "same_component.in": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+            "small_branch.in": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c"
+          }
+        }
+      },
+      "rounds": 7
+    },
+    "api": {
+      "raw_ms": {
+        "gcc_32_0": {
+          "baseline": [
+            27.315904,
+            27.276249,
+            26.948519,
+            27.606516,
+            27.038661,
+            27.053086,
+            27.501204
+          ],
+          "control": [
+            27.191105,
+            27.191534,
+            28.051519,
+            28.06649,
+            27.081027,
+            27.761449,
+            27.606976
+          ],
+          "cached": [
+            30.091138,
+            33.410398,
+            30.002237,
+            30.137448,
+            30.637173,
+            30.178023,
+            30.16196
+          ],
+          "bulk": [
+            28.851027,
+            26.852264,
+            27.616726,
+            26.713061,
+            27.371087,
+            27.201559,
+            27.207275
+          ]
+        },
+        "gcc_32_1": {
+          "baseline": [
+            29.726633,
+            29.894786,
+            29.994985,
+            29.61029,
+            29.654887,
+            30.922965,
+            29.516402
+          ],
+          "control": [
+            29.514596,
+            29.655596,
+            29.365011,
+            29.906849,
+            29.996199,
+            29.674505,
+            29.84217
+          ],
+          "cached": [
+            31.699191,
+            31.656782,
+            32.68092,
+            31.267945,
+            31.503878,
+            31.522458,
+            31.681928
+          ],
+          "bulk": [
+            28.843899,
+            30.604814,
+            29.338064,
+            28.765366,
+            28.389343,
+            28.634859,
+            28.662321
+          ]
+        },
+        "gcc_32_2": {
+          "baseline": [
+            29.615561,
+            29.423962,
+            29.845164,
+            29.723093,
+            29.807727,
+            29.852721,
+            29.62959
+          ],
+          "control": [
+            29.849102,
+            29.680722,
+            29.783754,
+            29.751227,
+            29.795001,
+            29.671641,
+            29.735082
+          ],
+          "cached": [
+            32.401921,
+            32.471431,
+            32.199125,
+            32.721921,
+            32.337524,
+            32.444284,
+            32.47651
+          ],
+          "bulk": [
+            27.948601,
+            28.436001,
+            27.817952,
+            28.099636,
+            28.162699,
+            27.7102,
+            28.086
+          ]
+        },
+        "gcc_32_3": {
+          "baseline": [
+            29.733282,
+            30.047647,
+            30.180679,
+            30.038479,
+            29.899215,
+            30.096344,
+            29.878646
+          ],
+          "control": [
+            30.032466,
+            30.08096,
+            29.894129,
+            29.909625,
+            29.92136,
+            30.081003,
+            29.84276
+          ],
+          "cached": [
+            33.667806,
+            33.759615,
+            33.336689,
+            33.547046,
+            33.368535,
+            33.751229,
+            33.543534
+          ],
+          "bulk": [
+            29.838791,
+            29.904822,
+            29.942739,
+            29.581235,
+            29.424314,
+            29.858068,
+            29.834994
+          ]
+        },
+        "gcc_32_4": {
+          "baseline": [
+            27.328834,
+            27.035163,
+            26.620152,
+            26.727408,
+            27.440668,
+            26.671564,
+            27.680306
+          ],
+          "control": [
+            28.345326,
+            27.513758,
+            27.376177,
+            27.460025,
+            27.247462,
+            27.378507,
+            26.694696
+          ],
+          "cached": [
+            30.462367,
+            30.534149,
+            32.322526,
+            31.137653,
+            30.174684,
+            31.029433,
+            31.177382
+          ],
+          "bulk": [
+            26.115486,
+            26.840788,
+            26.031122,
+            26.561179,
+            26.462014,
+            26.464762,
+            32.034193
+          ]
+        },
+        "gcc_32_5": {
+          "baseline": [
+            30.48667,
+            29.894002,
+            29.949995,
+            29.87879,
+            29.927587,
+            30.4345,
+            33.003585
+          ],
+          "control": [
+            29.938168,
+            30.104251,
+            30.060507,
+            29.989815,
+            29.986911,
+            29.95154,
+            33.142197
+          ],
+          "cached": [
+            34.077524,
+            34.06308,
+            34.214866,
+            34.102316,
+            34.14923,
+            34.120373,
+            34.125522
+          ],
+          "bulk": [
+            34.637262,
+            35.110796,
+            34.598478,
+            35.344057,
+            35.41737,
+            35.249362,
+            35.644373
+          ]
+        },
+        "gcc_32_6": {
+          "baseline": [
+            29.415269,
+            29.190409,
+            31.421381,
+            29.057152,
+            29.279895,
+            28.949642,
+            29.15034
+          ],
+          "control": [
+            29.690124,
+            30.702299,
+            30.846548,
+            29.448105,
+            29.221037,
+            29.171241,
+            30.770714
+          ],
+          "cached": [
+            29.008939,
+            29.18102,
+            29.29682,
+            29.34119,
+            29.162481,
+            29.359417,
+            31.117417
+          ],
+          "bulk": [
+            29.493438,
+            30.523979,
+            30.628108,
+            29.473444,
+            29.633541,
+            30.129887,
+            29.750487
+          ]
+        },
+        "gcc_4096_0": {
+          "baseline": [
+            30.631099,
+            29.997386,
+            30.110077,
+            31.051012,
+            29.886909,
+            29.891034,
+            30.112754
+          ],
+          "control": [
+            31.1376,
+            30.192305,
+            30.262867,
+            29.95079,
+            30.085496,
+            29.946706,
+            31.123179
+          ],
+          "cached": [
+            32.240623,
+            31.418959,
+            31.8728,
+            32.469883,
+            32.358395,
+            31.856091,
+            31.774064
+          ],
+          "bulk": [
+            32.034103,
+            32.503599,
+            32.026895,
+            32.289871,
+            29.966739,
+            29.986794,
+            30.041265
+          ]
+        },
+        "gcc_4096_1": {
+          "baseline": [
+            30.147529,
+            30.560667,
+            30.037353,
+            30.146414,
+            30.094417,
+            30.176669,
+            30.101359
+          ],
+          "control": [
+            30.173047,
+            31.083045,
+            29.388998,
+            30.467711,
+            31.310724,
+            30.296557,
+            30.278911
+          ],
+          "cached": [
+            33.084305,
+            32.210798,
+            32.528114,
+            31.87716,
+            33.010427,
+            31.5355,
+            32.875853
+          ],
+          "bulk": [
+            31.463181,
+            31.555453,
+            30.16974,
+            31.513293,
+            29.941509,
+            29.733851,
+            29.496712
+          ]
+        },
+        "gcc_4096_2": {
+          "baseline": [
+            30.046617,
+            29.987889,
+            29.947811,
+            30.107705,
+            30.045946,
+            30.063395,
+            31.052577
+          ],
+          "control": [
+            30.262311,
+            30.880408,
+            31.034233,
+            31.619945,
+            30.037126,
+            30.004579,
+            31.067322
+          ],
+          "cached": [
+            33.55596,
+            33.446716,
+            32.588687,
+            31.974832,
+            31.927586,
+            32.973508,
+            32.099296
+          ],
+          "bulk": [
+            28.872647,
+            28.797518,
+            28.791317,
+            28.886163,
+            28.846844,
+            28.51676,
+            28.875426
+          ]
+        },
+        "gcc_4096_3": {
+          "baseline": [
+            30.009053,
+            30.172514,
+            30.259766,
+            30.063985,
+            30.114894,
+            30.03414,
+            30.679238
+          ],
+          "control": [
+            30.078749,
+            29.959541,
+            30.07502,
+            29.95826,
+            29.952593,
+            29.947228,
+            30.532746
+          ],
+          "cached": [
+            34.231552,
+            34.625249,
+            34.291868,
+            34.10344,
+            34.285315,
+            34.230996,
+            34.355556
+          ],
+          "bulk": [
+            30.020761,
+            30.043459,
+            30.015633,
+            30.016204,
+            29.984423,
+            30.029711,
+            30.039031
+          ]
+        },
+        "gcc_4096_4": {
+          "baseline": [
+            12.354874,
+            12.191767,
+            12.454188,
+            12.4761,
+            12.314593,
+            12.460741,
+            12.313066
+          ],
+          "control": [
+            11.941753,
+            12.151798,
+            12.339372,
+            12.527222,
+            12.144474,
+            12.501824,
+            12.443594
+          ],
+          "cached": [
+            13.801933,
+            13.810998,
+            13.968287,
+            13.916733,
+            13.792832,
+            13.667651,
+            13.745136
+          ],
+          "bulk": [
+            26.119998,
+            26.566354,
+            26.65348,
+            26.697473,
+            25.990689,
+            26.954087,
+            26.933341
+          ]
+        },
+        "gcc_4096_5": {
+          "baseline": [
+            26.516482,
+            27.396564,
+            26.689435,
+            26.761494,
+            26.880034,
+            26.929143,
+            26.854273
+          ],
+          "control": [
+            26.862438,
+            26.457385,
+            26.61165,
+            26.614742,
+            26.855535,
+            26.660664,
+            26.576417
+          ],
+          "cached": [
+            28.231211,
+            28.097281,
+            28.625944,
+            27.910911,
+            28.190274,
+            28.102358,
+            28.335384
+          ],
+          "bulk": [
+            27.993937,
+            27.906068,
+            28.311142,
+            27.985264,
+            27.808837,
+            28.010612,
+            27.889459
+          ]
+        },
+        "gcc_4096_6": {
+          "baseline": [
+            22.832419,
+            22.622365,
+            22.676622,
+            22.683931,
+            22.543017,
+            22.68649,
+            22.530483
+          ],
+          "control": [
+            22.58454,
+            22.703205,
+            22.502403,
+            22.830524,
+            22.733346,
+            22.492727,
+            22.589986
+          ],
+          "cached": [
+            22.664779,
+            22.930579,
+            22.814971,
+            22.786287,
+            22.598445,
+            22.811683,
+            22.72639
+          ],
+          "bulk": [
+            21.176734,
+            20.967693,
+            21.179235,
+            20.96295,
+            21.68772,
+            21.225697,
+            21.199498
+          ]
+        },
+        "gcc_131072_0": {
+          "baseline": [
+            28.89449,
+            28.900069,
+            28.854069,
+            28.902791,
+            30.075719,
+            28.90696,
+            29.050682
+          ],
+          "control": [
+            30.749428,
+            28.893695,
+            28.918496,
+            28.929595,
+            28.953398,
+            30.16013,
+            28.903983
+          ],
+          "cached": [
+            31.788796,
+            30.277129,
+            30.336386,
+            31.684244,
+            30.492982,
+            30.339561,
+            30.414224
+          ],
+          "bulk": [
+            28.965758,
+            28.965291,
+            28.870647,
+            28.908856,
+            28.871503,
+            31.407706,
+            29.008877
+          ]
+        },
+        "gcc_131072_1": {
+          "baseline": [
+            29.667407,
+            29.677613,
+            29.616563,
+            31.149377,
+            29.704381,
+            29.627422,
+            29.658731
+          ],
+          "control": [
+            30.962471,
+            30.887812,
+            29.765855,
+            31.269178,
+            30.943614,
+            29.624715,
+            29.666191
+          ],
+          "cached": [
+            31.127789,
+            31.123853,
+            31.212578,
+            31.241,
+            31.110777,
+            32.764497,
+            31.250805
+          ],
+          "bulk": [
+            29.693379,
+            32.312593,
+            29.648182,
+            29.89248,
+            32.202287,
+            29.887154,
+            29.699391
+          ]
+        },
+        "gcc_131072_2": {
+          "baseline": [
+            29.333742,
+            29.367846,
+            31.048246,
+            29.43894,
+            30.891586,
+            29.372346,
+            29.412474
+          ],
+          "control": [
+            29.334699,
+            29.333476,
+            30.879544,
+            30.874366,
+            29.384766,
+            29.412133,
+            31.085465
+          ],
+          "cached": [
+            31.065808,
+            31.104894,
+            32.726397,
+            31.107062,
+            31.177543,
+            31.08188,
+            31.052342
+          ],
+          "bulk": [
+            28.342883,
+            26.904418,
+            28.374043,
+            28.429896,
+            31.40409,
+            28.315414,
+            28.334891
+          ]
+        },
+        "gcc_131072_3": {
+          "baseline": [
+            30.096126,
+            30.114079,
+            30.287352,
+            30.138466,
+            29.945555,
+            30.658195,
+            30.0657
+          ],
+          "control": [
+            29.961883,
+            30.331197,
+            29.860913,
+            29.896498,
+            30.086108,
+            30.192152,
+            30.00803
+          ],
+          "cached": [
+            33.845916,
+            33.8613,
+            33.831281,
+            34.029007,
+            33.838116,
+            33.834479,
+            33.878931
+          ],
+          "bulk": [
+            30.377665,
+            29.887763,
+            29.874695,
+            29.902143,
+            29.870389,
+            29.858108,
+            29.878108
+          ]
+        },
+        "gcc_131072_4": {
+          "baseline": [
+            29.79056,
+            29.440502,
+            30.038529,
+            29.768654,
+            29.712831,
+            29.69647,
+            29.817933
+          ],
+          "control": [
+            29.899224,
+            29.837733,
+            29.980114,
+            29.971118,
+            29.800652,
+            29.78498,
+            29.883812
+          ],
+          "cached": [
+            29.049597,
+            29.211013,
+            28.245254,
+            29.190092,
+            29.102119,
+            29.136818,
+            29.077443
+          ],
+          "bulk": [
+            30.836974,
+            30.675518,
+            30.558344,
+            30.523599,
+            30.663948,
+            30.676991,
+            30.458678
+          ]
+        },
+        "gcc_131072_5": {
+          "baseline": [
+            27.035086,
+            26.973573,
+            27.17437,
+            27.098268,
+            27.03557,
+            27.277827,
+            27.033912
+          ],
+          "control": [
+            27.28782,
+            27.122675,
+            27.280898,
+            27.076046,
+            26.910597,
+            27.166944,
+            27.296996
+          ],
+          "cached": [
+            27.712284,
+            27.797401,
+            27.68526,
+            27.865656,
+            27.613939,
+            27.623379,
+            27.540401
+          ],
+          "bulk": [
+            27.229233,
+            27.223324,
+            27.433292,
+            27.20863,
+            27.215654,
+            27.116779,
+            27.25306
+          ]
+        },
+        "gcc_131072_6": {
+          "baseline": [
+            28.958333,
+            28.85883,
+            28.869689,
+            28.886889,
+            28.980643,
+            28.921483,
+            28.818375
+          ],
+          "control": [
+            28.728961,
+            29.044036,
+            28.741977,
+            29.102409,
+            28.810558,
+            28.9449,
+            28.745897
+          ],
+          "cached": [
+            28.891934,
+            28.816251,
+            28.860375,
+            29.021016,
+            28.863794,
+            29.139601,
+            29.092588
+          ],
+          "bulk": [
+            28.157398,
+            28.144894,
+            28.199014,
+            28.232843,
+            28.097355,
+            28.137454,
+            28.126929
+          ]
+        },
+        "clang_32_0": {
+          "baseline": [
+            28.397878,
+            28.669634,
+            28.0763,
+            28.290793,
+            28.064676,
+            28.069371,
+            28.341949
+          ],
+          "control": [
+            28.325593,
+            28.371988,
+            28.234311,
+            27.970872,
+            28.963137,
+            28.415352,
+            29.058602
+          ],
+          "cached": [
+            27.409922,
+            27.207485,
+            27.010927,
+            26.71841,
+            27.159652,
+            27.549253,
+            26.863797
+          ],
+          "bulk": [
+            30.309747,
+            30.710612,
+            30.340843,
+            29.373223,
+            29.820283,
+            30.39395,
+            29.961265
+          ]
+        },
+        "clang_32_1": {
+          "baseline": [
+            29.443924,
+            29.586796,
+            29.241514,
+            29.517565,
+            29.154193,
+            29.550978,
+            29.489884
+          ],
+          "control": [
+            29.404725,
+            29.473389,
+            29.496948,
+            29.353195,
+            29.336328,
+            29.460076,
+            29.423247
+          ],
+          "cached": [
+            28.351721,
+            28.260846,
+            28.265282,
+            28.322943,
+            28.316251,
+            28.305167,
+            28.40535
+          ],
+          "bulk": [
+            29.114602,
+            28.823976,
+            36.236717,
+            48.636199,
+            28.847638,
+            28.881347,
+            28.878261
+          ]
+        },
+        "clang_32_2": {
+          "baseline": [
+            27.974334,
+            28.125754,
+            28.477133,
+            28.371312,
+            28.215203,
+            28.169544,
+            28.087089
+          ],
+          "control": [
+            28.107774,
+            28.259353,
+            28.148409,
+            28.186862,
+            28.031569,
+            28.149247,
+            27.83867
+          ],
+          "cached": [
+            29.064381,
+            29.402858,
+            29.561446,
+            29.430352,
+            29.587028,
+            29.128861,
+            29.47428
+          ],
+          "bulk": [
+            28.997262,
+            28.973702,
+            28.916289,
+            29.050011,
+            29.062661,
+            29.159348,
+            29.291596
+          ]
+        },
+        "clang_32_3": {
+          "baseline": [
+            30.628242,
+            30.143269,
+            30.209618,
+            30.237771,
+            30.112651,
+            30.319805,
+            30.074784
+          ],
+          "control": [
+            30.950373,
+            31.33178,
+            30.150246,
+            30.534301,
+            30.037887,
+            30.441099,
+            30.491767
+          ],
+          "cached": [
+            33.0425,
+            32.680891,
+            32.020921,
+            32.285753,
+            32.030328,
+            32.237946,
+            32.045849
+          ],
+          "bulk": [
+            31.55391,
+            30.771569,
+            30.739702,
+            30.435562,
+            30.63244,
+            30.696104,
+            30.736612
+          ]
+        },
+        "clang_32_4": {
+          "baseline": [
+            29.884205,
+            30.017083,
+            30.123052,
+            29.764341,
+            29.83934,
+            30.105471,
+            30.057182
+          ],
+          "control": [
+            30.012566,
+            30.108381,
+            30.086441,
+            29.968093,
+            29.965624,
+            30.16729,
+            32.083325
+          ],
+          "cached": [
+            31.131433,
+            31.07415,
+            30.943267,
+            31.483669,
+            31.929839,
+            30.996438,
+            31.083391
+          ],
+          "bulk": [
+            31.393433,
+            30.547247,
+            30.710524,
+            31.093699,
+            30.904065,
+            30.870559,
+            30.783215
+          ]
+        },
+        "clang_32_5": {
+          "baseline": [
+            33.550774,
+            33.731856,
+            33.292803,
+            32.859143,
+            34.022749,
+            33.07695,
+            33.107604
+          ],
+          "control": [
+            33.633069,
+            34.329459,
+            32.838095,
+            33.747802,
+            32.203108,
+            34.123133,
+            33.177498
+          ],
+          "cached": [
+            34.139956,
+            33.939211,
+            34.00117,
+            32.716882,
+            33.846839,
+            34.047344,
+            33.481692
+          ],
+          "bulk": [
+            34.13318,
+            33.76608,
+            33.646178,
+            34.052331,
+            34.587268,
+            34.660869,
+            35.235444
+          ]
+        },
+        "clang_32_6": {
+          "baseline": [
+            29.881099,
+            30.268338,
+            29.518613,
+            30.371073,
+            29.793068,
+            30.279814,
+            28.950872
+          ],
+          "control": [
+            29.583638,
+            29.966262,
+            30.286367,
+            29.023282,
+            29.745189,
+            30.005785,
+            30.057307
+          ],
+          "cached": [
+            29.224867,
+            30.153309,
+            30.031563,
+            28.959715,
+            30.150479,
+            29.823307,
+            29.79411
+          ],
+          "bulk": [
+            33.922068,
+            34.034752,
+            33.744901,
+            34.222315,
+            33.83164,
+            33.162222,
+            34.283114
+          ]
+        },
+        "clang_4096_0": {
+          "baseline": [
+            30.199482,
+            30.003019,
+            30.181635,
+            30.628084,
+            29.997498,
+            30.594433,
+            30.483241
+          ],
+          "control": [
+            30.307394,
+            30.117465,
+            30.247733,
+            30.138801,
+            30.390197,
+            30.120614,
+            29.91037
+          ],
+          "cached": [
+            29.823426,
+            29.738235,
+            29.653255,
+            30.303455,
+            29.971099,
+            29.997301,
+            29.834905
+          ],
+          "bulk": [
+            30.666995,
+            29.978845,
+            30.023933,
+            29.99221,
+            30.041576,
+            30.323363,
+            30.527849
+          ]
+        },
+        "clang_4096_1": {
+          "baseline": [
+            30.31339,
+            30.06995,
+            29.882241,
+            30.136842,
+            30.058723,
+            29.851921,
+            30.015205
+          ],
+          "control": [
+            30.213835,
+            30.069,
+            29.894777,
+            30.300127,
+            30.197503,
+            29.917959,
+            30.054006
+          ],
+          "cached": [
+            29.151108,
+            29.435608,
+            29.658699,
+            29.131619,
+            29.186246,
+            29.023302,
+            29.44327
+          ],
+          "bulk": [
+            29.713331,
+            29.880548,
+            29.885551,
+            29.771546,
+            29.896053,
+            29.738213,
+            29.714851
+          ]
+        },
+        "clang_4096_2": {
+          "baseline": [
+            30.307471,
+            29.675958,
+            29.818954,
+            30.066564,
+            30.191132,
+            30.00669,
+            30.060883
+          ],
+          "control": [
+            30.166138,
+            30.275859,
+            29.959893,
+            29.985194,
+            30.311572,
+            30.119453,
+            30.002901
+          ],
+          "cached": [
+            30.407019,
+            30.753014,
+            30.439816,
+            30.417896,
+            30.562447,
+            30.715438,
+            30.350422
+          ],
+          "bulk": [
+            30.23223,
+            30.063864,
+            29.91768,
+            30.021619,
+            29.911881,
+            30.145093,
+            30.13927
+          ]
+        },
+        "clang_4096_3": {
+          "baseline": [
+            30.161922,
+            30.199235,
+            29.938475,
+            30.482993,
+            30.224901,
+            30.597767,
+            29.94829
+          ],
+          "control": [
+            30.317191,
+            30.27528,
+            30.297566,
+            29.90762,
+            30.407258,
+            29.952642,
+            30.149115
+          ],
+          "cached": [
+            32.74901,
+            32.429361,
+            32.739732,
+            32.407922,
+            32.479777,
+            32.74757,
+            32.960355
+          ],
+          "bulk": [
+            29.976315,
+            30.525257,
+            30.03803,
+            30.153753,
+            29.983519,
+            30.215988,
+            30.247084
+          ]
+        },
+        "clang_4096_4": {
+          "baseline": [
+            14.639487,
+            14.680063,
+            14.338264,
+            14.411696,
+            14.90021,
+            14.683562,
+            14.567494
+          ],
+          "control": [
+            14.659376,
+            14.48525,
+            14.362821,
+            14.346293,
+            14.952427,
+            14.661298,
+            14.772383
+          ],
+          "cached": [
+            14.544596,
+            14.496075,
+            14.502409,
+            14.749743,
+            14.420169,
+            14.540164,
+            14.469576
+          ],
+          "bulk": [
+            30.788825,
+            30.98906,
+            30.835134,
+            30.228428,
+            31.241273,
+            31.452246,
+            31.434294
+          ]
+        },
+        "clang_4096_5": {
+          "baseline": [
+            27.555619,
+            27.82388,
+            27.678235,
+            27.637952,
+            27.245117,
+            27.931979,
+            27.681016
+          ],
+          "control": [
+            27.823033,
+            27.700655,
+            27.683037,
+            28.015845,
+            27.642422,
+            27.684683,
+            27.72965
+          ],
+          "cached": [
+            27.180386,
+            28.175536,
+            27.438292,
+            27.570125,
+            27.329398,
+            27.855553,
+            27.662517
+          ],
+          "bulk": [
+            27.850616,
+            27.809247,
+            28.07876,
+            27.634986,
+            27.958538,
+            27.597376,
+            27.600266
+          ]
+        },
+        "clang_4096_6": {
+          "baseline": [
+            24.382338,
+            23.761907,
+            24.216356,
+            24.070519,
+            23.650491,
+            24.253788,
+            24.433817
+          ],
+          "control": [
+            24.737352,
+            24.2245,
+            24.451435,
+            24.002549,
+            23.612601,
+            24.282954,
+            23.743402
+          ],
+          "cached": [
+            24.745725,
+            24.54741,
+            24.64777,
+            24.772802,
+            24.673318,
+            24.848908,
+            24.810084
+          ],
+          "bulk": [
+            26.290703,
+            26.013881,
+            26.600727,
+            26.54187,
+            26.27644,
+            26.446695,
+            26.355846
+          ]
+        },
+        "clang_131072_0": {
+          "baseline": [
+            29.495702,
+            29.582456,
+            32.794197,
+            29.565496,
+            29.501377,
+            29.584066,
+            29.718588
+          ],
+          "control": [
+            29.459493,
+            29.705623,
+            29.552863,
+            29.521935,
+            29.508284,
+            29.437521,
+            29.502751
+          ],
+          "cached": [
+            29.445883,
+            29.470724,
+            29.469357,
+            29.454753,
+            29.512709,
+            29.695445,
+            29.721972
+          ],
+          "bulk": [
+            29.695094,
+            29.549034,
+            29.738477,
+            29.759215,
+            29.646353,
+            29.537806,
+            29.719798
+          ]
+        },
+        "clang_131072_1": {
+          "baseline": [
+            29.128858,
+            29.145262,
+            29.017513,
+            28.951698,
+            29.00607,
+            28.975188,
+            29.03939
+          ],
+          "control": [
+            29.086528,
+            29.143208,
+            29.022038,
+            28.989791,
+            29.020239,
+            38.943321,
+            29.117543
+          ],
+          "cached": [
+            28.543892,
+            28.520017,
+            28.520934,
+            28.489231,
+            28.570221,
+            28.48064,
+            28.565226
+          ],
+          "bulk": [
+            28.963808,
+            28.850673,
+            28.845025,
+            28.819992,
+            28.836826,
+            36.828005,
+            28.793557
+          ]
+        },
+        "clang_131072_2": {
+          "baseline": [
+            29.734795,
+            29.709576,
+            29.69077,
+            29.692593,
+            29.834552,
+            29.686637,
+            29.813775
+          ],
+          "control": [
+            29.694944,
+            29.70605,
+            29.74234,
+            29.69058,
+            29.830537,
+            29.761612,
+            29.68326
+          ],
+          "cached": [
+            29.718502,
+            29.712178,
+            29.72169,
+            29.75583,
+            29.86329,
+            29.69566,
+            29.659982
+          ],
+          "bulk": [
+            29.561427,
+            29.53144,
+            29.517654,
+            29.605293,
+            29.610582,
+            29.584252,
+            29.512714
+          ]
+        },
+        "clang_131072_3": {
+          "baseline": [
+            30.025704,
+            30.442211,
+            29.810546,
+            30.486883,
+            30.58244,
+            30.249477,
+            30.070462
+          ],
+          "control": [
+            30.447578,
+            30.027544,
+            30.584102,
+            30.041188,
+            30.229943,
+            30.849866,
+            29.862671
+          ],
+          "cached": [
+            32.203497,
+            32.262385,
+            32.58574,
+            32.460989,
+            32.41092,
+            33.028448,
+            32.63999
+          ],
+          "bulk": [
+            30.47293,
+            29.845551,
+            30.02527,
+            29.976963,
+            29.832128,
+            29.77633,
+            30.252367
+          ]
+        },
+        "clang_131072_4": {
+          "baseline": [
+            30.073647,
+            32.806845,
+            32.743333,
+            32.761734,
+            32.812604,
+            32.75552,
+            32.778412
+          ],
+          "control": [
+            29.87933,
+            32.767012,
+            32.744936,
+            32.848703,
+            32.859637,
+            32.853219,
+            32.773212
+          ],
+          "cached": [
+            32.365558,
+            32.375531,
+            32.482234,
+            32.578845,
+            32.468221,
+            32.53008,
+            32.627463
+          ],
+          "bulk": [
+            34.338046,
+            34.210237,
+            34.143786,
+            34.206806,
+            34.09112,
+            34.1065,
+            34.171226
+          ]
+        },
+        "clang_131072_5": {
+          "baseline": [
+            27.057646,
+            27.057797,
+            26.984124,
+            26.98448,
+            26.998056,
+            26.98129,
+            27.000776
+          ],
+          "control": [
+            27.265184,
+            27.125039,
+            27.329078,
+            27.068113,
+            27.110238,
+            26.980079,
+            27.098565
+          ],
+          "cached": [
+            27.21207,
+            27.135144,
+            27.047505,
+            27.223123,
+            27.067339,
+            27.035315,
+            27.01654
+          ],
+          "bulk": [
+            27.314996,
+            27.657526,
+            27.253898,
+            27.533232,
+            27.197533,
+            27.518533,
+            27.650052
+          ]
+        },
+        "clang_131072_6": {
+          "baseline": [
+            27.380713,
+            27.738638,
+            27.270994,
+            26.763064,
+            27.755389,
+            26.771763,
+            28.219624
+          ],
+          "control": [
+            28.01785,
+            27.729753,
+            26.773558,
+            27.174731,
+            32.989265,
+            27.957948,
+            27.946236
+          ],
+          "cached": [
+            27.032338,
+            28.266017,
+            27.542981,
+            27.692602,
+            27.656557,
+            27.031089,
+            28.548901
+          ],
+          "bulk": [
+            29.166949,
+            28.399071,
+            28.839672,
+            29.067719,
+            28.907002,
+            29.354901,
+            29.057043
+          ]
+        }
+      },
+      "medians_ms": {
+        "gcc_32_0": {
+          "baseline": 27.276249,
+          "control": 27.606976,
+          "cached": 30.16196,
+          "bulk": 27.207275
+        },
+        "gcc_32_1": {
+          "baseline": 29.726633,
+          "control": 29.674505,
+          "cached": 31.656782,
+          "bulk": 28.765366
+        },
+        "gcc_32_2": {
+          "baseline": 29.723093,
+          "control": 29.751227,
+          "cached": 32.444284,
+          "bulk": 28.086
+        },
+        "gcc_32_3": {
+          "baseline": 30.038479,
+          "control": 29.92136,
+          "cached": 33.547046,
+          "bulk": 29.838791
+        },
+        "gcc_32_4": {
+          "baseline": 27.035163,
+          "control": 27.378507,
+          "cached": 31.029433,
+          "bulk": 26.464762
+        },
+        "gcc_32_5": {
+          "baseline": 29.949995,
+          "control": 29.989815,
+          "cached": 34.120373,
+          "bulk": 35.249362
+        },
+        "gcc_32_6": {
+          "baseline": 29.190409,
+          "control": 29.690124,
+          "cached": 29.29682,
+          "bulk": 29.750487
+        },
+        "gcc_4096_0": {
+          "baseline": 30.110077,
+          "control": 30.192305,
+          "cached": 31.8728,
+          "bulk": 32.026895
+        },
+        "gcc_4096_1": {
+          "baseline": 30.146414,
+          "control": 30.296557,
+          "cached": 32.528114,
+          "bulk": 30.16974
+        },
+        "gcc_4096_2": {
+          "baseline": 30.046617,
+          "control": 30.880408,
+          "cached": 32.588687,
+          "bulk": 28.846844
+        },
+        "gcc_4096_3": {
+          "baseline": 30.114894,
+          "control": 29.959541,
+          "cached": 34.285315,
+          "bulk": 30.020761
+        },
+        "gcc_4096_4": {
+          "baseline": 12.354874,
+          "control": 12.339372,
+          "cached": 13.801933,
+          "bulk": 26.65348
+        },
+        "gcc_4096_5": {
+          "baseline": 26.854273,
+          "control": 26.614742,
+          "cached": 28.190274,
+          "bulk": 27.985264
+        },
+        "gcc_4096_6": {
+          "baseline": 22.676622,
+          "control": 22.589986,
+          "cached": 22.786287,
+          "bulk": 21.179235
+        },
+        "gcc_131072_0": {
+          "baseline": 28.902791,
+          "control": 28.929595,
+          "cached": 30.414224,
+          "bulk": 28.965291
+        },
+        "gcc_131072_1": {
+          "baseline": 29.667407,
+          "control": 30.887812,
+          "cached": 31.212578,
+          "bulk": 29.887154
+        },
+        "gcc_131072_2": {
+          "baseline": 29.412474,
+          "control": 29.412133,
+          "cached": 31.104894,
+          "bulk": 28.342883
+        },
+        "gcc_131072_3": {
+          "baseline": 30.114079,
+          "control": 30.00803,
+          "cached": 33.845916,
+          "bulk": 29.878108
+        },
+        "gcc_131072_4": {
+          "baseline": 29.768654,
+          "control": 29.883812,
+          "cached": 29.102119,
+          "bulk": 30.663948
+        },
+        "gcc_131072_5": {
+          "baseline": 27.03557,
+          "control": 27.166944,
+          "cached": 27.68526,
+          "bulk": 27.223324
+        },
+        "gcc_131072_6": {
+          "baseline": 28.886889,
+          "control": 28.810558,
+          "cached": 28.891934,
+          "bulk": 28.144894
+        },
+        "clang_32_0": {
+          "baseline": 28.290793,
+          "control": 28.371988,
+          "cached": 27.159652,
+          "bulk": 30.309747
+        },
+        "clang_32_1": {
+          "baseline": 29.489884,
+          "control": 29.423247,
+          "cached": 28.316251,
+          "bulk": 28.881347
+        },
+        "clang_32_2": {
+          "baseline": 28.169544,
+          "control": 28.148409,
+          "cached": 29.430352,
+          "bulk": 29.050011
+        },
+        "clang_32_3": {
+          "baseline": 30.209618,
+          "control": 30.491767,
+          "cached": 32.237946,
+          "bulk": 30.736612
+        },
+        "clang_32_4": {
+          "baseline": 30.017083,
+          "control": 30.086441,
+          "cached": 31.083391,
+          "bulk": 30.870559
+        },
+        "clang_32_5": {
+          "baseline": 33.292803,
+          "control": 33.633069,
+          "cached": 33.939211,
+          "bulk": 34.13318
+        },
+        "clang_32_6": {
+          "baseline": 29.881099,
+          "control": 29.966262,
+          "cached": 29.823307,
+          "bulk": 33.922068
+        },
+        "clang_4096_0": {
+          "baseline": 30.199482,
+          "control": 30.138801,
+          "cached": 29.834905,
+          "bulk": 30.041576
+        },
+        "clang_4096_1": {
+          "baseline": 30.058723,
+          "control": 30.069,
+          "cached": 29.186246,
+          "bulk": 29.771546
+        },
+        "clang_4096_2": {
+          "baseline": 30.060883,
+          "control": 30.119453,
+          "cached": 30.439816,
+          "bulk": 30.063864
+        },
+        "clang_4096_3": {
+          "baseline": 30.199235,
+          "control": 30.27528,
+          "cached": 32.739732,
+          "bulk": 30.153753
+        },
+        "clang_4096_4": {
+          "baseline": 14.639487,
+          "control": 14.659376,
+          "cached": 14.502409,
+          "bulk": 30.98906
+        },
+        "clang_4096_5": {
+          "baseline": 27.678235,
+          "control": 27.700655,
+          "cached": 27.570125,
+          "bulk": 27.809247
+        },
+        "clang_4096_6": {
+          "baseline": 24.216356,
+          "control": 24.2245,
+          "cached": 24.745725,
+          "bulk": 26.355846
+        },
+        "clang_131072_0": {
+          "baseline": 29.582456,
+          "control": 29.508284,
+          "cached": 29.470724,
+          "bulk": 29.695094
+        },
+        "clang_131072_1": {
+          "baseline": 29.017513,
+          "control": 29.086528,
+          "cached": 28.520934,
+          "bulk": 28.845025
+        },
+        "clang_131072_2": {
+          "baseline": 29.709576,
+          "control": 29.70605,
+          "cached": 29.718502,
+          "bulk": 29.561427
+        },
+        "clang_131072_3": {
+          "baseline": 30.249477,
+          "control": 30.229943,
+          "cached": 32.460989,
+          "bulk": 29.976963
+        },
+        "clang_131072_4": {
+          "baseline": 32.761734,
+          "control": 32.773212,
+          "cached": 32.482234,
+          "bulk": 34.171226
+        },
+        "clang_131072_5": {
+          "baseline": 26.998056,
+          "control": 27.110238,
+          "cached": 27.067339,
+          "bulk": 27.518533
+        },
+        "clang_131072_6": {
+          "baseline": 27.380713,
+          "control": 27.946236,
+          "cached": 27.656557,
+          "bulk": 29.057043
+        }
+      },
+      "ratios": {
+        "gcc_32_0": {
+          "baseline": 1.0,
+          "control": 1.0121250909536719,
+          "cached": 1.105795741929178,
+          "bulk": 0.997471279866964
+        },
+        "gcc_32_1": {
+          "baseline": 1.0,
+          "control": 0.9982464209787903,
+          "cached": 1.064929956917758,
+          "bulk": 0.967663105337224
+        },
+        "gcc_32_2": {
+          "baseline": 1.0,
+          "control": 1.0009465367551083,
+          "cached": 1.091551407520072,
+          "bulk": 0.9449218491494139
+        },
+        "gcc_32_3": {
+          "baseline": 1.0,
+          "control": 0.9961010342767356,
+          "cached": 1.116802418657749,
+          "bulk": 0.9933522599463176
+        },
+        "gcc_32_4": {
+          "baseline": 1.0,
+          "control": 1.0126999049349175,
+          "cached": 1.1477435146220498,
+          "bulk": 0.9789015142982492
+        },
+        "gcc_32_5": {
+          "baseline": 1.0,
+          "control": 1.0013295494707093,
+          "cached": 1.1392446977036224,
+          "bulk": 1.1769404969850579
+        },
+        "gcc_32_6": {
+          "baseline": 1.0,
+          "control": 1.0171191503346186,
+          "cached": 1.003645409696041,
+          "bulk": 1.0191870555839078
+        },
+        "gcc_4096_0": {
+          "baseline": 1.0,
+          "control": 1.00273091297641,
+          "cached": 1.058542626775747,
+          "bulk": 1.0636603486600185
+        },
+        "gcc_4096_1": {
+          "baseline": 1.0,
+          "control": 1.0049804596991205,
+          "cached": 1.0790044215540862,
+          "bulk": 1.0007737570379018
+        },
+        "gcc_4096_2": {
+          "baseline": 1.0,
+          "control": 1.0277499127439205,
+          "cached": 1.0846042001999758,
+          "bulk": 0.9600696144927064
+        },
+        "gcc_4096_3": {
+          "baseline": 1.0,
+          "control": 0.9948413233664379,
+          "cached": 1.1384836685794077,
+          "bulk": 0.9968742045049204
+        },
+        "gcc_4096_4": {
+          "baseline": 1.0,
+          "control": 0.9987452725135034,
+          "cached": 1.117124545341377,
+          "bulk": 2.1573251171966623
+        },
+        "gcc_4096_5": {
+          "baseline": 1.0,
+          "control": 0.9910803394305256,
+          "cached": 1.0497500341938133,
+          "bulk": 1.04211586737053
+        },
+        "gcc_4096_6": {
+          "baseline": 1.0,
+          "control": 0.99617950151482,
+          "cached": 1.0048360377484795,
+          "bulk": 0.9339678105495607
+        },
+        "gcc_131072_0": {
+          "baseline": 1.0,
+          "control": 1.0009273844868476,
+          "cached": 1.0522936694937177,
+          "bulk": 1.0021624209232942
+        },
+        "gcc_131072_1": {
+          "baseline": 1.0,
+          "control": 1.0411362206343142,
+          "cached": 1.0520831159932515,
+          "bulk": 1.0074070174046554
+        },
+        "gcc_131072_2": {
+          "baseline": 1.0,
+          "control": 0.9999884062795942,
+          "cached": 1.0575408923438403,
+          "bulk": 0.9636347829835736
+        },
+        "gcc_131072_3": {
+          "baseline": 1.0,
+          "control": 0.9964784245933606,
+          "cached": 1.1239233316748622,
+          "bulk": 0.9921640970656948
+        },
+        "gcc_131072_4": {
+          "baseline": 1.0,
+          "control": 1.0038684315387587,
+          "cached": 0.9776095015918421,
+          "bulk": 1.0300750581467337
+        },
+        "gcc_131072_5": {
+          "baseline": 1.0,
+          "control": 1.0048593020232235,
+          "cached": 1.0240309340620524,
+          "bulk": 1.0069447028488765
+        },
+        "gcc_131072_6": {
+          "baseline": 1.0,
+          "control": 0.9973575901510198,
+          "cached": 1.0001746467056387,
+          "bulk": 0.974313779514298
+        },
+        "clang_32_0": {
+          "baseline": 1.0,
+          "control": 1.0028700149903893,
+          "cached": 0.9600173455724624,
+          "bulk": 1.0713643481114157
+        },
+        "clang_32_1": {
+          "baseline": 1.0,
+          "control": 0.9977403437734784,
+          "cached": 0.9602021832300188,
+          "bulk": 0.9793645509083726
+        },
+        "clang_32_2": {
+          "baseline": 1.0,
+          "control": 0.9992497216142371,
+          "cached": 1.044757842015476,
+          "bulk": 1.0312559905123067
+        },
+        "clang_32_3": {
+          "baseline": 1.0,
+          "control": 1.0093397076388055,
+          "cached": 1.0671417957022826,
+          "bulk": 1.0174445767569786
+        },
+        "clang_32_4": {
+          "baseline": 1.0,
+          "control": 1.0023106175906566,
+          "cached": 1.0355233718079802,
+          "bulk": 1.0284330092967395
+        },
+        "clang_32_5": {
+          "baseline": 1.0,
+          "control": 1.010220407095191,
+          "cached": 1.0194158479236488,
+          "bulk": 1.0252420020026551
+        },
+        "clang_32_6": {
+          "baseline": 1.0,
+          "control": 1.0028500625094146,
+          "cached": 0.9980659345896213,
+          "bulk": 1.1352349523690546
+        },
+        "clang_4096_0": {
+          "baseline": 1.0,
+          "control": 0.9979906608994155,
+          "cached": 0.987927706839475,
+          "bulk": 0.9947712348178687
+        },
+        "clang_4096_1": {
+          "baseline": 1.0,
+          "control": 1.0003418974252498,
+          "cached": 0.9709742493052682,
+          "bulk": 0.9904461343883438
+        },
+        "clang_4096_2": {
+          "baseline": 1.0,
+          "control": 1.001948379227583,
+          "cached": 1.0126055179417053,
+          "bulk": 1.0000991654170637
+        },
+        "clang_4096_3": {
+          "baseline": 1.0,
+          "control": 1.0025181101441807,
+          "cached": 1.0841245481880581,
+          "bulk": 0.9984939353596207
+        },
+        "clang_4096_4": {
+          "baseline": 1.0,
+          "control": 1.0013585858575509,
+          "cached": 0.9906364205248448,
+          "bulk": 2.1168132462565112
+        },
+        "clang_4096_5": {
+          "baseline": 1.0,
+          "control": 1.0008100227489216,
+          "cached": 0.9960940428463014,
+          "bulk": 1.0047333943078378
+        },
+        "clang_4096_6": {
+          "baseline": 1.0,
+          "control": 1.0003363016301874,
+          "cached": 1.0218599776118256,
+          "bulk": 1.088348965467802
+        },
+        "clang_131072_0": {
+          "baseline": 1.0,
+          "control": 0.9974927031075446,
+          "cached": 0.9962230316509217,
+          "bulk": 1.0038075946094536
+        },
+        "clang_131072_1": {
+          "baseline": 1.0,
+          "control": 1.002378391283912,
+          "cached": 0.9828869207364531,
+          "bulk": 0.9940557276566051
+        },
+        "clang_131072_2": {
+          "baseline": 1.0,
+          "control": 0.9998813177273214,
+          "cached": 1.0003004418508026,
+          "bulk": 0.9950134259741708
+        },
+        "clang_131072_3": {
+          "baseline": 1.0,
+          "control": 0.9993542367691184,
+          "cached": 1.073109098712682,
+          "bulk": 0.990991116970386
+        },
+        "clang_131072_4": {
+          "baseline": 1.0,
+          "control": 1.0003503477563185,
+          "cached": 0.9914687055331076,
+          "bulk": 1.0430225091260432
+        },
+        "clang_131072_5": {
+          "baseline": 1.0,
+          "control": 1.0041551880624293,
+          "cached": 1.002566221805007,
+          "bulk": 1.0192783139645314
+        },
+        "clang_131072_6": {
+          "baseline": 1.0,
+          "control": 1.0206540640486608,
+          "cached": 1.0100743906851513,
+          "bulk": 1.061223022205448
+        }
+      },
+      "checksums": {
+        "gcc_32_0": {
+          "baseline": 16420572,
+          "control": 16420572,
+          "cached": 16420572,
+          "bulk": 16420572
+        },
+        "gcc_32_1": {
+          "baseline": 17077725,
+          "control": 17077725,
+          "cached": 17077725,
+          "bulk": 17077725
+        },
+        "gcc_32_2": {
+          "baseline": 9646752,
+          "control": 9646752,
+          "cached": 9646752,
+          "bulk": 9646752
+        },
+        "gcc_32_3": {
+          "baseline": 10700128,
+          "control": 10700128,
+          "cached": 10700128,
+          "bulk": 10700128
+        },
+        "gcc_32_4": {
+          "baseline": 14176242,
+          "control": 14176242,
+          "cached": 14176242,
+          "bulk": 14176242
+        },
+        "gcc_32_5": {
+          "baseline": 9495904,
+          "control": 9495904,
+          "cached": 9495904,
+          "bulk": 9495904
+        },
+        "gcc_32_6": {
+          "baseline": 32925376,
+          "control": 32925376,
+          "cached": 32925376,
+          "bulk": 32925376
+        },
+        "gcc_4096_0": {
+          "baseline": 17274819,
+          "control": 17274819,
+          "cached": 17274819,
+          "bulk": 17274819
+        },
+        "gcc_4096_1": {
+          "baseline": 16775168,
+          "control": 16775168,
+          "cached": 16775168,
+          "bulk": 16775168
+        },
+        "gcc_4096_2": {
+          "baseline": 9875456,
+          "control": 9875456,
+          "cached": 9875456,
+          "bulk": 9875456
+        },
+        "gcc_4096_3": {
+          "baseline": 11325440,
+          "control": 11325440,
+          "cached": 11325440,
+          "bulk": 11325440
+        },
+        "gcc_4096_4": {
+          "baseline": 5797920,
+          "control": 5797920,
+          "cached": 5797920,
+          "bulk": 5797920
+        },
+        "gcc_4096_5": {
+          "baseline": 2260992,
+          "control": 2260992,
+          "cached": 2260992,
+          "bulk": 2260992
+        },
+        "gcc_4096_6": {
+          "baseline": 4595712,
+          "control": 4595712,
+          "cached": 4595712,
+          "bulk": 4595712
+        },
+        "gcc_131072_0": {
+          "baseline": 14942151,
+          "control": 14942151,
+          "cached": 14942151,
+          "bulk": 14942151
+        },
+        "gcc_131072_1": {
+          "baseline": 15728580,
+          "control": 15728580,
+          "cached": 15728580,
+          "bulk": 15728580
+        },
+        "gcc_131072_2": {
+          "baseline": 9306112,
+          "control": 9306112,
+          "cached": 9306112,
+          "bulk": 9306112
+        },
+        "gcc_131072_3": {
+          "baseline": 11272192,
+          "control": 11272192,
+          "cached": 11272192,
+          "bulk": 11272192
+        },
+        "gcc_131072_4": {
+          "baseline": 3855168,
+          "control": 3855168,
+          "cached": 3855168,
+          "bulk": 3855168
+        },
+        "gcc_131072_5": {
+          "baseline": 1179648,
+          "control": 1179648,
+          "cached": 1179648,
+          "bulk": 1179648
+        },
+        "gcc_131072_6": {
+          "baseline": 2883584,
+          "control": 2883584,
+          "cached": 2883584,
+          "bulk": 2883584
+        },
+        "clang_32_0": {
+          "baseline": 18231948,
+          "control": 18231948,
+          "cached": 18231948,
+          "bulk": 18231948
+        },
+        "clang_32_1": {
+          "baseline": 16971444,
+          "control": 16971444,
+          "cached": 16971444,
+          "bulk": 16971444
+        },
+        "clang_32_2": {
+          "baseline": 10247104,
+          "control": 10247104,
+          "cached": 10247104,
+          "bulk": 10247104
+        },
+        "clang_32_3": {
+          "baseline": 13112448,
+          "control": 13112448,
+          "cached": 13112448,
+          "bulk": 13112448
+        },
+        "clang_32_4": {
+          "baseline": 14707083,
+          "control": 14707083,
+          "cached": 14707083,
+          "bulk": 14707083
+        },
+        "clang_32_5": {
+          "baseline": 8520640,
+          "control": 8520640,
+          "cached": 8520640,
+          "bulk": 8520640
+        },
+        "clang_32_6": {
+          "baseline": 27011200,
+          "control": 27011200,
+          "cached": 27011200,
+          "bulk": 27011200
+        },
+        "clang_4096_0": {
+          "baseline": 20649511,
+          "control": 20649511,
+          "cached": 20649511,
+          "bulk": 20649511
+        },
+        "clang_4096_1": {
+          "baseline": 15554709,
+          "control": 15554709,
+          "cached": 15554709,
+          "bulk": 15554709
+        },
+        "clang_4096_2": {
+          "baseline": 9568256,
+          "control": 9568256,
+          "cached": 9568256,
+          "bulk": 9568256
+        },
+        "clang_4096_3": {
+          "baseline": 14123008,
+          "control": 14123008,
+          "cached": 14123008,
+          "bulk": 14123008
+        },
+        "clang_4096_4": {
+          "baseline": 6076160,
+          "control": 6076160,
+          "cached": 6076160,
+          "bulk": 6076160
+        },
+        "clang_4096_5": {
+          "baseline": 2179072,
+          "control": 2179072,
+          "cached": 2179072,
+          "bulk": 2179072
+        },
+        "clang_4096_6": {
+          "baseline": 5177344,
+          "control": 5177344,
+          "cached": 5177344,
+          "bulk": 5177344
+        },
+        "clang_131072_0": {
+          "baseline": 15204294,
+          "control": 15204294,
+          "cached": 15204294,
+          "bulk": 15204294
+        },
+        "clang_131072_1": {
+          "baseline": 14942151,
+          "control": 14942151,
+          "cached": 14942151,
+          "bulk": 14942151
+        },
+        "clang_131072_2": {
+          "baseline": 9175040,
+          "control": 9175040,
+          "cached": 9175040,
+          "bulk": 9175040
+        },
+        "clang_131072_3": {
+          "baseline": 14024704,
+          "control": 14024704,
+          "cached": 14024704,
+          "bulk": 14024704
+        },
+        "clang_131072_4": {
+          "baseline": 4096116,
+          "control": 4096116,
+          "cached": 4096116,
+          "bulk": 4096116
+        },
+        "clang_131072_5": {
+          "baseline": 1179648,
+          "control": 1179648,
+          "cached": 1179648,
+          "bulk": 1179648
+        },
+        "clang_131072_6": {
+          "baseline": 2621440,
+          "control": 2621440,
+          "cached": 2621440,
+          "bulk": 2621440
+        }
+      },
+      "loop_counts": {
+        "gcc_32_0": 260644,
+        "gcc_32_1": 271075,
+        "gcc_32_2": 301461,
+        "gcc_32_3": 334379,
+        "gcc_32_4": 248706,
+        "gcc_32_5": 296747,
+        "gcc_32_6": 514459,
+        "gcc_4096_0": 2109,
+        "gcc_4096_1": 2048,
+        "gcc_4096_2": 2411,
+        "gcc_4096_3": 2765,
+        "gcc_4096_4": 771,
+        "gcc_4096_5": 552,
+        "gcc_4096_6": 561,
+        "gcc_131072_0": 57,
+        "gcc_131072_1": 60,
+        "gcc_131072_2": 71,
+        "gcc_131072_3": 86,
+        "gcc_131072_4": 16,
+        "gcc_131072_5": 9,
+        "gcc_131072_6": 11,
+        "clang_32_0": 289396,
+        "clang_32_1": 269388,
+        "clang_32_2": 320222,
+        "clang_32_3": 409764,
+        "clang_32_4": 258019,
+        "clang_32_5": 266270,
+        "clang_32_6": 422050,
+        "clang_4096_0": 2521,
+        "clang_4096_1": 1899,
+        "clang_4096_2": 2336,
+        "clang_4096_3": 3448,
+        "clang_4096_4": 808,
+        "clang_4096_5": 532,
+        "clang_4096_6": 632,
+        "clang_131072_0": 58,
+        "clang_131072_1": 57,
+        "clang_131072_2": 70,
+        "clang_131072_3": 107,
+        "clang_131072_4": 17,
+        "clang_131072_5": 9,
+        "clang_131072_6": 10
+      },
+      "rounds": 7
+    },
+    "environment": {
+      "cpu": 14,
+      "compile_cpu": 6,
+      "standard": "C++23",
+      "optimization": "O2",
+      "checks": "SKIP_RUNTIME_CHECKS",
+      "gcc": "15.3.0",
+      "clang": "21.1.8 gcc15.3libstdc++",
+      "locks": [
+        "/tmp/sirkit_performance_cpu14.lock",
+        "/tmp/atcoder_full_performance_20261018/benchmark.lock"
+      ],
+      "native": false,
+      "rounds": 7
+    },
+    "main_inputs": {
+      "random_00.in": {
+        "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+        "independent_reference_output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7"
+      },
+      "max_random_00.in": {
+        "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+        "independent_reference_output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a"
+      },
+      "max_random_01.in": {
+        "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+        "independent_reference_output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08"
+      },
+      "conchon_filliatre_tle_00.in": {
+        "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+        "independent_reference_output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c"
+      },
+      "conchon_filliatre_tle_01.in": {
+        "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+        "independent_reference_output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c"
+      },
+      "branch_many.in": {
+        "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+        "independent_reference_output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82"
+      },
+      "balanced.in": {
+        "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+        "independent_reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b"
+      },
+      "same_component.in": {
+        "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+        "independent_reference_output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5"
+      },
+      "small_branch.in": {
+        "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+        "independent_reference_output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c"
+      }
+    },
+    "api_note": "n32/4096/131072 ×7modes ×GCC/Clang42conditions; baseline-calibrated same loopcount eachvariant, preparation/reserve/warmup outside timer, same checksum and finalstate. modes balanced+undo,chain+rollback,connected_noops+rollback,connected_noops+undo,random+rollback,deep_self_unite+undo,deep_self_same. Raw results/controls retained; no cause assigned to compiler-generated layout effects. SIMD not attempted: root traversal is data dependent and history restore has potential same-vertex dependencies. No speedup claimed.",
+    "reproduction_files": {
+      "baseline.hpp": {
+        "sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+        "text": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/rollback-union-find.hpp.html\n#include <algorithm>\n#include <cstddef>\n#include <limits>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n#define SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n// RollbackUnionFind(n=0): n要素を構築。O(n+1)時間・領域。コピーはO(n+h+1)時間・領域で独立（hは履歴長）、移動元は空。\n// find(i)/root(i)/leader(i): 代表、same(a,b)/issame(a,b): 同一成分か、size(i): 成分サイズ。O(log(n+1))。\n// unite(a,b)/merge(a,b): 新規結合ならtrue。falseでも履歴は1回分増える。O(log(n+1))償却時間。\n// undo(): 結合呼出し1回を戻す。O(1)。履歴が必要。get_state(): 現在の呼出し回数、O(1)。\n// snapshot(): 現在位置を保存。rollback(state=-1): 指定位置/保存位置まで戻す。O(1+戻す回数)。\n// size()/component_count(): 全要素数/成分数、O(1)。groups(): 成分別の頂点昇順一覧、O(1+n log(n+1))。\n// swap(other): 履歴を含めて内容を交換。O(1)。\n// reserve_history(k): k回分の履歴容量を確保。履歴・代表の直接書換えは不可。\n// clear_history(): 森林を保ち履歴と保存位置を消去。容量は保持し、旧stateは無効。O(h+1)上界、noexcept。\nclass RollbackUnionFind {\n    struct Change { int x, y, dx, dy; };\n    std::vector<int> data;\n    std::vector<Change> history;\n    int inner_snap = 0;\n    int components_ = 0;\n    static std::size_t checked_size(std::size_t n) {\n        if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: too many vertices\");\n        return n;\n    }\n    void check(int i) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (static_cast<std::size_t>(i) >= data.size()) throw std::out_of_range(\"RollbackUnionFind: vertex\");\n#else\n        (void)i;\n#endif\n    }\n    int leader_unchecked(int i) const { while (data[i] >= 0) i = data[i]; return i; }\n    void undo_last() noexcept {\n        const auto c = history.back(); history.pop_back();\n        data[c.x] = c.dx; data[c.y] = c.dy; components_ += (c.x != c.y);\n    }\npublic:\n    explicit RollbackUnionFind(std::size_t n = 0)\n        : data(checked_size(n), -1), components_(static_cast<int>(n)) { history.reserve(std::min(n, std::size_t{64})); }\n    RollbackUnionFind(const RollbackUnionFind&) = default;\n    RollbackUnionFind& operator=(const RollbackUnionFind& other) {\n        if (this != &other) { RollbackUnionFind copy(other); swap(copy); }\n        return *this;\n    }\n    void swap(RollbackUnionFind& other) noexcept {\n        data.swap(other.data); history.swap(other.history);\n        std::swap(inner_snap, other.inner_snap); std::swap(components_, other.components_);\n    }\n    RollbackUnionFind(RollbackUnionFind&& other) noexcept\n        : data(std::move(other.data)), history(std::move(other.history)),\n          inner_snap(std::exchange(other.inner_snap, 0)), components_(std::exchange(other.components_, 0)) {\n        other.data.clear(); other.history.clear();\n    }\n    RollbackUnionFind& operator=(RollbackUnionFind&& other) noexcept {\n        if (this != &other) {\n            data = std::move(other.data); history = std::move(other.history);\n            inner_snap = std::exchange(other.inner_snap, 0); components_ = std::exchange(other.components_, 0);\n            other.data.clear(); other.history.clear();\n        }\n        return *this;\n    }\n    int find(int i) const { check(i); return leader_unchecked(i); }\n    int root(int i) const { return find(i); }\n    int leader(int i) const { return find(i); }\n    bool unite(int x, int y) {\n        check(x); check(y); x = leader_unchecked(x); y = leader_unchecked(y);\n        if (history.size() == static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.push_back({x, y, data[x], data[y]});\n        if (x == y) return false;\n        if (data[x] > data[y]) std::swap(x, y);\n        data[x] += data[y]; data[y] = x; --components_; return true;\n    }\n    bool merge(int a, int b) { return unite(a, b); }\n    bool same(int a, int b) const { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n    bool issame(int a, int b) const { return same(a, b); }\n    int size(int i) const { return -data[find(i)]; }\n    int size() const noexcept { return static_cast<int>(data.size()); }\n    int component_count() const noexcept { return components_; }\n    void undo() {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (history.empty()) throw std::out_of_range(\"RollbackUnionFind: empty history\");\n#endif\n        const auto c = history.back(); history.pop_back();\n        if (c.x != c.y) {\n            data[c.x] = c.dx; data[c.y] = c.dy; ++components_;\n        }\n        if (inner_snap > get_state()) inner_snap = get_state();\n    }\n    void snapshot() noexcept { inner_snap = get_state(); }\n    int get_state() const noexcept { return static_cast<int>(history.size()); }\n    void rollback(int state = -1) {\n        if (state == -1) state = inner_snap;\n#ifndef SKIP_RUNTIME_CHECKS\n        if (state < 0 || state > get_state()) throw std::out_of_range(\"RollbackUnionFind: state\");\n#endif\n        while (get_state() > state) undo_last();\n        if (inner_snap > state) inner_snap = state;\n    }\n    void clear_history() noexcept { history.clear(); inner_snap = 0; }\n    void reserve_history(std::size_t count) {\n        if (count > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.reserve(count);\n    }\n    std::vector<std::vector<int>> groups() const {\n        std::vector<int> leaders(data.size()), counts(data.size(), 0), slot(data.size());\n        for (int i = 0; i < size(); ++i) ++counts[leaders[i] = leader_unchecked(i)];\n        std::vector<std::vector<int>> result; result.reserve(components_);\n        for (int i = 0; i < size(); ++i) if (counts[i]) {\n            slot[i] = static_cast<int>(result.size()); result.emplace_back(); result.back().reserve(counts[i]);\n        }\n        for (int i = 0; i < size(); ++i) result[slot[leaders[i]]].push_back(i);\n        return result;\n    }\n};\n#endif\n"
+      },
+      "control.hpp": {
+        "sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+        "text": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/rollback-union-find.hpp.html\n#include <algorithm>\n#include <cstddef>\n#include <limits>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n#define SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n// RollbackUnionFind(n=0): n要素を構築。O(n+1)時間・領域。コピーはO(n+h+1)時間・領域で独立（hは履歴長）、移動元は空。\n// find(i)/root(i)/leader(i): 代表、same(a,b)/issame(a,b): 同一成分か、size(i): 成分サイズ。O(log(n+1))。\n// unite(a,b)/merge(a,b): 新規結合ならtrue。falseでも履歴は1回分増える。O(log(n+1))償却時間。\n// undo(): 結合呼出し1回を戻す。O(1)。履歴が必要。get_state(): 現在の呼出し回数、O(1)。\n// snapshot(): 現在位置を保存。rollback(state=-1): 指定位置/保存位置まで戻す。O(1+戻す回数)。\n// size()/component_count(): 全要素数/成分数、O(1)。groups(): 成分別の頂点昇順一覧、O(1+n log(n+1))。\n// swap(other): 履歴を含めて内容を交換。O(1)。\n// reserve_history(k): k回分の履歴容量を確保。履歴・代表の直接書換えは不可。\n// clear_history(): 森林を保ち履歴と保存位置を消去。容量は保持し、旧stateは無効。O(h+1)上界、noexcept。\nclass RollbackUnionFind {\n    struct Change { int x, y, dx, dy; };\n    std::vector<int> data;\n    std::vector<Change> history;\n    int inner_snap = 0;\n    int components_ = 0;\n    static std::size_t checked_size(std::size_t n) {\n        if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: too many vertices\");\n        return n;\n    }\n    void check(int i) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (static_cast<std::size_t>(i) >= data.size()) throw std::out_of_range(\"RollbackUnionFind: vertex\");\n#else\n        (void)i;\n#endif\n    }\n    int leader_unchecked(int i) const { while (data[i] >= 0) i = data[i]; return i; }\n    void undo_last() noexcept {\n        const auto c = history.back(); history.pop_back();\n        data[c.x] = c.dx; data[c.y] = c.dy; components_ += (c.x != c.y);\n    }\npublic:\n    explicit RollbackUnionFind(std::size_t n = 0)\n        : data(checked_size(n), -1), components_(static_cast<int>(n)) { history.reserve(std::min(n, std::size_t{64})); }\n    RollbackUnionFind(const RollbackUnionFind&) = default;\n    RollbackUnionFind& operator=(const RollbackUnionFind& other) {\n        if (this != &other) { RollbackUnionFind copy(other); swap(copy); }\n        return *this;\n    }\n    void swap(RollbackUnionFind& other) noexcept {\n        data.swap(other.data); history.swap(other.history);\n        std::swap(inner_snap, other.inner_snap); std::swap(components_, other.components_);\n    }\n    RollbackUnionFind(RollbackUnionFind&& other) noexcept\n        : data(std::move(other.data)), history(std::move(other.history)),\n          inner_snap(std::exchange(other.inner_snap, 0)), components_(std::exchange(other.components_, 0)) {\n        other.data.clear(); other.history.clear();\n    }\n    RollbackUnionFind& operator=(RollbackUnionFind&& other) noexcept {\n        if (this != &other) {\n            data = std::move(other.data); history = std::move(other.history);\n            inner_snap = std::exchange(other.inner_snap, 0); components_ = std::exchange(other.components_, 0);\n            other.data.clear(); other.history.clear();\n        }\n        return *this;\n    }\n    int find(int i) const { check(i); return leader_unchecked(i); }\n    int root(int i) const { return find(i); }\n    int leader(int i) const { return find(i); }\n    bool unite(int x, int y) {\n        check(x); check(y); x = leader_unchecked(x); y = leader_unchecked(y);\n        if (history.size() == static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.push_back({x, y, data[x], data[y]});\n        if (x == y) return false;\n        if (data[x] > data[y]) std::swap(x, y);\n        data[x] += data[y]; data[y] = x; --components_; return true;\n    }\n    bool merge(int a, int b) { return unite(a, b); }\n    bool same(int a, int b) const { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n    bool issame(int a, int b) const { return same(a, b); }\n    int size(int i) const { return -data[find(i)]; }\n    int size() const noexcept { return static_cast<int>(data.size()); }\n    int component_count() const noexcept { return components_; }\n    void undo() {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (history.empty()) throw std::out_of_range(\"RollbackUnionFind: empty history\");\n#endif\n        const auto c = history.back(); history.pop_back();\n        if (c.x != c.y) {\n            data[c.x] = c.dx; data[c.y] = c.dy; ++components_;\n        }\n        if (inner_snap > get_state()) inner_snap = get_state();\n    }\n    void snapshot() noexcept { inner_snap = get_state(); }\n    int get_state() const noexcept { return static_cast<int>(history.size()); }\n    void rollback(int state = -1) {\n        if (state == -1) state = inner_snap;\n#ifndef SKIP_RUNTIME_CHECKS\n        if (state < 0 || state > get_state()) throw std::out_of_range(\"RollbackUnionFind: state\");\n#endif\n        while (get_state() > state) undo_last();\n        if (inner_snap > state) inner_snap = state;\n    }\n    void clear_history() noexcept { history.clear(); inner_snap = 0; }\n    void reserve_history(std::size_t count) {\n        if (count > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.reserve(count);\n    }\n    std::vector<std::vector<int>> groups() const {\n        std::vector<int> leaders(data.size()), counts(data.size(), 0), slot(data.size());\n        for (int i = 0; i < size(); ++i) ++counts[leaders[i] = leader_unchecked(i)];\n        std::vector<std::vector<int>> result; result.reserve(components_);\n        for (int i = 0; i < size(); ++i) if (counts[i]) {\n            slot[i] = static_cast<int>(result.size()); result.emplace_back(); result.back().reserve(counts[i]);\n        }\n        for (int i = 0; i < size(); ++i) result[slot[leaders[i]]].push_back(i);\n        return result;\n    }\n};\n#endif\n"
+      },
+      "cached.hpp": {
+        "sha256": "bfdb9b8a88e2bf96acd71a487c4986708965e1871de9ea57438accc57efb6789",
+        "text": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/rollback-union-find.hpp.html\n#include <algorithm>\n#include <cstddef>\n#include <limits>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n#define SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n// RollbackUnionFind(n=0): n要素を構築。O(n+1)時間・領域。コピーはO(n+h+1)時間・領域で独立（hは履歴長）、移動元は空。\n// find(i)/root(i)/leader(i): 代表、same(a,b)/issame(a,b): 同一成分か、size(i): 成分サイズ。O(log(n+1))。\n// unite(a,b)/merge(a,b): 新規結合ならtrue。falseでも履歴は1回分増える。O(log(n+1))償却時間。\n// undo(): 結合呼出し1回を戻す。O(1)。履歴が必要。get_state(): 現在の呼出し回数、O(1)。\n// snapshot(): 現在位置を保存。rollback(state=-1): 指定位置/保存位置まで戻す。O(1+戻す回数)。\n// size()/component_count(): 全要素数/成分数、O(1)。groups(): 成分別の頂点昇順一覧、O(1+n log(n+1))。\n// swap(other): 履歴を含めて内容を交換。O(1)。\n// reserve_history(k): k回分の履歴容量を確保。履歴・代表の直接書換えは不可。\n// clear_history(): 森林を保ち履歴と保存位置を消去。容量は保持し、旧stateは無効。O(h+1)上界、noexcept。\nclass RollbackUnionFind {\n    struct Change { int x, y, dx, dy; };\n    std::vector<int> data;\n    std::vector<Change> history;\n    int inner_snap = 0;\n    int components_ = 0;\n    static std::size_t checked_size(std::size_t n) {\n        if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: too many vertices\");\n        return n;\n    }\n    void check(int i) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (static_cast<std::size_t>(i) >= data.size()) throw std::out_of_range(\"RollbackUnionFind: vertex\");\n#else\n        (void)i;\n#endif\n    }\n    int leader_unchecked(int i) const { while (data[i] >= 0) i = data[i]; return i; }\n    void undo_last() noexcept {\n        const auto c = history.back(); history.pop_back();\n        data[c.x] = c.dx; data[c.y] = c.dy; components_ += (c.x != c.y);\n    }\npublic:\n    explicit RollbackUnionFind(std::size_t n = 0)\n        : data(checked_size(n), -1), components_(static_cast<int>(n)) { history.reserve(std::min(n, std::size_t{64})); }\n    RollbackUnionFind(const RollbackUnionFind&) = default;\n    RollbackUnionFind& operator=(const RollbackUnionFind& other) {\n        if (this != &other) { RollbackUnionFind copy(other); swap(copy); }\n        return *this;\n    }\n    void swap(RollbackUnionFind& other) noexcept {\n        data.swap(other.data); history.swap(other.history);\n        std::swap(inner_snap, other.inner_snap); std::swap(components_, other.components_);\n    }\n    RollbackUnionFind(RollbackUnionFind&& other) noexcept\n        : data(std::move(other.data)), history(std::move(other.history)),\n          inner_snap(std::exchange(other.inner_snap, 0)), components_(std::exchange(other.components_, 0)) {\n        other.data.clear(); other.history.clear();\n    }\n    RollbackUnionFind& operator=(RollbackUnionFind&& other) noexcept {\n        if (this != &other) {\n            data = std::move(other.data); history = std::move(other.history);\n            inner_snap = std::exchange(other.inner_snap, 0); components_ = std::exchange(other.components_, 0);\n            other.data.clear(); other.history.clear();\n        }\n        return *this;\n    }\n    int find(int i) const { check(i); return leader_unchecked(i); }\n    int root(int i) const { return find(i); }\n    int leader(int i) const { return find(i); }\n    bool unite(int x, int y) {\n        check(x); check(y); x = leader_unchecked(x); y = leader_unchecked(y);\n        if (history.size() == static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        int dx = data[x], dy = data[y];\n        history.push_back({x, y, dx, dy});\n        if (x == y) return false;\n        if (dx > dy) { std::swap(x, y); std::swap(dx, dy); }\n        data[x] = dx + dy; data[y] = x; --components_; return true;\n    }\n    bool merge(int a, int b) { return unite(a, b); }\n    bool same(int a, int b) const { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n    bool issame(int a, int b) const { return same(a, b); }\n    int size(int i) const { return -data[find(i)]; }\n    int size() const noexcept { return static_cast<int>(data.size()); }\n    int component_count() const noexcept { return components_; }\n    void undo() {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (history.empty()) throw std::out_of_range(\"RollbackUnionFind: empty history\");\n#endif\n        const auto c = history.back(); history.pop_back();\n        if (c.x != c.y) {\n            data[c.x] = c.dx; data[c.y] = c.dy; ++components_;\n        }\n        if (inner_snap > get_state()) inner_snap = get_state();\n    }\n    void snapshot() noexcept { inner_snap = get_state(); }\n    int get_state() const noexcept { return static_cast<int>(history.size()); }\n    void rollback(int state = -1) {\n        if (state == -1) state = inner_snap;\n#ifndef SKIP_RUNTIME_CHECKS\n        if (state < 0 || state > get_state()) throw std::out_of_range(\"RollbackUnionFind: state\");\n#endif\n        while (get_state() > state) undo_last();\n        if (inner_snap > state) inner_snap = state;\n    }\n    void clear_history() noexcept { history.clear(); inner_snap = 0; }\n    void reserve_history(std::size_t count) {\n        if (count > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.reserve(count);\n    }\n    std::vector<std::vector<int>> groups() const {\n        std::vector<int> leaders(data.size()), counts(data.size(), 0), slot(data.size());\n        for (int i = 0; i < size(); ++i) ++counts[leaders[i] = leader_unchecked(i)];\n        std::vector<std::vector<int>> result; result.reserve(components_);\n        for (int i = 0; i < size(); ++i) if (counts[i]) {\n            slot[i] = static_cast<int>(result.size()); result.emplace_back(); result.back().reserve(counts[i]);\n        }\n        for (int i = 0; i < size(); ++i) result[slot[leaders[i]]].push_back(i);\n        return result;\n    }\n};\n#endif\n"
+      },
+      "bulk.hpp": {
+        "sha256": "9241018b08eed0abd516ca06a261642d43dcb5fb665a835266ff0bd8302cd5ac",
+        "text": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/rollback-union-find.hpp.html\n#include <algorithm>\n#include <cstddef>\n#include <limits>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n#define SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n// RollbackUnionFind(n=0): n要素を構築。O(n+1)時間・領域。コピーはO(n+h+1)時間・領域で独立（hは履歴長）、移動元は空。\n// find(i)/root(i)/leader(i): 代表、same(a,b)/issame(a,b): 同一成分か、size(i): 成分サイズ。O(log(n+1))。\n// unite(a,b)/merge(a,b): 新規結合ならtrue。falseでも履歴は1回分増える。O(log(n+1))償却時間。\n// undo(): 結合呼出し1回を戻す。O(1)。履歴が必要。get_state(): 現在の呼出し回数、O(1)。\n// snapshot(): 現在位置を保存。rollback(state=-1): 指定位置/保存位置まで戻す。O(1+戻す回数)。\n// size()/component_count(): 全要素数/成分数、O(1)。groups(): 成分別の頂点昇順一覧、O(1+n log(n+1))。\n// swap(other): 履歴を含めて内容を交換。O(1)。\n// reserve_history(k): k回分の履歴容量を確保。履歴・代表の直接書換えは不可。\n// clear_history(): 森林を保ち履歴と保存位置を消去。容量は保持し、旧stateは無効。O(h+1)上界、noexcept。\nclass RollbackUnionFind {\n    struct Change { int x, y, dx, dy; };\n    std::vector<int> data;\n    std::vector<Change> history;\n    int inner_snap = 0;\n    int components_ = 0;\n    static std::size_t checked_size(std::size_t n) {\n        if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: too many vertices\");\n        return n;\n    }\n    void check(int i) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (static_cast<std::size_t>(i) >= data.size()) throw std::out_of_range(\"RollbackUnionFind: vertex\");\n#else\n        (void)i;\n#endif\n    }\n    int leader_unchecked(int i) const { while (data[i] >= 0) i = data[i]; return i; }\n    void undo_last() noexcept {\n        const auto c = history.back(); history.pop_back();\n        data[c.x] = c.dx; data[c.y] = c.dy; components_ += (c.x != c.y);\n    }\npublic:\n    explicit RollbackUnionFind(std::size_t n = 0)\n        : data(checked_size(n), -1), components_(static_cast<int>(n)) { history.reserve(std::min(n, std::size_t{64})); }\n    RollbackUnionFind(const RollbackUnionFind&) = default;\n    RollbackUnionFind& operator=(const RollbackUnionFind& other) {\n        if (this != &other) { RollbackUnionFind copy(other); swap(copy); }\n        return *this;\n    }\n    void swap(RollbackUnionFind& other) noexcept {\n        data.swap(other.data); history.swap(other.history);\n        std::swap(inner_snap, other.inner_snap); std::swap(components_, other.components_);\n    }\n    RollbackUnionFind(RollbackUnionFind&& other) noexcept\n        : data(std::move(other.data)), history(std::move(other.history)),\n          inner_snap(std::exchange(other.inner_snap, 0)), components_(std::exchange(other.components_, 0)) {\n        other.data.clear(); other.history.clear();\n    }\n    RollbackUnionFind& operator=(RollbackUnionFind&& other) noexcept {\n        if (this != &other) {\n            data = std::move(other.data); history = std::move(other.history);\n            inner_snap = std::exchange(other.inner_snap, 0); components_ = std::exchange(other.components_, 0);\n            other.data.clear(); other.history.clear();\n        }\n        return *this;\n    }\n    int find(int i) const { check(i); return leader_unchecked(i); }\n    int root(int i) const { return find(i); }\n    int leader(int i) const { return find(i); }\n    bool unite(int x, int y) {\n        check(x); check(y); x = leader_unchecked(x); y = leader_unchecked(y);\n        if (history.size() == static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.push_back({x, y, data[x], data[y]});\n        if (x == y) return false;\n        if (data[x] > data[y]) std::swap(x, y);\n        data[x] += data[y]; data[y] = x; --components_; return true;\n    }\n    bool merge(int a, int b) { return unite(a, b); }\n    bool same(int a, int b) const { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n    bool issame(int a, int b) const { return same(a, b); }\n    int size(int i) const { return -data[find(i)]; }\n    int size() const noexcept { return static_cast<int>(data.size()); }\n    int component_count() const noexcept { return components_; }\n    void undo() {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (history.empty()) throw std::out_of_range(\"RollbackUnionFind: empty history\");\n#endif\n        const auto c = history.back(); history.pop_back();\n        if (c.x != c.y) {\n            data[c.x] = c.dx; data[c.y] = c.dy; ++components_;\n        }\n        if (inner_snap > get_state()) inner_snap = get_state();\n    }\n    void snapshot() noexcept { inner_snap = get_state(); }\n    int get_state() const noexcept { return static_cast<int>(history.size()); }\n    void rollback(int state = -1) {\n        if (state == -1) state = inner_snap;\n#ifndef SKIP_RUNTIME_CHECKS\n        if (state < 0 || state > get_state()) throw std::out_of_range(\"RollbackUnionFind: state\");\n#endif\n        std::size_t count = history.size();\n        const auto* changes = history.data();\n        while (count > static_cast<std::size_t>(state)) {\n            const auto c = changes[--count];\n            data[c.x] = c.dx; data[c.y] = c.dy; components_ += (c.x != c.y);\n        }\n        history.resize(count);\n        if (inner_snap > state) inner_snap = state;\n    }\n    void clear_history() noexcept { history.clear(); inner_snap = 0; }\n    void reserve_history(std::size_t count) {\n        if (count > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.reserve(count);\n    }\n    std::vector<std::vector<int>> groups() const {\n        std::vector<int> leaders(data.size()), counts(data.size(), 0), slot(data.size());\n        for (int i = 0; i < size(); ++i) ++counts[leaders[i] = leader_unchecked(i)];\n        std::vector<std::vector<int>> result; result.reserve(components_);\n        for (int i = 0; i < size(); ++i) if (counts[i]) {\n            slot[i] = static_cast<int>(result.size()); result.emplace_back(); result.back().reserve(counts[i]);\n        }\n        for (int i = 0; i < size(); ++i) result[slot[leaders[i]]].push_back(i);\n        return result;\n    }\n};\n#endif\n"
+      },
+      "prepare.py": {
+        "sha256": "ffe980b441826ad610a17c06aaabc62c05b24ece298ce2f378ff23867588f15b",
+        "text": "from pathlib import Path\nimport hashlib,subprocess,json,shutil\np=Path(__file__).parent\nbase=Path('/home/reinsirk/Atcoder_Env/DataStructure/rollback-union-find.cpp').read_text()\nvariants={'baseline':base,'control':base}\nold='''        history.push_back({x, y, data[x], data[y]});\n        if (x == y) return false;\n        if (data[x] > data[y]) std::swap(x, y);\n        data[x] += data[y]; data[y] = x; --components_; return true;'''\nnew='''        int dx = data[x], dy = data[y];\n        history.push_back({x, y, dx, dy});\n        if (x == y) return false;\n        if (dx > dy) { std::swap(x, y); std::swap(dx, dy); }\n        data[x] = dx + dy; data[y] = x; --components_; return true;'''\nassert old in base\nvariants['cached']=base.replace(old,new)\nold='''        while (get_state() > state) undo_last();'''\nnew='''        std::size_t count = history.size();\n        const auto* changes = history.data();\n        while (count > static_cast<std::size_t>(state)) {\n            const auto c = changes[--count];\n            data[c.x] = c.dx; data[c.y] = c.dy; components_ += (c.x != c.y);\n        }\n        history.resize(count);'''\nassert old in base\nvariants['bulk']=base.replace(old,new)\nroot=Path('/home/reinsirk/Atcoder_Env')\nmain=(root/'Verify/current/drivers/rollback_union_find_main.cpp').read_text().replace('#include \"Verify/current/common/fast_io.hpp\"',(root/'Verify/current/common/fast_io.hpp').read_text())\nshutil.copyfile('/tmp/sirkit_ruf_20261022/opt/api_v2.cpp',p/'api.cpp')\ncompilers={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']}\nbuilds=[]\nfor name,source in variants.items():\n (p/(name+'.hpp')).write_text(source)\n (p/(name+'.cpp')).write_text('#define SKIP_RUNTIME_CHECKS\\n'+source+main)\n for compiler,cc in compilers.items():\n  for typ in ['main','api']:\n   cmd=['taskset','-c','6',*cc,'-std=c++23','-O2','-Wall','-Wextra','-Werror']\n   if typ=='api':cmd+=['-DSKIP_RUNTIME_CHECKS','-DSOURCE=\"'+str(p/(name+'.hpp'))+'\"',str(p/'api.cpp')]\n   else:cmd+=[str(p/(name+'.cpp'))]\n   cmd+=['-o',str(p/(compiler+'_'+name+'_'+typ))]\n   a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0,a.stderr\n   builds.append({'compiler':compiler,'variant':name,'type':typ,'command':cmd,'source_sha256':hashlib.sha256(source.encode()).hexdigest()})\n(p/'builds.json').write_text(json.dumps(builds,indent=2))\nprint(json.dumps({n:hashlib.sha256(s.encode()).hexdigest() for n,s in variants.items()},indent=2))\n"
+      },
+      "measure.py": {
+        "sha256": "1d634bbd113a71b72fbf93ffb70c9d457704daf998715b977a283becac882783",
+        "text": "from pathlib import Path\nimport subprocess,json,hashlib,fcntl,statistics,time,sys\np=Path(__file__).parent;old=Path('/tmp/sirkit_ruf_20261022');variants=['baseline','control','cached','bulk'];compilers=['gcc','clang']\nkind=sys.argv[1]\nif kind=='main':\n cases=[old/'official'/c for c in ['random_00.in','max_random_00.in','max_random_01.in','conchon_filliatre_tle_00.in','conchon_filliatre_tle_01.in']]+[old/'custom'/c for c in ['branch_many.in','balanced.in','same_component.in','small_branch.in']]\n refs={c.name:(old/'reference_outputs'/(c.name+'.out')).read_bytes().split() for c in cases}\n raw={cc:{v:{c.name:[]for c in cases}for v in variants}for cc in compilers};outputs={};cache=set()\nelse:\n raw={};checksums={};loops={}\ndef run_api(cc,v,n,mode,count):\n a=subprocess.run(['taskset','-c','14',str(p/(cc+'_'+v+'_api')),str(n),str(mode),str(count)],capture_output=True,text=True,check=True);assert not a.stderr\n ns,check=map(int,a.stdout.split());return ns,check\nwith open('/tmp/sirkit_performance_cpu14.lock','a')as lock1,open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock2:\n print('waiting dual locks',flush=True);fcntl.flock(lock1,fcntl.LOCK_EX);fcntl.flock(lock2,fcntl.LOCK_EX)\n if kind=='main':\n  for rep in range(7):\n   for cc in compilers:\n    for c in cases:\n     for v in variants[rep%4:]+variants[:rep%4]:\n      start=time.perf_counter_ns()\n      with c.open('rb')as inp:out=subprocess.check_output(['taskset','-c','14',str(p/(cc+'_'+v+'_main'))],stdin=inp)\n      ms=(time.perf_counter_ns()-start)/1e6;digest=hashlib.sha256(out).hexdigest();key=(c.name,digest)\n      if key not in cache:assert out.split()==refs[c.name];cache.add(key)\n      raw[cc][v][c.name].append(ms);outputs.setdefault(cc,{}).setdefault(v,{})[c.name]=digest\n   print('round',rep,'done',flush=True)\n  med={cc:{v:{c:statistics.median(xs)for c,xs in cs.items()}for v,cs in vs.items()}for cc,vs in raw.items()}\n  ratios={cc:{v:{c:t/vs['baseline'][c]for c,t in cs.items()}for v,cs in vs.items()}for cc,vs in med.items()}\n  result=dict(raw_ms=raw,medians_ms=med,ratios=ratios,outputs=outputs,rounds=7)\n else:\n  for cc in compilers:\n   for n in [32,4096,131072]:\n    for mode in range(7):\n     key=f'{cc}_{n}_{mode}';pilot=max(1,20000//n);ns,_=run_api(cc,'baseline',n,mode,pilot);count=max(1,int(pilot*30e6/ns));loops[key]=count;raw[key]={v:[]for v in variants};checksums[key]={}\n     for rep in range(7):\n      for v in variants[rep%4:]+variants[:rep%4]:\n       ns,check=run_api(cc,v,n,mode,count);raw[key][v].append(ns/1e6);checksums[key][v]=check\n     assert len(set(checksums[key].values()))==1\n     print(key,flush=True)\n  med={k:{v:statistics.median(xs)for v,xs in vs.items()}for k,vs in raw.items()};ratios={k:{v:t/vs['baseline']for v,t in vs.items()}for k,vs in med.items()}\n  result=dict(raw_ms=raw,medians_ms=med,ratios=ratios,checksums=checksums,loop_counts=loops,rounds=7)\n(p/(kind+'_results.json')).write_text(json.dumps(result,indent=2))\nprint(json.dumps(ratios,indent=2))\n"
+      },
+      "api.cpp": {
+        "sha256": "7d836d21bd9bb5a411baf1c0e6fbb596566876e86d2a0062fc087ead018df9ae",
+        "text": "#include SOURCE\n#include <algorithm>\n#include <array>\n#include <chrono>\n#include <cstddef>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#include <random>\n#include <utility>\n#include <vector>\nint main(int argc,char**argv){\n if(argc!=4)return 1;\n const int n=std::atoi(argv[1]),mode=std::atoi(argv[2]),reps=std::atoi(argv[3]);\n std::mt19937 rng(61022);std::vector<std::pair<int,int>> edges;\n if(mode==0){for(int step=1;step<n;step*=2)for(int i=0;i<n;i+=2*step)edges.emplace_back(i,i+step);}\n if(mode==1){for(int i=1;i<n;++i)edges.emplace_back(0,i);}\n if(mode>=2&&mode<=3){for(int i=0;i<n;++i)edges.emplace_back(0,n-1);}\n if(mode==4){for(int i=0;i<n;++i)edges.emplace_back(int(rng()%n),int(rng()%n));}\n if(mode>=5){for(int i=0;i<n;++i){int a=int(rng()%n);edges.emplace_back(a,a);}}\n RollbackUnionFind uf(n);uf.reserve_history(static_cast<std::size_t>(n)*2);\n if(mode>=2&&mode<=3)for(int i=1;i<n;++i)uf.unite(0,i);\n if(mode>=5)for(int step=1;step<n;step*=2)for(int i=0;i<n;i+=2*step)uf.unite(i,i+step);\n const auto base=uf.get_state();std::uint64_t checksum=0;\n // 同じ操作列を一度流して容量・ページ確保を計時外へ出す。\n for(auto [a,b]:edges){if(mode==6)(void)uf.same(a,b);else{uf.unite(a,b);if(mode==3||mode==5)uf.undo();}}uf.rollback(base);\n const auto begin=std::chrono::steady_clock::now();\n for(int r=0;r<reps;++r){\n  for(auto [a,b]:edges){if(mode==6)checksum+=uf.same(a,b);else{checksum+=uf.unite(a,b);if(mode==3||mode==5)uf.undo();}}\n  if(mode==0){for(std::size_t i=0;i<edges.size();++i)uf.undo();}else uf.rollback(base);\n  checksum+=static_cast<unsigned>(uf.get_state())+static_cast<unsigned>(uf.component_count());\n }\n const auto end=std::chrono::steady_clock::now();\n const auto ns=std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();\n if(uf.get_state()!=base)return 2;\n std::printf(\"%jd %ju\\n\",static_cast<std::intmax_t>(ns),static_cast<std::uintmax_t>(checksum));\n}\n"
+      }
+    },
+    "history_relation": "Previous rejected families (8/12byte history compression, success-only history/counter, self-input shortcut, no-op restore branch, reserve changes) are not repeated. cached preserves16byte entry and all no-op logging/rollback loops. bulk preserves16byte entry and restores all same old values, only delays history size update until loop end.",
+    "production_status": "NO_PRODUCTION_EDITS: source baseline1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66 preserved. All builds/tests/timing processes completed; heavy work stopped. No new candidate family planned.",
+    "causality_note": "The ~2.1x random n4096 bulk regression is an observed timing result. Its cause is not established and is not attributed definitively to code layout, branching, or memory dependencies."
+  },
+  "correctness_scope": "両候補は静的レビュー済み。固定main9条件×両コンパイラ×7反復は独立参照の出力と一致。API42条件×7反復はchecksumと終了stateが一致。候補は性能選別で不採用のため、全境界・例外検証は追加実行しない。",
+  "prior_rejected_candidates": "履歴圧縮、成功結合のみのcounter、no-op短絡、初期reserve変更の既存不採用案は再試行していない。",
+  "measurement_limits": [
+    "固定main・共通fastIO・C++23-O2・SKIP_RUNTIME_CHECKSで比較。CPU14固定、2本の共有lock、同一baseline/controlの機械語一致を確認。",
+    "APIの準備・reserve・warmupは計時外。main測定は実行開始・入出力・終了を含む別条件。",
+    "有限入力と測定環境による結果であり、性能上限や改善不能を証明したものではない。",
+    "SIMD専用経路やCPU判定は追加していない。依存する親探索・同じ頂点を複数回復元し得る履歴を、独立な一括演算として扱わない。"
+  ]
+}

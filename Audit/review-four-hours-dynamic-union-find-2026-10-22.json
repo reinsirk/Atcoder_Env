@@ -1,0 +1,186 @@
+{
+  "reviewed_utc": "2026-10-22T16:24:48.296330+00:00",
+  "status": "PASS",
+  "scope": "groups()の全単独/全連結専用化の最小diffを読取確認。",
+  "canonical_source": "DataStructure/dynamic-union-find.cpp",
+  "source_sha256": "0472cd0f62b94f457ec355d5bc14f02b3e6aca0a4855987773b41c032482910b",
+  "baseline_sha256": "d2627ac9eefeb73e0a7eff02c339e950d6299038dbbcbbe67038305b2169251c",
+  "live_source_edited": false,
+  "blocking_findings": [],
+  "key_type_scope": "公開API/Node.key/内部HashMapキーはint。親からの当初int64指定は誤記と訂正済み。任意int64キー対応への拡張はせず、INT_MIN〜INT_MAX全域を対象とする。",
+  "argument": [
+    {
+      "point": "root非先頭",
+      "finding": "全連結かつN>1ではroot_index(0)で唯一の真の根の添字を取得する。キー値や先頭index0を根と仮定しない。root_indexは入力parentを辿るだけで根の負サイズを上書きしない。"
+    },
+    {
+      "point": "負サイズ/添字",
+      "finding": "forループでi!=rootの要素だけparent=rootへ直結する。i==rootの負サイズ-Nは維持される。N<=INT_MAXの登録上限からstatic_cast<int>(i)は範囲内。キーの負値と非負の親添字を混同しない。"
+    },
+    {
+      "point": "全単独/空/1点",
+      "finding": "components==nodes.sizeは全て単独を意味し、登録順に1要素vectorを作る。N0のClang経路もこの分岐で空を返してroot_indexへ入らない。GCCは従来の空早期return。N1は単独側へ入る。"
+    },
+    {
+      "point": "順序",
+      "finding": "単独群はnodes_の登録順、全連結群の内側もnodes_を0..N-1で走査した順。旧一般ルーチンも単独なら根index順、全連結ならgroup0へ同じ登録順でコピーするので、両専用分岐の具体的出力順も以前と一致する。一般成分間の順序が未規定という既存API説明は変えない。"
+    },
+    {
+      "point": "予約失敗と所有",
+      "finding": "全連結ではouter reserveと1本のinner reserveを終えてからroot_index/直結処理を始める。全単独ではinner確保が途中で失敗してもUF本体を触らず、ローカルresultのvector所有が途中までの結果を破棄する。intコピーの内側pushはN件の予約内で行う。予約失敗で登録/成分/parent内容を変えない。"
+    },
+    {
+      "point": "find/後続併合",
+      "finding": "直結は親を常に同じ成分の根の有効添字へ向けるだけ。findの経路半減とサイズ判定の不変条件を保つ。後から根がより大きい成分へ吸収されても、旧根は有効な中間頂点として残り、findはその先の新根まで辿れる。"
+    },
+    {
+      "point": "任意intキー",
+      "finding": "キーは比較・算術をせずコピーするだけで、0/負値/INT_MIN/MAXも同じ。rootの判定は添字で行うため、root keyがINT_MINや-1でも正しく区別する。data()の負のparent-keyと負サイズの区別を保証しない既存説明も維持する。"
+    },
+    {
+      "point": "一般ケース/guard",
+      "finding": "新helperと2条件dispatch以外の最小diffはない。一般成分groups、index hash/登録・容量ガード・copy/move・共有InternalHashMap定義は不変。補足probeは旧/新を同一TUに別名で入れ、同一hash helper guardを共有して比較した。"
+    }
+  ],
+  "parent_tests_read": "Verify/current/tests/dynamic_union_groups_test.cppを読取確認。root非先頭/各サイズ/確保全失敗点の広い試験は重複実行せず、以下は追加の旧新出力照合と後続root変更に集中。",
+  "supplemental_probe": {
+    "configurations": 5,
+    "checks_per_configuration": [
+      185,
+      185,
+      185,
+      185,
+      185
+    ],
+    "allocation_failure_points_per_configuration": 6,
+    "live_delta_per_configuration": 0,
+    "coverage": [
+      "登録順8キー、真の根index3/key INT_MIN、深さ3を含む初期木",
+      "旧baselineと全単独/全連結groupsのvector出力を厳密比較",
+      "allowance0/1/4/8/16で予約失敗を注入し、全data()の完全保持と登録/成分/所有数を確認",
+      "成功後にroot負サイズと非根parent-keyの直結、全キーfind/size",
+      "全連結後にadd→mixed→unite、copy独立、move元空/再利用、結果vectorの独立所有",
+      "全連結8成分を、新たな9頂点成分へ吸収させ、旧根経由のfind圧縮/size17/再groups登録順を確認"
+    ],
+    "records": [
+      {
+        "compiler": "gcc",
+        "configuration": "checked",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review/test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review/gcc_checked"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checks=185 allocation_failures=6 live_delta=0\n",
+        "stderr": ""
+      },
+      {
+        "compiler": "gcc",
+        "configuration": "skip",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review/test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review/gcc_skip"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checks=185 allocation_failures=6 live_delta=0\n",
+        "stderr": ""
+      },
+      {
+        "compiler": "clang",
+        "configuration": "checked",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-toolchain=/opt/atcoder/gcc",
+          "-std=c++23",
+          "-O2",
+          "/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review/test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review/clang_checked"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checks=185 allocation_failures=6 live_delta=0\n",
+        "stderr": ""
+      },
+      {
+        "compiler": "clang",
+        "configuration": "skip",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-toolchain=/opt/atcoder/gcc",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review/test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review/clang_skip"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checks=185 allocation_failures=6 live_delta=0\n",
+        "stderr": ""
+      },
+      {
+        "compiler": "clang",
+        "configuration": "san",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-toolchain=/opt/atcoder/gcc",
+          "-std=c++23",
+          "-O2",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review/test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review/clang_san"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checks=185 allocation_failures=6 live_delta=0\n",
+        "stderr": ""
+      }
+    ],
+    "limits": "GCCASan runtime不足によりClangASanUBSanのみ。LSanはptrace制限でdetect_leaks=0。実行速度は再測定せずgeometry担当の測定を根拠とする。"
+  },
+  "source_diff": "--- four-hour baseline\n+++ frozen final\n@@ -349,6 +349,22 @@\n         return {a, b};\n     }\n \n+    std::vector<std::vector<int>> trivial_groups() {\n+        std::vector<std::vector<int>> result;\n+        result.reserve(components_);\n+        if (components_ == nodes_.size()) {\n+            for (const auto& node : nodes_) result.emplace_back(std::size_t{1}, node.key);\n+        } else {\n+            result.emplace_back(); result.back().reserve(nodes_.size());\n+            const int root = root_index(0);\n+            for (std::size_t i = 0; i < nodes_.size(); ++i) {\n+                result[0].push_back(nodes_[i].key);\n+                if (static_cast<int>(i) != root) nodes_[i].parent = root;\n+            }\n+        }\n+        return result;\n+    }\n+\n public:\n     DynamicUnionFind() = default;\n     explicit DynamicUnionFind(std::size_t expected_nodes) { reserve(expected_nodes); }\n@@ -428,6 +444,7 @@\n #if defined(__GNUC__) && !defined(__clang__)\n         if (nodes_.empty()) return {};\n #endif\n+        if (components_ == nodes_.size() || components_ == 1) return trivial_groups();\n         std::vector<std::vector<int>> result;\n         result.reserve(components_);\n #if defined(__GNUC__) && !defined(__clang__)\n",
+  "reproduction": {
+    "directory": "/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review",
+    "files": {
+      "test.cpp": {
+        "sha256": "99eb11073aaea682bcd356081756a9eaca88bf9d1f418696666bccee45f5f14a",
+        "source": "#include <algorithm>\n#include <cstddef>\n#include <cstdint>\n#include <cstdlib>\n#include <iostream>\n#include <limits>\n#include <new>\n#include <utility>\n#include <vector>\n#define DynamicUnionFind BaselineDUF\n#include \"/tmp/sirkit_four_hours_20261022/baseline/DataStructure/dynamic-union-find.cpp\"\n#undef DynamicUnionFind\n#undef SIRKIT_DYNAMIC_UNION_FIND_DEFINED\n#define DynamicUnionFind CurrentDUF\n#include \"/home/reinsirk/Atcoder_Env/DataStructure/dynamic-union-find.cpp\"\n#undef DynamicUnionFind\nstatic int budget=-1;static std::size_t live=0,checks=0,failures=0;\n[[gnu::noinline]] void* operator new(std::size_t n){if(budget==0)throw std::bad_alloc();if(budget>0)--budget;if(auto p=std::malloc(n?n:1)){++live;return p;}throw std::bad_alloc();}\n[[gnu::noinline]] void* operator new[](std::size_t n){return ::operator new(n);}\n[[gnu::noinline]] void release(void*p)noexcept{if(p)--live;std::free(p);}\nvoid operator delete(void*p)noexcept{release(p);}void operator delete[](void*p)noexcept{release(p);}void operator delete(void*p,std::size_t)noexcept{release(p);}void operator delete[](void*p,std::size_t)noexcept{release(p);}\nvoid require(bool b){++checks;if(!b)std::abort();}\nconst std::vector<int> keys{17,-5,std::numeric_limits<int>::max(),std::numeric_limits<int>::min(),42,-1,0,-99};\ntemplate<class U>U prepare(bool joined){U u;for(int k:keys)u.add(k);if(joined){u.unite(keys[3],keys[2]);u.unite(keys[1],keys[0]);u.unite(keys[3],keys[1]);u.unite(keys[7],keys[6]);u.unite(keys[5],keys[4]);u.unite(keys[7],keys[5]);u.unite(keys[3],keys[7]);}return u;}\nvoid run(){\n for(bool joined:{false,true}){\n  auto old=prepare<BaselineDUF>(joined);auto initial=prepare<CurrentDUF>(joined);auto expected=old.groups();require(initial.groups()==expected);\n  for(int allowance:{0,1,4,8,16}){\n   auto u=prepare<CurrentDUF>(joined);std::vector<int> before;for(int k:keys)before.push_back(u.data(k));auto owned=live;bool caught=false;budget=allowance;\n   try{auto result=u.groups();require(result==expected);}catch(const std::bad_alloc&){caught=true;++failures;}budget=-1;\n   require(live==owned&&u.node_count()==8&&u.component_count()==(joined?1u:8u));\n   if(caught){for(std::size_t i=0;i<keys.size();++i)require(u.data(keys[i])==before[i]);}\n   else if(joined){for(std::size_t i=0;i<keys.size();++i)require(u.data(keys[i])==(i==3?-8:keys[3]));}\n   for(int k:keys)require(u.find(k)==(joined?keys[3]:k)&&u.size(k)==(joined?8:1));\n  }\n }\n auto u=prepare<CurrentDUF>(true);auto expected=std::vector<std::vector<int>>{keys};require(u.groups()==expected&&u.data(keys[3])==-8);\n auto copy=u;copy.add(123);require(!u.contains(123)&&copy.component_count()==2);copy.unite(keys[3],123);expected[0].push_back(123);require(copy.groups()==expected&&copy.data(keys[3])==-9&&u.data(keys[3])==-8);\n CurrentDUF moved(std::move(copy));require(copy.empty()&&copy.groups().empty()&&moved.groups()==expected);copy.add(-2);require(copy.groups()==std::vector<std::vector<int>>{{-2}}&&copy.data(-2)==-1);\n auto output=u.groups();output[0][0]=999;require(u.groups()==std::vector<std::vector<int>>{keys});\n auto future=prepare<CurrentDUF>(true);(void)future.groups();\n for(int i=0;i<9;++i)future.add(1000+i);for(int i=1;i<9;++i)future.unite(1000,1000+i);future.unite(1000,keys[3]);\n for(int key:keys)require(future.find(key)==1000&&future.size(key)==17);\n require(future.data(1000)==-17);auto order=keys;for(int i=0;i<9;++i)order.push_back(1000+i);require(future.groups()==std::vector<std::vector<int>>{order});\n\n}\nint main(){auto start=live;run();require(live==start);std::cout<<\"PASS checks=\"<<checks<<\" allocation_failures=\"<<failures<<\" live_delta=0\\n\";}\n"
+      },
+      "run.py": {
+        "sha256": "9efe48f360fa1c27af4723d4007851f1220ac26061702ed93e4db57707243628",
+        "source": "import pathlib,subprocess,json,os\np=pathlib.Path('/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review');rows=[]\nfor cc in ['gcc','clang']:\n for mode,flags in [('checked',[]),('skip',['-DSKIP_RUNTIME_CHECKS']),('san',['-O1','-g','-fsanitize=address,undefined','-fno-omit-frame-pointer'])]:\n  if cc=='gcc'and mode=='san':continue\n  cmd=['taskset','-c','8','g++'if cc=='gcc'else'clang++',*(['--gcc-toolchain=/opt/atcoder/gcc']if cc=='clang'else[]),'-std=c++23','-O2',*flags,str(p/'test.cpp'),'-o',str(p/(cc+'_'+mode))];c=subprocess.run(cmd,capture_output=True,text=True)\n  if c.returncode:raise RuntimeError(c.stderr)\n  r=subprocess.run(['taskset','-c','8',str(p/(cc+'_'+mode))],capture_output=True,text=True,env={**os.environ,'ASAN_OPTIONS':'detect_leaks=0'});row=dict(compiler=cc,configuration=mode,command=cmd,returncode=r.returncode,stdout=r.stdout,stderr=r.stderr);rows.append(row)\n  if r.returncode:raise RuntimeError(row)\n(p/'results.json').write_text(json.dumps(rows,indent=2)+'\\n');print([(x['compiler'],x['configuration'],x['stdout'].strip())for x in rows])\n"
+      },
+      "write_review.py": {
+        "sha256": "ff0ea03d3ea49c3376c0f844bb1f7c0ddfb403692e5f0137b731f0e5bac1339b",
+        "source": "import pathlib,json,hashlib,datetime,difflib,re\np=pathlib.Path('/tmp/sirkit_four_hours_20261022/graph/dynamic_union_review');root=pathlib.Path('/home/reinsirk/Atcoder_Env');sha=lambda b:hashlib.sha256(b).hexdigest();f=root/'DataStructure/dynamic-union-find.cpp';source=f.read_bytes();assert sha(source)=='0472cd0f62b94f457ec355d5bc14f02b3e6aca0a4855987773b41c032482910b';base=pathlib.Path('/tmp/sirkit_four_hours_20261022/baseline/DataStructure/dynamic-union-find.cpp').read_bytes();rows=json.load(open(p/'results.json'));counts=[int(re.search(r'checks=(\\d+)',x['stdout']).group(1))for x in rows]\na={'reviewed_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS','scope':'groups()の全単独/全連結専用化の最小diffを読取確認。','canonical_source':'DataStructure/dynamic-union-find.cpp','source_sha256':sha(source),'baseline_sha256':sha(base),'live_source_edited':False,'blocking_findings':[],\n'key_type_scope':'公開API/Node.key/内部HashMapキーはint。親からの当初int64指定は誤記と訂正済み。任意int64キー対応への拡張はせず、INT_MIN〜INT_MAX全域を対象とする。',\n'argument':[\n{'point':'root非先頭','finding':'全連結かつN>1ではroot_index(0)で唯一の真の根の添字を取得する。キー値や先頭index0を根と仮定しない。root_indexは入力parentを辿るだけで根の負サイズを上書きしない。'},\n{'point':'負サイズ/添字','finding':'forループでi!=rootの要素だけparent=rootへ直結する。i==rootの負サイズ-Nは維持される。N<=INT_MAXの登録上限からstatic_cast<int>(i)は範囲内。キーの負値と非負の親添字を混同しない。'},\n{'point':'全単独/空/1点','finding':'components==nodes.sizeは全て単独を意味し、登録順に1要素vectorを作る。N0のClang経路もこの分岐で空を返してroot_indexへ入らない。GCCは従来の空早期return。N1は単独側へ入る。'},\n{'point':'順序','finding':'単独群はnodes_の登録順、全連結群の内側もnodes_を0..N-1で走査した順。旧一般ルーチンも単独なら根index順、全連結ならgroup0へ同じ登録順でコピーするので、両専用分岐の具体的出力順も以前と一致する。一般成分間の順序が未規定という既存API説明は変えない。'},\n{'point':'予約失敗と所有','finding':'全連結ではouter reserveと1本のinner reserveを終えてからroot_index/直結処理を始める。全単独ではinner確保が途中で失敗してもUF本体を触らず、ローカルresultのvector所有が途中までの結果を破棄する。intコピーの内側pushはN件の予約内で行う。予約失敗で登録/成分/parent内容を変えない。'},\n{'point':'find/後続併合','finding':'直結は親を常に同じ成分の根の有効添字へ向けるだけ。findの経路半減とサイズ判定の不変条件を保つ。後から根がより大きい成分へ吸収されても、旧根は有効な中間頂点として残り、findはその先の新根まで辿れる。'},\n{'point':'任意intキー','finding':'キーは比較・算術をせずコピーするだけで、0/負値/INT_MIN/MAXも同じ。rootの判定は添字で行うため、root keyがINT_MINや-1でも正しく区別する。data()の負のparent-keyと負サイズの区別を保証しない既存説明も維持する。'},\n{'point':'一般ケース/guard','finding':'新helperと2条件dispatch以外の最小diffはない。一般成分groups、index hash/登録・容量ガード・copy/move・共有InternalHashMap定義は不変。補足probeは旧/新を同一TUに別名で入れ、同一hash helper guardを共有して比較した。'}],\n'parent_tests_read':'Verify/current/tests/dynamic_union_groups_test.cppを読取確認。root非先頭/各サイズ/確保全失敗点の広い試験は重複実行せず、以下は追加の旧新出力照合と後続root変更に集中。',\n'supplemental_probe':{'configurations':len(rows),'checks_per_configuration':counts,'allocation_failure_points_per_configuration':6,'live_delta_per_configuration':0,'coverage':['登録順8キー、真の根index3/key INT_MIN、深さ3を含む初期木','旧baselineと全単独/全連結groupsのvector出力を厳密比較','allowance0/1/4/8/16で予約失敗を注入し、全data()の完全保持と登録/成分/所有数を確認','成功後にroot負サイズと非根parent-keyの直結、全キーfind/size','全連結後にadd→mixed→unite、copy独立、move元空/再利用、結果vectorの独立所有','全連結8成分を、新たな9頂点成分へ吸収させ、旧根経由のfind圧縮/size17/再groups登録順を確認'],'records':rows,'limits':'GCCASan runtime不足によりClangASanUBSanのみ。LSanはptrace制限でdetect_leaks=0。実行速度は再測定せずgeometry担当の測定を根拠とする。'},\n'source_diff':''.join(difflib.unified_diff(base.decode().splitlines(True),source.decode().splitlines(True),fromfile='four-hour baseline',tofile='frozen final')),\n'reproduction':{'directory':str(p),'files':{name:{'sha256':sha((p/name).read_bytes()),'source':(p/name).read_text()}for name in ['test.cpp','run.py','write_review.py']}}}\nout=p/'independent_review.json';out.write_text(json.dumps(a,ensure_ascii=False,indent=2)+'\\n');print(out,sha(out.read_bytes()),'counts',counts)\n"
+      }
+    }
+  }
+}

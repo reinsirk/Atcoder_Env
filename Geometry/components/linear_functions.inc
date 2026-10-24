@@ -1,6 +1,8 @@
 #ifndef SIRKIT_GEO_LINEAR_DEFINED
 #define SIRKIT_GEO_LINEAR_DEFINED
 namespace geo {
+// SIRKIT_API_BEGIN
+// [geo::直線・線分の関数]
 // 点・直線・閉線分の関数。交点・射影・距離は long double で近似する。
 // projection(p,l): long double 変換後も非零長の直線 l 上への射影。O(1)。
 // reflection(p,l): 直線 l に関して対称な点。projection と同じ前提。O(1)。
@@ -10,6 +12,7 @@ namespace geo {
 // distance(s,t,eps): 閉線分間距離。intersects が真なら0。O(1)。
 // intersection(l,m,eps): 非零長直線の交差種別と近似交点。O(1)。
 // intersection(s,t,eps): 閉線分の交点、または元の座標で辞書順に選んだ重なりの両端点。O(1)。
+// SIRKIT_API_END
 
 template<class T, class C> RealPoint projection(const Point<T, C>& p, const Line<T, C>& l) {
     RealPoint a = to_real(l.a), b = to_real(l.b), q = to_real(p);
@@ -41,7 +44,19 @@ template<class T, class C> long double distance(const Point<T, C>& p, const Line
 }
 
 template<class T, class C> long double distance(const Point<T, C>& p, const Segment<T, C>& s) {
-    return to_real(p).dist(closest_point(p, s));
+    RealPoint a = to_real(s.a), b = to_real(s.b), q = to_real(p), d = b - a;
+    if (d.x == 0 && d.y == 0) return q.dist(a);
+    // 整数の差の二乗和が表せる場合は、方向長を直接計算する。
+    RealPoint u;
+    if constexpr (std::is_integral_v<T> && sizeof(T) <= 8 &&
+                  std::numeric_limits<long double>::max_exponent > 2 * (std::numeric_limits<T>::digits + 1) + 1) {
+        const long double length = std::sqrt(d.x * d.x + d.y * d.y);
+        u = {d.x / length, d.y / length};
+    } else u = d.normalized();
+    const RealPoint offset = q - a;
+    if (offset.dot(u) <= 0) return q.dist(a);
+    if ((q - b).dot(u) >= 0) return q.dist(b);
+    return std::abs(offset.cross(u));
 }
 
 template<class T, class C> long double distance(const Segment<T, C>& s, const Segment<T, C>& t, Epsilon eps = {}) {

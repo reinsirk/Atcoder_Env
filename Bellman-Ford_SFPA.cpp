@@ -1,5 +1,15 @@
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/bellman-ford
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/negative_shortest_paths.md
+//
+// API一覧
+// [共有型・定数]
+// Edge{to,w}: 行先int・重みint64_t。WGraph: 重み付き有向隣接リスト。INF: int64_t{1}<<60。
+// [SPFA]
+// SPFA(graph, distances, start_index): 始点からの最短距離をdistancesに格納し、到達可能な負閉路があればtrueを返す。
+// 更新された頂点だけをFIFOキューで処理するSPFA。標準C++23、重みは[-1e9, 1e9]。
+// 到達可能な負閉路があればtrue。距離は成功時に全上書きし、未到達はINF・負閉路の影響を受ける頂点は-INF。
+// 最悪O(VE+V+E)時間・O(V)追加領域。
 
 #include <array>
 #include <type_traits>
@@ -17,22 +27,15 @@ inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 
 #ifndef SIRKIT_GRAPH_TYPES_DEFINED
 #define SIRKIT_GRAPH_TYPES_DEFINED
-// 有向辺。出発点は隣接リストの添字。
 struct Edge
 {
-    // 行先
     int to;
-    // コスト
     std::int64_t w;
     Edge(int destination, std::int64_t weight) : to(destination), w(weight) {}
 };
 using WGraph = std::vector<std::vector<Edge>>;
 #endif
 
-// SPFA(graph, distances, start_index): 始点からの最短距離をdistancesに格納し、到達可能な負閉路があればtrueを返す。
-// 更新された頂点だけをFIFOキューで処理するSPFA。標準C++23、重みは[-1e9, 1e9]。
-// 到達可能な負閉路があればtrue。距離は成功時に全上書きし、未到達はINF・負閉路の影響を受ける頂点は-INF。
-// 最悪O(VE+V+E)時間・O(V)追加領域。
 #ifndef SIRKIT_SPFA_DEFINED
 #define SIRKIT_SPFA_DEFINED
 template <bool Small, bool Bounded>

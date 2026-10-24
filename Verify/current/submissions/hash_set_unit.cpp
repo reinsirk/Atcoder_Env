@@ -1,9 +1,47 @@
-#define SKIP_RUNTIME_CHECKS
-// Verify: https://judge.yosupo.jp/problem/aplusb
+// Verify: ローカル独立検査
 
 // Library: DataStructure/Hash_set.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://nyaannyaan.github.io/library/hashmap/hashset.hpp
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/hash_set.md
+//
+// API一覧
+// [HashSet<Key,Hasher,KeyEqual>]
+// Flat table。検索・追加・次iteratorを求めない削除は期待償却O(1)。列キーのハッシュ計算は列長に比例する。
+// 次iteratorへの移動は空き区間長に比例する。削除では自動縮小しないため、疎になればrehash(0)で縮小する。
+// 再配置・clear・swap・ムーブでiterator/参照は無効。eraseは対象だけを無効にする。
+// Keyはコピー可能、またはムーブ構築がnoexceptであること。
+// Hasher/KeyEqualは同値なキーに同じハッシュ値を返し、格納中に規則を変えないこと。
+// iterator/参照の無効化後の使用は禁止。検査でも全ての使い回しは検出しない。
+// HashSet()/HashSet(n, hash, equal): 空集合を作り、後者はn要素分を予約する。
+// HashSet({keys}, hash, equal)/HashSet(first,last,hash,equal): 指定したキー列から構築する。
+// insert(const Key&)/insert(Key&&): コピー/ムーブで追加しiteratorを返す。重複時は既存要素を返す。
+// insert_checked(const Key&)/insert_checked(Key&&): コピー/ムーブで追加し、{iterator, 追加の有無}を返す。
+// emplace(args...): Keyを構築して追加し、{iterator, 追加の有無}を返す。
+// insert_range(first,last): 入力iteratorの範囲を追加する。同じ表のiteratorは渡さないこと。
+// find(key): 対応するiteratorを返す。未登録はend()。キーの変更は禁止する。
+// contain(key)/contains(key)/count(key): 登録済みか、または登録数0/1を返す。
+// erase(it, next=true): 削除して次のiteratorを返す。falseならO(1)でend()。erase(end())もend()。
+// erase(key, next=true): キーを削除して次のiteratorを返す。falseなら期待O(1)でend()。未登録もend()。
+// erase_if(pred): pred(const Key&)がtrueの要素を削除し、削除数を返す。空ならO(1)、他はO(capacity())。predは表を変更しないこと。
+// begin()/end()/cbegin()/cend(): 順序不定で列挙する。逆向き移動もでき、キーはconst参照。
+// 空集合のbeginはO(1)、それ以外は先頭要素までのバケットを走査する。
+// size()/empty()/capacity()/load_factor(): 要素数・空か・バケット数・使用率をO(1)で返す。
+// clear(): O(capacity())で全要素を破棄し、確保済み容量を再利用する。
+// reserve(n): n要素分を予約する。縮小しない。再配置はO(旧容量+新容量)。
+// rehash(n): nバケット以上・現登録数に必要な容量へ再配置し、墓石を除く。
+// HashSet(other)/operator=(other): 独立したコピーを作る。コピーにはKeyのコピー構築が必要。
+// HashSet(move(other))/operator=(move(other)): 内容を移動し、移動元は空で再利用可能。
+// swap(other): 内容とハッシュ・同値判定を交換する。O(1)。
+// operator==(other)/!=: 要素数と両方向のcontainsで比較する。期待O(両表の容量)。
+// swapはHasher/KeyEqualのswapが例外を送出しないことを要求する。
+//
+// [GenericHash]
+// GenericHash(): 実行時に選んだ種で構築する。同じオブジェクトでは結果は一定。
+// GenericHash(seed): 指定した種で構築する。std::hash対応型の結果はその実装にも依存する。
+// operator()(x): 整数・列挙・浮動小数・tuple・range・std::hash対応型を再帰的にハッシュ化する。
+// unorderedコンテナの要素順は無視する。独自の同値関係には対応するHasherも用意する。
+
 #include <algorithm>
 #include <bit>
 #include <chrono>
@@ -21,14 +59,13 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
+#if !defined(SIRKIT_DISABLE_SIMD) && defined(__SSE2__) && (defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__)
+#include <emmintrin.h>
+#endif
 
 #ifndef SIRKIT_GENERIC_HASH_DEFINED
 #define SIRKIT_GENERIC_HASH_DEFINED
 struct GenericHash {
-    // GenericHash(): 実行時に選んだ種で構築する。同じオブジェクトでは結果は一定。
-    // GenericHash(seed): 指定した種で構築する。std::hash対応型の結果はその実装にも依存する。
-    // operator()(x): 整数・列挙・浮動小数・tuple・range・std::hash対応型を再帰的にハッシュ化する。
-    // unorderedコンテナの要素順は無視する。独自の同値関係には対応するHasherも用意する。
 private:
     std::uint64_t seed_;
     static constexpr std::uint64_t mix(std::uint64_t x) noexcept {
@@ -100,34 +137,8 @@ public:
 
 #ifndef SIRKIT_HASH_SET_DEFINED
 #define SIRKIT_HASH_SET_DEFINED
-// Flat table。検索・追加・次iteratorを求めない削除は期待償却O(1)。列キーのハッシュ計算は列長に比例する。
-// 次iteratorへの移動は空き区間長に比例する。削除では自動縮小しないため、疎になればrehash(0)で縮小する。
-// 再配置・clear・swap・ムーブでiterator/参照は無効。eraseは対象だけを無効にする。
-// Keyはコピー可能、またはムーブ構築がnoexceptであること。
-// Hasher/KeyEqualは同値なキーに同じハッシュ値を返し、格納中に規則を変えないこと。
-// iterator/参照の無効化後の使用は禁止。検査でも全ての使い回しは検出しない。
 template <class Key, class Hasher = GenericHash, class KeyEqual = std::equal_to<Key>>
 class HashSet {
-    // HashSet()/HashSet(n, hash, equal): 空集合を作り、後者はn要素分を予約する。
-    // HashSet({keys}, hash, equal)/HashSet(first,last,hash,equal): 指定したキー列から構築する。
-    // insert(const Key&)/insert(Key&&): コピー/ムーブで追加しiteratorを返す。重複時は既存要素を返す。
-    // insert_checked(const Key&)/insert_checked(Key&&): コピー/ムーブで追加し、{iterator, 追加の有無}を返す。
-    // emplace(args...): Keyを構築して追加し、{iterator, 追加の有無}を返す。
-    // insert_range(first,last): 入力iteratorの範囲を追加する。同じ表のiteratorは渡さないこと。
-    // find(key): 対応するiteratorを返す。未登録はend()。キーの変更は禁止する。
-    // contain(key)/contains(key)/count(key): 登録済みか、または登録数0/1を返す。
-    // erase(it, next=true): 削除して次のiteratorを返す。falseならO(1)でend()。erase(end())もend()。
-    // erase(key, next=true): キーを削除して次のiteratorを返す。falseなら期待O(1)でend()。未登録もend()。
-    // erase_if(pred): pred(const Key&)がtrueの要素を削除し、削除数を返す。O(capacity())。predは表を変更しないこと。
-    // begin()/end()/cbegin()/cend(): 順序不定で列挙する。逆向き移動もでき、キーはconst参照。
-    // size()/empty()/capacity()/load_factor(): 要素数・空か・バケット数・使用率をO(1)で返す。
-    // clear(): O(capacity())で全要素を破棄し、確保済み容量を再利用する。
-    // reserve(n): n要素分を予約する。縮小しない。再配置はO(旧容量+新容量)。
-    // rehash(n): nバケット以上・現登録数に必要な容量へ再配置し、墓石を除く。
-    // HashSet(other)/operator=(other): 独立したコピーを作る。コピーにはKeyのコピー構築が必要。
-    // HashSet(move(other))/operator=(move(other)): 内容を移動し、移動元は空で再利用可能。
-    // swap(other): 内容とハッシュ・同値判定を交換する。O(1)。
-    // operator==(other)/!=: 要素数と両方向のcontainsで比較する。期待O(両表の容量)。
 public:
     using key_type = Key;
     using value_type = Key;
@@ -186,7 +197,7 @@ private:
         else return static_cast<size_type>((h * UINT64_C(11995408973635179863)) >> shift);
     }
     size_type locate(const Key& key) const {
-        if (slots_.empty()) return 0;
+        if (size_ == 0) return slots_.size();
         size_type p = bucket(key, shift_);
         while (state_[p]) {
             if (state_[p] == 1 && equal_(*slots_[p], key)) return p;
@@ -194,9 +205,57 @@ private:
         }
         return slots_.size();
     }
+#if !defined(SIRKIT_DISABLE_SIMD) && defined(__SSE2__) && (defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__)
+    // 登録状態を16スロットずつ判定し、有効なキーだけを移す。
+    void rebuild_simd(size_type capacity) {
+        std::vector<Slot> next(capacity);
+#if defined(__GNUC__) && !defined(__clang__) && (defined(__x86_64__) || defined(__i386__))
+        // 値の構築前に領域を一定間隔で準備する。
+        if constexpr (std::is_same_v<Slot, CompactSlot>) {
+            if (capacity >= 256) {
+                constexpr size_type stride = std::max(size_type{1}, size_type{4096} / sizeof(Slot));
+                for (size_type i = 0; i < capacity; i += stride)
+                    *reinterpret_cast<volatile unsigned char*>(std::addressof(next[i])) = 0;
+            }
+        }
+#endif
+        std::vector<std::uint8_t> state(capacity, 0);
+        const auto shift = static_cast<unsigned>(64 - std::countr_zero(capacity));
+        const auto live = _mm_set1_epi8(1);
+        for (size_type base = 0; base < slots_.size(); base += 16) {
+            const auto states = _mm_loadu_si128(reinterpret_cast<const __m128i*>(state_.data() + base));
+            unsigned mask = static_cast<unsigned>(_mm_movemask_epi8(_mm_cmpeq_epi8(states, live)));
+            while (mask) {
+                const size_type i = base + std::countr_zero(mask);
+                size_type p = bucket(*slots_[i], shift);
+                while (state[p]) p = (p + 1) & (capacity - 1);
+                next[p].emplace(*slots_[i]);
+                state[p] = 1;
+                mask &= mask - 1;
+            }
+        }
+        slots_.swap(next); state_.swap(state);
+        occupied_ = size_; shift_ = shift; invalidate();
+    }
+#endif
     void rebuild(size_type capacity) {
         if (capacity > max_capacity()) throw std::length_error("HashSet: capacity overflow");
+#if !defined(SIRKIT_DISABLE_SIMD) && defined(__SSE2__) && (defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__)
+        if constexpr (std::is_same_v<Slot, CompactSlot>) {
+            if (slots_.size() >= 64) { rebuild_simd(capacity); return; }
+        }
+#endif
         std::vector<Slot> next(capacity);
+#if defined(__GNUC__) && !defined(__clang__) && (defined(__x86_64__) || defined(__i386__))
+        // 値の構築前に領域を一定間隔で準備する。
+        if constexpr (std::is_same_v<Slot, CompactSlot>) {
+            if (capacity >= 256) {
+                constexpr size_type stride = std::max(size_type{1}, size_type{4096} / sizeof(Slot));
+                for (size_type i = 0; i < capacity; i += stride)
+                    *reinterpret_cast<volatile unsigned char*>(std::addressof(next[i])) = 0;
+            }
+        }
+#endif
         std::vector<std::uint8_t> state(capacity, 0);
         const auto shift = static_cast<unsigned>(64 - std::countr_zero(capacity));
         if constexpr (std::is_nothrow_move_constructible_v<value_type> &&
@@ -340,7 +399,6 @@ public:
         : hash_(other.hash_), equal_(other.equal_) { swap(other); }
     HashSet& operator=(HashSet other) { swap(other); return *this; }
     void swap(HashSet& other) noexcept(std::is_nothrow_swappable_v<Hasher> && std::is_nothrow_swappable_v<KeyEqual>) {
-        // 関数オブジェクトのswapが例外を送出しないことを要求する。
         static_assert(std::is_nothrow_swappable_v<Hasher> && std::is_nothrow_swappable_v<KeyEqual>,
                       "HashSet: Hasher and KeyEqual must be nothrow swappable");
         using std::swap;
@@ -350,6 +408,7 @@ public:
         invalidate(); other.invalidate();
     }
     iterator begin() const noexcept {
+        if (size_ == 0) return end();
         size_type p = 0; while (p < slots_.size() && state_[p] != 1) ++p;
         return iterator(this, p);
     }
@@ -405,6 +464,7 @@ public:
     iterator erase(const Key& key, bool get_next = true) { return erase(find(key), get_next); }
     template <class Predicate>
     size_type erase_if(Predicate predicate) {
+        if (size_ == 0) return 0;
         size_type removed = 0;
         for (size_type i = 0; i < slots_.size(); ++i) {
             if (state_[i] == 1 && std::invoke(predicate, std::as_const(*slots_[i]))) {
@@ -416,11 +476,13 @@ public:
     friend void swap(HashSet& left, HashSet& right) noexcept { left.swap(right); }
     friend bool operator==(const HashSet& left, const HashSet& right) {
         if (left.size_ != right.size_) return false;
+        if (left.size_ == 0) return true;
         for (const auto& key : left) if (!right.contains(key)) return false;
         for (const auto& key : right) if (!left.contains(key)) return false;
         return true;
     }
     void clear() noexcept {
+        if (occupied_ == 0) { invalidate(); return; }
         for (size_type i = 0; i < slots_.size(); ++i) if (state_[i] == 1) slots_[i].reset();
         std::fill(state_.begin(), state_.end(), std::uint8_t{0});
         size_ = occupied_ = 0; invalidate();
@@ -446,263 +508,6 @@ public:
 
 
 // SPDX-License-Identifier: CC0-1.0
-// Verify I/O: Verify/current/common/fast_io.hpp
-// SPDX-License-Identifier: CC0-1.0
-#include <algorithm>
-#include <array>
-#include <charconv>
-#include <cstddef>
-#include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <limits>
-#include <stdexcept>
-#include <string>
-#include <string_view>
-#include <type_traits>
-#include <vector>
-
-#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED
-#define SIRKIT_VERIFY_FAST_IO_DEFINED
-
-// VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。
-// >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。
-// >> char/string: 空白を飛ばし、1文字／空白までの文字列を読む。
-// >> 浮動小数点: 十進文字列を変換する。通常のCロケールで使う。
-// bool / !: 直前までの読み取りが成功しているか／失敗したかを返す。
-class VerifyInput {
-    static constexpr std::size_t buffer_size = 1 << 17;
-    std::FILE* file_;
-    std::array<unsigned char, buffer_size> buffer_;
-    std::size_t position_ = 0, size_ = 0;
-    bool good_ = true;
-
-    int peek() {
-        if (position_ == size_) {
-            size_ = std::fread(buffer_.data(), 1, buffer_.size(), file_);
-            position_ = 0;
-            if (size_ == 0) return EOF;
-        }
-        return buffer_[position_];
-    }
-
-    int skip_space() {
-        int c;
-        while ((c = peek()) != EOF && c <= ' ') ++position_;
-        if (c == EOF) good_ = false;
-        return c;
-    }
-
-public:
-    explicit VerifyInput(std::FILE* file = stdin) : file_(file) {}
-    VerifyInput(const VerifyInput&) = delete;
-    VerifyInput& operator=(const VerifyInput&) = delete;
-
-    explicit operator bool() const noexcept { return good_; }
-    bool operator!() const noexcept { return !good_; }
-
-    template<class T>
-        requires (std::is_integral_v<T> && sizeof(T) <= sizeof(std::uint64_t)
-                  && !std::is_same_v<T, char>)
-    VerifyInput& operator>>(T& result) {
-        if (!good_) return *this;
-        int c = skip_space();
-        if (c == EOF) return *this;
-        bool negative = false;
-        if (c == '-' || c == '+') {
-            negative = c == '-';
-            ++position_;
-            c = peek();
-        }
-        if (c == EOF) {
-            good_ = false;
-            return *this;
-        }
-#ifndef SKIP_RUNTIME_CHECKS
-        if (c < '0' || c > '9') {
-            good_ = false;
-            return *this;
-        }
-        // 先頭の0を除けば、20桁以下の末尾直前の値はuint64_tに収まる。
-        while (c == '0') {
-            ++position_;
-            c = peek();
-        }
-        std::uint64_t previous = 0;
-        unsigned last_digit = 0;
-        std::size_t digits = 0;
-#endif
-        std::uint64_t value = 0;
-        while (c >= '0' && c <= '9') {
-#ifndef SKIP_RUNTIME_CHECKS
-            previous = value;
-            last_digit = static_cast<unsigned>(c - '0');
-            if (digits <= 20) ++digits;
-#endif
-            value = value * 10 + static_cast<unsigned>(c - '0');
-            ++position_;
-            c = peek();
-        }
-#ifndef SKIP_RUNTIME_CHECKS
-        constexpr auto maximum = std::numeric_limits<std::uint64_t>::max();
-        if ((c != EOF && c > ' ') || digits > 20
-            || (digits == 20 && (previous > maximum / 10
-                || (previous == maximum / 10 && last_digit > maximum % 10)))) {
-            good_ = false;
-            return *this;
-        }
-        std::uint64_t limit = static_cast<std::uint64_t>(std::numeric_limits<T>::max());
-        if constexpr (std::is_signed_v<T>) limit += negative;
-        else if (negative && value != 0) good_ = false;
-        if (value > limit) good_ = false;
-        if (!good_) return *this;
-#endif
-        if constexpr (std::is_signed_v<T>) {
-            constexpr std::uint64_t minimum_magnitude =
-                static_cast<std::uint64_t>(std::numeric_limits<T>::max()) + 1;
-            // -(最小値)は評価せず、絶対値が最大値+1のときだけ最小値を使う。
-            result = negative
-                ? (value == minimum_magnitude ? std::numeric_limits<T>::min()
-                                  : static_cast<T>(-static_cast<T>(value)))
-                : static_cast<T>(value);
-        } else result = static_cast<T>(value);
-        return *this;
-    }
-
-    VerifyInput& operator>>(char& result) {
-        if (!good_) return *this;
-        const int c = skip_space();
-        if (c != EOF) {
-            result = static_cast<char>(c);
-            ++position_;
-        }
-        return *this;
-    }
-
-    VerifyInput& operator>>(std::string& result) {
-        if (!good_) return *this;
-        int c = skip_space();
-        if (c == EOF) return *this;
-        result.clear();
-        do {
-            result.push_back(static_cast<char>(c));
-            ++position_;
-            c = peek();
-        } while (c != EOF && c > ' ');
-        return *this;
-    }
-
-    template<class T> requires std::is_floating_point_v<T>
-    VerifyInput& operator>>(T& result) {
-        std::string token;
-        *this >> token;
-        if (!good_) return *this;
-#ifndef SKIP_RUNTIME_CHECKS
-        char* end = nullptr;
-        const long double value = std::strtold(token.c_str(), &end);
-        if (end != token.c_str() + token.size()) good_ = false;
-        else result = static_cast<T>(value);
-#else
-        result = static_cast<T>(std::strtold(token.c_str(), nullptr));
-#endif
-        return *this;
-    }
-};
-
-// VerifyOutput(file=stdout): 非所有のFILEへ書く。破棄時にflushし、FILEは閉じない。
-// << 整数/char/文字列/浮動小数点: 値を出力する。整数は64bit以下に対応する。
-// fixed(digits): 浮動小数点を小数点以下digits桁で出力する（digits>=0）。
-// flush(): バッファの内容をFILEへ渡す。bool / !で書き込み失敗を確認できる。
-class VerifyOutput {
-    static constexpr std::size_t buffer_size = 1 << 17;
-    std::FILE* file_;
-    std::array<char, buffer_size> buffer_;
-    std::size_t size_ = 0;
-    int precision_ = 6;
-    bool fixed_ = false, good_ = true;
-
-    void write(std::string_view text) {
-        while (!text.empty() && good_) {
-            if (size_ == buffer_.size()) flush();
-            const auto count = std::min(text.size(), buffer_.size() - size_);
-            std::memcpy(buffer_.data() + size_, text.data(), count);
-            size_ += count;
-            text.remove_prefix(count);
-        }
-    }
-
-public:
-    explicit VerifyOutput(std::FILE* file = stdout) : file_(file) {}
-    VerifyOutput(const VerifyOutput&) = delete;
-    VerifyOutput& operator=(const VerifyOutput&) = delete;
-    ~VerifyOutput() { flush(); }
-
-    explicit operator bool() const noexcept { return good_; }
-    bool operator!() const noexcept { return !good_; }
-
-    VerifyOutput& fixed(int digits) {
-        if (digits < 0) throw std::invalid_argument("negative output precision");
-        fixed_ = true;
-        precision_ = digits;
-        return *this;
-    }
-
-    void flush() noexcept {
-        std::size_t written = 0;
-        while (written < size_ && good_) {
-            const auto count = std::fwrite(buffer_.data() + written, 1, size_ - written, file_);
-            if (count == 0) good_ = false;
-            written += count;
-        }
-        size_ = 0;
-    }
-
-    template<class T>
-        requires (std::is_integral_v<T> && sizeof(T) <= sizeof(std::uint64_t)
-                  && !std::is_same_v<T, char>)
-    VerifyOutput& operator<<(T value) {
-        if constexpr (std::is_same_v<T, bool>) return *this << static_cast<char>('0' + value);
-        else {
-            char digits[std::numeric_limits<std::uint64_t>::digits10 + 3];
-            const auto end = std::to_chars(digits, digits + sizeof(digits), value).ptr;
-            write(std::string_view(digits, static_cast<std::size_t>(end - digits)));
-            return *this;
-        }
-    }
-
-    VerifyOutput& operator<<(char value) {
-        if (size_ == buffer_.size()) flush();
-        if (good_) buffer_[size_++] = value;
-        return *this;
-    }
-
-    VerifyOutput& operator<<(std::string_view value) { write(value); return *this; }
-    VerifyOutput& operator<<(const std::string& value) { write(value); return *this; }
-    VerifyOutput& operator<<(const char* value) { write(value); return *this; }
-
-    template<class T> requires std::is_floating_point_v<T>
-    VerifyOutput& operator<<(T value) {
-        char local[128];
-        const char* format = fixed_ ? "%.*Lf" : "%.*Lg";
-        const int count = std::snprintf(local, sizeof(local), format, precision_,
-                                        static_cast<long double>(value));
-        if (count < 0) good_ = false;
-        else if (static_cast<std::size_t>(count) < sizeof(local))
-            write(std::string_view(local, static_cast<std::size_t>(count)));
-        else {
-            std::vector<char> text(static_cast<std::size_t>(count) + 1);
-            std::snprintf(text.data(), text.size(), format, precision_, static_cast<long double>(value));
-            write(std::string_view(text.data(), static_cast<std::size_t>(count)));
-        }
-        return *this;
-    }
-};
-
-inline VerifyInput verify_in;
-inline VerifyOutput verify_out;
-#endif
-
 #include <algorithm>
 #include <cstdint>
 #include <random>
@@ -751,5 +556,4 @@ int main() {
     HashSet<std::vector<int>> vectors;
     vectors.insert({1, 2}); vectors.insert({2, 1}); vectors.insert({});
     require(vectors.size() == 3 && vectors.contains({1, 2}) && vectors.contains({}));
-    std::int64_t a, b; if (verify_in >> a >> b) verify_out << a + b << '\n';
 }

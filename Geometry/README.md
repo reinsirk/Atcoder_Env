@@ -8,7 +8,7 @@
 | --- | --- |
 | `Point.cpp` | `Point`、内積・外積・距離・回転・偏角順、`orientation`、`to_real` |
 | `Line_Segment.cpp` | `Line/Segment`、`on_segment/intersects`、射影・反射・最近点、距離、交点 |
-| `Polygon.cpp` | 面積・周長・内外判定・凸包・重心、`convex_cut` |
+| `Polygon.cpp` | 面積・周長・内外判定・凸包・重心、`convex_cut`、整列済み点列用の`::convex_hull_sorted` |
 | `Circle.cpp` | `Circle`、`circumcircle`、円盤の内外判定、円と直線・線分・円の交点 |
 
 Pointは全ファイルに含まれます。Polygonは必要な線分判定とLine型、Circleは必要な線分判定を含みます。
@@ -63,4 +63,10 @@ python3 Scripts/generate_geometry.py --check
 
 現在版の提出コード・検査一覧は[Verify](../Verify/current/README.md)を参照してください。
 
+凸包の方式・整数演算・整列済み入力の扱いは[凸包の説明](../Document/convex_hull.md)を参照してください。
+
 偏角ソートの提出コードは[angle_sort版](../Verify/current/submissions/angle_sort.cpp)と[比較関数を直接渡すstd::sort版](../Verify/current/submissions/angle_sort_std.cpp)があります。両方とも同じ入出力で比較できます。
+
+整数の最近点対と整列済み入力の扱いは[説明](../Document/nearest_two_points.md)と[使用例](../Examples/nearest_two_points_example.cpp)を参照してください。
+
+[円の交差](../Document/geometry_circle_intersection.md)・[内外判定](../Document/geometry_point_location.md)・[方向判定](../Document/geometry_orientation.md)・[点線分距離](../Document/geometry_point_segment_distance.md)・[線分交差](../Document/geometry_segment_intersection.md)・[面積](../Document/geometry_area.md)の前提と使用例は各説明を参照してください。

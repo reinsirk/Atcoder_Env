@@ -3,6 +3,20 @@
 // Library: Graph/Bellman-Ford.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/bellman-ford
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/negative_shortest_paths.md
+//
+// API一覧
+// [共通型・定数]
+// Edge(to,w): 行先toとint64_tの重みwを持つ有向辺。
+// WGraph: 出発点を隣接リストの添字とする辺列。INF=std::int64_t{1}<<60。
+//
+// [Bellman-Ford]
+// BellmanFord(graph, distances, start_index): 始点からの最短距離をdistancesに格納し、到達可能な負閉路があればtrueを返す。
+// SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
+// 検査は始点と処理中に参照する辺のみ。未到達頂点の出辺は走査しない。
+// 始点から到達できる負閉路があればtrue。未到達はINF、負閉路の影響下は-INF。
+// distancesは成功時に全上書き。有限距離が(-INF, INF)の範囲外ならoverflow_error。
+// 重みは[-1e9, 1e9]。O(VE+V+E)時間・O(V)追加領域。
 
 #include <algorithm>
 #include <array>
@@ -22,24 +36,15 @@ inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 
 #ifndef SIRKIT_GRAPH_TYPES_DEFINED
 #define SIRKIT_GRAPH_TYPES_DEFINED
-// 有向辺。出発点は隣接リストの添字。
 struct Edge
 {
-    // 行先
     int to;
-    // コスト
     std::int64_t w;
     Edge(int destination, std::int64_t weight) : to(destination), w(weight) {}
 };
 using WGraph = std::vector<std::vector<Edge>>;
 #endif
 
-// BellmanFord(graph, distances, start_index): 始点からの最短距離をdistancesに格納し、到達可能な負閉路があればtrueを返す。
-// SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
-// 検査は始点と処理中に参照する辺のみ。未到達頂点の出辺は走査しない。
-// 始点から到達できる負閉路があればtrue。未到達はINF、負閉路の影響下は-INF。
-// distancesは成功時に全上書き。有限距離が(-INF, INF)の範囲外ならoverflow_error。
-// 重みは[-1e9, 1e9]。O(VE+V+E)時間・O(V)追加領域。
 // 小規模・少数始点は隣接リストを走査し、多数パスでは更新頂点に処理を絞る。
 #ifndef SIRKIT_BELLMAN_FORD_DEFINED
 #define SIRKIT_BELLMAN_FORD_DEFINED
@@ -485,26 +490,29 @@ inline bool BellmanFord(const WGraph& graph, std::vector<std::int64_t>& distance
 #endif
         const int sparse = reinsirk::detail::BellmanFordSparse(graph, distances, start_index);
         if (sparse != 0) return sparse == 2;
-        if (graph.size() <= static_cast<std::size_t>((INF - 1) / 1'000'000'000) &&
-            graph[start_index].size() == 1 && graph[start_index].front().to > start_index) {
+    }
+    if (graph.size() <= static_cast<std::size_t>((INF - 1) / 1'000'000'000)
 #ifndef SKIP_RUNTIME_CHECKS
-            std::vector<std::int64_t> initial;
+        && start_index >= 0 && static_cast<std::size_t>(start_index) < graph.size()
+#endif
+        && graph[start_index].size() == 1 && graph[start_index].front().to > start_index) {
+#ifndef SKIP_RUNTIME_CHECKS
+        std::vector<std::int64_t> initial;
 #else
-            auto& initial = distances;
+        auto& initial = distances;
 #endif
-            const int stopped = reinsirk::detail::BellmanFordForward(graph, initial, start_index);
-            if (stopped < 0) {
+        const int stopped = reinsirk::detail::BellmanFordForward(graph, initial, start_index);
+        if (stopped < 0) {
 #ifndef SKIP_RUNTIME_CHECKS
-                distances.swap(initial);
+            distances.swap(initial);
 #endif
-                return stopped == -2;
-            }
-            return reinsirk::detail::BellmanFordImpl<true, true, true>(graph, distances, start_index, &initial
-#ifndef SKIP_RUNTIME_CHECKS
-                , stopped
-#endif
-            );
+            return stopped == -2;
         }
+        return reinsirk::detail::BellmanFordImpl<true, true, true>(graph, distances, start_index, &initial
+#ifndef SKIP_RUNTIME_CHECKS
+            , stopped
+#endif
+        );
     }
     if (graph.size() <= static_cast<std::size_t>((INF - 1) / 1'000'000'000))
         return reinsirk::detail::BellmanFordImpl<true, true>(graph, distances, start_index);
@@ -517,6 +525,20 @@ inline bool BellmanFord(const WGraph& graph, std::vector<std::int64_t>& distance
 // Library: Graph/Bellman-Ford_SFPA.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/bellman-ford
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/negative_shortest_paths.md
+//
+// API一覧
+// [共通型・定数]
+// Edge(to,w): 行先toとint64_tの重みwを持つ有向辺。
+// WGraph: 出発点を隣接リストの添字とする辺列。INF=std::int64_t{1}<<60。
+//
+// [SPFA]
+// SPFA(graph, distances, start_index): 始点からの最短距離をdistancesに格納し、到達可能な負閉路があればtrueを返す。
+// SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
+// 検査は始点と処理中に参照する辺のみ。未到達成分は走査しない。
+// 更新された頂点だけをFIFOキューで処理するSPFA。標準C++23、重みは[-1e9, 1e9]。
+// 到達可能な負閉路があればtrue。距離は成功時に全上書きし、未到達INF・負影響-INF。
+// 最悪O(VE+V+E)時間・O(V)追加領域。有限距離のINF/-INF衝突はoverflow_error。
 
 #include <array>
 #include <type_traits>
@@ -534,25 +556,16 @@ inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 
 #ifndef SIRKIT_GRAPH_TYPES_DEFINED
 #define SIRKIT_GRAPH_TYPES_DEFINED
-// 有向辺。出発点は隣接リストの添字。
 struct Edge
 {
-    // 行先
     int to;
-    // コスト
     std::int64_t w;
     Edge(int destination, std::int64_t weight) : to(destination), w(weight) {}
 };
 using WGraph = std::vector<std::vector<Edge>>;
 #endif
 
-// SPFA(graph, distances, start_index): 始点からの最短距離をdistancesに格納し、到達可能な負閉路があればtrueを返す。
-// SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
-// 検査は始点と処理中に参照する辺のみ。未到達成分は走査しない。
 // 64頂点以下はキュー・補助状態をスタックに置く。
-// 更新された頂点だけをFIFOキューで処理するSPFA。標準C++23、重みは[-1e9, 1e9]。
-// 到達可能な負閉路があればtrue。距離は成功時に全上書きし、未到達INF・負影響-INF。
-// 最悪O(VE+V+E)時間・O(V)追加領域。有限距離のINF/-INF衝突はoverflow_error。
 #ifndef SIRKIT_SPFA_DEFINED
 #define SIRKIT_SPFA_DEFINED
 namespace reinsirk::detail {
@@ -568,6 +581,18 @@ inline bool SPFARun(const WGraph &graph, std::vector<std::int64_t> &distances,
     if (start_index < 0 || start_index >= n)
         throw std::out_of_range("SPFA: invalid start vertex");
 #endif
+
+    if (graph[start_index].empty()) {
+#ifndef SKIP_RUNTIME_CHECKS
+        std::vector<std::int64_t> result(graph.size(), INF);
+        result[start_index] = 0;
+        distances.swap(result);
+#else
+        distances.assign(graph.size(), INF);
+        distances[start_index] = 0;
+#endif
+        return false;
+    }
 
     // n*最大辺重み<INFなら、内部値と出力値の変換が要らない。
     const std::int64_t unreachable = Bounded ? INF : (static_cast<std::int64_t>(n) + 1) * max_cost;
@@ -801,6 +826,20 @@ inline bool SPFA(const WGraph& graph, std::vector<std::int64_t>& distances, int 
 // Library: Graph/Dijkstra.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/dijkstra
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/dijkstra.md
+//
+// API一覧
+// [共通型・定数]
+// Edge(to,w): 行先toとint64_tの重みwを持つ有向辺。
+// WGraph: 出発点を隣接リストの添字とする辺列。INF=std::int64_t{1}<<60。
+//
+// [Dijkstra]
+// Dijkstra(graph, distances, start_index): 始点から全頂点への最短距離をdistancesへ上書きする。
+// Dijkstra(graph, distances, start_index, target_index, path): 全頂点の距離と始点から終点への頂点列を上書き。到達不能ならpathは空。
+// 重みは[0, 1e9]、未到達はINF。有限距離がINF以上ならoverflow_error。
+// 両版ともO(V+E log(E+1))時間・O(V+E)追加領域。
+// SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
+// 検査は始点・終点と処理中に参照する辺のみ。未到達成分は走査しない。
 
 #include <algorithm>
 #include <array>
@@ -823,7 +862,6 @@ inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 
 #ifndef SIRKIT_GRAPH_TYPES_DEFINED
 #define SIRKIT_GRAPH_TYPES_DEFINED
-// 有向辺。出発点は隣接リストの添字。
 struct Edge
 {
     int to;
@@ -833,11 +871,7 @@ struct Edge
 using WGraph = std::vector<std::vector<Edge>>;
 #endif
 
-// Dijkstra(graph, distances, start_index): 始点から全頂点への最短距離をdistancesに格納する。未到達はINF。
-// Dijkstra(graph, distances, start_index, target_index, path): 全頂点の距離に加え、始点から終点への頂点列をpathに格納する。到達不能なら空。
 // 小規模は二分ヒープ、大規模はキューが64件を超えたらradix heapへ切り替える。
-// SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
-// 検査は始点・終点と処理中に参照する辺のみ。未到達成分は走査しない。
 #ifndef SIRKIT_DIJKSTRA_DEFINED
 #define SIRKIT_DIJKSTRA_DEFINED
 namespace reinsirk::detail {
@@ -1640,8 +1674,6 @@ inline void DijkstraImpl(const WGraph &graph, std::vector<std::int64_t> &distanc
 
 } // namespace reinsirk::detail
 
-// 全頂点の最短距離を上書きする。重みは[0, 1e9]、未到達はINF。
-// O(V+E log(E+1))時間・O(V+E)追加領域。有限距離がINF以上ならoverflow_error。
 inline void Dijkstra(const WGraph &graph, std::vector<std::int64_t> &distances,
                      int start_index)
 {
@@ -1659,8 +1691,6 @@ inline void Dijkstra(const WGraph &graph, std::vector<std::int64_t> &distances,
     else reinsirk::detail::DijkstraLarge<false, true, prune_terminal>(graph, distances, start_index, -1, nullptr);
 }
 
-// 全頂点の距離とstart_indexからtarget_indexへの頂点列を上書きする。
-// 到達不能ならpathは空。距離の仕様と計算量は3引数版と同じ。
 inline void Dijkstra(const WGraph &graph, std::vector<std::int64_t> &distances,
                      int start_index, int target_index, std::vector<int> &path)
 {
@@ -1678,6 +1708,18 @@ inline void Dijkstra(const WGraph &graph, std::vector<std::int64_t> &distances,
 // Library: Graph/Floyd-Warshall.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/floyd-warshall
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/floyd_warshall.md
+//
+// API一覧
+// INF=std::int64_t{1}<<60。
+// [Floyd-Warshall]
+// FloydWarshall(distances): 正方行列を全点対最短距離で上書きし、グラフ内に負閉路があればtrue。O(V^3)時間。
+// FloydWarshall(distances, next): 距離に加え、経路の次頂点表nextを作る。経路更新・O(V^2)追加領域はこの版のみ。
+// FloydWarshallPath(next, from, to): 次頂点表から頂点列をO(経路長)で復元。未到達・負閉路の影響下なら空。
+// 入力はINFが未接続、有限重みは(-INF, INF)。対角はmin(入力, 0)とする。
+// 出力は未到達INF、負閉路を経由できる組だけ-INF。有限距離が(-INF, INF)外ならoverflow_error。
+// 算術範囲の算出を兼ねて初期行列を走査する。SKIP_RUNTIME_CHECKSで形状・入力値・頂点の検査を除く。
+// 通常版の追加領域はO(V)。大きな重みで広幅演算が必要な場合はO(V^2)。例外時の行列の内容は未規定。
 
 #include <algorithm>
 #include <bit>
@@ -1696,16 +1738,12 @@ inline void Dijkstra(const WGraph &graph, std::vector<std::int64_t> &distances,
 inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 #endif
 
-// FloydWarshall(distances): 正方行列を全点対最短距離で上書きし、グラフ内に負閉路があればtrue。O(V^3)時間。
-// FloydWarshall(distances, next): 距離に加え、経路の次頂点表nextを作る。経路更新・O(V^2)追加領域はこの版のみ。
-// FloydWarshallPath(next, from, to): 次頂点表から頂点列をO(経路長)で復元。未到達・負閉路の影響下なら空。
-// 入力はINFが未接続、有限重みは(-INF, INF)。対角はmin(入力, 0)とする。
-// 出力は未到達INF、負閉路を経由できる組だけ-INF。有限距離が(-INF, INF)外ならoverflow_error。
-// 算術範囲の算出を兼ねて初期行列を走査する。SKIP_RUNTIME_CHECKSで形状・入力値・頂点の検査を除く。
-// 通常版の追加領域はO(V)。大きな重みで広幅演算が必要な場合はO(V^2)。例外時の行列の内容は未規定。
 #ifndef SIRKIT_FLOYD_WARSHALL_DEFINED
 #define SIRKIT_FLOYD_WARSHALL_DEFINED
 namespace reinsirk::detail {
+
+// boolは既存の実行経路、専用の列挙型は有限範囲のSIMD最適化を選ぶ。
+enum class FloydWarshallSimdMode { Finite = 1 };
 
 #if defined(__SIZEOF_INT128__) && (defined(__GNUC__) || defined(__clang__))
 using FloydWarshallWide = __int128_t;
@@ -1819,15 +1857,15 @@ inline void FloydWarshallRelaxAvx2(std::vector<std::vector<std::int64_t>> &dista
     }
 }
 #endif
-template <bool RestorePath, bool HasNegative, bool FiniteRange = false, bool Dense = false, class Distance, bool UseSimd = false>
+template <bool RestorePath, bool HasNegative, bool FiniteRange = false, bool Dense = false, class Distance, auto UseSimd = false>
 inline bool FloydWarshallRun(std::vector<std::vector<Distance>> &distance,
                                     Distance unreachable, Distance lower,
                                     std::vector<std::vector<int>> *next)
 {
     const std::size_t n = distance.size();
 #if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
-    if constexpr (UseSimd && std::is_same_v<Distance, std::int64_t>)
-        FloydWarshallRelaxAvx2<RestorePath, HasNegative, Dense>(distance, unreachable, lower, next);
+    if constexpr (static_cast<bool>(UseSimd) && std::is_same_v<Distance, std::int64_t>)
+        FloydWarshallRelaxAvx2<RestorePath, HasNegative, Dense || (FiniteRange && std::is_same_v<decltype(UseSimd), FloydWarshallSimdMode>)>(distance, unreachable, lower, next);
     else
 #endif
     {
@@ -1898,7 +1936,7 @@ inline bool FloydWarshallRun(std::vector<std::vector<Distance>> &distance,
     return !negative.empty();
 }
 
-template <bool RestorePath, bool UseSimd = false>
+template <bool RestorePath, auto UseSimd = false>
 inline bool FloydWarshallImpl(std::vector<std::vector<std::int64_t>> &distance,
                                      std::vector<std::vector<int>> *next)
 {
@@ -1986,10 +2024,22 @@ inline bool FloydWarshallImpl(std::vector<std::vector<std::int64_t>> &distance,
 }
 
 #if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+#if !defined(__clang__)
+template <bool RestorePath>
+[[gnu::noinline]] inline bool FloydWarshallFiniteVectorized(
+    std::vector<std::vector<std::int64_t>> &distance, std::vector<std::vector<int>> *next)
+{
+    return FloydWarshallImpl<RestorePath, FloydWarshallSimdMode::Finite>(distance, next);
+}
+#endif
 template <bool RestorePath>
 [[gnu::noinline]] inline bool FloydWarshallVectorized(
     std::vector<std::vector<std::int64_t>> &distance, std::vector<std::vector<int>> *next)
 {
+#if !defined(__clang__) && !defined(__AVX2__)
+    if (distance.size() >= 64)
+        return FloydWarshallFiniteVectorized<RestorePath>(distance, next);
+#endif
     return FloydWarshallImpl<RestorePath, true>(distance, next);
 }
 #endif
@@ -2004,8 +2054,13 @@ inline bool FloydWarshall(std::vector<std::vector<std::int64_t>> &distances)
 #else
     constexpr std::size_t threshold = 8;
 #endif
-    if (distances.size() >= threshold && __builtin_cpu_supports("avx2"))
+    if (distances.size() >= threshold && __builtin_cpu_supports("avx2")) {
+#if !defined(__clang__) && defined(__AVX2__)
+        if (distances.size() >= 64)
+            return reinsirk::detail::FloydWarshallFiniteVectorized<false>(distances, nullptr);
+#endif
         return reinsirk::detail::FloydWarshallVectorized<false>(distances, nullptr);
+    }
 #endif
     return reinsirk::detail::FloydWarshallImpl<false>(distances, nullptr);
 }
@@ -2019,8 +2074,13 @@ inline bool FloydWarshall(std::vector<std::vector<std::int64_t>> &distances,
 #else
     constexpr std::size_t threshold = 8;
 #endif
-    if (distances.size() >= threshold && __builtin_cpu_supports("avx2"))
+    if (distances.size() >= threshold && __builtin_cpu_supports("avx2")) {
+#if !defined(__clang__) && defined(__AVX2__)
+        if (distances.size() >= 64)
+            return reinsirk::detail::FloydWarshallFiniteVectorized<true>(distances, &next);
+#endif
         return reinsirk::detail::FloydWarshallVectorized<true>(distances, &next);
+    }
 #endif
     return reinsirk::detail::FloydWarshallImpl<true>(distances, &next);
 }

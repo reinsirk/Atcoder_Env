@@ -1,0 +1,218 @@
+{
+  "date": "2026-10-22",
+  "round": 2,
+  "scope": "行列の転置と90度回転。32bit要素のAVX2処理を条件付きで追加。",
+  "baseline_source_sha256": "4fb7cee4b60f1c38a3ad55fc44b751b6f3864f1c36c5bad99e48256113be84b9",
+  "final_source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+  "final_files_sha256": {
+    "Algorithm/rotate.cpp": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+    "Document/matrix_transform.md": "eb3f4d2e6e44fab52e611a5cdc8ef2119052914fcafb94945ee73d44d758bd82",
+    "Examples/matrix_transform_example.cpp": "c882cc0322de0393911d11d8ed84a738b0c22d6bade5b8d16a1254ae8641742a",
+    "Verify/current/tests/matrix_simd_reference_test.cpp": "5a32ceb5051a67fd4e16f1952916dc19034a00f0000764354098c9817dbdf9aa",
+    "Verify/current/tests/matrix_simd_allocation_test.cpp": "63f183402c45ad40ea69334eafcf71a68cf81871edf76e15ced1a2cb47db06bc"
+  },
+  "license": "CC0-1.0",
+  "initial_source": "既存の行列変換と来歴はAudit/performance-matrix-rotate-four-hours-2026-10-22.jsonを引き継ぐ。",
+  "new_implementation": "今回追加の8×8転置は、32/64bit laneのunpackと128bit laneの結合を組み合わせた。新たな外部実装の取り込みはない。シフト/積の数学処理をせず、入力の32bit表現を位置だけ変えてコピーする。",
+  "reference": "SIMD命令はコンパイラ付属immintrin.hのAPIを使用。拡張は標準C++とは説明せず、標準の既存経路を維持。",
+  "mapping": "出力(row,col)を独立にtranspose:(j,i)、clockwise:(j,h-1-i)、counterclockwise:(w-1-j,i)と定義して検証。",
+  "independent_review": {
+    "reviewed_utc": "2026-10-22T15:19:52.242153+00:00",
+    "reviewer": "graph lane, read-only independent review",
+    "status": "PASS after resolved type restriction",
+    "source_files_sha256": {
+      "Algorithm/rotate.cpp": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+      "Algorithm/Radix_sort.cpp": "0c117c2be3c1e488d0716d3c321428918e56d8ac16260ed119edd289fb1377f9",
+      "Audit/performance-matrix-simd-second-round-2026-10-22.json": "5299700bee829f54cec51a61ad8671ea5c252ff50ca0d611b1518f7870020c24",
+      "Audit/verify-matrix-simd-second-round-2026-10-22.json": "4a1644f81db46b6ae7c65d6e02d2d6593d0201946d6f156cc4e37d4c56e1a954",
+      "Audit/provenance-matrix-simd-second-round-2026-10-22.json": "9acf827866d5b2ae0a4fec5f1ccf370a948d64836e2dd0a48fb2028172c38ef8",
+      "Audit/performance-radix-sort-second-round-four-hours-2026-10-22.json": "ecaffffbfb4b13aa90faf8dc4569c229ee16cf8a020a382355ec30caf95e8e1d",
+      "Verify/current/drivers/matrix_rotate_main.cpp": "b8a05bb69548cf03db49426ffb15e1e883af147d71fd6a0a3f71688c7744f73a"
+    },
+    "live_source_edits_by_reviewer": false,
+    "resolved_finding": {
+      "before": "The original sizeof4 + trivially copyable/default constructible/copy assignable predicate also accepted a class containing a volatile uint32_t member. Those traits do not express whether class member access has volatile semantics. SIMD representation transfers would bypass the ordinary class/member scalar access route.",
+      "evidence": "type_probe.cpp confirms all three traits and sizeof4; a conservative restriction avoids requiring a general detector for volatile members. This review does not claim that every trivial class representation copy is undefined.",
+      "resolution_by_parent": "SIMD eligibility additionally requires is_arithmetic_v<Value> || is_enum_v<Value>; class/struct types retain existing scalar/block routes.",
+      "confirmed_source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b"
+    },
+    "matrix_review": [
+      "Eligibility is nested under the existing trivial type predicates. sizeof4 arithmetic/enum values have no class member volatile access concern; vector<bool> and non-4-byte objects never instantiate the helper.",
+      "The SIMD helper writes already constructed output elements, with a separately owned vector for every output row. No source/destination aliasing is possible. Throwing shape checks or allocations destroy temporary ownership and leave the const input unchanged.",
+      "GCC AVX headers mark unaligned vector access types may_alias/aligned1. Clang loadu/storeu use packed may_alias wrapper structs. These are supported compiler intrinsic semantics, not a claim that reinterpret_cast vector dereference is portable standard C++.",
+      "8x8 row/column permutations match all three modes. h-i>=8 and w-j>=8 protect full loads/stores, scalar loops cover each remaining row/column once. Reverse indices stay in range.",
+      "Nonzero h,w are established before threshold h>4095/w, so area threshold has no product overflow or divide-by-zero. 32-row/column gates preserve short/small fallback. All source row lengths are checked before their vector loads.",
+      "Target attribute confines AVX2 instructions to the helper; runtime AVX2 builtin gates entry. Function ABI exposes owned vectors and scalar parameters, no 256-bit vector cross-target ABI.",
+      "SIRKIT_DISABLE_SIMD excludes intrinsic include, helper definitions, CPU builtin and dispatch references. Compiler/architecture guards preserve standard C++ fallback. No non-AVX2 hardware was independently exercised.",
+      "ABC298B actual frozen main uses vector<vector<int>>. Audit correctly distinguishes large matrix API measurements from the small real main and makes no established whole-main gain claim."
+    ],
+    "radix_review": [
+      "RadixInteger excludes bool and cv values; accepts only 1/2/4/8-byte full-width integral unsigned representations. The 64-bit scan member is only instantiated from the bytes8 branch; smaller types remain valid.",
+      "Overlapping current/previous loads are read-only and remain inside input. Starting at i=1, each 4-lane block covers adjacent pairs i-1..i+3, and the tail covers remaining pairs and differences. Input vector allocation bounds keep i+4 arithmetic representable on supported implementations.",
+      "XOR sign bias converts unsigned64 order to signed lane comparisons. Raw XOR against first equals signed-key XOR because a fixed sign bias cancels. Ordered/reversed flags and aggregate variation therefore match scalar formulas.",
+      "The first item, all SIMD lanes and every scalar tail are covered by maximum checks before large-input mutation. SKIP_RUNTIME_CHECKS preprocesses out check-only accumulators. Small insertion-sort exception behavior remains the existing contract.",
+      "Deferred Histogram initialization is safe: ordered/reversed return before reading counts, while unordered initializes all histograms before scatter. Unordered input has nonzero variation, so active byte count cannot be zero on the optimized path.",
+      "The SIMD scan allocates nothing and writes only local already-live lane storage. Workspace ownership and scatter capacity/storage behavior are unchanged. Unsigned shifts remain within bit width.",
+      "Target/CPU/disable requirements are consistent with matrix. Existing default/natively vectorized comparisons and first-call/main distinction are recorded; ABC331C whole-main gain is not established and is not asserted."
+    ],
+    "supplemental_fallback_test": {
+      "description": "VolatileBox class size4 with all three original traits; matrices64x65,65x64,63x129,129x63. Independent index equations for transpose/CW/CCW and unchanged input. Each executable nm checked for absent matrix_turn_avx2 instantiation and absent CPU indicator symbols.",
+      "test_sha256": "8e5b77e0593ab2367fe014b17112781ab45d89d70e8eab2182106e25b3d55e78",
+      "runner_sha256": "2f1eff3a1be062d3438fbed157007452338c5ce0ba936f690e21db3b781aa618",
+      "records": [
+        {
+          "compiler": "g++",
+          "configuration": "checked",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/gpp_checked"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        },
+        {
+          "compiler": "g++",
+          "configuration": "skip",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/gpp_skip"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        },
+        {
+          "compiler": "g++",
+          "configuration": "disabled",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/gpp_disabled"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        },
+        {
+          "compiler": "clang++",
+          "configuration": "checked",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-std=c++23",
+            "-O2",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/clangpp_checked"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        },
+        {
+          "compiler": "clang++",
+          "configuration": "skip",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-std=c++23",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/clangpp_skip"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        },
+        {
+          "compiler": "clang++",
+          "configuration": "disabled",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-std=c++23",
+            "-O2",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/clangpp_disabled"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        },
+        {
+          "compiler": "clang++",
+          "configuration": "san",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-std=c++23",
+            "-O2",
+            "-O1",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-omit-frame-pointer",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/clangpp_san"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        }
+      ],
+      "limitations": [
+        "GCC ASan link environment lacks libasan; sanitizer coverage uses Clang.",
+        "Clang ASan/UBSan passes with detect_leaks=0 because LeakSanitizer is unavailable under this sandbox ptrace environment. Existing parent fault-injection tests cover ownership."
+      ]
+    },
+    "additional_blocking_findings": [],
+    "not_repeated": "Existing broad references, allocation faults and fixed-main suites were read rather than mechanically rerun; supplemental test targets the independently identified type boundary."
+  },
+  "independent_review_correction": "独立レビューでvolatileメンバーを持つ自明クラスも従来のtraitを満たすことを確認。SIMDを算術型・列挙型に限定し、クラスは従来の要素代入を保つ。制限後の最終ソースでAPI測定・9構成27suite・216実main・PP/例を再確認。"
+}

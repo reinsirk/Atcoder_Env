@@ -1,0 +1,2402 @@
+{
+  "date": "2026-10-22",
+  "scope": "union_find現在版の独立ローカル検証。オンライン未提出。",
+  "source_sha256": "ec13728a641f79d14b8bcab9861885c2c0d59520cd62d5bc72717975d64da722",
+  "baseline_source_sha256": "420f5562121769c1061655b5391deddc3b6f2ccbb8e482982124b8aaa760485b",
+  "submission_sha256": "c102800f260eb16f9cf6a582ebe80d4fea4d0335b9b57037f17ad70b42120169",
+  "online_submission_performed": false,
+  "online_status": "未提出",
+  "problem_url": "https://judge.yosupo.jp/problem/unionfind",
+  "official_sources": [
+    {
+      "source": "common/random.h",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/common/random.h",
+      "sha256": "d0ae9470c3a04425e1ab8c39f376a0e707507659b8f5aa3ca06c5b47f193613c",
+      "bytes": 3742
+    },
+    {
+      "source": "common/testlib.h",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/common/testlib.h",
+      "sha256": "8d6d68c9708ff3f8d094488506a8171802496bd1ae04942b31f2a47057564497",
+      "bytes": 194404
+    },
+    {
+      "source": "data_structure/unionfind/task.md",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind/task.md",
+      "sha256": "ca0c8013eb9dc48ac5b0ac855b47c5e5c978ac0fa8276300fa035a4e0cc95ce9",
+      "bytes": 841
+    },
+    {
+      "source": "data_structure/unionfind/gen/example_00.in",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind/gen/example_00.in",
+      "sha256": "e0518cbffe61b792644f3d8a4a335904f5a6d1f2d64c9f37e0f03b852df40062",
+      "bytes": 46
+    },
+    {
+      "source": "data_structure/unionfind/gen/random.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind/gen/random.cpp",
+      "sha256": "98098139cc4b922070ea6ba77a400d5fd8e458c3945ee9f44300164ee897c10a",
+      "bytes": 503
+    },
+    {
+      "source": "data_structure/unionfind/gen/max_random.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind/gen/max_random.cpp",
+      "sha256": "acedee7f04dc34495d1880ff286abd098e90a38bcf874faf2c3ab209b2503270",
+      "bytes": 449
+    },
+    {
+      "source": "data_structure/unionfind/gen/path.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind/gen/path.cpp",
+      "sha256": "007b8ec7a497a8da7a5b31d8a9c4ccb34961f7a1caf61adbb0bedaa9a3f037c5",
+      "bytes": 1876
+    },
+    {
+      "source": "data_structure/unionfind/info.toml",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind/info.toml",
+      "sha256": "848ea059fdd5dd16444ea3323882ca7bbae64a0f88090506dc1522eb6e15a796",
+      "bytes": 359
+    }
+  ],
+  "official_inputs": [
+    {
+      "name": "example_00.in",
+      "bytes": 46,
+      "sha256": "e0518cbffe61b792644f3d8a4a335904f5a6d1f2d64c9f37e0f03b852df40062"
+    },
+    {
+      "name": "random_00.in",
+      "bytes": 2121002,
+      "sha256": "e9e9198dbfefcdeedeb7f01e04906f6d44d9c7c82a1313c9a632fec2309a65c4"
+    },
+    {
+      "name": "random_01.in",
+      "bytes": 2160757,
+      "sha256": "556a9741d87eee9ead3d51a4d6b2f6f04b7bc5d2818d4b75965e1d6ab0ba8326"
+    },
+    {
+      "name": "random_02.in",
+      "bytes": 1632841,
+      "sha256": "78cd2365ac598642cae686539b7f34ec69b1c793c4874f76a644d5cb987b3c13"
+    },
+    {
+      "name": "random_03.in",
+      "bytes": 378989,
+      "sha256": "5d94dabb319d88233c829c5252a35c76683059d57a0e8cb43c15d4119fd43bca"
+    },
+    {
+      "name": "random_04.in",
+      "bytes": 1239430,
+      "sha256": "6e5f63b28518d59ec49e384fa013280ac571bef58b7c5cfb964c374527fdc181"
+    },
+    {
+      "name": "random_05.in",
+      "bytes": 1908424,
+      "sha256": "b69a0518056fdab9459f26bd17575e22f541b97ca86a59506ed80b492bc4e7c8"
+    },
+    {
+      "name": "random_06.in",
+      "bytes": 1613191,
+      "sha256": "e389773915326f9824f3093481428999ff3b1d3f011a5ff269e4c8f18996af46"
+    },
+    {
+      "name": "random_07.in",
+      "bytes": 157970,
+      "sha256": "43a231be01569198dc2b8a4961a33118a58acb377800ed10d011249e85ef775c"
+    },
+    {
+      "name": "random_08.in",
+      "bytes": 574513,
+      "sha256": "68067453f91ff3a7ce291e7aacc3725ea647a46ff1caab81b83d3c0b6e03c7d1"
+    },
+    {
+      "name": "random_09.in",
+      "bytes": 2721647,
+      "sha256": "4656f1ee7b9fe35abd0894fa0392ad03cfe394653a56dc35009ff8bef3efa792"
+    },
+    {
+      "name": "max_random_00.in",
+      "bytes": 2851305,
+      "sha256": "22e4ddab088f841e9e35c987eaceba2181d63e2cdb4172b89a9678edd9208ae6"
+    },
+    {
+      "name": "max_random_01.in",
+      "bytes": 2904748,
+      "sha256": "53bb15acd3f4fb15e1e1a1f828824a56f81b3b82e05e74a76d2f73c9a747755d"
+    },
+    {
+      "name": "max_random_02.in",
+      "bytes": 2716927,
+      "sha256": "3b3f3eb155a1b0638eb8166e08b2ccca81bbe542454809e4ab8e1f3cf0a43222"
+    },
+    {
+      "name": "path_00.in",
+      "bytes": 2925732,
+      "sha256": "412432d3c296d117a7f6c36766feeab06d57f9532c6a40a799a1f8e2df9a1121"
+    },
+    {
+      "name": "path_01.in",
+      "bytes": 3126112,
+      "sha256": "2c476bd0b8ccc48dbb2ccf5619c8b36760d485f5f12817cdf5db3c9625df2a69"
+    },
+    {
+      "name": "path_02.in",
+      "bytes": 2977794,
+      "sha256": "5a9c37a5b26473d3b6875586e27a70529ec4758d9aa6f555a2c3a7ae6e42dec6"
+    },
+    {
+      "name": "path_03.in",
+      "bytes": 2977794,
+      "sha256": "9dc473904bf47085708a8223a79698e157b8d61eec279f5204a42b73b8b0d6ed"
+    }
+  ],
+  "custom_inputs": [
+    {
+      "name": "balanced.in",
+      "bytes": 2860795,
+      "sha256": "8ffd74ebdb528f21c20f9c5727bbe6234819d8c1a18059b555f76a3ef7864601",
+      "n": 131072,
+      "q": 200000
+    },
+    {
+      "name": "star_redundant.in",
+      "bytes": 2481433,
+      "sha256": "8ff36b405fe746c0853c4e8b8f8d3a59e27aa89c788296662c95d3839cb9ca15",
+      "n": 65536,
+      "q": 200000
+    },
+    {
+      "name": "same_index_balanced.in",
+      "bytes": 2860893,
+      "sha256": "5a9d3ddd7c0cf5e41a4de875db74a1ce2b4ce2a6407b5369f4d1299aefcc720e",
+      "n": 131072,
+      "q": 200000
+    },
+    {
+      "name": "disconnected_pairs.in",
+      "bytes": 2977794,
+      "sha256": "a4159fa73c37297e4ed64cd4a76ba330971c1385d9e087eeea3882ff5e0270b4",
+      "n": 200000,
+      "q": 200000
+    },
+    {
+      "name": "tiny_random.in",
+      "bytes": 1475171,
+      "sha256": "370a12cdba154076e757d7e8336e99d4e7dab9cb05ce9055a9a216e750675838",
+      "n": 32,
+      "q": 200000
+    }
+  ],
+  "fixture_note": "Library Checker公式info.tomlの全18入力を生成。取得生成器は変更せず、通常stack設定で生成・検証・測定した。master URLの取得物はSHAで固定し、現在HEADと同一という意味ではない。",
+  "reference_method": "親の木と経路圧縮を使わず、成分ごとの頂点一覧と成分IDを保持して小さい成分の全頂点IDを書き直す独立実装。参照自身を300個の小入力で独立無向グラフBFSのsame結果と照合。全入力の0/1列を完全比較。",
+  "reference_selfcheck": {
+    "status": "PASS",
+    "cases": 300,
+    "seed": 61022,
+    "method": "独立した無向グラフBFSで各sameを照合",
+    "build_command": [
+      "taskset",
+      "-c",
+      "6",
+      "g++",
+      "-std=c++23",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "/tmp/sirkit_uf_20261022/reference.cpp",
+      "-o",
+      "/tmp/sirkit_uf_20261022/reference"
+    ]
+  },
+  "expected_official_answers": [
+    {
+      "case": "example_00.in",
+      "scope": "official",
+      "input_sha256": "e0518cbffe61b792644f3d8a4a335904f5a6d1f2d64c9f37e0f03b852df40062",
+      "output_sha256": "e4749bc7f4f9360cf6a2e56321b815c8de72808a8ee756a48722cc9b287ddc24",
+      "answers": 4
+    },
+    {
+      "case": "random_00.in",
+      "scope": "official",
+      "input_sha256": "e9e9198dbfefcdeedeb7f01e04906f6d44d9c7c82a1313c9a632fec2309a65c4",
+      "output_sha256": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+      "answers": 74627
+    },
+    {
+      "case": "random_01.in",
+      "scope": "official",
+      "input_sha256": "556a9741d87eee9ead3d51a4d6b2f6f04b7bc5d2818d4b75965e1d6ab0ba8326",
+      "output_sha256": "7771aa7aa9389614675819e450b09202f741c496827b04713a671052052df2d4",
+      "answers": 74404
+    },
+    {
+      "case": "random_02.in",
+      "scope": "official",
+      "input_sha256": "78cd2365ac598642cae686539b7f34ec69b1c793c4874f76a644d5cb987b3c13",
+      "output_sha256": "812b904362fd0ede9c1a61fdd050213fa08999b3a2f983fdb069c1374e82c4b7",
+      "answers": 59773
+    },
+    {
+      "case": "random_03.in",
+      "scope": "official",
+      "input_sha256": "5d94dabb319d88233c829c5252a35c76683059d57a0e8cb43c15d4119fd43bca",
+      "output_sha256": "ccd22b3445f283950f5d9a831b24585e79b2d4415527e2bbb4c6a0cea0d5a08e",
+      "answers": 12816
+    },
+    {
+      "case": "random_04.in",
+      "scope": "official",
+      "input_sha256": "6e5f63b28518d59ec49e384fa013280ac571bef58b7c5cfb964c374527fdc181",
+      "output_sha256": "3d0c81cf711561802584958d2003390689d3c5660b9df727300a53875c8fe16b",
+      "answers": 49723
+    },
+    {
+      "case": "random_05.in",
+      "scope": "official",
+      "input_sha256": "b69a0518056fdab9459f26bd17575e22f541b97ca86a59506ed80b492bc4e7c8",
+      "output_sha256": "c3f24da09aea6fa99b2ccc3a38c0adf087175be7ec930000a348fbf0bc11b3c3",
+      "answers": 70107
+    },
+    {
+      "case": "random_06.in",
+      "scope": "official",
+      "input_sha256": "e389773915326f9824f3093481428999ff3b1d3f011a5ff269e4c8f18996af46",
+      "output_sha256": "6ed7b5576d3a5270bf30c31038be41dc192bbf833b0ced3ffe85bfed8489b527",
+      "answers": 54081
+    },
+    {
+      "case": "random_07.in",
+      "scope": "official",
+      "input_sha256": "43a231be01569198dc2b8a4961a33118a58acb377800ed10d011249e85ef775c",
+      "output_sha256": "7a549b5a773713251ab7570fdf385d7c65f08a0fbe67995f300a0749d4dbf6e2",
+      "answers": 5677
+    },
+    {
+      "case": "random_08.in",
+      "scope": "official",
+      "input_sha256": "68067453f91ff3a7ce291e7aacc3725ea647a46ff1caab81b83d3c0b6e03c7d1",
+      "output_sha256": "7cca44e08ac6ab4becc74e0efbe159de304852adcb8eed431e59bdf2840a5a01",
+      "answers": 24536
+    },
+    {
+      "case": "random_09.in",
+      "scope": "official",
+      "input_sha256": "4656f1ee7b9fe35abd0894fa0392ad03cfe394653a56dc35009ff8bef3efa792",
+      "output_sha256": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+      "answers": 97953
+    },
+    {
+      "case": "max_random_00.in",
+      "scope": "official",
+      "input_sha256": "22e4ddab088f841e9e35c987eaceba2181d63e2cdb4172b89a9678edd9208ae6",
+      "output_sha256": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+      "answers": 100350
+    },
+    {
+      "case": "max_random_01.in",
+      "scope": "official",
+      "input_sha256": "53bb15acd3f4fb15e1e1a1f828824a56f81b3b82e05e74a76d2f73c9a747755d",
+      "output_sha256": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+      "answers": 99948
+    },
+    {
+      "case": "max_random_02.in",
+      "scope": "official",
+      "input_sha256": "3b3f3eb155a1b0638eb8166e08b2ccca81bbe542454809e4ab8e1f3cf0a43222",
+      "output_sha256": "8826da4f7999994e0331a80cfe53d6e62d169b137ff18fa244d26fdb35b37a4d",
+      "answers": 99632
+    },
+    {
+      "case": "path_00.in",
+      "scope": "official",
+      "input_sha256": "412432d3c296d117a7f6c36766feeab06d57f9532c6a40a799a1f8e2df9a1121",
+      "output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+      "answers": 66667
+    },
+    {
+      "case": "path_01.in",
+      "scope": "official",
+      "input_sha256": "2c476bd0b8ccc48dbb2ccf5619c8b36760d485f5f12817cdf5db3c9625df2a69",
+      "output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+      "answers": 66667
+    },
+    {
+      "case": "path_02.in",
+      "scope": "official",
+      "input_sha256": "5a9c37a5b26473d3b6875586e27a70529ec4758d9aa6f555a2c3a7ae6e42dec6",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "answers": 0
+    },
+    {
+      "case": "path_03.in",
+      "scope": "official",
+      "input_sha256": "9dc473904bf47085708a8223a79698e157b8d61eec279f5204a42b73b8b0d6ed",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "answers": 0
+    },
+    {
+      "case": "balanced.in",
+      "scope": "custom",
+      "input_sha256": "8ffd74ebdb528f21c20f9c5727bbe6234819d8c1a18059b555f76a3ef7864601",
+      "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "answers": 68929
+    },
+    {
+      "case": "star_redundant.in",
+      "scope": "custom",
+      "input_sha256": "8ff36b405fe746c0853c4e8b8f8d3a59e27aa89c788296662c95d3839cb9ca15",
+      "output_sha256": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+      "answers": 100849
+    },
+    {
+      "case": "same_index_balanced.in",
+      "scope": "custom",
+      "input_sha256": "5a9d3ddd7c0cf5e41a4de875db74a1ce2b4ce2a6407b5369f4d1299aefcc720e",
+      "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "answers": 68929
+    },
+    {
+      "case": "disconnected_pairs.in",
+      "scope": "custom",
+      "input_sha256": "a4159fa73c37297e4ed64cd4a76ba330971c1385d9e087eeea3882ff5e0270b4",
+      "output_sha256": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+      "answers": 100000
+    },
+    {
+      "case": "tiny_random.in",
+      "scope": "custom",
+      "input_sha256": "370a12cdba154076e757d7e8336e99d4e7dab9cb05ce9055a9a216e750675838",
+      "output_sha256": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+      "answers": 99922
+    }
+  ],
+  "final_test_observations": {
+    "reference_checked_checks": 5404934,
+    "reference_skip_checks": 5404893,
+    "states": 6759,
+    "operations": 91994,
+    "exception_checks": 124137,
+    "allocation_failure_sites": 24,
+    "after_owner_release_allocation_balance": 0
+  },
+  "final_official_and_custom_verification": {
+    "status": "PASS",
+    "source_sha256": "ec13728a641f79d14b8bcab9861885c2c0d59520cd62d5bc72717975d64da722",
+    "submission_sha256": "c102800f260eb16f9cf6a582ebe80d4fea4d0335b9b57037f17ad70b42120169",
+    "official_runs": 72,
+    "custom_runs": 20,
+    "builds": [
+      {
+        "name": "gcc_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_uf_20261022/official_final/gcc_checked.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/official_final/gcc_checked"
+        ],
+        "sha256": "b30bc02bb60097b51831085451b12a57c46d063829a654f5239f3be553d8c35c",
+        "build_returncode": 0,
+        "stderr": ""
+      },
+      {
+        "name": "gcc_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_uf_20261022/official_final/gcc_skip.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/official_final/gcc_skip"
+        ],
+        "sha256": "c102800f260eb16f9cf6a582ebe80d4fea4d0335b9b57037f17ad70b42120169",
+        "build_returncode": 0,
+        "stderr": ""
+      },
+      {
+        "name": "clang_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_uf_20261022/official_final/clang_checked.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/official_final/clang_checked"
+        ],
+        "sha256": "b30bc02bb60097b51831085451b12a57c46d063829a654f5239f3be553d8c35c",
+        "build_returncode": 0,
+        "stderr": ""
+      },
+      {
+        "name": "clang_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_uf_20261022/official_final/clang_skip.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/official_final/clang_skip"
+        ],
+        "sha256": "c102800f260eb16f9cf6a582ebe80d4fea4d0335b9b57037f17ad70b42120169",
+        "build_returncode": 0,
+        "stderr": ""
+      }
+    ],
+    "records": [
+      {
+        "build": "gcc_checked",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "e0518cbffe61b792644f3d8a4a335904f5a6d1f2d64c9f37e0f03b852df40062",
+        "output_sha256": "e4749bc7f4f9360cf6a2e56321b815c8de72808a8ee756a48722cc9b287ddc24",
+        "reference_output_sha256": "e4749bc7f4f9360cf6a2e56321b815c8de72808a8ee756a48722cc9b287ddc24",
+        "answers": 4,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "e9e9198dbfefcdeedeb7f01e04906f6d44d9c7c82a1313c9a632fec2309a65c4",
+        "output_sha256": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+        "reference_output_sha256": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+        "answers": 74627,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "556a9741d87eee9ead3d51a4d6b2f6f04b7bc5d2818d4b75965e1d6ab0ba8326",
+        "output_sha256": "7771aa7aa9389614675819e450b09202f741c496827b04713a671052052df2d4",
+        "reference_output_sha256": "7771aa7aa9389614675819e450b09202f741c496827b04713a671052052df2d4",
+        "answers": 74404,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "78cd2365ac598642cae686539b7f34ec69b1c793c4874f76a644d5cb987b3c13",
+        "output_sha256": "812b904362fd0ede9c1a61fdd050213fa08999b3a2f983fdb069c1374e82c4b7",
+        "reference_output_sha256": "812b904362fd0ede9c1a61fdd050213fa08999b3a2f983fdb069c1374e82c4b7",
+        "answers": 59773,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "5d94dabb319d88233c829c5252a35c76683059d57a0e8cb43c15d4119fd43bca",
+        "output_sha256": "ccd22b3445f283950f5d9a831b24585e79b2d4415527e2bbb4c6a0cea0d5a08e",
+        "reference_output_sha256": "ccd22b3445f283950f5d9a831b24585e79b2d4415527e2bbb4c6a0cea0d5a08e",
+        "answers": 12816,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "6e5f63b28518d59ec49e384fa013280ac571bef58b7c5cfb964c374527fdc181",
+        "output_sha256": "3d0c81cf711561802584958d2003390689d3c5660b9df727300a53875c8fe16b",
+        "reference_output_sha256": "3d0c81cf711561802584958d2003390689d3c5660b9df727300a53875c8fe16b",
+        "answers": 49723,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_05.in",
+        "scope": "official",
+        "input_sha256": "b69a0518056fdab9459f26bd17575e22f541b97ca86a59506ed80b492bc4e7c8",
+        "output_sha256": "c3f24da09aea6fa99b2ccc3a38c0adf087175be7ec930000a348fbf0bc11b3c3",
+        "reference_output_sha256": "c3f24da09aea6fa99b2ccc3a38c0adf087175be7ec930000a348fbf0bc11b3c3",
+        "answers": 70107,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_06.in",
+        "scope": "official",
+        "input_sha256": "e389773915326f9824f3093481428999ff3b1d3f011a5ff269e4c8f18996af46",
+        "output_sha256": "6ed7b5576d3a5270bf30c31038be41dc192bbf833b0ced3ffe85bfed8489b527",
+        "reference_output_sha256": "6ed7b5576d3a5270bf30c31038be41dc192bbf833b0ced3ffe85bfed8489b527",
+        "answers": 54081,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_07.in",
+        "scope": "official",
+        "input_sha256": "43a231be01569198dc2b8a4961a33118a58acb377800ed10d011249e85ef775c",
+        "output_sha256": "7a549b5a773713251ab7570fdf385d7c65f08a0fbe67995f300a0749d4dbf6e2",
+        "reference_output_sha256": "7a549b5a773713251ab7570fdf385d7c65f08a0fbe67995f300a0749d4dbf6e2",
+        "answers": 5677,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_08.in",
+        "scope": "official",
+        "input_sha256": "68067453f91ff3a7ce291e7aacc3725ea647a46ff1caab81b83d3c0b6e03c7d1",
+        "output_sha256": "7cca44e08ac6ab4becc74e0efbe159de304852adcb8eed431e59bdf2840a5a01",
+        "reference_output_sha256": "7cca44e08ac6ab4becc74e0efbe159de304852adcb8eed431e59bdf2840a5a01",
+        "answers": 24536,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_09.in",
+        "scope": "official",
+        "input_sha256": "4656f1ee7b9fe35abd0894fa0392ad03cfe394653a56dc35009ff8bef3efa792",
+        "output_sha256": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+        "reference_output_sha256": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+        "answers": 97953,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "22e4ddab088f841e9e35c987eaceba2181d63e2cdb4172b89a9678edd9208ae6",
+        "output_sha256": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+        "reference_output_sha256": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+        "answers": 100350,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "53bb15acd3f4fb15e1e1a1f828824a56f81b3b82e05e74a76d2f73c9a747755d",
+        "output_sha256": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+        "reference_output_sha256": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+        "answers": 99948,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "3b3f3eb155a1b0638eb8166e08b2ccca81bbe542454809e4ab8e1f3cf0a43222",
+        "output_sha256": "8826da4f7999994e0331a80cfe53d6e62d169b137ff18fa244d26fdb35b37a4d",
+        "reference_output_sha256": "8826da4f7999994e0331a80cfe53d6e62d169b137ff18fa244d26fdb35b37a4d",
+        "answers": 99632,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "path_00.in",
+        "scope": "official",
+        "input_sha256": "412432d3c296d117a7f6c36766feeab06d57f9532c6a40a799a1f8e2df9a1121",
+        "output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "reference_output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "answers": 66667,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "path_01.in",
+        "scope": "official",
+        "input_sha256": "2c476bd0b8ccc48dbb2ccf5619c8b36760d485f5f12817cdf5db3c9625df2a69",
+        "output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "reference_output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "answers": 66667,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "path_02.in",
+        "scope": "official",
+        "input_sha256": "5a9c37a5b26473d3b6875586e27a70529ec4758d9aa6f555a2c3a7ae6e42dec6",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "reference_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "answers": 0,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "path_03.in",
+        "scope": "official",
+        "input_sha256": "9dc473904bf47085708a8223a79698e157b8d61eec279f5204a42b73b8b0d6ed",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "reference_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "answers": 0,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "8ffd74ebdb528f21c20f9c5727bbe6234819d8c1a18059b555f76a3ef7864601",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "answers": 68929,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "star_redundant.in",
+        "scope": "custom",
+        "input_sha256": "8ff36b405fe746c0853c4e8b8f8d3a59e27aa89c788296662c95d3839cb9ca15",
+        "output_sha256": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+        "reference_output_sha256": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+        "answers": 100849,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "same_index_balanced.in",
+        "scope": "custom",
+        "input_sha256": "5a9d3ddd7c0cf5e41a4de875db74a1ce2b4ce2a6407b5369f4d1299aefcc720e",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "answers": 68929,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "disconnected_pairs.in",
+        "scope": "custom",
+        "input_sha256": "a4159fa73c37297e4ed64cd4a76ba330971c1385d9e087eeea3882ff5e0270b4",
+        "output_sha256": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+        "reference_output_sha256": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+        "answers": 100000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "tiny_random.in",
+        "scope": "custom",
+        "input_sha256": "370a12cdba154076e757d7e8336e99d4e7dab9cb05ce9055a9a216e750675838",
+        "output_sha256": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+        "reference_output_sha256": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+        "answers": 99922,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "e0518cbffe61b792644f3d8a4a335904f5a6d1f2d64c9f37e0f03b852df40062",
+        "output_sha256": "e4749bc7f4f9360cf6a2e56321b815c8de72808a8ee756a48722cc9b287ddc24",
+        "reference_output_sha256": "e4749bc7f4f9360cf6a2e56321b815c8de72808a8ee756a48722cc9b287ddc24",
+        "answers": 4,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "e9e9198dbfefcdeedeb7f01e04906f6d44d9c7c82a1313c9a632fec2309a65c4",
+        "output_sha256": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+        "reference_output_sha256": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+        "answers": 74627,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "556a9741d87eee9ead3d51a4d6b2f6f04b7bc5d2818d4b75965e1d6ab0ba8326",
+        "output_sha256": "7771aa7aa9389614675819e450b09202f741c496827b04713a671052052df2d4",
+        "reference_output_sha256": "7771aa7aa9389614675819e450b09202f741c496827b04713a671052052df2d4",
+        "answers": 74404,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "78cd2365ac598642cae686539b7f34ec69b1c793c4874f76a644d5cb987b3c13",
+        "output_sha256": "812b904362fd0ede9c1a61fdd050213fa08999b3a2f983fdb069c1374e82c4b7",
+        "reference_output_sha256": "812b904362fd0ede9c1a61fdd050213fa08999b3a2f983fdb069c1374e82c4b7",
+        "answers": 59773,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "5d94dabb319d88233c829c5252a35c76683059d57a0e8cb43c15d4119fd43bca",
+        "output_sha256": "ccd22b3445f283950f5d9a831b24585e79b2d4415527e2bbb4c6a0cea0d5a08e",
+        "reference_output_sha256": "ccd22b3445f283950f5d9a831b24585e79b2d4415527e2bbb4c6a0cea0d5a08e",
+        "answers": 12816,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "6e5f63b28518d59ec49e384fa013280ac571bef58b7c5cfb964c374527fdc181",
+        "output_sha256": "3d0c81cf711561802584958d2003390689d3c5660b9df727300a53875c8fe16b",
+        "reference_output_sha256": "3d0c81cf711561802584958d2003390689d3c5660b9df727300a53875c8fe16b",
+        "answers": 49723,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_05.in",
+        "scope": "official",
+        "input_sha256": "b69a0518056fdab9459f26bd17575e22f541b97ca86a59506ed80b492bc4e7c8",
+        "output_sha256": "c3f24da09aea6fa99b2ccc3a38c0adf087175be7ec930000a348fbf0bc11b3c3",
+        "reference_output_sha256": "c3f24da09aea6fa99b2ccc3a38c0adf087175be7ec930000a348fbf0bc11b3c3",
+        "answers": 70107,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_06.in",
+        "scope": "official",
+        "input_sha256": "e389773915326f9824f3093481428999ff3b1d3f011a5ff269e4c8f18996af46",
+        "output_sha256": "6ed7b5576d3a5270bf30c31038be41dc192bbf833b0ced3ffe85bfed8489b527",
+        "reference_output_sha256": "6ed7b5576d3a5270bf30c31038be41dc192bbf833b0ced3ffe85bfed8489b527",
+        "answers": 54081,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_07.in",
+        "scope": "official",
+        "input_sha256": "43a231be01569198dc2b8a4961a33118a58acb377800ed10d011249e85ef775c",
+        "output_sha256": "7a549b5a773713251ab7570fdf385d7c65f08a0fbe67995f300a0749d4dbf6e2",
+        "reference_output_sha256": "7a549b5a773713251ab7570fdf385d7c65f08a0fbe67995f300a0749d4dbf6e2",
+        "answers": 5677,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_08.in",
+        "scope": "official",
+        "input_sha256": "68067453f91ff3a7ce291e7aacc3725ea647a46ff1caab81b83d3c0b6e03c7d1",
+        "output_sha256": "7cca44e08ac6ab4becc74e0efbe159de304852adcb8eed431e59bdf2840a5a01",
+        "reference_output_sha256": "7cca44e08ac6ab4becc74e0efbe159de304852adcb8eed431e59bdf2840a5a01",
+        "answers": 24536,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_09.in",
+        "scope": "official",
+        "input_sha256": "4656f1ee7b9fe35abd0894fa0392ad03cfe394653a56dc35009ff8bef3efa792",
+        "output_sha256": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+        "reference_output_sha256": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+        "answers": 97953,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "22e4ddab088f841e9e35c987eaceba2181d63e2cdb4172b89a9678edd9208ae6",
+        "output_sha256": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+        "reference_output_sha256": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+        "answers": 100350,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "53bb15acd3f4fb15e1e1a1f828824a56f81b3b82e05e74a76d2f73c9a747755d",
+        "output_sha256": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+        "reference_output_sha256": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+        "answers": 99948,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "3b3f3eb155a1b0638eb8166e08b2ccca81bbe542454809e4ab8e1f3cf0a43222",
+        "output_sha256": "8826da4f7999994e0331a80cfe53d6e62d169b137ff18fa244d26fdb35b37a4d",
+        "reference_output_sha256": "8826da4f7999994e0331a80cfe53d6e62d169b137ff18fa244d26fdb35b37a4d",
+        "answers": 99632,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "path_00.in",
+        "scope": "official",
+        "input_sha256": "412432d3c296d117a7f6c36766feeab06d57f9532c6a40a799a1f8e2df9a1121",
+        "output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "reference_output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "answers": 66667,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "path_01.in",
+        "scope": "official",
+        "input_sha256": "2c476bd0b8ccc48dbb2ccf5619c8b36760d485f5f12817cdf5db3c9625df2a69",
+        "output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "reference_output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "answers": 66667,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "path_02.in",
+        "scope": "official",
+        "input_sha256": "5a9c37a5b26473d3b6875586e27a70529ec4758d9aa6f555a2c3a7ae6e42dec6",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "reference_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "answers": 0,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "path_03.in",
+        "scope": "official",
+        "input_sha256": "9dc473904bf47085708a8223a79698e157b8d61eec279f5204a42b73b8b0d6ed",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "reference_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "answers": 0,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "8ffd74ebdb528f21c20f9c5727bbe6234819d8c1a18059b555f76a3ef7864601",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "answers": 68929,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "star_redundant.in",
+        "scope": "custom",
+        "input_sha256": "8ff36b405fe746c0853c4e8b8f8d3a59e27aa89c788296662c95d3839cb9ca15",
+        "output_sha256": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+        "reference_output_sha256": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+        "answers": 100849,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "same_index_balanced.in",
+        "scope": "custom",
+        "input_sha256": "5a9d3ddd7c0cf5e41a4de875db74a1ce2b4ce2a6407b5369f4d1299aefcc720e",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "answers": 68929,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "disconnected_pairs.in",
+        "scope": "custom",
+        "input_sha256": "a4159fa73c37297e4ed64cd4a76ba330971c1385d9e087eeea3882ff5e0270b4",
+        "output_sha256": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+        "reference_output_sha256": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+        "answers": 100000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "tiny_random.in",
+        "scope": "custom",
+        "input_sha256": "370a12cdba154076e757d7e8336e99d4e7dab9cb05ce9055a9a216e750675838",
+        "output_sha256": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+        "reference_output_sha256": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+        "answers": 99922,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "e0518cbffe61b792644f3d8a4a335904f5a6d1f2d64c9f37e0f03b852df40062",
+        "output_sha256": "e4749bc7f4f9360cf6a2e56321b815c8de72808a8ee756a48722cc9b287ddc24",
+        "reference_output_sha256": "e4749bc7f4f9360cf6a2e56321b815c8de72808a8ee756a48722cc9b287ddc24",
+        "answers": 4,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "e9e9198dbfefcdeedeb7f01e04906f6d44d9c7c82a1313c9a632fec2309a65c4",
+        "output_sha256": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+        "reference_output_sha256": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+        "answers": 74627,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "556a9741d87eee9ead3d51a4d6b2f6f04b7bc5d2818d4b75965e1d6ab0ba8326",
+        "output_sha256": "7771aa7aa9389614675819e450b09202f741c496827b04713a671052052df2d4",
+        "reference_output_sha256": "7771aa7aa9389614675819e450b09202f741c496827b04713a671052052df2d4",
+        "answers": 74404,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "78cd2365ac598642cae686539b7f34ec69b1c793c4874f76a644d5cb987b3c13",
+        "output_sha256": "812b904362fd0ede9c1a61fdd050213fa08999b3a2f983fdb069c1374e82c4b7",
+        "reference_output_sha256": "812b904362fd0ede9c1a61fdd050213fa08999b3a2f983fdb069c1374e82c4b7",
+        "answers": 59773,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "5d94dabb319d88233c829c5252a35c76683059d57a0e8cb43c15d4119fd43bca",
+        "output_sha256": "ccd22b3445f283950f5d9a831b24585e79b2d4415527e2bbb4c6a0cea0d5a08e",
+        "reference_output_sha256": "ccd22b3445f283950f5d9a831b24585e79b2d4415527e2bbb4c6a0cea0d5a08e",
+        "answers": 12816,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "6e5f63b28518d59ec49e384fa013280ac571bef58b7c5cfb964c374527fdc181",
+        "output_sha256": "3d0c81cf711561802584958d2003390689d3c5660b9df727300a53875c8fe16b",
+        "reference_output_sha256": "3d0c81cf711561802584958d2003390689d3c5660b9df727300a53875c8fe16b",
+        "answers": 49723,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_05.in",
+        "scope": "official",
+        "input_sha256": "b69a0518056fdab9459f26bd17575e22f541b97ca86a59506ed80b492bc4e7c8",
+        "output_sha256": "c3f24da09aea6fa99b2ccc3a38c0adf087175be7ec930000a348fbf0bc11b3c3",
+        "reference_output_sha256": "c3f24da09aea6fa99b2ccc3a38c0adf087175be7ec930000a348fbf0bc11b3c3",
+        "answers": 70107,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_06.in",
+        "scope": "official",
+        "input_sha256": "e389773915326f9824f3093481428999ff3b1d3f011a5ff269e4c8f18996af46",
+        "output_sha256": "6ed7b5576d3a5270bf30c31038be41dc192bbf833b0ced3ffe85bfed8489b527",
+        "reference_output_sha256": "6ed7b5576d3a5270bf30c31038be41dc192bbf833b0ced3ffe85bfed8489b527",
+        "answers": 54081,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_07.in",
+        "scope": "official",
+        "input_sha256": "43a231be01569198dc2b8a4961a33118a58acb377800ed10d011249e85ef775c",
+        "output_sha256": "7a549b5a773713251ab7570fdf385d7c65f08a0fbe67995f300a0749d4dbf6e2",
+        "reference_output_sha256": "7a549b5a773713251ab7570fdf385d7c65f08a0fbe67995f300a0749d4dbf6e2",
+        "answers": 5677,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_08.in",
+        "scope": "official",
+        "input_sha256": "68067453f91ff3a7ce291e7aacc3725ea647a46ff1caab81b83d3c0b6e03c7d1",
+        "output_sha256": "7cca44e08ac6ab4becc74e0efbe159de304852adcb8eed431e59bdf2840a5a01",
+        "reference_output_sha256": "7cca44e08ac6ab4becc74e0efbe159de304852adcb8eed431e59bdf2840a5a01",
+        "answers": 24536,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_09.in",
+        "scope": "official",
+        "input_sha256": "4656f1ee7b9fe35abd0894fa0392ad03cfe394653a56dc35009ff8bef3efa792",
+        "output_sha256": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+        "reference_output_sha256": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+        "answers": 97953,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "22e4ddab088f841e9e35c987eaceba2181d63e2cdb4172b89a9678edd9208ae6",
+        "output_sha256": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+        "reference_output_sha256": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+        "answers": 100350,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "53bb15acd3f4fb15e1e1a1f828824a56f81b3b82e05e74a76d2f73c9a747755d",
+        "output_sha256": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+        "reference_output_sha256": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+        "answers": 99948,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "3b3f3eb155a1b0638eb8166e08b2ccca81bbe542454809e4ab8e1f3cf0a43222",
+        "output_sha256": "8826da4f7999994e0331a80cfe53d6e62d169b137ff18fa244d26fdb35b37a4d",
+        "reference_output_sha256": "8826da4f7999994e0331a80cfe53d6e62d169b137ff18fa244d26fdb35b37a4d",
+        "answers": 99632,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "path_00.in",
+        "scope": "official",
+        "input_sha256": "412432d3c296d117a7f6c36766feeab06d57f9532c6a40a799a1f8e2df9a1121",
+        "output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "reference_output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "answers": 66667,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "path_01.in",
+        "scope": "official",
+        "input_sha256": "2c476bd0b8ccc48dbb2ccf5619c8b36760d485f5f12817cdf5db3c9625df2a69",
+        "output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "reference_output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "answers": 66667,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "path_02.in",
+        "scope": "official",
+        "input_sha256": "5a9c37a5b26473d3b6875586e27a70529ec4758d9aa6f555a2c3a7ae6e42dec6",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "reference_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "answers": 0,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "path_03.in",
+        "scope": "official",
+        "input_sha256": "9dc473904bf47085708a8223a79698e157b8d61eec279f5204a42b73b8b0d6ed",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "reference_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "answers": 0,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "8ffd74ebdb528f21c20f9c5727bbe6234819d8c1a18059b555f76a3ef7864601",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "answers": 68929,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "star_redundant.in",
+        "scope": "custom",
+        "input_sha256": "8ff36b405fe746c0853c4e8b8f8d3a59e27aa89c788296662c95d3839cb9ca15",
+        "output_sha256": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+        "reference_output_sha256": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+        "answers": 100849,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "same_index_balanced.in",
+        "scope": "custom",
+        "input_sha256": "5a9d3ddd7c0cf5e41a4de875db74a1ce2b4ce2a6407b5369f4d1299aefcc720e",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "answers": 68929,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "disconnected_pairs.in",
+        "scope": "custom",
+        "input_sha256": "a4159fa73c37297e4ed64cd4a76ba330971c1385d9e087eeea3882ff5e0270b4",
+        "output_sha256": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+        "reference_output_sha256": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+        "answers": 100000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "tiny_random.in",
+        "scope": "custom",
+        "input_sha256": "370a12cdba154076e757d7e8336e99d4e7dab9cb05ce9055a9a216e750675838",
+        "output_sha256": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+        "reference_output_sha256": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+        "answers": 99922,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "e0518cbffe61b792644f3d8a4a335904f5a6d1f2d64c9f37e0f03b852df40062",
+        "output_sha256": "e4749bc7f4f9360cf6a2e56321b815c8de72808a8ee756a48722cc9b287ddc24",
+        "reference_output_sha256": "e4749bc7f4f9360cf6a2e56321b815c8de72808a8ee756a48722cc9b287ddc24",
+        "answers": 4,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "e9e9198dbfefcdeedeb7f01e04906f6d44d9c7c82a1313c9a632fec2309a65c4",
+        "output_sha256": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+        "reference_output_sha256": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+        "answers": 74627,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "556a9741d87eee9ead3d51a4d6b2f6f04b7bc5d2818d4b75965e1d6ab0ba8326",
+        "output_sha256": "7771aa7aa9389614675819e450b09202f741c496827b04713a671052052df2d4",
+        "reference_output_sha256": "7771aa7aa9389614675819e450b09202f741c496827b04713a671052052df2d4",
+        "answers": 74404,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "78cd2365ac598642cae686539b7f34ec69b1c793c4874f76a644d5cb987b3c13",
+        "output_sha256": "812b904362fd0ede9c1a61fdd050213fa08999b3a2f983fdb069c1374e82c4b7",
+        "reference_output_sha256": "812b904362fd0ede9c1a61fdd050213fa08999b3a2f983fdb069c1374e82c4b7",
+        "answers": 59773,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "5d94dabb319d88233c829c5252a35c76683059d57a0e8cb43c15d4119fd43bca",
+        "output_sha256": "ccd22b3445f283950f5d9a831b24585e79b2d4415527e2bbb4c6a0cea0d5a08e",
+        "reference_output_sha256": "ccd22b3445f283950f5d9a831b24585e79b2d4415527e2bbb4c6a0cea0d5a08e",
+        "answers": 12816,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "6e5f63b28518d59ec49e384fa013280ac571bef58b7c5cfb964c374527fdc181",
+        "output_sha256": "3d0c81cf711561802584958d2003390689d3c5660b9df727300a53875c8fe16b",
+        "reference_output_sha256": "3d0c81cf711561802584958d2003390689d3c5660b9df727300a53875c8fe16b",
+        "answers": 49723,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_05.in",
+        "scope": "official",
+        "input_sha256": "b69a0518056fdab9459f26bd17575e22f541b97ca86a59506ed80b492bc4e7c8",
+        "output_sha256": "c3f24da09aea6fa99b2ccc3a38c0adf087175be7ec930000a348fbf0bc11b3c3",
+        "reference_output_sha256": "c3f24da09aea6fa99b2ccc3a38c0adf087175be7ec930000a348fbf0bc11b3c3",
+        "answers": 70107,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_06.in",
+        "scope": "official",
+        "input_sha256": "e389773915326f9824f3093481428999ff3b1d3f011a5ff269e4c8f18996af46",
+        "output_sha256": "6ed7b5576d3a5270bf30c31038be41dc192bbf833b0ced3ffe85bfed8489b527",
+        "reference_output_sha256": "6ed7b5576d3a5270bf30c31038be41dc192bbf833b0ced3ffe85bfed8489b527",
+        "answers": 54081,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_07.in",
+        "scope": "official",
+        "input_sha256": "43a231be01569198dc2b8a4961a33118a58acb377800ed10d011249e85ef775c",
+        "output_sha256": "7a549b5a773713251ab7570fdf385d7c65f08a0fbe67995f300a0749d4dbf6e2",
+        "reference_output_sha256": "7a549b5a773713251ab7570fdf385d7c65f08a0fbe67995f300a0749d4dbf6e2",
+        "answers": 5677,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_08.in",
+        "scope": "official",
+        "input_sha256": "68067453f91ff3a7ce291e7aacc3725ea647a46ff1caab81b83d3c0b6e03c7d1",
+        "output_sha256": "7cca44e08ac6ab4becc74e0efbe159de304852adcb8eed431e59bdf2840a5a01",
+        "reference_output_sha256": "7cca44e08ac6ab4becc74e0efbe159de304852adcb8eed431e59bdf2840a5a01",
+        "answers": 24536,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_09.in",
+        "scope": "official",
+        "input_sha256": "4656f1ee7b9fe35abd0894fa0392ad03cfe394653a56dc35009ff8bef3efa792",
+        "output_sha256": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+        "reference_output_sha256": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+        "answers": 97953,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "22e4ddab088f841e9e35c987eaceba2181d63e2cdb4172b89a9678edd9208ae6",
+        "output_sha256": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+        "reference_output_sha256": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+        "answers": 100350,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "53bb15acd3f4fb15e1e1a1f828824a56f81b3b82e05e74a76d2f73c9a747755d",
+        "output_sha256": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+        "reference_output_sha256": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+        "answers": 99948,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "3b3f3eb155a1b0638eb8166e08b2ccca81bbe542454809e4ab8e1f3cf0a43222",
+        "output_sha256": "8826da4f7999994e0331a80cfe53d6e62d169b137ff18fa244d26fdb35b37a4d",
+        "reference_output_sha256": "8826da4f7999994e0331a80cfe53d6e62d169b137ff18fa244d26fdb35b37a4d",
+        "answers": 99632,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "path_00.in",
+        "scope": "official",
+        "input_sha256": "412432d3c296d117a7f6c36766feeab06d57f9532c6a40a799a1f8e2df9a1121",
+        "output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "reference_output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "answers": 66667,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "path_01.in",
+        "scope": "official",
+        "input_sha256": "2c476bd0b8ccc48dbb2ccf5619c8b36760d485f5f12817cdf5db3c9625df2a69",
+        "output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "reference_output_sha256": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+        "answers": 66667,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "path_02.in",
+        "scope": "official",
+        "input_sha256": "5a9c37a5b26473d3b6875586e27a70529ec4758d9aa6f555a2c3a7ae6e42dec6",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "reference_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "answers": 0,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "path_03.in",
+        "scope": "official",
+        "input_sha256": "9dc473904bf47085708a8223a79698e157b8d61eec279f5204a42b73b8b0d6ed",
+        "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "reference_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "answers": 0,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "8ffd74ebdb528f21c20f9c5727bbe6234819d8c1a18059b555f76a3ef7864601",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "answers": 68929,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "star_redundant.in",
+        "scope": "custom",
+        "input_sha256": "8ff36b405fe746c0853c4e8b8f8d3a59e27aa89c788296662c95d3839cb9ca15",
+        "output_sha256": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+        "reference_output_sha256": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+        "answers": 100849,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "same_index_balanced.in",
+        "scope": "custom",
+        "input_sha256": "5a9d3ddd7c0cf5e41a4de875db74a1ce2b4ce2a6407b5369f4d1299aefcc720e",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "answers": 68929,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "disconnected_pairs.in",
+        "scope": "custom",
+        "input_sha256": "a4159fa73c37297e4ed64cd4a76ba330971c1385d9e087eeea3882ff5e0270b4",
+        "output_sha256": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+        "reference_output_sha256": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+        "answers": 100000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "tiny_random.in",
+        "scope": "custom",
+        "input_sha256": "370a12cdba154076e757d7e8336e99d4e7dab9cb05ce9055a9a216e750675838",
+        "output_sha256": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+        "reference_output_sha256": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+        "answers": 99922,
+        "returncode": 0,
+        "stderr_bytes": 0
+      }
+    ],
+    "note": "全出力を成分ID書換え方式の独立参照と完全一致で確認。標準C++23の単一実装、専用SIMD/拡張整数分岐なし。"
+  },
+  "independent_suite": {
+    "status": "PASS",
+    "suite": "final",
+    "source_sha256": "ec13728a641f79d14b8bcab9861885c2c0d59520cd62d5bc72717975d64da722",
+    "expected_runs": 12,
+    "results": [
+      {
+        "name": "uf_reference_test_gcc_checked_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_reference_test_gcc_checked_native",
+          "-pedantic-errors",
+          "-DSIRKIT_UF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "ed904f9076c2219a67fdc06d587d131f2a0c14093f0d7a8e1bcc1658921430cd",
+        "returncode": 0,
+        "stdout": "PASS checks=5404934 states=6759 operations=91994\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_reference_test_gcc_skip_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_reference_test_gcc_skip_native",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors",
+          "-DSIRKIT_UF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "ed904f9076c2219a67fdc06d587d131f2a0c14093f0d7a8e1bcc1658921430cd",
+        "returncode": 0,
+        "stdout": "PASS checks=5404893 states=6759 operations=91994\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_reference_test_clang_checked_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_reference_test_clang_checked_native",
+          "-pedantic-errors",
+          "-DSIRKIT_UF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "ed904f9076c2219a67fdc06d587d131f2a0c14093f0d7a8e1bcc1658921430cd",
+        "returncode": 0,
+        "stdout": "PASS checks=5404934 states=6759 operations=91994\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_reference_test_clang_skip_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_reference_test_clang_skip_native",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors",
+          "-DSIRKIT_UF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "ed904f9076c2219a67fdc06d587d131f2a0c14093f0d7a8e1bcc1658921430cd",
+        "returncode": 0,
+        "stdout": "PASS checks=5404893 states=6759 operations=91994\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_reference_test_clang_checked_native_san",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_reference_test_clang_checked_native_san",
+          "-pedantic-errors",
+          "-DSIRKIT_UF_REQUIRE_EXTRA",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "ed904f9076c2219a67fdc06d587d131f2a0c14093f0d7a8e1bcc1658921430cd",
+        "returncode": 0,
+        "stdout": "PASS checks=5404934 states=6759 operations=91994\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_reference_test_clang_skip_native_san",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_reference_test_clang_skip_native_san",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors",
+          "-DSIRKIT_UF_REQUIRE_EXTRA",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "ed904f9076c2219a67fdc06d587d131f2a0c14093f0d7a8e1bcc1658921430cd",
+        "returncode": 0,
+        "stdout": "PASS checks=5404893 states=6759 operations=91994\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_exception_test_gcc_checked_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_exception_test_gcc_checked_native",
+          "-pedantic-errors",
+          "-DSIRKIT_UF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "4fd3a057bbea8f4558cf58e1483f8ccc9930e70dc0eab1fd40e0ef5232972b21",
+        "returncode": 0,
+        "stdout": "PASS checks=124137 allocation_failures=24 live_delta=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_exception_test_gcc_skip_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_exception_test_gcc_skip_native",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors",
+          "-DSIRKIT_UF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "4fd3a057bbea8f4558cf58e1483f8ccc9930e70dc0eab1fd40e0ef5232972b21",
+        "returncode": 0,
+        "stdout": "PASS checks=124137 allocation_failures=24 live_delta=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_exception_test_clang_checked_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_exception_test_clang_checked_native",
+          "-pedantic-errors",
+          "-DSIRKIT_UF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "4fd3a057bbea8f4558cf58e1483f8ccc9930e70dc0eab1fd40e0ef5232972b21",
+        "returncode": 0,
+        "stdout": "PASS checks=124137 allocation_failures=24 live_delta=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_exception_test_clang_skip_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_exception_test_clang_skip_native",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors",
+          "-DSIRKIT_UF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "4fd3a057bbea8f4558cf58e1483f8ccc9930e70dc0eab1fd40e0ef5232972b21",
+        "returncode": 0,
+        "stdout": "PASS checks=124137 allocation_failures=24 live_delta=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_exception_test_clang_checked_native_san",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_exception_test_clang_checked_native_san",
+          "-pedantic-errors",
+          "-DSIRKIT_UF_REQUIRE_EXTRA",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "4fd3a057bbea8f4558cf58e1483f8ccc9930e70dc0eab1fd40e0ef5232972b21",
+        "returncode": 0,
+        "stdout": "PASS checks=124137 allocation_failures=24 live_delta=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_exception_test_clang_skip_native_san",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/final/uf_exception_test_clang_skip_native_san",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors",
+          "-DSIRKIT_UF_REQUIRE_EXTRA",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "4fd3a057bbea8f4558cf58e1483f8ccc9930e70dc0eab1fd40e0ef5232972b21",
+        "returncode": 0,
+        "stdout": "PASS checks=124137 allocation_failures=24 live_delta=0\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "summary": {
+    "status": "PASS",
+    "runs": 12,
+    "source_sha256": "ec13728a641f79d14b8bcab9861885c2c0d59520cd62d5bc72717975d64da722",
+    "source_unchanged": true,
+    "all_build_and_run_returncodes_zero": true,
+    "all_stderr_empty": true,
+    "all_child_processes_waited": true,
+    "results_sha256": "d11010bdd5d968d943e009df91bb53be07f578a3ef6221607d7868cd104a693a",
+    "test_sha256": {
+      "uf_reference_test.cpp": "ed904f9076c2219a67fdc06d587d131f2a0c14093f0d7a8e1bcc1658921430cd",
+      "uf_exception_test.cpp": "4fd3a057bbea8f4558cf58e1483f8ccc9930e70dc0eab1fd40e0ef5232972b21"
+    },
+    "extra_api_required": true,
+    "leak_sanitizer": false
+  },
+  "aggregate": {
+    "status": "PASS",
+    "source_sha256": "ec13728a641f79d14b8bcab9861885c2c0d59520cd62d5bc72717975d64da722",
+    "runs": 16,
+    "core_runs": 12,
+    "repository_runs": 4,
+    "all_build_and_run_returncodes_zero": true,
+    "all_diagnostics_empty": true,
+    "all_child_processes_waited": true,
+    "core_summary": {
+      "status": "PASS",
+      "runs": 12,
+      "source_sha256": "ec13728a641f79d14b8bcab9861885c2c0d59520cd62d5bc72717975d64da722",
+      "source_unchanged": true,
+      "all_build_and_run_returncodes_zero": true,
+      "all_stderr_empty": true,
+      "all_child_processes_waited": true,
+      "results_sha256": "d11010bdd5d968d943e009df91bb53be07f578a3ef6221607d7868cd104a693a",
+      "test_sha256": {
+        "uf_reference_test.cpp": "ed904f9076c2219a67fdc06d587d131f2a0c14093f0d7a8e1bcc1658921430cd",
+        "uf_exception_test.cpp": "4fd3a057bbea8f4558cf58e1483f8ccc9930e70dc0eab1fd40e0ef5232972b21"
+      },
+      "extra_api_required": true,
+      "leak_sanitizer": false
+    },
+    "repository_test_sha256": {
+      "Verify/current/tests/uf_reference_test.cpp": "b98336270a41b137ada101083126b9f1a070628a201c7f5175a9641a6d96d6f9",
+      "Verify/current/tests/uf_exception_test.cpp": "5a6a56cc3c7504b8a74fa387d22384ad26c2831036737a6b1a6c426079ec4898"
+    },
+    "preprocessor_status": "PASS",
+    "records": {
+      "final/results.json": {
+        "sha256": "d11010bdd5d968d943e009df91bb53be07f578a3ef6221607d7868cd104a693a",
+        "path": "/tmp/sirkit_uf_20261022/verify/final/results.json"
+      },
+      "final/summary.json": {
+        "sha256": "f391d82930658e955b6ef62c2bbb9adbf559e153d267e52c478139fb2114278b",
+        "path": "/tmp/sirkit_uf_20261022/verify/final/summary.json"
+      },
+      "repo_copy.json": {
+        "sha256": "1fd6bfa16db190e449d9df5c1563f5ebc2f5ee2078159a3eff446f85e7b3a82d",
+        "path": "/tmp/sirkit_uf_20261022/verify/repo_copy.json"
+      },
+      "preprocessor.json": {
+        "sha256": "2c1cba1c1a03b0a901c63888a95c0b695153405154f9d02243f12579eec0c17e",
+        "path": "/tmp/sirkit_uf_20261022/verify/preprocessor.json"
+      },
+      "baseline/results.json": {
+        "sha256": "4041db85e8c722ea2e408a7a1440180871bc233d7fb4055ab23ccc37d879ed1d",
+        "path": "/tmp/sirkit_uf_20261022/verify/baseline/results.json"
+      }
+    },
+    "limits": [
+      "INT_MAX件の頂点を実際には確保せず、constructor/reset(INT_MAX+1)拒否と常時上限guard保持で確認。",
+      "ASan/UBSan checked/skipは通過、LSanは無効。確保収支は別の失敗注入で確認。",
+      "参照は親木を用いない全ラベル更新。サイズ併合の同サイズ時に第一引数側を代表にする既存挙動も照合。groups前後の圧縮量は公開契約ではなく、同一成分・代表・サイズ・頂点一覧を確認。"
+    ]
+  },
+  "repository_test_copy": {
+    "status": "PASS",
+    "source_sha256": "ec13728a641f79d14b8bcab9861885c2c0d59520cd62d5bc72717975d64da722",
+    "core_summary": {
+      "status": "PASS",
+      "runs": 12,
+      "source_sha256": "ec13728a641f79d14b8bcab9861885c2c0d59520cd62d5bc72717975d64da722",
+      "source_unchanged": true,
+      "all_build_and_run_returncodes_zero": true,
+      "all_stderr_empty": true,
+      "all_child_processes_waited": true,
+      "results_sha256": "d11010bdd5d968d943e009df91bb53be07f578a3ef6221607d7868cd104a693a",
+      "test_sha256": {
+        "uf_reference_test.cpp": "ed904f9076c2219a67fdc06d587d131f2a0c14093f0d7a8e1bcc1658921430cd",
+        "uf_exception_test.cpp": "4fd3a057bbea8f4558cf58e1483f8ccc9930e70dc0eab1fd40e0ef5232972b21"
+      },
+      "extra_api_required": true,
+      "leak_sanitizer": false
+    },
+    "repository_test_sources": {
+      "Verify/current/tests/uf_reference_test.cpp": {
+        "sha256": "b98336270a41b137ada101083126b9f1a070628a201c7f5175a9641a6d96d6f9",
+        "suite_sha256": "ed904f9076c2219a67fdc06d587d131f2a0c14093f0d7a8e1bcc1658921430cd",
+        "only_difference": "extra API required macro defaults on (3 lines)",
+        "reverse_identical": true
+      },
+      "Verify/current/tests/uf_exception_test.cpp": {
+        "sha256": "5a6a56cc3c7504b8a74fa387d22384ad26c2831036737a6b1a6c426079ec4898",
+        "suite_sha256": "4fd3a057bbea8f4558cf58e1483f8ccc9930e70dc0eab1fd40e0ef5232972b21",
+        "only_difference": "extra API required macro defaults on (3 lines)",
+        "reverse_identical": true
+      }
+    },
+    "repository_default_checks": [
+      {
+        "name": "uf_reference_test.cpp",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/uf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/uf_reference_test_repo_gcc"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "stdout": "PASS checks=5404934 states=6759 operations=91994\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_reference_test.cpp",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/uf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/uf_reference_test_repo_clang",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "stdout": "PASS checks=5404893 states=6759 operations=91994\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_exception_test.cpp",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/uf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/uf_exception_test_repo_gcc"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "stdout": "PASS checks=124137 allocation_failures=24 live_delta=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_exception_test.cpp",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/uf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/uf_exception_test_repo_clang",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "stdout": "PASS checks=124137 allocation_failures=24 live_delta=0\n",
+        "stderr": ""
+      }
+    ],
+    "all_processes_waited": true,
+    "note": "repoコピーの差はextra API必須を既定化する3行だけ。suite側の-Dと同等。既定includeでGCC checked/Clang skipを再実行。"
+  },
+  "examples": {
+    "status": "PASS",
+    "source_sha256": "ec13728a641f79d14b8bcab9861885c2c0d59520cd62d5bc72717975d64da722",
+    "example_sha256": "385b438f55c0c5b2c33371a45113f9d1e2b0fc1993e85efe00514968b49072f6",
+    "runs": 4,
+    "results": [
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/union_find_example.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/samples/gccFalse"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "output": "3 2 3\n"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/union_find_example.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/samples/gccTrue",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "output": "3 2 3\n"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/union_find_example.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/samples/clangFalse"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "output": "3 2 3\n"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/union_find_example.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/samples/clangTrue",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "output": "3 2 3\n"
+      }
+    ]
+  },
+  "preprocessor": {
+    "status": "PASS",
+    "source_sha256": "ec13728a641f79d14b8bcab9861885c2c0d59520cd62d5bc72717975d64da722",
+    "records": {
+      "checked": {
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "-x",
+          "c++",
+          "/home/reinsirk/Atcoder_Env/DataStructure/union_find.cpp"
+        ],
+        "source_part_sha256": "a4b478348918288d02aa2ea41b9cdb488f6f63557746a75b0d56d9a52f9b61dc",
+        "messages": {
+          "UnionFind: vertex": true,
+          "UnionFind: too many vertices": true
+        }
+      },
+      "skip": {
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "-x",
+          "c++",
+          "/home/reinsirk/Atcoder_Env/DataStructure/union_find.cpp",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "source_part_sha256": "d2cfc94c72174a6a65e1b6646a167273f445071df2c9be895a1ad792bdea35db",
+        "messages": {
+          "UnionFind: vertex": false,
+          "UnionFind: too many vertices": true
+        }
+      },
+      "standard": {
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "-x",
+          "c++",
+          "/home/reinsirk/Atcoder_Env/DataStructure/union_find.cpp",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-U__SIZEOF_INT128__"
+        ],
+        "source_part_sha256": "a4b478348918288d02aa2ea41b9cdb488f6f63557746a75b0d56d9a52f9b61dc",
+        "messages": {
+          "UnionFind: vertex": true,
+          "UnionFind: too many vertices": true
+        }
+      },
+      "no_simd": {
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "-x",
+          "c++",
+          "/home/reinsirk/Atcoder_Env/DataStructure/union_find.cpp",
+          "-DSIRKIT_DISABLE_SIMD"
+        ],
+        "source_part_sha256": "a4b478348918288d02aa2ea41b9cdb488f6f63557746a75b0d56d9a52f9b61dc",
+        "messages": {
+          "UnionFind: vertex": true,
+          "UnionFind: too many vertices": true
+        }
+      }
+    },
+    "note": "SKIPで頂点入力検査を前処理除外し、頂点数上限保護は維持。単一の標準C++23実装で新しいSIMD/拡張整数経路はなく、対応除外macroで本文は同一。"
+  },
+  "baseline_suite": {
+    "status": "PASS",
+    "suite": "baseline",
+    "source_sha256": "420f5562121769c1061655b5391deddc3b6f2ccbb8e482982124b8aaa760485b",
+    "expected_runs": 4,
+    "results": [
+      {
+        "name": "uf_reference_test_gcc_checked_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/baseline/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/baseline/uf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/baseline/uf_reference_test_gcc_checked_native",
+          "-pedantic-errors"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "ed904f9076c2219a67fdc06d587d131f2a0c14093f0d7a8e1bcc1658921430cd",
+        "returncode": 0,
+        "stdout": "PASS checks=3277623 states=5357 operations=91994\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_reference_test_clang_skip_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/baseline/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/baseline/uf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/baseline/uf_reference_test_clang_skip_native",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "ed904f9076c2219a67fdc06d587d131f2a0c14093f0d7a8e1bcc1658921430cd",
+        "returncode": 0,
+        "stdout": "PASS checks=3277582 states=5357 operations=91994\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_exception_test_gcc_checked_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/baseline/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/baseline/uf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/baseline/uf_exception_test_gcc_checked_native",
+          "-pedantic-errors"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "4fd3a057bbea8f4558cf58e1483f8ccc9930e70dc0eab1fd40e0ef5232972b21",
+        "returncode": 0,
+        "stdout": "PASS checks=122946 allocation_failures=24 live_delta=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "uf_exception_test_clang_skip_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_UF_SOURCE=\"/tmp/sirkit_uf_20261022/verify/baseline/header.hpp\"",
+          "/tmp/sirkit_uf_20261022/verify/baseline/uf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_uf_20261022/verify/baseline/uf_exception_test_clang_skip_native",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "4fd3a057bbea8f4558cf58e1483f8ccc9930e70dc0eab1fd40e0ef5232972b21",
+        "returncode": 0,
+        "stdout": "PASS checks=122946 allocation_failures=24 live_delta=0\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "reproduction": {
+    "install_final.py": {
+      "sha256": "2772a5ab22a33f25516647b288aa7ccb03169ec5ea2ca7caa679589a587628cb",
+      "source": "from pathlib import Path\nimport sys,hashlib\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');s=Path(sys.argv[1]).read_text();start=s.index('// UnionFind(n=0)');end=s.index('class UnionFind',start)\ncomments='''// UnionFind(n=0): n要素を独立成分として構築。O(n+1)時間・領域、n<=INT_MAX。\n// root(i)/leader(i): 代表、unite(a,b): 結合（戻り値なし）、merge(a,b): 新規結合ならtrue。償却O(α(n+1))。\n// issame(a,b)/same(a,b): 同一成分か、size(i): 成分サイズ。償却O(α(n+1))。探索時に経路を圧縮する。\n// size()/empty()/component_count(): 全要素数/空か/成分数、O(1)。groups(): 頂点昇順の成分一覧、O(1+n α(n+1))償却。\n// reset(n): n要素へ初期化、容量を再利用しO(旧n+n+1)上界。確保失敗時は元の連結状態を保つ。\n// clear(): 空へ戻して容量保持、O(旧n+1)上界、noexcept。swap(other): 内容交換、O(1)、noexcept。\n// コピーはO(n+1)で独立、移動元は空。自己代入・自己ムーブは内容を保つ。\n'''\ns=s[:start]+comments+s[end:]\nneedle='    int root(int i)';assert s.count(needle)==1\nextra='''    void reset(std::size_t n) {\n        const auto count = checked_size(n);\n        param.reserve(count);\n        param.clear(); param.resize(count, -1);\n        components_ = static_cast<int>(count);\n    }\n    void clear() noexcept { param.clear(); components_ = 0; }\n    bool empty() const noexcept { return param.empty(); }\n    void swap(UnionFind& other) noexcept {\n        param.swap(other.param); std::swap(components_, other.components_);\n    }\n    friend void swap(UnionFind& left, UnionFind& right) noexcept { left.swap(right); }\n'''\ns=s.replace(needle,extra+needle);(p/'final.hpp').write_text(s);(r/'DataStructure/union_find.cpp').write_text(s);print('installed',hashlib.sha256(s.encode()).hexdigest())\n"
+    },
+    "fetch_official.py": {
+      "sha256": "086e7f48037e58cf44a1ba513e72be45cc2826810fc45c83636c0686325348f9",
+      "source": "from pathlib import Path\nimport urllib.request,tomllib,json,hashlib,concurrent.futures\np=Path(__file__).parent;o=p/'official';o.mkdir(exist_ok=True);base='https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/';prefix='data_structure/unionfind/';ip=prefix+'info.toml';info=urllib.request.urlopen(base+ip,timeout=30).read();(o/'info.toml').write_bytes(info);d=tomllib.loads(info.decode())\nfiles=['common/random.h','common/testlib.h',prefix+'task.md']\nfor t in d['tests']:\n if t['name'].endswith('.cpp'):files.append(prefix+'gen/'+t['name'])\n else:files.extend(prefix+'gen/'+Path(t['name']).stem+f'_{i:02}.in'for i in range(t['number']))\ndef get(n):\n data=urllib.request.urlopen(base+n,timeout=30).read();f=(p/'common'/Path(n).name)if n.startswith('common/')else(o/Path(n).name);f.parent.mkdir(exist_ok=True);f.write_bytes(data);return dict(source=n,url=base+n,sha256=hashlib.sha256(data).hexdigest(),bytes=len(data))\nwith concurrent.futures.ThreadPoolExecutor(max_workers=6)as pool:rows=list(pool.map(get,files))\nrows.append(dict(source=ip,url=base+ip,sha256=hashlib.sha256(info).hexdigest(),bytes=len(info)));(p/'official_sources.json').write_text(json.dumps(rows,indent=2)+'\\n');print('fetched',len(rows),'official files')\n"
+    },
+    "prepare_official.py": {
+      "sha256": "1f95b55140ec4dde9bd1884cfb7411e2dcef67f3a465edec9dc076287c4b523c",
+      "source": "from pathlib import Path\nimport subprocess,tomllib,json,hashlib\np=Path(__file__).parent;o=p/'official';d=tomllib.loads((o/'info.toml').read_text());(p/'params.h').write_text(''.join(f'constexpr int {k} = {v};\\n'for k,v in d['params'].items()));rows=[]\nfor t in d['tests']:\n f=o/t['name']\n if f.suffix=='.cpp':subprocess.run(['taskset','-c','6','g++','-std=c++23','-O2','-I'+str(p/'common'),str(f),'-o',str(o/f.stem)],capture_output=True,check=True)\n for seed in range(t['number']):\n  target=o/f'{f.stem}_{seed:02}.in'\n  if f.suffix=='.cpp':\n   with target.open('wb')as out:subprocess.run([str(o/f.stem),str(seed)],stdout=out,check=True)\n  else:target=o/f'{f.stem}_{seed:02}.in'\n  rows.append({'name':target.name,'bytes':target.stat().st_size,'sha256':hashlib.sha256(target.read_bytes()).hexdigest()})\n(p/'official_cases.json').write_text(json.dumps(rows,indent=2)+'\\n');print('generated',len(rows),'official cases')\n"
+    },
+    "make_custom.py": {
+      "sha256": "f5324fd61ada0d168039b853a6f592c3213f57bf6d60938c9cb18ecd9690a794",
+      "source": "from pathlib import Path\nimport random,json,hashlib\np=Path(__file__).parent;o=p/'custom';o.mkdir(exist_ok=True);rng=random.Random(61022);rows=[]\ndef write(name,n,ops):\n assert len(ops)==200000\n f=o/(name+'.in');f.write_text(f'{n} {len(ops)}\\n'+'\\n'.join(' '.join(map(str,x))for x in ops)+'\\n');rows.append(dict(name=f.name,bytes=f.stat().st_size,sha256=hashlib.sha256(f.read_bytes()).hexdigest(),n=n,q=len(ops)))\nn=131072;ops=[]\nfor k in range(17):\n step=1<<k\n for i in range(0,n,step*2):ops.append((0,i,i+step))\nwhile len(ops)<200000:ops.append((1,rng.randrange(n),rng.randrange(n)))\nwrite('balanced',n,ops)\nn=65536;ops=[(0,0,i)for i in range(1,n)]\nwhile len(ops)<200000:ops.append((int(len(ops)%4!=0),rng.randrange(n),rng.randrange(n)))\nwrite('star_redundant',n,ops)\nn=131072;ops=[]\nfor k in range(17):\n step=1<<k\n for i in range(0,n,step*2):ops.append((0,i,i+step))\nwhile len(ops)<200000:\n v=rng.randrange(n);ops.append((1,v,v))\nwrite('same_index_balanced',n,ops)\nn=200000;ops=[]\nfor i in range(n//2):ops.append((0,2*i,2*i+1));ops.append((1,2*i,(2*i+4)%n))\nwrite('disconnected_pairs',n,ops)\nn=32;ops=[(rng.randrange(2),rng.randrange(n),rng.randrange(n))for _ in range(200000)];write('tiny_random',n,ops)\n(p/'custom_cases.json').write_text(json.dumps(rows,indent=2)+'\\n');print('custom',len(rows))\n"
+    },
+    "reference.cpp": {
+      "sha256": "e8132b079886527da1fae28e3e7be23515d1ba2f0a132311b28ed3a496ccbd9b",
+      "source": "#include <iostream>\n#include <numeric>\n#include <utility>\n#include <vector>\n// 親の木を使わず、小さい成分の全頂点に成分IDを書き直す独立参照。\nint main() {\n    std::ios::sync_with_stdio(false); std::cin.tie(nullptr);\n    int n,q; if(!(std::cin>>n>>q)) return 0;\n    std::vector<int> owner(n); std::iota(owner.begin(),owner.end(),0);\n    std::vector<std::vector<int>> members(n);\n    for(int i=0;i<n;++i) members[i].push_back(i);\n    while(q--) {\n        int type,u,v; std::cin>>type>>u>>v;\n        if(type==1) { std::cout<<(owner[u]==owner[v])<<'\\n'; continue; }\n        int a=owner[u],b=owner[v]; if(a==b) continue;\n        if(members[a].size()>members[b].size()) std::swap(a,b);\n        for(int w:members[a]) { owner[w]=b; members[b].push_back(w); }\n        std::vector<int>{}.swap(members[a]);\n    }\n}\n"
+    },
+    "build_reference.py": {
+      "sha256": "2095e27e684640cd23c09e8225756afc34e0d433a048e5045fcc5ab79e421d70",
+      "source": "from pathlib import Path\nimport subprocess,random,json,hashlib,collections\np=Path(__file__).parent;sha=lambda b:hashlib.sha256(b).hexdigest();cmd=['taskset','-c','6','g++','-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',str(p/'reference.cpp'),'-o',str(p/'reference')];subprocess.run(cmd,capture_output=True,check=True);rng=random.Random(61022)\nfor case in range(300):\n n=rng.randrange(1,33);q=rng.randrange(1,401);g=[[]for _ in range(n)];ops=[];expected=[]\n for _ in range(q):\n  t=rng.randrange(2);u=rng.randrange(n);v=rng.randrange(n);ops.append((t,u,v))\n  if not t:g[u].append(v);g[v].append(u);continue\n  seen={u};todo=collections.deque([u])\n  while todo:\n   a=todo.popleft()\n   for b in g[a]:\n    if b not in seen:seen.add(b);todo.append(b)\n  expected.append(int(v in seen))\n data=(f'{n} {q}\\n'+'\\n'.join(' '.join(map(str,x))for x in ops)+'\\n').encode();out=subprocess.check_output([str(p/'reference')],input=data);assert list(map(int,out.split()))==expected,case\n(p/'reference_selfcheck.json').write_text(json.dumps(dict(status='PASS',cases=300,seed=61022,method='独立した無向グラフBFSで各sameを照合',build_command=cmd),ensure_ascii=False,indent=2)+'\\n');o=p/'reference_outputs';o.mkdir(exist_ok=True);rows=[]\nfor scope in ['official','custom']:\n for case in json.loads((p/(scope+'_cases.json')).read_text()):\n  f=p/scope/case['name'];out=subprocess.check_output([str(p/'reference')],input=f.read_bytes());(o/(f.name+'.out')).write_bytes(out);rows.append(dict(case=f.name,scope=scope,input_sha256=sha(f.read_bytes()),output_sha256=sha(out),answers=len(out.split())))\n(p/'official_reference.json').write_text(json.dumps(rows,indent=2)+'\\n');print('reference PASS selfcheck300+inputs',len(rows))\n"
+    },
+    "verify_official.py": {
+      "sha256": "9cc08f3a7ccc24dacec8905e7e0002f09fed4e47bbea81a5da93e3fb6ee6c0fa",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');o=p/'official_final';o.mkdir(exist_ok=True);sha=lambda b:hashlib.sha256(b).hexdigest();submission=(r/'Verify/current/submissions/union_find.cpp').read_bytes();source=(r/'DataStructure/union_find.cpp').read_bytes();assert source==(p/'final.hpp').read_bytes();builds=[];records=[]\ncases=[(p/'official'/x['name'],'official')for x in json.loads((p/'official_cases.json').read_text())]+[(p/'custom'/x['name'],'custom')for x in json.loads((p/'custom_cases.json').read_text())]\nfor mode,cc in {'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']}.items():\n for skip in [False,True]:\n  name=mode+('_skip'if skip else'_checked');data=submission if skip else submission.replace(b'#define SKIP_RUNTIME_CHECKS\\n',b'',1);cpp=o/(name+'.cpp');cpp.write_bytes(data);exe=o/name;cmd=['taskset','-c','6',*cc,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',str(cpp),'-o',str(exe)];built=subprocess.run(cmd,capture_output=True,text=True);assert built.returncode==0,built.stderr;assert not built.stderr;builds.append(dict(name=name,command=cmd,sha256=sha(data),build_returncode=built.returncode,stderr=built.stderr))\n  for f,scope in cases:\n   data=f.read_bytes();ref=(p/'reference_outputs'/(f.name+'.out')).read_bytes();run=subprocess.run([str(exe)],input=data,capture_output=True);assert run.returncode==0 and not run.stderr,(name,f.name,run.stderr);assert run.stdout.split()==ref.split(),(name,f.name);records.append(dict(build=name,case=f.name,scope=scope,input_sha256=sha(data),output_sha256=sha(run.stdout),reference_output_sha256=sha(ref),answers=len(ref.split()),returncode=run.returncode,stderr_bytes=len(run.stderr)))\n  print(name,'PASS',len(cases),flush=True)\nassert (r/'DataStructure/union_find.cpp').read_bytes()==source and (r/'Verify/current/submissions/union_find.cpp').read_bytes()==submission\nresult=dict(status='PASS',source_sha256=sha(source),submission_sha256=sha(submission),official_runs=sum(x['scope']=='official'for x in records),custom_runs=sum(x['scope']=='custom'for x in records),builds=builds,records=records,note='全出力を成分ID書換え方式の独立参照と完全一致で確認。標準C++23の単一実装、専用SIMD/拡張整数分岐なし。')\n(o/'results.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n');print('official/custom PASS',len(records))\n"
+    },
+    "verify_samples.py": {
+      "sha256": "531d8459e3a6716208316a5d56dec2e2d12344435a5b203d41185aac26535242",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');o=p/'samples';o.mkdir(exist_ok=True);rows=[]\nfor mode,cc in {'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']}.items():\n for skip in [False,True]:\n  exe=o/(mode+str(skip));cmd=['taskset','-c','6',*cc,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',str(r/'Examples/union_find_example.cpp'),'-o',str(exe)]+(['-DSKIP_RUNTIME_CHECKS']if skip else[]);a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0,a.stderr;b=subprocess.run([str(exe)],capture_output=True,text=True);assert b.returncode==0 and not b.stderr and b.stdout=='3 2 3\\n',(b.stdout,b.stderr);rows.append(dict(command=cmd,build_returncode=a.returncode,returncode=b.returncode,output=b.stdout))\n(o/'results.json').write_text(json.dumps(dict(status='PASS',source_sha256=hashlib.sha256((r/'DataStructure/union_find.cpp').read_bytes()).hexdigest(),example_sha256=hashlib.sha256((r/'Examples/union_find_example.cpp').read_bytes()).hexdigest(),runs=len(rows),results=rows),indent=2)+'\\n');print('examples4 PASS')\n"
+    },
+    "verify/run.py": {
+      "sha256": "56e428cf4084811aaf0ec36b5f4158a35da6a28bf55963211ab10386fe8a4a39",
+      "source": "from pathlib import Path\nimport sys,subprocess,json,hashlib,os\np=Path(__file__).parent;suite=sys.argv[1];source=Path(sys.argv[2])if len(sys.argv)>2 else p.parent/'baseline/DataStructure/union_find.cpp';o=p/suite;o.mkdir(exist_ok=True);header=source.read_bytes();sha=lambda b:hashlib.sha256(b).hexdigest();resume=len(sys.argv)>3 and sys.argv[3]=='--resume';rows=[]\nif resume:\n previous=json.loads((o/'results.json').read_text());assert previous['source_sha256']==sha(header);assert(o/'header.hpp').read_bytes()==header;rows=previous['results']\n(o/'header.hpp').write_bytes(header)\ncompilers={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']}\nconfigs=[('gcc',False,False,False),('clang',True,False,False)]if suite=='baseline'else[(c,skip,False,False)for c in compilers for skip in [False,True]]+[('clang',skip,False,True)for skip in [False,True]]\nfor test in ['uf_reference_test.cpp','uf_exception_test.cpp']:\n (o/test).write_bytes((p/test).read_bytes())\n for cc,skip,standard,san in configs:\n  name=Path(test).stem+'_'+cc+('_skip'if skip else'_checked')+('_standard'if standard else'_native')+('_san'if san else'');cmd=['taskset','-c','10',*compilers[cc],'-std=c++23','-O1'if san else'-O2','-Wall','-Wextra','-Werror','-DSIRKIT_UF_SOURCE=\"'+str(o/'header.hpp')+'\"',str(o/test),'-o',str(o/name)]\n  if skip:cmd+=['-DSKIP_RUNTIME_CHECKS']\n  if standard:cmd+=['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-U__SIZEOF_INT128__']\n  cmd+=['-pedantic-errors']\n  if suite!='baseline':cmd+=['-DSIRKIT_UF_REQUIRE_EXTRA']\n  if san:cmd+=['-fsanitize=address,undefined','-fno-omit-frame-pointer']\n  old=next((row for row in rows if row['name']==name),None)\n  if old is not None:\n   assert resume and old['test_sha256']==sha((o/test).read_bytes())and old['returncode']==0 and old['build_returncode']==0 and not old['stderr']and not old['build_stderr'];print(name,'REUSED matching source/test SHA',flush=True);continue\n  build=subprocess.run(cmd,capture_output=True,text=True);assert build.returncode==0,build.stderr;assert not build.stderr\n  env=dict(os.environ,ASAN_OPTIONS='detect_leaks=0',UBSAN_OPTIONS='halt_on_error=1:print_stacktrace=1');run=subprocess.run(['taskset','-c','10',str(o/name)],capture_output=True,text=True,env=env);assert run.returncode==0,(name,run.stdout,run.stderr);assert not run.stderr\n  row=dict(name=name,command=cmd,build_returncode=build.returncode,build_stderr=build.stderr,test_sha256=sha((o/test).read_bytes()),returncode=run.returncode,stdout=run.stdout,stderr=run.stderr);rows.append(row);print(name,run.stdout.strip(),flush=True)\n  (o/'results.json').write_text(json.dumps(dict(status='RUNNING',suite=suite,source_sha256=sha(header),expected_runs=len(configs)*2,results=rows),indent=2)+'\\n')\nassert source.read_bytes()==header\nresult=dict(status='PASS',suite=suite,source_sha256=sha(header),expected_runs=len(configs)*2,results=rows);(o/'results.json').write_text(json.dumps(result,indent=2)+'\\n');summary=dict(status='PASS',runs=len(rows),source_sha256=sha(header),source_unchanged=True,all_build_and_run_returncodes_zero=True,all_stderr_empty=True,all_child_processes_waited=True,results_sha256=sha((o/'results.json').read_bytes()),test_sha256={test:sha((o/test).read_bytes())for test in ['uf_reference_test.cpp','uf_exception_test.cpp']},extra_api_required=suite!='baseline',leak_sanitizer=False);(o/'summary.json').write_text(json.dumps(summary,indent=2)+'\\n');print('SUITE PASS',suite,len(rows),flush=True)\n"
+    },
+    "verify/finalize_repo.py": {
+      "sha256": "7bbb091711b1f4f284b0f3fb5a0a07798e7f27f2006a6c2116652c5d2f6a592e",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib,os\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');sha=lambda b:hashlib.sha256(b).hexdigest();header=(r/'DataStructure/union_find.cpp').read_bytes();summary=json.loads((p/'final/summary.json').read_text());assert summary['status']=='PASS'and summary['source_sha256']==sha(header);extra=b'#ifndef SIRKIT_UF_REQUIRE_EXTRA\\n#define SIRKIT_UF_REQUIRE_EXTRA\\n#endif\\n';tests={};rows=[]\nfor name in ['uf_reference_test.cpp','uf_exception_test.cpp']:\n original=(p/name).read_bytes();assert original.startswith(b'// SPDX-License-Identifier: CC0-1.0\\n');marker=b'// SPDX-License-Identifier: CC0-1.0\\n';data=original.replace(marker,marker+extra,1);assert data.replace(extra,b'',1)==original;target=r/'Verify/current/tests'/name;target.write_bytes(data);tests[str(target.relative_to(r))]=dict(sha256=sha(data),suite_sha256=sha(original),only_difference='extra API required macro defaults on (3 lines)',reverse_identical=True)\n for cc,compiler,skip,standard in [('gcc',['g++'],False,False),('clang',['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0'],True,False)]:\n  exe=p/(Path(name).stem+'_repo_'+cc);cmd=['taskset','-c','10',*compiler,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',str(target),'-o',str(exe)]+(['-DSKIP_RUNTIME_CHECKS']if skip else[])+(['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-U__SIZEOF_INT128__']if standard else[]);a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0 and not a.stderr,a.stderr;b=subprocess.run(['taskset','-c','10',str(exe)],capture_output=True,text=True);assert b.returncode==0 and not b.stderr,(b.stdout,b.stderr);rows.append(dict(name=name,command=cmd,build_returncode=a.returncode,returncode=b.returncode,stdout=b.stdout,stderr=b.stderr));print(name,cc,b.stdout.strip(),flush=True)\nassert (r/'DataStructure/union_find.cpp').read_bytes()==header\nresult=dict(status='PASS',source_sha256=sha(header),core_summary=summary,repository_test_sources=tests,repository_default_checks=rows,all_processes_waited=True,note='repoコピーの差はextra API必須を既定化する3行だけ。suite側の-Dと同等。既定includeでGCC checked/Clang skipを再実行。');(p/'repo_copy.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n');print('REPO PASS',len(rows),flush=True)\n"
+    },
+    "verify/check_preprocessor.py": {
+      "sha256": "f676b0c8f152fbd366187ce5055fd62ecd708c88e231a53b0557d1227a643609",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');source=r/'DataStructure/union_find.cpp';sha=lambda b:hashlib.sha256(b).hexdigest();records={};parts={};messages=['UnionFind: vertex','UnionFind: too many vertices']\nfor name,flags in [('checked',[]),('skip',['-DSKIP_RUNTIME_CHECKS']),('standard',['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-U__SIZEOF_INT128__']),('no_simd',['-DSIRKIT_DISABLE_SIMD'])]:\n cmd=['g++','-std=c++23','-E','-P','-x','c++',str(source),*flags];a=subprocess.run(cmd,capture_output=True,text=True,check=True);part=a.stdout[a.stdout.index('class UnionFind {'):];parts[name]=part;records[name]=dict(command=cmd,source_part_sha256=sha(part.encode()),messages={x:x in part for x in messages})\nassert all(records['checked']['messages'].values());assert not records['skip']['messages'][messages[0]];assert records['skip']['messages'][messages[1]];assert parts['checked']==parts['standard']==parts['no_simd'];result=dict(status='PASS',source_sha256=sha(source.read_bytes()),records=records,note='SKIPで頂点入力検査を前処理除外し、頂点数上限保護は維持。単一の標準C++23実装で新しいSIMD/拡張整数経路はなく、対応除外macroで本文は同一。');(p/'preprocessor.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n');print('preprocessor PASS',result['source_sha256'])\n"
+    },
+    "sync_verify.py": {
+      "sha256": "e3fd18d64f696222066e07e0a52847bf5fbd62269d5caf60fc6188576f13d8d8",
+      "source": "from pathlib import Path\nimport sys,json,hashlib,time,os\nr=Path('/home/reinsirk/Atcoder_Env');sys.path.insert(0,str(r/'Scripts'));import prepare_verify as v\nlibs={'DataStructure/union_find.cpp'}\n# 他workの記録を再生成せず、変更した本体を含む行だけ同期する。\nselected=[e for e in v.collect() if libs.intersection(e['libraries'])]\nfor retry in range(10):\n mp=r/'Verify/current/manifest.json';jp=r/'Verify/current/judgements.json';before=mp.read_bytes();journal_before=jp.read_bytes();manifest=json.loads(before);journal={e['id']:e for e in json.loads(journal_before)['entries']};updates={}\n for original in selected:\n  e=dict(original);data,hashes=v.render(e);output=r/'Verify/current/submissions'/(e['id']+'.cpp');output.write_bytes(data)\n  record=journal.get(e['id']);status='未提出'\n  if record:\n   if record.get('submission_sha256') is None:status=record['status']+'（提出ソース未照合）'\n   else:status=record['status'] if record['submission_sha256']==v.digest(data) else '要再提出（ソース変更）'\n   e['judge_record']=record\n  e.update(source_hashes=hashes,submission_sha256=v.digest(data),submission=str(output.relative_to(r)),bytes=len(data),judge_status=status,acl_external_dependency=False,skip_runtime_checks=bool(e.get('problem_url')))\n  driver=(r/e['driver']).read_bytes();fast=v.FAST_IO_INCLUDE in driver.decode().splitlines();e.update(driver_sha256=v.digest(driver),io_mode='shared_fast_io'if fast else'local_driver',io_source_hashes={v.FAST_IO:v.digest((r/v.FAST_IO).read_bytes())}if fast else{})\n  updates[e['id']]=e\n if mp.read_bytes()!=before or jp.read_bytes()!=journal_before:continue\n manifest['entries']=[updates.get(e['id'],e)for e in manifest['entries']]\n temp=mp.with_suffix('.uf_sync.tmp');temp.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\\n');os.replace(temp,mp)\n print('synchronized',len(updates),'entries');break\nelse:raise SystemExit('manifest changed concurrently; retry later')\n"
+    }
+  },
+  "source_consistency": {
+    "driver_io_hashes": {
+      "Verify/current/drivers/union_find_main.cpp": "4eaa2d1fb03798169633d103a7a3cf4b93e1b99b8986f7abd05b35183bd3a84d",
+      "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+    },
+    "final_equals_frozen_source": true,
+    "submission_sha256": "c102800f260eb16f9cf6a582ebe80d4fea4d0335b9b57037f17ad70b42120169",
+    "judge_status": "未提出",
+    "repository_tests": {
+      "Verify/current/tests/uf_reference_test.cpp": "b98336270a41b137ada101083126b9f1a070628a201c7f5175a9641a6d96d6f9",
+      "Verify/current/tests/uf_exception_test.cpp": "5a6a56cc3c7504b8a74fa387d22384ad26c2831036737a6b1a6c426079ec4898"
+    }
+  },
+  "limits": [
+    "公式Unionfind問題はunite/sameを対象とする。既存mainと共通fastIOを固定し、各操作を入力順に直接呼ぶ。照会のバッチ化・並べ替え・入力分布によるmainの実装切替は加えていない。他APIは独立成分ラベル配列で補足する。",
+    "最終core12実行はGCC/Clang×checked/skipの4構成とClang ASan/UBSan×checked/skipの2構成、それぞれ2test。repo既定includeで4実行を再確認。全て標準C++23の単一実装で新規SIMD/拡張整数分岐なし。標準指定/追加SIMD無効指定でも前処理後の本体が同一。LSanは無効、確保収支は別の失敗注入で確認。",
+    "代表を含む成分ラベル参照と全APIを照合。サイズ併合で同サイズなら第1引数側の根を保つtie、深いbalancedの両向き、groupsの成分順/頂点順・独立返却所有、コピー/移動/自己代入/自己ムーブ、空/1頂点と不正same-indexを含む。",
+    "resetは容量を先にreserveしてからclear/容量内resize(int)を行い、確保失敗時は元の連結状態を保持。clear後に容量へ収まるresetを確保禁止設定で実行し、確保0を確認。member/free swapとempty、容量再利用と後続操作も確認。",
+    "groups失敗時は経路圧縮だけ進む可能性がある。保証するのは連結関係・代表・サイズ・成分数であり、内部親配列が全く変わらないことではない。全1成分のgroupsは既存代表を保持して全頂点を根の直下へ平坦化する。",
+    "頂点数INT_MAXの実確保は行わず、INT_MAX+1/SIZE_MAX拒否と常時容量guardのソース/前処理保持を確認。SKIP時は頂点入力検査を除外し、頂点数上限は維持する。",
+    "有限のローカル照合であり全入力の証明やオンラインACではない。過去の提出判定を現在版の検証済みという意味へ書き換えず、途中候補の性能・検証は最終版と区別して保存。"
+  ],
+  "package_preparation": {
+    "note": "配布専用コピーで生成元・manifest・提出注記の整合を再確認。コピー作成時には別workの提出URL同期が完了していたため、追加の同期変更はなかった。共有作業フォルダの他ライブラリ・提出記録は変更していない。",
+    "source_workspace": "/home/reinsirk/Atcoder_Env",
+    "snapshot": "/tmp/sirkit_uf_20261022/package_snapshot",
+    "changed_only_in_snapshot": [],
+    "preparation_command": [
+      "python3",
+      "/tmp/sirkit_uf_20261022/package_snapshot/Scripts/prepare_verify.py"
+    ],
+    "stdout": "141件の提出・補助コードを生成しました。\n"
+  }
+}

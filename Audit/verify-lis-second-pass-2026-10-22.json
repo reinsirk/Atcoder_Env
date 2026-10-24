@@ -1,0 +1,4645 @@
+{
+  "date": "2026-10-22",
+  "round": 2,
+  "scope": "LISIndicesの延長/先頭置換で既知になった末尾との比較を二分探索から除く。長さ系API・所有権・型要件は変更しない。",
+  "baseline_source_sha256": "83840e64868646779fa364b6d1140843e3de9ace73e67acf41334fc68b197c12",
+  "final_source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e",
+  "files_sha256": {
+    "Algorithm/LIS.cpp": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e",
+    "Document/lis.md": "758d6a46433722b9ae0bacbb3d02a7a034da199a0a0f9a53cfc2c8942680feaa",
+    "Examples/lis_example.cpp": "9b65d233036713b3b31d819126ca8e575c6d08c6c554e3ad9b630eee7ee95907"
+  },
+  "driver_io_sha256": {
+    "Verify/current/drivers/lis_main.cpp": "a29976f6877b9608c0f81b5d9397d55462ec6d9d1e237f2032abd8c16ec7f26a",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "status": "PASS",
+  "reference": "全三値列0..7長、独立DP/全部分集合・9308 API cases、整数幅/float/inf/NaN/非default/比較専用/コピー不能・入力と戻り値の独立性。",
+  "suites": {
+    "status": "PASS",
+    "rows": [
+      {
+        "configuration": "gccchecked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/gcccheckedlis_reference_test.cpp.out"
+        ],
+        "test": "lis_reference_test.cpp",
+        "stdout": "PASS 1648251 checks; 9308 API cases; independent DP/subset reference\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "gccchecked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/gcccheckedlis_exception_test.cpp.out"
+        ],
+        "test": "lis_exception_test.cpp",
+        "stdout": "PASS 1354687 checks; allocation failures=68 copy failures=2998 comparison failures=7044 live_delta=0 value_alive=0\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "gccskip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/gccskiplis_reference_test.cpp.out"
+        ],
+        "test": "lis_reference_test.cpp",
+        "stdout": "PASS 1648071 checks; 9308 API cases; independent DP/subset reference\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "gccskip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/gccskiplis_exception_test.cpp.out"
+        ],
+        "test": "lis_exception_test.cpp",
+        "stdout": "PASS 1354687 checks; allocation failures=68 copy failures=2998 comparison failures=7044 live_delta=0 value_alive=0\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "gccstandard",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/gccstandardlis_reference_test.cpp.out"
+        ],
+        "test": "lis_reference_test.cpp",
+        "stdout": "PASS 1648251 checks; 9308 API cases; independent DP/subset reference\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "gccstandard",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/gccstandardlis_exception_test.cpp.out"
+        ],
+        "test": "lis_exception_test.cpp",
+        "stdout": "PASS 1354687 checks; allocation failures=68 copy failures=2998 comparison failures=7044 live_delta=0 value_alive=0\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "clangchecked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangcheckedlis_reference_test.cpp.out"
+        ],
+        "test": "lis_reference_test.cpp",
+        "stdout": "PASS 1648251 checks; 9308 API cases; independent DP/subset reference\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "clangchecked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangcheckedlis_exception_test.cpp.out"
+        ],
+        "test": "lis_exception_test.cpp",
+        "stdout": "PASS 1354687 checks; allocation failures=68 copy failures=2998 comparison failures=7044 live_delta=0 value_alive=0\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "clangskip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangskiplis_reference_test.cpp.out"
+        ],
+        "test": "lis_reference_test.cpp",
+        "stdout": "PASS 1648071 checks; 9308 API cases; independent DP/subset reference\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "clangskip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangskiplis_exception_test.cpp.out"
+        ],
+        "test": "lis_exception_test.cpp",
+        "stdout": "PASS 1354687 checks; allocation failures=68 copy failures=2998 comparison failures=7044 live_delta=0 value_alive=0\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "clangstandard",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangstandardlis_reference_test.cpp.out"
+        ],
+        "test": "lis_reference_test.cpp",
+        "stdout": "PASS 1648251 checks; 9308 API cases; independent DP/subset reference\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "clangstandard",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangstandardlis_exception_test.cpp.out"
+        ],
+        "test": "lis_exception_test.cpp",
+        "stdout": "PASS 1354687 checks; allocation failures=68 copy failures=2998 comparison failures=7044 live_delta=0 value_alive=0\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "clangsan",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangsanlis_reference_test.cpp.out"
+        ],
+        "test": "lis_reference_test.cpp",
+        "stdout": "PASS 1648251 checks; 9308 API cases; independent DP/subset reference\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "clangsan",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangsanlis_exception_test.cpp.out"
+        ],
+        "test": "lis_exception_test.cpp",
+        "stdout": "PASS 1354687 checks; allocation failures=68 copy failures=2998 comparison failures=7044 live_delta=0 value_alive=0\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "clangsan_standard_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangsan_standard_skiplis_reference_test.cpp.out"
+        ],
+        "test": "lis_reference_test.cpp",
+        "stdout": "PASS 1648071 checks; 9308 API cases; independent DP/subset reference\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      },
+      {
+        "configuration": "clangsan_standard_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_four_hours_20261022/lis_round2/final.hpp\"",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangsan_standard_skiplis_exception_test.cpp.out"
+        ],
+        "test": "lis_exception_test.cpp",
+        "stdout": "PASS 1354687 checks; allocation failures=68 copy failures=2998 comparison failures=7044 live_delta=0 value_alive=0\n",
+        "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e"
+      }
+    ]
+  },
+  "configurations": 8,
+  "suite_count": 16,
+  "counts": "各checked1648251/skip1648071参照検査。各例外1354687検査、割当68・コピー2998・比較7044失敗点、live_delta0/value_alive0。",
+  "integration": {
+    "status": "PASS",
+    "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e",
+    "records": [
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/lis_example.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/gcccheckedexample"
+        ],
+        "stdout": "1 1 2 2 3 3 \n1 1 2 2 3 1 \n3 4\n1 3 4 \n1 2 2 4 \n"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/lis_local.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/gcccheckedlocal"
+        ],
+        "stdout": "OK\n"
+      },
+      {
+        "configuration": "gccchecked",
+        "preprocessor_sha256": "5a6e6cc8c61dd3ebef48afb7ea7161da42fa52b00fbc52b824887a9d727622d1"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Examples/lis_example.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/gccstandard_skipexample"
+        ],
+        "stdout": "1 1 2 2 3 3 \n1 1 2 2 3 1 \n3 4\n1 3 4 \n1 2 2 4 \n"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/lis_local.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/gccstandard_skiplocal"
+        ],
+        "stdout": "OK\n"
+      },
+      {
+        "configuration": "gccstandard_skip",
+        "preprocessor_sha256": "f25e4ebb8a69a4874f22e7978c535ee73328a8eb2666fcb336d3530a0fc8e2dd"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/lis_example.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangcheckedexample"
+        ],
+        "stdout": "1 1 2 2 3 3 \n1 1 2 2 3 1 \n3 4\n1 3 4 \n1 2 2 4 \n"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/lis_local.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangcheckedlocal"
+        ],
+        "stdout": "OK\n"
+      },
+      {
+        "configuration": "clangchecked",
+        "preprocessor_sha256": "62dc3d491bd967789c1f30674e954fab3c5d4370253b30f63a6605def9d69e7a"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Examples/lis_example.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangstandard_skipexample"
+        ],
+        "stdout": "1 1 2 2 3 3 \n1 1 2 2 3 1 \n3 4\n1 3 4 \n1 2 2 4 \n"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/lis_local.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/clangstandard_skiplocal"
+        ],
+        "stdout": "OK\n"
+      },
+      {
+        "configuration": "clangstandard_skip",
+        "preprocessor_sha256": "5360b767a299575d49f3eb12ea4f72750d84d08b764d1340435195e49ec9052c"
+      }
+    ]
+  },
+  "main": {
+    "status": "PASS",
+    "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e",
+    "builds": [
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/gccbaseline.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/gccbaseline"
+        ],
+        "source_sha256": "eb8f1baa51bf8457f2cdfc047525ecb66bd870ad936d47acde71bacbc3564cbd"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/gcccontrol.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/gcccontrol"
+        ],
+        "source_sha256": "eb8f1baa51bf8457f2cdfc047525ecb66bd870ad936d47acde71bacbc3564cbd"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/gccfinal.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/gccfinal"
+        ],
+        "source_sha256": "a14b4cab50e2533680c2aaa3b656d402cdd78527a9d134f88d5a02c72a919789"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/gccchecked.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/gccchecked"
+        ],
+        "source_sha256": "20708f7ab4cc648de03a0e7dc41e23060ee6ea9c504071f09d7896f40225e281"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/gccstandard.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/gccstandard"
+        ],
+        "source_sha256": "36d0e7911c2b5d729a3021696aab899de436c206533374ba06b812374e8aa98e"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/gccstandard_skip.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/gccstandard_skip"
+        ],
+        "source_sha256": "1ad551d6f0ae37d05987a7c786fd7487214f202b8238ac1575e77a119f680556"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/clangbaseline.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/clangbaseline"
+        ],
+        "source_sha256": "eb8f1baa51bf8457f2cdfc047525ecb66bd870ad936d47acde71bacbc3564cbd"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/clangcontrol.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/clangcontrol"
+        ],
+        "source_sha256": "eb8f1baa51bf8457f2cdfc047525ecb66bd870ad936d47acde71bacbc3564cbd"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/clangfinal.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/clangfinal"
+        ],
+        "source_sha256": "a14b4cab50e2533680c2aaa3b656d402cdd78527a9d134f88d5a02c72a919789"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/clangchecked.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/clangchecked"
+        ],
+        "source_sha256": "20708f7ab4cc648de03a0e7dc41e23060ee6ea9c504071f09d7896f40225e281"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/clangstandard.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/clangstandard"
+        ],
+        "source_sha256": "36d0e7911c2b5d729a3021696aab899de436c206533374ba06b812374e8aa98e"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/clangstandard_skip.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/lis_round2/main/clangstandard_skip"
+        ],
+        "source_sha256": "1ad551d6f0ae37d05987a7c786fd7487214f202b8238ac1575e77a119f680556"
+      }
+    ],
+    "correct": [
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "60579e098bead3427f868ad19ddba1f56f19671934c02bbca3b129d5fb369773",
+        "output_sha256": "6bc483d79494871372efc9ca2c842ec6237034fe8144c9dbe9438e19d8151857",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "example_01.in",
+        "scope": "official",
+        "input_sha256": "3db246433a5c101e6bdc52b682ec4998306f8b55bd992f6335b05b7ff3c93035",
+        "output_sha256": "62f31da50e4ee0cbc1064619de41935ea25e0c6a296e9849de8130365a188c4d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "small_00.in",
+        "scope": "official",
+        "input_sha256": "01a73883cda3df4748c4c2758f4f4a57e3aa1e8e26d8006159c3a318ad736d9a",
+        "output_sha256": "ebceeb73bc26d609a8f2352a66781b66d71e3edd80024d48160e4960ac9f7503",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "small_01.in",
+        "scope": "official",
+        "input_sha256": "13c168720129a50b89df308071327e6502b144a3700a07e72bb425b677788ef4",
+        "output_sha256": "d15403b38edd11e98cfda4d6ec234b53896437fb89765d6dbe9fcf68ee6eae36",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "small_02.in",
+        "scope": "official",
+        "input_sha256": "0a8ce70dc2f1d319e129a05802b09091bcb0283883e95619a9080f47f8976a8b",
+        "output_sha256": "15a15c047478f3e0e3cab6ed3f632a29e89952fba136b5a78394d1c0ad79c6e5",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "small_03.in",
+        "scope": "official",
+        "input_sha256": "f67fe9848ebfc47df6109d17555c13343187ad31febd7409bbee33e3044ceddd",
+        "output_sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "small_04.in",
+        "scope": "official",
+        "input_sha256": "17a7e4021062ad0156d411deedaf7ae9ce1a3098d70a3914770fe650afd138ca",
+        "output_sha256": "122def0ca1e13a8a9706a3c0bceb5e2eb393e7e0303d1bd04d31989d74e414f3",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "e28af8b18f73895f3bfe13d4d6e17c6d722e3212510fbcafd2fe6259da72fc56",
+        "output_sha256": "9c1544f3273b967cb16eeff152ae6d1ec477d1a00232630ba848a5dc9e845110",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "7746b3e883c47e76787cc4a35975ee2f3131fedfbcbb6d0a9f8e44ba220c7b6d",
+        "output_sha256": "743d8ba2a9e1c4a952b819865c66ed83deb1d19c46e52e421cc2869b4517c80d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "a13590700562537b2df91b53b301c2f5e7921825e689fd5d90f33e1563b9ec8a",
+        "output_sha256": "af7b6af54f7be68b403c7f10d571652c7ae52c0cf4842c7323004dc07ebe6f34",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "5d379cd7560c3521a56ed9f0f28abd3a9d68a450d3608d6ff1bed7eb10a3b543",
+        "output_sha256": "cee582ac220b12361d75ba3b10fd433a7443590bd86636e1a6b0fba61df0e943",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "853ded845e4005507bfa780f49ad7e8f0a90238cba19f5d00005a000ad694049",
+        "output_sha256": "6c6055de8c628605a838a7a5d2c73979a67643eab1abadee2ebdd224f20ab9f8",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "3e2d9fc5f2a4004e7baf602a5e7150f9bce32e24b6ca70ac89ddc71bbed3717f",
+        "output_sha256": "b9e5b62067fc1fe5597856516026901bee41591c1d036d36949b1913b609da0c",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "388ef5ce643c07c73fbca9af841c33e58af5f6bd99b16d37ce88833962c43018",
+        "output_sha256": "b165d9c4ca2f9a962e1a66ef2b0639bafab4ed40c6b7c79b96eafa19ec1c050b",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "f2bef770c0e38f592913c0a11a34ee7c22d4d975caba0b1e5c09c22e87a01c19",
+        "output_sha256": "1441250d1ff3f5a80928c9faa71093dbbc5d7375f05635ab9a9e67b491282066",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "max_random_03.in",
+        "scope": "official",
+        "input_sha256": "7cd43c6e7fd73eabfe334b4175e35d4cdbd43c9117f411b5b38d1d0daf23869d",
+        "output_sha256": "5475d9ebc4bdf2f12a6e4628267fce71922742cd1182e9d7893e025affdf68eb",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "max_random_04.in",
+        "scope": "official",
+        "input_sha256": "133596d3847d1573d3ddc32510fdc9bbf5423f20008884d0d82a2f34e0ad1b9c",
+        "output_sha256": "4e6dbcc1d1e88c9c59c8f048d39c45b6f7a83e4c8349da3161fcf76b942dd3fc",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "hand_max_00.in",
+        "scope": "official",
+        "input_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "output_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "hand_min_00.in",
+        "scope": "official",
+        "input_sha256": "a2791806f8ce247bcd5de2bf408a8690d8cf4511e09b4558ea879011d10aac1d",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "equal_500k.in",
+        "scope": "custom",
+        "input_sha256": "b747b82188a3df1572ca37d39ae33bfdb4a6ce5bb7819eef6cec1e26b786a956",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "alternating_500k.in",
+        "scope": "custom",
+        "input_sha256": "2e106c8c8afdcbd021de74cfb3389a26340321b6d2c4a41ebb6ccab478b33277",
+        "output_sha256": "9cf15b7e2aa95bc85239aadeab91ecb983954a2a8602b202cf01982754be638f"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "tiny32.in",
+        "scope": "custom",
+        "input_sha256": "cb23c132f4fe1c48f68d7ec0066200dcb2b4bb6be90689ca7cd57753e1c75b0f",
+        "output_sha256": "6a60248ac098a2b55859f6c0d6048b127fe8119936cb819baaece310372e100a"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "empty.in",
+        "scope": "custom",
+        "input_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4",
+        "output_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "60579e098bead3427f868ad19ddba1f56f19671934c02bbca3b129d5fb369773",
+        "output_sha256": "6bc483d79494871372efc9ca2c842ec6237034fe8144c9dbe9438e19d8151857",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "example_01.in",
+        "scope": "official",
+        "input_sha256": "3db246433a5c101e6bdc52b682ec4998306f8b55bd992f6335b05b7ff3c93035",
+        "output_sha256": "62f31da50e4ee0cbc1064619de41935ea25e0c6a296e9849de8130365a188c4d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "small_00.in",
+        "scope": "official",
+        "input_sha256": "01a73883cda3df4748c4c2758f4f4a57e3aa1e8e26d8006159c3a318ad736d9a",
+        "output_sha256": "ebceeb73bc26d609a8f2352a66781b66d71e3edd80024d48160e4960ac9f7503",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "small_01.in",
+        "scope": "official",
+        "input_sha256": "13c168720129a50b89df308071327e6502b144a3700a07e72bb425b677788ef4",
+        "output_sha256": "d15403b38edd11e98cfda4d6ec234b53896437fb89765d6dbe9fcf68ee6eae36",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "small_02.in",
+        "scope": "official",
+        "input_sha256": "0a8ce70dc2f1d319e129a05802b09091bcb0283883e95619a9080f47f8976a8b",
+        "output_sha256": "15a15c047478f3e0e3cab6ed3f632a29e89952fba136b5a78394d1c0ad79c6e5",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "small_03.in",
+        "scope": "official",
+        "input_sha256": "f67fe9848ebfc47df6109d17555c13343187ad31febd7409bbee33e3044ceddd",
+        "output_sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "small_04.in",
+        "scope": "official",
+        "input_sha256": "17a7e4021062ad0156d411deedaf7ae9ce1a3098d70a3914770fe650afd138ca",
+        "output_sha256": "122def0ca1e13a8a9706a3c0bceb5e2eb393e7e0303d1bd04d31989d74e414f3",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "e28af8b18f73895f3bfe13d4d6e17c6d722e3212510fbcafd2fe6259da72fc56",
+        "output_sha256": "9c1544f3273b967cb16eeff152ae6d1ec477d1a00232630ba848a5dc9e845110",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "7746b3e883c47e76787cc4a35975ee2f3131fedfbcbb6d0a9f8e44ba220c7b6d",
+        "output_sha256": "743d8ba2a9e1c4a952b819865c66ed83deb1d19c46e52e421cc2869b4517c80d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "a13590700562537b2df91b53b301c2f5e7921825e689fd5d90f33e1563b9ec8a",
+        "output_sha256": "af7b6af54f7be68b403c7f10d571652c7ae52c0cf4842c7323004dc07ebe6f34",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "5d379cd7560c3521a56ed9f0f28abd3a9d68a450d3608d6ff1bed7eb10a3b543",
+        "output_sha256": "cee582ac220b12361d75ba3b10fd433a7443590bd86636e1a6b0fba61df0e943",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "853ded845e4005507bfa780f49ad7e8f0a90238cba19f5d00005a000ad694049",
+        "output_sha256": "6c6055de8c628605a838a7a5d2c73979a67643eab1abadee2ebdd224f20ab9f8",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "3e2d9fc5f2a4004e7baf602a5e7150f9bce32e24b6ca70ac89ddc71bbed3717f",
+        "output_sha256": "b9e5b62067fc1fe5597856516026901bee41591c1d036d36949b1913b609da0c",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "388ef5ce643c07c73fbca9af841c33e58af5f6bd99b16d37ce88833962c43018",
+        "output_sha256": "b165d9c4ca2f9a962e1a66ef2b0639bafab4ed40c6b7c79b96eafa19ec1c050b",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "f2bef770c0e38f592913c0a11a34ee7c22d4d975caba0b1e5c09c22e87a01c19",
+        "output_sha256": "1441250d1ff3f5a80928c9faa71093dbbc5d7375f05635ab9a9e67b491282066",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "max_random_03.in",
+        "scope": "official",
+        "input_sha256": "7cd43c6e7fd73eabfe334b4175e35d4cdbd43c9117f411b5b38d1d0daf23869d",
+        "output_sha256": "5475d9ebc4bdf2f12a6e4628267fce71922742cd1182e9d7893e025affdf68eb",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "max_random_04.in",
+        "scope": "official",
+        "input_sha256": "133596d3847d1573d3ddc32510fdc9bbf5423f20008884d0d82a2f34e0ad1b9c",
+        "output_sha256": "4e6dbcc1d1e88c9c59c8f048d39c45b6f7a83e4c8349da3161fcf76b942dd3fc",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "hand_max_00.in",
+        "scope": "official",
+        "input_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "output_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "hand_min_00.in",
+        "scope": "official",
+        "input_sha256": "a2791806f8ce247bcd5de2bf408a8690d8cf4511e09b4558ea879011d10aac1d",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "equal_500k.in",
+        "scope": "custom",
+        "input_sha256": "b747b82188a3df1572ca37d39ae33bfdb4a6ce5bb7819eef6cec1e26b786a956",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "alternating_500k.in",
+        "scope": "custom",
+        "input_sha256": "2e106c8c8afdcbd021de74cfb3389a26340321b6d2c4a41ebb6ccab478b33277",
+        "output_sha256": "9cf15b7e2aa95bc85239aadeab91ecb983954a2a8602b202cf01982754be638f"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "tiny32.in",
+        "scope": "custom",
+        "input_sha256": "cb23c132f4fe1c48f68d7ec0066200dcb2b4bb6be90689ca7cd57753e1c75b0f",
+        "output_sha256": "6a60248ac098a2b55859f6c0d6048b127fe8119936cb819baaece310372e100a"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "case": "empty.in",
+        "scope": "custom",
+        "input_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4",
+        "output_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "60579e098bead3427f868ad19ddba1f56f19671934c02bbca3b129d5fb369773",
+        "output_sha256": "6bc483d79494871372efc9ca2c842ec6237034fe8144c9dbe9438e19d8151857",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "example_01.in",
+        "scope": "official",
+        "input_sha256": "3db246433a5c101e6bdc52b682ec4998306f8b55bd992f6335b05b7ff3c93035",
+        "output_sha256": "62f31da50e4ee0cbc1064619de41935ea25e0c6a296e9849de8130365a188c4d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "small_00.in",
+        "scope": "official",
+        "input_sha256": "01a73883cda3df4748c4c2758f4f4a57e3aa1e8e26d8006159c3a318ad736d9a",
+        "output_sha256": "ebceeb73bc26d609a8f2352a66781b66d71e3edd80024d48160e4960ac9f7503",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "small_01.in",
+        "scope": "official",
+        "input_sha256": "13c168720129a50b89df308071327e6502b144a3700a07e72bb425b677788ef4",
+        "output_sha256": "d15403b38edd11e98cfda4d6ec234b53896437fb89765d6dbe9fcf68ee6eae36",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "small_02.in",
+        "scope": "official",
+        "input_sha256": "0a8ce70dc2f1d319e129a05802b09091bcb0283883e95619a9080f47f8976a8b",
+        "output_sha256": "15a15c047478f3e0e3cab6ed3f632a29e89952fba136b5a78394d1c0ad79c6e5",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "small_03.in",
+        "scope": "official",
+        "input_sha256": "f67fe9848ebfc47df6109d17555c13343187ad31febd7409bbee33e3044ceddd",
+        "output_sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "small_04.in",
+        "scope": "official",
+        "input_sha256": "17a7e4021062ad0156d411deedaf7ae9ce1a3098d70a3914770fe650afd138ca",
+        "output_sha256": "122def0ca1e13a8a9706a3c0bceb5e2eb393e7e0303d1bd04d31989d74e414f3",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "e28af8b18f73895f3bfe13d4d6e17c6d722e3212510fbcafd2fe6259da72fc56",
+        "output_sha256": "9c1544f3273b967cb16eeff152ae6d1ec477d1a00232630ba848a5dc9e845110",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "7746b3e883c47e76787cc4a35975ee2f3131fedfbcbb6d0a9f8e44ba220c7b6d",
+        "output_sha256": "743d8ba2a9e1c4a952b819865c66ed83deb1d19c46e52e421cc2869b4517c80d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "a13590700562537b2df91b53b301c2f5e7921825e689fd5d90f33e1563b9ec8a",
+        "output_sha256": "af7b6af54f7be68b403c7f10d571652c7ae52c0cf4842c7323004dc07ebe6f34",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "5d379cd7560c3521a56ed9f0f28abd3a9d68a450d3608d6ff1bed7eb10a3b543",
+        "output_sha256": "cee582ac220b12361d75ba3b10fd433a7443590bd86636e1a6b0fba61df0e943",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "853ded845e4005507bfa780f49ad7e8f0a90238cba19f5d00005a000ad694049",
+        "output_sha256": "6c6055de8c628605a838a7a5d2c73979a67643eab1abadee2ebdd224f20ab9f8",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "3e2d9fc5f2a4004e7baf602a5e7150f9bce32e24b6ca70ac89ddc71bbed3717f",
+        "output_sha256": "b9e5b62067fc1fe5597856516026901bee41591c1d036d36949b1913b609da0c",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "388ef5ce643c07c73fbca9af841c33e58af5f6bd99b16d37ce88833962c43018",
+        "output_sha256": "b165d9c4ca2f9a962e1a66ef2b0639bafab4ed40c6b7c79b96eafa19ec1c050b",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "f2bef770c0e38f592913c0a11a34ee7c22d4d975caba0b1e5c09c22e87a01c19",
+        "output_sha256": "1441250d1ff3f5a80928c9faa71093dbbc5d7375f05635ab9a9e67b491282066",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "max_random_03.in",
+        "scope": "official",
+        "input_sha256": "7cd43c6e7fd73eabfe334b4175e35d4cdbd43c9117f411b5b38d1d0daf23869d",
+        "output_sha256": "5475d9ebc4bdf2f12a6e4628267fce71922742cd1182e9d7893e025affdf68eb",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "max_random_04.in",
+        "scope": "official",
+        "input_sha256": "133596d3847d1573d3ddc32510fdc9bbf5423f20008884d0d82a2f34e0ad1b9c",
+        "output_sha256": "4e6dbcc1d1e88c9c59c8f048d39c45b6f7a83e4c8349da3161fcf76b942dd3fc",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "hand_max_00.in",
+        "scope": "official",
+        "input_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "output_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "hand_min_00.in",
+        "scope": "official",
+        "input_sha256": "a2791806f8ce247bcd5de2bf408a8690d8cf4511e09b4558ea879011d10aac1d",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "equal_500k.in",
+        "scope": "custom",
+        "input_sha256": "b747b82188a3df1572ca37d39ae33bfdb4a6ce5bb7819eef6cec1e26b786a956",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "alternating_500k.in",
+        "scope": "custom",
+        "input_sha256": "2e106c8c8afdcbd021de74cfb3389a26340321b6d2c4a41ebb6ccab478b33277",
+        "output_sha256": "9cf15b7e2aa95bc85239aadeab91ecb983954a2a8602b202cf01982754be638f"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "tiny32.in",
+        "scope": "custom",
+        "input_sha256": "cb23c132f4fe1c48f68d7ec0066200dcb2b4bb6be90689ca7cd57753e1c75b0f",
+        "output_sha256": "6a60248ac098a2b55859f6c0d6048b127fe8119936cb819baaece310372e100a"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "empty.in",
+        "scope": "custom",
+        "input_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4",
+        "output_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "60579e098bead3427f868ad19ddba1f56f19671934c02bbca3b129d5fb369773",
+        "output_sha256": "6bc483d79494871372efc9ca2c842ec6237034fe8144c9dbe9438e19d8151857",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "example_01.in",
+        "scope": "official",
+        "input_sha256": "3db246433a5c101e6bdc52b682ec4998306f8b55bd992f6335b05b7ff3c93035",
+        "output_sha256": "62f31da50e4ee0cbc1064619de41935ea25e0c6a296e9849de8130365a188c4d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "small_00.in",
+        "scope": "official",
+        "input_sha256": "01a73883cda3df4748c4c2758f4f4a57e3aa1e8e26d8006159c3a318ad736d9a",
+        "output_sha256": "ebceeb73bc26d609a8f2352a66781b66d71e3edd80024d48160e4960ac9f7503",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "small_01.in",
+        "scope": "official",
+        "input_sha256": "13c168720129a50b89df308071327e6502b144a3700a07e72bb425b677788ef4",
+        "output_sha256": "d15403b38edd11e98cfda4d6ec234b53896437fb89765d6dbe9fcf68ee6eae36",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "small_02.in",
+        "scope": "official",
+        "input_sha256": "0a8ce70dc2f1d319e129a05802b09091bcb0283883e95619a9080f47f8976a8b",
+        "output_sha256": "15a15c047478f3e0e3cab6ed3f632a29e89952fba136b5a78394d1c0ad79c6e5",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "small_03.in",
+        "scope": "official",
+        "input_sha256": "f67fe9848ebfc47df6109d17555c13343187ad31febd7409bbee33e3044ceddd",
+        "output_sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "small_04.in",
+        "scope": "official",
+        "input_sha256": "17a7e4021062ad0156d411deedaf7ae9ce1a3098d70a3914770fe650afd138ca",
+        "output_sha256": "122def0ca1e13a8a9706a3c0bceb5e2eb393e7e0303d1bd04d31989d74e414f3",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "e28af8b18f73895f3bfe13d4d6e17c6d722e3212510fbcafd2fe6259da72fc56",
+        "output_sha256": "9c1544f3273b967cb16eeff152ae6d1ec477d1a00232630ba848a5dc9e845110",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "7746b3e883c47e76787cc4a35975ee2f3131fedfbcbb6d0a9f8e44ba220c7b6d",
+        "output_sha256": "743d8ba2a9e1c4a952b819865c66ed83deb1d19c46e52e421cc2869b4517c80d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "a13590700562537b2df91b53b301c2f5e7921825e689fd5d90f33e1563b9ec8a",
+        "output_sha256": "af7b6af54f7be68b403c7f10d571652c7ae52c0cf4842c7323004dc07ebe6f34",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "5d379cd7560c3521a56ed9f0f28abd3a9d68a450d3608d6ff1bed7eb10a3b543",
+        "output_sha256": "cee582ac220b12361d75ba3b10fd433a7443590bd86636e1a6b0fba61df0e943",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "853ded845e4005507bfa780f49ad7e8f0a90238cba19f5d00005a000ad694049",
+        "output_sha256": "6c6055de8c628605a838a7a5d2c73979a67643eab1abadee2ebdd224f20ab9f8",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "3e2d9fc5f2a4004e7baf602a5e7150f9bce32e24b6ca70ac89ddc71bbed3717f",
+        "output_sha256": "b9e5b62067fc1fe5597856516026901bee41591c1d036d36949b1913b609da0c",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "388ef5ce643c07c73fbca9af841c33e58af5f6bd99b16d37ce88833962c43018",
+        "output_sha256": "b165d9c4ca2f9a962e1a66ef2b0639bafab4ed40c6b7c79b96eafa19ec1c050b",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "f2bef770c0e38f592913c0a11a34ee7c22d4d975caba0b1e5c09c22e87a01c19",
+        "output_sha256": "1441250d1ff3f5a80928c9faa71093dbbc5d7375f05635ab9a9e67b491282066",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "max_random_03.in",
+        "scope": "official",
+        "input_sha256": "7cd43c6e7fd73eabfe334b4175e35d4cdbd43c9117f411b5b38d1d0daf23869d",
+        "output_sha256": "5475d9ebc4bdf2f12a6e4628267fce71922742cd1182e9d7893e025affdf68eb",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "max_random_04.in",
+        "scope": "official",
+        "input_sha256": "133596d3847d1573d3ddc32510fdc9bbf5423f20008884d0d82a2f34e0ad1b9c",
+        "output_sha256": "4e6dbcc1d1e88c9c59c8f048d39c45b6f7a83e4c8349da3161fcf76b942dd3fc",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "hand_max_00.in",
+        "scope": "official",
+        "input_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "output_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "hand_min_00.in",
+        "scope": "official",
+        "input_sha256": "a2791806f8ce247bcd5de2bf408a8690d8cf4511e09b4558ea879011d10aac1d",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "equal_500k.in",
+        "scope": "custom",
+        "input_sha256": "b747b82188a3df1572ca37d39ae33bfdb4a6ce5bb7819eef6cec1e26b786a956",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "alternating_500k.in",
+        "scope": "custom",
+        "input_sha256": "2e106c8c8afdcbd021de74cfb3389a26340321b6d2c4a41ebb6ccab478b33277",
+        "output_sha256": "9cf15b7e2aa95bc85239aadeab91ecb983954a2a8602b202cf01982754be638f"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "tiny32.in",
+        "scope": "custom",
+        "input_sha256": "cb23c132f4fe1c48f68d7ec0066200dcb2b4bb6be90689ca7cd57753e1c75b0f",
+        "output_sha256": "6a60248ac098a2b55859f6c0d6048b127fe8119936cb819baaece310372e100a"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "case": "empty.in",
+        "scope": "custom",
+        "input_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4",
+        "output_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "60579e098bead3427f868ad19ddba1f56f19671934c02bbca3b129d5fb369773",
+        "output_sha256": "6bc483d79494871372efc9ca2c842ec6237034fe8144c9dbe9438e19d8151857",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "example_01.in",
+        "scope": "official",
+        "input_sha256": "3db246433a5c101e6bdc52b682ec4998306f8b55bd992f6335b05b7ff3c93035",
+        "output_sha256": "62f31da50e4ee0cbc1064619de41935ea25e0c6a296e9849de8130365a188c4d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "small_00.in",
+        "scope": "official",
+        "input_sha256": "01a73883cda3df4748c4c2758f4f4a57e3aa1e8e26d8006159c3a318ad736d9a",
+        "output_sha256": "ebceeb73bc26d609a8f2352a66781b66d71e3edd80024d48160e4960ac9f7503",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "small_01.in",
+        "scope": "official",
+        "input_sha256": "13c168720129a50b89df308071327e6502b144a3700a07e72bb425b677788ef4",
+        "output_sha256": "d15403b38edd11e98cfda4d6ec234b53896437fb89765d6dbe9fcf68ee6eae36",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "small_02.in",
+        "scope": "official",
+        "input_sha256": "0a8ce70dc2f1d319e129a05802b09091bcb0283883e95619a9080f47f8976a8b",
+        "output_sha256": "15a15c047478f3e0e3cab6ed3f632a29e89952fba136b5a78394d1c0ad79c6e5",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "small_03.in",
+        "scope": "official",
+        "input_sha256": "f67fe9848ebfc47df6109d17555c13343187ad31febd7409bbee33e3044ceddd",
+        "output_sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "small_04.in",
+        "scope": "official",
+        "input_sha256": "17a7e4021062ad0156d411deedaf7ae9ce1a3098d70a3914770fe650afd138ca",
+        "output_sha256": "122def0ca1e13a8a9706a3c0bceb5e2eb393e7e0303d1bd04d31989d74e414f3",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "e28af8b18f73895f3bfe13d4d6e17c6d722e3212510fbcafd2fe6259da72fc56",
+        "output_sha256": "9c1544f3273b967cb16eeff152ae6d1ec477d1a00232630ba848a5dc9e845110",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "7746b3e883c47e76787cc4a35975ee2f3131fedfbcbb6d0a9f8e44ba220c7b6d",
+        "output_sha256": "743d8ba2a9e1c4a952b819865c66ed83deb1d19c46e52e421cc2869b4517c80d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "a13590700562537b2df91b53b301c2f5e7921825e689fd5d90f33e1563b9ec8a",
+        "output_sha256": "af7b6af54f7be68b403c7f10d571652c7ae52c0cf4842c7323004dc07ebe6f34",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "5d379cd7560c3521a56ed9f0f28abd3a9d68a450d3608d6ff1bed7eb10a3b543",
+        "output_sha256": "cee582ac220b12361d75ba3b10fd433a7443590bd86636e1a6b0fba61df0e943",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "853ded845e4005507bfa780f49ad7e8f0a90238cba19f5d00005a000ad694049",
+        "output_sha256": "6c6055de8c628605a838a7a5d2c73979a67643eab1abadee2ebdd224f20ab9f8",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "3e2d9fc5f2a4004e7baf602a5e7150f9bce32e24b6ca70ac89ddc71bbed3717f",
+        "output_sha256": "b9e5b62067fc1fe5597856516026901bee41591c1d036d36949b1913b609da0c",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "388ef5ce643c07c73fbca9af841c33e58af5f6bd99b16d37ce88833962c43018",
+        "output_sha256": "b165d9c4ca2f9a962e1a66ef2b0639bafab4ed40c6b7c79b96eafa19ec1c050b",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "f2bef770c0e38f592913c0a11a34ee7c22d4d975caba0b1e5c09c22e87a01c19",
+        "output_sha256": "1441250d1ff3f5a80928c9faa71093dbbc5d7375f05635ab9a9e67b491282066",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "max_random_03.in",
+        "scope": "official",
+        "input_sha256": "7cd43c6e7fd73eabfe334b4175e35d4cdbd43c9117f411b5b38d1d0daf23869d",
+        "output_sha256": "5475d9ebc4bdf2f12a6e4628267fce71922742cd1182e9d7893e025affdf68eb",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "max_random_04.in",
+        "scope": "official",
+        "input_sha256": "133596d3847d1573d3ddc32510fdc9bbf5423f20008884d0d82a2f34e0ad1b9c",
+        "output_sha256": "4e6dbcc1d1e88c9c59c8f048d39c45b6f7a83e4c8349da3161fcf76b942dd3fc",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "hand_max_00.in",
+        "scope": "official",
+        "input_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "output_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "hand_min_00.in",
+        "scope": "official",
+        "input_sha256": "a2791806f8ce247bcd5de2bf408a8690d8cf4511e09b4558ea879011d10aac1d",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "equal_500k.in",
+        "scope": "custom",
+        "input_sha256": "b747b82188a3df1572ca37d39ae33bfdb4a6ce5bb7819eef6cec1e26b786a956",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "alternating_500k.in",
+        "scope": "custom",
+        "input_sha256": "2e106c8c8afdcbd021de74cfb3389a26340321b6d2c4a41ebb6ccab478b33277",
+        "output_sha256": "9cf15b7e2aa95bc85239aadeab91ecb983954a2a8602b202cf01982754be638f"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "tiny32.in",
+        "scope": "custom",
+        "input_sha256": "cb23c132f4fe1c48f68d7ec0066200dcb2b4bb6be90689ca7cd57753e1c75b0f",
+        "output_sha256": "6a60248ac098a2b55859f6c0d6048b127fe8119936cb819baaece310372e100a"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "empty.in",
+        "scope": "custom",
+        "input_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4",
+        "output_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "60579e098bead3427f868ad19ddba1f56f19671934c02bbca3b129d5fb369773",
+        "output_sha256": "6bc483d79494871372efc9ca2c842ec6237034fe8144c9dbe9438e19d8151857",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "example_01.in",
+        "scope": "official",
+        "input_sha256": "3db246433a5c101e6bdc52b682ec4998306f8b55bd992f6335b05b7ff3c93035",
+        "output_sha256": "62f31da50e4ee0cbc1064619de41935ea25e0c6a296e9849de8130365a188c4d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "small_00.in",
+        "scope": "official",
+        "input_sha256": "01a73883cda3df4748c4c2758f4f4a57e3aa1e8e26d8006159c3a318ad736d9a",
+        "output_sha256": "ebceeb73bc26d609a8f2352a66781b66d71e3edd80024d48160e4960ac9f7503",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "small_01.in",
+        "scope": "official",
+        "input_sha256": "13c168720129a50b89df308071327e6502b144a3700a07e72bb425b677788ef4",
+        "output_sha256": "d15403b38edd11e98cfda4d6ec234b53896437fb89765d6dbe9fcf68ee6eae36",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "small_02.in",
+        "scope": "official",
+        "input_sha256": "0a8ce70dc2f1d319e129a05802b09091bcb0283883e95619a9080f47f8976a8b",
+        "output_sha256": "15a15c047478f3e0e3cab6ed3f632a29e89952fba136b5a78394d1c0ad79c6e5",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "small_03.in",
+        "scope": "official",
+        "input_sha256": "f67fe9848ebfc47df6109d17555c13343187ad31febd7409bbee33e3044ceddd",
+        "output_sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "small_04.in",
+        "scope": "official",
+        "input_sha256": "17a7e4021062ad0156d411deedaf7ae9ce1a3098d70a3914770fe650afd138ca",
+        "output_sha256": "122def0ca1e13a8a9706a3c0bceb5e2eb393e7e0303d1bd04d31989d74e414f3",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "e28af8b18f73895f3bfe13d4d6e17c6d722e3212510fbcafd2fe6259da72fc56",
+        "output_sha256": "9c1544f3273b967cb16eeff152ae6d1ec477d1a00232630ba848a5dc9e845110",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "7746b3e883c47e76787cc4a35975ee2f3131fedfbcbb6d0a9f8e44ba220c7b6d",
+        "output_sha256": "743d8ba2a9e1c4a952b819865c66ed83deb1d19c46e52e421cc2869b4517c80d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "a13590700562537b2df91b53b301c2f5e7921825e689fd5d90f33e1563b9ec8a",
+        "output_sha256": "af7b6af54f7be68b403c7f10d571652c7ae52c0cf4842c7323004dc07ebe6f34",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "5d379cd7560c3521a56ed9f0f28abd3a9d68a450d3608d6ff1bed7eb10a3b543",
+        "output_sha256": "cee582ac220b12361d75ba3b10fd433a7443590bd86636e1a6b0fba61df0e943",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "853ded845e4005507bfa780f49ad7e8f0a90238cba19f5d00005a000ad694049",
+        "output_sha256": "6c6055de8c628605a838a7a5d2c73979a67643eab1abadee2ebdd224f20ab9f8",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "3e2d9fc5f2a4004e7baf602a5e7150f9bce32e24b6ca70ac89ddc71bbed3717f",
+        "output_sha256": "b9e5b62067fc1fe5597856516026901bee41591c1d036d36949b1913b609da0c",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "388ef5ce643c07c73fbca9af841c33e58af5f6bd99b16d37ce88833962c43018",
+        "output_sha256": "b165d9c4ca2f9a962e1a66ef2b0639bafab4ed40c6b7c79b96eafa19ec1c050b",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "f2bef770c0e38f592913c0a11a34ee7c22d4d975caba0b1e5c09c22e87a01c19",
+        "output_sha256": "1441250d1ff3f5a80928c9faa71093dbbc5d7375f05635ab9a9e67b491282066",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "max_random_03.in",
+        "scope": "official",
+        "input_sha256": "7cd43c6e7fd73eabfe334b4175e35d4cdbd43c9117f411b5b38d1d0daf23869d",
+        "output_sha256": "5475d9ebc4bdf2f12a6e4628267fce71922742cd1182e9d7893e025affdf68eb",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "max_random_04.in",
+        "scope": "official",
+        "input_sha256": "133596d3847d1573d3ddc32510fdc9bbf5423f20008884d0d82a2f34e0ad1b9c",
+        "output_sha256": "4e6dbcc1d1e88c9c59c8f048d39c45b6f7a83e4c8349da3161fcf76b942dd3fc",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "hand_max_00.in",
+        "scope": "official",
+        "input_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "output_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "hand_min_00.in",
+        "scope": "official",
+        "input_sha256": "a2791806f8ce247bcd5de2bf408a8690d8cf4511e09b4558ea879011d10aac1d",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "equal_500k.in",
+        "scope": "custom",
+        "input_sha256": "b747b82188a3df1572ca37d39ae33bfdb4a6ce5bb7819eef6cec1e26b786a956",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "alternating_500k.in",
+        "scope": "custom",
+        "input_sha256": "2e106c8c8afdcbd021de74cfb3389a26340321b6d2c4a41ebb6ccab478b33277",
+        "output_sha256": "9cf15b7e2aa95bc85239aadeab91ecb983954a2a8602b202cf01982754be638f"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "tiny32.in",
+        "scope": "custom",
+        "input_sha256": "cb23c132f4fe1c48f68d7ec0066200dcb2b4bb6be90689ca7cd57753e1c75b0f",
+        "output_sha256": "6a60248ac098a2b55859f6c0d6048b127fe8119936cb819baaece310372e100a"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "case": "empty.in",
+        "scope": "custom",
+        "input_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4",
+        "output_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "60579e098bead3427f868ad19ddba1f56f19671934c02bbca3b129d5fb369773",
+        "output_sha256": "6bc483d79494871372efc9ca2c842ec6237034fe8144c9dbe9438e19d8151857",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "example_01.in",
+        "scope": "official",
+        "input_sha256": "3db246433a5c101e6bdc52b682ec4998306f8b55bd992f6335b05b7ff3c93035",
+        "output_sha256": "62f31da50e4ee0cbc1064619de41935ea25e0c6a296e9849de8130365a188c4d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "small_00.in",
+        "scope": "official",
+        "input_sha256": "01a73883cda3df4748c4c2758f4f4a57e3aa1e8e26d8006159c3a318ad736d9a",
+        "output_sha256": "ebceeb73bc26d609a8f2352a66781b66d71e3edd80024d48160e4960ac9f7503",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "small_01.in",
+        "scope": "official",
+        "input_sha256": "13c168720129a50b89df308071327e6502b144a3700a07e72bb425b677788ef4",
+        "output_sha256": "d15403b38edd11e98cfda4d6ec234b53896437fb89765d6dbe9fcf68ee6eae36",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "small_02.in",
+        "scope": "official",
+        "input_sha256": "0a8ce70dc2f1d319e129a05802b09091bcb0283883e95619a9080f47f8976a8b",
+        "output_sha256": "15a15c047478f3e0e3cab6ed3f632a29e89952fba136b5a78394d1c0ad79c6e5",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "small_03.in",
+        "scope": "official",
+        "input_sha256": "f67fe9848ebfc47df6109d17555c13343187ad31febd7409bbee33e3044ceddd",
+        "output_sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "small_04.in",
+        "scope": "official",
+        "input_sha256": "17a7e4021062ad0156d411deedaf7ae9ce1a3098d70a3914770fe650afd138ca",
+        "output_sha256": "122def0ca1e13a8a9706a3c0bceb5e2eb393e7e0303d1bd04d31989d74e414f3",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "e28af8b18f73895f3bfe13d4d6e17c6d722e3212510fbcafd2fe6259da72fc56",
+        "output_sha256": "9c1544f3273b967cb16eeff152ae6d1ec477d1a00232630ba848a5dc9e845110",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "7746b3e883c47e76787cc4a35975ee2f3131fedfbcbb6d0a9f8e44ba220c7b6d",
+        "output_sha256": "743d8ba2a9e1c4a952b819865c66ed83deb1d19c46e52e421cc2869b4517c80d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "a13590700562537b2df91b53b301c2f5e7921825e689fd5d90f33e1563b9ec8a",
+        "output_sha256": "af7b6af54f7be68b403c7f10d571652c7ae52c0cf4842c7323004dc07ebe6f34",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "5d379cd7560c3521a56ed9f0f28abd3a9d68a450d3608d6ff1bed7eb10a3b543",
+        "output_sha256": "cee582ac220b12361d75ba3b10fd433a7443590bd86636e1a6b0fba61df0e943",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "853ded845e4005507bfa780f49ad7e8f0a90238cba19f5d00005a000ad694049",
+        "output_sha256": "6c6055de8c628605a838a7a5d2c73979a67643eab1abadee2ebdd224f20ab9f8",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "3e2d9fc5f2a4004e7baf602a5e7150f9bce32e24b6ca70ac89ddc71bbed3717f",
+        "output_sha256": "b9e5b62067fc1fe5597856516026901bee41591c1d036d36949b1913b609da0c",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "388ef5ce643c07c73fbca9af841c33e58af5f6bd99b16d37ce88833962c43018",
+        "output_sha256": "b165d9c4ca2f9a962e1a66ef2b0639bafab4ed40c6b7c79b96eafa19ec1c050b",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "f2bef770c0e38f592913c0a11a34ee7c22d4d975caba0b1e5c09c22e87a01c19",
+        "output_sha256": "1441250d1ff3f5a80928c9faa71093dbbc5d7375f05635ab9a9e67b491282066",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "max_random_03.in",
+        "scope": "official",
+        "input_sha256": "7cd43c6e7fd73eabfe334b4175e35d4cdbd43c9117f411b5b38d1d0daf23869d",
+        "output_sha256": "5475d9ebc4bdf2f12a6e4628267fce71922742cd1182e9d7893e025affdf68eb",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "max_random_04.in",
+        "scope": "official",
+        "input_sha256": "133596d3847d1573d3ddc32510fdc9bbf5423f20008884d0d82a2f34e0ad1b9c",
+        "output_sha256": "4e6dbcc1d1e88c9c59c8f048d39c45b6f7a83e4c8349da3161fcf76b942dd3fc",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "hand_max_00.in",
+        "scope": "official",
+        "input_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "output_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "hand_min_00.in",
+        "scope": "official",
+        "input_sha256": "a2791806f8ce247bcd5de2bf408a8690d8cf4511e09b4558ea879011d10aac1d",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "equal_500k.in",
+        "scope": "custom",
+        "input_sha256": "b747b82188a3df1572ca37d39ae33bfdb4a6ce5bb7819eef6cec1e26b786a956",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "alternating_500k.in",
+        "scope": "custom",
+        "input_sha256": "2e106c8c8afdcbd021de74cfb3389a26340321b6d2c4a41ebb6ccab478b33277",
+        "output_sha256": "9cf15b7e2aa95bc85239aadeab91ecb983954a2a8602b202cf01982754be638f"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "tiny32.in",
+        "scope": "custom",
+        "input_sha256": "cb23c132f4fe1c48f68d7ec0066200dcb2b4bb6be90689ca7cd57753e1c75b0f",
+        "output_sha256": "6a60248ac098a2b55859f6c0d6048b127fe8119936cb819baaece310372e100a"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "empty.in",
+        "scope": "custom",
+        "input_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4",
+        "output_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "60579e098bead3427f868ad19ddba1f56f19671934c02bbca3b129d5fb369773",
+        "output_sha256": "6bc483d79494871372efc9ca2c842ec6237034fe8144c9dbe9438e19d8151857",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "example_01.in",
+        "scope": "official",
+        "input_sha256": "3db246433a5c101e6bdc52b682ec4998306f8b55bd992f6335b05b7ff3c93035",
+        "output_sha256": "62f31da50e4ee0cbc1064619de41935ea25e0c6a296e9849de8130365a188c4d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "small_00.in",
+        "scope": "official",
+        "input_sha256": "01a73883cda3df4748c4c2758f4f4a57e3aa1e8e26d8006159c3a318ad736d9a",
+        "output_sha256": "ebceeb73bc26d609a8f2352a66781b66d71e3edd80024d48160e4960ac9f7503",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "small_01.in",
+        "scope": "official",
+        "input_sha256": "13c168720129a50b89df308071327e6502b144a3700a07e72bb425b677788ef4",
+        "output_sha256": "d15403b38edd11e98cfda4d6ec234b53896437fb89765d6dbe9fcf68ee6eae36",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "small_02.in",
+        "scope": "official",
+        "input_sha256": "0a8ce70dc2f1d319e129a05802b09091bcb0283883e95619a9080f47f8976a8b",
+        "output_sha256": "15a15c047478f3e0e3cab6ed3f632a29e89952fba136b5a78394d1c0ad79c6e5",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "small_03.in",
+        "scope": "official",
+        "input_sha256": "f67fe9848ebfc47df6109d17555c13343187ad31febd7409bbee33e3044ceddd",
+        "output_sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "small_04.in",
+        "scope": "official",
+        "input_sha256": "17a7e4021062ad0156d411deedaf7ae9ce1a3098d70a3914770fe650afd138ca",
+        "output_sha256": "122def0ca1e13a8a9706a3c0bceb5e2eb393e7e0303d1bd04d31989d74e414f3",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "e28af8b18f73895f3bfe13d4d6e17c6d722e3212510fbcafd2fe6259da72fc56",
+        "output_sha256": "9c1544f3273b967cb16eeff152ae6d1ec477d1a00232630ba848a5dc9e845110",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "7746b3e883c47e76787cc4a35975ee2f3131fedfbcbb6d0a9f8e44ba220c7b6d",
+        "output_sha256": "743d8ba2a9e1c4a952b819865c66ed83deb1d19c46e52e421cc2869b4517c80d",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "a13590700562537b2df91b53b301c2f5e7921825e689fd5d90f33e1563b9ec8a",
+        "output_sha256": "af7b6af54f7be68b403c7f10d571652c7ae52c0cf4842c7323004dc07ebe6f34",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "5d379cd7560c3521a56ed9f0f28abd3a9d68a450d3608d6ff1bed7eb10a3b543",
+        "output_sha256": "cee582ac220b12361d75ba3b10fd433a7443590bd86636e1a6b0fba61df0e943",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "853ded845e4005507bfa780f49ad7e8f0a90238cba19f5d00005a000ad694049",
+        "output_sha256": "6c6055de8c628605a838a7a5d2c73979a67643eab1abadee2ebdd224f20ab9f8",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "3e2d9fc5f2a4004e7baf602a5e7150f9bce32e24b6ca70ac89ddc71bbed3717f",
+        "output_sha256": "b9e5b62067fc1fe5597856516026901bee41591c1d036d36949b1913b609da0c",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "388ef5ce643c07c73fbca9af841c33e58af5f6bd99b16d37ce88833962c43018",
+        "output_sha256": "b165d9c4ca2f9a962e1a66ef2b0639bafab4ed40c6b7c79b96eafa19ec1c050b",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "f2bef770c0e38f592913c0a11a34ee7c22d4d975caba0b1e5c09c22e87a01c19",
+        "output_sha256": "1441250d1ff3f5a80928c9faa71093dbbc5d7375f05635ab9a9e67b491282066",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "max_random_03.in",
+        "scope": "official",
+        "input_sha256": "7cd43c6e7fd73eabfe334b4175e35d4cdbd43c9117f411b5b38d1d0daf23869d",
+        "output_sha256": "5475d9ebc4bdf2f12a6e4628267fce71922742cd1182e9d7893e025affdf68eb",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "max_random_04.in",
+        "scope": "official",
+        "input_sha256": "133596d3847d1573d3ddc32510fdc9bbf5423f20008884d0d82a2f34e0ad1b9c",
+        "output_sha256": "4e6dbcc1d1e88c9c59c8f048d39c45b6f7a83e4c8349da3161fcf76b942dd3fc",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "hand_max_00.in",
+        "scope": "official",
+        "input_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "output_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "hand_min_00.in",
+        "scope": "official",
+        "input_sha256": "a2791806f8ce247bcd5de2bf408a8690d8cf4511e09b4558ea879011d10aac1d",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863",
+        "official_checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "equal_500k.in",
+        "scope": "custom",
+        "input_sha256": "b747b82188a3df1572ca37d39ae33bfdb4a6ce5bb7819eef6cec1e26b786a956",
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "alternating_500k.in",
+        "scope": "custom",
+        "input_sha256": "2e106c8c8afdcbd021de74cfb3389a26340321b6d2c4a41ebb6ccab478b33277",
+        "output_sha256": "9cf15b7e2aa95bc85239aadeab91ecb983954a2a8602b202cf01982754be638f"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "tiny32.in",
+        "scope": "custom",
+        "input_sha256": "cb23c132f4fe1c48f68d7ec0066200dcb2b4bb6be90689ca7cd57753e1c75b0f",
+        "output_sha256": "6a60248ac098a2b55859f6c0d6048b127fe8119936cb819baaece310372e100a"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "case": "empty.in",
+        "scope": "custom",
+        "input_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4",
+        "output_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+      }
+    ],
+    "runs": 184,
+    "texts": {
+      "gcc": {
+        "baseline": "0d88f6942d3f127c56874473dbd5bae5e0cde4f6ff6a9eea35dc9e1bb552d872",
+        "control": "0d88f6942d3f127c56874473dbd5bae5e0cde4f6ff6a9eea35dc9e1bb552d872",
+        "final": "7ae33e9378eaffb1f12bac5147a9c6dff914d6cf4cd73926398075baed0d0064",
+        "checked": "f7fe3c6dc00014b9a7e8c91456f4bd8615cdcf2e24c67f24aeb32a3848637b25",
+        "standard": "f7fe3c6dc00014b9a7e8c91456f4bd8615cdcf2e24c67f24aeb32a3848637b25",
+        "standard_skip": "7ae33e9378eaffb1f12bac5147a9c6dff914d6cf4cd73926398075baed0d0064"
+      },
+      "clang": {
+        "baseline": "0652dbdd59c0475adbcd2e792e6734860e6d0b71cb6bbc6abd7caa058374ae11",
+        "control": "0652dbdd59c0475adbcd2e792e6734860e6d0b71cb6bbc6abd7caa058374ae11",
+        "final": "08a72b3cf3e3e93b4a8526a28a2cd3260d06f04e00fd0858d9f9af70b19a426f",
+        "checked": "85f4993349b28929e21896f15cdaa4e6356f4a151b6ebbe087dcec7b0467fdd8",
+        "standard": "85f4993349b28929e21896f15cdaa4e6356f4a151b6ebbe087dcec7b0467fdd8",
+        "standard_skip": "08a72b3cf3e3e93b4a8526a28a2cd3260d06f04e00fd0858d9f9af70b19a426f"
+      }
+    },
+    "raw": {
+      "gccmax_random_00.in": {
+        "baseline": {
+          "wall_ms": [
+            23.794109,
+            52.606174,
+            24.455323,
+            24.456596,
+            24.63648,
+            25.518783,
+            25.27143,
+            24.749376,
+            25.074379,
+            24.894667,
+            24.352828
+          ],
+          "cpu_ms": [
+            23.263999999999953,
+            24.07600000000243,
+            23.78399999999892,
+            23.85999999999955,
+            23.140999999999636,
+            23.356999999999406,
+            23.2100000000004,
+            23.282999999998168,
+            23.392999999999553,
+            23.36799999999828,
+            23.320000000000228
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            24.408416,
+            24.769974,
+            24.478233,
+            24.352963,
+            24.960454,
+            25.085128,
+            25.153276,
+            24.881488,
+            25.291952,
+            24.730666,
+            24.832272
+          ],
+          "cpu_ms": [
+            23.695999999999493,
+            23.93500000000115,
+            23.850000000000815,
+            23.215999999999013,
+            23.483000000000143,
+            23.725000000000218,
+            23.414999999999964,
+            23.334999999999884,
+            23.66300000000021,
+            23.24300000000168,
+            23.27400000000024
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            24.495766,
+            24.433426,
+            24.161539,
+            25.549446,
+            24.800141,
+            25.035753,
+            24.860407,
+            24.705771,
+            24.789134,
+            23.772687,
+            24.480931
+          ],
+          "cpu_ms": [
+            23.77199999999946,
+            23.654999999998427,
+            23.420999999999694,
+            23.51499999999973,
+            23.345000000001058,
+            23.50000000000052,
+            23.374000000001118,
+            23.17100000000183,
+            23.18699999999985,
+            23.092999999999584,
+            23.038000000000338
+          ]
+        }
+      },
+      "gccmax_random_01.in": {
+        "baseline": {
+          "wall_ms": [
+            25.444339,
+            25.665934,
+            24.74369,
+            24.636206,
+            24.736248,
+            25.046555,
+            24.494654,
+            25.310273,
+            25.091248,
+            24.875213,
+            24.176712
+          ],
+          "cpu_ms": [
+            23.495000000000932,
+            23.495000000000932,
+            23.131000000000455,
+            23.126999999998787,
+            23.176000000000307,
+            23.372999999998534,
+            23.06200000000036,
+            23.21499999999954,
+            23.525999999998824,
+            23.299999999999432,
+            23.449999999999527
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            25.26405,
+            24.906378,
+            24.982777,
+            24.910145,
+            25.487848,
+            24.555663,
+            24.536607,
+            24.476559,
+            24.823617,
+            24.394455,
+            24.972266
+          ],
+          "cpu_ms": [
+            23.746999999998852,
+            23.42700000000031,
+            23.452000000001583,
+            23.398000000000472,
+            23.49599999999907,
+            23.065000000001668,
+            23.067999999999422,
+            23.881000000001595,
+            23.26000000000139,
+            23.713999999999793,
+            24.109999999999854
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            24.372926,
+            24.953076,
+            25.019912,
+            24.025584,
+            24.785901,
+            24.715507,
+            24.937205,
+            24.475658,
+            25.832166,
+            24.695031,
+            24.275915
+          ],
+          "cpu_ms": [
+            22.841000000001,
+            23.41899999999919,
+            23.318999999999424,
+            23.40999999999971,
+            23.23599999999848,
+            23.29499999999962,
+            23.51400000000048,
+            23.36000000000027,
+            23.82700000000004,
+            23.76699999999987,
+            23.652999999998592
+          ]
+        }
+      },
+      "gcchand_max_00.in": {
+        "baseline": {
+          "wall_ms": [
+            16.905968,
+            16.555969,
+            16.499606,
+            16.235455,
+            15.855643,
+            15.735674,
+            15.759077,
+            16.159477,
+            16.673182,
+            16.922975,
+            15.612434
+          ],
+          "cpu_ms": [
+            15.027000000000346,
+            14.861000000000457,
+            14.832999999998986,
+            14.54800000000045,
+            14.821000000001305,
+            14.681999999998752,
+            14.654999999999418,
+            14.4029999999995,
+            14.860000000001872,
+            15.075000000000838,
+            14.560000000000795
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            16.680547,
+            16.241363,
+            15.355632,
+            15.528672,
+            15.867157,
+            21.285849,
+            16.493679,
+            16.344229,
+            15.804576,
+            15.398056,
+            15.722522
+          ],
+          "cpu_ms": [
+            14.953999999999246,
+            14.564999999998607,
+            14.36099999999918,
+            14.412999999999565,
+            14.803000000000344,
+            14.698000000000544,
+            14.853000000000005,
+            14.600000000001057,
+            14.827999999998509,
+            14.40100000000033,
+            14.509000000000771
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            15.666642,
+            16.075727,
+            15.887784,
+            16.703611,
+            15.944526,
+            16.690863,
+            15.827875,
+            15.845989,
+            16.004479,
+            16.566236,
+            16.71599
+          ],
+          "cpu_ms": [
+            14.66299999999987,
+            14.944999999999986,
+            14.912000000000036,
+            14.979999999999993,
+            14.30599999999882,
+            15.015000000000445,
+            14.847999999998418,
+            14.777999999999736,
+            14.958999999998834,
+            14.395000000000824,
+            14.857999999998928
+          ]
+        }
+      },
+      "gcchand_min_00.in": {
+        "baseline": {
+          "wall_ms": [
+            7.058091,
+            6.499885,
+            6.843794,
+            6.702161,
+            6.280992,
+            6.733565,
+            6.034966,
+            6.39831,
+            6.499801,
+            6.540363,
+            7.160118
+          ],
+          "cpu_ms": [
+            6.224000000000007,
+            5.9440000000008375,
+            6.137999999999089,
+            6.072000000000077,
+            5.603999999999054,
+            6.07599999999997,
+            5.381999999999554,
+            5.761000000000127,
+            5.944000000000393,
+            5.983000000000516,
+            5.778999999998868
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            6.842848,
+            6.491894,
+            6.607065,
+            6.737912,
+            6.430983,
+            6.501702,
+            6.420237,
+            6.422888,
+            6.466961,
+            7.753196,
+            7.028477
+          ],
+          "cpu_ms": [
+            6.121000000000709,
+            5.921000000000287,
+            6.053999999999782,
+            6.064999999999321,
+            5.909000000000386,
+            5.9499999999999,
+            5.788000000000348,
+            5.844999999999878,
+            5.836999999999648,
+            5.859999999998422,
+            5.6400000000005335
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            6.721631,
+            6.666295,
+            6.673883,
+            6.426889,
+            8.046736,
+            6.693982,
+            6.489922,
+            6.334455,
+            6.600536,
+            6.98361,
+            7.088199
+          ],
+          "cpu_ms": [
+            6.081000000000891,
+            5.9459999999984525,
+            5.984999999999019,
+            5.803999999999476,
+            5.92499999999907,
+            5.992000000000441,
+            5.685000000001494,
+            5.74799999999942,
+            6.053000000000974,
+            5.58300000000056,
+            5.702000000001872
+          ]
+        }
+      },
+      "gccequal_500k.in": {
+        "baseline": {
+          "wall_ms": [
+            4.907047,
+            4.016376,
+            4.445611,
+            4.179161,
+            4.460639,
+            4.130613,
+            3.795352,
+            3.832543,
+            3.74742,
+            3.92831,
+            4.035954
+          ],
+          "cpu_ms": [
+            4.4480000000000075,
+            3.629999999998912,
+            4.02400000000136,
+            3.7749999999996398,
+            3.7829999999992037,
+            3.7519999999988674,
+            3.6180000000007873,
+            3.6679999999993385,
+            3.578000000000525,
+            3.7570000000017867,
+            3.70199999999965
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            4.325135,
+            4.207573,
+            4.418477,
+            4.251129,
+            3.999033,
+            3.816647,
+            3.854679,
+            3.722655,
+            3.87196,
+            3.803702,
+            3.808732
+          ],
+          "cpu_ms": [
+            3.919999999998147,
+            3.805999999998644,
+            3.855000000000164,
+            3.824000000001382,
+            3.767000000000298,
+            3.626000000000129,
+            3.6840000000006867,
+            3.58400000000092,
+            3.680999999998491,
+            3.6279999999995205,
+            3.644000000001313
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            4.437366,
+            4.483773,
+            4.844041,
+            3.947235,
+            3.932971,
+            4.22979,
+            3.755182,
+            3.893505,
+            3.774519,
+            3.782959,
+            4.020405
+          ],
+          "cpu_ms": [
+            3.7980000000010783,
+            3.8320000000009458,
+            4.032999999999731,
+            3.594000000000097,
+            3.5810000000002784,
+            3.775000000000528,
+            3.587000000000451,
+            3.7240000000009488,
+            3.6199999999997345,
+            3.617999999999455,
+            3.4869999999984636
+          ]
+        }
+      },
+      "gccalternating_500k.in": {
+        "baseline": {
+          "wall_ms": [
+            11.785124,
+            14.145603,
+            13.905454,
+            13.782832,
+            13.700951,
+            13.852873,
+            14.022436,
+            13.788955,
+            13.380861,
+            13.922354,
+            13.987591
+          ],
+          "cpu_ms": [
+            11.268000000000722,
+            12.90900000000006,
+            12.671999999998462,
+            12.604000000000726,
+            12.393000000001209,
+            12.459000000001108,
+            12.272000000000505,
+            12.73000000000124,
+            12.268000000000612,
+            12.745999999999036,
+            12.755999999997991
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            13.733467,
+            13.713461,
+            13.640244,
+            13.947599,
+            13.908159,
+            13.948044,
+            13.512581,
+            13.872054,
+            13.657134,
+            13.970878,
+            13.768488
+          ],
+          "cpu_ms": [
+            12.55400000000062,
+            12.577999999998202,
+            12.306999999999402,
+            12.620999999998883,
+            12.566000000000521,
+            12.673999999999186,
+            12.4929999999992,
+            12.692999999998289,
+            12.44299999999976,
+            12.817999999999108,
+            12.425000000001685
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            13.99638,
+            13.852912,
+            13.74556,
+            13.667779,
+            13.590239,
+            13.709883,
+            13.738405,
+            14.052391,
+            14.225728,
+            13.916736,
+            13.893625
+          ],
+          "cpu_ms": [
+            12.619000000000824,
+            12.541999999999165,
+            12.552000000000785,
+            12.511999999999635,
+            12.449999999998962,
+            12.503999999998294,
+            12.498000000000786,
+            12.676000000000354,
+            12.547999999999337,
+            12.674999999999326,
+            12.63200000000042
+          ]
+        }
+      },
+      "gcctiny32.in": {
+        "baseline": {
+          "wall_ms": [
+            2.275351,
+            1.137443,
+            1.045852,
+            1.003959,
+            0.91173,
+            0.911431,
+            0.91171,
+            0.923259,
+            0.900698,
+            0.913566,
+            0.907228
+          ],
+          "cpu_ms": [
+            2.033000000002172,
+            1.0690000000006528,
+            0.9660000000006885,
+            0.9609999999993235,
+            0.8719999999999839,
+            0.8710000000000662,
+            0.8720000000002059,
+            0.8819999999993833,
+            0.8610000000004447,
+            0.8720000000010941,
+            0.8659999999995893
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            1.631103,
+            1.303701,
+            1.014079,
+            1.006154,
+            0.923159,
+            0.911708,
+            0.910099,
+            0.907499,
+            0.903838,
+            0.909058,
+            0.908559
+          ],
+          "cpu_ms": [
+            1.4799999999997038,
+            1.214999999999522,
+            0.9659999999989122,
+            0.9639999999988547,
+            0.8820000000013817,
+            0.8699999999992603,
+            0.8699999999994823,
+            0.8650000000003377,
+            0.8619999999996963,
+            0.8680000000014232,
+            0.8699999999999264
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            1.40128,
+            1.213857,
+            1.022717,
+            0.999813,
+            0.939359,
+            0.921546,
+            0.901762,
+            0.912064,
+            0.961805,
+            0.905018,
+            0.913125
+          ],
+          "cpu_ms": [
+            1.2299999999991762,
+            1.1319999999996888,
+            0.9740000000000304,
+            0.9590000000008203,
+            0.8790000000000742,
+            0.8780000000001564,
+            0.8619999999990302,
+            0.8719999999997619,
+            0.9129999999999416,
+            0.8659999999993673,
+            0.8719999999993178
+          ]
+        }
+      },
+      "clangmax_random_00.in": {
+        "baseline": {
+          "wall_ms": [
+            23.02967,
+            24.514802,
+            24.534694,
+            24.184322,
+            24.545406,
+            24.601785,
+            24.431352,
+            24.779892,
+            24.33251,
+            24.863547,
+            25.157773
+          ],
+          "cpu_ms": [
+            22.638000000000158,
+            23.781999999998416,
+            23.7510000000003,
+            23.536000000000445,
+            23.715999999998516,
+            23.754000000001163,
+            23.813000000000084,
+            23.379999999999956,
+            23.59100000000014,
+            23.249000000000297,
+            23.12699999999923
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            24.268196,
+            24.169118,
+            24.422816,
+            24.448454,
+            24.437873,
+            24.268658,
+            24.77746,
+            24.728448,
+            25.213502,
+            25.297886,
+            24.610313
+          ],
+          "cpu_ms": [
+            23.681000000000285,
+            23.418000000000383,
+            23.71199999999929,
+            23.737999999999815,
+            23.78000000000169,
+            23.570999999998232,
+            24.034000000000333,
+            24.029999999998886,
+            23.17099999999961,
+            23.27700000000066,
+            23.11399999999919
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            24.389372,
+            24.321353,
+            24.380557,
+            24.140645,
+            24.228827,
+            24.117311,
+            24.159825,
+            31.637232,
+            24.104598,
+            24.713088,
+            24.454468
+          ],
+          "cpu_ms": [
+            23.60400000000018,
+            23.619000000000945,
+            23.73299999999956,
+            23.43199999999923,
+            23.632000000000097,
+            23.41599999999877,
+            23.45300000000039,
+            23.277000000000214,
+            23.441000000001377,
+            23.228999999998834,
+            23.0020000000013
+          ]
+        }
+      },
+      "clangmax_random_01.in": {
+        "baseline": {
+          "wall_ms": [
+            24.710205,
+            24.829972,
+            24.695582,
+            23.950665,
+            24.44586,
+            24.284994,
+            24.548974,
+            24.725209,
+            24.616546,
+            24.580678,
+            24.482215
+          ],
+          "cpu_ms": [
+            23.153999999999453,
+            23.3169999999987,
+            23.830999999999936,
+            23.112000000000243,
+            23.821000000001202,
+            23.574000000000428,
+            23.758999999999197,
+            23.87600000000134,
+            23.886000000000074,
+            23.77800000000052,
+            23.608999999999103
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            23.931352,
+            25.345688,
+            24.760065,
+            24.285787,
+            24.823223,
+            24.41845,
+            24.652849,
+            24.396221,
+            24.651517,
+            24.701689,
+            24.350901
+          ],
+          "cpu_ms": [
+            23.220000000002017,
+            23.45599999999859,
+            23.76900000000015,
+            23.66199999999985,
+            23.985999999999397,
+            23.761000000000365,
+            23.919000000000246,
+            23.773999999999962,
+            23.859000000000297,
+            23.902999999998897,
+            23.65299999999948
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            24.517567,
+            25.323724,
+            24.868825,
+            24.552706,
+            24.562086,
+            24.427037,
+            24.270185,
+            24.573019,
+            24.504812,
+            24.88238,
+            24.786219
+          ],
+          "cpu_ms": [
+            23.915999999998494,
+            23.249999999999993,
+            23.42100000000169,
+            23.80200000000121,
+            23.89299999999972,
+            23.70599999999934,
+            23.660000000000903,
+            23.94599999999958,
+            23.851000000000955,
+            24.166999999999828,
+            23.273000000000987
+          ]
+        }
+      },
+      "clanghand_max_00.in": {
+        "baseline": {
+          "wall_ms": [
+            15.793502,
+            15.135355,
+            15.357583,
+            15.606749,
+            14.71435,
+            14.361368,
+            14.699753,
+            15.775959,
+            15.122892,
+            14.938463,
+            15.149826
+          ],
+          "cpu_ms": [
+            13.87200000000055,
+            13.410000000002142,
+            13.654999999999085,
+            13.866999999999408,
+            13.667000000000762,
+            13.32500000000092,
+            13.69599999999993,
+            13.527999999998652,
+            13.518000000000807,
+            13.254000000002542,
+            13.99600000000012
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            15.87648,
+            16.402617,
+            14.760226,
+            14.392148,
+            14.847256,
+            15.369119,
+            14.955301,
+            15.083974,
+            15.123432,
+            14.77586,
+            14.835005
+          ],
+          "cpu_ms": [
+            14.098000000001054,
+            13.400000000002077,
+            13.794000000000306,
+            13.390000000001123,
+            13.88500000000148,
+            13.700999999999741,
+            13.291000000000608,
+            13.410999999999618,
+            13.99999999999757,
+            13.621999999998913,
+            13.789999999999747
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            15.525361,
+            14.874785,
+            14.894197,
+            15.787812,
+            15.657822,
+            15.561423,
+            15.095552,
+            14.814728,
+            14.499678,
+            15.333227,
+            15.540655
+          ],
+          "cpu_ms": [
+            13.210999999998752,
+            13.87599999999889,
+            13.731000000000826,
+            14.109999999999179,
+            13.865999999997491,
+            13.767999999998892,
+            13.951999999999742,
+            13.704000000000605,
+            13.43599999999956,
+            13.67199999999924,
+            13.711999999999946
+          ]
+        }
+      },
+      "clanghand_min_00.in": {
+        "baseline": {
+          "wall_ms": [
+            6.299609,
+            6.4216,
+            6.470104,
+            6.49507,
+            6.428885,
+            6.339295,
+            6.346381,
+            6.321942,
+            6.376364,
+            6.408184,
+            6.425079
+          ],
+          "cpu_ms": [
+            5.647000000000624,
+            5.867000000000733,
+            5.917999999999868,
+            5.850000000001021,
+            5.750999999998285,
+            5.698999999999899,
+            5.7269999999993715,
+            5.7680000000006615,
+            5.866000000000593,
+            5.86799999999954,
+            5.804000000000364
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            6.300043,
+            6.306908,
+            6.540336,
+            6.599835,
+            6.534063,
+            6.55975,
+            6.393363,
+            6.464837,
+            6.418232,
+            6.509503,
+            6.260905
+          ],
+          "cpu_ms": [
+            5.721000000000753,
+            5.727999999999955,
+            5.784999999999929,
+            5.901999999999408,
+            5.901999999999852,
+            5.911000000001998,
+            5.801999999999197,
+            5.8880000000005595,
+            5.855000000000388,
+            5.912999999999169,
+            5.678999999999768
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            6.490472,
+            6.001176,
+            6.473367,
+            6.328366,
+            6.107707,
+            6.271112,
+            6.651745,
+            6.467869,
+            6.435473,
+            6.540212,
+            6.373362
+          ],
+          "cpu_ms": [
+            5.844999999999434,
+            5.468000000000028,
+            5.814000000001318,
+            5.695000000001116,
+            5.512000000001738,
+            5.645000000000788,
+            5.995000000000417,
+            5.854000000000692,
+            5.879999999998553,
+            5.912000000002138,
+            5.767999999998441
+          ]
+        }
+      },
+      "clangequal_500k.in": {
+        "baseline": {
+          "wall_ms": [
+            4.23905,
+            3.892574,
+            3.673798,
+            3.375031,
+            3.280359,
+            3.345331,
+            3.222394,
+            3.193281,
+            3.61218,
+            3.392459,
+            3.887539
+          ],
+          "cpu_ms": [
+            3.9839999999995435,
+            3.657000000002242,
+            3.487000000001572,
+            3.236999999998602,
+            3.1600000000002737,
+            3.225999999999729,
+            3.1010000000004645,
+            3.0820000000004732,
+            3.435000000000965,
+            3.237999999999186,
+            3.641999999999257
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            3.749532,
+            3.674239,
+            3.525334,
+            3.419681,
+            3.435972,
+            3.186335,
+            3.192439,
+            3.156847,
+            3.675678,
+            4.078591,
+            3.840823
+          ],
+          "cpu_ms": [
+            3.5610000000003694,
+            3.498000000000001,
+            3.3689999999997333,
+            3.2900000000011254,
+            3.3119999999993155,
+            3.069999999998796,
+            3.075000000000827,
+            3.0449999999992983,
+            3.2929999999997683,
+            3.8050000000011686,
+            3.638999999999726
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            3.640267,
+            3.779621,
+            3.774856,
+            3.437633,
+            3.400621,
+            3.302114,
+            3.155459,
+            3.225309,
+            3.563153,
+            4.023173,
+            3.842443
+          ],
+          "cpu_ms": [
+            3.4580000000006272,
+            3.597999999998436,
+            3.5439999999984373,
+            3.3069999999990607,
+            3.2759999999991685,
+            3.1829999999990477,
+            3.038999999999348,
+            3.0839999999994205,
+            3.3649999999996183,
+            3.741999999999912,
+            3.614000000000228
+          ]
+        }
+      },
+      "clangalternating_500k.in": {
+        "baseline": {
+          "wall_ms": [
+            13.194738,
+            14.260884,
+            14.30011,
+            14.321113,
+            14.565747,
+            14.101329,
+            14.875005,
+            14.302099,
+            14.28777,
+            14.389243,
+            14.274104
+          ],
+          "cpu_ms": [
+            12.55000000000095,
+            13.024000000001923,
+            13.144999999997964,
+            13.169999999999682,
+            13.330999999999094,
+            12.869000000000685,
+            13.483999999999163,
+            12.948000000001958,
+            13.08500000000068,
+            13.134999999998787,
+            12.968000000000757
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            13.075484,
+            14.321964,
+            14.332336,
+            14.510034,
+            13.841628,
+            14.579326,
+            14.409871,
+            14.376898,
+            14.381951,
+            14.397618,
+            14.464959
+          ],
+          "cpu_ms": [
+            11.929999999997776,
+            13.128999999999724,
+            13.120999999999494,
+            13.312000000000435,
+            12.547999999998893,
+            13.424000000000547,
+            13.187999999999533,
+            13.29899999999995,
+            13.233000000000938,
+            13.149000000000743,
+            13.15600000000039
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            14.415956,
+            14.524583,
+            14.357589,
+            14.176183,
+            13.781367,
+            14.538425,
+            14.174059,
+            13.896935,
+            14.492063,
+            14.445106,
+            14.268766
+          ],
+          "cpu_ms": [
+            13.085000000001124,
+            13.099999999999223,
+            13.038000000000771,
+            12.952999999999104,
+            12.645999999998825,
+            13.404999999998779,
+            12.960999999999334,
+            12.681000000000608,
+            13.260000000000716,
+            13.310000000001487,
+            13.159999999999172
+          ]
+        }
+      },
+      "clangtiny32.in": {
+        "baseline": {
+          "wall_ms": [
+            1.957124,
+            1.140456,
+            1.001956,
+            0.929848,
+            0.924613,
+            0.917316,
+            0.915295,
+            0.915859,
+            0.92478,
+            0.913647,
+            0.914034
+          ],
+          "cpu_ms": [
+            1.7719999999989966,
+            1.0849999999997806,
+            0.9590000000017085,
+            0.8880000000011101,
+            0.884000000000551,
+            0.8750000000015135,
+            0.8729999999994575,
+            0.8759999999998769,
+            0.8859999999990542,
+            0.8730000000012339,
+            0.8749999999997371
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            1.506918,
+            1.226504,
+            0.924991,
+            0.928842,
+            0.934857,
+            0.916143,
+            0.915072,
+            0.909621,
+            0.923053,
+            0.909854,
+            0.97876
+          ],
+          "cpu_ms": [
+            1.4099999999990231,
+            1.1489999999985123,
+            0.881000000001464,
+            0.8880000000011101,
+            0.8930000000004767,
+            0.8750000000015135,
+            0.8739999999987091,
+            0.8689999999988984,
+            0.8809999999992435,
+            0.8689999999993425,
+            0.929000000001956
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            1.315341,
+            1.281157,
+            1.015301,
+            0.927669,
+            0.956511,
+            0.918146,
+            0.908206,
+            0.914597,
+            0.918465,
+            0.914568,
+            0.907791
+          ],
+          "cpu_ms": [
+            1.2350000000003192,
+            1.2220000000002784,
+            0.9709999999998331,
+            0.8859999999990542,
+            0.9100000000015207,
+            0.8780000000010446,
+            0.8690000000006748,
+            0.873999999998265,
+            0.8790000000011844,
+            0.8739999999987091,
+            0.8679999999978705
+          ]
+        }
+      }
+    },
+    "medians": {
+      "gccmax_random_00.in": {
+        "baseline": {
+          "wall_ms": 24.749376,
+          "cpu_ms": 23.356999999999406
+        },
+        "control": {
+          "wall_ms": 24.832272,
+          "cpu_ms": 23.483000000000143
+        },
+        "final": {
+          "wall_ms": 24.705771,
+          "cpu_ms": 23.374000000001118
+        }
+      },
+      "gccmax_random_01.in": {
+        "baseline": {
+          "wall_ms": 24.875213,
+          "cpu_ms": 23.299999999999432
+        },
+        "control": {
+          "wall_ms": 24.906378,
+          "cpu_ms": 23.452000000001583
+        },
+        "final": {
+          "wall_ms": 24.715507,
+          "cpu_ms": 23.40999999999971
+        }
+      },
+      "gcchand_max_00.in": {
+        "baseline": {
+          "wall_ms": 16.235455,
+          "cpu_ms": 14.821000000001305
+        },
+        "control": {
+          "wall_ms": 15.867157,
+          "cpu_ms": 14.600000000001057
+        },
+        "final": {
+          "wall_ms": 16.004479,
+          "cpu_ms": 14.857999999998928
+        }
+      },
+      "gcchand_min_00.in": {
+        "baseline": {
+          "wall_ms": 6.540363,
+          "cpu_ms": 5.9440000000008375
+        },
+        "control": {
+          "wall_ms": 6.501702,
+          "cpu_ms": 5.909000000000386
+        },
+        "final": {
+          "wall_ms": 6.673883,
+          "cpu_ms": 5.92499999999907
+        }
+      },
+      "gccequal_500k.in": {
+        "baseline": {
+          "wall_ms": 4.035954,
+          "cpu_ms": 3.7519999999988674
+        },
+        "control": {
+          "wall_ms": 3.87196,
+          "cpu_ms": 3.6840000000006867
+        },
+        "final": {
+          "wall_ms": 3.947235,
+          "cpu_ms": 3.6199999999997345
+        }
+      },
+      "gccalternating_500k.in": {
+        "baseline": {
+          "wall_ms": 13.852873,
+          "cpu_ms": 12.604000000000726
+        },
+        "control": {
+          "wall_ms": 13.768488,
+          "cpu_ms": 12.566000000000521
+        },
+        "final": {
+          "wall_ms": 13.852912,
+          "cpu_ms": 12.547999999999337
+        }
+      },
+      "gcctiny32.in": {
+        "baseline": {
+          "wall_ms": 0.913566,
+          "cpu_ms": 0.8720000000010941
+        },
+        "control": {
+          "wall_ms": 0.911708,
+          "cpu_ms": 0.8699999999999264
+        },
+        "final": {
+          "wall_ms": 0.939359,
+          "cpu_ms": 0.8790000000000742
+        }
+      },
+      "clangmax_random_00.in": {
+        "baseline": {
+          "wall_ms": 24.534694,
+          "cpu_ms": 23.59100000000014
+        },
+        "control": {
+          "wall_ms": 24.448454,
+          "cpu_ms": 23.681000000000285
+        },
+        "final": {
+          "wall_ms": 24.321353,
+          "cpu_ms": 23.441000000001377
+        }
+      },
+      "clangmax_random_01.in": {
+        "baseline": {
+          "wall_ms": 24.580678,
+          "cpu_ms": 23.758999999999197
+        },
+        "control": {
+          "wall_ms": 24.651517,
+          "cpu_ms": 23.76900000000015
+        },
+        "final": {
+          "wall_ms": 24.562086,
+          "cpu_ms": 23.80200000000121
+        }
+      },
+      "clanghand_max_00.in": {
+        "baseline": {
+          "wall_ms": 15.135355,
+          "cpu_ms": 13.654999999999085
+        },
+        "control": {
+          "wall_ms": 14.955301,
+          "cpu_ms": 13.700999999999741
+        },
+        "final": {
+          "wall_ms": 15.333227,
+          "cpu_ms": 13.731000000000826
+        }
+      },
+      "clanghand_min_00.in": {
+        "baseline": {
+          "wall_ms": 6.408184,
+          "cpu_ms": 5.804000000000364
+        },
+        "control": {
+          "wall_ms": 6.464837,
+          "cpu_ms": 5.855000000000388
+        },
+        "final": {
+          "wall_ms": 6.435473,
+          "cpu_ms": 5.814000000001318
+        }
+      },
+      "clangequal_500k.in": {
+        "baseline": {
+          "wall_ms": 3.392459,
+          "cpu_ms": 3.237999999999186
+        },
+        "control": {
+          "wall_ms": 3.525334,
+          "cpu_ms": 3.3119999999993155
+        },
+        "final": {
+          "wall_ms": 3.563153,
+          "cpu_ms": 3.3649999999996183
+        }
+      },
+      "clangalternating_500k.in": {
+        "baseline": {
+          "wall_ms": 14.30011,
+          "cpu_ms": 13.08500000000068
+        },
+        "control": {
+          "wall_ms": 14.381951,
+          "cpu_ms": 13.15600000000039
+        },
+        "final": {
+          "wall_ms": 14.357589,
+          "cpu_ms": 13.085000000001124
+        }
+      },
+      "clangtiny32.in": {
+        "baseline": {
+          "wall_ms": 0.924613,
+          "cpu_ms": 0.884000000000551
+        },
+        "control": {
+          "wall_ms": 0.924991,
+          "cpu_ms": 0.881000000001464
+        },
+        "final": {
+          "wall_ms": 0.918465,
+          "cpu_ms": 0.8790000000011844
+        }
+      }
+    },
+    "ratios": {
+      "gccmax_random_00.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.0033494177792603,
+          "cpu_ms": 1.0053945284069332
+        },
+        "final": {
+          "wall_ms": 0.9982381373978882,
+          "cpu_ms": 1.0007278331978298
+        }
+      },
+      "gccmax_random_01.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.0012528535936558,
+          "cpu_ms": 1.006523605150307
+        },
+        "final": {
+          "wall_ms": 0.9935797132671789,
+          "cpu_ms": 1.0047210300429303
+        }
+      },
+      "gcchand_max_00.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9773152030540566,
+          "cpu_ms": 0.9850887254571061
+        },
+        "final": {
+          "wall_ms": 0.9857733583690754,
+          "cpu_ms": 1.0024964577287376
+        }
+      },
+      "gcchand_min_00.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9940888602054656,
+          "cpu_ms": 0.9941117092866005
+        },
+        "final": {
+          "wall_ms": 1.020414769027346,
+          "cpu_ms": 0.9968034993267556
+        }
+      },
+      "gccequal_500k.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9593667321282651,
+          "cpu_ms": 0.9818763326230807
+        },
+        "final": {
+          "wall_ms": 0.9780178366750463,
+          "cpu_ms": 0.9648187633264466
+        }
+      },
+      "gccalternating_500k.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9939084838213704,
+          "cpu_ms": 0.9969850841002695
+        },
+        "final": {
+          "wall_ms": 1.0000028153004794,
+          "cpu_ms": 0.9955569660424163
+        }
+      },
+      "gcctiny32.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9979662115271365,
+          "cpu_ms": 0.9977064220170123
+        },
+        "final": {
+          "wall_ms": 1.028233318665537,
+          "cpu_ms": 1.0080275229346
+        }
+      },
+      "clangmax_random_00.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9964849775587176,
+          "cpu_ms": 1.0038150142003368
+        },
+        "final": {
+          "wall_ms": 0.9913045175945541,
+          "cpu_ms": 0.9936416429995014
+        }
+      },
+      "clangmax_random_01.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.0028818977247087,
+          "cpu_ms": 1.0004208931352732
+        },
+        "final": {
+          "wall_ms": 0.9992436335564057,
+          "cpu_ms": 1.0018098404815865
+        }
+      },
+      "clanghand_max_00.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9881037478143063,
+          "cpu_ms": 1.0033687294031974
+        },
+        "final": {
+          "wall_ms": 1.0130734957984138,
+          "cpu_ms": 1.0055657268401132
+        }
+      },
+      "clanghand_min_00.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.0088407261714083,
+          "cpu_ms": 1.0087870434183357
+        },
+        "final": {
+          "wall_ms": 1.0042584607433245,
+          "cpu_ms": 1.0017229496900333
+        }
+      },
+      "clangequal_500k.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.0391677541276105,
+          "cpu_ms": 1.0228536133416146
+        },
+        "final": {
+          "wall_ms": 1.0503157149430544,
+          "cpu_ms": 1.0392217418160792
+        }
+      },
+      "clangalternating_500k.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.005723102829279,
+          "cpu_ms": 1.0054260603744523
+        },
+        "final": {
+          "wall_ms": 1.004019479570437,
+          "cpu_ms": 1.000000000000034
+        }
+      },
+      "clangtiny32.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.0004088196899676,
+          "cpu_ms": 0.9966063348426638
+        },
+        "final": {
+          "wall_ms": 0.9933507316033843,
+          "cpu_ms": 0.9943438914034349
+        }
+      }
+    },
+    "online_submission": false
+  },
+  "two_values": {
+    "status": "PASS",
+    "input_sha256": "b7488f24905a00c178574ace5c34883c887783cb720097a22b9197ec88de320c",
+    "n": 500000,
+    "input_definition": "0 1の繰り返し。値は0/1だけなので狭義LIS長は2以下、添字0,1が長さ2の証人。公式制約内の補足入力であり公式配布fixtureとは区別。",
+    "correctness": [
+      {
+        "compiler": "gcc",
+        "variant": "baseline",
+        "stdout_sha256": "7e58581e78743614ccfcd1cc8c569e8acf6a74e9badef5e19b20046f4d3e4388",
+        "checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "control",
+        "stdout_sha256": "7e58581e78743614ccfcd1cc8c569e8acf6a74e9badef5e19b20046f4d3e4388",
+        "checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "stdout_sha256": "7e58581e78743614ccfcd1cc8c569e8acf6a74e9badef5e19b20046f4d3e4388",
+        "checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "checked",
+        "stdout_sha256": "7e58581e78743614ccfcd1cc8c569e8acf6a74e9badef5e19b20046f4d3e4388",
+        "checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "stdout_sha256": "7e58581e78743614ccfcd1cc8c569e8acf6a74e9badef5e19b20046f4d3e4388",
+        "checker": "ok OK\n"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_skip",
+        "stdout_sha256": "7e58581e78743614ccfcd1cc8c569e8acf6a74e9badef5e19b20046f4d3e4388",
+        "checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "baseline",
+        "stdout_sha256": "7e58581e78743614ccfcd1cc8c569e8acf6a74e9badef5e19b20046f4d3e4388",
+        "checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "control",
+        "stdout_sha256": "7e58581e78743614ccfcd1cc8c569e8acf6a74e9badef5e19b20046f4d3e4388",
+        "checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "stdout_sha256": "7e58581e78743614ccfcd1cc8c569e8acf6a74e9badef5e19b20046f4d3e4388",
+        "checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "checked",
+        "stdout_sha256": "7e58581e78743614ccfcd1cc8c569e8acf6a74e9badef5e19b20046f4d3e4388",
+        "checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "stdout_sha256": "7e58581e78743614ccfcd1cc8c569e8acf6a74e9badef5e19b20046f4d3e4388",
+        "checker": "ok OK\n"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_skip",
+        "stdout_sha256": "7e58581e78743614ccfcd1cc8c569e8acf6a74e9badef5e19b20046f4d3e4388",
+        "checker": "ok OK\n"
+      }
+    ],
+    "raw": {
+      "gcc": {
+        "baseline": {
+          "wall_ms": [
+            9.081458,
+            6.438672,
+            6.393144,
+            6.27187,
+            5.737352,
+            6.120256,
+            5.97711,
+            6.478764,
+            6.046282,
+            5.990139,
+            5.583896,
+            5.67941,
+            5.792276,
+            5.782327,
+            5.604289,
+            5.626674,
+            5.63114,
+            5.659388,
+            5.68028,
+            5.766886,
+            5.684977,
+            5.683167,
+            5.671019,
+            5.685898,
+            5.80184,
+            5.613284,
+            6.0119,
+            5.68171,
+            5.647974,
+            5.785677,
+            4.370124
+          ],
+          "cpu_ms": [
+            6.267999999999968,
+            6.235000000000005,
+            6.159999999999985,
+            6.002999999999953,
+            5.619999999999958,
+            5.77699999999999,
+            5.59100000000004,
+            5.808999999999939,
+            5.883000000000013,
+            5.827999999999999,
+            5.486999999999992,
+            5.539999999999962,
+            5.629000000000023,
+            5.642000000000008,
+            5.492999999999998,
+            5.496000000000056,
+            5.533000000000038,
+            5.552999999999947,
+            5.556000000000033,
+            5.614999999999981,
+            5.551000000000029,
+            5.543999999999993,
+            5.529999999999924,
+            5.539000000000044,
+            5.674000000000012,
+            5.518999999999968,
+            5.70499999999996,
+            5.546999999999969,
+            5.537999999999932,
+            5.64199999999998,
+            4.2040000000000415
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            6.715492,
+            6.52143,
+            6.617488,
+            6.139952,
+            5.858814,
+            6.092366,
+            6.070196,
+            5.976452,
+            6.038093,
+            6.10702,
+            5.963653,
+            5.699719,
+            5.723388,
+            5.855077,
+            5.684164,
+            5.629744,
+            5.732859,
+            5.625842,
+            5.688334,
+            6.315817,
+            5.70656,
+            5.564292,
+            5.709999,
+            5.637212,
+            5.794069,
+            5.675253,
+            5.735266,
+            5.67714,
+            5.664954,
+            5.246056,
+            4.248427
+          ],
+          "cpu_ms": [
+            6.447000000000022,
+            6.314999999999987,
+            6.331999999999977,
+            5.970000000000003,
+            5.707999999999991,
+            5.671000000000037,
+            5.71000000000002,
+            5.677000000000057,
+            5.875999999999978,
+            5.966999999999972,
+            5.806000000000033,
+            5.558000000000035,
+            5.60399999999997,
+            5.712999999999968,
+            5.546999999999969,
+            5.525999999999947,
+            5.601999999999996,
+            5.508000000000013,
+            5.561999999999983,
+            5.723999999999951,
+            5.580000000000029,
+            5.46000000000002,
+            5.595000000000044,
+            5.53800000000007,
+            5.672000000000066,
+            5.572000000000021,
+            5.583999999999978,
+            5.554999999999922,
+            5.535999999999985,
+            5.106999999999918,
+            4.112999999999978
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            6.430358,
+            6.34376,
+            6.169147,
+            5.599149,
+            5.750658,
+            5.610586,
+            5.727148,
+            5.79943,
+            5.887742,
+            5.766333,
+            5.464399,
+            5.469734,
+            5.599577,
+            5.701109,
+            5.622143,
+            5.448728,
+            5.615636,
+            5.492255,
+            5.497777,
+            5.85976,
+            5.564237,
+            5.660072,
+            5.457419,
+            5.409997,
+            5.496169,
+            5.549716,
+            5.854579,
+            5.49622,
+            5.502792,
+            5.474882,
+            4.25425
+          ],
+          "cpu_ms": [
+            6.047000000000052,
+            6.12200000000003,
+            5.998999999999991,
+            5.458000000000005,
+            5.576000000000011,
+            5.445000000000019,
+            5.439999999999973,
+            5.49899999999999,
+            5.629999999999996,
+            5.610000000000031,
+            5.363999999999952,
+            5.345999999999962,
+            5.493000000000025,
+            5.349999999999966,
+            5.43400000000005,
+            5.320999999999993,
+            5.484000000000017,
+            5.386000000000029,
+            5.374999999999991,
+            5.532000000000065,
+            5.406999999999885,
+            5.49800000000003,
+            5.349999999999993,
+            5.304999999999948,
+            5.395999999999984,
+            5.422000000000065,
+            5.457999999999935,
+            5.382000000000053,
+            5.390000000000006,
+            5.367000000000067,
+            4.106000000000054
+          ]
+        }
+      },
+      "clang": {
+        "baseline": {
+          "wall_ms": [
+            3.832814,
+            3.915533,
+            3.835986,
+            3.903088,
+            4.15018,
+            4.144072,
+            3.990647,
+            4.044494,
+            4.027261,
+            4.039217,
+            4.013796,
+            4.15935,
+            4.013538,
+            4.015226,
+            4.023864,
+            4.075729,
+            4.042854,
+            4.002271,
+            4.099365,
+            4.01195,
+            4.12249,
+            4.079556,
+            3.886216,
+            4.013059,
+            4.345906,
+            4.372871,
+            4.183597,
+            4.030022,
+            4.15959,
+            4.105897,
+            4.278262
+          ],
+          "cpu_ms": [
+            3.725000000000034,
+            3.6950000000000593,
+            3.7139999999999396,
+            3.797000000000106,
+            3.8260000000000516,
+            3.803000000000112,
+            3.6259999999999626,
+            3.7069999999999603,
+            3.6940000000000306,
+            3.7109999999999643,
+            3.705000000000014,
+            3.7870000000000403,
+            3.716999999999915,
+            3.71100000000002,
+            3.7280000000000646,
+            3.7720000000001086,
+            3.736999999999935,
+            3.6959999999999216,
+            3.7880000000000136,
+            3.7039999999999296,
+            3.809000000000007,
+            3.7729999999999153,
+            3.75100000000006,
+            3.8810000000001343,
+            4.016000000000075,
+            4.017000000000048,
+            3.855999999999915,
+            3.7099999999999356,
+            3.84000000000001,
+            3.786000000000067,
+            3.876000000000046
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            3.789057,
+            3.830306,
+            3.789103,
+            3.835405,
+            3.805875,
+            4.05753,
+            4.047341,
+            4.059493,
+            3.994925,
+            4.05247,
+            4.114354,
+            4.028973,
+            4.151737,
+            4.029351,
+            3.974282,
+            4.019383,
+            3.988986,
+            4.121854,
+            4.170308,
+            4.08377,
+            4.06411,
+            4.34193,
+            3.903602,
+            3.992664,
+            4.710192,
+            4.674634,
+            4.029492,
+            4.151851,
+            4.060918,
+            4.288105,
+            4.206715
+          ],
+          "cpu_ms": [
+            3.67800000000007,
+            3.7019999999999276,
+            3.6780000000000146,
+            3.6989999999999523,
+            3.695000000000004,
+            3.717000000000026,
+            3.705000000000014,
+            3.7129999999998553,
+            3.6159999999999526,
+            3.736000000000128,
+            3.766999999999965,
+            3.7249999999999783,
+            3.8590000000000013,
+            3.734999999999933,
+            3.684999999999994,
+            3.7149999999999683,
+            3.68099999999999,
+            3.8170000000000703,
+            3.8460000000000716,
+            3.7599999999999856,
+            3.7540000000000906,
+            3.769000000000078,
+            3.785999999999956,
+            3.871000000000069,
+            4.278000000000059,
+            4.2640000000000455,
+            3.712000000000104,
+            3.7980000000001346,
+            3.740000000000021,
+            3.9730000000000043,
+            3.8939999999998975
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            3.70037,
+            3.778256,
+            3.829326,
+            3.78513,
+            3.730764,
+            4.111492,
+            3.985821,
+            4.005422,
+            4.00023,
+            3.955594,
+            3.986622,
+            3.907026,
+            3.940861,
+            3.916156,
+            3.911215,
+            4.005771,
+            3.948486,
+            3.939484,
+            4.05654,
+            3.91368,
+            3.867162,
+            3.828837,
+            3.894862,
+            3.878959,
+            4.696585,
+            4.467255,
+            4.149754,
+            3.956734,
+            3.949132,
+            3.944318,
+            4.202794
+          ],
+          "cpu_ms": [
+            3.595999999999988,
+            3.6630000000001384,
+            3.6209999999998743,
+            3.6379999999999746,
+            3.6269999999999913,
+            3.738999999999937,
+            3.6380000000000856,
+            3.669000000000089,
+            3.6700000000000066,
+            3.6479999999999846,
+            3.6399999999999766,
+            3.612000000000004,
+            3.6570000000000213,
+            3.607000000000027,
+            3.615999999999897,
+            3.7059999999999316,
+            3.6240000000000716,
+            3.6290000000001044,
+            3.744999999999943,
+            3.605000000000025,
+            3.5340000000000926,
+            3.674999999999984,
+            3.7629999999999053,
+            3.758999999999846,
+            4.294999999999993,
+            4.106999999999916,
+            3.81999999999999,
+            3.6179999999999546,
+            3.6179999999999546,
+            3.62800000000002,
+            3.8249999999998563
+          ]
+        }
+      }
+    },
+    "median": {
+      "gcc": {
+        "baseline": {
+          "wall_ms": 5.737352,
+          "cpu_ms": 5.59100000000004
+        },
+        "control": {
+          "wall_ms": 5.732859,
+          "cpu_ms": 5.601999999999996
+        },
+        "final": {
+          "wall_ms": 5.599577,
+          "cpu_ms": 5.43400000000005
+        }
+      },
+      "clang": {
+        "baseline": {
+          "wall_ms": 4.039217,
+          "cpu_ms": 3.75100000000006
+        },
+        "control": {
+          "wall_ms": 4.05247,
+          "cpu_ms": 3.736000000000128
+        },
+        "final": {
+          "wall_ms": 3.944318,
+          "cpu_ms": 3.6399999999999766
+        }
+      }
+    },
+    "ratios": {
+      "gcc": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9992168861174983,
+          "cpu_ms": 1.0019674476837697
+        },
+        "final": {
+          "wall_ms": 0.9759863086664371,
+          "cpu_ms": 0.9719191557860867
+        }
+      },
+      "clang": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.003281081457124,
+          "cpu_ms": 0.9960010663823163
+        },
+        "final": {
+          "wall_ms": 0.976505595020025,
+          "cpu_ms": 0.9704078912289839
+        }
+      }
+    }
+  },
+  "main_run_count": 196,
+  "final_current_main_runs": 192,
+  "baseline_control_main_runs": 4,
+  "independent_review": {
+    "source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e",
+    "diff": "count hi-1→hi-2と説明1行のみ。",
+    "reasoning": [
+      "Strict: 延長不能なら末尾はvalue以上、先頭置換不能なら先頭はvalue未満。NonStrict: 末尾はvalueより大きく、先頭はvalue以下。この両条件が同時に成り立つにはL>=2。",
+      "下限位置は[1,L-1]で、末尾L-1は既にlower/upper boundとなることを確認済み。count=L-2で中間[1,L-1)だけを探索し、全てbeforeならL-1へ達する。L2のcount0も正しい。",
+      "count-half-1はcount>0かつhalf=count/2の時だけ実行されるので非負。midは中間範囲内。tails/previous配列の確保と初期化は変更しない。",
+      "狭義弱順序の同値類でもStrict/NonStrictの条件は同じ。NaN既定検査は各入力の探索前に維持、SKIP時はSWO前提。コピー不能なTのindex参照のみという契約も維持。",
+      "previousはlo>0の時だけ書き、復元時に必要な前駆だけ読む既存不変条件を保つ。比較回数は減るが返す添字の正しさを損なわない。"
+    ],
+    "additional_tests": "既存rootの広いsuiteは重複実行せず。else前提と探索半開区間の数学を独立に確認。"
+  },
+  "online_submission_performed": false,
+  "fixture_provenance": "公式生成器/19公式fixture/独立Fenwick DP/公式checkerの取得物はAudit/verify-lis-2026-10-22.jsonを引き継ぎ、入力SHAを今回実行記録にも保存。補足0/1列の最適長は上限2と添字0,1の証人で独立に確定。",
+  "underflow": "延長不能かつ先頭置換でもない分岐では、一貫した狭義弱順序の前提からtails長は2以上。探索候補1..L-2の個数L-2は非負。候補が無ければ末尾L-1へ置換し、前駆は有効なL-2位置を使う。SKIPでもこの論理条件は維持する。",
+  "environment": "ClangのASan/UBSanを併用。ptrace環境のLSanはdetect_leaks=0、置換allocatorの確保収支を別検査。"
+}

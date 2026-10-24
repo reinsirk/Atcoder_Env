@@ -8,6 +8,8 @@ from pathlib import Path
 import re
 import sys
 
+from source_api_docs import render_api_overview
+
 
 PARTS: dict[str, tuple[str, ...]] = {
     "options": (),
@@ -89,7 +91,7 @@ def render(kind: str, roots: tuple[str, ...], headers: dict[str, str], pieces: d
         definition = definition.replace("#ifndef SIRKIT_PRIMALITY32_DEFINED", condition, 1)
     content = "// SPDX-License-Identifier: CC0-1.0\n\n" + headers[kind] + "\n" + prototype + "\n"
     content += "\n".join(pieces[name] for name in dependency_order(roots))
-    return content + "\n" + definition
+    return render_api_overview(content + "\n" + definition, ("Document/binomial_coefficient.md",))
 
 
 def main() -> int:

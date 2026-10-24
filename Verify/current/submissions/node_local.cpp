@@ -2,6 +2,27 @@
 
 // Library: DataStructure/Node.cpp
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/node.md
+//
+// API一覧
+// [Node・単方向連結列]
+// Node(next={}): 値を持たない単方向ノード。nはNode自体を所有するshared_ptrを接続する。
+// コピーはnを共有し、ムーブはnを移す。循環の自動回収は行わない。
+// 非共有の後続k個をO(k)時間・O(1)追加領域で解放。長い連結は反復、2ノード以下は通常破棄。
+// make_node(next={}): nextを後続に持つ新しいノードを返す。O(1)時間・1回確保。
+// make_chain(count, tail={}): tailの前にcount個追加して先頭を返す。0個ならtail。O(count)時間・count回確保。
+// chain_size(head): ノード数を返す。循環は既定でinvalid_argument、検査省略時は循環なしが前提。O(k)時間・O(1)領域。
+// chain_tail(head): 末尾（空ならnullptr）を返す。循環は既定でinvalid_argument、検査省略時は循環なしが前提。O(k)時間・O(1)領域。
+// chain_nth(head, index): 0始まりのindex番目（不足ならnullptr）を返す。循環も可。非循環O(min(index+1,k))、循環O(index+1)時間・O(1)領域。
+// push_front_node(head): 新しい先頭を追加してheadを更新する。O(1)時間・1回確保。
+// pop_front_node(head): headを次へ移し、空ならfalseを返す。共有された元先頭のnは保持する。O(1)時間・領域。
+// reverse_chain(head): 循環なしのnを逆転し新しい先頭を返す。共有者にも変更が見える。O(k)時間・O(1)領域。
+// clone_chain(head): 独立した同長の列を返す。循環は既定でinvalid_argument、検査省略時は循環なしが前提。O(k)時間・k回確保。
+// cycle_entry(head): 循環入口の非所有ポインタ（循環なしならnullptr）を返す。O(k)時間・O(1)領域。
+// has_cycle(head): 循環の有無を返す。O(k)時間・O(1)領域。
+// break_cycle(head): 循環の末尾から入口への辺を切り、切ったらtrueを返す。共有者にも変更が見える。O(k)時間・O(1)領域。
+// clear_chain(head): headを空にし、共有されていない後続k個を反復解放する。循環回収には先にbreak_cycle。O(k)時間・O(1)領域。
+
 #include <cstddef>
 #include <limits>
 #include <memory>
@@ -10,9 +31,6 @@
 
 #ifndef SIRKIT_NODE_DEFINED
 #define SIRKIT_NODE_DEFINED
-// Node(next={}): 値を持たない単方向ノード。nはNode自体を所有するshared_ptrを接続する。
-// コピーはnを共有し、ムーブはnを移す。循環の自動回収は行わない。
-// 非共有の後続k個をO(k)時間・O(1)追加領域で解放。長い連結は反復、2ノード以下は通常破棄。
 struct Node {
     std::shared_ptr<Node> n;
 
@@ -36,7 +54,6 @@ struct Node {
 
 #ifndef SIRKIT_MAKE_NODE_DEFINED
 #define SIRKIT_MAKE_NODE_DEFINED
-// make_node(next={}): nextを後続に持つ新しいノードを返す。O(1)時間・1回確保。
 inline std::shared_ptr<Node> make_node(std::shared_ptr<Node> next = {}) {
     return std::make_shared<Node>(std::move(next));
 }
@@ -44,7 +61,6 @@ inline std::shared_ptr<Node> make_node(std::shared_ptr<Node> next = {}) {
 
 #ifndef SIRKIT_MAKE_CHAIN_DEFINED
 #define SIRKIT_MAKE_CHAIN_DEFINED
-// make_chain(count, tail={}): tailの前にcount個追加して先頭を返す。0個ならtail。O(count)時間・count回確保。
 inline std::shared_ptr<Node> make_chain(std::size_t count, std::shared_ptr<Node> tail = {}) {
     while (count != 0) {
         tail = make_node(std::move(tail));
@@ -84,7 +100,6 @@ struct ChainCycleCheck {
 
 #ifndef SIRKIT_CHAIN_SIZE_DEFINED
 #define SIRKIT_CHAIN_SIZE_DEFINED
-// chain_size(head): ノード数を返す。循環は既定でinvalid_argument、検査省略時は循環なしが前提。O(k)時間・O(1)領域。
 inline std::size_t chain_size(const std::shared_ptr<Node>& head) {
     std::size_t size = 0;
     const Node* current = head.get();
@@ -107,7 +122,6 @@ inline std::size_t chain_size(const std::shared_ptr<Node>& head) {
 
 #ifndef SIRKIT_CHAIN_TAIL_DEFINED
 #define SIRKIT_CHAIN_TAIL_DEFINED
-// chain_tail(head): 末尾（空ならnullptr）を返す。循環は既定でinvalid_argument、検査省略時は循環なしが前提。O(k)時間・O(1)領域。
 inline std::shared_ptr<Node> chain_tail(const std::shared_ptr<Node>& head) {
     const std::shared_ptr<Node>* link = &head;
 #ifndef SKIP_RUNTIME_CHECKS
@@ -125,7 +139,6 @@ inline std::shared_ptr<Node> chain_tail(const std::shared_ptr<Node>& head) {
 
 #ifndef SIRKIT_CHAIN_NTH_DEFINED
 #define SIRKIT_CHAIN_NTH_DEFINED
-// chain_nth(head, index): 0始まりのindex番目（不足ならnullptr）を返す。循環も可。非循環O(min(index+1,k))、循環O(index+1)時間・O(1)領域。
 inline std::shared_ptr<Node> chain_nth(const std::shared_ptr<Node>& head, std::size_t index) {
     const std::shared_ptr<Node>* link = &head;
     while (*link && index != 0) {
@@ -138,7 +151,6 @@ inline std::shared_ptr<Node> chain_nth(const std::shared_ptr<Node>& head, std::s
 
 #ifndef SIRKIT_PUSH_FRONT_NODE_DEFINED
 #define SIRKIT_PUSH_FRONT_NODE_DEFINED
-// push_front_node(head): 新しい先頭を追加してheadを更新する。O(1)時間・1回確保。
 inline void push_front_node(std::shared_ptr<Node>& head) {
     head = make_node(head);
 }
@@ -146,7 +158,6 @@ inline void push_front_node(std::shared_ptr<Node>& head) {
 
 #ifndef SIRKIT_POP_FRONT_NODE_DEFINED
 #define SIRKIT_POP_FRONT_NODE_DEFINED
-// pop_front_node(head): headを次へ移し、空ならfalseを返す。共有された元先頭のnは保持する。O(1)時間・領域。
 inline bool pop_front_node(std::shared_ptr<Node>& head) noexcept {
     if (!head) return false;
     auto next = head->n;
@@ -157,7 +168,6 @@ inline bool pop_front_node(std::shared_ptr<Node>& head) noexcept {
 
 #ifndef SIRKIT_REVERSE_CHAIN_DEFINED
 #define SIRKIT_REVERSE_CHAIN_DEFINED
-// reverse_chain(head): 循環なしのnを逆転し新しい先頭を返す。共有者にも変更が見える。O(k)時間・O(1)領域。
 inline std::shared_ptr<Node> reverse_chain(std::shared_ptr<Node> head) noexcept {
     std::shared_ptr<Node> previous;
     while (head) {
@@ -172,7 +182,6 @@ inline std::shared_ptr<Node> reverse_chain(std::shared_ptr<Node> head) noexcept 
 
 #ifndef SIRKIT_CLONE_CHAIN_DEFINED
 #define SIRKIT_CLONE_CHAIN_DEFINED
-// clone_chain(head): 独立した同長の列を返す。循環は既定でinvalid_argument、検査省略時は循環なしが前提。O(k)時間・k回確保。
 inline std::shared_ptr<Node> clone_chain(const std::shared_ptr<Node>& head) {
     std::shared_ptr<Node> result;
     auto* link = &result;
@@ -194,7 +203,6 @@ inline std::shared_ptr<Node> clone_chain(const std::shared_ptr<Node>& head) {
 
 #ifndef SIRKIT_CYCLE_ENTRY_DEFINED
 #define SIRKIT_CYCLE_ENTRY_DEFINED
-// cycle_entry(head): 循環入口の非所有ポインタ（循環なしならnullptr）を返す。O(k)時間・O(1)領域。
 inline Node* cycle_entry(const std::shared_ptr<Node>& head) noexcept {
     Node* slow = head.get();
     Node* fast = head.get();
@@ -214,7 +222,6 @@ inline Node* cycle_entry(const std::shared_ptr<Node>& head) noexcept {
 
 #ifndef SIRKIT_HAS_CYCLE_DEFINED
 #define SIRKIT_HAS_CYCLE_DEFINED
-// has_cycle(head): 循環の有無を返す。O(k)時間・O(1)領域。
 inline bool has_cycle(const std::shared_ptr<Node>& head) noexcept {
     return cycle_entry(head) != nullptr;
 }
@@ -222,7 +229,6 @@ inline bool has_cycle(const std::shared_ptr<Node>& head) noexcept {
 
 #ifndef SIRKIT_BREAK_CYCLE_DEFINED
 #define SIRKIT_BREAK_CYCLE_DEFINED
-// break_cycle(head): 循環の末尾から入口への辺を切り、切ったらtrueを返す。共有者にも変更が見える。O(k)時間・O(1)領域。
 inline bool break_cycle(const std::shared_ptr<Node>& head) noexcept {
     auto keep_alive = head;
     Node* entry = cycle_entry(keep_alive);
@@ -236,7 +242,6 @@ inline bool break_cycle(const std::shared_ptr<Node>& head) noexcept {
 
 #ifndef SIRKIT_CLEAR_CHAIN_DEFINED
 #define SIRKIT_CLEAR_CHAIN_DEFINED
-// clear_chain(head): headを空にし、共有されていない後続k個を反復解放する。循環回収には先にbreak_cycle。O(k)時間・O(1)領域。
 inline void clear_chain(std::shared_ptr<Node>& head) noexcept {
     head.reset();
 }

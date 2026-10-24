@@ -1,8 +1,61 @@
 #define SKIP_RUNTIME_CHECKS
 // Verify: https://atcoder.jp/contests/math-and-algorithm/tasks/math_and_algorithm_ae
+// Submission: https://atcoder.jp/contests/math-and-algorithm/submissions/80293657
 
 // Library: Geometry/Line_Segment.cpp
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/geometry_point.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/geometry_orientation.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/geometry_segment_intersection.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/geometry_point_segment_distance.md
+//
+// API一覧
+// [geo::Epsilon]
+// Epsilon{abs,rel}: 非負有限の絶対・相対許容幅（既定は各1e-12L）。
+// tolerance(scale): abs + rel * abs(scale) を返す。O(1)。
+//
+// [geo::Point]
+// Point<T,C=DefaultCalc<T>>{x,y}: 符号付き整数/浮動小数点の集成体。座標・座標演算はT、差・積・和はCに収まる有限入力。
+// DefaultCalc<T>: 整数は対応環境で128ビット拡張、標準代替はint64_t。浮動小数点はT。
+// PointI/PointD/PointLD/RealPoint: int64_t/double/long double/long doubleのPoint。Value/Calc/Realは座標/計算/距離の型。
+// 比較は座標の完全一致・辞書順。単項-, +,-,*,+=,-=,*= は座標演算、点同士の * は内積、^ は外積。O(1)。
+// dot/cross/norm2/dist2/orient は C、norm/dist は Real、ccw は符号を返す。dist2/orient の差は C で計算する。
+// rotated90(k)/rot90(k) は反時計回り90度の k 倍のコピー/更新、arg は偏角。O(1)。
+// 浮動小数点専用: /,/= は非零スカラー除算、rotated/rot はラジアン回転、normalized は非零点の単位化。
+// almost_equal は成分別の誤差比較。cast<U,D>() は座標型変換。arg_cmp は零点を先頭に偏角・距離順。O(1)。
+// 浮動 arg_cmp は丸めた偏角が等しければ距離順。ostream は (x,y) を出力する。O(1)。
+//
+// [geo::点の関数]
+// 点の関数。座標は有限、整数の差・積は C に収まる入力を扱う。
+// predicate_sign<T,C>(value,scale,eps): 整数は厳密、実数は許容幅で -1/0/1 を返す。O(1)。
+// orientation(a,b,c,eps): 左折1、直進0、右折-1。整数では厳密。O(1)。
+// to_real(p): long double 座標へ変換する。O(1)。
+// distance(p,q): 2点間距離を Point::Real で返す。O(1)。
+//
+// [geo::Line / geo::Segment]
+// Segment{a,b} は閉線分（零長可）、Line{a,b} は相異なる2点で表す直線。
+//
+// [geo::on_segment]
+// on_segment(p,s,eps): 閉線分上（端点を含む）なら true。整数では厳密。O(1)。
+//
+// [geo::intersects]
+// intersects(s,t,eps): 閉線分同士が端点・重なりを含め交わるか。O(1)。
+//
+// [geo::直線・線分の交差型]
+// LineIntersectionKind: None/Point/Coincident。LineIntersection{kind,point}: 交点をoptional<RealPoint>で所有。
+// SegmentIntersectionKind: None/Point/Overlap。SegmentIntersection{kind,points}: 近似交点、重なりは辞書順の両端点を所有。
+//
+// [geo::直線・線分の関数]
+// 点・直線・閉線分の関数。交点・射影・距離は long double で近似する。
+// projection(p,l): long double 変換後も非零長の直線 l 上への射影。O(1)。
+// reflection(p,l): 直線 l に関して対称な点。projection と同じ前提。O(1)。
+// closest_point(p,s): 閉線分上の最近点。long double 変換後の零長線分は a を返す。O(1)。
+// distance(p,l): 点と非零長直線の距離。O(1)。
+// distance(p,s): 点と閉線分の距離（零長可）。O(1)。
+// distance(s,t,eps): 閉線分間距離。intersects が真なら0。O(1)。
+// intersection(l,m,eps): 非零長直線の交差種別と近似交点。O(1)。
+// intersection(s,t,eps): 閉線分の交点、または元の座標で辞書順に選んだ重なりの両端点。O(1)。
+
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -21,7 +74,6 @@
 #ifndef SIRKIT_GEO_EPSILON_DEFINED
 #define SIRKIT_GEO_EPSILON_DEFINED
 namespace geo {
-// tolerance(scale): 非負有限の abs/rel から許容幅を返す。O(1)。
 struct Epsilon {
     long double abs = 1e-12L;
     long double rel = 1e-12L;
@@ -40,13 +92,6 @@ template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, 
 #else
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, std::int64_t, T>;
 #endif
-// Point は集成体。座標・座標演算は T、積・差・和は C に収まる有限入力を扱う。
-// 比較は座標の完全一致・辞書順。+,-,*,+=,-=,*= は座標演算、点同士の * は内積、^ は外積。O(1)。
-// dot/cross/norm2/dist2/orient は C、norm/dist は Real、ccw は符号を返す。dist2/orient の差は C で計算する。
-// rotated90(k)/rot90(k) は反時計回り90度の k 倍のコピー/更新、arg は偏角。O(1)。
-// 浮動小数点専用: /,/= は非零スカラー除算、rotated/rot はラジアン回転、normalized は非零点の単位化。
-// almost_equal は成分別の誤差比較。cast<U,D>() は座標型変換。arg_cmp は零点を先頭に偏角・距離順。O(1)。
-// 浮動 arg_cmp は丸めた偏角が等しければ距離順。ostream は (x,y) を出力する。O(1)。
 template<class T, class C = DefaultCalc<T>>
 struct Point {
     static_assert((std::is_integral_v<T> && std::is_signed_v<T>) || std::is_floating_point_v<T>);
@@ -176,11 +221,6 @@ using RealPoint = PointLD;
 #ifndef SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 #define SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 namespace geo {
-// 点の関数。座標は有限、整数の差・積は C に収まる入力を扱う。
-// predicate_sign<T,C>(value,scale,eps): 整数は厳密、実数は許容幅で -1/0/1 を返す。O(1)。
-// orientation(a,b,c,eps): 左折1、直進0、右折-1。整数では厳密。O(1)。
-// to_real(p): long double 座標へ変換する。O(1)。
-// distance(p,q): 2点間距離を Point::Real で返す。O(1)。
 
 template<class T, class C> int predicate_sign(C value, C scale, Epsilon eps = {}) {
     if constexpr (std::is_integral_v<T>) return (value > 0) - (value < 0);
@@ -206,7 +246,6 @@ template<class T, class C> typename Point<T, C>::Real distance(const Point<T, C>
 #ifndef SIRKIT_GEO_LINEAR_TYPES_DEFINED
 #define SIRKIT_GEO_LINEAR_TYPES_DEFINED
 namespace geo {
-// Segment{a,b} は閉線分（零長可）、Line{a,b} は相異なる2点で表す直線。
 template<class T, class C = DefaultCalc<T>> struct Segment { Point<T, C> a, b; };
 template<class T, class C = DefaultCalc<T>> struct Line { Point<T, C> a, b; };
 }
@@ -215,7 +254,6 @@ template<class T, class C = DefaultCalc<T>> struct Line { Point<T, C> a, b; };
 #ifndef SIRKIT_GEO_ON_SEGMENT_DEFINED
 #define SIRKIT_GEO_ON_SEGMENT_DEFINED
 namespace geo {
-// on_segment(p,s,eps): 閉線分上（端点を含む）なら true。整数では厳密。O(1)。
 template<class T, class C> bool on_segment(const Point<T, C>& p, const Segment<T, C>& s, Epsilon eps = {}) {
     if (orientation(s.a, s.b, p, eps) != 0) return false;
     C x = (C(p.x) - C(s.a.x)) * (C(p.x) - C(s.b.x));
@@ -229,18 +267,49 @@ template<class T, class C> bool on_segment(const Point<T, C>& p, const Segment<T
 #ifndef SIRKIT_GEO_SEGMENT_PREDICATES_DEFINED
 #define SIRKIT_GEO_SEGMENT_PREDICATES_DEFINED
 namespace geo {
-// intersects(s,t,eps): 閉線分同士が端点・重なりを含め交わるか。O(1)。
 template<class T, class C> bool intersects(const Segment<T, C>& s, const Segment<T, C>& t, Epsilon eps = {}) {
-    int a = orientation(s.a, s.b, t.a, eps), b = orientation(s.a, s.b, t.b, eps);
     if constexpr (std::is_integral_v<T>) {
+        const int a = orientation(s.a, s.b, t.a, eps), b = orientation(s.a, s.b, t.b, eps);
         if (a * b > 0) return false;
+        // 整数計算で共線と分かった場合は、変化する1軸だけを調べる。
+        auto in_box = [](const Point<T, C>& p, const Segment<T, C>& line) {
+            if constexpr (std::numeric_limits<C>::is_integer) {
+                if (line.a.x != line.b.x)
+                    return std::min(line.a.x, line.b.x) <= p.x && p.x <= std::max(line.a.x, line.b.x);
+                if (line.a.y != line.b.y)
+                    return std::min(line.a.y, line.b.y) <= p.y && p.y <= std::max(line.a.y, line.b.y);
+                return p == line.a;
+            }
+            return std::min(line.a.x, line.b.x) <= p.x && p.x <= std::max(line.a.x, line.b.x) &&
+                   std::min(line.a.y, line.b.y) <= p.y && p.y <= std::max(line.a.y, line.b.y);
+        };
+        if (a == 0) {
+            if (b != 0) return in_box(t.a, s);
+            if (s.a == s.b) return orientation(t.a, t.b, s.a, eps) == 0 && in_box(s.a, t);
+            if constexpr (std::numeric_limits<C>::is_integer) {
+                if (s.a.x != s.b.x)
+                    return std::max(s.a.x, s.b.x) >= std::min(t.a.x, t.b.x) &&
+                           std::max(t.a.x, t.b.x) >= std::min(s.a.x, s.b.x);
+                return std::max(s.a.y, s.b.y) >= std::min(t.a.y, t.b.y) &&
+                       std::max(t.a.y, t.b.y) >= std::min(s.a.y, s.b.y);
+            }
+            return std::max(s.a.x, s.b.x) >= std::min(t.a.x, t.b.x) &&
+                   std::max(t.a.x, t.b.x) >= std::min(s.a.x, s.b.x) &&
+                   std::max(s.a.y, s.b.y) >= std::min(t.a.y, t.b.y) &&
+                   std::max(t.a.y, t.b.y) >= std::min(s.a.y, s.b.y);
+        }
+        if (b == 0) return in_box(t.b, s);
+        const int c = orientation(t.a, t.b, s.a, eps), d = orientation(t.a, t.b, s.b, eps);
+        return c * d <= 0;
+    } else {
+        const int a = orientation(s.a, s.b, t.a, eps), b = orientation(s.a, s.b, t.b, eps);
+        const int c = orientation(t.a, t.b, s.a, eps), d = orientation(t.a, t.b, s.b, eps);
+        if (a == 0 && on_segment(t.a, s, eps)) return true;
+        if (b == 0 && on_segment(t.b, s, eps)) return true;
+        if (c == 0 && on_segment(s.a, t, eps)) return true;
+        if (d == 0 && on_segment(s.b, t, eps)) return true;
+        return a * b < 0 && c * d < 0;
     }
-    int c = orientation(t.a, t.b, s.a, eps), d = orientation(t.a, t.b, s.b, eps);
-    if (a == 0 && on_segment(t.a, s, eps)) return true;
-    if (b == 0 && on_segment(t.b, s, eps)) return true;
-    if (c == 0 && on_segment(s.a, t, eps)) return true;
-    if (d == 0 && on_segment(s.b, t, eps)) return true;
-    return a * b < 0 && c * d < 0;
 }
 }
 #endif
@@ -248,7 +317,6 @@ template<class T, class C> bool intersects(const Segment<T, C>& s, const Segment
 #ifndef SIRKIT_GEO_LINEAR_RESULTS_DEFINED
 #define SIRKIT_GEO_LINEAR_RESULTS_DEFINED
 namespace geo {
-// 直線・線分の交差種別。交点は RealPoint、重なりは辞書順の両端点。
 enum class LineIntersectionKind { None, Point, Coincident };
 enum class SegmentIntersectionKind { None, Point, Overlap };
 struct LineIntersection { LineIntersectionKind kind = LineIntersectionKind::None; std::optional<RealPoint> point; };
@@ -259,15 +327,6 @@ struct SegmentIntersection { SegmentIntersectionKind kind = SegmentIntersectionK
 #ifndef SIRKIT_GEO_LINEAR_DEFINED
 #define SIRKIT_GEO_LINEAR_DEFINED
 namespace geo {
-// 点・直線・閉線分の関数。交点・射影・距離は long double で近似する。
-// projection(p,l): long double 変換後も非零長の直線 l 上への射影。O(1)。
-// reflection(p,l): 直線 l に関して対称な点。projection と同じ前提。O(1)。
-// closest_point(p,s): 閉線分上の最近点。long double 変換後の零長線分は a を返す。O(1)。
-// distance(p,l): 点と非零長直線の距離。O(1)。
-// distance(p,s): 点と閉線分の距離（零長可）。O(1)。
-// distance(s,t,eps): 閉線分間距離。intersects が真なら0。O(1)。
-// intersection(l,m,eps): 非零長直線の交差種別と近似交点。O(1)。
-// intersection(s,t,eps): 閉線分の交点、または元の座標で辞書順に選んだ重なりの両端点。O(1)。
 
 template<class T, class C> RealPoint projection(const Point<T, C>& p, const Line<T, C>& l) {
     RealPoint a = to_real(l.a), b = to_real(l.b), q = to_real(p);
@@ -299,7 +358,19 @@ template<class T, class C> long double distance(const Point<T, C>& p, const Line
 }
 
 template<class T, class C> long double distance(const Point<T, C>& p, const Segment<T, C>& s) {
-    return to_real(p).dist(closest_point(p, s));
+    RealPoint a = to_real(s.a), b = to_real(s.b), q = to_real(p), d = b - a;
+    if (d.x == 0 && d.y == 0) return q.dist(a);
+    // 整数の差の二乗和が表せる場合は、方向長を直接計算する。
+    RealPoint u;
+    if constexpr (std::is_integral_v<T> && sizeof(T) <= 8 &&
+                  std::numeric_limits<long double>::max_exponent > 2 * (std::numeric_limits<T>::digits + 1) + 1) {
+        const long double length = std::sqrt(d.x * d.x + d.y * d.y);
+        u = {d.x / length, d.y / length};
+    } else u = d.normalized();
+    const RealPoint offset = q - a;
+    if (offset.dot(u) <= 0) return q.dist(a);
+    if ((q - b).dot(u) >= 0) return q.dist(b);
+    return std::abs(offset.cross(u));
 }
 
 template<class T, class C> long double distance(const Segment<T, C>& s, const Segment<T, C>& t, Epsilon eps = {}) {

@@ -1,5 +1,19 @@
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/bellman-ford
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/negative_shortest_paths.md
+//
+// API一覧
+// [共通型・定数]
+// Edge(to,w): 行先toとint64_tの重みwを持つ有向辺。
+// WGraph: 出発点を隣接リストの添字とする辺列。INF=std::int64_t{1}<<60。
+//
+// [SPFA]
+// SPFA(graph, distances, start_index): 始点からの最短距離をdistancesに格納し、到達可能な負閉路があればtrueを返す。
+// SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
+// 検査は始点と処理中に参照する辺のみ。未到達成分は走査しない。
+// 更新された頂点だけをFIFOキューで処理するSPFA。標準C++23、重みは[-1e9, 1e9]。
+// 到達可能な負閉路があればtrue。距離は成功時に全上書きし、未到達INF・負影響-INF。
+// 最悪O(VE+V+E)時間・O(V)追加領域。有限距離のINF/-INF衝突はoverflow_error。
 
 #include <array>
 #include <type_traits>
@@ -17,25 +31,16 @@ inline constexpr std::int64_t INF = std::int64_t{1} << 60;
 
 #ifndef SIRKIT_GRAPH_TYPES_DEFINED
 #define SIRKIT_GRAPH_TYPES_DEFINED
-// 有向辺。出発点は隣接リストの添字。
 struct Edge
 {
-    // 行先
     int to;
-    // コスト
     std::int64_t w;
     Edge(int destination, std::int64_t weight) : to(destination), w(weight) {}
 };
 using WGraph = std::vector<std::vector<Edge>>;
 #endif
 
-// SPFA(graph, distances, start_index): 始点からの最短距離をdistancesに格納し、到達可能な負閉路があればtrueを返す。
-// SKIP_RUNTIME_CHECKSを定義すると入力検査を省く。
-// 検査は始点と処理中に参照する辺のみ。未到達成分は走査しない。
 // 64頂点以下はキュー・補助状態をスタックに置く。
-// 更新された頂点だけをFIFOキューで処理するSPFA。標準C++23、重みは[-1e9, 1e9]。
-// 到達可能な負閉路があればtrue。距離は成功時に全上書きし、未到達INF・負影響-INF。
-// 最悪O(VE+V+E)時間・O(V)追加領域。有限距離のINF/-INF衝突はoverflow_error。
 #ifndef SIRKIT_SPFA_DEFINED
 #define SIRKIT_SPFA_DEFINED
 namespace reinsirk::detail {
@@ -51,6 +56,18 @@ inline bool SPFARun(const WGraph &graph, std::vector<std::int64_t> &distances,
     if (start_index < 0 || start_index >= n)
         throw std::out_of_range("SPFA: invalid start vertex");
 #endif
+
+    if (graph[start_index].empty()) {
+#ifndef SKIP_RUNTIME_CHECKS
+        std::vector<std::int64_t> result(graph.size(), INF);
+        result[start_index] = 0;
+        distances.swap(result);
+#else
+        distances.assign(graph.size(), INF);
+        distances[start_index] = 0;
+#endif
+        return false;
+    }
 
     // n*最大辺重み<INFなら、内部値と出力値の変換が要らない。
     const std::int64_t unreachable = Bounded ? INF : (static_cast<std::int64_t>(n) + 1) * max_cost;

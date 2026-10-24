@@ -1,0 +1,4219 @@
+{
+  "date": "2026-10-22",
+  "scope": "同じ問題・main・共通高速IO・C++23 O2・検査省略でbaseline/control/finalを比較し、API専用計測を区別する。",
+  "source": {
+    "path": "DataStructure/rollback-union-find.cpp",
+    "baseline_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+    "final_sha256": "bf0243aa6f5aa4b89a3f7833ad0b41c03d01a2920d5989fbe0a3fd6bc1fe1917",
+    "final_bytes": 8190
+  },
+  "artifacts": {
+    "DataStructure/rollback-union-find.cpp": {
+      "sha256": "bf0243aa6f5aa4b89a3f7833ad0b41c03d01a2920d5989fbe0a3fd6bc1fe1917",
+      "bytes": 8190
+    },
+    "Document/rollback_union_find.md": {
+      "sha256": "d843bd99d0b53da979fd3a0725a77c818e44c854d2288c6598d334475fc8bbe3",
+      "bytes": 6690
+    },
+    "Examples/rollback_union_find_example.cpp": {
+      "sha256": "cd48845954ec75b5c37de34f44fa09cb022797f1bfe4dc35d11c28e0500e7d2d",
+      "bytes": 1674
+    },
+    "Verify/current/tests/ruf_reference_test.cpp": {
+      "sha256": "b74314bb7c688721d2fc6393371a650fdd0e370875d60132fcc686f001a1f3a3",
+      "bytes": 9311
+    },
+    "Verify/current/tests/ruf_exception_test.cpp": {
+      "sha256": "4fa99301f489dfa32d226b8696ca248db96fbdbc692c693d64730612781a9799",
+      "bytes": 7181
+    },
+    "Verify/current/tests/rollback_reuse_test.cpp": {
+      "sha256": "0ae7e627b94935516f2e8f7bef7862b395f1456e6c7e17a48f0cef556709f90b",
+      "bytes": 11719
+    },
+    "Verify/current/tests/rollback_union_groups_performance_benchmark.cpp": {
+      "sha256": "e7d876a429226b3d2f0fbce3256c11448106de52f8d3860a593371e33a3ec152",
+      "bytes": 1155
+    },
+    "Verify/current/tests/rollback_union_copy_performance_benchmark.cpp": {
+      "sha256": "7234f1e210a618d520044e46ef5228ea6406bd6cfc50d13e6f272afaec984406",
+      "bytes": 1027
+    }
+  },
+  "previous_audits": {
+    "verify": {
+      "path": "Audit/verify-rollback-union-find-2026-10-22.json",
+      "sha256": "1fbbfb4427642c05860a65e549eec8b3e4c29521d07a906582d9160fe88efabb"
+    },
+    "performance": {
+      "path": "Audit/performance-rollback-union-find-2026-10-22.json",
+      "sha256": "4e9bdbedfa2d45561fa4e8484864070064ec1b5f5628b4f8e5cbbdd59d823567"
+    },
+    "provenance": {
+      "path": "Audit/provenance-rollback-union-find-2026-10-22.json",
+      "sha256": "d00167d68473640493d7e4a235e7b84bc886af16c4be94b467f91131d9548123"
+    }
+  },
+  "environment": {
+    "cpu": "Intel Core i9-14900K",
+    "compiler": {
+      "gcc": "g++ (GCC) 15.3.0",
+      "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)"
+    },
+    "compile_and_driver_cpu": 10,
+    "benchmark_cpu": 24,
+    "lane_exclusive_lock": "/tmp/sirkit_four_hours_20261022/benchmark_geometry.lock",
+    "flags": [
+      "-std=c++23",
+      "-O2"
+    ],
+    "checks": "SKIP_RUNTIME_CHECKS",
+    "repetitions": 9,
+    "order": "各条件で固定seedの順序シャッフル",
+    "api_timing": "steady_clock、構築と準備は計測外。各反復の結果をchecksumへ反映。",
+    "main_timing": "getrusage(RUSAGE_CHILDREN)のuser+sys、monotonic壁時間も保存。各出力SHAを照合。",
+    "simd": "追加SIMDなし。標準C++実装をコンパイラが自動ベクトル化し得る。"
+  },
+  "frozen_sources": {
+    "baseline_library": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/rollback-union-find.hpp.html\n#include <algorithm>\n#include <cstddef>\n#include <limits>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n#define SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n// RollbackUnionFind(n=0): n要素を構築。O(n+1)時間・領域。コピーはO(n+h+1)時間・領域で独立（hは履歴長）、移動元は空。\n// find(i)/root(i)/leader(i): 代表、same(a,b)/issame(a,b): 同一成分か、size(i): 成分サイズ。O(log(n+1))。\n// unite(a,b)/merge(a,b): 新規結合ならtrue。falseでも履歴は1回分増える。O(log(n+1))償却時間。\n// undo(): 結合呼出し1回を戻す。O(1)。履歴が必要。get_state(): 現在の呼出し回数、O(1)。\n// snapshot(): 現在位置を保存。rollback(state=-1): 指定位置/保存位置まで戻す。O(1+戻す回数)。\n// size()/component_count(): 全要素数/成分数、O(1)。groups(): 成分別の頂点昇順一覧、O(1+n log(n+1))。\n// swap(other): 履歴を含めて内容を交換。O(1)。\n// reserve_history(k): k回分の履歴容量を確保。履歴・代表の直接書換えは不可。\n// clear_history(): 森林を保ち履歴と保存位置を消去。容量は保持し、旧stateは無効。O(h+1)上界、noexcept。\nclass RollbackUnionFind {\n    struct Change { int x, y, dx, dy; };\n    std::vector<int> data;\n    std::vector<Change> history;\n    int inner_snap = 0;\n    int components_ = 0;\n    static std::size_t checked_size(std::size_t n) {\n        if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: too many vertices\");\n        return n;\n    }\n    void check(int i) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (static_cast<std::size_t>(i) >= data.size()) throw std::out_of_range(\"RollbackUnionFind: vertex\");\n#else\n        (void)i;\n#endif\n    }\n    int leader_unchecked(int i) const { while (data[i] >= 0) i = data[i]; return i; }\n    void undo_last() noexcept {\n        const auto c = history.back(); history.pop_back();\n        data[c.x] = c.dx; data[c.y] = c.dy; components_ += (c.x != c.y);\n    }\npublic:\n    explicit RollbackUnionFind(std::size_t n = 0)\n        : data(checked_size(n), -1), components_(static_cast<int>(n)) { history.reserve(std::min(n, std::size_t{64})); }\n    RollbackUnionFind(const RollbackUnionFind&) = default;\n    RollbackUnionFind& operator=(const RollbackUnionFind& other) {\n        if (this != &other) { RollbackUnionFind copy(other); swap(copy); }\n        return *this;\n    }\n    void swap(RollbackUnionFind& other) noexcept {\n        data.swap(other.data); history.swap(other.history);\n        std::swap(inner_snap, other.inner_snap); std::swap(components_, other.components_);\n    }\n    RollbackUnionFind(RollbackUnionFind&& other) noexcept\n        : data(std::move(other.data)), history(std::move(other.history)),\n          inner_snap(std::exchange(other.inner_snap, 0)), components_(std::exchange(other.components_, 0)) {\n        other.data.clear(); other.history.clear();\n    }\n    RollbackUnionFind& operator=(RollbackUnionFind&& other) noexcept {\n        if (this != &other) {\n            data = std::move(other.data); history = std::move(other.history);\n            inner_snap = std::exchange(other.inner_snap, 0); components_ = std::exchange(other.components_, 0);\n            other.data.clear(); other.history.clear();\n        }\n        return *this;\n    }\n    int find(int i) const { check(i); return leader_unchecked(i); }\n    int root(int i) const { return find(i); }\n    int leader(int i) const { return find(i); }\n    bool unite(int x, int y) {\n        check(x); check(y); x = leader_unchecked(x); y = leader_unchecked(y);\n        if (history.size() == static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.push_back({x, y, data[x], data[y]});\n        if (x == y) return false;\n        if (data[x] > data[y]) std::swap(x, y);\n        data[x] += data[y]; data[y] = x; --components_; return true;\n    }\n    bool merge(int a, int b) { return unite(a, b); }\n    bool same(int a, int b) const { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n    bool issame(int a, int b) const { return same(a, b); }\n    int size(int i) const { return -data[find(i)]; }\n    int size() const noexcept { return static_cast<int>(data.size()); }\n    int component_count() const noexcept { return components_; }\n    void undo() {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (history.empty()) throw std::out_of_range(\"RollbackUnionFind: empty history\");\n#endif\n        const auto c = history.back(); history.pop_back();\n        if (c.x != c.y) {\n            data[c.x] = c.dx; data[c.y] = c.dy; ++components_;\n        }\n        if (inner_snap > get_state()) inner_snap = get_state();\n    }\n    void snapshot() noexcept { inner_snap = get_state(); }\n    int get_state() const noexcept { return static_cast<int>(history.size()); }\n    void rollback(int state = -1) {\n        if (state == -1) state = inner_snap;\n#ifndef SKIP_RUNTIME_CHECKS\n        if (state < 0 || state > get_state()) throw std::out_of_range(\"RollbackUnionFind: state\");\n#endif\n        while (get_state() > state) undo_last();\n        if (inner_snap > state) inner_snap = state;\n    }\n    void clear_history() noexcept { history.clear(); inner_snap = 0; }\n    void reserve_history(std::size_t count) {\n        if (count > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.reserve(count);\n    }\n    std::vector<std::vector<int>> groups() const {\n        std::vector<int> leaders(data.size()), counts(data.size(), 0), slot(data.size());\n        for (int i = 0; i < size(); ++i) ++counts[leaders[i] = leader_unchecked(i)];\n        std::vector<std::vector<int>> result; result.reserve(components_);\n        for (int i = 0; i < size(); ++i) if (counts[i]) {\n            slot[i] = static_cast<int>(result.size()); result.emplace_back(); result.back().reserve(counts[i]);\n        }\n        for (int i = 0; i < size(); ++i) result[slot[leaders[i]]].push_back(i);\n        return result;\n    }\n};\n#endif\n",
+    "final_library": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/rollback-union-find.hpp.html\n#include <algorithm>\n#include <cstddef>\n#include <limits>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n#define SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n// RollbackUnionFind(n=0): n要素を構築。O(n+1)時間・領域。コピーはO(n+h+1)時間・領域で独立（hは履歴長）、移動元は空。\n// find(i)/root(i)/leader(i): 代表、same(a,b)/issame(a,b): 同一成分か、size(i): 成分サイズ。O(log(n+1))。\n// unite(a,b)/merge(a,b): 新規結合ならtrue。falseでも履歴は1回分増える。O(log(n+1))償却時間。\n// undo(): 結合呼出し1回を戻す。O(1)。履歴が必要。get_state(): 現在の呼出し回数、O(1)。\n// snapshot(): 現在位置を保存。rollback(state=-1): 指定位置/保存位置まで戻す。O(1+戻す回数)。\n// size()/component_count(): 全要素数/成分数、O(1)。groups(): 成分別の頂点昇順一覧、O(1+n log(n+1))。\n// swap(other)/swap(a,b): 履歴を含めて内容を交換、O(1)、noexcept。\n// reset(n)/reset(): 指定/現在の頂点数で全成分を独立にし履歴・保存位置を消去。O(旧n+旧h+n+1)上界。容量再利用。\n// clear()/empty(): 頂点と履歴を空にして容量保持/空か。clearはO(n+h+1)上界、いずれもnoexcept。\n// コピー代入とresetの失敗時は論理状態を保持（予約容量は変わり得る）。\n// reserve_history(k): k回分の履歴容量を確保。履歴・代表の直接書換えは不可。\n// clear_history(): 森林を保ち履歴と保存位置を消去。容量は保持し、旧stateは無効。O(h+1)上界、noexcept。\nclass RollbackUnionFind {\n    struct Change { int x, y, dx, dy; };\n    std::vector<int> data;\n    std::vector<Change> history;\n    int inner_snap = 0;\n    int components_ = 0;\n    static std::size_t checked_size(std::size_t n) {\n        if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: too many vertices\");\n        return n;\n    }\n    void check(int i) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (static_cast<std::size_t>(i) >= data.size()) throw std::out_of_range(\"RollbackUnionFind: vertex\");\n#else\n        (void)i;\n#endif\n    }\n    int leader_unchecked(int i) const { while (data[i] >= 0) i = data[i]; return i; }\n    void undo_last() noexcept {\n        const auto c = history.back(); history.pop_back();\n        data[c.x] = c.dx; data[c.y] = c.dy; components_ += (c.x != c.y);\n    }\n    std::vector<std::vector<int>> trivial_groups() const {\n        std::vector<std::vector<int>> result;\n        result.reserve(static_cast<std::size_t>(components_));\n        if (components_ == size()) {\n            for (int v = 0; v < size(); ++v) result.emplace_back(std::size_t{1}, v);\n        } else {\n            result.emplace_back(data.size());\n            for (int v = 0; v < size(); ++v) result[0][v] = v;\n        }\n        return result;\n    }\npublic:\n    explicit RollbackUnionFind(std::size_t n = 0)\n        : data(checked_size(n), -1), components_(static_cast<int>(n)) { history.reserve(std::min(n, std::size_t{64})); }\n    RollbackUnionFind(const RollbackUnionFind&) = default;\n    RollbackUnionFind& operator=(const RollbackUnionFind& other) {\n        if (this != &other) {\n            data.reserve(other.data.size()); history.reserve(other.history.size());\n            data.clear(); history.clear();\n            data.insert(data.end(), other.data.begin(), other.data.end());\n            history.insert(history.end(), other.history.begin(), other.history.end());\n            inner_snap = other.inner_snap; components_ = other.components_;\n        }\n        return *this;\n    }\n    void swap(RollbackUnionFind& other) noexcept {\n        data.swap(other.data); history.swap(other.history);\n        std::swap(inner_snap, other.inner_snap); std::swap(components_, other.components_);\n    }\n    RollbackUnionFind(RollbackUnionFind&& other) noexcept\n        : data(std::move(other.data)), history(std::move(other.history)),\n          inner_snap(std::exchange(other.inner_snap, 0)), components_(std::exchange(other.components_, 0)) {\n        other.data.clear(); other.history.clear();\n    }\n    RollbackUnionFind& operator=(RollbackUnionFind&& other) noexcept {\n        if (this != &other) {\n            data = std::move(other.data); history = std::move(other.history);\n            inner_snap = std::exchange(other.inner_snap, 0); components_ = std::exchange(other.components_, 0);\n            other.data.clear(); other.history.clear();\n        }\n        return *this;\n    }\n    void reset(std::size_t n) {\n        const auto count = checked_size(n);\n        data.reserve(count); history.reserve(std::min(count, std::size_t{64}));\n        data.clear(); history.clear();\n        data.resize(count, -1);\n        inner_snap = 0; components_ = static_cast<int>(count);\n    }\n    void reset() { reset(data.size()); }\n    void clear() noexcept { data.clear(); history.clear(); inner_snap = 0; components_ = 0; }\n    bool empty() const noexcept { return data.empty(); }\n    friend void swap(RollbackUnionFind& a, RollbackUnionFind& b) noexcept { a.swap(b); }\n    int find(int i) const { check(i); return leader_unchecked(i); }\n    int root(int i) const { return find(i); }\n    int leader(int i) const { return find(i); }\n    bool unite(int x, int y) {\n        check(x); check(y); x = leader_unchecked(x); y = leader_unchecked(y);\n        if (history.size() == static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.push_back({x, y, data[x], data[y]});\n        if (x == y) return false;\n        if (data[x] > data[y]) std::swap(x, y);\n        data[x] += data[y]; data[y] = x; --components_; return true;\n    }\n    bool merge(int a, int b) { return unite(a, b); }\n    bool same(int a, int b) const { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n    bool issame(int a, int b) const { return same(a, b); }\n    int size(int i) const { return -data[find(i)]; }\n    int size() const noexcept { return static_cast<int>(data.size()); }\n    int component_count() const noexcept { return components_; }\n    void undo() {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (history.empty()) throw std::out_of_range(\"RollbackUnionFind: empty history\");\n#endif\n        const auto c = history.back(); history.pop_back();\n        if (c.x != c.y) {\n            data[c.x] = c.dx; data[c.y] = c.dy; ++components_;\n        }\n        if (inner_snap > get_state()) inner_snap = get_state();\n    }\n    void snapshot() noexcept { inner_snap = get_state(); }\n    int get_state() const noexcept { return static_cast<int>(history.size()); }\n    void rollback(int state = -1) {\n        if (state == -1) state = inner_snap;\n#ifndef SKIP_RUNTIME_CHECKS\n        if (state < 0 || state > get_state()) throw std::out_of_range(\"RollbackUnionFind: state\");\n#endif\n        while (get_state() > state) undo_last();\n        if (inner_snap > state) inner_snap = state;\n    }\n    void clear_history() noexcept { history.clear(); inner_snap = 0; }\n    void reserve_history(std::size_t count) {\n        if (count > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.reserve(count);\n    }\n    std::vector<std::vector<int>> groups() const {\n        if (components_ == size() || components_ == 1) return trivial_groups();\n        std::vector<int> leaders(data.size()), counts(data.size(), 0), slot(data.size());\n        for (int i = 0; i < size(); ++i) ++counts[leaders[i] = leader_unchecked(i)];\n        std::vector<std::vector<int>> result; result.reserve(components_);\n        for (int i = 0; i < size(); ++i) if (counts[i]) {\n            slot[i] = static_cast<int>(result.size()); result.emplace_back(); result.back().reserve(counts[i]);\n        }\n        for (int i = 0; i < size(); ++i) result[slot[leaders[i]]].push_back(i);\n        return result;\n    }\n};\n#endif\n",
+    "frozen_submission_baseline": "#define SKIP_RUNTIME_CHECKS\n// Verify: https://judge.yosupo.jp/problem/persistent_unionfind\n// Submission: https://judge.yosupo.jp/submission/412482\n\n// Library: DataStructure/rollback-union-find.cpp\n// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/rollback-union-find.hpp.html\n#include <algorithm>\n#include <cstddef>\n#include <limits>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n#define SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n// RollbackUnionFind(n=0): n要素を構築。O(n+1)時間・領域。コピーはO(n+h+1)時間・領域で独立（hは履歴長）、移動元は空。\n// find(i)/root(i)/leader(i): 代表、same(a,b)/issame(a,b): 同一成分か、size(i): 成分サイズ。O(log(n+1))。\n// unite(a,b)/merge(a,b): 新規結合ならtrue。falseでも履歴は1回分増える。O(log(n+1))償却時間。\n// undo(): 結合呼出し1回を戻す。O(1)。履歴が必要。get_state(): 現在の呼出し回数、O(1)。\n// snapshot(): 現在位置を保存。rollback(state=-1): 指定位置/保存位置まで戻す。O(1+戻す回数)。\n// size()/component_count(): 全要素数/成分数、O(1)。groups(): 成分別の頂点昇順一覧、O(1+n log(n+1))。\n// swap(other): 履歴を含めて内容を交換。O(1)。\n// reserve_history(k): k回分の履歴容量を確保。履歴・代表の直接書換えは不可。\n// clear_history(): 森林を保ち履歴と保存位置を消去。容量は保持し、旧stateは無効。O(h+1)上界、noexcept。\nclass RollbackUnionFind {\n    struct Change { int x, y, dx, dy; };\n    std::vector<int> data;\n    std::vector<Change> history;\n    int inner_snap = 0;\n    int components_ = 0;\n    static std::size_t checked_size(std::size_t n) {\n        if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: too many vertices\");\n        return n;\n    }\n    void check(int i) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (static_cast<std::size_t>(i) >= data.size()) throw std::out_of_range(\"RollbackUnionFind: vertex\");\n#else\n        (void)i;\n#endif\n    }\n    int leader_unchecked(int i) const { while (data[i] >= 0) i = data[i]; return i; }\n    void undo_last() noexcept {\n        const auto c = history.back(); history.pop_back();\n        data[c.x] = c.dx; data[c.y] = c.dy; components_ += (c.x != c.y);\n    }\npublic:\n    explicit RollbackUnionFind(std::size_t n = 0)\n        : data(checked_size(n), -1), components_(static_cast<int>(n)) { history.reserve(std::min(n, std::size_t{64})); }\n    RollbackUnionFind(const RollbackUnionFind&) = default;\n    RollbackUnionFind& operator=(const RollbackUnionFind& other) {\n        if (this != &other) { RollbackUnionFind copy(other); swap(copy); }\n        return *this;\n    }\n    void swap(RollbackUnionFind& other) noexcept {\n        data.swap(other.data); history.swap(other.history);\n        std::swap(inner_snap, other.inner_snap); std::swap(components_, other.components_);\n    }\n    RollbackUnionFind(RollbackUnionFind&& other) noexcept\n        : data(std::move(other.data)), history(std::move(other.history)),\n          inner_snap(std::exchange(other.inner_snap, 0)), components_(std::exchange(other.components_, 0)) {\n        other.data.clear(); other.history.clear();\n    }\n    RollbackUnionFind& operator=(RollbackUnionFind&& other) noexcept {\n        if (this != &other) {\n            data = std::move(other.data); history = std::move(other.history);\n            inner_snap = std::exchange(other.inner_snap, 0); components_ = std::exchange(other.components_, 0);\n            other.data.clear(); other.history.clear();\n        }\n        return *this;\n    }\n    int find(int i) const { check(i); return leader_unchecked(i); }\n    int root(int i) const { return find(i); }\n    int leader(int i) const { return find(i); }\n    bool unite(int x, int y) {\n        check(x); check(y); x = leader_unchecked(x); y = leader_unchecked(y);\n        if (history.size() == static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.push_back({x, y, data[x], data[y]});\n        if (x == y) return false;\n        if (data[x] > data[y]) std::swap(x, y);\n        data[x] += data[y]; data[y] = x; --components_; return true;\n    }\n    bool merge(int a, int b) { return unite(a, b); }\n    bool same(int a, int b) const { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n    bool issame(int a, int b) const { return same(a, b); }\n    int size(int i) const { return -data[find(i)]; }\n    int size() const noexcept { return static_cast<int>(data.size()); }\n    int component_count() const noexcept { return components_; }\n    void undo() {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (history.empty()) throw std::out_of_range(\"RollbackUnionFind: empty history\");\n#endif\n        const auto c = history.back(); history.pop_back();\n        if (c.x != c.y) {\n            data[c.x] = c.dx; data[c.y] = c.dy; ++components_;\n        }\n        if (inner_snap > get_state()) inner_snap = get_state();\n    }\n    void snapshot() noexcept { inner_snap = get_state(); }\n    int get_state() const noexcept { return static_cast<int>(history.size()); }\n    void rollback(int state = -1) {\n        if (state == -1) state = inner_snap;\n#ifndef SKIP_RUNTIME_CHECKS\n        if (state < 0 || state > get_state()) throw std::out_of_range(\"RollbackUnionFind: state\");\n#endif\n        while (get_state() > state) undo_last();\n        if (inner_snap > state) inner_snap = state;\n    }\n    void clear_history() noexcept { history.clear(); inner_snap = 0; }\n    void reserve_history(std::size_t count) {\n        if (count > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.reserve(count);\n    }\n    std::vector<std::vector<int>> groups() const {\n        std::vector<int> leaders(data.size()), counts(data.size(), 0), slot(data.size());\n        for (int i = 0; i < size(); ++i) ++counts[leaders[i] = leader_unchecked(i)];\n        std::vector<std::vector<int>> result; result.reserve(components_);\n        for (int i = 0; i < size(); ++i) if (counts[i]) {\n            slot[i] = static_cast<int>(result.size()); result.emplace_back(); result.back().reserve(counts[i]);\n        }\n        for (int i = 0; i < size(); ++i) result[slot[leaders[i]]].push_back(i);\n        return result;\n    }\n};\n#endif\n\n\n// SPDX-License-Identifier: CC0-1.0\n// Verify I/O: Verify/current/common/fast_io.hpp\n// SPDX-License-Identifier: CC0-1.0\n#include <algorithm>\n#include <array>\n#include <charconv>\n#include <cstddef>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#include <cstring>\n#include <limits>\n#include <stdexcept>\n#include <string>\n#include <string_view>\n#include <type_traits>\n#include <vector>\n\n#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED\n#define SIRKIT_VERIFY_FAST_IO_DEFINED\n\n// VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。\n// >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。\n// >> char/string: 空白を飛ばし、1文字／空白までの文字列を読む。\n// >> 浮動小数点: 十進文字列を変換する。通常のCロケールで使う。\n// bool / !: 直前までの読み取りが成功しているか／失敗したかを返す。\nclass VerifyInput {\n    static constexpr std::size_t buffer_size = 1 << 17;\n    std::FILE* file_;\n    std::array<unsigned char, buffer_size> buffer_;\n    std::size_t position_ = 0, size_ = 0;\n    bool good_ = true;\n\n    int peek() {\n        if (position_ == size_) {\n            size_ = std::fread(buffer_.data(), 1, buffer_.size(), file_);\n            position_ = 0;\n            if (size_ == 0) return EOF;\n        }\n        return buffer_[position_];\n    }\n\n    int skip_space() {\n        int c;\n        while ((c = peek()) != EOF && c <= ' ') ++position_;\n        if (c == EOF) good_ = false;\n        return c;\n    }\n\npublic:\n    explicit VerifyInput(std::FILE* file = stdin) : file_(file) {}\n    VerifyInput(const VerifyInput&) = delete;\n    VerifyInput& operator=(const VerifyInput&) = delete;\n\n    explicit operator bool() const noexcept { return good_; }\n    bool operator!() const noexcept { return !good_; }\n\n    template<class T>\n        requires (std::is_integral_v<T> && sizeof(T) <= sizeof(std::uint64_t)\n                  && !std::is_same_v<T, char>)\n    VerifyInput& operator>>(T& result) {\n        if (!good_) return *this;\n        int c = skip_space();\n        if (c == EOF) return *this;\n        bool negative = false;\n        if (c == '-' || c == '+') {\n            negative = c == '-';\n            ++position_;\n            c = peek();\n        }\n        if (c == EOF) {\n            good_ = false;\n            return *this;\n        }\n#ifndef SKIP_RUNTIME_CHECKS\n        if (c < '0' || c > '9') {\n            good_ = false;\n            return *this;\n        }\n        // 先頭の0を除けば、20桁以下の末尾直前の値はuint64_tに収まる。\n        while (c == '0') {\n            ++position_;\n            c = peek();\n        }\n        std::uint64_t previous = 0;\n        unsigned last_digit = 0;\n        std::size_t digits = 0;\n#endif\n        std::uint64_t value = 0;\n        while (c >= '0' && c <= '9') {\n#ifndef SKIP_RUNTIME_CHECKS\n            previous = value;\n            last_digit = static_cast<unsigned>(c - '0');\n            if (digits <= 20) ++digits;\n#endif\n            value = value * 10 + static_cast<unsigned>(c - '0');\n            ++position_;\n            c = peek();\n        }\n#ifndef SKIP_RUNTIME_CHECKS\n        constexpr auto maximum = std::numeric_limits<std::uint64_t>::max();\n        if ((c != EOF && c > ' ') || digits > 20\n            || (digits == 20 && (previous > maximum / 10\n                || (previous == maximum / 10 && last_digit > maximum % 10)))) {\n            good_ = false;\n            return *this;\n        }\n        std::uint64_t limit = static_cast<std::uint64_t>(std::numeric_limits<T>::max());\n        if constexpr (std::is_signed_v<T>) limit += negative;\n        else if (negative && value != 0) good_ = false;\n        if (value > limit) good_ = false;\n        if (!good_) return *this;\n#endif\n        if constexpr (std::is_signed_v<T>) {\n            constexpr std::uint64_t minimum_magnitude =\n                static_cast<std::uint64_t>(std::numeric_limits<T>::max()) + 1;\n            // -(最小値)は評価せず、絶対値が最大値+1のときだけ最小値を使う。\n            result = negative\n                ? (value == minimum_magnitude ? std::numeric_limits<T>::min()\n                                  : static_cast<T>(-static_cast<T>(value)))\n                : static_cast<T>(value);\n        } else result = static_cast<T>(value);\n        return *this;\n    }\n\n    VerifyInput& operator>>(char& result) {\n        if (!good_) return *this;\n        const int c = skip_space();\n        if (c != EOF) {\n            result = static_cast<char>(c);\n            ++position_;\n        }\n        return *this;\n    }\n\n    VerifyInput& operator>>(std::string& result) {\n        if (!good_) return *this;\n        int c = skip_space();\n        if (c == EOF) return *this;\n        result.clear();\n        do {\n            result.push_back(static_cast<char>(c));\n            ++position_;\n            c = peek();\n        } while (c != EOF && c > ' ');\n        return *this;\n    }\n\n    template<class T> requires std::is_floating_point_v<T>\n    VerifyInput& operator>>(T& result) {\n        std::string token;\n        *this >> token;\n        if (!good_) return *this;\n#ifndef SKIP_RUNTIME_CHECKS\n        char* end = nullptr;\n        const long double value = std::strtold(token.c_str(), &end);\n        if (end != token.c_str() + token.size()) good_ = false;\n        else result = static_cast<T>(value);\n#else\n        result = static_cast<T>(std::strtold(token.c_str(), nullptr));\n#endif\n        return *this;\n    }\n};\n\n// VerifyOutput(file=stdout): 非所有のFILEへ書く。破棄時にflushし、FILEは閉じない。\n// << 整数/char/文字列/浮動小数点: 値を出力する。整数は64bit以下に対応する。\n// fixed(digits): 浮動小数点を小数点以下digits桁で出力する（digits>=0）。\n// flush(): バッファの内容をFILEへ渡す。bool / !で書き込み失敗を確認できる。\nclass VerifyOutput {\n    static constexpr std::size_t buffer_size = 1 << 17;\n    std::FILE* file_;\n    std::array<char, buffer_size> buffer_;\n    std::size_t size_ = 0;\n    int precision_ = 6;\n    bool fixed_ = false, good_ = true;\n\n    void write(std::string_view text) {\n        while (!text.empty() && good_) {\n            if (size_ == buffer_.size()) flush();\n            const auto count = std::min(text.size(), buffer_.size() - size_);\n            std::memcpy(buffer_.data() + size_, text.data(), count);\n            size_ += count;\n            text.remove_prefix(count);\n        }\n    }\n\npublic:\n    explicit VerifyOutput(std::FILE* file = stdout) : file_(file) {}\n    VerifyOutput(const VerifyOutput&) = delete;\n    VerifyOutput& operator=(const VerifyOutput&) = delete;\n    ~VerifyOutput() { flush(); }\n\n    explicit operator bool() const noexcept { return good_; }\n    bool operator!() const noexcept { return !good_; }\n\n    VerifyOutput& fixed(int digits) {\n        if (digits < 0) throw std::invalid_argument(\"negative output precision\");\n        fixed_ = true;\n        precision_ = digits;\n        return *this;\n    }\n\n    void flush() noexcept {\n        std::size_t written = 0;\n        while (written < size_ && good_) {\n            const auto count = std::fwrite(buffer_.data() + written, 1, size_ - written, file_);\n            if (count == 0) good_ = false;\n            written += count;\n        }\n        size_ = 0;\n    }\n\n    template<class T>\n        requires (std::is_integral_v<T> && sizeof(T) <= sizeof(std::uint64_t)\n                  && !std::is_same_v<T, char>)\n    VerifyOutput& operator<<(T value) {\n        if constexpr (std::is_same_v<T, bool>) return *this << static_cast<char>('0' + value);\n        else {\n            char digits[std::numeric_limits<std::uint64_t>::digits10 + 3];\n            const auto end = std::to_chars(digits, digits + sizeof(digits), value).ptr;\n            write(std::string_view(digits, static_cast<std::size_t>(end - digits)));\n            return *this;\n        }\n    }\n\n    VerifyOutput& operator<<(char value) {\n        if (size_ == buffer_.size()) flush();\n        if (good_) buffer_[size_++] = value;\n        return *this;\n    }\n\n    VerifyOutput& operator<<(std::string_view value) { write(value); return *this; }\n    VerifyOutput& operator<<(const std::string& value) { write(value); return *this; }\n    VerifyOutput& operator<<(const char* value) { write(value); return *this; }\n\n    template<class T> requires std::is_floating_point_v<T>\n    VerifyOutput& operator<<(T value) {\n        char local[128];\n        const char* format = fixed_ ? \"%.*Lf\" : \"%.*Lg\";\n        const int count = std::snprintf(local, sizeof(local), format, precision_,\n                                        static_cast<long double>(value));\n        if (count < 0) good_ = false;\n        else if (static_cast<std::size_t>(count) < sizeof(local))\n            write(std::string_view(local, static_cast<std::size_t>(count)));\n        else {\n            std::vector<char> text(static_cast<std::size_t>(count) + 1);\n            std::snprintf(text.data(), text.size(), format, precision_, static_cast<long double>(value));\n            write(std::string_view(text.data(), static_cast<std::size_t>(count)));\n        }\n        return *this;\n    }\n};\n\ninline VerifyInput verify_in;\ninline VerifyOutput verify_out;\n#endif\n\n#include <array>\n#include <vector>\nint main() {\n    int n,q;verify_in>>n>>q;\n    std::vector<std::array<int,3>> queries(q+1);\n    std::vector<std::vector<int>> children(q+1);\n    for(int i=1;i<=q;++i){int k;auto& a=queries[i];verify_in>>a[0]>>k>>a[1]>>a[2];children[k+1].push_back(i);}\n    RollbackUnionFind uf(n);\n    std::vector<int> answers(q+1,-1);\n    struct Frame{int vertex;bool exit;};std::vector<Frame> stack{{0,false}};\n    while(!stack.empty()){\n        auto [i,exit]=stack.back();stack.pop_back();\n        if(exit){if(i!=0&&queries[i][0]==0)uf.undo();continue;}\n        if(i!=0){const auto& a=queries[i];if(a[0]==0)uf.unite(a[1],a[2]);else answers[i]=uf.same(a[1],a[2]);}\n        stack.push_back({i,true});for(int child:children[i])stack.push_back({child,false});\n    }\n    for(int i=1;i<=q;++i)if(answers[i]!=-1)verify_out<<answers[i]<<'\\n';\n}\n",
+    "frozen_main": {
+      "path": "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/main.cpp",
+      "sha256": "8c6dad142331e1dcb3d367ff3a18a6fb138bfd193494541b5eb3bff790369417",
+      "body": "// SPDX-License-Identifier: CC0-1.0\n#include \"Verify/current/common/fast_io.hpp\"\n#include <array>\n#include <vector>\nint main() {\n    int n,q;verify_in>>n>>q;\n    std::vector<std::array<int,3>> queries(q+1);\n    std::vector<std::vector<int>> children(q+1);\n    for(int i=1;i<=q;++i){int k;auto& a=queries[i];verify_in>>a[0]>>k>>a[1]>>a[2];children[k+1].push_back(i);}\n    RollbackUnionFind uf(n);\n    std::vector<int> answers(q+1,-1);\n    struct Frame{int vertex;bool exit;};std::vector<Frame> stack{{0,false}};\n    while(!stack.empty()){\n        auto [i,exit]=stack.back();stack.pop_back();\n        if(exit){if(i!=0&&queries[i][0]==0)uf.undo();continue;}\n        if(i!=0){const auto& a=queries[i];if(a[0]==0)uf.unite(a[1],a[2]);else answers[i]=uf.same(a[1],a[2]);}\n        stack.push_back({i,true});for(int child:children[i])stack.push_back({child,false});\n    }\n    for(int i=1;i<=q;++i)if(answers[i]!=-1)verify_out<<answers[i]<<'\\n';\n}\n"
+    },
+    "frozen_io": {
+      "path": "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/io.hpp",
+      "sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+      "body": "// SPDX-License-Identifier: CC0-1.0\n#include <algorithm>\n#include <array>\n#include <charconv>\n#include <cstddef>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#include <cstring>\n#include <limits>\n#include <stdexcept>\n#include <string>\n#include <string_view>\n#include <type_traits>\n#include <vector>\n\n#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED\n#define SIRKIT_VERIFY_FAST_IO_DEFINED\n\n// VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。\n// >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。\n// >> char/string: 空白を飛ばし、1文字／空白までの文字列を読む。\n// >> 浮動小数点: 十進文字列を変換する。通常のCロケールで使う。\n// bool / !: 直前までの読み取りが成功しているか／失敗したかを返す。\nclass VerifyInput {\n    static constexpr std::size_t buffer_size = 1 << 17;\n    std::FILE* file_;\n    std::array<unsigned char, buffer_size> buffer_;\n    std::size_t position_ = 0, size_ = 0;\n    bool good_ = true;\n\n    int peek() {\n        if (position_ == size_) {\n            size_ = std::fread(buffer_.data(), 1, buffer_.size(), file_);\n            position_ = 0;\n            if (size_ == 0) return EOF;\n        }\n        return buffer_[position_];\n    }\n\n    int skip_space() {\n        int c;\n        while ((c = peek()) != EOF && c <= ' ') ++position_;\n        if (c == EOF) good_ = false;\n        return c;\n    }\n\npublic:\n    explicit VerifyInput(std::FILE* file = stdin) : file_(file) {}\n    VerifyInput(const VerifyInput&) = delete;\n    VerifyInput& operator=(const VerifyInput&) = delete;\n\n    explicit operator bool() const noexcept { return good_; }\n    bool operator!() const noexcept { return !good_; }\n\n    template<class T>\n        requires (std::is_integral_v<T> && sizeof(T) <= sizeof(std::uint64_t)\n                  && !std::is_same_v<T, char>)\n    VerifyInput& operator>>(T& result) {\n        if (!good_) return *this;\n        int c = skip_space();\n        if (c == EOF) return *this;\n        bool negative = false;\n        if (c == '-' || c == '+') {\n            negative = c == '-';\n            ++position_;\n            c = peek();\n        }\n        if (c == EOF) {\n            good_ = false;\n            return *this;\n        }\n#ifndef SKIP_RUNTIME_CHECKS\n        if (c < '0' || c > '9') {\n            good_ = false;\n            return *this;\n        }\n        // 先頭の0を除けば、20桁以下の末尾直前の値はuint64_tに収まる。\n        while (c == '0') {\n            ++position_;\n            c = peek();\n        }\n        std::uint64_t previous = 0;\n        unsigned last_digit = 0;\n        std::size_t digits = 0;\n#endif\n        std::uint64_t value = 0;\n        while (c >= '0' && c <= '9') {\n#ifndef SKIP_RUNTIME_CHECKS\n            previous = value;\n            last_digit = static_cast<unsigned>(c - '0');\n            if (digits <= 20) ++digits;\n#endif\n            value = value * 10 + static_cast<unsigned>(c - '0');\n            ++position_;\n            c = peek();\n        }\n#ifndef SKIP_RUNTIME_CHECKS\n        constexpr auto maximum = std::numeric_limits<std::uint64_t>::max();\n        if ((c != EOF && c > ' ') || digits > 20\n            || (digits == 20 && (previous > maximum / 10\n                || (previous == maximum / 10 && last_digit > maximum % 10)))) {\n            good_ = false;\n            return *this;\n        }\n        std::uint64_t limit = static_cast<std::uint64_t>(std::numeric_limits<T>::max());\n        if constexpr (std::is_signed_v<T>) limit += negative;\n        else if (negative && value != 0) good_ = false;\n        if (value > limit) good_ = false;\n        if (!good_) return *this;\n#endif\n        if constexpr (std::is_signed_v<T>) {\n            constexpr std::uint64_t minimum_magnitude =\n                static_cast<std::uint64_t>(std::numeric_limits<T>::max()) + 1;\n            // -(最小値)は評価せず、絶対値が最大値+1のときだけ最小値を使う。\n            result = negative\n                ? (value == minimum_magnitude ? std::numeric_limits<T>::min()\n                                  : static_cast<T>(-static_cast<T>(value)))\n                : static_cast<T>(value);\n        } else result = static_cast<T>(value);\n        return *this;\n    }\n\n    VerifyInput& operator>>(char& result) {\n        if (!good_) return *this;\n        const int c = skip_space();\n        if (c != EOF) {\n            result = static_cast<char>(c);\n            ++position_;\n        }\n        return *this;\n    }\n\n    VerifyInput& operator>>(std::string& result) {\n        if (!good_) return *this;\n        int c = skip_space();\n        if (c == EOF) return *this;\n        result.clear();\n        do {\n            result.push_back(static_cast<char>(c));\n            ++position_;\n            c = peek();\n        } while (c != EOF && c > ' ');\n        return *this;\n    }\n\n    template<class T> requires std::is_floating_point_v<T>\n    VerifyInput& operator>>(T& result) {\n        std::string token;\n        *this >> token;\n        if (!good_) return *this;\n#ifndef SKIP_RUNTIME_CHECKS\n        char* end = nullptr;\n        const long double value = std::strtold(token.c_str(), &end);\n        if (end != token.c_str() + token.size()) good_ = false;\n        else result = static_cast<T>(value);\n#else\n        result = static_cast<T>(std::strtold(token.c_str(), nullptr));\n#endif\n        return *this;\n    }\n};\n\n// VerifyOutput(file=stdout): 非所有のFILEへ書く。破棄時にflushし、FILEは閉じない。\n// << 整数/char/文字列/浮動小数点: 値を出力する。整数は64bit以下に対応する。\n// fixed(digits): 浮動小数点を小数点以下digits桁で出力する（digits>=0）。\n// flush(): バッファの内容をFILEへ渡す。bool / !で書き込み失敗を確認できる。\nclass VerifyOutput {\n    static constexpr std::size_t buffer_size = 1 << 17;\n    std::FILE* file_;\n    std::array<char, buffer_size> buffer_;\n    std::size_t size_ = 0;\n    int precision_ = 6;\n    bool fixed_ = false, good_ = true;\n\n    void write(std::string_view text) {\n        while (!text.empty() && good_) {\n            if (size_ == buffer_.size()) flush();\n            const auto count = std::min(text.size(), buffer_.size() - size_);\n            std::memcpy(buffer_.data() + size_, text.data(), count);\n            size_ += count;\n            text.remove_prefix(count);\n        }\n    }\n\npublic:\n    explicit VerifyOutput(std::FILE* file = stdout) : file_(file) {}\n    VerifyOutput(const VerifyOutput&) = delete;\n    VerifyOutput& operator=(const VerifyOutput&) = delete;\n    ~VerifyOutput() { flush(); }\n\n    explicit operator bool() const noexcept { return good_; }\n    bool operator!() const noexcept { return !good_; }\n\n    VerifyOutput& fixed(int digits) {\n        if (digits < 0) throw std::invalid_argument(\"negative output precision\");\n        fixed_ = true;\n        precision_ = digits;\n        return *this;\n    }\n\n    void flush() noexcept {\n        std::size_t written = 0;\n        while (written < size_ && good_) {\n            const auto count = std::fwrite(buffer_.data() + written, 1, size_ - written, file_);\n            if (count == 0) good_ = false;\n            written += count;\n        }\n        size_ = 0;\n    }\n\n    template<class T>\n        requires (std::is_integral_v<T> && sizeof(T) <= sizeof(std::uint64_t)\n                  && !std::is_same_v<T, char>)\n    VerifyOutput& operator<<(T value) {\n        if constexpr (std::is_same_v<T, bool>) return *this << static_cast<char>('0' + value);\n        else {\n            char digits[std::numeric_limits<std::uint64_t>::digits10 + 3];\n            const auto end = std::to_chars(digits, digits + sizeof(digits), value).ptr;\n            write(std::string_view(digits, static_cast<std::size_t>(end - digits)));\n            return *this;\n        }\n    }\n\n    VerifyOutput& operator<<(char value) {\n        if (size_ == buffer_.size()) flush();\n        if (good_) buffer_[size_++] = value;\n        return *this;\n    }\n\n    VerifyOutput& operator<<(std::string_view value) { write(value); return *this; }\n    VerifyOutput& operator<<(const std::string& value) { write(value); return *this; }\n    VerifyOutput& operator<<(const char* value) { write(value); return *this; }\n\n    template<class T> requires std::is_floating_point_v<T>\n    VerifyOutput& operator<<(T value) {\n        char local[128];\n        const char* format = fixed_ ? \"%.*Lf\" : \"%.*Lg\";\n        const int count = std::snprintf(local, sizeof(local), format, precision_,\n                                        static_cast<long double>(value));\n        if (count < 0) good_ = false;\n        else if (static_cast<std::size_t>(count) < sizeof(local))\n            write(std::string_view(local, static_cast<std::size_t>(count)));\n        else {\n            std::vector<char> text(static_cast<std::size_t>(count) + 1);\n            std::snprintf(text.data(), text.size(), format, precision_, static_cast<long double>(value));\n            write(std::string_view(text.data(), static_cast<std::size_t>(count)));\n        }\n        return *this;\n    }\n};\n\ninline VerifyInput verify_in;\ninline VerifyOutput verify_out;\n#endif\n"
+    },
+    "main_io_unchanged": true,
+    "baseline_equals_control": true
+  },
+  "builds": [
+    {
+      "library": "ruf",
+      "compiler": "gcc",
+      "variant": "baseline",
+      "fixture": "groups",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/baseline.hpp\"",
+        "-DTYPE=1",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_groups_gcc_baseline_1"
+      ],
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "text_sha256": "828f3ef50661e4482b51353a179f56f262ed1c3f3152d2e39889d8029de9eafd"
+    },
+    {
+      "library": "ruf",
+      "compiler": "gcc",
+      "variant": "baseline",
+      "fixture": "copy",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/baseline.hpp\"",
+        "-DTYPE=1",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/copy_api.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_copy_gcc_baseline_1"
+      ],
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "text_sha256": "0fae6c3542a4e35791c63b371665d164553faf1467fd54a382fc72e640ef9269"
+    },
+    {
+      "library": "ruf",
+      "compiler": "gcc",
+      "variant": "baseline",
+      "fixture": "main",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/baseline.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_main_gcc_baseline_1"
+      ],
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "text_sha256": "728372eecf329fedebe2dc25d24c09e0539859ba0fab29b5487fbfe0f3df1df5"
+    },
+    {
+      "library": "ruf",
+      "compiler": "gcc",
+      "variant": "control",
+      "fixture": "groups",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/control.hpp\"",
+        "-DTYPE=1",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_groups_gcc_control_1"
+      ],
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "text_sha256": "828f3ef50661e4482b51353a179f56f262ed1c3f3152d2e39889d8029de9eafd"
+    },
+    {
+      "library": "ruf",
+      "compiler": "gcc",
+      "variant": "control",
+      "fixture": "copy",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/control.hpp\"",
+        "-DTYPE=1",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/copy_api.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_copy_gcc_control_1"
+      ],
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "text_sha256": "0fae6c3542a4e35791c63b371665d164553faf1467fd54a382fc72e640ef9269"
+    },
+    {
+      "library": "ruf",
+      "compiler": "gcc",
+      "variant": "control",
+      "fixture": "main",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/control.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_main_gcc_control_1"
+      ],
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "text_sha256": "728372eecf329fedebe2dc25d24c09e0539859ba0fab29b5487fbfe0f3df1df5"
+    },
+    {
+      "library": "ruf",
+      "compiler": "gcc",
+      "variant": "final",
+      "fixture": "groups",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DTYPE=1",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_groups_gcc_final_1"
+      ],
+      "source_sha256": "bf0243aa6f5aa4b89a3f7833ad0b41c03d01a2920d5989fbe0a3fd6bc1fe1917",
+      "text_sha256": "63ba9420a44b2cd3786d2fa0f7238327d30bef05af69b2b2acb286826045f953"
+    },
+    {
+      "library": "ruf",
+      "compiler": "gcc",
+      "variant": "final",
+      "fixture": "copy",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DTYPE=1",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/copy_api.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_copy_gcc_final_1"
+      ],
+      "source_sha256": "bf0243aa6f5aa4b89a3f7833ad0b41c03d01a2920d5989fbe0a3fd6bc1fe1917",
+      "text_sha256": "08d66b45e7b3b19a2b45460707254af6b3178aeb0007f3a26643a945a2fb0e3c"
+    },
+    {
+      "library": "ruf",
+      "compiler": "gcc",
+      "variant": "final",
+      "fixture": "main",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_main_gcc_final_1"
+      ],
+      "source_sha256": "bf0243aa6f5aa4b89a3f7833ad0b41c03d01a2920d5989fbe0a3fd6bc1fe1917",
+      "text_sha256": "a93405207f7967ccbe72e2c23942ee61cb5fe1b50eb06a63289725461d81c0b2"
+    },
+    {
+      "library": "ruf",
+      "compiler": "clang",
+      "variant": "baseline",
+      "fixture": "groups",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/baseline.hpp\"",
+        "-DTYPE=1",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_groups_clang_baseline_1"
+      ],
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "text_sha256": "526d675d6e18afcfee8e32e371cdf3bbe40583f3aca20a57a1d6cefdbd73ebf5"
+    },
+    {
+      "library": "ruf",
+      "compiler": "clang",
+      "variant": "baseline",
+      "fixture": "copy",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/baseline.hpp\"",
+        "-DTYPE=1",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/copy_api.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_copy_clang_baseline_1"
+      ],
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "text_sha256": "c525adaf562e2998b2ee1e7a1cffebc57002cf527e49dcafa68335e43574036f"
+    },
+    {
+      "library": "ruf",
+      "compiler": "clang",
+      "variant": "baseline",
+      "fixture": "main",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/baseline.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_main_clang_baseline_1"
+      ],
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "text_sha256": "dd5649c5cb7089d24e51456ce711d54f6e62959b5b91bd56045c57ed2e767476"
+    },
+    {
+      "library": "ruf",
+      "compiler": "clang",
+      "variant": "control",
+      "fixture": "groups",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/control.hpp\"",
+        "-DTYPE=1",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_groups_clang_control_1"
+      ],
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "text_sha256": "526d675d6e18afcfee8e32e371cdf3bbe40583f3aca20a57a1d6cefdbd73ebf5"
+    },
+    {
+      "library": "ruf",
+      "compiler": "clang",
+      "variant": "control",
+      "fixture": "copy",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/control.hpp\"",
+        "-DTYPE=1",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/copy_api.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_copy_clang_control_1"
+      ],
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "text_sha256": "c525adaf562e2998b2ee1e7a1cffebc57002cf527e49dcafa68335e43574036f"
+    },
+    {
+      "library": "ruf",
+      "compiler": "clang",
+      "variant": "control",
+      "fixture": "main",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/control.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_main_clang_control_1"
+      ],
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "text_sha256": "dd5649c5cb7089d24e51456ce711d54f6e62959b5b91bd56045c57ed2e767476"
+    },
+    {
+      "library": "ruf",
+      "compiler": "clang",
+      "variant": "final",
+      "fixture": "groups",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DTYPE=1",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_groups_clang_final_1"
+      ],
+      "source_sha256": "bf0243aa6f5aa4b89a3f7833ad0b41c03d01a2920d5989fbe0a3fd6bc1fe1917",
+      "text_sha256": "e440d371843cdd12473c1d0d96c6d532d7d21fb67a29b77685968582386b582d"
+    },
+    {
+      "library": "ruf",
+      "compiler": "clang",
+      "variant": "final",
+      "fixture": "copy",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DTYPE=1",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/copy_api.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_copy_clang_final_1"
+      ],
+      "source_sha256": "bf0243aa6f5aa4b89a3f7833ad0b41c03d01a2920d5989fbe0a3fd6bc1fe1917",
+      "text_sha256": "4fea6778fc92ebbf4fa0bd99ac378e13789607bc0de97a0f10ed2d1aa49c8fe6"
+    },
+    {
+      "library": "ruf",
+      "compiler": "clang",
+      "variant": "final",
+      "fixture": "main",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final_main_clang_final_1"
+      ],
+      "source_sha256": "bf0243aa6f5aa4b89a3f7833ad0b41c03d01a2920d5989fbe0a3fd6bc1fe1917",
+      "text_sha256": "dd5649c5cb7089d24e51456ce711d54f6e62959b5b91bd56045c57ed2e767476"
+    }
+  ],
+  "api_results": {
+    "ruf/gcc/groups/type1/32,1,100000": {
+      "raw_ms": {
+        "baseline": [
+          14.319211,
+          14.514664,
+          14.778046,
+          14.869797,
+          14.300904,
+          14.514551,
+          14.515404,
+          14.491185,
+          14.494266
+        ],
+        "control": [
+          14.386312,
+          14.534208,
+          14.460605,
+          14.414632,
+          15.248887,
+          14.538636,
+          14.426988,
+          14.604242,
+          14.362517
+        ],
+        "final": [
+          2.743791,
+          2.778299,
+          2.72439,
+          2.708136,
+          2.711029,
+          2.727155,
+          2.699321,
+          2.779039,
+          2.764619
+        ]
+      },
+      "median_ms": {
+        "baseline": 14.514551,
+        "control": 14.460605,
+        "final": 2.727155
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9962833159634079,
+        "final": 0.18789110321083993
+      },
+      "arguments": [
+        32,
+        1,
+        100000
+      ],
+      "checksum": "6400000"
+    },
+    "ruf/gcc/groups/type1/32,2,100000": {
+      "raw_ms": {
+        "baseline": [
+          16.350302,
+          16.01847,
+          16.067839,
+          16.297219,
+          16.11279,
+          15.930925,
+          16.240437,
+          15.882295,
+          16.275946
+        ],
+        "control": [
+          16.404385,
+          16.032975,
+          16.210258,
+          15.959661,
+          16.176152,
+          16.148562,
+          16.165563,
+          16.187417,
+          16.264279
+        ],
+        "final": [
+          16.465831,
+          16.387456,
+          16.506828,
+          16.479507,
+          16.473589,
+          16.447273,
+          16.471841,
+          16.517506,
+          16.635181
+        ]
+      },
+      "median_ms": {
+        "baseline": 16.11279,
+        "control": 16.176152,
+        "final": 16.473589
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0039324040094855,
+        "final": 1.0223920872797325
+      },
+      "arguments": [
+        32,
+        2,
+        100000
+      ],
+      "checksum": "9600000"
+    },
+    "ruf/gcc/groups/type1/32,8,100000": {
+      "raw_ms": {
+        "baseline": [
+          22.925479,
+          22.537108,
+          22.425145,
+          22.948025,
+          23.181745,
+          22.894877,
+          22.583063,
+          22.756673,
+          22.55456
+        ],
+        "control": [
+          22.72518,
+          23.052201,
+          22.369501,
+          22.413387,
+          22.624202,
+          23.006274,
+          22.494098,
+          22.672763,
+          22.826499
+        ],
+        "final": [
+          22.730037,
+          23.453911,
+          24.092679,
+          22.637685,
+          22.450534,
+          23.393219,
+          22.566993,
+          22.650652,
+          22.421722
+        ]
+      },
+      "median_ms": {
+        "baseline": 22.756673,
+        "control": 22.672763,
+        "final": 22.650652
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9963127298968527,
+        "final": 0.9953411028053178
+      },
+      "arguments": [
+        32,
+        8,
+        100000
+      ],
+      "checksum": "28800000"
+    },
+    "ruf/gcc/groups/type1/32,32,100000": {
+      "raw_ms": {
+        "baseline": [
+          73.174144,
+          73.358769,
+          74.323929,
+          73.232666,
+          74.14552,
+          74.26222,
+          73.211895,
+          73.664073,
+          73.66715
+        ],
+        "control": [
+          73.892443,
+          73.758723,
+          73.40532,
+          73.20462,
+          73.411212,
+          73.515956,
+          73.152025,
+          73.946217,
+          73.781088
+        ],
+        "final": [
+          59.60448,
+          59.594859,
+          59.668206,
+          59.552301,
+          60.286966,
+          60.494992,
+          60.386405,
+          59.713937,
+          60.317684
+        ]
+      },
+      "median_ms": {
+        "baseline": 73.664073,
+        "control": 73.515956,
+        "final": 59.713937
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9979892911976236,
+        "final": 0.8106249704655891
+      },
+      "arguments": [
+        32,
+        32,
+        100000
+      ],
+      "checksum": "105600000"
+    },
+    "ruf/gcc/groups/type1/4096,1,3000": {
+      "raw_ms": {
+        "baseline": [
+          64.198491,
+          64.619751,
+          63.837291,
+          63.849736,
+          64.592902,
+          64.00895,
+          63.854196,
+          77.576771,
+          63.963988
+        ],
+        "control": [
+          63.94468,
+          64.187328,
+          64.313443,
+          66.30534,
+          64.814596,
+          64.29366,
+          63.796072,
+          64.149264,
+          64.309834
+        ],
+        "final": [
+          3.177365,
+          3.2301,
+          3.258024,
+          3.206654,
+          3.180073,
+          3.174985,
+          3.159354,
+          3.170914,
+          3.188917
+        ]
+      },
+      "median_ms": {
+        "baseline": 64.00895,
+        "control": 64.29366,
+        "final": 3.180073
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0044479717289536,
+        "final": 0.04968169295075142
+      },
+      "arguments": [
+        4096,
+        1,
+        3000
+      ],
+      "checksum": "24576000"
+    },
+    "ruf/gcc/groups/type1/4096,2,3000": {
+      "raw_ms": {
+        "baseline": [
+          66.000021,
+          65.799758,
+          66.143171,
+          66.212436,
+          65.99063,
+          66.036064,
+          65.995955,
+          66.064336,
+          68.965614
+        ],
+        "control": [
+          81.971108,
+          65.76302,
+          65.987868,
+          66.024172,
+          66.206011,
+          66.063303,
+          65.831816,
+          65.787977,
+          65.897725
+        ],
+        "final": [
+          67.248462,
+          67.229462,
+          66.996145,
+          67.34207,
+          67.260199,
+          67.402544,
+          66.614049,
+          67.203126,
+          67.106731
+        ]
+      },
+      "median_ms": {
+        "baseline": 66.036064,
+        "control": 65.987868,
+        "final": 67.229462
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9992701563800048,
+        "final": 1.0180719129474465
+      },
+      "arguments": [
+        4096,
+        2,
+        3000
+      ],
+      "checksum": "36864000"
+    },
+    "ruf/gcc/groups/type1/4096,1024,3000": {
+      "raw_ms": {
+        "baseline": [
+          122.039805,
+          121.683168,
+          121.918292,
+          122.436562,
+          121.584044,
+          122.010451,
+          121.760609,
+          121.582158,
+          121.592782
+        ],
+        "control": [
+          121.736988,
+          123.152496,
+          121.362288,
+          122.12309,
+          121.834149,
+          121.460137,
+          121.829167,
+          121.932476,
+          122.361937
+        ],
+        "final": [
+          120.988342,
+          120.784499,
+          120.876452,
+          120.878507,
+          121.601035,
+          120.825553,
+          120.931529,
+          121.2583,
+          120.862516
+        ]
+      },
+      "median_ms": {
+        "baseline": 121.760609,
+        "control": 121.834149,
+        "final": 120.878507
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0006039720119992,
+        "final": 0.9927554403082856
+      },
+      "arguments": [
+        4096,
+        1024,
+        3000
+      ],
+      "checksum": "12595200000"
+    },
+    "ruf/gcc/groups/type1/4096,4096,3000": {
+      "raw_ms": {
+        "baseline": [
+          341.224807,
+          345.446671,
+          338.762926,
+          339.427265,
+          339.138878,
+          342.489175,
+          338.784718,
+          338.877055,
+          339.645252
+        ],
+        "control": [
+          338.805978,
+          338.769755,
+          338.945045,
+          352.303979,
+          339.888447,
+          348.183049,
+          339.578453,
+          338.811474,
+          338.96571
+        ],
+        "final": [
+          289.692892,
+          285.848116,
+          286.035668,
+          289.633921,
+          290.489784,
+          285.201552,
+          285.648202,
+          285.76347,
+          285.201117
+        ]
+      },
+      "median_ms": {
+        "baseline": 339.427265,
+        "control": 338.96571,
+        "final": 285.848116
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9986401946820626,
+        "final": 0.8421483642452825
+      },
+      "arguments": [
+        4096,
+        4096,
+        3000
+      ],
+      "checksum": "50343936000"
+    },
+    "ruf/gcc/groups/type1/131072,1,100": {
+      "raw_ms": {
+        "baseline": [
+          132.95152,
+          133.032222,
+          133.238846,
+          125.5621,
+          133.065366,
+          132.972758,
+          133.466012,
+          134.706367,
+          132.595921
+        ],
+        "control": [
+          130.510646,
+          132.410564,
+          133.109969,
+          132.915201,
+          133.842973,
+          136.199276,
+          134.217832,
+          127.010272,
+          132.153309
+        ],
+        "final": [
+          3.519565,
+          3.541104,
+          3.537999,
+          3.552514,
+          3.512354,
+          3.553682,
+          3.560215,
+          3.55699,
+          3.554325
+        ]
+      },
+      "median_ms": {
+        "baseline": 133.032222,
+        "control": 132.915201,
+        "final": 3.552514
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9991203559690975,
+        "final": 0.02670416194356282
+      },
+      "arguments": [
+        131072,
+        1,
+        100
+      ],
+      "checksum": "26214400"
+    },
+    "ruf/gcc/groups/type1/131072,2,100": {
+      "raw_ms": {
+        "baseline": [
+          131.50087,
+          131.695149,
+          130.225802,
+          130.784409,
+          129.842737,
+          129.784935,
+          130.749617,
+          130.873041,
+          130.770655
+        ],
+        "control": [
+          129.350842,
+          133.922453,
+          132.012729,
+          130.304577,
+          130.190894,
+          131.823476,
+          131.094127,
+          129.948311,
+          131.830418
+        ],
+        "final": [
+          130.017461,
+          129.608689,
+          130.640941,
+          130.670013,
+          132.008097,
+          131.524635,
+          130.368606,
+          130.519434,
+          129.040737
+        ]
+      },
+      "median_ms": {
+        "baseline": 130.770655,
+        "control": 131.094127,
+        "final": 130.519434
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0024735824715414,
+        "final": 0.9980789191581244
+      },
+      "arguments": [
+        131072,
+        2,
+        100
+      ],
+      "checksum": "39321600"
+    },
+    "ruf/gcc/groups/type1/131072,32768,100": {
+      "raw_ms": {
+        "baseline": [
+          227.102326,
+          223.433673,
+          215.721825,
+          226.275432,
+          220.023285,
+          213.554309,
+          218.583145,
+          226.350483,
+          223.596298
+        ],
+        "control": [
+          218.781764,
+          221.124314,
+          212.289867,
+          231.251809,
+          224.840462,
+          218.922774,
+          221.405474,
+          226.71007,
+          230.700036
+        ],
+        "final": [
+          204.893806,
+          206.061961,
+          205.745769,
+          206.009056,
+          205.391263,
+          210.503797,
+          206.74087,
+          212.384109,
+          205.057103
+        ]
+      },
+      "median_ms": {
+        "baseline": 223.433673,
+        "control": 221.405474,
+        "final": 206.009056
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9909225902579152,
+        "final": 0.9220143644149823
+      },
+      "arguments": [
+        131072,
+        32768,
+        100
+      ],
+      "checksum": "429509836800"
+    },
+    "ruf/gcc/groups/type1/131072,131072,100": {
+      "raw_ms": {
+        "baseline": [
+          392.899854,
+          431.013944,
+          384.302029,
+          398.376439,
+          385.965877,
+          387.093537,
+          384.290982,
+          402.910651,
+          392.102682
+        ],
+        "control": [
+          399.11589,
+          383.895988,
+          383.17098,
+          393.628616,
+          396.088107,
+          384.104452,
+          386.01128,
+          419.62886,
+          434.798747
+        ],
+        "final": [
+          318.559819,
+          318.368153,
+          320.301353,
+          318.149506,
+          318.251113,
+          319.561499,
+          318.075401,
+          319.850186,
+          320.343505
+        ]
+      },
+      "median_ms": {
+        "baseline": 392.102682,
+        "control": 393.628616,
+        "final": 318.559819
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0038916693765436,
+        "final": 0.8124397858620105
+      },
+      "arguments": [
+        131072,
+        131072,
+        100
+      ],
+      "checksum": "1718000025600"
+    },
+    "ruf/gcc/copy/type1/32,0,500000": {
+      "raw_ms": {
+        "baseline": [
+          13.866555,
+          13.270376,
+          13.654873,
+          13.65925,
+          13.348005,
+          16.38715,
+          13.592864,
+          16.405689,
+          13.233638
+        ],
+        "control": [
+          13.375517,
+          13.447015,
+          13.342837,
+          13.34204,
+          13.242758,
+          16.485715,
+          13.246901,
+          13.719174,
+          13.969586
+        ],
+        "final": [
+          7.877188,
+          7.921915,
+          7.878371,
+          7.940129,
+          7.798961,
+          7.762777,
+          7.941472,
+          7.961932,
+          7.829176
+        ]
+      },
+      "median_ms": {
+        "baseline": 13.654873,
+        "control": 13.375517,
+        "final": 7.878371
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9795416625258982,
+        "final": 0.5769640625731195
+      },
+      "arguments": [
+        32,
+        0,
+        500000
+      ],
+      "checksum": "31500000"
+    },
+    "ruf/gcc/copy/type1/32,4096,10000": {
+      "raw_ms": {
+        "baseline": [
+          16.538838,
+          16.611548,
+          16.522019,
+          16.49887,
+          16.498298,
+          16.56473,
+          16.538331,
+          16.510897,
+          16.490995
+        ],
+        "control": [
+          16.508517,
+          16.523347,
+          16.536825,
+          16.499031,
+          16.490047,
+          16.602657,
+          16.511859,
+          16.532604,
+          16.517758
+        ],
+        "final": [
+          15.533559,
+          15.581845,
+          15.587403,
+          15.553463,
+          15.476772,
+          15.757135,
+          15.585254,
+          15.658939,
+          15.563393
+        ]
+      },
+      "median_ms": {
+        "baseline": 16.522019,
+        "control": 16.517758,
+        "final": 15.581845
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9997421017370819,
+        "final": 0.9430956955079158
+      },
+      "arguments": [
+        32,
+        4096,
+        10000
+      ],
+      "checksum": "41590000"
+    },
+    "ruf/gcc/copy/type1/4096,4096,3000": {
+      "raw_ms": {
+        "baseline": [
+          12.520457,
+          12.419046,
+          12.36979,
+          13.562547,
+          13.574586,
+          12.369509,
+          12.440933,
+          12.381819,
+          12.406622
+        ],
+        "control": [
+          12.452513,
+          13.558471,
+          12.720707,
+          12.395049,
+          12.414832,
+          12.376565,
+          12.396363,
+          14.750254,
+          12.385276
+        ],
+        "final": [
+          10.52463,
+          10.505703,
+          10.507427,
+          10.516036,
+          10.481502,
+          10.527469,
+          10.516853,
+          10.474189,
+          10.48343
+        ]
+      },
+      "median_ms": {
+        "baseline": 12.419046,
+        "control": 12.414832,
+        "final": 10.507427
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9996606824711013,
+        "final": 0.846073603399166
+      },
+      "arguments": [
+        4096,
+        4096,
+        3000
+      ],
+      "checksum": "36861000"
+    },
+    "ruf/gcc/copy/type1/131072,1000,200": {
+      "raw_ms": {
+        "baseline": [
+          34.342939,
+          34.004164,
+          34.079764,
+          34.040079,
+          34.14993,
+          34.096641,
+          34.219152,
+          34.273225,
+          34.266696
+        ],
+        "control": [
+          34.071759,
+          34.069523,
+          34.182042,
+          34.073422,
+          34.037663,
+          34.110365,
+          33.907711,
+          34.431288,
+          34.150166
+        ],
+        "final": [
+          20.819621,
+          21.022382,
+          20.963583,
+          21.125683,
+          20.989812,
+          21.190613,
+          21.243636,
+          21.168321,
+          21.123551
+        ]
+      },
+      "median_ms": {
+        "baseline": 34.14993,
+        "control": 34.073422,
+        "final": 21.123551
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9977596440168399,
+        "final": 0.6185532737548803
+      },
+      "arguments": [
+        131072,
+        1000,
+        200
+      ],
+      "checksum": "52628600"
+    },
+    "ruf/clang/groups/type1/32,1,100000": {
+      "raw_ms": {
+        "baseline": [
+          14.73614,
+          14.689537,
+          14.736371,
+          14.713586,
+          15.330083,
+          15.628289,
+          14.759893,
+          14.86083,
+          14.736387
+        ],
+        "control": [
+          14.940786,
+          14.716193,
+          14.811381,
+          14.825779,
+          14.751701,
+          14.903155,
+          14.818349,
+          14.814601,
+          14.832697
+        ],
+        "final": [
+          2.629306,
+          2.643984,
+          2.627772,
+          2.643836,
+          2.625809,
+          2.654952,
+          2.666345,
+          2.661061,
+          2.629122
+        ]
+      },
+      "median_ms": {
+        "baseline": 14.736387,
+        "control": 14.818349,
+        "final": 2.643836
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.005561878905596,
+        "final": 0.1794086976678883
+      },
+      "arguments": [
+        32,
+        1,
+        100000
+      ],
+      "checksum": "6400000"
+    },
+    "ruf/clang/groups/type1/32,2,100000": {
+      "raw_ms": {
+        "baseline": [
+          16.936334,
+          17.063302,
+          17.074871,
+          16.957275,
+          17.043158,
+          17.603737,
+          17.11908,
+          17.061482,
+          16.900898
+        ],
+        "control": [
+          17.056735,
+          16.8843,
+          17.012664,
+          16.90002,
+          16.988387,
+          17.553639,
+          17.007321,
+          16.888549,
+          17.010248
+        ],
+        "final": [
+          16.942903,
+          16.917215,
+          18.501179,
+          16.890487,
+          17.330264,
+          17.288425,
+          16.945104,
+          16.954351,
+          16.935877
+        ]
+      },
+      "median_ms": {
+        "baseline": 17.061482,
+        "control": 17.007321,
+        "final": 16.945104
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9968255395398828,
+        "final": 0.9931789043882588
+      },
+      "arguments": [
+        32,
+        2,
+        100000
+      ],
+      "checksum": "9600000"
+    },
+    "ruf/clang/groups/type1/32,8,100000": {
+      "raw_ms": {
+        "baseline": [
+          22.075295,
+          22.57016,
+          21.737588,
+          22.048163,
+          22.011949,
+          21.96483,
+          21.89546,
+          24.521147,
+          23.189185
+        ],
+        "control": [
+          21.924975,
+          22.495699,
+          21.996692,
+          21.899526,
+          22.306761,
+          21.942272,
+          22.000396,
+          21.79118,
+          21.797819
+        ],
+        "final": [
+          22.216174,
+          21.906326,
+          21.722638,
+          22.251741,
+          22.020133,
+          21.794378,
+          22.072867,
+          22.039302,
+          22.012159
+        ]
+      },
+      "median_ms": {
+        "baseline": 22.048163,
+        "control": 21.942272,
+        "final": 22.020133
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9951972869576481,
+        "final": 0.9987286922724584
+      },
+      "arguments": [
+        32,
+        8,
+        100000
+      ],
+      "checksum": "28800000"
+    },
+    "ruf/clang/groups/type1/32,32,100000": {
+      "raw_ms": {
+        "baseline": [
+          72.656096,
+          73.5305,
+          74.597961,
+          73.456548,
+          73.336249,
+          72.619717,
+          72.960244,
+          73.48207,
+          73.245948
+        ],
+        "control": [
+          72.628039,
+          73.857506,
+          73.453312,
+          73.654631,
+          73.325621,
+          72.968026,
+          73.23894,
+          74.221445,
+          73.52985
+        ],
+        "final": [
+          60.519796,
+          59.983611,
+          59.962118,
+          59.888495,
+          59.929076,
+          59.832471,
+          60.216705,
+          60.454562,
+          61.29131
+        ]
+      },
+      "median_ms": {
+        "baseline": 73.336249,
+        "control": 73.453312,
+        "final": 59.983611
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.001596250170908,
+        "final": 0.8179258118314724
+      },
+      "arguments": [
+        32,
+        32,
+        100000
+      ],
+      "checksum": "105600000"
+    },
+    "ruf/clang/groups/type1/4096,1,3000": {
+      "raw_ms": {
+        "baseline": [
+          67.127081,
+          66.682289,
+          66.226351,
+          74.068986,
+          66.378293,
+          66.700419,
+          66.460547,
+          66.376772,
+          66.777047
+        ],
+        "control": [
+          66.787055,
+          66.435316,
+          66.314145,
+          66.618085,
+          66.676479,
+          66.424754,
+          67.027213,
+          66.401958,
+          66.134485
+        ],
+        "final": [
+          1.837742,
+          1.963508,
+          1.831986,
+          1.878285,
+          1.831535,
+          2.024941,
+          1.986847,
+          1.841182,
+          1.83
+        ]
+      },
+      "median_ms": {
+        "baseline": 66.682289,
+        "control": 66.435316,
+        "final": 1.841182
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.996296272912887,
+        "final": 0.02761125971545458
+      },
+      "arguments": [
+        4096,
+        1,
+        3000
+      ],
+      "checksum": "24576000"
+    },
+    "ruf/clang/groups/type1/4096,2,3000": {
+      "raw_ms": {
+        "baseline": [
+          73.596605,
+          72.929756,
+          73.619481,
+          73.379921,
+          73.327798,
+          72.87632,
+          72.806833,
+          73.060349,
+          72.946358
+        ],
+        "control": [
+          72.58775,
+          72.867877,
+          73.177099,
+          72.877346,
+          73.251621,
+          73.660352,
+          72.827823,
+          72.850483,
+          72.889046
+        ],
+        "final": [
+          72.522056,
+          71.922498,
+          72.087609,
+          72.835493,
+          72.899577,
+          72.14054,
+          72.013428,
+          72.938623,
+          72.0574
+        ]
+      },
+      "median_ms": {
+        "baseline": 73.060349,
+        "control": 72.877346,
+        "final": 72.14054
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9974951803200393,
+        "final": 0.9874102846127931
+      },
+      "arguments": [
+        4096,
+        2,
+        3000
+      ],
+      "checksum": "36864000"
+    },
+    "ruf/clang/groups/type1/4096,1024,3000": {
+      "raw_ms": {
+        "baseline": [
+          122.71898,
+          122.513145,
+          122.058598,
+          122.706477,
+          122.725737,
+          122.001833,
+          121.813001,
+          121.982798,
+          122.43344
+        ],
+        "control": [
+          122.787786,
+          122.586951,
+          121.677189,
+          121.65155,
+          123.200752,
+          123.140667,
+          122.735852,
+          122.808953,
+          122.869737
+        ],
+        "final": [
+          122.18198,
+          123.54995,
+          122.71363,
+          122.174697,
+          123.844184,
+          122.678671,
+          122.12825,
+          122.734979,
+          121.753446
+        ]
+      },
+      "median_ms": {
+        "baseline": 122.43344,
+        "control": 122.787786,
+        "final": 122.678671
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0028941929590478,
+        "final": 1.00200297402409
+      },
+      "arguments": [
+        4096,
+        1024,
+        3000
+      ],
+      "checksum": "12595200000"
+    },
+    "ruf/clang/groups/type1/4096,4096,3000": {
+      "raw_ms": {
+        "baseline": [
+          337.110132,
+          338.707684,
+          337.16904,
+          337.545998,
+          336.94543,
+          337.008723,
+          337.045352,
+          336.941471,
+          338.914183
+        ],
+        "control": [
+          337.018354,
+          336.931806,
+          336.941851,
+          338.197412,
+          337.381069,
+          340.095307,
+          338.837057,
+          337.124682,
+          337.11718
+        ],
+        "final": [
+          288.537681,
+          288.444953,
+          288.500159,
+          288.366761,
+          288.443085,
+          288.443296,
+          288.418324,
+          288.384316,
+          288.751712
+        ]
+      },
+      "median_ms": {
+        "baseline": 337.110132,
+        "control": 337.124682,
+        "final": 288.443296
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.000043160969128,
+        "final": 0.855635202326105
+      },
+      "arguments": [
+        4096,
+        4096,
+        3000
+      ],
+      "checksum": "50343936000"
+    },
+    "ruf/clang/groups/type1/131072,1,100": {
+      "raw_ms": {
+        "baseline": [
+          120.703304,
+          118.772766,
+          118.837055,
+          122.903456,
+          128.570215,
+          125.325468,
+          124.067676,
+          123.871308,
+          118.96055
+        ],
+        "control": [
+          119.762713,
+          126.355433,
+          120.887129,
+          129.164845,
+          127.480824,
+          117.50125,
+          128.152785,
+          127.047368,
+          127.465419
+        ],
+        "final": [
+          2.570575,
+          2.568062,
+          2.570197,
+          2.578735,
+          2.563052,
+          2.564901,
+          2.569252,
+          2.567628,
+          2.56712
+        ]
+      },
+      "median_ms": {
+        "baseline": 122.903456,
+        "control": 127.047368,
+        "final": 2.568062
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0337168061409112,
+        "final": 0.02089495351538365
+      },
+      "arguments": [
+        131072,
+        1,
+        100
+      ],
+      "checksum": "26214400"
+    },
+    "ruf/clang/groups/type1/131072,2,100": {
+      "raw_ms": {
+        "baseline": [
+          125.896399,
+          126.848126,
+          127.0473,
+          125.406987,
+          125.068586,
+          162.734486,
+          126.343444,
+          125.102526,
+          125.01656
+        ],
+        "control": [
+          126.941565,
+          127.531234,
+          124.966978,
+          127.105147,
+          126.401743,
+          124.113789,
+          125.33653,
+          126.081278,
+          126.585063
+        ],
+        "final": [
+          125.882226,
+          125.207726,
+          126.302039,
+          126.943884,
+          126.288229,
+          126.857216,
+          127.457963,
+          126.842549,
+          125.127878
+        ]
+      },
+      "median_ms": {
+        "baseline": 125.896399,
+        "control": 126.401743,
+        "final": 126.302039
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.004013967071449,
+        "final": 1.003222014316708
+      },
+      "arguments": [
+        131072,
+        2,
+        100
+      ],
+      "checksum": "39321600"
+    },
+    "ruf/clang/groups/type1/131072,32768,100": {
+      "raw_ms": {
+        "baseline": [
+          207.798388,
+          207.520339,
+          206.901549,
+          207.209728,
+          205.614139,
+          207.898231,
+          207.2247,
+          206.247011,
+          207.097216
+        ],
+        "control": [
+          208.116215,
+          205.60054,
+          206.84144,
+          207.872787,
+          207.883414,
+          206.253627,
+          206.076554,
+          207.331861,
+          208.472053
+        ],
+        "final": [
+          204.135692,
+          206.285883,
+          205.560113,
+          204.620802,
+          205.83805,
+          205.888142,
+          206.724101,
+          207.889012,
+          206.398528
+        ]
+      },
+      "median_ms": {
+        "baseline": 207.209728,
+        "control": 207.331861,
+        "final": 205.888142
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0005894173076662,
+        "final": 0.9936219886355914
+      },
+      "arguments": [
+        131072,
+        32768,
+        100
+      ],
+      "checksum": "429509836800"
+    },
+    "ruf/clang/groups/type1/131072,131072,100": {
+      "raw_ms": {
+        "baseline": [
+          380.943852,
+          380.779167,
+          381.176177,
+          384.425942,
+          379.915405,
+          379.980522,
+          380.789707,
+          383.11802,
+          379.86182
+        ],
+        "control": [
+          380.66608,
+          380.651729,
+          380.589633,
+          380.842942,
+          383.769618,
+          382.00664,
+          379.971438,
+          382.733485,
+          380.544265
+        ],
+        "final": [
+          318.286936,
+          317.861661,
+          317.743872,
+          317.596468,
+          322.271155,
+          322.508236,
+          321.334861,
+          319.194196,
+          320.191674
+        ]
+      },
+      "median_ms": {
+        "baseline": 380.789707,
+        "control": 380.66608,
+        "final": 319.194196
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9996753404891797,
+        "final": 0.8382427101686337
+      },
+      "arguments": [
+        131072,
+        131072,
+        100
+      ],
+      "checksum": "1718000025600"
+    },
+    "ruf/clang/copy/type1/32,0,500000": {
+      "raw_ms": {
+        "baseline": [
+          14.198329,
+          17.296887,
+          13.932856,
+          13.837754,
+          14.170841,
+          13.917882,
+          13.761982,
+          14.145697,
+          13.642901
+        ],
+        "control": [
+          14.160243,
+          14.026487,
+          13.718689,
+          14.28594,
+          13.671667,
+          14.279311,
+          13.704691,
+          13.8226,
+          13.973181
+        ],
+        "final": [
+          9.154271,
+          9.256083,
+          9.217114,
+          9.240928,
+          9.281589,
+          9.122132,
+          9.236513,
+          9.170859,
+          9.226475
+        ]
+      },
+      "median_ms": {
+        "baseline": 13.932856,
+        "control": 13.973181,
+        "final": 9.226475
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0028942379078634,
+        "final": 0.6622098871903938
+      },
+      "arguments": [
+        32,
+        0,
+        500000
+      ],
+      "checksum": "31500000"
+    },
+    "ruf/clang/copy/type1/32,4096,10000": {
+      "raw_ms": {
+        "baseline": [
+          16.512866,
+          16.569053,
+          16.560385,
+          16.533739,
+          16.595015,
+          16.487803,
+          16.537418,
+          16.542231,
+          16.51103
+        ],
+        "control": [
+          16.500686,
+          16.528434,
+          16.536055,
+          16.496632,
+          16.5048,
+          16.515979,
+          16.521259,
+          16.523714,
+          16.527282
+        ],
+        "final": [
+          15.592648,
+          15.716837,
+          15.64087,
+          15.57461,
+          15.659935,
+          15.567816,
+          15.587211,
+          15.68013,
+          15.558189
+        ]
+      },
+      "median_ms": {
+        "baseline": 16.537418,
+        "control": 16.521259,
+        "final": 15.592648
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9990228825322067,
+        "final": 0.9428707673713032
+      },
+      "arguments": [
+        32,
+        4096,
+        10000
+      ],
+      "checksum": "41590000"
+    },
+    "ruf/clang/copy/type1/4096,4096,3000": {
+      "raw_ms": {
+        "baseline": [
+          12.361848,
+          12.41632,
+          13.56257,
+          13.541551,
+          12.372767,
+          12.376624,
+          12.381838,
+          12.361778,
+          13.574379
+        ],
+        "control": [
+          12.409712,
+          12.384949,
+          12.385182,
+          12.37627,
+          12.388602,
+          12.394785,
+          12.365749,
+          12.385121,
+          12.374383
+        ],
+        "final": [
+          10.479707,
+          10.545741,
+          10.433798,
+          10.468375,
+          10.45976,
+          10.5344,
+          10.499067,
+          10.532258,
+          10.460512
+        ]
+      },
+      "median_ms": {
+        "baseline": 12.381838,
+        "control": 12.385121,
+        "final": 10.479707
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0002651464184882,
+        "final": 0.8463773310553732
+      },
+      "arguments": [
+        4096,
+        4096,
+        3000
+      ],
+      "checksum": "36861000"
+    },
+    "ruf/clang/copy/type1/131072,1000,200": {
+      "raw_ms": {
+        "baseline": [
+          34.291195,
+          34.295038,
+          34.539042,
+          34.303626,
+          34.121955,
+          34.352413,
+          34.316816,
+          34.194233,
+          34.124261
+        ],
+        "control": [
+          34.260014,
+          34.366884,
+          34.262359,
+          34.069557,
+          34.375866,
+          34.168632,
+          34.108878,
+          34.151959,
+          34.430673
+        ],
+        "final": [
+          21.381665,
+          21.227671,
+          21.129562,
+          21.131161,
+          21.276199,
+          21.158391,
+          20.929773,
+          21.27323,
+          21.094893
+        ]
+      },
+      "median_ms": {
+        "baseline": 34.295038,
+        "control": 34.260014,
+        "final": 21.158391
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9989787443886197,
+        "final": 0.6169519625550496
+      },
+      "arguments": [
+        131072,
+        1000,
+        200
+      ],
+      "checksum": "52628600"
+    }
+  },
+  "same_problem_main_results": {
+    "ruf/gcc/main/random_00.in": {
+      "raw_cpu_ms": {
+        "baseline": [
+          20.40400000000453,
+          18.978999999999857,
+          18.974000000001823,
+          18.94999999999314,
+          19.054000000002347,
+          19.189999999989382,
+          19.128999999987073,
+          19.134000000009976,
+          19.450999999994778
+        ],
+        "control": [
+          19.06300000000627,
+          18.918999999989694,
+          18.988000000002003,
+          19.111999999996243,
+          19.045999999997676,
+          19.057999999999353,
+          19.195000000008733,
+          19.199999999997885,
+          18.897000000013264
+        ],
+        "final": [
+          19.206999999997976,
+          19.05500000001581,
+          18.955000000005384,
+          19.063000000013375,
+          18.9649999999979,
+          19.233000000003386,
+          18.93300000000231,
+          19.204999999997696,
+          19.004000000000687
+        ]
+      },
+      "raw_wall_ms": {
+        "baseline": [
+          20.770196,
+          19.323484,
+          19.37469,
+          19.364671,
+          19.365062,
+          19.525675,
+          19.441839,
+          19.495369,
+          19.768082
+        ],
+        "control": [
+          19.455444,
+          19.238269,
+          19.299943,
+          19.429109,
+          19.376031,
+          19.399602,
+          19.553322,
+          19.51123,
+          19.222088
+        ],
+        "final": [
+          19.582236,
+          19.364812,
+          19.280346,
+          19.407686,
+          19.31167,
+          19.578797,
+          19.265511,
+          19.525979,
+          19.358439
+        ]
+      },
+      "median_cpu_ms": {
+        "baseline": 19.128999999987073,
+        "control": 19.057999999999353,
+        "final": 19.05500000001581
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9962883579911251,
+        "final": 0.9961315280479213
+      },
+      "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+      "output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7"
+    },
+    "ruf/gcc/main/max_random_00.in": {
+      "raw_cpu_ms": {
+        "baseline": [
+          25.60000000000251,
+          25.58799999999195,
+          25.72799999999731,
+          25.51199999999554,
+          25.43400000001128,
+          25.4340000000024,
+          26.13800000000488,
+          25.73900000001217,
+          25.417999999993057
+        ],
+        "control": [
+          25.281999999984706,
+          25.293999999998817,
+          25.32400000000301,
+          25.299999999999656,
+          25.22399999999969,
+          25.43899999999688,
+          26.36399999999739,
+          26.38299999999205,
+          25.360000000000937
+        ],
+        "final": [
+          25.261999999992568,
+          25.217000000006706,
+          25.24499999999641,
+          25.439999999999685,
+          25.234000000013523,
+          25.127000000003008,
+          25.395999999998864,
+          27.222999999997555,
+          25.569000000007946
+        ]
+      },
+      "raw_wall_ms": {
+        "baseline": [
+          26.079512,
+          26.020872,
+          26.149429,
+          25.929247,
+          25.839304,
+          25.86091,
+          26.614478,
+          26.248565,
+          25.934672
+        ],
+        "control": [
+          25.728502,
+          25.732588,
+          25.80958,
+          25.719255,
+          25.676229,
+          25.855514,
+          26.907077,
+          26.970026,
+          25.780742
+        ],
+        "final": [
+          25.678445,
+          25.666663,
+          25.676252,
+          25.847063,
+          25.634096,
+          25.556923,
+          25.800595,
+          27.769244,
+          26.174308
+        ]
+      },
+      "median_cpu_ms": {
+        "baseline": 25.58799999999195,
+        "control": 25.32400000000301,
+        "final": 25.261999999992568
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9896826637490612,
+        "final": 0.9872596529623462
+      },
+      "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+      "output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a"
+    },
+    "ruf/gcc/main/conchon_filliatre_tle_00.in": {
+      "raw_cpu_ms": {
+        "baseline": [
+          18.07699999999457,
+          17.840000000003187,
+          17.81100000000535,
+          17.742000000010805,
+          17.850999999989625,
+          17.759999999995557,
+          17.887999999992132,
+          18.229000000001605,
+          17.854999999995513
+        ],
+        "control": [
+          18.35300000000295,
+          17.783000000006766,
+          17.746999999992852,
+          17.80599999999488,
+          17.836000000004404,
+          17.80200000000498,
+          17.83299999999244,
+          17.769999999993402,
+          17.830999999997488
+        ],
+        "final": [
+          18.29099999999606,
+          18.075999999991765,
+          18.456999999992618,
+          17.773999999995738,
+          17.7669999999992,
+          17.741000000008,
+          17.817999999993006,
+          17.801999999997875,
+          17.858000000000374
+        ]
+      },
+      "raw_wall_ms": {
+        "baseline": [
+          18.470068,
+          18.218375,
+          18.187909,
+          18.099189,
+          18.25049,
+          18.144343,
+          18.276697,
+          18.585859,
+          18.28491
+        ],
+        "control": [
+          18.716777,
+          18.156606,
+          18.104547,
+          18.177162,
+          18.232275,
+          18.17731,
+          18.225255,
+          18.175697,
+          18.203037
+        ],
+        "final": [
+          18.652386,
+          18.461182,
+          18.851724,
+          18.163703,
+          18.131631,
+          18.137979,
+          18.192279,
+          18.161896,
+          18.228163
+        ]
+      },
+      "median_cpu_ms": {
+        "baseline": 17.850999999989625,
+        "control": 17.80599999999488,
+        "final": 17.817999999993006
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9974791328219836,
+        "final": 0.9981513640694282
+      },
+      "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+      "output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c"
+    },
+    "ruf/clang/main/random_00.in": {
+      "raw_cpu_ms": {
+        "baseline": [
+          19.93400000000456,
+          19.57500000000323,
+          19.413000000014335,
+          19.415000000011062,
+          19.604999999986106,
+          20.2980000000057,
+          19.50500000000055,
+          19.87399999999262,
+          19.356000000012585
+        ],
+        "control": [
+          19.397000000004994,
+          19.40100000000733,
+          19.63799999998983,
+          19.36100000001062,
+          19.379000000004254,
+          19.556999999990055,
+          19.37500000000192,
+          19.387000000008925,
+          19.44600000000385
+        ],
+        "final": [
+          19.81099999999003,
+          19.446000000000296,
+          19.663999999988135,
+          19.39100000000238,
+          19.514000000004472,
+          19.835999999992637,
+          19.424000000011432,
+          19.375999999990512,
+          19.661999999998514
+        ]
+      },
+      "raw_wall_ms": {
+        "baseline": [
+          20.326255,
+          19.940492,
+          19.751166,
+          19.736505,
+          19.978064,
+          20.692701,
+          19.867806,
+          20.176821,
+          19.697244
+        ],
+        "control": [
+          19.754728,
+          19.708474,
+          20.015818,
+          19.69664,
+          19.722263,
+          19.907802,
+          19.679125,
+          19.821606,
+          19.790885
+        ],
+        "final": [
+          20.16344,
+          19.748914,
+          19.968161,
+          19.687916,
+          19.85001,
+          20.183401,
+          19.782847,
+          19.688391,
+          20.199583
+        ]
+      },
+      "median_cpu_ms": {
+        "baseline": 19.57500000000323,
+        "control": 19.397000000004994,
+        "final": 19.514000000004472
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.990906768837895,
+        "final": 0.9968837803321202
+      },
+      "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+      "output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7"
+    },
+    "ruf/clang/main/max_random_00.in": {
+      "raw_cpu_ms": {
+        "baseline": [
+          26.265999999996126,
+          25.938000000010675,
+          26.682999999991353,
+          25.83100000000016,
+          25.748999999994027,
+          26.816999999988766,
+          25.823000000013252,
+          25.85300000001034,
+          26.13500000000002
+        ],
+        "control": [
+          26.632999999996798,
+          25.883999999999574,
+          26.58000000000804,
+          25.734999999999175,
+          26.34900000000684,
+          26.710000000001344,
+          25.896999999993398,
+          25.91599999998806,
+          26.456000000001367
+        ],
+        "final": [
+          25.791999999992044,
+          26.53899999998721,
+          26.65400000000062,
+          25.86999999999584,
+          26.061999999988927,
+          26.19300000000102,
+          25.924999999991982,
+          26.599000000000927,
+          26.290000000001257
+        ]
+      },
+      "raw_wall_ms": {
+        "baseline": [
+          26.705866,
+          26.396152,
+          27.096033,
+          26.263584,
+          26.180822,
+          27.262813,
+          26.22698,
+          26.259886,
+          26.545033
+        ],
+        "control": [
+          27.044587,
+          26.332293,
+          27.02527,
+          26.162678,
+          26.766437,
+          27.159114,
+          26.311535,
+          26.316997,
+          26.911965
+        ],
+        "final": [
+          26.229278,
+          26.92936,
+          27.068852,
+          26.27391,
+          26.5251,
+          26.64034,
+          26.451545,
+          27.00232,
+          26.739582
+        ]
+      },
+      "median_cpu_ms": {
+        "baseline": 25.938000000010675,
+        "control": 26.34900000000684,
+        "final": 26.19300000000102
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0158454776773844,
+        "final": 1.009831135784958
+      },
+      "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+      "output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a"
+    },
+    "ruf/clang/main/conchon_filliatre_tle_00.in": {
+      "raw_cpu_ms": {
+        "baseline": [
+          18.753999999999493,
+          18.386000000006675,
+          19.349000000007166,
+          20.017000000002838,
+          18.423000000007406,
+          18.35099999998313,
+          18.276999999999433,
+          18.430000000007496,
+          18.544999999987155
+        ],
+        "control": [
+          18.337000000000714,
+          18.554999999997435,
+          19.681999999999533,
+          19.215000000004423,
+          18.84799999998954,
+          18.441000000004593,
+          18.332000000000903,
+          18.517999999994927,
+          18.5450000000138
+        ],
+        "final": [
+          19.133999999992213,
+          18.458000000002528,
+          19.90199999999831,
+          18.600999999987877,
+          18.54400000000389,
+          18.35300000000295,
+          18.331000000003428,
+          18.45299999999206,
+          18.395999999986756
+        ]
+      },
+      "raw_wall_ms": {
+        "baseline": [
+          19.189388,
+          18.796246,
+          19.824345,
+          20.534397,
+          18.800703,
+          18.72016,
+          18.673345,
+          18.783572,
+          18.940432
+        ],
+        "control": [
+          18.709038,
+          18.913581,
+          20.156947,
+          20.004199,
+          19.221576,
+          18.870736,
+          18.697828,
+          18.899111,
+          18.945771
+        ],
+        "final": [
+          19.491191,
+          18.823738,
+          20.349751,
+          19.031918,
+          18.921591,
+          18.757333,
+          18.718987,
+          18.797046,
+          18.791028
+        ]
+      },
+      "median_cpu_ms": {
+        "baseline": 18.430000000007496,
+        "control": 18.5450000000138,
+        "final": 18.458000000002528
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0062398263703884,
+        "final": 1.0015192620724374
+      },
+      "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+      "output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c"
+    }
+  },
+  "main_interpretation": "mainで使用する結合/探索/undo/rollbackの本文は不変。GCC RUFの.text全体は破棄関数の配置/パディングが変わるが、アドレスとnopを除く全関数の命令列は同一。その他3組は.text全体が同一。測定の小差を提出全体の速度改善とは主張しない。",
+  "unchanged_hot_methods": {
+    "methods": {
+      "static std::size_t checked_size(std::size_t n)": {
+        "byte_identical": true,
+        "sha256": "76fc210a422d2a127a3f514f54f330f588b62f7ddb64c9c524f1bc30adf4a564"
+      },
+      "void check(int i) const": {
+        "byte_identical": true,
+        "sha256": "a014aca5d1cef4fc91c763240d176e18e2898a0a3c3e30c82969b56cbce05995"
+      },
+      "int leader_unchecked(int i) const": {
+        "byte_identical": true,
+        "sha256": "b9ac740c65f3e1fc9784555df9d2f6dd7945f254f1757906bfeac10fb2a699e5"
+      },
+      "void undo_last() noexcept": {
+        "byte_identical": true,
+        "sha256": "133de7a7d716a1a9a3837bd1f51dc436c1ee8b780ebc7395ade12ed76026f66b"
+      },
+      "bool unite(int x, int y)": {
+        "byte_identical": true,
+        "sha256": "fa8bdb72799ab85f3a0218755d09388afa04ece1b18518920796c1159a1217b0"
+      },
+      "bool same(int a, int b) const": {
+        "byte_identical": true,
+        "sha256": "f1769575b25378602114857eeeb599f8696560ac16bae5f26c0e208ccb5151d5"
+      },
+      "void undo()": {
+        "byte_identical": true,
+        "sha256": "e6f007360252bda8eec8e58494ad639013d9482beacf8ef9ff617f578f0b87aa"
+      },
+      "void rollback(int state = -1)": {
+        "byte_identical": true,
+        "sha256": "83a4e4524ff1ac3079000f10306ded9493371233e3d3cfc8798e2ae761c346ae"
+      },
+      "void clear_history() noexcept": {
+        "byte_identical": true,
+        "sha256": "82c300a4a7c377fd55275217d45f59288ba32c1d62535a0efe9bde0732b4ad21"
+      },
+      "void reserve_history(std::size_t count)": {
+        "byte_identical": true,
+        "sha256": "88282c9a7d0c296a087c76b8c55e1ee3db994a91cf5cfd2177e7b65a7d87a88c"
+      }
+    },
+    "gcc_main_symbolic_instructions": {
+      "all_functions_identical_ignoring_addresses_and_nops": true,
+      "functions": 34
+    },
+    "clang_main_symbolic_instructions": {
+      "all_functions_identical_ignoring_addresses_and_nops": true,
+      "functions": 34
+    }
+  },
+  "benchmark_fixtures": {
+    "Verify/current/tests/rollback_union_groups_performance_benchmark.cpp": {
+      "sha256": "e7d876a429226b3d2f0fbce3256c11448106de52f8d3860a593371e33a3ec152",
+      "source": "// SPDX-License-Identifier: CC0-1.0\n// 再測定用。各反復の結果を集計し、計測外で状態を確認する。\n#ifndef SIRKIT_RUF_SOURCE\n#define SIRKIT_RUF_SOURCE \"../../../DataStructure/rollback-union-find.cpp\"\n#endif\n#include SIRKIT_RUF_SOURCE\n#include <chrono>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#ifdef SIRKIT_WEIGHTED_BENCHMARK\nusing UF=RollbackWeightedUnionFind<std::int64_t>;\n#else\nusing UF=RollbackUnionFind;\n#endif\nint main(int argc,char**argv){if(argc!=4)return 2;const int n=std::atoi(argv[1]),components=std::atoi(argv[2]),repeats=std::atoi(argv[3]);UF uf(n);for(int stride=1;stride<n/components;stride*=2)for(int i=0;i+stride<n;i+=stride*2){\n#ifdef SIRKIT_WEIGHTED_BENCHMARK\nuf.unite(i,i+stride,stride);\n#else\nuf.unite(i,i+stride);\n#endif\n}std::uint64_t sum=0;const auto start=std::chrono::steady_clock::now();for(int r=0;r<repeats;++r){auto groups=uf.groups();sum+=groups.size();for(const auto&g:groups)sum+=g.size()+g.front()+g.back();}const auto stop=std::chrono::steady_clock::now();std::printf(\"%.6f %ju\\n\",std::chrono::duration<double,std::milli>(stop-start).count(),static_cast<std::uintmax_t>(sum));}\n"
+    },
+    "Verify/current/tests/rollback_union_copy_performance_benchmark.cpp": {
+      "sha256": "7234f1e210a618d520044e46ef5228ea6406bd6cfc50d13e6f272afaec984406",
+      "source": "// SPDX-License-Identifier: CC0-1.0\n// 再測定用。各反復の結果を集計し、計測外で状態を確認する。\n#ifndef SIRKIT_RUF_SOURCE\n#define SIRKIT_RUF_SOURCE \"../../../DataStructure/rollback-union-find.cpp\"\n#endif\n#include SIRKIT_RUF_SOURCE\n#include <chrono>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\nint main(int argc,char**argv){if(argc!=4)return 2;const int n=std::atoi(argv[1]),extra=std::atoi(argv[2]),repeats=std::atoi(argv[3]);RollbackUnionFind source(n),target(n);for(int i=1;i<n;++i)source.unite(i-1,i);source.snapshot();for(int i=0;i<extra;++i)source.unite(0,n-1);target=source;std::uint64_t sum=0;const auto start=std::chrono::steady_clock::now();for(int i=0;i<repeats;++i){target=source;sum+=target.get_state()+target.size(0);}const auto stop=std::chrono::steady_clock::now();target.rollback();if(target.get_state()!=n-1||source.get_state()!=n-1+extra)return 3;std::printf(\"%.6f %ju\\n\",std::chrono::duration<double,std::milli>(stop-start).count(),static_cast<std::uintmax_t>(sum));}\n"
+    }
+  },
+  "benchmark_body_identity": [
+    {
+      "path": "Verify/current/tests/rollback_union_groups_performance_benchmark.cpp",
+      "same_benchmark_body": true,
+      "sha256": "e7d876a429226b3d2f0fbce3256c11448106de52f8d3860a593371e33a3ec152",
+      "frozen_fixture_sha256": "20656c85255c14708211554bf206eac4d7cdb5cfe7796415f5779938f69cf64e"
+    },
+    {
+      "path": "Verify/current/tests/rollback_union_copy_performance_benchmark.cpp",
+      "same_benchmark_body": true,
+      "sha256": "7234f1e210a618d520044e46ef5228ea6406bd6cfc50d13e6f272afaec984406",
+      "frozen_fixture_sha256": "45b0eaae804776b494781c30ba80272f0dd4ce9981a9e0ea6d585d47187f0e92"
+    }
+  ],
+  "reproduction": {
+    "final_performance.py": {
+      "sha256": "39428cbd99adf73b1a4e290310ec38b152734c8fe6120a65468cca7e1af6c79f",
+      "source": "from pathlib import Path\nimport subprocess as sp,json,hashlib,statistics,random,fcntl,os,time,resource\np=Path(__file__).parent;root=Path('/home/reinsirk/Atcoder_Env');ccs={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']};acl='/tmp/sirkit_four_hours_20261022/union_second/acl';vs=['baseline','control','final'];builds=[]\ndef sha(b):return hashlib.sha256(b).hexdigest()\nfor lib in ['ruf','rwuf']:\n d=p/lib;base=(d/'baseline.hpp').read_text();main=(d/'baseline.cpp').read_text();assert main.count(base)==1;(d/'final.cpp').write_text(main.replace(base,(d/'final.hpp').read_text()))\n for cc,args in ccs.items():\n  for v in vs:\n   configs=[('groups',1),('copy',1),('main',1)]if lib=='ruf'else[('reset',t)for t in[0,1,2]]+[('main',1)]\n   for fixture,vt in configs:\n    source=d/(v+'.cpp')if fixture=='main'else p/'groups_api.cpp'if fixture=='groups'else d/(fixture+'_api.cpp');exe=d/f'final_{fixture}_{cc}_{v}_{vt}';cmd=['taskset','-c','10',*args,'-std=c++23','-O2','-isystem',acl]\n    if fixture!='main':cmd+=['-DSKIP_RUNTIME_CHECKS','-DHEADER=\"'+str(d/(v+'.hpp'))+'\"','-DTYPE='+str(vt)]\n    cmd+=[str(source),'-o',str(exe)];r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,(cmd,r.stderr);text=Path(str(exe)+'.text');sp.run(['objcopy','--dump-section','.text='+str(text),str(exe)],check=True);builds.append({'library':lib,'compiler':cc,'variant':v,'fixture':fixture,'value_type':vt,'command':cmd,'source_sha256':sha((d/(v+'.hpp')).read_bytes()),'text_sha256':sha(text.read_bytes())})\n  print(lib,cc,'builds ready',flush=True)\n(p/'final_builds.json').write_text(json.dumps(builds,indent=2)+'\\n');raw={};os.sched_setaffinity(0,{10})\nwith open('/tmp/sirkit_four_hours_20261022/benchmark_geometry.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for lib in ['ruf','rwuf']:\n  for cc in ccs:\n   configs=[('groups',1),('copy',1)]if lib=='ruf'else[('reset',t)for t in[0,1,2]]\n   for fixture,vt in configs:\n    cases=([(n,c,r)for n,r in[(32,100000),(4096,3000),(131072,100)]for c in[1,2,n//4,n]]if fixture=='groups'else[(32,0,500000),(32,4096,10000),(4096,4096,3000),(131072,1000,200)]if fixture=='copy'else[(32,500000),(4096,5000),(131072,300)])\n    for case in cases:\n     key=f'{lib}/{cc}/{fixture}/type{vt}/'+','.join(map(str,case));rows={v:[]for v in vs};expected=None;rng=random.Random(617)\n     for rep in range(9):\n      order=vs[:];rng.shuffle(order)\n      for v in order:\n       r=sp.run(['taskset','-c','24',str(p/lib/f'final_{fixture}_{cc}_{v}_{vt}'),*map(str,case)],capture_output=True,text=True);assert not r.returncode and not r.stderr,(key,v,r.stderr);ms,checksum=r.stdout.split();expected=expected or checksum;assert checksum==expected;rows[v].append(float(ms))\n     med={v:statistics.median(xs)for v,xs in rows.items()};raw[key]={'raw_ms':rows,'median_ms':med,'ratios':{v:x/med['baseline']for v,x in med.items()},'arguments':case,'checksum':expected};(p/'final_partial.json').write_text(json.dumps(raw,indent=2)+'\\n');print(key,raw[key]['ratios'],flush=True)\n mainraw={}\n for lib in ['ruf','rwuf']:\n  old=Path('/tmp/sirkit_'+lib+'_20261022');cases=([old/'official'/c for c in['random_00.in','max_random_00.in','conchon_filliatre_tle_00.in']]if lib=='ruf'else[old/'official'/c for c in['random_00.in','max_random_00.in','path_00.in']])\n  for file in cases:assert file.exists(),file\n  for cc in ccs:\n   for file in cases:\n    key=f'{lib}/{cc}/main/{file.name}';data=file.read_bytes();rows={v:[]for v in vs};wall={v:[]for v in vs};expected=None;rng=random.Random(617)\n    for rep in range(9):\n     order=vs[:];rng.shuffle(order)\n     for v in order:\n      before=resource.getrusage(resource.RUSAGE_CHILDREN);start=time.monotonic_ns();r=sp.run(['taskset','-c','24',str(p/lib/f'final_main_{cc}_{v}_1')],input=data,capture_output=True);elapsed=(time.monotonic_ns()-start)/1e6;after=resource.getrusage(resource.RUSAGE_CHILDREN);assert not r.returncode and not r.stderr,(key,v,r.stderr);checksum=sha(r.stdout);expected=expected or checksum;assert expected==checksum;rows[v].append((after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime)*1000);wall[v].append(elapsed)\n    med={v:statistics.median(xs)for v,xs in rows.items()};mainraw[key]={'raw_cpu_ms':rows,'raw_wall_ms':wall,'median_cpu_ms':med,'ratios':{v:x/med['baseline']for v,x in med.items()},'input_sha256':sha(data),'output_sha256':expected};(p/'final_main_partial.json').write_text(json.dumps(mainraw,indent=2)+'\\n');print(key,mainraw[key]['ratios'],flush=True)\n(p/'final_results.json').write_text(json.dumps({'api':raw,'main':mainraw,'builds':builds,'repetitions':9,'run_cpu':24,'driver_cpu':10,'clock':'steady_clock API; getrusage child CPU and monotonic wall main'},indent=2)+'\\n')\n"
+    },
+    "group_select.py": {
+      "sha256": "c82e2f2966acc5312730242cfb28faca35aef08d782af465f0ffb3b74b816345",
+      "source": "from pathlib import Path\nimport subprocess as sp,json,statistics,random,fcntl,os,hashlib\np=Path(__file__).parent;ccs={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']};vs=['baseline','control','groups','extremes'];builds=[]\nfor cc,args in ccs.items():\n for v in vs:\n  out=p/'ruf'/('g2_'+cc+'_'+v);cmd=['taskset','-c','10',*args,'-std=c++23','-O2','-DSKIP_RUNTIME_CHECKS','-DHEADER=\"'+str(p/'ruf'/(v+'.hpp'))+'\"',str(p/'groups_api.cpp'),'-o',str(out)];r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,r.stderr;builds.append(cmd)\nraw={};os.sched_setaffinity(0,{10})\nwith open('/tmp/sirkit_four_hours_20261022/benchmark_geometry.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for cc in ccs:\n  for n,repeats in [(32,100000),(4096,3000),(131072,100)]:\n   for components in [1,2,n//4,n]:\n    rows={v:[]for v in vs};rng=random.Random(741);expected=None\n    for rep in range(7):\n     order=vs[:];rng.shuffle(order)\n     for v in order:\n      r=sp.run(['taskset','-c','24',str(p/'ruf'/('g2_'+cc+'_'+v)),str(n),str(components),str(repeats)],capture_output=True,text=True);assert not r.returncode and not r.stderr;ms,checksum=r.stdout.split();expected=expected or checksum;assert expected==checksum;rows[v].append(float(ms))\n    med={v:statistics.median(xs)for v,xs in rows.items()};key=f'{cc}/n{n}/groups{components}';raw[key]={'raw_ms':rows,'median_ms':med,'ratios':{v:x/med['baseline']for v,x in med.items()}};print(key,raw[key]['ratios'],flush=True)\n(p/'groups_selection.json').write_text(json.dumps({'raw':raw,'builds':builds},indent=2)+'\\n')\n"
+    },
+    "selection.py": {
+      "sha256": "ed176f79fc97e6314ec3fe831a90229e87dd26208b45075c07efce85b883c465",
+      "source": "from pathlib import Path\nimport subprocess as sp,json,hashlib,statistics,random,fcntl,os\np=Path(__file__).parent;root=Path('/home/reinsirk/Atcoder_Env');ccs={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']};variants={'ruf':['baseline','control','groups','copy','both'],'rwuf':['baseline','control','reset']};builds=[];acl='/tmp/sirkit_four_hours_20261022/union_second/acl'\nfor lib,vs in variants.items():\n for cc,args in ccs.items():\n  for v in vs:\n   for fixture in (['groups','copy','core']if lib=='ruf'else['reset','core']):\n    for vt in ([0,1,2]if lib=='rwuf'else[1]):\n     source=(p/'groups_api.cpp')if fixture=='groups'else(p/lib/(fixture+'_api.cpp'));binary=p/lib/f'{fixture}_{cc}_{v}_{vt}';cmd=['taskset','-c','10',*args,'-std=c++23','-O2','-DSKIP_RUNTIME_CHECKS','-DHEADER=\"'+str(p/lib/(v+'.hpp'))+'\"','-DSOURCE=\"'+str(p/lib/(v+'.hpp'))+'\"','-DTYPE='+str(vt),'-isystem',acl,str(source),'-o',str(binary)];r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,(lib,v,fixture,r.stderr);text=Path(str(binary)+'.text');sp.run(['objcopy','--dump-section','.text='+str(text),str(binary)],check=True);builds.append({'lib':lib,'compiler':cc,'variant':v,'fixture':fixture,'type':vt,'command':cmd,'source_sha256':hashlib.sha256((p/lib/(v+'.hpp')).read_bytes()).hexdigest(),'text_sha256':hashlib.sha256(text.read_bytes()).hexdigest()})\n  print(lib,cc,'builds ready',flush=True)\n(p/'selection_builds.json').write_text(json.dumps(builds,indent=2)+'\\n');smoke=[]\nfor lib,vs,macro in [('ruf',['groups','copy','both'],'SIRKIT_RUF_SOURCE'),('rwuf',['reset'],'SIRKIT_RWUF_SOURCE')]:\n for v in vs:\n  out=p/lib/('ref_'+v);test=root/'Verify/current/tests'/(lib+'_reference_test.cpp');cmd=['taskset','-c','10','g++','-std=c++23','-O2','-DSKIP_RUNTIME_CHECKS','-D'+macro+'=\"'+str(p/lib/(v+'.hpp'))+'\"',str(test),'-o',str(out)];r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,r.stderr;r=sp.run(['taskset','-c','10',str(out)],capture_output=True,text=True);assert not r.returncode and not r.stderr;(smoke.append({'lib':lib,'variant':v,'stdout':r.stdout,'passed':True}));print(lib,v,r.stdout.strip(),flush=True)\nraw={};sums={};os.sched_setaffinity(0,{10})\nwith open('/tmp/sirkit_four_hours_20261022/benchmark_geometry.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for lib,vs in variants.items():\n  for cc in ccs:\n   for fixture in (['groups','copy','core']if lib=='ruf'else['reset','core']):\n    active=vs if fixture!='core'else(['baseline','control','both']if lib=='ruf'else vs)\n    cases=([(str(n),str(c),str(reps))for n,reps in [(32,100000),(4096,1000),(131072,30)]for c in [1,2,n]]if fixture=='groups'else[(str(n),str(h),str(reps))for n,h,reps in [(32,0,500000),(32,4096,10000),(4096,4096,3000),(131072,1000,200)]]if fixture=='copy'else[(str(n),str(reps))for n,reps in [(32,500000),(4096,5000),(131072,300)]]if fixture=='reset'else[(str(n),str(mode),str(max(1,1000000//n)))for n in [32,4096]for mode in ([0,1,2,3,4,5,6]if lib=='ruf'else[0,1,2,3,4,5,7,9,10,11])])\n    for vt in ([0,1,2]if lib=='rwuf'else[1]):\n     for args in cases:\n      key=f'{lib}/{cc}/{fixture}/type{vt}/'+','.join(args);rows={v:[]for v in active};rng=random.Random(741)\n      for rep in range(7):\n       order=active[:];rng.shuffle(order)\n       for v in order:\n        exe=p/lib/f'{fixture}_{cc}_{v}_{vt}';r=sp.run(['taskset','-c','24',str(exe),*args],capture_output=True,text=True);assert not r.returncode and not r.stderr,(key,v,r.stderr);timing,checksum=r.stdout.split();assert sums.setdefault(key,checksum)==checksum;rows[v].append(float(timing)/(1000000 if fixture=='core'else 1))\n      med={v:statistics.median(xs)for v,xs in rows.items()};raw[key]={'raw_ms':rows,'median_ms':med,'ratios':{v:x/med['baseline']for v,x in med.items()},'arguments':args};(p/'selection_partial.json').write_text(json.dumps(raw,indent=2)+'\\n')\n      if fixture!='core':print(key,raw[key]['ratios'],flush=True)\n(p/'selection_results.json').write_text(json.dumps({'raw':raw,'builds':builds,'smoke':smoke,'checksums':sums},indent=2)+'\\n')\n"
+    }
+  },
+  "limits": [
+    "API専用計測の効果をLibrary Checkerのmain全体の効果と混同しない。",
+    "baseline/controlを含む生値を保存し、すべての入力や環境で速くなるとは宣言しない。",
+    "IOやmainの変更による改善は含めない。"
+  ],
+  "adopted": [
+    "コピー代入は頂点と履歴の両方を先行reserveし、容量を再利用する。履歴形式・snapshot・成分数を維持。",
+    "groupsは全独立と全連結だけ直接一覧化。通常の3作業配列の経路は維持。",
+    "reset(n)/reset()/clear()/empty()/ADL swapを追加。新APIの便利さと確保抑制を例/故障注入で検証し、既存mainの高速化とはしない。"
+  ],
+  "result_summary": "9rep中央値: コピー代入はn32/履歴31でGCC約42%・Clang約34%短縮、n4096/履歴8191で両約15%、n131072/履歴132071で約38%。全連結groupsは81〜98%短縮、全独立は約16〜19%短縮。通常groupsは概ね同等だがn32/2成分とGCC n4096/2成分で約2%増の条件も保存。",
+  "rejected": [
+    {
+      "candidate": "通常groupsも2作業配列化",
+      "reason": "Clang n4096/2成分で約9〜10%遅くなるため通常経路には採用しない。",
+      "source_sha256": "ede72501a4a158916d3e4aba8990c7c77c728d502962b77da23663c4590b5d1d",
+      "source": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/rollback-union-find.hpp.html\n#include <algorithm>\n#include <cstddef>\n#include <limits>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n#define SIRKIT_ROLLBACK_UNION_FIND_DEFINED\n// RollbackUnionFind(n=0): n要素を構築。O(n+1)時間・領域。コピーはO(n+h+1)時間・領域で独立（hは履歴長）、移動元は空。\n// find(i)/root(i)/leader(i): 代表、same(a,b)/issame(a,b): 同一成分か、size(i): 成分サイズ。O(log(n+1))。\n// unite(a,b)/merge(a,b): 新規結合ならtrue。falseでも履歴は1回分増える。O(log(n+1))償却時間。\n// undo(): 結合呼出し1回を戻す。O(1)。履歴が必要。get_state(): 現在の呼出し回数、O(1)。\n// snapshot(): 現在位置を保存。rollback(state=-1): 指定位置/保存位置まで戻す。O(1+戻す回数)。\n// size()/component_count(): 全要素数/成分数、O(1)。groups(): 成分別の頂点昇順一覧、O(1+n log(n+1))。\n// swap(other): 履歴を含めて内容を交換。O(1)。\n// reserve_history(k): k回分の履歴容量を確保。履歴・代表の直接書換えは不可。\n// clear_history(): 森林を保ち履歴と保存位置を消去。容量は保持し、旧stateは無効。O(h+1)上界、noexcept。\nclass RollbackUnionFind {\n    struct Change { int x, y, dx, dy; };\n    std::vector<int> data;\n    std::vector<Change> history;\n    int inner_snap = 0;\n    int components_ = 0;\n    static std::size_t checked_size(std::size_t n) {\n        if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: too many vertices\");\n        return n;\n    }\n    void check(int i) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (static_cast<std::size_t>(i) >= data.size()) throw std::out_of_range(\"RollbackUnionFind: vertex\");\n#else\n        (void)i;\n#endif\n    }\n    int leader_unchecked(int i) const { while (data[i] >= 0) i = data[i]; return i; }\n    void undo_last() noexcept {\n        const auto c = history.back(); history.pop_back();\n        data[c.x] = c.dx; data[c.y] = c.dy; components_ += (c.x != c.y);\n    }\npublic:\n    explicit RollbackUnionFind(std::size_t n = 0)\n        : data(checked_size(n), -1), components_(static_cast<int>(n)) { history.reserve(std::min(n, std::size_t{64})); }\n    RollbackUnionFind(const RollbackUnionFind&) = default;\n    RollbackUnionFind& operator=(const RollbackUnionFind& other) {\n        if (this != &other) { RollbackUnionFind copy(other); swap(copy); }\n        return *this;\n    }\n    void swap(RollbackUnionFind& other) noexcept {\n        data.swap(other.data); history.swap(other.history);\n        std::swap(inner_snap, other.inner_snap); std::swap(components_, other.components_);\n    }\n    RollbackUnionFind(RollbackUnionFind&& other) noexcept\n        : data(std::move(other.data)), history(std::move(other.history)),\n          inner_snap(std::exchange(other.inner_snap, 0)), components_(std::exchange(other.components_, 0)) {\n        other.data.clear(); other.history.clear();\n    }\n    RollbackUnionFind& operator=(RollbackUnionFind&& other) noexcept {\n        if (this != &other) {\n            data = std::move(other.data); history = std::move(other.history);\n            inner_snap = std::exchange(other.inner_snap, 0); components_ = std::exchange(other.components_, 0);\n            other.data.clear(); other.history.clear();\n        }\n        return *this;\n    }\n    int find(int i) const { check(i); return leader_unchecked(i); }\n    int root(int i) const { return find(i); }\n    int leader(int i) const { return find(i); }\n    bool unite(int x, int y) {\n        check(x); check(y); x = leader_unchecked(x); y = leader_unchecked(y);\n        if (history.size() == static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.push_back({x, y, data[x], data[y]});\n        if (x == y) return false;\n        if (data[x] > data[y]) std::swap(x, y);\n        data[x] += data[y]; data[y] = x; --components_; return true;\n    }\n    bool merge(int a, int b) { return unite(a, b); }\n    bool same(int a, int b) const { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n    bool issame(int a, int b) const { return same(a, b); }\n    int size(int i) const { return -data[find(i)]; }\n    int size() const noexcept { return static_cast<int>(data.size()); }\n    int component_count() const noexcept { return components_; }\n    void undo() {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (history.empty()) throw std::out_of_range(\"RollbackUnionFind: empty history\");\n#endif\n        const auto c = history.back(); history.pop_back();\n        if (c.x != c.y) {\n            data[c.x] = c.dx; data[c.y] = c.dy; ++components_;\n        }\n        if (inner_snap > get_state()) inner_snap = get_state();\n    }\n    void snapshot() noexcept { inner_snap = get_state(); }\n    int get_state() const noexcept { return static_cast<int>(history.size()); }\n    void rollback(int state = -1) {\n        if (state == -1) state = inner_snap;\n#ifndef SKIP_RUNTIME_CHECKS\n        if (state < 0 || state > get_state()) throw std::out_of_range(\"RollbackUnionFind: state\");\n#endif\n        while (get_state() > state) undo_last();\n        if (inner_snap > state) inner_snap = state;\n    }\n    void clear_history() noexcept { history.clear(); inner_snap = 0; }\n    void reserve_history(std::size_t count) {\n        if (count > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"RollbackUnionFind: history overflow\");\n        history.reserve(count);\n    }\n    std::vector<std::vector<int>> groups() const {\n        std::vector<std::vector<int>> result;\n        result.reserve(static_cast<std::size_t>(components_));\n        if (components_ == size()) {\n            for (int v = 0; v < size(); ++v) result.emplace_back(std::size_t{1}, v);\n            return result;\n        }\n        if (components_ == 1) {\n            result.emplace_back(data.size());\n            for (int v = 0; v < size(); ++v) result[0][v] = v;\n            return result;\n        }\n        std::vector<int> leaders(data.size()), counts(data.size(), 0);\n        for (int i = 0; i < size(); ++i) ++counts[leaders[i] = leader_unchecked(i)];\n        for (int i = 0; i < size(); ++i) if (counts[i]) {\n            const int count = counts[i];\n            counts[i] = static_cast<int>(result.size());\n            result.emplace_back(); result.back().reserve(count);\n        }\n        for (int i = 0; i < size(); ++i) result[counts[leaders[i]]].push_back(i);\n        return result;\n    }\n\n};\n#endif\n",
+      "comparison": {
+        "raw": {
+          "gcc/n32/groups1": {
+            "raw_ms": {
+              "baseline": [
+                14.543298,
+                14.499672,
+                14.53402,
+                14.53333,
+                14.784018,
+                14.419515,
+                15.437325
+              ],
+              "control": [
+                14.559379,
+                14.386046,
+                14.467887,
+                14.189741,
+                14.627206,
+                14.493912,
+                14.565194
+              ],
+              "groups": [
+                2.55816,
+                2.577919,
+                2.57559,
+                2.559484,
+                2.557549,
+                2.591537,
+                2.579236
+              ],
+              "extremes": [
+                2.718293,
+                2.786178,
+                2.725768,
+                2.724364,
+                2.694153,
+                2.707761,
+                2.710074
+              ]
+            },
+            "median_ms": {
+              "baseline": 14.53402,
+              "control": 14.493912,
+              "groups": 2.57559,
+              "extremes": 2.718293
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.9972404056138632,
+              "groups": 0.17721112259374902,
+              "extremes": 0.18702967245125576
+            }
+          },
+          "gcc/n32/groups2": {
+            "raw_ms": {
+              "baseline": [
+                16.196519,
+                16.031887,
+                16.281953,
+                16.064165,
+                16.249743,
+                16.129782,
+                16.256285
+              ],
+              "control": [
+                16.842754,
+                16.137879,
+                16.151645,
+                16.084521,
+                16.221607,
+                16.238263,
+                16.2468
+              ],
+              "groups": [
+                15.519559,
+                15.649581,
+                15.774762,
+                15.533157,
+                15.477831,
+                15.645251,
+                15.749748
+              ],
+              "extremes": [
+                16.58023,
+                16.490861,
+                16.524769,
+                16.507494,
+                16.531466,
+                16.380386,
+                16.388833
+              ]
+            },
+            "median_ms": {
+              "baseline": 16.196519,
+              "control": 16.221607,
+              "groups": 15.645251,
+              "extremes": 16.507494
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 1.0015489748136621,
+              "groups": 0.9659637975295804,
+              "extremes": 1.0192001133082982
+            }
+          },
+          "gcc/n32/groups8": {
+            "raw_ms": {
+              "baseline": [
+                22.892083,
+                22.615275,
+                22.687656,
+                22.532374,
+                23.287462,
+                22.577223,
+                22.554408
+              ],
+              "control": [
+                23.385478,
+                23.196417,
+                22.678857,
+                22.919071,
+                22.774243,
+                22.729832,
+                22.670214
+              ],
+              "groups": [
+                22.949824,
+                22.02392,
+                22.307898,
+                22.014711,
+                22.088723,
+                22.242066,
+                22.289199
+              ],
+              "extremes": [
+                22.597425,
+                22.828123,
+                22.955558,
+                22.790023,
+                22.593955,
+                22.865362,
+                22.686137
+              ]
+            },
+            "median_ms": {
+              "baseline": 22.615275,
+              "control": 22.774243,
+              "groups": 22.242066,
+              "extremes": 22.790023
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 1.0070292313491656,
+              "groups": 0.9834974812377918,
+              "extremes": 1.007726989833199
+            }
+          },
+          "gcc/n32/groups32": {
+            "raw_ms": {
+              "baseline": [
+                74.359316,
+                73.742154,
+                74.877132,
+                76.911204,
+                74.46791,
+                74.032652,
+                73.273042
+              ],
+              "control": [
+                73.783589,
+                73.985306,
+                73.125399,
+                73.994076,
+                73.202555,
+                73.973978,
+                73.250922
+              ],
+              "groups": [
+                58.621614,
+                59.400895,
+                59.207743,
+                58.926947,
+                59.128586,
+                59.346182,
+                59.350694
+              ],
+              "extremes": [
+                60.170972,
+                59.698284,
+                60.172915,
+                59.556719,
+                61.560819,
+                60.939145,
+                59.994843
+              ]
+            },
+            "median_ms": {
+              "baseline": 74.359316,
+              "control": 73.783589,
+              "groups": 59.207743,
+              "extremes": 60.170972
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.9922575000555411,
+              "groups": 0.7962384027308695,
+              "extremes": 0.8091921125256181
+            }
+          },
+          "gcc/n4096/groups1": {
+            "raw_ms": {
+              "baseline": [
+                64.343011,
+                63.960407,
+                64.411575,
+                63.955758,
+                63.965767,
+                63.957664,
+                64.140744
+              ],
+              "control": [
+                63.838613,
+                64.331214,
+                63.928491,
+                63.952626,
+                64.160626,
+                63.895522,
+                64.275304
+              ],
+              "groups": [
+                3.204337,
+                3.069199,
+                3.143141,
+                3.206588,
+                3.174449,
+                3.118619,
+                3.092686
+              ],
+              "extremes": [
+                3.110209,
+                3.115653,
+                3.198421,
+                3.199184,
+                3.176427,
+                3.213574,
+                3.155304
+              ]
+            },
+            "median_ms": {
+              "baseline": 63.965767,
+              "control": 63.952626,
+              "groups": 3.143141,
+              "extremes": 3.176427
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.9997945619881334,
+              "groups": 0.04913786150645235,
+              "extremes": 0.04965823359860595
+            }
+          },
+          "gcc/n4096/groups2": {
+            "raw_ms": {
+              "baseline": [
+                66.130877,
+                66.334013,
+                65.984875,
+                65.878293,
+                65.940066,
+                65.898824,
+                66.057933
+              ],
+              "control": [
+                66.465624,
+                66.156298,
+                65.942156,
+                65.81806,
+                65.86702,
+                65.902226,
+                66.211893
+              ],
+              "groups": [
+                66.09124,
+                66.383007,
+                66.529929,
+                66.028392,
+                66.073654,
+                66.480177,
+                66.00813
+              ],
+              "extremes": [
+                66.863105,
+                67.254428,
+                66.492066,
+                66.693158,
+                67.197343,
+                67.452176,
+                67.136845
+              ]
+            },
+            "median_ms": {
+              "baseline": 65.984875,
+              "control": 65.942156,
+              "groups": 66.09124,
+              "extremes": 67.136845
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.9993525940603811,
+              "groups": 1.0016119603166633,
+              "extremes": 1.017458091721777
+            }
+          },
+          "gcc/n4096/groups1024": {
+            "raw_ms": {
+              "baseline": [
+                122.16662,
+                121.015844,
+                122.233145,
+                122.100439,
+                121.826179,
+                121.526079,
+                121.761297
+              ],
+              "control": [
+                122.033766,
+                122.052649,
+                122.95763,
+                122.442007,
+                122.088136,
+                121.62847,
+                121.81311
+              ],
+              "groups": [
+                120.110577,
+                119.585598,
+                119.791083,
+                119.80463,
+                119.798783,
+                120.522311,
+                120.120379
+              ],
+              "extremes": [
+                120.77053,
+                120.762938,
+                120.787479,
+                121.85592,
+                120.865493,
+                120.788211,
+                121.098402
+              ]
+            },
+            "median_ms": {
+              "baseline": 121.826179,
+              "control": 122.052649,
+              "groups": 119.80463,
+              "extremes": 120.788211
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 1.0018589600515995,
+              "groups": 0.9834062841287997,
+              "extremes": 0.9914799264942883
+            }
+          },
+          "gcc/n4096/groups4096": {
+            "raw_ms": {
+              "baseline": [
+                338.782483,
+                338.694063,
+                338.700301,
+                342.548397,
+                338.970143,
+                339.126155,
+                338.871895
+              ],
+              "control": [
+                338.685359,
+                338.664152,
+                339.419781,
+                342.042232,
+                340.96196,
+                338.681179,
+                339.12881
+              ],
+              "groups": [
+                282.780273,
+                283.007158,
+                283.274911,
+                283.896817,
+                282.975012,
+                286.125043,
+                282.724433
+              ],
+              "extremes": [
+                292.067485,
+                285.63305,
+                287.716794,
+                288.805958,
+                286.017241,
+                285.220954,
+                285.060787
+              ]
+            },
+            "median_ms": {
+              "baseline": 338.871895,
+              "control": 339.12881,
+              "groups": 283.007158,
+              "extremes": 286.017241
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 1.0007581478540732,
+              "groups": 0.8351449682777617,
+              "extremes": 0.8440276258377816
+            }
+          },
+          "gcc/n131072/groups1": {
+            "raw_ms": {
+              "baseline": [
+                132.994999,
+                126.885593,
+                136.817895,
+                135.310873,
+                133.262371,
+                134.347796,
+                133.358
+              ],
+              "control": [
+                133.9594,
+                127.42061,
+                133.128237,
+                135.855979,
+                134.335082,
+                133.652273,
+                132.061452
+              ],
+              "groups": [
+                3.551812,
+                3.592973,
+                3.577566,
+                3.545699,
+                3.564264,
+                3.557246,
+                3.569667
+              ],
+              "extremes": [
+                3.583003,
+                3.561255,
+                3.580246,
+                3.558032,
+                3.521206,
+                3.522385,
+                3.555166
+              ]
+            },
+            "median_ms": {
+              "baseline": 133.358,
+              "control": 133.652273,
+              "groups": 3.564264,
+              "extremes": 3.558032
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 1.0022066392717348,
+              "groups": 0.02672703549843279,
+              "extremes": 0.02668030414373341
+            }
+          },
+          "gcc/n131072/groups2": {
+            "raw_ms": {
+              "baseline": [
+                130.885717,
+                130.093398,
+                131.914444,
+                131.28484,
+                130.02639,
+                130.215749,
+                130.295099
+              ],
+              "control": [
+                131.050319,
+                132.162775,
+                130.384232,
+                130.523647,
+                130.520931,
+                132.248811,
+                131.574713
+              ],
+              "groups": [
+                84.062142,
+                83.838388,
+                85.970906,
+                83.926728,
+                84.587101,
+                83.272122,
+                84.061137
+              ],
+              "extremes": [
+                130.711678,
+                130.904364,
+                131.614284,
+                130.11576,
+                128.917132,
+                131.105994,
+                131.216225
+              ]
+            },
+            "median_ms": {
+              "baseline": 130.295099,
+              "control": 131.050319,
+              "groups": 84.061137,
+              "extremes": 130.904364
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 1.0057962272241723,
+              "groups": 0.6451596233869089,
+              "extremes": 1.0046760392729737
+            }
+          },
+          "gcc/n131072/groups32768": {
+            "raw_ms": {
+              "baseline": [
+                228.537579,
+                227.164713,
+                221.772664,
+                217.49384,
+                230.072962,
+                227.781967,
+                219.914037
+              ],
+              "control": [
+                224.01041,
+                238.200514,
+                222.01559,
+                225.369239,
+                231.355979,
+                222.797444,
+                231.124257
+              ],
+              "groups": [
+                173.685554,
+                174.819838,
+                173.744044,
+                174.355088,
+                175.09128,
+                173.698598,
+                172.958781
+              ],
+              "extremes": [
+                213.022973,
+                207.761151,
+                206.350419,
+                207.167607,
+                206.979059,
+                208.230821,
+                214.952885
+              ]
+            },
+            "median_ms": {
+              "baseline": 227.164713,
+              "control": 225.369239,
+              "groups": 173.744044,
+              "extremes": 207.761151
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.9920961579979193,
+              "groups": 0.7648372923130892,
+              "extremes": 0.9145837320253168
+            }
+          },
+          "gcc/n131072/groups131072": {
+            "raw_ms": {
+              "baseline": [
+                392.406589,
+                394.971112,
+                434.993844,
+                398.789631,
+                389.684626,
+                387.36828,
+                422.53028
+              ],
+              "control": [
+                389.936295,
+                438.892816,
+                396.76912,
+                442.891579,
+                411.310841,
+                394.552159,
+                396.901757
+              ],
+              "groups": [
+                316.112457,
+                316.43604,
+                313.781598,
+                315.132598,
+                314.006149,
+                313.913494,
+                317.011627
+              ],
+              "extremes": [
+                318.948109,
+                317.240235,
+                318.362692,
+                317.65449,
+                316.877195,
+                316.824378,
+                318.969001
+              ]
+            },
+            "median_ms": {
+              "baseline": 394.971112,
+              "control": 396.901757,
+              "groups": 315.132598,
+              "extremes": 317.65449
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 1.0048880663454698,
+              "groups": 0.797862396579525,
+              "extremes": 0.8042474002503758
+            }
+          },
+          "clang/n32/groups1": {
+            "raw_ms": {
+              "baseline": [
+                15.410519,
+                14.915015,
+                15.545933,
+                14.742917,
+                14.865032,
+                14.83744,
+                14.844716
+              ],
+              "control": [
+                14.863084,
+                14.756325,
+                16.291931,
+                14.721872,
+                15.089655,
+                15.106528,
+                14.74505
+              ],
+              "groups": [
+                2.492899,
+                2.561198,
+                2.544804,
+                2.492108,
+                2.492117,
+                2.489043,
+                2.488669
+              ],
+              "extremes": [
+                2.628006,
+                2.671904,
+                2.671774,
+                2.634729,
+                2.628927,
+                2.659297,
+                2.625676
+              ]
+            },
+            "median_ms": {
+              "baseline": 14.865032,
+              "control": 14.863084,
+              "groups": 2.492117,
+              "extremes": 2.634729
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.9998689542007041,
+              "groups": 0.16764962228133784,
+              "extremes": 0.17724341259406642
+            }
+          },
+          "clang/n32/groups2": {
+            "raw_ms": {
+              "baseline": [
+                16.850171,
+                16.953416,
+                16.951713,
+                17.122378,
+                16.936222,
+                16.971047,
+                16.891773
+              ],
+              "control": [
+                16.892392,
+                17.655689,
+                17.043917,
+                17.1359,
+                16.947256,
+                16.890986,
+                16.970683
+              ],
+              "groups": [
+                16.127972,
+                16.087811,
+                16.192663,
+                16.279102,
+                16.082601,
+                17.614394,
+                16.089467
+              ],
+              "extremes": [
+                17.045233,
+                17.131859,
+                16.896935,
+                16.929816,
+                18.577883,
+                18.269511,
+                16.989644
+              ]
+            },
+            "median_ms": {
+              "baseline": 16.951713,
+              "control": 16.970683,
+              "groups": 16.127972,
+              "extremes": 17.045233
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 1.00111906094682,
+              "groups": 0.951406621855856,
+              "extremes": 1.0055168465865365
+            }
+          },
+          "clang/n32/groups8": {
+            "raw_ms": {
+              "baseline": [
+                21.81825,
+                21.947603,
+                21.843253,
+                21.679695,
+                21.713833,
+                22.010878,
+                21.833637
+              ],
+              "control": [
+                22.090931,
+                21.788199,
+                21.863838,
+                21.843207,
+                21.705479,
+                21.863976,
+                21.776872
+              ],
+              "groups": [
+                21.394617,
+                21.475099,
+                21.582735,
+                21.337074,
+                21.615924,
+                21.311675,
+                21.591937
+              ],
+              "extremes": [
+                21.863345,
+                21.835848,
+                22.104641,
+                21.855057,
+                23.60811,
+                21.826065,
+                22.791513
+              ]
+            },
+            "median_ms": {
+              "baseline": 21.833637,
+              "control": 21.843207,
+              "groups": 21.475099,
+              "extremes": 21.863345
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 1.0004383145144349,
+              "groups": 0.9835786406085253,
+              "extremes": 1.0013606528312256
+            }
+          },
+          "clang/n32/groups32": {
+            "raw_ms": {
+              "baseline": [
+                72.738122,
+                74.277383,
+                81.386849,
+                73.289626,
+                73.438439,
+                73.799244,
+                72.706246
+              ],
+              "control": [
+                73.012512,
+                73.299,
+                72.647618,
+                73.367955,
+                73.204109,
+                73.473681,
+                73.485961
+              ],
+              "groups": [
+                60.16446,
+                60.040666,
+                59.863124,
+                60.266743,
+                59.813897,
+                60.693004,
+                60.131777
+              ],
+              "extremes": [
+                60.922981,
+                60.738275,
+                61.642248,
+                59.90389,
+                59.902239,
+                62.998444,
+                60.382409
+              ]
+            },
+            "median_ms": {
+              "baseline": 73.438439,
+              "control": 73.299,
+              "groups": 60.131777,
+              "extremes": 60.738275
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.9981012804479682,
+              "groups": 0.8188052172514179,
+              "extremes": 0.8270638078241287
+            }
+          },
+          "clang/n4096/groups1": {
+            "raw_ms": {
+              "baseline": [
+                66.370862,
+                66.28834,
+                66.373077,
+                66.604872,
+                66.639181,
+                66.292114,
+                66.548934
+              ],
+              "control": [
+                73.512227,
+                66.645401,
+                66.852501,
+                66.875674,
+                74.005674,
+                66.432608,
+                66.669903
+              ],
+              "groups": [
+                1.953408,
+                1.878696,
+                1.841564,
+                1.927605,
+                1.870146,
+                2.122008,
+                1.912802
+              ],
+              "extremes": [
+                2.010521,
+                1.876399,
+                2.081781,
+                1.885294,
+                1.918721,
+                1.867497,
+                1.833511
+              ]
+            },
+            "median_ms": {
+              "baseline": 66.373077,
+              "control": 66.852501,
+              "groups": 1.912802,
+              "extremes": 1.885294
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 1.007223169719855,
+              "groups": 0.028818944163158205,
+              "extremes": 0.028404499010946865
+            }
+          },
+          "clang/n4096/groups2": {
+            "raw_ms": {
+              "baseline": [
+                72.923254,
+                72.640446,
+                73.453545,
+                73.568578,
+                72.991611,
+                72.900055,
+                73.161187
+              ],
+              "control": [
+                72.811367,
+                73.756803,
+                72.738342,
+                72.889281,
+                73.526498,
+                72.963072,
+                73.76302
+              ],
+              "groups": [
+                79.799329,
+                79.596692,
+                82.108144,
+                80.194257,
+                80.019494,
+                80.190312,
+                79.814555
+              ],
+              "extremes": [
+                71.938613,
+                72.807083,
+                72.934716,
+                72.27025,
+                72.228449,
+                72.849974,
+                72.460941
+              ]
+            },
+            "median_ms": {
+              "baseline": 72.991611,
+              "control": 72.963072,
+              "groups": 80.019494,
+              "extremes": 72.460941
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.9996090098627908,
+              "groups": 1.0962834345442791,
+              "extremes": 0.9927297124596962
+            }
+          },
+          "clang/n4096/groups1024": {
+            "raw_ms": {
+              "baseline": [
+                123.578838,
+                122.824813,
+                122.819363,
+                122.352829,
+                121.752465,
+                122.881924,
+                122.828752
+              ],
+              "control": [
+                123.828997,
+                122.309342,
+                123.181637,
+                122.519608,
+                122.794686,
+                123.361802,
+                122.775172
+              ],
+              "groups": [
+                121.985447,
+                121.954374,
+                121.939363,
+                122.042877,
+                122.159701,
+                122.866412,
+                122.059357
+              ],
+              "extremes": [
+                121.996617,
+                122.579802,
+                122.609137,
+                122.27161,
+                122.680202,
+                122.682487,
+                121.897626
+              ]
+            },
+            "median_ms": {
+              "baseline": 122.824813,
+              "control": 122.794686,
+              "groups": 122.042877,
+              "extremes": 122.579802
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.9997547156859908,
+              "groups": 0.9936337293670457,
+              "extremes": 0.9980051994868496
+            }
+          },
+          "clang/n4096/groups4096": {
+            "raw_ms": {
+              "baseline": [
+                340.070333,
+                337.074242,
+                337.082409,
+                337.224149,
+                337.313922,
+                337.256218,
+                336.979086
+              ],
+              "control": [
+                340.075291,
+                337.074181,
+                337.485403,
+                337.191693,
+                337.01515,
+                337.046168,
+                338.183203
+              ],
+              "groups": [
+                288.5109,
+                288.55986,
+                288.517685,
+                288.408451,
+                290.909934,
+                323.07053,
+                288.830422
+              ],
+              "extremes": [
+                289.244177,
+                288.446421,
+                288.393336,
+                288.410559,
+                288.442198,
+                288.401038,
+                329.531016
+              ]
+            },
+            "median_ms": {
+              "baseline": 337.224149,
+              "control": 337.191693,
+              "groups": 288.55986,
+              "extremes": 288.442198
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.9999037554098772,
+              "groups": 0.8556915655527386,
+              "extremes": 0.8553426522250636
+            }
+          },
+          "clang/n131072/groups1": {
+            "raw_ms": {
+              "baseline": [
+                127.17979,
+                127.811352,
+                118.818608,
+                122.931372,
+                127.40617,
+                127.045039,
+                118.355799
+              ],
+              "control": [
+                122.152418,
+                118.572308,
+                125.643084,
+                123.024645,
+                128.150489,
+                128.151084,
+                124.974424
+              ],
+              "groups": [
+                2.588907,
+                2.568939,
+                2.574144,
+                2.584364,
+                2.568299,
+                2.588183,
+                2.570081
+              ],
+              "extremes": [
+                2.639509,
+                2.578774,
+                2.590827,
+                2.580796,
+                2.578138,
+                2.581855,
+                2.574543
+              ]
+            },
+            "median_ms": {
+              "baseline": 127.045039,
+              "control": 124.974424,
+              "groups": 2.574144,
+              "extremes": 2.580796
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.98370172486625,
+              "groups": 0.020261664841552767,
+              "extremes": 0.020314024225692118
+            }
+          },
+          "clang/n131072/groups2": {
+            "raw_ms": {
+              "baseline": [
+                126.022088,
+                125.082167,
+                127.10982,
+                124.650855,
+                127.782983,
+                126.41396,
+                126.308623
+              ],
+              "control": [
+                127.296533,
+                126.464347,
+                125.916176,
+                126.148041,
+                125.539469,
+                125.973741,
+                126.498543
+              ],
+              "groups": [
+                93.999628,
+                97.071211,
+                97.491144,
+                93.532178,
+                96.000822,
+                96.400778,
+                93.546989
+              ],
+              "extremes": [
+                124.587632,
+                126.164623,
+                125.864048,
+                126.587148,
+                125.93001,
+                126.202148,
+                125.179295
+              ]
+            },
+            "median_ms": {
+              "baseline": 126.308623,
+              "control": 126.148041,
+              "groups": 96.000822,
+              "extremes": 125.93001
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.9987286537040311,
+              "groups": 0.7600496285989913,
+              "extremes": 0.997002477020116
+            }
+          },
+          "clang/n131072/groups32768": {
+            "raw_ms": {
+              "baseline": [
+                208.325504,
+                208.634643,
+                207.805154,
+                208.020489,
+                206.313796,
+                208.973258,
+                206.738597
+              ],
+              "control": [
+                206.720171,
+                207.629874,
+                207.453275,
+                208.406437,
+                207.560597,
+                208.53588,
+                207.666088
+              ],
+              "groups": [
+                176.20609,
+                176.400007,
+                175.523306,
+                175.607786,
+                175.823246,
+                177.132329,
+                175.294599
+              ],
+              "extremes": [
+                205.768122,
+                206.161525,
+                205.999989,
+                207.87435,
+                207.171838,
+                206.026,
+                206.492182
+              ]
+            },
+            "median_ms": {
+              "baseline": 208.020489,
+              "control": 207.629874,
+              "groups": 175.823246,
+              "extremes": 206.161525
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.998122228238777,
+              "groups": 0.8452208089944448,
+              "extremes": 0.9910635533598808
+            }
+          },
+          "clang/n131072/groups131072": {
+            "raw_ms": {
+              "baseline": [
+                379.851555,
+                380.542095,
+                381.993799,
+                380.126182,
+                379.848026,
+                380.804424,
+                380.042464
+              ],
+              "control": [
+                380.252767,
+                379.670983,
+                380.409236,
+                379.677921,
+                380.069448,
+                385.484567,
+                379.626611
+              ],
+              "groups": [
+                317.612922,
+                320.032633,
+                317.171717,
+                317.253188,
+                321.441501,
+                317.27236,
+                317.905129
+              ],
+              "extremes": [
+                317.291535,
+                322.520019,
+                323.062568,
+                318.957481,
+                321.314657,
+                318.885497,
+                322.635054
+              ]
+            },
+            "median_ms": {
+              "baseline": 380.126182,
+              "control": 380.069448,
+              "groups": 317.612922,
+              "extremes": 321.314657
+            },
+            "ratios": {
+              "baseline": 1.0,
+              "control": 0.9998507495597871,
+              "groups": 0.8355460292919261,
+              "extremes": 0.8452842035490206
+            }
+          }
+        },
+        "builds": [
+          [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/baseline.hpp\"",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/g2_gcc_baseline"
+          ],
+          [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/control.hpp\"",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/g2_gcc_control"
+          ],
+          [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/groups.hpp\"",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/g2_gcc_groups"
+          ],
+          [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/extremes.hpp\"",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/g2_gcc_extremes"
+          ],
+          [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/baseline.hpp\"",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/g2_clang_baseline"
+          ],
+          [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/control.hpp\"",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/g2_clang_control"
+          ],
+          [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/groups.hpp\"",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/g2_clang_groups"
+          ],
+          [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DHEADER=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/extremes.hpp\"",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/groups_api.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/rollback_second/ruf/g2_clang_extremes"
+          ]
+        ]
+      }
+    },
+    {
+      "candidate": "前周の圧縮履歴/成功だけの履歴/根サイズ先読み/まとめrollback/reserve変更",
+      "reason": "既存2026-10-22 Auditの棄却履歴を読み、同じ候補を繰り返さない。",
+      "audit": "Audit/performance-rollback-union-find-412482-2026-10-22.json"
+    }
+  ]
+}

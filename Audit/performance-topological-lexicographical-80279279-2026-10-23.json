@@ -1,0 +1,2670 @@
+{
+  "date": "2026-10-23",
+  "status": "NO_FURTHER_CHANGE_ADOPTED",
+  "online_result": "Audit/online-topological-lexicographical-80279279-2026-10-23.json",
+  "source_hashes": {
+    "Graph/Topological.cpp": "c0492c598400d66768dfae5915d9555cfda6557a976e9b63af2771996afc7900",
+    "Graph/Topological_sort.cpp": "c0492c598400d66768dfae5915d9555cfda6557a976e9b63af2771996afc7900"
+  },
+  "main_changed": false,
+  "io_changed": false,
+  "candidate": "出辺が1本で次頂点の残入次数1、かつ候補が1個または次頂点が現在の最小値より小さい場合、最小候補を直接置き換え、ビット集合更新を省略。複数候補のときだけ適用する案も比較。",
+  "decision": "両案とも不採用。大規模の鎖・逆鎖・重複鎖で通常の辞書順APIが最大約13%退行。固定mainでもランダムDAG約1〜2%、鎖約2〜3%退行し、安定した上積みなし。現在のAVX2初期登録・同一下位語の次最小取得と全公開APIを維持。",
+  "scope": "現方式での小さな最適化をいったん終了する判断。アルゴリズム全体の絶対的な速度限界を証明するものではない。オンライン39msは最大時間だけの記録で、ケース別の変化は取得できていない。",
+  "conditions": {
+    "compiler": "GCC15.2",
+    "flags": "-O2 -std=gnu++23 -march=native -ftrivial-auto-var-init=zero -Wall -Wextra -Werror",
+    "checks": "SKIP_RUNTIME_CHECKS",
+    "cpu": "Intel Core i9-14900K",
+    "build_cpu": 6,
+    "run_cpu": 14,
+    "locks": [
+      "/tmp/sirkit_performance_cpu14.lock",
+      "/tmp/atcoder_full_performance_20261018/benchmark.lock"
+    ],
+    "main_rounds": 9,
+    "api_rounds": 5,
+    "main_measurement": "child user+sys CPU/wall; regular-file stdout; SHA validation after timing; rotate 3 variants",
+    "api_measurement": "prebuilt graph, steady_clock ns/call; 10000 iterations n64, 10/30 n200000; checksum equality"
+  },
+  "main_medians": {
+    "sample1": {
+      "baseline": {
+        "median_cpu_ms": 0.9499999999988962,
+        "relative_to_current": 1.0
+      },
+      "shortcut": {
+        "median_cpu_ms": 0.9770000000004497,
+        "relative_to_current": 1.0284210526332473
+      },
+      "shortcut_wide": {
+        "median_cpu_ms": 0.9649999999993275,
+        "relative_to_current": 1.0157894736846829
+      }
+    },
+    "sample2": {
+      "baseline": {
+        "median_cpu_ms": 0.9550000000004832,
+        "relative_to_current": 1.0
+      },
+      "shortcut": {
+        "median_cpu_ms": 0.958999999999488,
+        "relative_to_current": 1.0041884816743485
+      },
+      "shortcut_wide": {
+        "median_cpu_ms": 0.8979999999991772,
+        "relative_to_current": 0.9403141361243171
+      }
+    },
+    "single_edge": {
+      "baseline": {
+        "median_cpu_ms": 4.790999999998657,
+        "relative_to_current": 1.0
+      },
+      "shortcut": {
+        "median_cpu_ms": 4.742000000001134,
+        "relative_to_current": 0.9897724900860913
+      },
+      "shortcut_wide": {
+        "median_cpu_ms": 4.670999999999648,
+        "relative_to_current": 0.9749530369444702
+      }
+    },
+    "forward_chain": {
+      "baseline": {
+        "median_cpu_ms": 11.114999999999542,
+        "relative_to_current": 1.0
+      },
+      "shortcut": {
+        "median_cpu_ms": 11.355000000000226,
+        "relative_to_current": 1.0215924426451366
+      },
+      "shortcut_wide": {
+        "median_cpu_ms": 11.397000000000324,
+        "relative_to_current": 1.0253711201080336
+      }
+    },
+    "reverse_chain": {
+      "baseline": {
+        "median_cpu_ms": 11.144999999999294,
+        "relative_to_current": 1.0
+      },
+      "shortcut": {
+        "median_cpu_ms": 11.455000000000215,
+        "relative_to_current": 1.0278151637506452
+      },
+      "shortcut_wide": {
+        "median_cpu_ms": 11.439000000000865,
+        "relative_to_current": 1.0263795423958357
+      }
+    },
+    "star": {
+      "baseline": {
+        "median_cpu_ms": 7.405000000000328,
+        "relative_to_current": 1.0
+      },
+      "shortcut": {
+        "median_cpu_ms": 7.364000000002147,
+        "relative_to_current": 0.9944632005404214
+      },
+      "shortcut_wide": {
+        "median_cpu_ms": 7.288999999999324,
+        "relative_to_current": 0.9843349088452399
+      }
+    },
+    "reverse_star": {
+      "baseline": {
+        "median_cpu_ms": 10.950000000000015,
+        "relative_to_current": 1.0
+      },
+      "shortcut": {
+        "median_cpu_ms": 10.585000000000399,
+        "relative_to_current": 0.9666666666667018
+      },
+      "shortcut_wide": {
+        "median_cpu_ms": 10.595000000001464,
+        "relative_to_current": 0.9675799086759315
+      }
+    },
+    "random_dag": {
+      "baseline": {
+        "median_cpu_ms": 16.836000000000297,
+        "relative_to_current": 1.0
+      },
+      "shortcut": {
+        "median_cpu_ms": 17.064000000000632,
+        "relative_to_current": 1.013542409123327
+      },
+      "shortcut_wide": {
+        "median_cpu_ms": 16.98200000000094,
+        "relative_to_current": 1.008671893561454
+      }
+    },
+    "permuted_dag": {
+      "baseline": {
+        "median_cpu_ms": 18.09100000000008,
+        "relative_to_current": 1.0
+      },
+      "shortcut": {
+        "median_cpu_ms": 18.396000000000967,
+        "relative_to_current": 1.016859211762804
+      },
+      "shortcut_wide": {
+        "median_cpu_ms": 18.4110000000004,
+        "relative_to_current": 1.0176883533248753
+      }
+    },
+    "cycle": {
+      "baseline": {
+        "median_cpu_ms": 8.27000000000111,
+        "relative_to_current": 1.0
+      },
+      "shortcut": {
+        "median_cpu_ms": 7.946000000000897,
+        "relative_to_current": 0.9608222490930871
+      },
+      "shortcut_wide": {
+        "median_cpu_ms": 8.01000000000085,
+        "relative_to_current": 0.9685610640870346
+      }
+    }
+  },
+  "verification": {
+    "status": "PASS",
+    "variants": {
+      "baseline": "// SPDX-License-Identifier: CC0-1.0\n// 参考: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/topological-sort\n#include <array>\n#include <bit>\n#include <cstddef>\n#include <cstdint>\n#include <limits>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__x86_64__) || defined(__i386__))\n#include <immintrin.h>\n#endif\n\n#ifndef SIRKIT_UNWEIGHTED_GRAPH_DEFINED\n#define SIRKIT_UNWEIGHTED_GRAPH_DEFINED\nusing Graph = std::vector<std::vector<int>>;\n#endif\n\n#ifndef SIRKIT_TOPOLOGICAL_RESULT_DEFINED\n#define SIRKIT_TOPOLOGICAL_RESULT_DEFINED\n// order: 閉路があっても取り出せた頂点列。position: 列中の位置、未処理は-1。\n// acyclic: DAGか。unique: DAGで順序が一意か（空グラフはtrue）。\nstruct TopologicalResult {\n    std::vector<int> order;\n    std::vector<int> position;\n    bool acyclic = true;\n    bool unique = true;\n};\n#endif\n\n#ifndef SIRKIT_TOPOLOGICAL_READY_MASK_DEFINED\n#define SIRKIT_TOPOLOGICAL_READY_MASK_DEFINED\nnamespace reinsirk::detail {\ninline std::uint64_t TopologicalReadyMask(const std::uint32_t* degree) {\n    std::uint64_t mask = 0;\n    for (unsigned i = 0; i < 64; ++i)\n        mask |= static_cast<std::uint64_t>(degree[i] == 0) << i;\n    return mask;\n}\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__x86_64__) || defined(__i386__))\n__attribute__((target(\"avx2\")))\ninline std::uint64_t TopologicalReadyMaskAvx2(const std::uint32_t* degree) {\n    const auto zero = _mm256_setzero_si256();\n    std::uint64_t mask = 0;\n    for (unsigned i = 0; i < 64; i += 8) {\n        const auto values = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(degree + i));\n        const auto equal = _mm256_cmpeq_epi32(values, zero);\n        const auto byte = static_cast<unsigned>(_mm256_movemask_ps(_mm256_castsi256_ps(equal)));\n        mask |= static_cast<std::uint64_t>(byte) << i;\n    }\n    return mask;\n}\n#endif\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_TOPOLOGICAL_CORE_DEFINED\n#define SIRKIT_TOPOLOGICAL_CORE_DEFINED\nnamespace reinsirk::detail {\ntemplate <bool Lexicographical, bool Details>\ninline TopologicalResult TopologicalRun(const Graph& graph) {\n    const auto n = graph.size();\n    if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n        throw std::length_error(\"TopologicalSort: too many vertices\");\n    std::vector<std::uint32_t> indegree(n);\n    for (const auto& edges : graph) for (int to : edges) {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (to < 0 || static_cast<std::size_t>(to) >= n)\n            throw std::out_of_range(\"TopologicalSort: invalid vertex\");\n#endif\n        auto& degree = indegree[static_cast<std::size_t>(to)];\n        if (degree == std::numeric_limits<std::uint32_t>::max())\n            throw std::length_error(\"TopologicalSort: degree overflow\");\n        ++degree;\n    }\n    TopologicalResult result;\n    result.order.reserve(n);\n    if constexpr (Details) result.position.assign(n, -1);\n    if constexpr (!Lexicographical) {\n        // 各頂点は高々1回追加し、reserve(n)済みなので容量を超えない。\n        const auto append = [&](int vertex) {\n            if (result.order.size() == result.order.capacity()) std::unreachable();\n            result.order.push_back(vertex);\n        };\n        std::uint32_t degree_bits = 0;\n        for (std::size_t i = 0; i < n; ++i) {\n            degree_bits |= indegree[i];\n            if (indegree[i] == 0) append(static_cast<int>(i));\n        }\n        if (n >= 4096 && degree_bits > 1 && result.order.size() > n / 64 && result.order.size() < n - n / 4) {\n            // 到達できる頂点が十分増えてから、添字式キューに切り替える。\n            const auto switch_size = result.order.size() + n / 16;\n            std::size_t head = 0;\n            while (head < result.order.size() &&\n                   (result.order.size() < switch_size || result.order.size() - head <= n / 64)) {\n                if constexpr (Details) {\n                    if (result.order.size() - head > 1) result.unique = false;\n                    result.position[static_cast<std::size_t>(result.order[head])] = static_cast<int>(head);\n                }\n                for (int to : graph[static_cast<std::size_t>(result.order[head])])\n                    if (--indegree[static_cast<std::size_t>(to)] == 0) append(to);\n                ++head;\n            }\n            if (head < result.order.size()) {\n                std::size_t tail = result.order.size();\n                result.order.resize(n);\n                for (; head < tail; ++head) {\n                    if constexpr (Details) {\n                        if (tail - head > 1) result.unique = false;\n                        result.position[static_cast<std::size_t>(result.order[head])] = static_cast<int>(head);\n                    }\n                    for (int to : graph[static_cast<std::size_t>(result.order[head])]) {\n                        const bool ready = --indegree[static_cast<std::size_t>(to)] == 0;\n                        // 全頂点が入隊済みなら未処理の辺はなく、常にtail < n。\n                        result.order[tail] = to;\n                        tail += ready;\n                    }\n                }\n                result.order.resize(tail);\n            }\n        } else {\n            for (std::size_t head = 0; head < result.order.size(); ++head) {\n                if constexpr (Details) {\n                    if (result.order.size() - head > 1) result.unique = false;\n                    result.position[static_cast<std::size_t>(result.order[head])] = static_cast<int>(head);\n                }\n                for (int to : graph[static_cast<std::size_t>(result.order[head])])\n                    if (--indegree[static_cast<std::size_t>(to)] == 0) append(to);\n            }\n        }\n    } else {\n        std::array<std::size_t, 6> offsets{};\n        std::size_t words = (n + 63) / 64, total = 0, levels = 0;\n        // 頂点数はINT_MAX以下なので、64進の階層は高々6段。\n        do {\n            offsets[levels++] = total;\n            total += words;\n            if (words <= 1) break;\n            words = (words + 63) / 64;\n        } while (true);\n        std::uint64_t single_word = 0;\n        std::vector<std::uint64_t> large_bits;\n        auto* bits = n <= 64 ? &single_word : nullptr;\n        std::size_t ready_count = 0;\n        // 最小値を別に保持し、候補1個の間はビット集合を使わない。\n        int minimum = -1;\n        const auto insert = [&](int vertex) {\n            ++ready_count;\n            if (minimum < 0) { minimum = vertex; return; }\n            if (vertex < minimum) std::swap(vertex, minimum);\n            if (bits == nullptr) {\n                // 複数候補が初めて現れたときだけ確保する。\n                large_bits.assign(total, 0);\n                bits = large_bits.data();\n            }\n            std::size_t index = static_cast<std::size_t>(vertex);\n            for (std::size_t level = 0; level < levels; ++level) {\n                auto& word = bits[offsets[level] + (index >> 6)];\n                const auto old = word;\n                word |= std::uint64_t{1} << (index & 63);\n                if (old != 0) break;\n                index >>= 6;\n            }\n        };\n        auto make_mask = &TopologicalReadyMask;\n        bool bulk_initialize = false;\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__x86_64__) || defined(__i386__))\n        if (n >= 4096 && __builtin_cpu_supports(\"avx2\")) {\n            bulk_initialize = true;\n            make_mask = &TopologicalReadyMaskAvx2;\n        }\n#endif\n        if (bulk_initialize) {\n            for (std::size_t base = 0; base < n; base += 64) {\n                std::uint64_t mask = 0;\n                if (n - base >= 64) mask = make_mask(indegree.data() + base);\n                else for (std::size_t i = base; i < n; ++i)\n                    mask |= static_cast<std::uint64_t>(indegree[i] == 0) << (i - base);\n                ready_count += std::popcount(mask);\n                if (mask != 0 && minimum < 0) {\n                    minimum = static_cast<int>(base + std::countr_zero(mask));\n                    mask &= mask - 1;\n                }\n                if (mask != 0) {\n                    if (bits == nullptr) {\n                        large_bits.assign(total, 0);\n                        bits = large_bits.data();\n                    }\n                    bits[base >> 6] = mask;\n                }\n            }\n            if (ready_count > 1) {\n                std::size_t count = (n + 63) / 64;\n                for (std::size_t level = 0; level + 1 < levels; ++level) {\n                    for (std::size_t i = 0; i < count; ++i)\n                        if (bits[offsets[level] + i] != 0)\n                            bits[offsets[level + 1] + (i >> 6)] |= std::uint64_t{1} << (i & 63);\n                    count = (count + 63) / 64;\n                }\n            }\n        } else {\n            for (std::size_t i = 0; i < n; ++i)\n                if (indegree[i] == 0) insert(static_cast<int>(i));\n        }\n        while (ready_count != 0) {\n            if constexpr (Details) if (ready_count > 1) result.unique = false;\n            const int from = minimum;\n            minimum = -1;\n            if (--ready_count != 0) {\n                std::size_t index = static_cast<std::size_t>(from) >> 6;\n                if (bits[index] != 0) {\n                    index = (index << 6) + std::countr_zero(bits[index]);\n                } else {\n                    index = 0;\n                    for (std::size_t level = levels; level-- != 0;)\n                        index = (index << 6) + std::countr_zero(bits[offsets[level] + index]);\n                }\n                minimum = static_cast<int>(index);\n                for (std::size_t level = 0; level < levels; ++level) {\n                    auto& word = bits[offsets[level] + (index >> 6)];\n                    word &= ~(std::uint64_t{1} << (index & 63));\n                    if (word != 0) break;\n                    index >>= 6;\n                }\n            }\n            if constexpr (Details)\n                result.position[static_cast<std::size_t>(from)] = static_cast<int>(result.order.size());\n            result.order.push_back(from);\n            for (int to : graph[static_cast<std::size_t>(from)])\n                if (--indegree[static_cast<std::size_t>(to)] == 0) insert(to);\n        }\n    }\n    result.acyclic = result.order.size() == n;\n    if constexpr (Details) result.unique = result.unique && result.acyclic;\n    else if (!result.acyclic) result.order.clear();\n    return result;\n}\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_TOPOLOGICAL_SORT_DEFINED\n#define SIRKIT_TOPOLOGICAL_SORT_DEFINED\n// TopologicalSort(graph): FIFO順のトポロジカル順を返す。閉路なら空、空グラフも空。O(V+E)時間・O(V)領域。\ninline std::vector<int> TopologicalSort(const Graph& graph) {\n    return reinsirk::detail::TopologicalRun<false, false>(graph).order;\n}\n#endif\n#ifndef SIRKIT_TOPOLOGICAL_SORT_LEXICOGRAPHICAL_DEFINED\n#define SIRKIT_TOPOLOGICAL_SORT_LEXICOGRAPHICAL_DEFINED\n// TopologicalSortLexicographical(graph): 辞書順最小のトポロジカル順。閉路なら空。O(E+V log(V+1))時間・O(V)領域。\ninline std::vector<int> TopologicalSortLexicographical(const Graph& graph) {\n    return reinsirk::detail::TopologicalRun<true, false>(graph).order;\n}\n#endif\n#ifndef SIRKIT_TOPOLOGICAL_DETAILS_DEFINED\n#define SIRKIT_TOPOLOGICAL_DETAILS_DEFINED\n// TopologicalSortDetails(graph, lexicographical=false): 順序・各頂点の位置・DAG判定・一意性を返す。時間は対応するsortと同じ。\n// IsDAG(graph): DAGかを返す。空はtrue。O(V+E)時間・O(V)領域。\n// 全辺を使う入次数集計中に終点を検査し、2回目では繰り返さない。SKIPで検査を省く。\n// 頂点数INT_MAX、各入次数UINT32_MAXの容量制限は常時検査する。\ninline TopologicalResult TopologicalSortDetails(const Graph& graph, bool lexicographical = false) {\n    return lexicographical ? reinsirk::detail::TopologicalRun<true, true>(graph)\n                           : reinsirk::detail::TopologicalRun<false, true>(graph);\n}\ninline bool IsDAG(const Graph& graph) {\n    return TopologicalSort(graph).size() == graph.size();\n}\n#endif\n",
+      "shortcut": "// SPDX-License-Identifier: CC0-1.0\n// 参考: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/topological-sort\n#include <array>\n#include <bit>\n#include <cstddef>\n#include <cstdint>\n#include <limits>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__x86_64__) || defined(__i386__))\n#include <immintrin.h>\n#endif\n\n#ifndef SIRKIT_UNWEIGHTED_GRAPH_DEFINED\n#define SIRKIT_UNWEIGHTED_GRAPH_DEFINED\nusing Graph = std::vector<std::vector<int>>;\n#endif\n\n#ifndef SIRKIT_TOPOLOGICAL_RESULT_DEFINED\n#define SIRKIT_TOPOLOGICAL_RESULT_DEFINED\n// order: 閉路があっても取り出せた頂点列。position: 列中の位置、未処理は-1。\n// acyclic: DAGか。unique: DAGで順序が一意か（空グラフはtrue）。\nstruct TopologicalResult {\n    std::vector<int> order;\n    std::vector<int> position;\n    bool acyclic = true;\n    bool unique = true;\n};\n#endif\n\n#ifndef SIRKIT_TOPOLOGICAL_READY_MASK_DEFINED\n#define SIRKIT_TOPOLOGICAL_READY_MASK_DEFINED\nnamespace reinsirk::detail {\ninline std::uint64_t TopologicalReadyMask(const std::uint32_t* degree) {\n    std::uint64_t mask = 0;\n    for (unsigned i = 0; i < 64; ++i)\n        mask |= static_cast<std::uint64_t>(degree[i] == 0) << i;\n    return mask;\n}\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__x86_64__) || defined(__i386__))\n__attribute__((target(\"avx2\")))\ninline std::uint64_t TopologicalReadyMaskAvx2(const std::uint32_t* degree) {\n    const auto zero = _mm256_setzero_si256();\n    std::uint64_t mask = 0;\n    for (unsigned i = 0; i < 64; i += 8) {\n        const auto values = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(degree + i));\n        const auto equal = _mm256_cmpeq_epi32(values, zero);\n        const auto byte = static_cast<unsigned>(_mm256_movemask_ps(_mm256_castsi256_ps(equal)));\n        mask |= static_cast<std::uint64_t>(byte) << i;\n    }\n    return mask;\n}\n#endif\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_TOPOLOGICAL_CORE_DEFINED\n#define SIRKIT_TOPOLOGICAL_CORE_DEFINED\nnamespace reinsirk::detail {\ntemplate <bool Lexicographical, bool Details>\ninline TopologicalResult TopologicalRun(const Graph& graph) {\n    const auto n = graph.size();\n    if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n        throw std::length_error(\"TopologicalSort: too many vertices\");\n    std::vector<std::uint32_t> indegree(n);\n    for (const auto& edges : graph) for (int to : edges) {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (to < 0 || static_cast<std::size_t>(to) >= n)\n            throw std::out_of_range(\"TopologicalSort: invalid vertex\");\n#endif\n        auto& degree = indegree[static_cast<std::size_t>(to)];\n        if (degree == std::numeric_limits<std::uint32_t>::max())\n            throw std::length_error(\"TopologicalSort: degree overflow\");\n        ++degree;\n    }\n    TopologicalResult result;\n    result.order.reserve(n);\n    if constexpr (Details) result.position.assign(n, -1);\n    if constexpr (!Lexicographical) {\n        // 各頂点は高々1回追加し、reserve(n)済みなので容量を超えない。\n        const auto append = [&](int vertex) {\n            if (result.order.size() == result.order.capacity()) std::unreachable();\n            result.order.push_back(vertex);\n        };\n        std::uint32_t degree_bits = 0;\n        for (std::size_t i = 0; i < n; ++i) {\n            degree_bits |= indegree[i];\n            if (indegree[i] == 0) append(static_cast<int>(i));\n        }\n        if (n >= 4096 && degree_bits > 1 && result.order.size() > n / 64 && result.order.size() < n - n / 4) {\n            // 到達できる頂点が十分増えてから、添字式キューに切り替える。\n            const auto switch_size = result.order.size() + n / 16;\n            std::size_t head = 0;\n            while (head < result.order.size() &&\n                   (result.order.size() < switch_size || result.order.size() - head <= n / 64)) {\n                if constexpr (Details) {\n                    if (result.order.size() - head > 1) result.unique = false;\n                    result.position[static_cast<std::size_t>(result.order[head])] = static_cast<int>(head);\n                }\n                for (int to : graph[static_cast<std::size_t>(result.order[head])])\n                    if (--indegree[static_cast<std::size_t>(to)] == 0) append(to);\n                ++head;\n            }\n            if (head < result.order.size()) {\n                std::size_t tail = result.order.size();\n                result.order.resize(n);\n                for (; head < tail; ++head) {\n                    if constexpr (Details) {\n                        if (tail - head > 1) result.unique = false;\n                        result.position[static_cast<std::size_t>(result.order[head])] = static_cast<int>(head);\n                    }\n                    for (int to : graph[static_cast<std::size_t>(result.order[head])]) {\n                        const bool ready = --indegree[static_cast<std::size_t>(to)] == 0;\n                        // 全頂点が入隊済みなら未処理の辺はなく、常にtail < n。\n                        result.order[tail] = to;\n                        tail += ready;\n                    }\n                }\n                result.order.resize(tail);\n            }\n        } else {\n            for (std::size_t head = 0; head < result.order.size(); ++head) {\n                if constexpr (Details) {\n                    if (result.order.size() - head > 1) result.unique = false;\n                    result.position[static_cast<std::size_t>(result.order[head])] = static_cast<int>(head);\n                }\n                for (int to : graph[static_cast<std::size_t>(result.order[head])])\n                    if (--indegree[static_cast<std::size_t>(to)] == 0) append(to);\n            }\n        }\n    } else {\n        std::array<std::size_t, 6> offsets{};\n        std::size_t words = (n + 63) / 64, total = 0, levels = 0;\n        // 頂点数はINT_MAX以下なので、64進の階層は高々6段。\n        do {\n            offsets[levels++] = total;\n            total += words;\n            if (words <= 1) break;\n            words = (words + 63) / 64;\n        } while (true);\n        std::uint64_t single_word = 0;\n        std::vector<std::uint64_t> large_bits;\n        auto* bits = n <= 64 ? &single_word : nullptr;\n        std::size_t ready_count = 0;\n        // 最小値を別に保持し、候補1個の間はビット集合を使わない。\n        int minimum = -1;\n        const auto insert = [&](int vertex) {\n            ++ready_count;\n            if (minimum < 0) { minimum = vertex; return; }\n            if (vertex < minimum) std::swap(vertex, minimum);\n            if (bits == nullptr) {\n                // 複数候補が初めて現れたときだけ確保する。\n                large_bits.assign(total, 0);\n                bits = large_bits.data();\n            }\n            std::size_t index = static_cast<std::size_t>(vertex);\n            for (std::size_t level = 0; level < levels; ++level) {\n                auto& word = bits[offsets[level] + (index >> 6)];\n                const auto old = word;\n                word |= std::uint64_t{1} << (index & 63);\n                if (old != 0) break;\n                index >>= 6;\n            }\n        };\n        auto make_mask = &TopologicalReadyMask;\n        bool bulk_initialize = false;\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__x86_64__) || defined(__i386__))\n        if (n >= 4096 && __builtin_cpu_supports(\"avx2\")) {\n            bulk_initialize = true;\n            make_mask = &TopologicalReadyMaskAvx2;\n        }\n#endif\n        if (bulk_initialize) {\n            for (std::size_t base = 0; base < n; base += 64) {\n                std::uint64_t mask = 0;\n                if (n - base >= 64) mask = make_mask(indegree.data() + base);\n                else for (std::size_t i = base; i < n; ++i)\n                    mask |= static_cast<std::uint64_t>(indegree[i] == 0) << (i - base);\n                ready_count += std::popcount(mask);\n                if (mask != 0 && minimum < 0) {\n                    minimum = static_cast<int>(base + std::countr_zero(mask));\n                    mask &= mask - 1;\n                }\n                if (mask != 0) {\n                    if (bits == nullptr) {\n                        large_bits.assign(total, 0);\n                        bits = large_bits.data();\n                    }\n                    bits[base >> 6] = mask;\n                }\n            }\n            if (ready_count > 1) {\n                std::size_t count = (n + 63) / 64;\n                for (std::size_t level = 0; level + 1 < levels; ++level) {\n                    for (std::size_t i = 0; i < count; ++i)\n                        if (bits[offsets[level] + i] != 0)\n                            bits[offsets[level + 1] + (i >> 6)] |= std::uint64_t{1} << (i & 63);\n                    count = (count + 63) / 64;\n                }\n            }\n        } else {\n            for (std::size_t i = 0; i < n; ++i)\n                if (indegree[i] == 0) insert(static_cast<int>(i));\n        }\n        while (ready_count != 0) {\n            if constexpr (Details) if (ready_count > 1) result.unique = false;\n            const int from = minimum;\n            const auto& edges = graph[static_cast<std::size_t>(from)];\n            if (edges.size() == 1) {\n                const int to = edges.front();\n                if (indegree[static_cast<std::size_t>(to)] == 1 && (ready_count == 1 || to < from)) {\n                    --indegree[static_cast<std::size_t>(to)];\n                    minimum = to;\n                    if constexpr (Details)\n                        result.position[static_cast<std::size_t>(from)] = static_cast<int>(result.order.size());\n                    result.order.push_back(from);\n                    continue;\n                }\n            }\n            minimum = -1;\n            if (--ready_count != 0) {\n                std::size_t index = static_cast<std::size_t>(from) >> 6;\n                if (bits[index] != 0) {\n                    index = (index << 6) + std::countr_zero(bits[index]);\n                } else {\n                    index = 0;\n                    for (std::size_t level = levels; level-- != 0;)\n                        index = (index << 6) + std::countr_zero(bits[offsets[level] + index]);\n                }\n                minimum = static_cast<int>(index);\n                for (std::size_t level = 0; level < levels; ++level) {\n                    auto& word = bits[offsets[level] + (index >> 6)];\n                    word &= ~(std::uint64_t{1} << (index & 63));\n                    if (word != 0) break;\n                    index >>= 6;\n                }\n            }\n            if constexpr (Details)\n                result.position[static_cast<std::size_t>(from)] = static_cast<int>(result.order.size());\n            result.order.push_back(from);\n            for (int to : graph[static_cast<std::size_t>(from)])\n                if (--indegree[static_cast<std::size_t>(to)] == 0) insert(to);\n        }\n    }\n    result.acyclic = result.order.size() == n;\n    if constexpr (Details) result.unique = result.unique && result.acyclic;\n    else if (!result.acyclic) result.order.clear();\n    return result;\n}\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_TOPOLOGICAL_SORT_DEFINED\n#define SIRKIT_TOPOLOGICAL_SORT_DEFINED\n// TopologicalSort(graph): FIFO順のトポロジカル順を返す。閉路なら空、空グラフも空。O(V+E)時間・O(V)領域。\ninline std::vector<int> TopologicalSort(const Graph& graph) {\n    return reinsirk::detail::TopologicalRun<false, false>(graph).order;\n}\n#endif\n#ifndef SIRKIT_TOPOLOGICAL_SORT_LEXICOGRAPHICAL_DEFINED\n#define SIRKIT_TOPOLOGICAL_SORT_LEXICOGRAPHICAL_DEFINED\n// TopologicalSortLexicographical(graph): 辞書順最小のトポロジカル順。閉路なら空。O(E+V log(V+1))時間・O(V)領域。\ninline std::vector<int> TopologicalSortLexicographical(const Graph& graph) {\n    return reinsirk::detail::TopologicalRun<true, false>(graph).order;\n}\n#endif\n#ifndef SIRKIT_TOPOLOGICAL_DETAILS_DEFINED\n#define SIRKIT_TOPOLOGICAL_DETAILS_DEFINED\n// TopologicalSortDetails(graph, lexicographical=false): 順序・各頂点の位置・DAG判定・一意性を返す。時間は対応するsortと同じ。\n// IsDAG(graph): DAGかを返す。空はtrue。O(V+E)時間・O(V)領域。\n// 全辺を使う入次数集計中に終点を検査し、2回目では繰り返さない。SKIPで検査を省く。\n// 頂点数INT_MAX、各入次数UINT32_MAXの容量制限は常時検査する。\ninline TopologicalResult TopologicalSortDetails(const Graph& graph, bool lexicographical = false) {\n    return lexicographical ? reinsirk::detail::TopologicalRun<true, true>(graph)\n                           : reinsirk::detail::TopologicalRun<false, true>(graph);\n}\ninline bool IsDAG(const Graph& graph) {\n    return TopologicalSort(graph).size() == graph.size();\n}\n#endif\n",
+      "shortcut_wide": "// SPDX-License-Identifier: CC0-1.0\n// 参考: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/topological-sort\n#include <array>\n#include <bit>\n#include <cstddef>\n#include <cstdint>\n#include <limits>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__x86_64__) || defined(__i386__))\n#include <immintrin.h>\n#endif\n\n#ifndef SIRKIT_UNWEIGHTED_GRAPH_DEFINED\n#define SIRKIT_UNWEIGHTED_GRAPH_DEFINED\nusing Graph = std::vector<std::vector<int>>;\n#endif\n\n#ifndef SIRKIT_TOPOLOGICAL_RESULT_DEFINED\n#define SIRKIT_TOPOLOGICAL_RESULT_DEFINED\n// order: 閉路があっても取り出せた頂点列。position: 列中の位置、未処理は-1。\n// acyclic: DAGか。unique: DAGで順序が一意か（空グラフはtrue）。\nstruct TopologicalResult {\n    std::vector<int> order;\n    std::vector<int> position;\n    bool acyclic = true;\n    bool unique = true;\n};\n#endif\n\n#ifndef SIRKIT_TOPOLOGICAL_READY_MASK_DEFINED\n#define SIRKIT_TOPOLOGICAL_READY_MASK_DEFINED\nnamespace reinsirk::detail {\ninline std::uint64_t TopologicalReadyMask(const std::uint32_t* degree) {\n    std::uint64_t mask = 0;\n    for (unsigned i = 0; i < 64; ++i)\n        mask |= static_cast<std::uint64_t>(degree[i] == 0) << i;\n    return mask;\n}\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__x86_64__) || defined(__i386__))\n__attribute__((target(\"avx2\")))\ninline std::uint64_t TopologicalReadyMaskAvx2(const std::uint32_t* degree) {\n    const auto zero = _mm256_setzero_si256();\n    std::uint64_t mask = 0;\n    for (unsigned i = 0; i < 64; i += 8) {\n        const auto values = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(degree + i));\n        const auto equal = _mm256_cmpeq_epi32(values, zero);\n        const auto byte = static_cast<unsigned>(_mm256_movemask_ps(_mm256_castsi256_ps(equal)));\n        mask |= static_cast<std::uint64_t>(byte) << i;\n    }\n    return mask;\n}\n#endif\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_TOPOLOGICAL_CORE_DEFINED\n#define SIRKIT_TOPOLOGICAL_CORE_DEFINED\nnamespace reinsirk::detail {\ntemplate <bool Lexicographical, bool Details>\ninline TopologicalResult TopologicalRun(const Graph& graph) {\n    const auto n = graph.size();\n    if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n        throw std::length_error(\"TopologicalSort: too many vertices\");\n    std::vector<std::uint32_t> indegree(n);\n    for (const auto& edges : graph) for (int to : edges) {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (to < 0 || static_cast<std::size_t>(to) >= n)\n            throw std::out_of_range(\"TopologicalSort: invalid vertex\");\n#endif\n        auto& degree = indegree[static_cast<std::size_t>(to)];\n        if (degree == std::numeric_limits<std::uint32_t>::max())\n            throw std::length_error(\"TopologicalSort: degree overflow\");\n        ++degree;\n    }\n    TopologicalResult result;\n    result.order.reserve(n);\n    if constexpr (Details) result.position.assign(n, -1);\n    if constexpr (!Lexicographical) {\n        // 各頂点は高々1回追加し、reserve(n)済みなので容量を超えない。\n        const auto append = [&](int vertex) {\n            if (result.order.size() == result.order.capacity()) std::unreachable();\n            result.order.push_back(vertex);\n        };\n        std::uint32_t degree_bits = 0;\n        for (std::size_t i = 0; i < n; ++i) {\n            degree_bits |= indegree[i];\n            if (indegree[i] == 0) append(static_cast<int>(i));\n        }\n        if (n >= 4096 && degree_bits > 1 && result.order.size() > n / 64 && result.order.size() < n - n / 4) {\n            // 到達できる頂点が十分増えてから、添字式キューに切り替える。\n            const auto switch_size = result.order.size() + n / 16;\n            std::size_t head = 0;\n            while (head < result.order.size() &&\n                   (result.order.size() < switch_size || result.order.size() - head <= n / 64)) {\n                if constexpr (Details) {\n                    if (result.order.size() - head > 1) result.unique = false;\n                    result.position[static_cast<std::size_t>(result.order[head])] = static_cast<int>(head);\n                }\n                for (int to : graph[static_cast<std::size_t>(result.order[head])])\n                    if (--indegree[static_cast<std::size_t>(to)] == 0) append(to);\n                ++head;\n            }\n            if (head < result.order.size()) {\n                std::size_t tail = result.order.size();\n                result.order.resize(n);\n                for (; head < tail; ++head) {\n                    if constexpr (Details) {\n                        if (tail - head > 1) result.unique = false;\n                        result.position[static_cast<std::size_t>(result.order[head])] = static_cast<int>(head);\n                    }\n                    for (int to : graph[static_cast<std::size_t>(result.order[head])]) {\n                        const bool ready = --indegree[static_cast<std::size_t>(to)] == 0;\n                        // 全頂点が入隊済みなら未処理の辺はなく、常にtail < n。\n                        result.order[tail] = to;\n                        tail += ready;\n                    }\n                }\n                result.order.resize(tail);\n            }\n        } else {\n            for (std::size_t head = 0; head < result.order.size(); ++head) {\n                if constexpr (Details) {\n                    if (result.order.size() - head > 1) result.unique = false;\n                    result.position[static_cast<std::size_t>(result.order[head])] = static_cast<int>(head);\n                }\n                for (int to : graph[static_cast<std::size_t>(result.order[head])])\n                    if (--indegree[static_cast<std::size_t>(to)] == 0) append(to);\n            }\n        }\n    } else {\n        std::array<std::size_t, 6> offsets{};\n        std::size_t words = (n + 63) / 64, total = 0, levels = 0;\n        // 頂点数はINT_MAX以下なので、64進の階層は高々6段。\n        do {\n            offsets[levels++] = total;\n            total += words;\n            if (words <= 1) break;\n            words = (words + 63) / 64;\n        } while (true);\n        std::uint64_t single_word = 0;\n        std::vector<std::uint64_t> large_bits;\n        auto* bits = n <= 64 ? &single_word : nullptr;\n        std::size_t ready_count = 0;\n        // 最小値を別に保持し、候補1個の間はビット集合を使わない。\n        int minimum = -1;\n        const auto insert = [&](int vertex) {\n            ++ready_count;\n            if (minimum < 0) { minimum = vertex; return; }\n            if (vertex < minimum) std::swap(vertex, minimum);\n            if (bits == nullptr) {\n                // 複数候補が初めて現れたときだけ確保する。\n                large_bits.assign(total, 0);\n                bits = large_bits.data();\n            }\n            std::size_t index = static_cast<std::size_t>(vertex);\n            for (std::size_t level = 0; level < levels; ++level) {\n                auto& word = bits[offsets[level] + (index >> 6)];\n                const auto old = word;\n                word |= std::uint64_t{1} << (index & 63);\n                if (old != 0) break;\n                index >>= 6;\n            }\n        };\n        auto make_mask = &TopologicalReadyMask;\n        bool bulk_initialize = false;\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__x86_64__) || defined(__i386__))\n        if (n >= 4096 && __builtin_cpu_supports(\"avx2\")) {\n            bulk_initialize = true;\n            make_mask = &TopologicalReadyMaskAvx2;\n        }\n#endif\n        if (bulk_initialize) {\n            for (std::size_t base = 0; base < n; base += 64) {\n                std::uint64_t mask = 0;\n                if (n - base >= 64) mask = make_mask(indegree.data() + base);\n                else for (std::size_t i = base; i < n; ++i)\n                    mask |= static_cast<std::uint64_t>(indegree[i] == 0) << (i - base);\n                ready_count += std::popcount(mask);\n                if (mask != 0 && minimum < 0) {\n                    minimum = static_cast<int>(base + std::countr_zero(mask));\n                    mask &= mask - 1;\n                }\n                if (mask != 0) {\n                    if (bits == nullptr) {\n                        large_bits.assign(total, 0);\n                        bits = large_bits.data();\n                    }\n                    bits[base >> 6] = mask;\n                }\n            }\n            if (ready_count > 1) {\n                std::size_t count = (n + 63) / 64;\n                for (std::size_t level = 0; level + 1 < levels; ++level) {\n                    for (std::size_t i = 0; i < count; ++i)\n                        if (bits[offsets[level] + i] != 0)\n                            bits[offsets[level + 1] + (i >> 6)] |= std::uint64_t{1} << (i & 63);\n                    count = (count + 63) / 64;\n                }\n            }\n        } else {\n            for (std::size_t i = 0; i < n; ++i)\n                if (indegree[i] == 0) insert(static_cast<int>(i));\n        }\n        while (ready_count != 0) {\n            if constexpr (Details) if (ready_count > 1) result.unique = false;\n            const int from = minimum;\n            const auto& edges = graph[static_cast<std::size_t>(from)];\n            if (ready_count > 1 && edges.size() == 1) {\n                const int to = edges.front();\n                if (indegree[static_cast<std::size_t>(to)] == 1 && to < from) {\n                    --indegree[static_cast<std::size_t>(to)];\n                    minimum = to;\n                    if constexpr (Details)\n                        result.position[static_cast<std::size_t>(from)] = static_cast<int>(result.order.size());\n                    result.order.push_back(from);\n                    continue;\n                }\n            }\n            minimum = -1;\n            if (--ready_count != 0) {\n                std::size_t index = static_cast<std::size_t>(from) >> 6;\n                if (bits[index] != 0) {\n                    index = (index << 6) + std::countr_zero(bits[index]);\n                } else {\n                    index = 0;\n                    for (std::size_t level = levels; level-- != 0;)\n                        index = (index << 6) + std::countr_zero(bits[offsets[level] + index]);\n                }\n                minimum = static_cast<int>(index);\n                for (std::size_t level = 0; level < levels; ++level) {\n                    auto& word = bits[offsets[level] + (index >> 6)];\n                    word &= ~(std::uint64_t{1} << (index & 63));\n                    if (word != 0) break;\n                    index >>= 6;\n                }\n            }\n            if constexpr (Details)\n                result.position[static_cast<std::size_t>(from)] = static_cast<int>(result.order.size());\n            result.order.push_back(from);\n            for (int to : graph[static_cast<std::size_t>(from)])\n                if (--indegree[static_cast<std::size_t>(to)] == 0) insert(to);\n        }\n    }\n    result.acyclic = result.order.size() == n;\n    if constexpr (Details) result.unique = result.unique && result.acyclic;\n    else if (!result.acyclic) result.order.clear();\n    return result;\n}\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_TOPOLOGICAL_SORT_DEFINED\n#define SIRKIT_TOPOLOGICAL_SORT_DEFINED\n// TopologicalSort(graph): FIFO順のトポロジカル順を返す。閉路なら空、空グラフも空。O(V+E)時間・O(V)領域。\ninline std::vector<int> TopologicalSort(const Graph& graph) {\n    return reinsirk::detail::TopologicalRun<false, false>(graph).order;\n}\n#endif\n#ifndef SIRKIT_TOPOLOGICAL_SORT_LEXICOGRAPHICAL_DEFINED\n#define SIRKIT_TOPOLOGICAL_SORT_LEXICOGRAPHICAL_DEFINED\n// TopologicalSortLexicographical(graph): 辞書順最小のトポロジカル順。閉路なら空。O(E+V log(V+1))時間・O(V)領域。\ninline std::vector<int> TopologicalSortLexicographical(const Graph& graph) {\n    return reinsirk::detail::TopologicalRun<true, false>(graph).order;\n}\n#endif\n#ifndef SIRKIT_TOPOLOGICAL_DETAILS_DEFINED\n#define SIRKIT_TOPOLOGICAL_DETAILS_DEFINED\n// TopologicalSortDetails(graph, lexicographical=false): 順序・各頂点の位置・DAG判定・一意性を返す。時間は対応するsortと同じ。\n// IsDAG(graph): DAGかを返す。空はtrue。O(V+E)時間・O(V)領域。\n// 全辺を使う入次数集計中に終点を検査し、2回目では繰り返さない。SKIPで検査を省く。\n// 頂点数INT_MAX、各入次数UINT32_MAXの容量制限は常時検査する。\ninline TopologicalResult TopologicalSortDetails(const Graph& graph, bool lexicographical = false) {\n    return lexicographical ? reinsirk::detail::TopologicalRun<true, true>(graph)\n                           : reinsirk::detail::TopologicalRun<false, true>(graph);\n}\ninline bool IsDAG(const Graph& graph) {\n    return TopologicalSort(graph).size() == graph.size();\n}\n#endif\n"
+    },
+    "builds": [
+      [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=gnu++23",
+        "-O2",
+        "-march=native",
+        "-ftrivial-auto-var-init=zero",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/tmp/sirkit_topological_lex_80279279/baseline_main.cpp",
+        "-o",
+        "/tmp/sirkit_topological_lex_80279279/baseline_main"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=gnu++23",
+        "-O2",
+        "-march=native",
+        "-ftrivial-auto-var-init=zero",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_topological_lex_80279279/baseline.hpp\"",
+        "/tmp/sirkit_topological_lex_80278917/bench.cpp",
+        "-o",
+        "/tmp/sirkit_topological_lex_80279279/baseline_api"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=gnu++23",
+        "-O2",
+        "-march=native",
+        "-ftrivial-auto-var-init=zero",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/tmp/sirkit_topological_lex_80279279/shortcut_main.cpp",
+        "-o",
+        "/tmp/sirkit_topological_lex_80279279/shortcut_main"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=gnu++23",
+        "-O2",
+        "-march=native",
+        "-ftrivial-auto-var-init=zero",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_topological_lex_80279279/shortcut.hpp\"",
+        "/tmp/sirkit_topological_lex_80278917/bench.cpp",
+        "-o",
+        "/tmp/sirkit_topological_lex_80279279/shortcut_api"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=gnu++23",
+        "-O2",
+        "-march=native",
+        "-ftrivial-auto-var-init=zero",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/tmp/sirkit_topological_lex_80279279/shortcut_wide_main.cpp",
+        "-o",
+        "/tmp/sirkit_topological_lex_80279279/shortcut_wide_main"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=gnu++23",
+        "-O2",
+        "-march=native",
+        "-ftrivial-auto-var-init=zero",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_topological_lex_80279279/shortcut_wide.hpp\"",
+        "/tmp/sirkit_topological_lex_80278917/bench.cpp",
+        "-o",
+        "/tmp/sirkit_topological_lex_80279279/shortcut_wide_api"
+      ]
+    ],
+    "tests": [
+      {
+        "variant": "shortcut",
+        "test": "topological_reference_test",
+        "stdout": "{\"cases\":67160,\"checks\":872987}\n"
+      },
+      {
+        "variant": "shortcut",
+        "test": "topological_queue_reference_test",
+        "stdout": "{\"cases\":434,\"checks\":5209,\"many_ready_cases\":96}\n"
+      },
+      {
+        "variant": "shortcut_wide",
+        "test": "topological_reference_test",
+        "stdout": "{\"cases\":67160,\"checks\":872987}\n"
+      },
+      {
+        "variant": "shortcut_wide",
+        "test": "topological_queue_reference_test",
+        "stdout": "{\"cases\":434,\"checks\":5209,\"many_ready_cases\":96}\n"
+      }
+    ],
+    "api": {
+      "64_0_2": {
+        "baseline": [
+          311.336,
+          309.294,
+          317.414,
+          311.58,
+          313.108
+        ],
+        "shortcut": [
+          294.304,
+          291.273,
+          295.474,
+          294.486,
+          294.37
+        ],
+        "shortcut_wide": [
+          289.236,
+          294.08,
+          289.422,
+          289.847,
+          289.946
+        ]
+      },
+      "64_0_3": {
+        "baseline": [
+          324.195,
+          325.238,
+          323.878,
+          324.83,
+          323.358
+        ],
+        "shortcut": [
+          317.701,
+          318.345,
+          315.3,
+          316.69,
+          315.094
+        ],
+        "shortcut_wide": [
+          304.859,
+          306.732,
+          306.603,
+          308.383,
+          304.921
+        ]
+      },
+      "64_1_2": {
+        "baseline": [
+          256.197,
+          288.046,
+          257.419,
+          256.408,
+          258.483
+        ],
+        "shortcut": [
+          314.256,
+          314.362,
+          320.111,
+          315.142,
+          312.994
+        ],
+        "shortcut_wide": [
+          315.389,
+          312.321,
+          321.188,
+          318.537,
+          341.021
+        ]
+      },
+      "64_1_3": {
+        "baseline": [
+          285.611,
+          285.99,
+          285.998,
+          287.312,
+          326.888
+        ],
+        "shortcut": [
+          270.337,
+          270.708,
+          270.444,
+          269.676,
+          270.608
+        ],
+        "shortcut_wide": [
+          331.459,
+          333.56,
+          332.472,
+          332.125,
+          331.12
+        ]
+      },
+      "64_2_2": {
+        "baseline": [
+          256.966,
+          255.885,
+          291.851,
+          256.113,
+          257.026
+        ],
+        "shortcut": [
+          313.971,
+          314.691,
+          312.131,
+          312.973,
+          312.87
+        ],
+        "shortcut_wide": [
+          315.139,
+          315.23,
+          314.868,
+          315.324,
+          314.981
+        ]
+      },
+      "64_2_3": {
+        "baseline": [
+          285.281,
+          285.819,
+          288.357,
+          286.773,
+          285.196
+        ],
+        "shortcut": [
+          269.574,
+          270.685,
+          269.922,
+          270.196,
+          270.398
+        ],
+        "shortcut_wide": [
+          328.377,
+          327.06,
+          328.165,
+          329.417,
+          328.427
+        ]
+      },
+      "64_3_2": {
+        "baseline": [
+          349.374,
+          370.943,
+          349.944,
+          350.382,
+          359.751
+        ],
+        "shortcut": [
+          334.052,
+          334.034,
+          333.396,
+          334.306,
+          333.874
+        ],
+        "shortcut_wide": [
+          335.65,
+          334.672,
+          334.963,
+          332.368,
+          333.745
+        ]
+      },
+      "64_3_3": {
+        "baseline": [
+          368.371,
+          368.061,
+          377.646,
+          342.538,
+          368.347
+        ],
+        "shortcut": [
+          369.85,
+          370.024,
+          365.824,
+          357.851,
+          370.546
+        ],
+        "shortcut_wide": [
+          352.627,
+          354.379,
+          353.873,
+          355.042,
+          346.861
+        ]
+      },
+      "64_4_2": {
+        "baseline": [
+          328.988,
+          330.474,
+          334.254,
+          330.619,
+          333.821
+        ],
+        "shortcut": [
+          321.133,
+          314.565,
+          312.938,
+          314.808,
+          314.756
+        ],
+        "shortcut_wide": [
+          323.075,
+          313.09,
+          339.69,
+          309.437,
+          327.508
+        ]
+      },
+      "64_4_3": {
+        "baseline": [
+          328.091,
+          327.648,
+          330.758,
+          328.52,
+          330.846
+        ],
+        "shortcut": [
+          332.647,
+          329.141,
+          332.375,
+          352.535,
+          326.453
+        ],
+        "shortcut_wide": [
+          340.499,
+          335.78,
+          355.49,
+          342.557,
+          362.938
+        ]
+      },
+      "64_5_2": {
+        "baseline": [
+          60.1734,
+          58.6061,
+          64.7599,
+          66.9511,
+          201.098
+        ],
+        "shortcut": [
+          66.7611,
+          61.5192,
+          53.4746,
+          60.4846,
+          66.6252
+        ],
+        "shortcut_wide": [
+          64.4611,
+          65.891,
+          202.57,
+          66.0861,
+          67.0119
+        ]
+      },
+      "64_5_3": {
+        "baseline": [
+          212.155,
+          85.1827,
+          86.2541,
+          89.4839,
+          93.9653
+        ],
+        "shortcut": [
+          80.2154,
+          216.308,
+          76.1633,
+          81.5051,
+          73.4052
+        ],
+        "shortcut_wide": [
+          81.6884,
+          78.8414,
+          74.003,
+          78.0515,
+          219.608
+        ]
+      },
+      "64_6_2": {
+        "baseline": [
+          357.887,
+          358.994,
+          360.395,
+          358.568,
+          360.359
+        ],
+        "shortcut": [
+          369.965,
+          374.147,
+          369.009,
+          381.701,
+          430.236
+        ],
+        "shortcut_wide": [
+          388.99,
+          388.688,
+          390.394,
+          389.736,
+          390.541
+        ]
+      },
+      "64_6_3": {
+        "baseline": [
+          419.27,
+          417.623,
+          420.09,
+          415.708,
+          428.391
+        ],
+        "shortcut": [
+          378.998,
+          377.791,
+          378.444,
+          379.624,
+          379.484
+        ],
+        "shortcut_wide": [
+          422.011,
+          419.485,
+          420.818,
+          414.138,
+          411.719
+        ]
+      },
+      "64_7_2": {
+        "baseline": [
+          692.47,
+          696.376,
+          697.374,
+          756.983,
+          709.634
+        ],
+        "shortcut": [
+          711.975,
+          713.956,
+          706.202,
+          715.986,
+          706.75
+        ],
+        "shortcut_wide": [
+          711.373,
+          715.884,
+          904.28,
+          709.026,
+          711.101
+        ]
+      },
+      "64_7_3": {
+        "baseline": [
+          707.286,
+          707.869,
+          711.147,
+          712.662,
+          710.307
+        ],
+        "shortcut": [
+          735.057,
+          737.375,
+          818.466,
+          799.728,
+          734.51
+        ],
+        "shortcut_wide": [
+          760.986,
+          759.091,
+          754.737,
+          919.633,
+          832.589
+        ]
+      },
+      "64_8_2": {
+        "baseline": [
+          188.268,
+          195.472,
+          193.944,
+          188.337,
+          192.94
+        ],
+        "shortcut": [
+          189.886,
+          186.876,
+          187.872,
+          186.468,
+          188.163
+        ],
+        "shortcut_wide": [
+          185.942,
+          187.49,
+          196.538,
+          188.201,
+          184.398
+        ]
+      },
+      "64_8_3": {
+        "baseline": [
+          179.323,
+          182.064,
+          180.324,
+          182.872,
+          177.773
+        ],
+        "shortcut": [
+          210.891,
+          205.482,
+          209.957,
+          214.488,
+          209.706
+        ],
+        "shortcut_wide": [
+          177.294,
+          173.448,
+          178.262,
+          173.548,
+          187.343
+        ]
+      },
+      "64_9_2": {
+        "baseline": [
+          279.262,
+          281.18,
+          282.098,
+          281.308,
+          281.314
+        ],
+        "shortcut": [
+          334.486,
+          333.26,
+          332.536,
+          331.963,
+          331.828
+        ],
+        "shortcut_wide": [
+          336.085,
+          336.94,
+          335.782,
+          336.245,
+          334.362
+        ]
+      },
+      "64_9_3": {
+        "baseline": [
+          308.104,
+          308.269,
+          307.357,
+          307.054,
+          309.162
+        ],
+        "shortcut": [
+          309.641,
+          308.178,
+          327.546,
+          309.633,
+          307.554
+        ],
+        "shortcut_wide": [
+          416.801,
+          353.972,
+          353.925,
+          352.662,
+          353.73
+        ]
+      },
+      "64_10_2": {
+        "baseline": [
+          365.078,
+          360.595,
+          368.582,
+          363.921,
+          363.656
+        ],
+        "shortcut": [
+          375.408,
+          363.794,
+          393.511,
+          383.903,
+          386.381
+        ],
+        "shortcut_wide": [
+          406.345,
+          382.663,
+          377.743,
+          392.393,
+          380.405
+        ]
+      },
+      "64_10_3": {
+        "baseline": [
+          433.149,
+          433.334,
+          431.652,
+          434.183,
+          429.47
+        ],
+        "shortcut": [
+          371.777,
+          373.654,
+          373.43,
+          371.553,
+          372.456
+        ],
+        "shortcut_wide": [
+          437.672,
+          434.763,
+          408.114,
+          405.039,
+          397.156
+        ]
+      },
+      "64_11_2": {
+        "baseline": [
+          213.233,
+          211.747,
+          212.159,
+          211.986,
+          211.545
+        ],
+        "shortcut": [
+          203.497,
+          205.176,
+          207.089,
+          205.594,
+          203.24
+        ],
+        "shortcut_wide": [
+          208.765,
+          207.324,
+          209.677,
+          209.066,
+          209.214
+        ]
+      },
+      "64_11_3": {
+        "baseline": [
+          197.133,
+          198.099,
+          197.77,
+          248.908,
+          230.737
+        ],
+        "shortcut": [
+          220.867,
+          231.46,
+          220.224,
+          219.699,
+          220.482
+        ],
+        "shortcut_wide": [
+          202.629,
+          200.069,
+          196.845,
+          193.163,
+          201.598
+        ]
+      },
+      "64_12_2": {
+        "baseline": [
+          304.189,
+          300.536,
+          305.255,
+          304.641,
+          306.115
+        ],
+        "shortcut": [
+          338.672,
+          341.322,
+          344.627,
+          338.954,
+          340.573
+        ],
+        "shortcut_wide": [
+          344.069,
+          339.428,
+          338.212,
+          341.574,
+          341.812
+        ]
+      },
+      "64_12_3": {
+        "baseline": [
+          326.732,
+          327.793,
+          321.88,
+          325.681,
+          324.438
+        ],
+        "shortcut": [
+          449.599,
+          309.556,
+          311.997,
+          331.325,
+          313.515
+        ],
+        "shortcut_wide": [
+          349.399,
+          350.382,
+          350.658,
+          350.86,
+          368.245
+        ]
+      },
+      "200000_0_2": {
+        "baseline": [
+          1046800.0,
+          1034510.0,
+          1034170.0,
+          1033860.0,
+          1024350.0
+        ],
+        "shortcut": [
+          971266.0,
+          968901.0,
+          969600.0,
+          969438.0,
+          969647.0
+        ],
+        "shortcut_wide": [
+          961726.0,
+          961547.0,
+          961337.0,
+          965306.0,
+          962282.0
+        ]
+      },
+      "200000_0_3": {
+        "baseline": [
+          1219640.0,
+          1220010.0,
+          1218880.0,
+          1221170.0,
+          1216800.0
+        ],
+        "shortcut": [
+          1199230.0,
+          1199110.0,
+          1201400.0,
+          1197060.0,
+          1199090.0
+        ],
+        "shortcut_wide": [
+          1119860.0,
+          1119450.0,
+          1120970.0,
+          1118900.0,
+          1119540.0
+        ]
+      },
+      "200000_1_2": {
+        "baseline": [
+          1380390.0,
+          1369700.0,
+          1372860.0,
+          1369280.0,
+          1374130.0
+        ],
+        "shortcut": [
+          1563080.0,
+          1556980.0,
+          1556660.0,
+          1556810.0,
+          1564960.0
+        ],
+        "shortcut_wide": [
+          1555900.0,
+          1553070.0,
+          1509290.0,
+          1574920.0,
+          1558970.0
+        ]
+      },
+      "200000_1_3": {
+        "baseline": [
+          1583080.0,
+          1561400.0,
+          1560150.0,
+          1222830.0,
+          1208150.0
+        ],
+        "shortcut": [
+          1523340.0,
+          1517820.0,
+          1430560.0,
+          1198810.0,
+          1170560.0
+        ],
+        "shortcut_wide": [
+          1701160.0,
+          1697250.0,
+          1702200.0,
+          1361220.0,
+          1350980.0
+        ]
+      },
+      "200000_2_2": {
+        "baseline": [
+          1011660.0,
+          1419380.0,
+          1414770.0,
+          1416440.0,
+          1416880.0
+        ],
+        "shortcut": [
+          1194920.0,
+          1597390.0,
+          1604080.0,
+          1599490.0,
+          1606170.0
+        ],
+        "shortcut_wide": [
+          1597400.0,
+          1603870.0,
+          1594090.0,
+          1607200.0,
+          1605850.0
+        ]
+      },
+      "200000_2_3": {
+        "baseline": [
+          1609740.0,
+          1606870.0,
+          1613340.0,
+          1620590.0,
+          1618800.0
+        ],
+        "shortcut": [
+          1566010.0,
+          1564540.0,
+          1566540.0,
+          1589990.0,
+          1565160.0
+        ],
+        "shortcut_wide": [
+          1746860.0,
+          1749510.0,
+          1771770.0,
+          1750710.0,
+          1752790.0
+        ]
+      },
+      "200000_3_2": {
+        "baseline": [
+          2497010.0,
+          1321040.0,
+          1332560.0,
+          1334600.0,
+          1334470.0
+        ],
+        "shortcut": [
+          1328160.0,
+          1323790.0,
+          1322300.0,
+          1323860.0,
+          1324020.0
+        ],
+        "shortcut_wide": [
+          1319460.0,
+          1313280.0,
+          1314250.0,
+          1314420.0,
+          1318530.0
+        ]
+      },
+      "200000_3_3": {
+        "baseline": [
+          1525240.0,
+          1530200.0,
+          1521820.0,
+          1522380.0,
+          1521650.0
+        ],
+        "shortcut": [
+          1508720.0,
+          1504900.0,
+          1496920.0,
+          1501320.0,
+          1499020.0
+        ],
+        "shortcut_wide": [
+          1475950.0,
+          1470560.0,
+          1474740.0,
+          1469650.0,
+          1469870.0
+        ]
+      },
+      "200000_4_2": {
+        "baseline": [
+          1204380.0,
+          1189720.0,
+          1187660.0,
+          1197150.0,
+          1189610.0
+        ],
+        "shortcut": [
+          1156920.0,
+          1157050.0,
+          1147650.0,
+          1193830.0,
+          1144500.0
+        ],
+        "shortcut_wide": [
+          1148690.0,
+          1160340.0,
+          1150730.0,
+          1147260.0,
+          1155770.0
+        ]
+      },
+      "200000_4_3": {
+        "baseline": [
+          1276230.0,
+          1272950.0,
+          1279740.0,
+          1276890.0,
+          1283080.0
+        ],
+        "shortcut": [
+          1352250.0,
+          1350900.0,
+          1361310.0,
+          1368160.0,
+          1354600.0
+        ],
+        "shortcut_wide": [
+          1310770.0,
+          1308290.0,
+          1304420.0,
+          1324710.0,
+          1315140.0
+        ]
+      },
+      "200000_5_2": {
+        "baseline": [
+          334079.0,
+          334360.0,
+          341100.0,
+          334897.0,
+          336992.0
+        ],
+        "shortcut": [
+          334452.0,
+          335844.0,
+          336746.0,
+          335290.0,
+          342048.0
+        ],
+        "shortcut_wide": [
+          334773.0,
+          336631.0,
+          334643.0,
+          338048.0,
+          338487.0
+        ]
+      },
+      "200000_5_3": {
+        "baseline": [
+          483647.0,
+          475796.0,
+          478208.0,
+          476327.0,
+          476358.0
+        ],
+        "shortcut": [
+          480536.0,
+          476411.0,
+          477620.0,
+          477488.0,
+          476541.0
+        ],
+        "shortcut_wide": [
+          475662.0,
+          479124.0,
+          475051.0,
+          475651.0,
+          483470.0
+        ]
+      },
+      "200000_6_2": {
+        "baseline": [
+          5307860.0,
+          5480290.0,
+          5378960.0,
+          5444870.0,
+          5317890.0
+        ],
+        "shortcut": [
+          4969980.0,
+          4949730.0,
+          5108500.0,
+          4971890.0,
+          5027700.0
+        ],
+        "shortcut_wide": [
+          4998500.0,
+          5018500.0,
+          7728380.0,
+          5012430.0,
+          5107690.0
+        ]
+      },
+      "200000_6_3": {
+        "baseline": [
+          5383910.0,
+          5365780.0,
+          5414480.0,
+          5405150.0,
+          5405690.0
+        ],
+        "shortcut": [
+          5399430.0,
+          5406540.0,
+          5380650.0,
+          5386720.0,
+          5412310.0
+        ],
+        "shortcut_wide": [
+          5326380.0,
+          5335130.0,
+          5409140.0,
+          5314050.0,
+          5331590.0
+        ]
+      },
+      "200000_7_2": {
+        "baseline": [
+          10269800.0,
+          10888100.0,
+          9916540.0,
+          9867420.0,
+          9939710.0
+        ],
+        "shortcut": [
+          9664670.0,
+          9708680.0,
+          9698210.0,
+          9619300.0,
+          9502900.0
+        ],
+        "shortcut_wide": [
+          9611180.0,
+          11781700.0,
+          10002500.0,
+          9702850.0,
+          9678840.0
+        ]
+      },
+      "200000_7_3": {
+        "baseline": [
+          10487200.0,
+          10720200.0,
+          12039000.0,
+          10318900.0,
+          10578900.0
+        ],
+        "shortcut": [
+          10000400.0,
+          10153300.0,
+          10290200.0,
+          10056800.0,
+          10310600.0
+        ],
+        "shortcut_wide": [
+          10172900.0,
+          10369100.0,
+          11138800.0,
+          10260000.0,
+          10265400.0
+        ]
+      },
+      "200000_8_2": {
+        "baseline": [
+          701122.0,
+          689838.0,
+          690143.0,
+          691324.0,
+          690327.0
+        ],
+        "shortcut": [
+          660968.0,
+          660951.0,
+          661478.0,
+          658414.0,
+          658973.0
+        ],
+        "shortcut_wide": [
+          658378.0,
+          654958.0,
+          654444.0,
+          654461.0,
+          654540.0
+        ]
+      },
+      "200000_8_3": {
+        "baseline": [
+          856176.0,
+          853372.0,
+          852237.0,
+          855111.0,
+          853183.0
+        ],
+        "shortcut": [
+          841805.0,
+          844002.0,
+          842908.0,
+          843277.0,
+          841865.0
+        ],
+        "shortcut_wide": [
+          801232.0,
+          805873.0,
+          803551.0,
+          803534.0,
+          802823.0
+        ]
+      },
+      "200000_9_2": {
+        "baseline": [
+          1449260.0,
+          1464250.0,
+          1445720.0,
+          1444950.0,
+          1444770.0
+        ],
+        "shortcut": [
+          1632270.0,
+          1627350.0,
+          1625950.0,
+          1620390.0,
+          1628730.0
+        ],
+        "shortcut_wide": [
+          1619220.0,
+          1613360.0,
+          1617190.0,
+          1611400.0,
+          1613600.0
+        ]
+      },
+      "200000_9_3": {
+        "baseline": [
+          1629650.0,
+          1657730.0,
+          1219560.0,
+          1219850.0,
+          1636740.0
+        ],
+        "shortcut": [
+          1637030.0,
+          1628970.0,
+          1226580.0,
+          1628870.0,
+          1629480.0
+        ],
+        "shortcut_wide": [
+          1771900.0,
+          1769740.0,
+          1376040.0,
+          1766410.0,
+          1763870.0
+        ]
+      },
+      "200000_10_2": {
+        "baseline": [
+          1424820.0,
+          1420960.0,
+          1427800.0,
+          1429800.0,
+          1474090.0
+        ],
+        "shortcut": [
+          1481210.0,
+          1476140.0,
+          1477640.0,
+          1485090.0,
+          1481300.0
+        ],
+        "shortcut_wide": [
+          1507070.0,
+          1508920.0,
+          1505460.0,
+          1514840.0,
+          1514130.0
+        ]
+      },
+      "200000_10_3": {
+        "baseline": [
+          1615640.0,
+          1584390.0,
+          1586480.0,
+          1588440.0,
+          1591140.0
+        ],
+        "shortcut": [
+          1584860.0,
+          1590290.0,
+          1590110.0,
+          1589940.0,
+          1585820.0
+        ],
+        "shortcut_wide": [
+          1690930.0,
+          1695450.0,
+          1707110.0,
+          1697510.0,
+          1689860.0
+        ]
+      },
+      "200000_11_2": {
+        "baseline": [
+          711630.0,
+          708484.0,
+          707428.0,
+          709037.0,
+          704799.0
+        ],
+        "shortcut": [
+          675678.0,
+          675976.0,
+          675788.0,
+          675610.0,
+          672896.0
+        ],
+        "shortcut_wide": [
+          672939.0,
+          673534.0,
+          675972.0,
+          672700.0,
+          670992.0
+        ]
+      },
+      "200000_11_3": {
+        "baseline": [
+          873023.0,
+          871902.0,
+          874987.0,
+          872573.0,
+          874979.0
+        ],
+        "shortcut": [
+          862142.0,
+          861761.0,
+          859820.0,
+          857652.0,
+          865188.0
+        ],
+        "shortcut_wide": [
+          824558.0,
+          822050.0,
+          820120.0,
+          824085.0,
+          821570.0
+        ]
+      },
+      "200000_12_2": {
+        "baseline": [
+          1312170.0,
+          1310640.0,
+          1313520.0,
+          1311750.0,
+          1310980.0
+        ],
+        "shortcut": [
+          1416680.0,
+          1411810.0,
+          1411940.0,
+          1406900.0,
+          1402460.0
+        ],
+        "shortcut_wide": [
+          1409430.0,
+          1398510.0,
+          1405070.0,
+          1394690.0,
+          1396820.0
+        ]
+      },
+      "200000_12_3": {
+        "baseline": [
+          1501340.0,
+          1496870.0,
+          1496920.0,
+          1495300.0,
+          1495240.0
+        ],
+        "shortcut": [
+          1487930.0,
+          1488830.0,
+          1489050.0,
+          1486660.0,
+          1484120.0
+        ],
+        "shortcut_wide": [
+          1554840.0,
+          1554510.0,
+          1566060.0,
+          1558350.0,
+          1553420.0
+        ]
+      }
+    },
+    "main": {
+      "sample1": {
+        "baseline": [
+          {
+            "cpu_ms": 1.3839999999993857,
+            "wall_ms": 1.57292
+          },
+          {
+            "cpu_ms": 0.8779999999994903,
+            "wall_ms": 0.948915
+          },
+          {
+            "cpu_ms": 0.9499999999988962,
+            "wall_ms": 1.018208
+          },
+          {
+            "cpu_ms": 1.046999999999576,
+            "wall_ms": 1.119021
+          },
+          {
+            "cpu_ms": 0.8859999999999424,
+            "wall_ms": 0.953565
+          },
+          {
+            "cpu_ms": 0.9199999999993658,
+            "wall_ms": 0.985815
+          },
+          {
+            "cpu_ms": 1.0889999999981193,
+            "wall_ms": 1.159955
+          },
+          {
+            "cpu_ms": 1.0539999999998884,
+            "wall_ms": 1.210631
+          },
+          {
+            "cpu_ms": 0.89600000000023,
+            "wall_ms": 0.968472
+          }
+        ],
+        "shortcut": [
+          {
+            "cpu_ms": 1.249999999998197,
+            "wall_ms": 1.374485
+          },
+          {
+            "cpu_ms": 1.020000000000798,
+            "wall_ms": 1.094379
+          },
+          {
+            "cpu_ms": 0.9539999999994553,
+            "wall_ms": 1.020799
+          },
+          {
+            "cpu_ms": 0.9770000000004497,
+            "wall_ms": 1.04991
+          },
+          {
+            "cpu_ms": 1.0439999999996008,
+            "wall_ms": 1.114565
+          },
+          {
+            "cpu_ms": 0.9320000000010431,
+            "wall_ms": 0.995248
+          },
+          {
+            "cpu_ms": 0.9740000000006965,
+            "wall_ms": 1.040595
+          },
+          {
+            "cpu_ms": 1.6690000000005867,
+            "wall_ms": 1.774169
+          },
+          {
+            "cpu_ms": 0.9569999999998746,
+            "wall_ms": 1.027787
+          }
+        ],
+        "shortcut_wide": [
+          {
+            "cpu_ms": 1.150999999999458,
+            "wall_ms": 1.343992
+          },
+          {
+            "cpu_ms": 0.9649999999993275,
+            "wall_ms": 1.037646
+          },
+          {
+            "cpu_ms": 1.018999999999326,
+            "wall_ms": 1.095329
+          },
+          {
+            "cpu_ms": 0.9580000000004585,
+            "wall_ms": 1.02362
+          },
+          {
+            "cpu_ms": 0.9860000000003755,
+            "wall_ms": 1.057446
+          },
+          {
+            "cpu_ms": 0.9530000000004257,
+            "wall_ms": 1.021245
+          },
+          {
+            "cpu_ms": 0.8910000000006413,
+            "wall_ms": 0.961182
+          },
+          {
+            "cpu_ms": 1.2729999999998576,
+            "wall_ms": 1.357205
+          },
+          {
+            "cpu_ms": 0.9209999999992835,
+            "wall_ms": 0.994725
+          }
+        ]
+      },
+      "sample2": {
+        "baseline": [
+          {
+            "cpu_ms": 1.1609999999991905,
+            "wall_ms": 1.283405
+          },
+          {
+            "cpu_ms": 0.8779999999992683,
+            "wall_ms": 0.945096
+          },
+          {
+            "cpu_ms": 0.9550000000004832,
+            "wall_ms": 1.0204
+          },
+          {
+            "cpu_ms": 0.8780000000006005,
+            "wall_ms": 0.946545
+          },
+          {
+            "cpu_ms": 0.8899999999993913,
+            "wall_ms": 0.959844
+          },
+          {
+            "cpu_ms": 0.9669999999997181,
+            "wall_ms": 1.031181
+          },
+          {
+            "cpu_ms": 0.9579999999995703,
+            "wall_ms": 1.022947
+          },
+          {
+            "cpu_ms": 1.1779999999994573,
+            "wall_ms": 1.258561
+          },
+          {
+            "cpu_ms": 0.9399999999990527,
+            "wall_ms": 1.013966
+          }
+        ],
+        "shortcut": [
+          {
+            "cpu_ms": 1.152000000000597,
+            "wall_ms": 1.213901
+          },
+          {
+            "cpu_ms": 0.958999999999488,
+            "wall_ms": 1.028679
+          },
+          {
+            "cpu_ms": 0.9479999999997268,
+            "wall_ms": 1.014647
+          },
+          {
+            "cpu_ms": 0.9550000000000392,
+            "wall_ms": 1.022612
+          },
+          {
+            "cpu_ms": 0.9619999999992412,
+            "wall_ms": 1.027528
+          },
+          {
+            "cpu_ms": 0.8720000000008721,
+            "wall_ms": 0.940142
+          },
+          {
+            "cpu_ms": 0.8899999999996133,
+            "wall_ms": 0.958676
+          },
+          {
+            "cpu_ms": 1.1259999999992942,
+            "wall_ms": 1.257155
+          },
+          {
+            "cpu_ms": 0.988000000000433,
+            "wall_ms": 1.059575
+          }
+        ],
+        "shortcut_wide": [
+          {
+            "cpu_ms": 1.1900000000018007,
+            "wall_ms": 1.233282
+          },
+          {
+            "cpu_ms": 0.8930000000008098,
+            "wall_ms": 0.967882
+          },
+          {
+            "cpu_ms": 0.9530000000002037,
+            "wall_ms": 1.020081
+          },
+          {
+            "cpu_ms": 0.8850000000002467,
+            "wall_ms": 0.95153
+          },
+          {
+            "cpu_ms": 0.8899999999993913,
+            "wall_ms": 0.956018
+          },
+          {
+            "cpu_ms": 0.9200000000011421,
+            "wall_ms": 0.98674
+          },
+          {
+            "cpu_ms": 0.8919999999998929,
+            "wall_ms": 0.957921
+          },
+          {
+            "cpu_ms": 1.1559999999999349,
+            "wall_ms": 1.237258
+          },
+          {
+            "cpu_ms": 0.8979999999991772,
+            "wall_ms": 0.968352
+          }
+        ]
+      },
+      "single_edge": {
+        "baseline": [
+          {
+            "cpu_ms": 6.976999999999789,
+            "wall_ms": 7.014364
+          },
+          {
+            "cpu_ms": 4.958999999998714,
+            "wall_ms": 5.037468
+          },
+          {
+            "cpu_ms": 4.881999999998388,
+            "wall_ms": 4.965969
+          },
+          {
+            "cpu_ms": 4.72499999999898,
+            "wall_ms": 4.803336
+          },
+          {
+            "cpu_ms": 4.779999999999784,
+            "wall_ms": 4.855311
+          },
+          {
+            "cpu_ms": 4.693000000000724,
+            "wall_ms": 4.762562
+          },
+          {
+            "cpu_ms": 4.723000000000255,
+            "wall_ms": 4.791864
+          },
+          {
+            "cpu_ms": 5.161000000001081,
+            "wall_ms": 5.255173
+          },
+          {
+            "cpu_ms": 4.790999999998657,
+            "wall_ms": 4.881982
+          }
+        ],
+        "shortcut": [
+          {
+            "cpu_ms": 6.727999999999401,
+            "wall_ms": 6.853423
+          },
+          {
+            "cpu_ms": 4.798000000000191,
+            "wall_ms": 4.873535
+          },
+          {
+            "cpu_ms": 4.699000000000009,
+            "wall_ms": 4.815744
+          },
+          {
+            "cpu_ms": 4.707000000001349,
+            "wall_ms": 4.785705
+          },
+          {
+            "cpu_ms": 5.384999999999751,
+            "wall_ms": 5.497528
+          },
+          {
+            "cpu_ms": 4.549999999999832,
+            "wall_ms": 4.627077
+          },
+          {
+            "cpu_ms": 4.73399999999935,
+            "wall_ms": 4.8183
+          },
+          {
+            "cpu_ms": 5.906000000000855,
+            "wall_ms": 5.992483
+          },
+          {
+            "cpu_ms": 4.742000000001134,
+            "wall_ms": 4.825476
+          }
+        ],
+        "shortcut_wide": [
+          {
+            "cpu_ms": 6.851000000000385,
+            "wall_ms": 6.916588
+          },
+          {
+            "cpu_ms": 4.664999999999364,
+            "wall_ms": 4.752336
+          },
+          {
+            "cpu_ms": 4.656999999999689,
+            "wall_ms": 4.728577
+          },
+          {
+            "cpu_ms": 4.61299999999909,
+            "wall_ms": 4.868546
+          },
+          {
+            "cpu_ms": 4.785000000000261,
+            "wall_ms": 4.860859
+          },
+          {
+            "cpu_ms": 4.503999999998065,
+            "wall_ms": 4.632786
+          },
+          {
+            "cpu_ms": 4.670999999999648,
+            "wall_ms": 4.810494
+          },
+          {
+            "cpu_ms": 5.618000000000567,
+            "wall_ms": 5.739224
+          },
+          {
+            "cpu_ms": 4.8280000000002765,
+            "wall_ms": 4.902773
+          }
+        ]
+      },
+      "forward_chain": {
+        "baseline": [
+          {
+            "cpu_ms": 12.676999999999495,
+            "wall_ms": 12.767457
+          },
+          {
+            "cpu_ms": 10.957999999998801,
+            "wall_ms": 11.050266
+          },
+          {
+            "cpu_ms": 10.80000000000092,
+            "wall_ms": 10.942344
+          },
+          {
+            "cpu_ms": 11.409999999999254,
+            "wall_ms": 11.49528
+          },
+          {
+            "cpu_ms": 11.059999999998515,
+            "wall_ms": 11.176656
+          },
+          {
+            "cpu_ms": 10.5459999999995,
+            "wall_ms": 10.644732
+          },
+          {
+            "cpu_ms": 11.313000000000573,
+            "wall_ms": 11.401811
+          },
+          {
+            "cpu_ms": 11.34099999999938,
+            "wall_ms": 11.433918
+          },
+          {
+            "cpu_ms": 11.114999999999542,
+            "wall_ms": 11.213179
+          }
+        ],
+        "shortcut": [
+          {
+            "cpu_ms": 12.356999999999951,
+            "wall_ms": 12.512274
+          },
+          {
+            "cpu_ms": 11.636000000000536,
+            "wall_ms": 11.722245
+          },
+          {
+            "cpu_ms": 11.173999999998575,
+            "wall_ms": 11.259126
+          },
+          {
+            "cpu_ms": 11.285999999999463,
+            "wall_ms": 11.521903
+          },
+          {
+            "cpu_ms": 11.496000000001061,
+            "wall_ms": 11.575932
+          },
+          {
+            "cpu_ms": 10.64300000000018,
+            "wall_ms": 10.731233
+          },
+          {
+            "cpu_ms": 11.264999999998748,
+            "wall_ms": 11.361055
+          },
+          {
+            "cpu_ms": 12.512999999999108,
+            "wall_ms": 12.635779
+          },
+          {
+            "cpu_ms": 11.355000000000226,
+            "wall_ms": 11.536372
+          }
+        ],
+        "shortcut_wide": [
+          {
+            "cpu_ms": 11.772999999999033,
+            "wall_ms": 11.917151
+          },
+          {
+            "cpu_ms": 11.397000000000324,
+            "wall_ms": 11.514648
+          },
+          {
+            "cpu_ms": 11.604999999998867,
+            "wall_ms": 11.693352
+          },
+          {
+            "cpu_ms": 11.208999999998914,
+            "wall_ms": 11.319365
+          },
+          {
+            "cpu_ms": 11.128000000000249,
+            "wall_ms": 11.217067
+          },
+          {
+            "cpu_ms": 11.058999999999264,
+            "wall_ms": 11.334119
+          },
+          {
+            "cpu_ms": 10.99900000000087,
+            "wall_ms": 11.071315
+          },
+          {
+            "cpu_ms": 11.727999999999073,
+            "wall_ms": 11.880961
+          },
+          {
+            "cpu_ms": 11.773999999999507,
+            "wall_ms": 11.904981
+          }
+        ]
+      },
+      "reverse_chain": {
+        "baseline": [
+          {
+            "cpu_ms": 11.659000000001862,
+            "wall_ms": 11.759051
+          },
+          {
+            "cpu_ms": 11.19099999999873,
+            "wall_ms": 11.285885
+          },
+          {
+            "cpu_ms": 11.0899999999996,
+            "wall_ms": 11.230792
+          },
+          {
+            "cpu_ms": 11.233000000001825,
+            "wall_ms": 11.334323
+          },
+          {
+            "cpu_ms": 11.01599999999947,
+            "wall_ms": 11.093121
+          },
+          {
+            "cpu_ms": 10.878000000001498,
+            "wall_ms": 10.972443
+          },
+          {
+            "cpu_ms": 11.144999999999294,
+            "wall_ms": 11.239864
+          },
+          {
+            "cpu_ms": 11.519999999998198,
+            "wall_ms": 11.612275
+          },
+          {
+            "cpu_ms": 11.071999999998638,
+            "wall_ms": 11.202872
+          }
+        ],
+        "shortcut": [
+          {
+            "cpu_ms": 11.48100000000074,
+            "wall_ms": 11.554653
+          },
+          {
+            "cpu_ms": 11.312000000000545,
+            "wall_ms": 11.512794
+          },
+          {
+            "cpu_ms": 11.331999999999232,
+            "wall_ms": 11.412059
+          },
+          {
+            "cpu_ms": 11.455000000000215,
+            "wall_ms": 11.546305
+          },
+          {
+            "cpu_ms": 11.28200000000068,
+            "wall_ms": 11.368087
+          },
+          {
+            "cpu_ms": 11.523000000000616,
+            "wall_ms": 11.620329
+          },
+          {
+            "cpu_ms": 11.813999999998659,
+            "wall_ms": 11.93102
+          },
+          {
+            "cpu_ms": 11.570000000000968,
+            "wall_ms": 11.681912
+          },
+          {
+            "cpu_ms": 10.714000000001223,
+            "wall_ms": 10.795417
+          }
+        ],
+        "shortcut_wide": [
+          {
+            "cpu_ms": 11.947999999999181,
+            "wall_ms": 12.018631
+          },
+          {
+            "cpu_ms": 11.384000000000727,
+            "wall_ms": 11.460434
+          },
+          {
+            "cpu_ms": 11.439000000000865,
+            "wall_ms": 11.52722
+          },
+          {
+            "cpu_ms": 11.133999999999311,
+            "wall_ms": 11.306757
+          },
+          {
+            "cpu_ms": 11.346999999999108,
+            "wall_ms": 11.440722
+          },
+          {
+            "cpu_ms": 11.00899999999938,
+            "wall_ms": 11.110935
+          },
+          {
+            "cpu_ms": 12.463000000002333,
+            "wall_ms": 12.576014
+          },
+          {
+            "cpu_ms": 11.55499999999976,
+            "wall_ms": 11.707757
+          },
+          {
+            "cpu_ms": 11.45300000000038,
+            "wall_ms": 11.537317
+          }
+        ]
+      },
+      "star": {
+        "baseline": [
+          {
+            "cpu_ms": 7.930000000000548,
+            "wall_ms": 8.044429
+          },
+          {
+            "cpu_ms": 7.405000000000328,
+            "wall_ms": 7.483891
+          },
+          {
+            "cpu_ms": 7.330999999998644,
+            "wall_ms": 7.414013
+          },
+          {
+            "cpu_ms": 7.486999999998911,
+            "wall_ms": 7.578859
+          },
+          {
+            "cpu_ms": 6.918999999999453,
+            "wall_ms": 7.084925
+          },
+          {
+            "cpu_ms": 7.260000000000932,
+            "wall_ms": 7.340282
+          },
+          {
+            "cpu_ms": 8.118000000000292,
+            "wall_ms": 8.246933
+          },
+          {
+            "cpu_ms": 7.493999999998779,
+            "wall_ms": 7.677069
+          },
+          {
+            "cpu_ms": 7.169999999999899,
+            "wall_ms": 7.29429
+          }
+        ],
+        "shortcut": [
+          {
+            "cpu_ms": 7.498000000001448,
+            "wall_ms": 7.555633
+          },
+          {
+            "cpu_ms": 7.5099999999991285,
+            "wall_ms": 7.596959
+          },
+          {
+            "cpu_ms": 7.321000000000355,
+            "wall_ms": 7.403907
+          },
+          {
+            "cpu_ms": 7.364000000002147,
+            "wall_ms": 7.445421
+          },
+          {
+            "cpu_ms": 7.139999999999258,
+            "wall_ms": 7.217197
+          },
+          {
+            "cpu_ms": 7.025999999997978,
+            "wall_ms": 7.102157
+          },
+          {
+            "cpu_ms": 7.597999999998883,
+            "wall_ms": 7.707292
+          },
+          {
+            "cpu_ms": 7.6160000000018435,
+            "wall_ms": 7.701884
+          },
+          {
+            "cpu_ms": 7.108999999999588,
+            "wall_ms": 7.185859
+          }
+        ],
+        "shortcut_wide": [
+          {
+            "cpu_ms": 7.330000000000503,
+            "wall_ms": 7.38442
+          },
+          {
+            "cpu_ms": 7.288999999999324,
+            "wall_ms": 7.358898
+          },
+          {
+            "cpu_ms": 7.452000000000014,
+            "wall_ms": 7.588867
+          },
+          {
+            "cpu_ms": 7.209000000000243,
+            "wall_ms": 7.376678
+          },
+          {
+            "cpu_ms": 6.979000000000957,
+            "wall_ms": 7.059707
+          },
+          {
+            "cpu_ms": 7.019999999999582,
+            "wall_ms": 7.110346
+          },
+          {
+            "cpu_ms": 7.519000000001164,
+            "wall_ms": 7.654169
+          },
+          {
+            "cpu_ms": 7.324999999998472,
+            "wall_ms": 7.41435
+          },
+          {
+            "cpu_ms": 6.988999999999468,
+            "wall_ms": 7.111949
+          }
+        ]
+      },
+      "reverse_star": {
+        "baseline": [
+          {
+            "cpu_ms": 11.41899999999907,
+            "wall_ms": 11.498247
+          },
+          {
+            "cpu_ms": 10.46299999999789,
+            "wall_ms": 10.574434
+          },
+          {
+            "cpu_ms": 11.38300000000081,
+            "wall_ms": 11.522479
+          },
+          {
+            "cpu_ms": 10.950000000000015,
+            "wall_ms": 11.020048
+          },
+          {
+            "cpu_ms": 10.211999999999444,
+            "wall_ms": 10.295466
+          },
+          {
+            "cpu_ms": 10.852000000000972,
+            "wall_ms": 10.939913
+          },
+          {
+            "cpu_ms": 11.555000000000426,
+            "wall_ms": 11.623352
+          },
+          {
+            "cpu_ms": 11.327000000000087,
+            "wall_ms": 11.47513
+          },
+          {
+            "cpu_ms": 10.449999999999404,
+            "wall_ms": 10.537541
+          }
+        ],
+        "shortcut": [
+          {
+            "cpu_ms": 10.585000000000399,
+            "wall_ms": 10.639809
+          },
+          {
+            "cpu_ms": 10.861000000000676,
+            "wall_ms": 10.958969
+          },
+          {
+            "cpu_ms": 10.582999999998899,
+            "wall_ms": 10.710418
+          },
+          {
+            "cpu_ms": 10.628000000001414,
+            "wall_ms": 10.721363
+          },
+          {
+            "cpu_ms": 10.30500000000023,
+            "wall_ms": 10.378268
+          },
+          {
+            "cpu_ms": 10.387000000000146,
+            "wall_ms": 10.469047
+          },
+          {
+            "cpu_ms": 10.89799999999963,
+            "wall_ms": 11.070664
+          },
+          {
+            "cpu_ms": 10.998999999999093,
+            "wall_ms": 11.119238
+          },
+          {
+            "cpu_ms": 10.119000000000877,
+            "wall_ms": 10.206662
+          }
+        ],
+        "shortcut_wide": [
+          {
+            "cpu_ms": 10.632999999998338,
+            "wall_ms": 10.693238
+          },
+          {
+            "cpu_ms": 10.571000000001106,
+            "wall_ms": 10.672653
+          },
+          {
+            "cpu_ms": 11.266000000001108,
+            "wall_ms": 11.356091
+          },
+          {
+            "cpu_ms": 10.474000000000538,
+            "wall_ms": 10.558225
+          },
+          {
+            "cpu_ms": 10.2070000000003,
+            "wall_ms": 10.292504
+          },
+          {
+            "cpu_ms": 10.81799999999955,
+            "wall_ms": 11.062083
+          },
+          {
+            "cpu_ms": 10.987000000000302,
+            "wall_ms": 11.138922
+          },
+          {
+            "cpu_ms": 10.595000000001464,
+            "wall_ms": 10.725746
+          },
+          {
+            "cpu_ms": 10.47600000000104,
+            "wall_ms": 10.549941
+          }
+        ]
+      },
+      "random_dag": {
+        "baseline": [
+          {
+            "cpu_ms": 16.879000000000644,
+            "wall_ms": 16.931787
+          },
+          {
+            "cpu_ms": 16.299000000001172,
+            "wall_ms": 16.370272
+          },
+          {
+            "cpu_ms": 16.836000000000297,
+            "wall_ms": 16.923985
+          },
+          {
+            "cpu_ms": 16.977999999998605,
+            "wall_ms": 17.067475
+          },
+          {
+            "cpu_ms": 16.183999999999976,
+            "wall_ms": 16.251547
+          },
+          {
+            "cpu_ms": 16.79899999999801,
+            "wall_ms": 16.96041
+          },
+          {
+            "cpu_ms": 17.14499999999952,
+            "wall_ms": 17.254539
+          },
+          {
+            "cpu_ms": 16.847999999998862,
+            "wall_ms": 16.993981
+          },
+          {
+            "cpu_ms": 16.827000000000147,
+            "wall_ms": 16.915711
+          }
+        ],
+        "shortcut": [
+          {
+            "cpu_ms": 17.245000000001397,
+            "wall_ms": 17.301655
+          },
+          {
+            "cpu_ms": 17.05200000000051,
+            "wall_ms": 17.151595
+          },
+          {
+            "cpu_ms": 16.583000000000236,
+            "wall_ms": 16.656216
+          },
+          {
+            "cpu_ms": 17.155000000000253,
+            "wall_ms": 17.242515
+          },
+          {
+            "cpu_ms": 16.331000000000316,
+            "wall_ms": 16.397342
+          },
+          {
+            "cpu_ms": 17.064000000000632,
+            "wall_ms": 17.147506
+          },
+          {
+            "cpu_ms": 17.125000000000057,
+            "wall_ms": 17.353481
+          },
+          {
+            "cpu_ms": 17.167000000000378,
+            "wall_ms": 17.284751
+          },
+          {
+            "cpu_ms": 16.513000000000666,
+            "wall_ms": 16.595987
+          }
+        ],
+        "shortcut_wide": [
+          {
+            "cpu_ms": 17.177000000001108,
+            "wall_ms": 17.362709
+          },
+          {
+            "cpu_ms": 16.788999999998833,
+            "wall_ms": 16.873788
+          },
+          {
+            "cpu_ms": 17.05900000000149,
+            "wall_ms": 17.14182
+          },
+          {
+            "cpu_ms": 16.98200000000094,
+            "wall_ms": 17.063632
+          },
+          {
+            "cpu_ms": 16.319999999999226,
+            "wall_ms": 16.520781
+          },
+          {
+            "cpu_ms": 17.147000000002024,
+            "wall_ms": 17.224563
+          },
+          {
+            "cpu_ms": 17.10400000000112,
+            "wall_ms": 17.224297
+          },
+          {
+            "cpu_ms": 16.941999999998902,
+            "wall_ms": 17.034186
+          },
+          {
+            "cpu_ms": 16.74900000000168,
+            "wall_ms": 17.001866
+          }
+        ]
+      },
+      "permuted_dag": {
+        "baseline": [
+          {
+            "cpu_ms": 18.53999999999978,
+            "wall_ms": 18.780393
+          },
+          {
+            "cpu_ms": 17.386000000000013,
+            "wall_ms": 17.636397
+          },
+          {
+            "cpu_ms": 18.09100000000008,
+            "wall_ms": 18.232682
+          },
+          {
+            "cpu_ms": 18.228999999999385,
+            "wall_ms": 18.361717
+          },
+          {
+            "cpu_ms": 17.408000000000754,
+            "wall_ms": 17.540374
+          },
+          {
+            "cpu_ms": 18.067000000000945,
+            "wall_ms": 18.138761
+          },
+          {
+            "cpu_ms": 18.262000000000445,
+            "wall_ms": 18.375518
+          },
+          {
+            "cpu_ms": 17.91900000000002,
+            "wall_ms": 17.986736
+          },
+          {
+            "cpu_ms": 18.20099999999991,
+            "wall_ms": 18.271902
+          }
+        ],
+        "shortcut": [
+          {
+            "cpu_ms": 18.69099999999879,
+            "wall_ms": 18.839769
+          },
+          {
+            "cpu_ms": 18.120999999999498,
+            "wall_ms": 18.241675
+          },
+          {
+            "cpu_ms": 18.444999999999823,
+            "wall_ms": 18.528571
+          },
+          {
+            "cpu_ms": 18.345999999999528,
+            "wall_ms": 18.428974
+          },
+          {
+            "cpu_ms": 17.64000000000232,
+            "wall_ms": 17.728455
+          },
+          {
+            "cpu_ms": 18.310999999999524,
+            "wall_ms": 18.404861
+          },
+          {
+            "cpu_ms": 18.583999999999268,
+            "wall_ms": 18.651217
+          },
+          {
+            "cpu_ms": 18.653000000001807,
+            "wall_ms": 18.721834
+          },
+          {
+            "cpu_ms": 18.396000000000967,
+            "wall_ms": 18.495015
+          }
+        ],
+        "shortcut_wide": [
+          {
+            "cpu_ms": 18.46699999999879,
+            "wall_ms": 18.635141
+          },
+          {
+            "cpu_ms": 17.595000000000137,
+            "wall_ms": 17.661854
+          },
+          {
+            "cpu_ms": 18.481000000000193,
+            "wall_ms": 18.565321
+          },
+          {
+            "cpu_ms": 18.4110000000004,
+            "wall_ms": 18.500929
+          },
+          {
+            "cpu_ms": 17.501999999997686,
+            "wall_ms": 17.670735
+          },
+          {
+            "cpu_ms": 18.330999999999207,
+            "wall_ms": 18.430424
+          },
+          {
+            "cpu_ms": 19.272000000001064,
+            "wall_ms": 19.455274
+          },
+          {
+            "cpu_ms": 18.246999999999236,
+            "wall_ms": 18.345538
+          },
+          {
+            "cpu_ms": 18.72700000000038,
+            "wall_ms": 18.830672
+          }
+        ]
+      },
+      "cycle": {
+        "baseline": [
+          {
+            "cpu_ms": 8.537000000001571,
+            "wall_ms": 8.627243
+          },
+          {
+            "cpu_ms": 7.906000000000746,
+            "wall_ms": 7.989918
+          },
+          {
+            "cpu_ms": 8.27000000000111,
+            "wall_ms": 8.35158
+          },
+          {
+            "cpu_ms": 8.392000000001065,
+            "wall_ms": 8.574377
+          },
+          {
+            "cpu_ms": 7.508999999999766,
+            "wall_ms": 7.61243
+          },
+          {
+            "cpu_ms": 8.282999999999374,
+            "wall_ms": 8.381564
+          },
+          {
+            "cpu_ms": 9.060999999999098,
+            "wall_ms": 9.218358
+          },
+          {
+            "cpu_ms": 7.89099999999876,
+            "wall_ms": 7.974664
+          },
+          {
+            "cpu_ms": 7.97299999999912,
+            "wall_ms": 8.058262
+          }
+        ],
+        "shortcut": [
+          {
+            "cpu_ms": 8.225999999999068,
+            "wall_ms": 8.310725
+          },
+          {
+            "cpu_ms": 7.885999999999838,
+            "wall_ms": 7.955587
+          },
+          {
+            "cpu_ms": 7.919999999999261,
+            "wall_ms": 8.115788
+          },
+          {
+            "cpu_ms": 8.219000000001087,
+            "wall_ms": 8.336678
+          },
+          {
+            "cpu_ms": 7.946000000000897,
+            "wall_ms": 8.009571
+          },
+          {
+            "cpu_ms": 7.929000000000519,
+            "wall_ms": 8.103706
+          },
+          {
+            "cpu_ms": 10.159999999998615,
+            "wall_ms": 10.322109
+          },
+          {
+            "cpu_ms": 8.210999999998636,
+            "wall_ms": 8.30201
+          },
+          {
+            "cpu_ms": 7.945999999998676,
+            "wall_ms": 8.027791
+          }
+        ],
+        "shortcut_wide": [
+          {
+            "cpu_ms": 8.01000000000085,
+            "wall_ms": 8.129955
+          },
+          {
+            "cpu_ms": 7.941000000000642,
+            "wall_ms": 8.017581
+          },
+          {
+            "cpu_ms": 8.315999999998658,
+            "wall_ms": 8.414738
+          },
+          {
+            "cpu_ms": 7.92299999999857,
+            "wall_ms": 8.003713
+          },
+          {
+            "cpu_ms": 7.655999999998997,
+            "wall_ms": 7.735681
+          },
+          {
+            "cpu_ms": 8.262000000001324,
+            "wall_ms": 8.333896
+          },
+          {
+            "cpu_ms": 10.388000000001618,
+            "wall_ms": 10.527894
+          },
+          {
+            "cpu_ms": 7.9990000000007555,
+            "wall_ms": 8.086206
+          },
+          {
+            "cpu_ms": 8.172999999999986,
+            "wall_ms": 8.245266
+          }
+        ]
+      }
+    },
+    "main_sha256": "04e14b31a2767f6e9964f73a118e53e11118dbcf3ba3588baa9768f641c500bb",
+    "io_sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "reproduction_script": "from pathlib import Path\nimport subprocess,hashlib,json,fcntl,statistics,resource,time\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');b=(r/'Graph/Topological_sort.cpp').read_text();sha=lambda x:hashlib.sha256(x).hexdigest();sub=(r/'Verify/current/submissions/topological_lexicographical.cpp').read_text();assert b in sub\nshortcut='''            const auto& edges = graph[static_cast<std::size_t>(from)];\n            if (edges.size() == 1) {\n                const int to = edges.front();\n                if (indegree[static_cast<std::size_t>(to)] == 1 && (ready_count == 1 || to < from)) {\n                    --indegree[static_cast<std::size_t>(to)];\n                    minimum = to;\n                    if constexpr (Details)\n                        result.position[static_cast<std::size_t>(from)] = static_cast<int>(result.order.size());\n                    result.order.push_back(from);\n                    continue;\n                }\n            }\n'''\nvs={'baseline':b,'shortcut':b.replace('            minimum = -1;\\n            if (--ready_count != 0)',shortcut+'            minimum = -1;\\n            if (--ready_count != 0)',1)}\nvs['shortcut_wide']=vs['shortcut'].replace('if (edges.size() == 1) {','if (ready_count > 1 && edges.size() == 1) {').replace('(ready_count == 1 || to < from)','to < from')\nfor v,s in vs.items():(p/(v+'.hpp')).write_text(s);(p/(v+'_main.cpp')).write_text(sub.replace(b,s))\nbench=Path('/tmp/sirkit_topological_lex_80278917/bench.cpp');flags=['/usr/bin/g++','-std=gnu++23','-O2','-march=native','-ftrivial-auto-var-init=zero','-Wall','-Wextra','-Werror'];out={'status':'INCOMPLETE','variants':vs,'builds':[],'tests':[],'api':{},'main':{},'main_sha256':sha((r/'Verify/current/drivers/topological_lexicographical_main.cpp').read_bytes()),'io_sha256':sha((r/'Verify/current/common/fast_io.hpp').read_bytes())};cases=[c for c in json.loads((r/'Audit/performance-topological-2026-10-22.json').read_text())['inputs']if c['id']=='topological_lexicographical']\nwith open('/tmp/sirkit_performance_cpu14.lock','a')as la,open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lb:\n fcntl.flock(la,fcntl.LOCK_EX);fcntl.flock(lb,fcntl.LOCK_EX)\n for v in vs:\n  for typ in ['main','api']:\n   src=p/(v+'_main.cpp')if typ=='main'else bench;cmd=['taskset','-c','6',*flags,*(['-DSKIP_RUNTIME_CHECKS','-DHEADER=\"'+str(p/(v+'.hpp'))+'\"']if typ=='api'else[]),str(src),'-o',str(p/(v+'_'+typ))];q=subprocess.run(cmd,capture_output=True,text=True);assert q.returncode==0 and not q.stderr,(cmd,q.stderr);out['builds'].append(cmd)\n  if v!='baseline':\n   for test in ['topological_reference_test','topological_queue_reference_test']:\n    src=r/'Verify/current/tests'/(test+'.cpp');exe=p/(v+test);cmd=['taskset','-c','6',*flags,'-DSKIP_RUNTIME_CHECKS','-DSIRKIT_TEST_TOPOLOGICAL_SOURCE=\"'+str(p/(v+'.hpp'))+'\"',str(src),'-o',str(exe)];q=subprocess.run(cmd,capture_output=True,text=True);assert q.returncode==0 and not q.stderr,q.stderr;q=subprocess.run(['taskset','-c','14',str(exe)],capture_output=True,text=True);assert q.returncode==0 and not q.stderr,(test,v,q.stdout,q.stderr);out['tests'].append({'variant':v,'test':test,'stdout':q.stdout})\n for rep in range(9):\n  for c in cases:\n   vs1=list(vs);vs1=vs1[rep%3:]+vs1[:rep%3]\n   for v in vs1:\n    with Path(c['input']).open('rb')as f,(p/'answer.out').open('wb')as ans:\n     bef=resource.getrusage(resource.RUSAGE_CHILDREN);t=time.perf_counter_ns();q=subprocess.run(['taskset','-c','14',str(p/(v+'_main'))],stdin=f,stdout=ans,stderr=subprocess.PIPE);wall=(time.perf_counter_ns()-t)/1e6;aft=resource.getrusage(resource.RUSAGE_CHILDREN)\n    assert q.returncode==0 and not q.stderr and sha((p/'answer.out').read_bytes())==c['output_sha256'];out['main'].setdefault(c['case'],{}).setdefault(v,[]).append({'cpu_ms':1000*(aft.ru_utime+aft.ru_stime-bef.ru_utime-bef.ru_stime),'wall_ms':wall})\n for k,d in out['main'].items():\n  m={v:statistics.median(x['cpu_ms']for x in ts)for v,ts in d.items()};print('main',k,{v:round(t/m['baseline'],3)for v,t in m.items()},flush=True)\n for n in [64,200000]:\n  for kind in range(13):\n   for api in [2,3]:\n    key=f'{n}_{kind}_{api}';d={v:[]for v in vs};reps=10000 if n==64 else(10 if kind in[6,7]else 30)\n    for rep in range(5):\n     vs1=list(vs);vs1=vs1[rep%3:]+vs1[:rep%3];checks=[]\n     for v in vs1:\n      q=subprocess.run(['taskset','-c','14',str(p/(v+'_api')),str(n),str(kind),str(api),str(reps)],capture_output=True,text=True);assert q.returncode==0 and not q.stderr,(v,key,q.stderr);t,s=q.stdout.split();d[v].append(float(t));checks.append(s)\n     assert len(set(checks))==1,(key,checks)\n    out['api'][key]=d;m={v:statistics.median(t)for v,t in d.items()};print('api',key,{v:round(t/m['baseline'],3)for v,t in m.items()},flush=True)\n out['status']='PASS'\n(p/'results.json').write_text(json.dumps(out,ensure_ascii=False,indent=2));print('ALL PASS',flush=True)\n",
+  "production_verification": "本体・main・I/Oは不変のため、source SHA一致のAudit/performance-topological-lexicographical-2026-10-23.jsonの検証が対応。今回の実験候補には独立API参照・434境界ケースも実行し、正しさを通過した上で性能面から不採用。"
+}

@@ -1,4 +1,18 @@
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/heap.md
+//
+// API一覧
+// [Heap]
+// int の最小ヒープ。値を所有し、コピー・ムーブ可能。
+// Heap(): 空を構築。Heap(vector<int>): 値を受け取り O(N) で構築。
+// Heap({値...}), Heap(first,last): 値をコピーし O(N) で構築。
+// empty(), size(): 空判定・要素数を O(1) で返す。
+// top(): 最小値、空なら -1 を O(1) で返す。top_or(fallback): 空なら fallback。
+// push(value): 値を追加、償却 O(log N)。pop(): 最小値を削除、空なら何もしない、O(log N)。
+// pop_value(): 最小値を削除して返す、O(log N)。空なら out_of_range、検査省略時は非空が前提。
+// replace_top(value): 最小値を置換して旧値を返す、O(log N)。空の扱いは pop_value() と同じ。
+// push_pop(value): 値を追加した後の最小値を返して削除、O(log N)、空なら value を返す。
+// clear(): 全要素を削除、容量を保持。reserve(n): n 要素分の容量を確保、再確保時 O(N)。
 
 #include <algorithm>
 #include <cstddef>
@@ -12,16 +26,6 @@
 #ifndef SIRKIT_HEAP_DEFINED
 #define SIRKIT_HEAP_DEFINED
 
-// int の最小ヒープ。値を所有し、コピー・ムーブ可能。
-// Heap(): 空を構築。Heap(vector<int>): 値を受け取り O(N) で構築。
-// Heap({値...}), Heap(first,last): 値をコピーし O(N) で構築。
-// empty(), size(): 空判定・要素数を O(1) で返す。
-// top(): 最小値、空なら -1 を O(1) で返す。top_or(fallback): 空なら fallback。
-// push(value): 値を追加、償却 O(log N)。pop(): 最小値を削除、空なら何もしない、O(log N)。
-// pop_value(): 最小値を削除して返す、O(log N)。空なら out_of_range、検査省略時は非空が前提。
-// replace_top(value): 最小値を置換して旧値を返す、O(log N)。空の扱いは pop_value() と同じ。
-// push_pop(value): 値を追加した後の最小値を返して削除、O(log N)、空なら value を返す。
-// clear(): 全要素を削除、容量を保持。reserve(n): n 要素分の容量を確保、再確保時 O(N)。
 class Heap {
     std::vector<int> values_;
 

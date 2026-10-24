@@ -1,5 +1,31 @@
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://nyaannyaan.github.io/library/multiplicative-function/divisor-multiple-transform.hpp.html
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/zeta_mobius.md
+//
+// API一覧
+// [IntegerSieve]
+// IntegerSieve(maxn): maxn>=0の最小素因数表・昇順素数列をO(maxn)時間・領域で作る。0,1の最小素因数は0。
+// least_prime_factor[x]は最小素因数、prime_listは昇順素数列。表は書き換えず利用する。
+// コピーは独立、コピー代入は強保証。ムーブ元は空となりmax_value()=-1。
+// swap(other): 表と素数列をO(1)で交換する。
+// max_value(): 表の上限を返す。is_prime(x): 0<=x<=max_value()の素数判定をO(1)で返す。
+// prime_factorization(x): 1<=x<=max_value()^2の素因数と指数のmapを返す。x=1は空の表でも許す。
+// enumerate_divisors(x), sorted_divisors(x): prime_factorizationと同じ前提で全約数を返す。後者だけ昇順。
+// divisor_totients(x): prime_factorizationと同じ前提で各約数dからphi(d)へのmapを返す。
+// mobius_table(): O(maxn)でmu表を返す。mu[0]=0,mu[1]=1。
+// totient_table(): O(maxn)でphi表を返す。phi[0]=0,phi[1]=1。
+// power_table<Mint>(k,nmax): 0<=nmax<=max_value(),k>=0でn^kの表。0^0=1。
+// べき乗表はO(nmax+pi(nmax)log(k+1))時間・O(nmax)領域。公開配列を変更せず使う。
+//
+// [約数／倍数のゼータ／メビウス変換]
+// 正の添字の4変換。f[0]は不変、空配列も可。時間O(n log log n)。
+// multiple_zeta_transform(f): f[d]=sum_{d|k} f[k]へ更新する。
+// multiple_mobius_transform(f): 倍数ゼータ変換を元に戻す。
+// divisor_zeta_transform(f): f[k]=sum_{d|k} f[d]へ更新する。
+// divisor_mobius_transform(f): 約数ゼータ変換を元に戻す。
+// 各(f,sieve)版: sieve.max_value()>=f.size()-1の素数表を再利用し、追加領域O(1)。
+// 各(f)版: 素数表も作る。f.size()-1<=INT_MAX、追加領域O(n)。
+
 #include <algorithm>
 #include <array>
 #include <concepts>
@@ -14,36 +40,34 @@
 
 #ifndef SIRKIT_INTEGER_SIEVE_DEFINED
 #define SIRKIT_INTEGER_SIEVE_DEFINED
-// IntegerSieve(maxn): maxn>=0の最小素因数表・昇順素数列をO(maxn)時間・領域で作る。0,1の最小素因数は0。
-// least_prime_factor[x]は最小素因数、prime_listは昇順素数列。表は書き換えず利用する。
-// コピーは独立、コピー代入は強保証。ムーブ元は空となりmax_value()=-1。
-// swap(other): 表と素数列をO(1)で交換する。
-// max_value(): 表の上限を返す。is_prime(x): 0<=x<=max_value()の素数判定をO(1)で返す。
-// prime_factorization(x): 1<=x<=max_value()^2の素因数と指数のmapを返す。x=1は空の表でも許す。
-// enumerate_divisors(x), sorted_divisors(x): prime_factorizationと同じ前提で全約数を返す。後者だけ昇順。
-// divisor_totients(x): prime_factorizationと同じ前提で各約数dからphi(d)へのmapを返す。
-// mobius_table(): O(maxn)でmu表を返す。mu[0]=0,mu[1]=1。
-// totient_table(): O(maxn)でphi表を返す。phi[0]=0,phi[1]=1。
-// power_table<Mint>(k,nmax): 0<=nmax<=max_value(),k>=0でn^kの表。0^0=1。
-// べき乗表はO(nmax+pi(nmax)log(k+1))時間・O(nmax)領域。公開配列を変更せず使う。
 struct IntegerSieve {
     std::vector<int> least_prime_factor;
     std::vector<int> prime_list;
 
-    explicit IntegerSieve(int maxn) : least_prime_factor(table_size(maxn)) {
+    explicit IntegerSieve(int maxn) : least_prime_factor(table_size(maxn), 2) {
         const std::size_t limit = least_prime_factor.size();
-        for (std::size_t i = 2; i < limit; ++i) {
-            if (least_prime_factor[i] == 0) {
+        least_prime_factor[0] = 0;
+        if (limit > 1) least_prime_factor[1] = 0;
+        if (limit > 2) prime_list.push_back(2);
+        std::size_t i = 3;
+        for (; i <= (limit - 1) / 3; i += 2) {
+            if (least_prime_factor[i] == 2) {
                 least_prime_factor[i] = static_cast<int>(i);
                 prime_list.push_back(static_cast<int>(i));
             }
             const int first = least_prime_factor[i];
-            for (const int p : prime_list) {
-                const std::uint64_t next = static_cast<std::uint64_t>(i) *
-                                           static_cast<std::uint64_t>(p);
+            for (std::size_t j = 1; j < prime_list.size(); ++j) {
+                const int prime = prime_list[j];
+                const std::uint64_t next = static_cast<std::uint64_t>(i) * static_cast<std::uint64_t>(prime);
                 if (next >= limit) break;
-                least_prime_factor[static_cast<std::size_t>(next)] = p;
-                if (p == first) break;
+                least_prime_factor[static_cast<std::size_t>(next)] = prime;
+                if (prime == first) break;
+            }
+        }
+        for (; i < limit; i += 2) {
+            if (least_prime_factor[i] == 2) {
+                least_prime_factor[i] = static_cast<int>(i);
+                prime_list.push_back(static_cast<int>(i));
             }
         }
     }
@@ -266,13 +290,83 @@ private:
 namespace reinsirk::detail {
 struct IntegerTransform {
     // 素数pについて、指数を1段進める／戻す伝播を行う。
+#if defined(__GNUC__) && !defined(__clang__)
     template <bool ToMultiples, bool Subtract, class T, class PrimeRange>
     static void propagate(std::vector<T>& a, const PrimeRange& primes) {
+        if constexpr (std::is_trivially_copyable_v<T> && sizeof(T) <= 8) {
+            if (a.size() >= 257) {
+                propagate_expanded<ToMultiples, Subtract>(a, primes);
+                return;
+            }
+        }
+        propagate_scalar<ToMultiples, Subtract>(a, primes);
+    }
+    template <bool ToMultiples, bool Subtract, class T, class PrimeRange>
+    static void propagate_expanded(std::vector<T>& a, const PrimeRange& primes) {
         if (a.size() <= 2) return;
         const std::size_t upper = a.size() - 1;
-        for (const int value : primes) {
-            const auto p = static_cast<std::size_t>(value);
+        auto prime = primes.begin();
+        const auto end = primes.end();
+        for (; prime != end; ++prime) {
+            const auto p = static_cast<std::size_t>(*prime);
+            if (p > upper / 2) break;
+            const auto count = upper / p;
+            if constexpr (ToMultiples != Subtract) {
+                std::size_t from = 1, to = p;
+                for (; count - from + 1 >= 8; from += 8, to += p * 8) {
+                    if constexpr (ToMultiples) a[to + p * 0] += a[from + 0]; else a[from + 0] -= a[to + p * 0];
+                    if constexpr (ToMultiples) a[to + p * 1] += a[from + 1]; else a[from + 1] -= a[to + p * 1];
+                    if constexpr (ToMultiples) a[to + p * 2] += a[from + 2]; else a[from + 2] -= a[to + p * 2];
+                    if constexpr (ToMultiples) a[to + p * 3] += a[from + 3]; else a[from + 3] -= a[to + p * 3];
+                    if constexpr (ToMultiples) a[to + p * 4] += a[from + 4]; else a[from + 4] -= a[to + p * 4];
+                    if constexpr (ToMultiples) a[to + p * 5] += a[from + 5]; else a[from + 5] -= a[to + p * 5];
+                    if constexpr (ToMultiples) a[to + p * 6] += a[from + 6]; else a[from + 6] -= a[to + p * 6];
+                    if constexpr (ToMultiples) a[to + p * 7] += a[from + 7]; else a[from + 7] -= a[to + p * 7];
+                }
+                for (; from <= count; ++from, to += p) {
+                    if constexpr (ToMultiples) a[to] += a[from]; else a[from] -= a[to];
+                }
+            } else {
+                std::size_t from = count, to = count * p;
+                for (; from >= 8; from -= 8, to -= p * 8) {
+                    if constexpr (ToMultiples) a[to - p * 0] -= a[from - 0]; else a[from - 0] += a[to - p * 0];
+                    if constexpr (ToMultiples) a[to - p * 1] -= a[from - 1]; else a[from - 1] += a[to - p * 1];
+                    if constexpr (ToMultiples) a[to - p * 2] -= a[from - 2]; else a[from - 2] += a[to - p * 2];
+                    if constexpr (ToMultiples) a[to - p * 3] -= a[from - 3]; else a[from - 3] += a[to - p * 3];
+                    if constexpr (ToMultiples) a[to - p * 4] -= a[from - 4]; else a[from - 4] += a[to - p * 4];
+                    if constexpr (ToMultiples) a[to - p * 5] -= a[from - 5]; else a[from - 5] += a[to - p * 5];
+                    if constexpr (ToMultiples) a[to - p * 6] -= a[from - 6]; else a[from - 6] += a[to - p * 6];
+                    if constexpr (ToMultiples) a[to - p * 7] -= a[from - 7]; else a[from - 7] += a[to - p * 7];
+                }
+                for (; from; --from, to -= p) {
+                    if constexpr (ToMultiples) a[to] -= a[from]; else a[from] += a[to];
+                }
+            }
+        }
+        for (; prime != end; ++prime) {
+            const auto p = static_cast<std::size_t>(*prime);
             if (p > upper) break;
+            if constexpr (ToMultiples) {
+                if constexpr (Subtract) a[p] -= a[1]; else a[p] += a[1];
+            } else {
+                if constexpr (Subtract) a[1] -= a[p]; else a[1] += a[p];
+            }
+        }
+    }
+#endif
+    template <bool ToMultiples, bool Subtract, class T, class PrimeRange>
+#if defined(__GNUC__) && !defined(__clang__)
+    static void propagate_scalar(std::vector<T>& a, const PrimeRange& primes) {
+#else
+    static void propagate(std::vector<T>& a, const PrimeRange& primes) {
+#endif
+        if (a.size() <= 2) return;
+        const std::size_t upper = a.size() - 1;
+        auto prime = primes.begin();
+        const auto end = primes.end();
+        for (; prime != end; ++prime) {
+            const auto p = static_cast<std::size_t>(*prime);
+            if (p > upper / 2) break;
             const auto count = upper / p;
             if constexpr (ToMultiples != Subtract) {
                 for (std::size_t from = 1, to = p; from <= count; ++from, to += p) {
@@ -284,6 +378,15 @@ struct IntegerTransform {
                     if constexpr (ToMultiples) a[to] -= a[from];
                     else a[from] += a[to];
                 }
+            }
+        }
+        for (; prime != end; ++prime) {
+            const auto p = static_cast<std::size_t>(*prime);
+            if (p > upper) break;
+            if constexpr (ToMultiples) {
+                if constexpr (Subtract) a[p] -= a[1]; else a[p] += a[1];
+            } else {
+                if constexpr (Subtract) a[1] -= a[p]; else a[1] += a[p];
             }
         }
     }
@@ -327,13 +430,6 @@ struct IntegerTransform {
 };
 } // namespace reinsirk::detail
 #endif
-// 正の添字の4変換。f[0]は不変、空配列も可。時間O(n log log n)。
-// multiple_zeta_transform(f): f[d]=sum_{d|k} f[k]へ更新する。
-// multiple_mobius_transform(f): 倍数ゼータ変換を元に戻す。
-// divisor_zeta_transform(f): f[k]=sum_{d|k} f[d]へ更新する。
-// divisor_mobius_transform(f): 約数ゼータ変換を元に戻す。
-// 各(f,sieve)版: sieve.max_value()>=f.size()-1の素数表を再利用し、追加領域O(1)。
-// 各(f)版: 素数表も作る。f.size()-1<=INT_MAX、追加領域O(n)。
 #ifndef SIRKIT_MULTIPLE_ZETA_DEFINED
 #define SIRKIT_MULTIPLE_ZETA_DEFINED
 template <class T> void multiple_zeta_transform(std::vector<T>& f, const IntegerSieve& sieve) {

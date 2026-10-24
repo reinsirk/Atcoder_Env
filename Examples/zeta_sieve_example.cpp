@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: CC0-1.0
 #include "../Math/Zeta/Sieve.cpp"
 #include <cassert>
 #include <cstdint>

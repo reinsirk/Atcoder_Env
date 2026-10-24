@@ -1,0 +1,4710 @@
+{
+  "date": "2026-10-22",
+  "source": "String/Trie.cpp",
+  "baseline_source_sha256": "90646b09ed7d83ab0a6db432e6a6c74d32215df5b7420b9d41446c8680efa49a",
+  "final_source_sha256": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0",
+  "decision": "新規連続末尾を単一路として接続する最小変更を採用。索引閾値変更・単一子専用探索は別条件の退行を確認し棄却。",
+  "conditions": {
+    "cpu": "Intel Core i9-14900K",
+    "compilers": [
+      "GCC15.3.0",
+      "Clang21.1.8"
+    ],
+    "flags": [
+      "-std=c++23",
+      "-O2",
+      "-DSKIP_RUNTIME_CHECKS"
+    ],
+    "native_cpu_flags": false,
+    "compile_affinity": 12,
+    "performance_affinity": 28,
+    "shared_lock": "/tmp/sirkit_four_hours_20261022/benchmark_algorithms.lock",
+    "main_repetitions": 11,
+    "direct_repetitions": 7,
+    "statistic": "median; baseline/control/final order rotated",
+    "baseline_control": "byte-identical header, separately built; .text identity checked",
+    "main_policy": "existing frozen problem main and fast IO, no batching/reordering/extra repeat loop"
+  },
+  "frozen": {
+    "String/Trie.cpp": "90646b09ed7d83ab0a6db432e6a6c74d32215df5b7420b9d41446c8680efa49a",
+    "Examples/trie_example.cpp": "3a8bf4d4088ac59f8c6b3fa3d6c8acad5188ce7bb6e11c8a738369adbf5e9cd6",
+    "Verify/current/drivers/trie_gacha_main.cpp": "5fc9518bc1e13a41cb0f4e3ea45878df17cf5ea569d5cd0b168d7495356415b7",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "final_files_sha256": {
+    "String/Trie.cpp": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0",
+    "Examples/trie_example.cpp": "dafb6403ee85c7b26ef09c6900a1667eee28139db022a735f168f67f48ee620a",
+    "Document/trie.md": "2de2c301ff4b89f27dbc72e1ed981ace2f1bb6067aed9bd86ebb254702db1e39",
+    "Verify/current/tests/trie_reference_test.cpp": "b730e0625e19a3f13b40b53daa477105e701e0ebb35d53eac68729d6a90a70a1",
+    "Verify/current/tests/radix_trie_allocation_test.cpp": "3cc81d6912d8c1e64bd4369c3c150f867e08b233d3efaed744c75bc82402c567"
+  },
+  "candidate_selection": {
+    "build": [
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/baseline.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/gcc_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/control.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/gcc_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/contiguous.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/gcc_contiguous"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/threshold8.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/gcc_threshold8"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/threshold12.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/gcc_threshold12"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/threshold24.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/gcc_threshold24"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/baseline.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/clang_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/control.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/clang_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/contiguous.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/clang_contiguous"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/threshold8.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/clang_threshold8"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/threshold12.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/clang_threshold12"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/threshold24.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/clang_threshold24"
+      ]
+    ],
+    "rows": [
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "length": 6,
+        "kind": 0,
+        "repetitions": 2000,
+        "raw_ms": {
+          "baseline": [
+            3.83581,
+            3.80523,
+            3.82927,
+            3.80036,
+            3.78923
+          ],
+          "control": [
+            3.82577,
+            3.8382,
+            3.85927,
+            3.78751,
+            3.83437
+          ],
+          "contiguous": [
+            3.05252,
+            3.04211,
+            3.04774,
+            3.05503,
+            3.05137
+          ],
+          "threshold8": [
+            3.72021,
+            3.71764,
+            3.83373,
+            3.74669,
+            3.74327
+          ],
+          "threshold12": [
+            3.80472,
+            3.80627,
+            3.78675,
+            3.77301,
+            3.77064
+          ],
+          "threshold24": [
+            4.78884,
+            4.81575,
+            4.81017,
+            4.82137,
+            4.99025
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.80523,
+          "control": 3.83437,
+          "contiguous": 3.05137,
+          "threshold8": 3.74327,
+          "threshold12": 3.78675,
+          "threshold24": 4.81575
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0076578813895611,
+          "contiguous": 0.8018884535231773,
+          "threshold8": 0.983717147189526,
+          "threshold12": 0.9951435261469084,
+          "threshold24": 1.2655608202395126
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 0,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            184.285,
+            168.685,
+            169.054,
+            170.521,
+            170.672
+          ],
+          "control": [
+            182.764,
+            169.287,
+            171.141,
+            170.346,
+            189.207
+          ],
+          "contiguous": [
+            197.465,
+            169.044,
+            168.679,
+            169.343,
+            196.324
+          ],
+          "threshold8": [
+            212.685,
+            187.57,
+            188.482,
+            189.489,
+            204.789
+          ],
+          "threshold12": [
+            204.536,
+            177.123,
+            169.111,
+            171.299,
+            169.476
+          ],
+          "threshold24": [
+            177.236,
+            176.858,
+            173.602,
+            211.129,
+            172.436
+          ]
+        },
+        "median_ms": {
+          "baseline": 170.521,
+          "control": 171.141,
+          "contiguous": 169.343,
+          "threshold8": 189.489,
+          "threshold12": 171.299,
+          "threshold24": 176.858
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0036359158109558,
+          "contiguous": 0.993091759959184,
+          "threshold8": 1.1112355662938878,
+          "threshold12": 1.0045624879047157,
+          "threshold24": 1.0371625782161729
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            89.6434,
+            88.1933,
+            111.446,
+            88.3512,
+            94.7885
+          ],
+          "control": [
+            99.9314,
+            94.1104,
+            95.9715,
+            88.1612,
+            89.0345
+          ],
+          "contiguous": [
+            117.581,
+            89.0172,
+            92.9783,
+            95.8131,
+            88.4325
+          ],
+          "threshold8": [
+            129.255,
+            107.17,
+            108.774,
+            108.012,
+            107.124
+          ],
+          "threshold12": [
+            91.0602,
+            91.2964,
+            90.0954,
+            106.561,
+            89.9896
+          ],
+          "threshold24": [
+            91.5344,
+            92.1676,
+            94.5442,
+            98.2089,
+            90.0666
+          ]
+        },
+        "median_ms": {
+          "baseline": 89.6434,
+          "control": 94.1104,
+          "contiguous": 92.9783,
+          "threshold8": 108.012,
+          "threshold12": 91.0602,
+          "threshold24": 92.1676
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0498307739331618,
+          "contiguous": 1.0372018464270656,
+          "threshold8": 1.2049074443851973,
+          "threshold12": 1.0158048445284316,
+          "threshold24": 1.0281582358545078
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 2,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            14.4496,
+            14.6746,
+            14.3177,
+            14.3131,
+            14.3717
+          ],
+          "control": [
+            14.3894,
+            14.3296,
+            14.2984,
+            14.2538,
+            14.2965
+          ],
+          "contiguous": [
+            14.4249,
+            14.3464,
+            14.8353,
+            14.3656,
+            14.3966
+          ],
+          "threshold8": [
+            11.3047,
+            11.2782,
+            11.456,
+            11.3193,
+            11.4298
+          ],
+          "threshold12": [
+            11.3422,
+            11.2994,
+            11.3262,
+            11.3337,
+            11.351
+          ],
+          "threshold24": [
+            14.333,
+            14.3082,
+            14.2969,
+            14.3152,
+            14.3043
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.3717,
+          "control": 14.2984,
+          "contiguous": 14.3966,
+          "threshold8": 11.3193,
+          "threshold12": 11.3337,
+          "threshold24": 14.3082
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9948996987134439,
+          "contiguous": 1.001732571651231,
+          "threshold8": 0.7876103731639263,
+          "threshold12": 0.7886123423116264,
+          "threshold24": 0.9955815943834062
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 50000,
+        "length": 12,
+        "kind": 3,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            52.4516,
+            53.8416,
+            50.9184,
+            51.2402,
+            48.3187
+          ],
+          "control": [
+            55.9001,
+            51.457,
+            51.6342,
+            50.7533,
+            47.5712
+          ],
+          "contiguous": [
+            52.7238,
+            50.5822,
+            56.5396,
+            50.1008,
+            46.8185
+          ],
+          "threshold8": [
+            51.007,
+            51.2868,
+            55.2781,
+            52.7717,
+            47.0365
+          ],
+          "threshold12": [
+            53.7346,
+            51.7453,
+            56.2789,
+            50.9792,
+            51.1039
+          ],
+          "threshold24": [
+            53.5325,
+            50.428,
+            51.423,
+            51.2553,
+            53.8815
+          ]
+        },
+        "median_ms": {
+          "baseline": 51.2402,
+          "control": 51.457,
+          "contiguous": 50.5822,
+          "threshold8": 51.2868,
+          "threshold12": 51.7453,
+          "threshold24": 51.423
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0042310529623226,
+          "contiguous": 0.9871585200682277,
+          "threshold8": 1.0009094421957758,
+          "threshold12": 1.0098574947014258,
+          "threshold24": 1.0035675114460911
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 50000,
+        "length": 12,
+        "kind": 4,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            14.0878,
+            14.0836,
+            14.066,
+            14.3054,
+            14.0799
+          ],
+          "control": [
+            14.0616,
+            14.0904,
+            14.0507,
+            14.0938,
+            14.0815
+          ],
+          "contiguous": [
+            13.9853,
+            14.0006,
+            14.0016,
+            14.0146,
+            14.0034
+          ],
+          "threshold8": [
+            14.0446,
+            14.0879,
+            14.0904,
+            14.1408,
+            14.3157
+          ],
+          "threshold12": [
+            14.3739,
+            14.1047,
+            14.0579,
+            14.0896,
+            14.0776
+          ],
+          "threshold24": [
+            14.0702,
+            14.3524,
+            14.0682,
+            14.0987,
+            14.0507
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.0836,
+          "control": 14.0815,
+          "contiguous": 14.0016,
+          "threshold8": 14.0904,
+          "threshold12": 14.0896,
+          "threshold24": 14.0702
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9998508903973415,
+          "contiguous": 0.9941776250390525,
+          "threshold8": 1.0004828310943226,
+          "threshold12": 1.000426027436167,
+          "threshold24": 0.9990485387258939
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 10000,
+        "length": 100,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            27.7865,
+            24.5348,
+            24.67,
+            24.9307,
+            24.4563
+          ],
+          "control": [
+            25.0607,
+            25.2708,
+            24.5929,
+            24.5864,
+            24.9349
+          ],
+          "contiguous": [
+            23.5669,
+            24.4758,
+            23.8067,
+            23.8359,
+            24.3144
+          ],
+          "threshold8": [
+            25.5414,
+            25.2404,
+            25.664,
+            25.4113,
+            25.6326
+          ],
+          "threshold12": [
+            25.1641,
+            24.9876,
+            25.0021,
+            25.2599,
+            25.0459
+          ],
+          "threshold24": [
+            24.8778,
+            24.9842,
+            24.9762,
+            24.6437,
+            24.8959
+          ]
+        },
+        "median_ms": {
+          "baseline": 24.67,
+          "control": 24.9349,
+          "contiguous": 23.8359,
+          "threshold8": 25.5414,
+          "threshold12": 25.0459,
+          "threshold24": 24.8959
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.010737738143494,
+          "contiguous": 0.9661897040940413,
+          "threshold8": 1.0353222537494933,
+          "threshold12": 1.0152371301175516,
+          "threshold24": 1.0091568706931495
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "length": 6,
+        "kind": 0,
+        "repetitions": 2000,
+        "raw_ms": {
+          "baseline": [
+            3.4999,
+            3.48201,
+            3.47337,
+            3.51272,
+            3.55705
+          ],
+          "control": [
+            3.51779,
+            3.52942,
+            3.51467,
+            3.55484,
+            3.50172
+          ],
+          "contiguous": [
+            3.19476,
+            3.21628,
+            3.19586,
+            3.22102,
+            3.18902
+          ],
+          "threshold8": [
+            3.39407,
+            3.36906,
+            3.40609,
+            3.37528,
+            3.37514
+          ],
+          "threshold12": [
+            3.4537,
+            3.41946,
+            3.5264,
+            3.43786,
+            3.44932
+          ],
+          "threshold24": [
+            4.64407,
+            4.72498,
+            4.65051,
+            4.8705,
+            4.73388
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.4999,
+          "control": 3.51779,
+          "contiguous": 3.19586,
+          "threshold8": 3.37528,
+          "threshold12": 3.44932,
+          "threshold24": 4.72498
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0051115746164176,
+          "contiguous": 0.9131289465413298,
+          "threshold8": 0.9643932683790967,
+          "threshold12": 0.9855481585188149,
+          "threshold24": 1.3500328580816596
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 0,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            173.152,
+            172.21,
+            173.148,
+            171.832,
+            169.745
+          ],
+          "control": [
+            171.055,
+            171.83,
+            170.555,
+            172.247,
+            171.308
+          ],
+          "contiguous": [
+            169.463,
+            171.064,
+            171.676,
+            169.299,
+            171.984
+          ],
+          "threshold8": [
+            198.295,
+            189.447,
+            191.751,
+            201.814,
+            189.356
+          ],
+          "threshold12": [
+            173.942,
+            173.395,
+            185.223,
+            179.391,
+            172.209
+          ],
+          "threshold24": [
+            174.006,
+            179.404,
+            175.35,
+            174.5,
+            188.912
+          ]
+        },
+        "median_ms": {
+          "baseline": 172.21,
+          "control": 171.308,
+          "contiguous": 171.064,
+          "threshold8": 191.751,
+          "threshold12": 173.942,
+          "threshold24": 175.35
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9947622089309563,
+          "contiguous": 0.9933453341850066,
+          "threshold8": 1.113471923813948,
+          "threshold12": 1.0100574879507578,
+          "threshold24": 1.018233552058533
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            87.0164,
+            85.1334,
+            85.3966,
+            85.1282,
+            84.7812
+          ],
+          "control": [
+            113.072,
+            85.8107,
+            84.4832,
+            85.3639,
+            85.8482
+          ],
+          "contiguous": [
+            84.8907,
+            84.7926,
+            84.8509,
+            84.7442,
+            85.6212
+          ],
+          "threshold8": [
+            97.1839,
+            97.2678,
+            97.6396,
+            98.3371,
+            97.6038
+          ],
+          "threshold12": [
+            84.3345,
+            84.3692,
+            83.3311,
+            84.2354,
+            84.6204
+          ],
+          "threshold24": [
+            87.2742,
+            129.889,
+            87.4899,
+            90.5284,
+            87.0539
+          ]
+        },
+        "median_ms": {
+          "baseline": 85.1334,
+          "control": 85.8107,
+          "contiguous": 84.8509,
+          "threshold8": 97.6038,
+          "threshold12": 84.3345,
+          "threshold24": 87.4899
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.007955749447338,
+          "contiguous": 0.9966816784011916,
+          "threshold8": 1.1464806997018797,
+          "threshold12": 0.9906159039812813,
+          "threshold24": 1.0276800879560786
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 2,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            15.9895,
+            15.8668,
+            15.8713,
+            15.8694,
+            15.8654
+          ],
+          "control": [
+            15.9043,
+            15.8817,
+            15.8635,
+            15.8689,
+            15.8657
+          ],
+          "contiguous": [
+            16.0984,
+            15.8961,
+            15.9173,
+            15.9398,
+            15.8966
+          ],
+          "threshold8": [
+            12.9157,
+            12.9438,
+            12.8993,
+            12.9435,
+            12.886
+          ],
+          "threshold12": [
+            12.9126,
+            12.8836,
+            12.9076,
+            12.8815,
+            12.8854
+          ],
+          "threshold24": [
+            15.898,
+            15.8686,
+            15.8636,
+            15.8791,
+            15.8708
+          ]
+        },
+        "median_ms": {
+          "baseline": 15.8694,
+          "control": 15.8689,
+          "contiguous": 15.9173,
+          "threshold8": 12.9157,
+          "threshold12": 12.8854,
+          "threshold24": 15.8708
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.999968492822665,
+          "contiguous": 1.0030183875886927,
+          "threshold8": 0.8138745006112391,
+          "threshold12": 0.8119651656647384,
+          "threshold24": 1.000088220096538
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 50000,
+        "length": 12,
+        "kind": 3,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            50.0924,
+            47.1992,
+            47.3363,
+            47.3717,
+            47.0689
+          ],
+          "control": [
+            47.325,
+            47.3936,
+            47.1029,
+            51.8639,
+            46.9073
+          ],
+          "contiguous": [
+            46.7981,
+            46.7878,
+            46.7477,
+            51.4315,
+            46.3133
+          ],
+          "threshold8": [
+            46.7141,
+            46.6729,
+            46.7665,
+            46.8858,
+            46.914
+          ],
+          "threshold12": [
+            46.9802,
+            46.9249,
+            47.1324,
+            47.3627,
+            48.1159
+          ],
+          "threshold24": [
+            46.9172,
+            47.4301,
+            47.0965,
+            47.4016,
+            47.4211
+          ]
+        },
+        "median_ms": {
+          "baseline": 47.3363,
+          "control": 47.325,
+          "contiguous": 46.7878,
+          "threshold8": 46.7665,
+          "threshold12": 47.1324,
+          "threshold24": 47.4016
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9997612825675011,
+          "contiguous": 0.988412698077374,
+          "threshold8": 0.9879627262798317,
+          "threshold12": 0.9956925234967666,
+          "threshold24": 1.0013794910037328
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 50000,
+        "length": 12,
+        "kind": 4,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            14.7293,
+            14.7329,
+            14.7073,
+            14.6909,
+            15.1141
+          ],
+          "control": [
+            14.768,
+            14.6976,
+            14.6919,
+            14.7599,
+            14.7425
+          ],
+          "contiguous": [
+            15.172,
+            14.7791,
+            14.8063,
+            14.8019,
+            14.8158
+          ],
+          "threshold8": [
+            14.7244,
+            14.7325,
+            14.735,
+            14.7137,
+            14.7046
+          ],
+          "threshold12": [
+            14.7389,
+            14.727,
+            14.7163,
+            14.7152,
+            14.7019
+          ],
+          "threshold24": [
+            14.7116,
+            14.7662,
+            14.7483,
+            14.7308,
+            15.2495
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.7293,
+          "control": 14.7425,
+          "contiguous": 14.8063,
+          "threshold8": 14.7244,
+          "threshold12": 14.7163,
+          "threshold24": 14.7483
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0008961729342196,
+          "contiguous": 1.005227675449614,
+          "threshold8": 0.9996673297441154,
+          "threshold12": 0.9991174054435716,
+          "threshold24": 1.0012899458901645
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 10000,
+        "length": 100,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            26.5706,
+            24.1601,
+            24.3785,
+            27.8356,
+            28.4637
+          ],
+          "control": [
+            24.9265,
+            24.2219,
+            24.4543,
+            29.6097,
+            28.7573
+          ],
+          "contiguous": [
+            23.8309,
+            23.875,
+            24.1852,
+            26.2116,
+            25.3801
+          ],
+          "threshold8": [
+            25.4806,
+            24.7551,
+            25.6056,
+            26.0134,
+            27.1657
+          ],
+          "threshold12": [
+            24.7799,
+            24.7303,
+            24.5489,
+            25.1247,
+            29.7334
+          ],
+          "threshold24": [
+            24.386,
+            24.5171,
+            24.5157,
+            26.8569,
+            27.5846
+          ]
+        },
+        "median_ms": {
+          "baseline": 26.5706,
+          "control": 24.9265,
+          "contiguous": 24.1852,
+          "threshold8": 25.6056,
+          "threshold12": 24.7799,
+          "threshold24": 24.5171
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9381233393299362,
+          "contiguous": 0.9102240822563284,
+          "threshold8": 0.9636816631916479,
+          "threshold12": 0.9326059629816414,
+          "threshold24": 0.9227153319834704
+        }
+      }
+    ]
+  },
+  "direct_final": {
+    "build": [
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/baseline.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/api_gcc_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/control.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/api_gcc_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/final.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/api_gcc_final"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/baseline.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/api_clang_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/control.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/api_clang_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/final.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/api_clang_final"
+      ]
+    ],
+    "rows": [
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "length": 6,
+        "kind": 0,
+        "repetitions": 2000,
+        "raw_ms": {
+          "baseline": [
+            3.82411,
+            3.80391,
+            3.86961,
+            3.85927,
+            3.92768,
+            3.80315,
+            3.80342
+          ],
+          "control": [
+            3.80096,
+            3.84085,
+            3.80888,
+            3.84024,
+            3.8126,
+            3.85318,
+            3.78549
+          ],
+          "final": [
+            3.03231,
+            3.08114,
+            3.05343,
+            3.06777,
+            3.05031,
+            3.05869,
+            3.06538
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.82411,
+          "control": 3.8126,
+          "final": 3.05869
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9969901493419384,
+          "final": 0.7998436237451328
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 0,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            169.708,
+            170.126,
+            181.23,
+            169.04,
+            170.504,
+            169.244,
+            179.297
+          ],
+          "control": [
+            168.797,
+            168.617,
+            171.884,
+            169.082,
+            172.54,
+            171.063,
+            172.106
+          ],
+          "final": [
+            167.24,
+            168.696,
+            168.868,
+            191.4,
+            167.82,
+            168.093,
+            170.336
+          ]
+        },
+        "median_ms": {
+          "baseline": 170.126,
+          "control": 171.063,
+          "final": 168.696
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0055076825411753,
+          "final": 0.9915944652786758
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            84.6134,
+            83.9718,
+            83.6913,
+            83.8648,
+            83.5175,
+            84.3903,
+            83.1145
+          ],
+          "control": [
+            83.8042,
+            83.3251,
+            83.2871,
+            83.4681,
+            83.3156,
+            84.017,
+            83.4042
+          ],
+          "final": [
+            83.9796,
+            84.2405,
+            82.9764,
+            83.198,
+            83.3805,
+            92.0367,
+            83.0461
+          ]
+        },
+        "median_ms": {
+          "baseline": 83.8648,
+          "control": 83.4042,
+          "final": 83.3805
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9945078268832692,
+          "final": 0.9942252291783918
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 2,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            14.3209,
+            14.3045,
+            14.2592,
+            14.2468,
+            14.3221,
+            14.3,
+            14.3175
+          ],
+          "control": [
+            14.3199,
+            14.3355,
+            14.3322,
+            14.3086,
+            14.3498,
+            14.3235,
+            14.3036
+          ],
+          "final": [
+            14.313,
+            14.3336,
+            14.401,
+            14.3416,
+            14.3611,
+            14.3831,
+            14.3095
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.3045,
+          "control": 14.3235,
+          "final": 14.3416
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0013282533468488,
+          "final": 1.0025935894298996
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 50000,
+        "length": 12,
+        "kind": 3,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            50.3417,
+            48.0587,
+            47.9266,
+            47.6211,
+            47.8769,
+            52.6209,
+            48.246
+          ],
+          "control": [
+            48.1284,
+            48.0517,
+            47.8737,
+            47.8382,
+            47.9498,
+            48.5652,
+            47.9302
+          ],
+          "final": [
+            47.4291,
+            47.4179,
+            47.016,
+            47.2959,
+            47.7045,
+            53.0972,
+            47.283
+          ]
+        },
+        "median_ms": {
+          "baseline": 48.0587,
+          "control": 47.9498,
+          "final": 47.4179
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9977340211033591,
+          "final": 0.986666305996625
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 50000,
+        "length": 12,
+        "kind": 4,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            14.1594,
+            14.1008,
+            14.1031,
+            14.6972,
+            14.1176,
+            14.0864,
+            14.055
+          ],
+          "control": [
+            14.1001,
+            14.0794,
+            14.1055,
+            14.0973,
+            14.0757,
+            14.0733,
+            14.0891
+          ],
+          "final": [
+            14.0104,
+            14.0017,
+            13.9978,
+            14.2203,
+            13.9907,
+            14.0092,
+            14.0313
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.1031,
+          "control": 14.0891,
+          "final": 14.0092
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9990073104494757,
+          "final": 0.9933418893718402
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 10000,
+        "length": 100,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            26.5367,
+            24.9928,
+            24.8511,
+            24.7932,
+            24.8596,
+            24.7706,
+            25.4109
+          ],
+          "control": [
+            25.1474,
+            24.6721,
+            24.9214,
+            24.8174,
+            24.6703,
+            24.9457,
+            25.0857
+          ],
+          "final": [
+            23.8198,
+            23.8071,
+            23.6562,
+            23.9506,
+            24.0263,
+            23.9288,
+            23.9182
+          ]
+        },
+        "median_ms": {
+          "baseline": 24.8596,
+          "control": 24.9214,
+          "final": 23.9182
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0024859611578625,
+          "final": 0.9621313295467344
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "length": 6,
+        "kind": 0,
+        "repetitions": 2000,
+        "raw_ms": {
+          "baseline": [
+            3.53202,
+            3.5042,
+            3.47103,
+            3.59231,
+            3.54704,
+            3.49949,
+            3.53792
+          ],
+          "control": [
+            3.47522,
+            3.5,
+            3.5338,
+            3.54352,
+            3.57625,
+            3.49729,
+            3.50104
+          ],
+          "final": [
+            3.20673,
+            3.20632,
+            3.20437,
+            3.20052,
+            3.32861,
+            3.23487,
+            3.2072
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.53202,
+          "control": 3.50104,
+          "final": 3.20673
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9912288152388719,
+          "final": 0.907902560008154
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 0,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            172.976,
+            172.746,
+            171.925,
+            172.267,
+            180.152,
+            171.478,
+            171.946
+          ],
+          "control": [
+            171.981,
+            176.436,
+            173.348,
+            172.538,
+            171.358,
+            172.371,
+            189.664
+          ],
+          "final": [
+            177.753,
+            170.863,
+            169.27,
+            171.42,
+            184.025,
+            169.906,
+            171.592
+          ]
+        },
+        "median_ms": {
+          "baseline": 172.267,
+          "control": 172.538,
+          "final": 171.42
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0015731393708605,
+          "final": 0.9950832138482704
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            85.4554,
+            84.8571,
+            99.9175,
+            85.3565,
+            86.0286,
+            84.6895,
+            85.3423
+          ],
+          "control": [
+            85.5038,
+            86.4694,
+            86.668,
+            85.7343,
+            85.3399,
+            85.4316,
+            85.6796
+          ],
+          "final": [
+            85.722,
+            85.351,
+            88.7771,
+            84.9183,
+            85.1259,
+            84.8836,
+            84.9263
+          ]
+        },
+        "median_ms": {
+          "baseline": 85.3565,
+          "control": 85.6796,
+          "final": 85.1259
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0037853004750663,
+          "final": 0.9972983896949852
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 2,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            15.8689,
+            15.8941,
+            15.8678,
+            15.8754,
+            15.9054,
+            16.2375,
+            15.9175
+          ],
+          "control": [
+            15.9032,
+            15.8791,
+            15.8956,
+            15.9151,
+            15.8695,
+            15.8959,
+            15.8788
+          ],
+          "final": [
+            15.9075,
+            16.1062,
+            15.9168,
+            15.9007,
+            15.9147,
+            15.9247,
+            16.13
+          ]
+        },
+        "median_ms": {
+          "baseline": 15.8941,
+          "control": 15.8956,
+          "final": 15.9168
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0000943746421629,
+          "final": 1.001428202918064
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 50000,
+        "length": 12,
+        "kind": 3,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            54.1905,
+            48.8334,
+            47.7851,
+            50.1464,
+            47.5756,
+            47.5574,
+            47.2482
+          ],
+          "control": [
+            48.3591,
+            50.8489,
+            50.2064,
+            47.4352,
+            47.9452,
+            47.6304,
+            47.2738
+          ],
+          "final": [
+            49.4575,
+            47.1735,
+            49.9834,
+            49.9638,
+            46.5364,
+            46.3498,
+            46.9734
+          ]
+        },
+        "median_ms": {
+          "baseline": 47.7851,
+          "control": 47.9452,
+          "final": 47.1735
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0033504167617102,
+          "final": 0.9872010312838102
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 50000,
+        "length": 12,
+        "kind": 4,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            14.7712,
+            14.7629,
+            14.8818,
+            14.7093,
+            14.7443,
+            14.6909,
+            14.6951
+          ],
+          "control": [
+            14.7337,
+            14.7615,
+            15.2583,
+            14.705,
+            14.7125,
+            15.2412,
+            14.7206
+          ],
+          "final": [
+            14.7678,
+            14.7769,
+            14.7586,
+            14.7417,
+            14.7748,
+            14.7729,
+            14.7957
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.7443,
+          "control": 14.7337,
+          "final": 14.7729
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9992810781115414,
+          "final": 1.0019397326424448
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 10000,
+        "length": 100,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            26.7586,
+            24.5229,
+            24.4287,
+            24.3464,
+            27.8821,
+            27.8535,
+            24.8164
+          ],
+          "control": [
+            24.676,
+            24.1948,
+            24.4453,
+            24.5977,
+            24.1444,
+            26.4881,
+            24.971
+          ],
+          "final": [
+            23.8748,
+            23.9058,
+            23.914,
+            23.8408,
+            24.1134,
+            27.2383,
+            24.1482
+          ]
+        },
+        "median_ms": {
+          "baseline": 24.8164,
+          "control": 24.5977,
+          "final": 23.914
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9911872793797649,
+          "final": 0.9636369497590304
+        }
+      }
+    ]
+  },
+  "fixed_main": {
+    "builds": [
+      {
+        "name": "main_gcc_baseline",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_gcc_baseline.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_gcc_baseline"
+        ],
+        "tu_sha256": "549f2350732a51949d2f6f6ccbb84a75c68e0bb21417dd9dab29211b2b1d7c53",
+        "binary_sha256": "301647aa7ca2047a586642ad2e6e7d1c2834c5e0c73bf9ba423ba44b19c44b9b"
+      },
+      {
+        "name": "main_gcc_control",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_gcc_control.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_gcc_control"
+        ],
+        "tu_sha256": "549f2350732a51949d2f6f6ccbb84a75c68e0bb21417dd9dab29211b2b1d7c53",
+        "binary_sha256": "f3b0ebce165a73172a1c16f8179b4c841e3bba613fdcc831ca145e7627f53b88"
+      },
+      {
+        "name": "main_gcc_final",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_gcc_final.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_gcc_final"
+        ],
+        "tu_sha256": "60a0764c170fbb96a3af50235a625dc3e194a6b39b653b5910f701e2b65eb177",
+        "binary_sha256": "a80d3fef6e1e8aadc2b48469ce754d9adc410ea9b01a467bb23094fbe085a15d"
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_gcc_final_checked.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_gcc_final_checked"
+        ],
+        "tu_sha256": "0016c165a90f30e8ca85e826ef9b4c5d5401d43c7e4152d4c31e9c09f78a5cf0",
+        "binary_sha256": "afd226959f8b49fe3b3b533a61ca52f558db47da341bb0b77354cb32291eb5c8"
+      },
+      {
+        "name": "main_clang_baseline",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_clang_baseline.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_clang_baseline"
+        ],
+        "tu_sha256": "549f2350732a51949d2f6f6ccbb84a75c68e0bb21417dd9dab29211b2b1d7c53",
+        "binary_sha256": "ee65749d65cf79bc7a86ce98b1a28feb73b273b9626f3afd257a0e3d2c145f26"
+      },
+      {
+        "name": "main_clang_control",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_clang_control.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_clang_control"
+        ],
+        "tu_sha256": "549f2350732a51949d2f6f6ccbb84a75c68e0bb21417dd9dab29211b2b1d7c53",
+        "binary_sha256": "4d7e5439e6014cea35bb01b0229218e98f2750d9767cb44133f566a61def387e"
+      },
+      {
+        "name": "main_clang_final",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_clang_final.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_clang_final"
+        ],
+        "tu_sha256": "60a0764c170fbb96a3af50235a625dc3e194a6b39b653b5910f701e2b65eb177",
+        "binary_sha256": "02c53e37e0ade648fcb00f74022399ed508e8dad26440379502b0fedcfa486e8"
+      },
+      {
+        "name": "main_clang_final_checked",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_clang_final_checked.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/main_clang_final_checked"
+        ],
+        "tu_sha256": "0016c165a90f30e8ca85e826ef9b4c5d5401d43c7e4152d4c31e9c09f78a5cf0",
+        "binary_sha256": "40427f897041b93f607cded727b8cd6769bc3e556a7a48f54165f1728af63d2f"
+      }
+    ],
+    "correctness": [
+      {
+        "name": "main_gcc_baseline",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "random_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "shared_prefix_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "duplicates_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "length1_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "random_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "shared_prefix_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "duplicates_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "length1_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "random_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "shared_prefix_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "duplicates_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "length1_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "random_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "shared_prefix_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "duplicates_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_baseline",
+        "case": "length1_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "random_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "shared_prefix_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "duplicates_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "length1_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "random_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "shared_prefix_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "duplicates_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "length1_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "random_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "shared_prefix_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "duplicates_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "length1_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "random_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "shared_prefix_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "duplicates_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_control",
+        "case": "length1_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "random_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "shared_prefix_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "duplicates_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "length1_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "random_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "shared_prefix_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "duplicates_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "length1_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "random_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "shared_prefix_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "duplicates_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "length1_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "random_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "shared_prefix_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "duplicates_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final",
+        "case": "length1_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "random_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "shared_prefix_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "duplicates_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "length1_1",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "random_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "shared_prefix_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "duplicates_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "length1_32",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "random_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "shared_prefix_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "duplicates_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "length1_1000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "random_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "shared_prefix_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "duplicates_200000",
+        "passed": true
+      },
+      {
+        "name": "main_gcc_final_checked",
+        "case": "length1_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "random_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "shared_prefix_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "duplicates_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "length1_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "random_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "shared_prefix_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "duplicates_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "length1_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "random_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "shared_prefix_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "duplicates_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "length1_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "random_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "shared_prefix_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "duplicates_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_baseline",
+        "case": "length1_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "random_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "shared_prefix_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "duplicates_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "length1_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "random_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "shared_prefix_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "duplicates_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "length1_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "random_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "shared_prefix_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "duplicates_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "length1_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "random_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "shared_prefix_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "duplicates_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_control",
+        "case": "length1_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "random_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "shared_prefix_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "duplicates_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "length1_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "random_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "shared_prefix_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "duplicates_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "length1_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "random_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "shared_prefix_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "duplicates_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "length1_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "random_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "shared_prefix_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "duplicates_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final",
+        "case": "length1_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "random_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "shared_prefix_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "duplicates_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "length1_1",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "random_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "shared_prefix_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "duplicates_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "length1_32",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "random_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "shared_prefix_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "duplicates_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "length1_1000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "random_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "shared_prefix_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "duplicates_200000",
+        "passed": true
+      },
+      {
+        "name": "main_clang_final_checked",
+        "case": "length1_200000",
+        "passed": true
+      }
+    ],
+    "cases": [
+      {
+        "name": "sample_1",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/sample_1.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/sample_1.ans",
+        "kind": "official sample",
+        "input_sha256": "56829837be09353f89bcbb28283e60f6abf346894f005a239a7eb18a52f15940",
+        "answer_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+      },
+      {
+        "name": "sample_2",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/sample_2.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/sample_2.ans",
+        "kind": "official sample",
+        "input_sha256": "fb2c528fdfbfd8c15f0b38677ca5d627c9fc949fd209691c43160d9fc146104b",
+        "answer_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      },
+      {
+        "name": "sample_3",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/sample_3.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/sample_3.ans",
+        "kind": "official sample",
+        "input_sha256": "e3562221b26bffaf29b96f1fed39df4f86e8289f169ac35cb4caf907850226c2",
+        "answer_sha256": "7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d"
+      },
+      {
+        "name": "random_1",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/random_1.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/random_1.ans",
+        "kind": "independent Python set",
+        "input_sha256": "a5be0d92e998e081028df87768983aba87e4c204f8660c50d939dd2429cbcf2d",
+        "answer_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      },
+      {
+        "name": "shared_prefix_1",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/shared_prefix_1.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/shared_prefix_1.ans",
+        "kind": "independent Python set",
+        "input_sha256": "defef3802ab6151e3d20811a826e19bc06eafadba86cb5adfb41e8742c66b4b5",
+        "answer_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      },
+      {
+        "name": "duplicates_1",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/duplicates_1.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/duplicates_1.ans",
+        "kind": "independent Python set",
+        "input_sha256": "97495a4aee71a70a3c5f586f41be22127107f2ef81dcc59b0ee00e5fb08232f3",
+        "answer_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      },
+      {
+        "name": "length1_1",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/length1_1.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/length1_1.ans",
+        "kind": "independent Python set",
+        "input_sha256": "cf957dbc28ccda7e3f23fd0c58d4570ed91c008d31438f93e02d33adb7761176",
+        "answer_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      },
+      {
+        "name": "random_32",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/random_32.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/random_32.ans",
+        "kind": "independent Python set",
+        "input_sha256": "7b8b4a9d2f5a44476b658bfd3ee3ab636446faf4a09b93c2ffe99a8fe5b2fb7d",
+        "answer_sha256": "2115cdb6bfcfb008eb2bab2bb79347cb064a48e4e7c4115ccbe4469c787bb6c4"
+      },
+      {
+        "name": "shared_prefix_32",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/shared_prefix_32.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/shared_prefix_32.ans",
+        "kind": "independent Python set",
+        "input_sha256": "c738f8ab623fa25caf9ab66176d921d1a32df6774935139eeec52f54519df689",
+        "answer_sha256": "2115cdb6bfcfb008eb2bab2bb79347cb064a48e4e7c4115ccbe4469c787bb6c4"
+      },
+      {
+        "name": "duplicates_32",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/duplicates_32.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/duplicates_32.ans",
+        "kind": "independent Python set",
+        "input_sha256": "0507aa04868aec98f3aaa70c441df3599b8cda3192a2dd1772f9bb516320b122",
+        "answer_sha256": "e6c21e8d260fe71882debdb339d2402a2ca7648529bc2303f48649bce0380017"
+      },
+      {
+        "name": "length1_32",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/length1_32.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/length1_32.ans",
+        "kind": "independent Python set",
+        "input_sha256": "978222f97078eb49520bc50660ce3414771bc65d93d4640c16e6b394c9f095fd",
+        "answer_sha256": "7ee29791fc17e986b97128845622b077fb45e349fdb80523fac9dba879b4ad60"
+      },
+      {
+        "name": "random_1000",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/random_1000.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/random_1000.ans",
+        "kind": "independent Python set",
+        "input_sha256": "91abe40a20f6af99d0000500b2e2886c3c120675bef7d59ca10e4de9f503cf5c",
+        "answer_sha256": "83c02ac2d48c863dab2ccf6870455aadfc2cec073b8db269b517c879d76aa6d9"
+      },
+      {
+        "name": "shared_prefix_1000",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/shared_prefix_1000.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/shared_prefix_1000.ans",
+        "kind": "independent Python set",
+        "input_sha256": "d74626e1b70a98becec4846712d49df4b750319fb44e645e16de76df55262b62",
+        "answer_sha256": "83c02ac2d48c863dab2ccf6870455aadfc2cec073b8db269b517c879d76aa6d9"
+      },
+      {
+        "name": "duplicates_1000",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/duplicates_1000.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/duplicates_1000.ans",
+        "kind": "independent Python set",
+        "input_sha256": "9ecfe92cc57cc9ab5bb0ae152403fda52d20b8105090c6b5164997b5be5722c1",
+        "answer_sha256": "e6c21e8d260fe71882debdb339d2402a2ca7648529bc2303f48649bce0380017"
+      },
+      {
+        "name": "length1_1000",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/length1_1000.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/length1_1000.ans",
+        "kind": "independent Python set",
+        "input_sha256": "dce3d573f17cb8aa926ab538a62ebab0438b533f6baa2ca9e63c9f480e9d6b30",
+        "answer_sha256": "20d2add851bf39edcc6b5e830930f962db7e19dffa2cab8610eed551eda6c302"
+      },
+      {
+        "name": "random_200000",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/random_200000.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/random_200000.ans",
+        "kind": "independent Python set",
+        "input_sha256": "ed192bd6221f5b018be995c41401c36e8e303b4135fb60951a1b4e26787021a4",
+        "answer_sha256": "d43574be921c54215a1e05bb2fc0c1a4b63dd2aea4bbfd5b9ebc11a2685943e2"
+      },
+      {
+        "name": "shared_prefix_200000",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/shared_prefix_200000.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/shared_prefix_200000.ans",
+        "kind": "independent Python set",
+        "input_sha256": "be79cfdd31ec00ce269c2e554de9caa31fd013b4f9d39619477d4115da640dd0",
+        "answer_sha256": "3c88e00bd56eeee3332841fbac5e7c7e07d4060878480f2d0047d24869728334"
+      },
+      {
+        "name": "duplicates_200000",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/duplicates_200000.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/duplicates_200000.ans",
+        "kind": "independent Python set",
+        "input_sha256": "8720d932e4d62a7e21e80c30469faaf1e175c46ba325b1a77cc3aa13a73240bb",
+        "answer_sha256": "e6c21e8d260fe71882debdb339d2402a2ca7648529bc2303f48649bce0380017"
+      },
+      {
+        "name": "length1_200000",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/length1_200000.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/trie/cases/length1_200000.ans",
+        "kind": "independent Python set",
+        "input_sha256": "321e80fddd723d59f6a19d5fbf91ca2b5ed17b28fd1382feae345e372840ed59",
+        "answer_sha256": "20d2add851bf39edcc6b5e830930f962db7e19dffa2cab8610eed551eda6c302"
+      }
+    ],
+    "measurements": [
+      {
+        "compiler": "gcc",
+        "case": "random_200000",
+        "raw_ms": {
+          "baseline": [
+            145.526355,
+            124.260472,
+            125.654224,
+            123.76794,
+            117.778118,
+            119.528409,
+            117.547032,
+            118.740681,
+            124.270617,
+            122.828691,
+            121.068099
+          ],
+          "control": [
+            122.303995,
+            124.007222,
+            122.249301,
+            118.487111,
+            119.933335,
+            131.673171,
+            117.448343,
+            119.998629,
+            118.363183,
+            117.700407,
+            118.999547
+          ],
+          "final": [
+            121.984805,
+            122.167926,
+            123.136078,
+            117.770708,
+            119.818684,
+            116.787591,
+            118.042469,
+            120.172282,
+            115.690528,
+            115.95955,
+            115.791625
+          ]
+        },
+        "median_ms": {
+          "baseline": 122.828691,
+          "control": 119.933335,
+          "final": 118.042469
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9764276898465033,
+          "final": 0.9610333549838123
+        }
+      },
+      {
+        "compiler": "gcc",
+        "case": "shared_prefix_200000",
+        "raw_ms": {
+          "baseline": [
+            54.504697,
+            54.544436,
+            53.890545,
+            55.972914,
+            53.437439,
+            55.225804,
+            53.885752,
+            58.925154,
+            58.266007,
+            57.972721,
+            57.825227
+          ],
+          "control": [
+            53.440723,
+            67.878166,
+            54.731982,
+            55.946253,
+            53.630138,
+            53.588892,
+            58.972509,
+            57.387516,
+            58.135163,
+            60.114861,
+            56.98745
+          ],
+          "final": [
+            55.147535,
+            66.971812,
+            53.179254,
+            53.052521,
+            54.163497,
+            53.871887,
+            62.181784,
+            56.652976,
+            57.774727,
+            59.01017,
+            56.998905
+          ]
+        },
+        "median_ms": {
+          "baseline": 55.225804,
+          "control": 56.98745,
+          "final": 56.652976
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0318989652011223,
+          "final": 1.025842484792073
+        }
+      },
+      {
+        "compiler": "gcc",
+        "case": "duplicates_200000",
+        "raw_ms": {
+          "baseline": [
+            9.331739,
+            8.196973,
+            8.243828,
+            8.182804,
+            8.16193,
+            8.241311,
+            8.113152,
+            8.154444,
+            8.132813,
+            8.215019,
+            8.124259
+          ],
+          "control": [
+            8.505765,
+            8.222351,
+            8.193602,
+            8.229255,
+            8.218462,
+            8.189701,
+            8.132716,
+            8.159973,
+            8.363833,
+            8.403711,
+            8.214918
+          ],
+          "final": [
+            8.372928,
+            8.128341,
+            8.096277,
+            8.193111,
+            8.181792,
+            8.143787,
+            8.139511,
+            8.164292,
+            8.202729,
+            8.281162,
+            8.230107
+          ]
+        },
+        "median_ms": {
+          "baseline": 8.182804,
+          "control": 8.218462,
+          "final": 8.181792
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0043576749485872,
+          "final": 0.9998763260124524
+        }
+      },
+      {
+        "compiler": "gcc",
+        "case": "length1_200000",
+        "raw_ms": {
+          "baseline": [
+            2.786379,
+            2.825136,
+            2.759128,
+            2.779611,
+            2.697138,
+            2.73391,
+            2.769284,
+            2.67345,
+            2.704468,
+            2.734899,
+            2.830701
+          ],
+          "control": [
+            2.696434,
+            2.711649,
+            2.828166,
+            2.848721,
+            2.696768,
+            2.763089,
+            2.730822,
+            2.752885,
+            2.723427,
+            2.78582,
+            2.738904
+          ],
+          "final": [
+            2.70473,
+            2.665928,
+            2.737567,
+            2.669348,
+            2.715511,
+            2.654678,
+            2.654093,
+            2.691679,
+            2.691497,
+            2.66675,
+            2.767352
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.759128,
+          "control": 2.738904,
+          "final": 2.691497
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9926701479597901,
+          "final": 0.9754882702071089
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "random_200000",
+        "raw_ms": {
+          "baseline": [
+            132.399415,
+            123.969669,
+            124.948244,
+            120.672853,
+            124.896041,
+            129.573267,
+            124.143351,
+            131.658526,
+            129.460408,
+            122.458192,
+            119.746023
+          ],
+          "control": [
+            125.866572,
+            125.725296,
+            138.129326,
+            118.331583,
+            122.066337,
+            127.460699,
+            116.755923,
+            121.083446,
+            127.833167,
+            116.957111,
+            118.117599
+          ],
+          "final": [
+            122.719458,
+            132.985648,
+            135.578071,
+            122.14895,
+            126.589625,
+            126.169674,
+            117.724262,
+            127.411738,
+            128.639259,
+            117.323804,
+            117.414445
+          ]
+        },
+        "median_ms": {
+          "baseline": 124.896041,
+          "control": 122.066337,
+          "final": 126.169674
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9773435252443271,
+          "final": 1.010197545012656
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "shared_prefix_200000",
+        "raw_ms": {
+          "baseline": [
+            53.988606,
+            53.689391,
+            56.69792,
+            53.72281,
+            53.652902,
+            54.634657,
+            53.715186,
+            53.449804,
+            56.912967,
+            53.866852,
+            53.746046
+          ],
+          "control": [
+            57.393116,
+            54.254444,
+            53.189793,
+            53.884496,
+            53.940643,
+            55.404741,
+            53.228681,
+            53.52256,
+            56.564842,
+            52.267635,
+            53.9917
+          ],
+          "final": [
+            84.576322,
+            53.316259,
+            54.681463,
+            53.853197,
+            54.072124,
+            54.053388,
+            52.480991,
+            53.202361,
+            53.934449,
+            53.882259,
+            52.48958
+          ]
+        },
+        "median_ms": {
+          "baseline": 53.746046,
+          "control": 53.940643,
+          "final": 53.882259
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0036206756493307,
+          "final": 1.002534381785034
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "duplicates_200000",
+        "raw_ms": {
+          "baseline": [
+            8.432235,
+            7.415697,
+            7.397548,
+            7.402268,
+            7.491533,
+            7.462924,
+            7.538063,
+            7.584679,
+            7.413145,
+            7.430642,
+            7.644967
+          ],
+          "control": [
+            7.888952,
+            7.5409,
+            7.607733,
+            7.464986,
+            7.557866,
+            7.787115,
+            7.393386,
+            7.452524,
+            7.477015,
+            7.551796,
+            7.496667
+          ],
+          "final": [
+            7.782794,
+            7.43573,
+            7.465449,
+            7.621243,
+            8.254969,
+            7.517663,
+            7.420839,
+            7.452577,
+            7.533244,
+            7.514856,
+            7.412265
+          ]
+        },
+        "median_ms": {
+          "baseline": 7.462924,
+          "control": 7.5409,
+          "final": 7.514856
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0104484515720646,
+          "final": 1.0069586666030634
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "length1_200000",
+        "raw_ms": {
+          "baseline": [
+            2.901436,
+            2.490929,
+            2.514547,
+            2.479525,
+            2.52783,
+            2.531699,
+            2.558932,
+            2.602218,
+            2.636911,
+            2.481768,
+            2.528494
+          ],
+          "control": [
+            2.567472,
+            2.522456,
+            2.479433,
+            2.455048,
+            2.578106,
+            2.499188,
+            2.496732,
+            2.548602,
+            2.548582,
+            2.505553,
+            2.595829
+          ],
+          "final": [
+            2.522462,
+            2.493232,
+            2.592454,
+            2.49681,
+            2.50711,
+            2.57442,
+            2.507768,
+            2.46268,
+            2.556886,
+            2.565897,
+            2.452641
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.528494,
+          "control": 2.522456,
+          "final": 2.507768
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9976120172719414,
+          "final": 0.9918030258327685
+        }
+      }
+    ],
+    "timing": "Process wall time, including launch, IO, computation and teardown. No repeat loop added to main.",
+    "affinity": 28
+  },
+  "fixed_main_text_sections_sha256": {
+    "gcc": {
+      "baseline": "79cda7670e15b3bfcf1140e1ba01b8168b951279a94f9fde3ea2ae6cce3e92bf",
+      "control": "79cda7670e15b3bfcf1140e1ba01b8168b951279a94f9fde3ea2ae6cce3e92bf",
+      "final": "3b169741284e6846dedee7ad3abe23f0ebc0afad878352d9723c5ffb65b4928f",
+      "baseline_control_identical": true
+    },
+    "clang": {
+      "baseline": "bfbeceb021e0ca67012ac3ee59fe0df0ef7b18181332e1f0ba756e762f2b722b",
+      "control": "bfbeceb021e0ca67012ac3ee59fe0df0ef7b18181332e1f0ba756e762f2b722b",
+      "final": "4510cf08af00da28a13355a011279fa730bec96d9ba971479fe606db1929cb22",
+      "baseline_control_identical": true
+    }
+  },
+  "verification": {
+    "source_sha256": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0",
+    "test_sha256": "b730e0625e19a3f13b40b53daa477105e701e0ebb35d53eac68729d6a90a70a1",
+    "runs": [
+      {
+        "name": "gcc_checked",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DTRIE_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/final.hpp\"",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/gcc_checked"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "run_exit": 0,
+        "stdout": "trie independent tests passed\n",
+        "stderr": ""
+      },
+      {
+        "name": "gcc_skip",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DTRIE_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/final.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/gcc_skip"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "run_exit": 0,
+        "stdout": "trie independent tests passed\n",
+        "stderr": ""
+      },
+      {
+        "name": "clang_checked",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DTRIE_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/final.hpp\"",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/clang_checked"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "run_exit": 0,
+        "stdout": "trie independent tests passed\n",
+        "stderr": ""
+      },
+      {
+        "name": "clang_skip",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DTRIE_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/final.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/clang_skip"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "run_exit": 0,
+        "stdout": "trie independent tests passed\n",
+        "stderr": ""
+      },
+      {
+        "name": "clang_checked_asan_ubsan",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DTRIE_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/final.hpp\"",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-fno-omit-frame-pointer",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/clang_checked_asan_ubsan"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "run_exit": 0,
+        "stdout": "trie independent tests passed\n",
+        "stderr": ""
+      },
+      {
+        "name": "clang_skip_asan_ubsan",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DTRIE_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/final.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-fno-omit-frame-pointer",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/trie_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/trie/clang_skip_asan_ubsan"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "run_exit": 0,
+        "stdout": "trie independent tests passed\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "allocation_exception_verification": [
+    {
+      "compiler": "gcc",
+      "skip_checks": false,
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DRADIX_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/radix/final.hpp\"",
+        "-DTRIE_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/final.hpp\"",
+        "-Wno-mismatched-new-delete",
+        "/tmp/sirkit_four_hours_20261022/algorithms/allocation_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/gcc_allocation_False"
+      ],
+      "output": "PASS allocation/strong ownership checks=12\n",
+      "passed": true
+    },
+    {
+      "compiler": "gcc",
+      "skip_checks": true,
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DRADIX_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/radix/final.hpp\"",
+        "-DTRIE_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/final.hpp\"",
+        "-Wno-mismatched-new-delete",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/tmp/sirkit_four_hours_20261022/algorithms/allocation_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/gcc_allocation_True"
+      ],
+      "output": "PASS allocation/strong ownership checks=12\n",
+      "passed": true
+    },
+    {
+      "compiler": "clang",
+      "skip_checks": false,
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DRADIX_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/radix/final.hpp\"",
+        "-DTRIE_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/final.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/allocation_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/clang_allocation_False"
+      ],
+      "output": "PASS allocation/strong ownership checks=12\n",
+      "passed": true
+    },
+    {
+      "compiler": "clang",
+      "skip_checks": true,
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DRADIX_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/radix/final.hpp\"",
+        "-DTRIE_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/final.hpp\"",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/tmp/sirkit_four_hours_20261022/algorithms/allocation_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/clang_allocation_True"
+      ],
+      "output": "PASS allocation/strong ownership checks=12\n",
+      "passed": true
+    }
+  ],
+  "examples": [
+    {
+      "compiler": "gcc",
+      "skip_checks": false,
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "/home/reinsirk/Atcoder_Env/Examples/trie_example.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/gcc_exampleFalse"
+      ],
+      "output": "5 4\n2 1\n3 1\n3\n4 apple\nbanana\napp:1\napple:2\n1\n1\n1 12\n",
+      "passed": true
+    },
+    {
+      "compiler": "gcc",
+      "skip_checks": true,
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Examples/trie_example.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/gcc_exampleTrue"
+      ],
+      "output": "5 4\n2 1\n3 1\n3\n4 apple\nbanana\napp:1\napple:2\n1\n1\n1 12\n",
+      "passed": true
+    },
+    {
+      "compiler": "clang",
+      "skip_checks": false,
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "/home/reinsirk/Atcoder_Env/Examples/trie_example.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/clang_exampleFalse"
+      ],
+      "output": "5 4\n2 1\n3 1\n3\n4 apple\nbanana\napp:1\napple:2\n1\n1\n1 12\n",
+      "passed": true
+    },
+    {
+      "compiler": "clang",
+      "skip_checks": true,
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Examples/trie_example.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/clang_exampleTrue"
+      ],
+      "output": "5 4\n2 1\n3 1\n3\n4 apple\nbanana\napp:1\napple:2\n1\n1\n1 12\n",
+      "passed": true
+    }
+  ],
+  "online_judgement": "未提出。公式サンプルと独立参照による生成入力をローカル実行し、公式テスト実行とは区別する。",
+  "extension_or_simd": "追加なし。標準C++23。ヒストグラム散布または木の追跡が主体で、専用SIMDは追加しない。コンパイラの自動ベクトル化は通常設定のまま。",
+  "convenience_api": "既存の接頭辞個数・辞書順・列挙・全削除・複製交換で主要用途を満たすため今回API追加なし。重複しない追加を固定mainへ移す変更は行わない。",
+  "provenance": {
+    "license": "CC0-1.0現行表示を維持。今回、外部実装コードの移植を行わない。",
+    "previous_audit": "Audit/revision-node-trie-2026-10-18.json",
+    "history": "b66b1c5 update\n6a1e76c Initial commit\n",
+    "primary_problem": "https://atcoder.jp/contests/abc164/tasks/abc164_c",
+    "primary_download_sha256": "598ecc53d35a188dc78019c8651e8e072f3d054795fc92f2abf10833c4d5660f",
+    "ownership_origin": "本人の自作申告および骨組みからのAPI整備の区別はAudit/authorship-node-trie-2026-10-18.jsonとrevision監査を維持。今回の変更はノードの接続処理だけ。"
+  },
+  "limitations": [
+    "小規模の混合操作で改善。大規模の提出全体は支配する照会・入出力・確保の分散が大きく、一貫した改善は確立しない。",
+    "baseline/controlでも数%の差を観測する条件をそのまま保存。専用索引の容量・ノードレイアウトを変えない。",
+    "全バイト・空語・長い語・削除再利用・表の追加回収・所有権と容量保護を照合。循環所有やaliasingの旧TrieNodeは対応範囲外。"
+  ],
+  "reproduction": {
+    "directory": "/tmp/sirkit_four_hours_20261022/algorithms/trie",
+    "benchmark_source": {
+      "sha256": "cc955a7316a146e92f1b6987fb5ec419ffc950a8481db54f7e7c60d15db19661",
+      "text": "#include HEADER\n#include <chrono>\n#include <cstdint>\n#include <cstdlib>\n#include <iostream>\n#include <random>\nint main(int argc,char**argv){if(argc!=5)return 2;std::size_t n=std::strtoull(argv[1],nullptr,10);int length=std::atoi(argv[2]),kind=std::atoi(argv[3]),reps=std::atoi(argv[4]);std::mt19937_64 rng(123);std::vector<std::string> words(n,std::string(length,'a'));for(std::size_t i=0;i<n;++i){for(int j=0;j<length;++j)words[i][j]=static_cast<char>((kind==3?0:'a')+rng()%(kind==3?256:(kind==4?2:26)));if(kind==1)for(int j=0;j<length/2;++j)words[i][j]='a';if(kind==2)words[i]=words[i%16];}\nstd::uint64_t sum=0;auto t=std::chrono::steady_clock::now();for(int rep=0;rep<reps;++rep){Trie trie;for(const auto&w:words)trie.insert(w);for(const auto&w:words)sum+=trie.count(w);for(std::size_t i=0;i<n;i+=2)sum+=trie.erase(words[i]);sum+=trie.distinct_size();}auto e=std::chrono::steady_clock::now();std::cout<<std::chrono::duration<double,std::milli>(e-t).count()<<' '<<sum<<'\\n';}\n"
+    },
+    "main_measure_script": "/tmp/sirkit_four_hours_20261022/algorithms/measure_main.py",
+    "main_measure_script_sha256": "2fe1daf221af9d65bf4f5a7ed3aea1e10201e8189465a6d7e519b2d4cb2339c0",
+    "reference_test": "Verify/current/tests/trie_reference_test.cpp",
+    "fixture_script_sha256": "e2b5a04d3b321a5a067ce39e9382a00ea64f7f043541353e832680e62fd405e1"
+  },
+  "measurement_orchestration": {
+    "initial_failure": "異なるharnessが一部の実行ファイル名を共有したため候補の途中実行が出力不足で中断。途中の値を最終測定として採用しない。",
+    "repair": "main_、api_、single_を分離し、固定mainと最終APIを再測定。正しさの出力も全回照合。"
+  },
+  "single_child_candidate": {
+    "build": [
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/baseline.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/single_gcc_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/control.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/single_gcc_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/contiguous.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/single_gcc_contiguous"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/single.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/single_gcc_single"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/baseline.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/single_clang_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/control.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/single_clang_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/contiguous.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/single_clang_contiguous"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/trie/single.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/trie/single_clang_single"
+      ]
+    ],
+    "rows": [
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "length": 6,
+        "kind": 0,
+        "repetitions": 2000,
+        "raw_ms": {
+          "baseline": [
+            3.80572,
+            3.90073,
+            3.78269,
+            3.7691,
+            3.8309
+          ],
+          "control": [
+            3.79483,
+            3.79821,
+            3.79325,
+            3.79744,
+            3.82657
+          ],
+          "contiguous": [
+            3.03305,
+            3.06006,
+            3.06106,
+            3.05236,
+            3.04432
+          ],
+          "single": [
+            3.00885,
+            3.06174,
+            3.07423,
+            3.03581,
+            3.05138
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.80572,
+          "control": 3.79744,
+          "contiguous": 3.05236,
+          "single": 3.05138
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9978243275910997,
+          "contiguous": 0.8020453422742609,
+          "single": 0.8017878351534007
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 0,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            189.681,
+            182.04,
+            182.526,
+            184.02,
+            183.926
+          ],
+          "control": [
+            182.625,
+            190.581,
+            180.281,
+            199.312,
+            184.102
+          ],
+          "contiguous": [
+            180.986,
+            208.906,
+            184.368,
+            219.134,
+            185.305
+          ],
+          "single": [
+            183.242,
+            184.217,
+            184.33,
+            187.992,
+            185.296
+          ]
+        },
+        "median_ms": {
+          "baseline": 183.926,
+          "control": 184.102,
+          "contiguous": 185.305,
+          "single": 184.33
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.000956906581995,
+          "contiguous": 1.007497580548699,
+          "single": 1.0021965355632159
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            88.3343,
+            87.1664,
+            88.0809,
+            88.2371,
+            96.8799
+          ],
+          "control": [
+            91.0631,
+            89.683,
+            108.322,
+            88.8277,
+            87.1921
+          ],
+          "contiguous": [
+            88.4649,
+            88.3731,
+            88.0631,
+            86.5954,
+            87.5422
+          ],
+          "single": [
+            88.0441,
+            93.9857,
+            89.3083,
+            88.7618,
+            88.3716
+          ]
+        },
+        "median_ms": {
+          "baseline": 88.2371,
+          "control": 89.683,
+          "contiguous": 88.0631,
+          "single": 88.7618
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.016386531288993,
+          "contiguous": 0.9980280403594407,
+          "single": 1.0059464782954108
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 2,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            14.2438,
+            14.2782,
+            14.3011,
+            14.2954,
+            14.3202
+          ],
+          "control": [
+            14.3252,
+            14.3225,
+            14.2928,
+            14.2555,
+            14.2674
+          ],
+          "contiguous": [
+            14.313,
+            14.3353,
+            14.3193,
+            14.3762,
+            14.3034
+          ],
+          "single": [
+            14.7195,
+            14.7318,
+            14.7456,
+            14.7087,
+            14.6997
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.2954,
+          "control": 14.2928,
+          "contiguous": 14.3193,
+          "single": 14.7195
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9998181233123942,
+          "contiguous": 1.0016718664745303,
+          "single": 1.0296668858513927
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 50000,
+        "length": 12,
+        "kind": 3,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            51.8418,
+            50.4641,
+            54.3167,
+            51.4935,
+            51.1586
+          ],
+          "control": [
+            50.2979,
+            50.3856,
+            50.3882,
+            50.4481,
+            50.6412
+          ],
+          "contiguous": [
+            50.4787,
+            49.4816,
+            49.765,
+            49.811,
+            50.4785
+          ],
+          "single": [
+            52.8407,
+            50.2617,
+            54.293,
+            50.7012,
+            50.2158
+          ]
+        },
+        "median_ms": {
+          "baseline": 51.4935,
+          "control": 50.3882,
+          "contiguous": 49.811,
+          "single": 50.7012
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9785351549224659,
+          "contiguous": 0.9673259731810812,
+          "single": 0.9846135920067581
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 50000,
+        "length": 12,
+        "kind": 4,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            14.0895,
+            14.0629,
+            14.0791,
+            14.0675,
+            14.0383
+          ],
+          "control": [
+            14.07,
+            14.0813,
+            14.326,
+            14.0289,
+            14.0365
+          ],
+          "contiguous": [
+            13.9903,
+            13.9886,
+            13.9921,
+            13.9997,
+            13.9794
+          ],
+          "single": [
+            14.1465,
+            14.145,
+            14.1473,
+            14.4013,
+            14.1622
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.0675,
+          "control": 14.07,
+          "contiguous": 13.9903,
+          "single": 14.1473
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0001777145903679,
+          "contiguous": 0.9945121734494401,
+          "single": 1.0056726497245423
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 10000,
+        "length": 100,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            28.858,
+            27.7601,
+            26.9232,
+            26.577,
+            26.3507
+          ],
+          "control": [
+            26.9611,
+            26.7548,
+            26.6305,
+            26.8636,
+            27.2297
+          ],
+          "contiguous": [
+            25.9137,
+            25.7995,
+            25.5541,
+            25.8251,
+            25.6478
+          ],
+          "single": [
+            25.8284,
+            25.8787,
+            27.2181,
+            25.9638,
+            25.6561
+          ]
+        },
+        "median_ms": {
+          "baseline": 26.9232,
+          "control": 26.8636,
+          "contiguous": 25.7995,
+          "single": 25.8787
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9977862958340762,
+          "contiguous": 0.9582627622273726,
+          "single": 0.9612044630653116
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "length": 6,
+        "kind": 0,
+        "repetitions": 2000,
+        "raw_ms": {
+          "baseline": [
+            3.52797,
+            3.48773,
+            3.4734,
+            3.49279,
+            3.58783
+          ],
+          "control": [
+            3.47846,
+            3.49818,
+            3.48033,
+            3.52185,
+            3.5854
+          ],
+          "contiguous": [
+            3.23564,
+            3.23607,
+            3.26254,
+            3.2076,
+            3.34175
+          ],
+          "single": [
+            3.17641,
+            3.10089,
+            3.06227,
+            3.19214,
+            3.0178
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.49279,
+          "control": 3.49818,
+          "contiguous": 3.23607,
+          "single": 3.10089
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0015431789486342,
+          "contiguous": 0.9265000186097647,
+          "single": 0.8877974341429059
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 0,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            186.679,
+            188.48,
+            189.385,
+            187.347,
+            187.265
+          ],
+          "control": [
+            204.478,
+            187.25,
+            225.888,
+            185.83,
+            192.214
+          ],
+          "contiguous": [
+            190.402,
+            186.635,
+            184.473,
+            185.64,
+            189.766
+          ],
+          "single": [
+            187.005,
+            188.201,
+            189.723,
+            187.864,
+            184.426
+          ]
+        },
+        "median_ms": {
+          "baseline": 187.347,
+          "control": 192.214,
+          "contiguous": 186.635,
+          "single": 187.864
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0259785318152945,
+          "contiguous": 0.9961995655121245,
+          "single": 1.0027595851548197
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            90.2745,
+            106.09,
+            92.7049,
+            90.6893,
+            88.4298
+          ],
+          "control": [
+            90.3931,
+            90.7701,
+            89.9335,
+            90.1564,
+            91.3947
+          ],
+          "contiguous": [
+            95.2028,
+            89.3282,
+            93.6255,
+            90.7962,
+            89.6002
+          ],
+          "single": [
+            97.833,
+            90.8003,
+            89.7965,
+            90.8002,
+            90.3794
+          ]
+        },
+        "median_ms": {
+          "baseline": 90.6893,
+          "control": 90.3931,
+          "contiguous": 90.7962,
+          "single": 90.8002
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9967339035586337,
+          "contiguous": 1.0011787498635452,
+          "single": 1.0012228565001604
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 2,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            15.872,
+            15.9457,
+            15.8715,
+            16.1538,
+            16.1548
+          ],
+          "control": [
+            15.8715,
+            15.8664,
+            15.8891,
+            15.8824,
+            15.8826
+          ],
+          "contiguous": [
+            16.0881,
+            15.9159,
+            15.9303,
+            15.9235,
+            15.9122
+          ],
+          "single": [
+            15.991,
+            16.04,
+            16.1027,
+            15.9952,
+            16.0012
+          ]
+        },
+        "median_ms": {
+          "baseline": 15.9457,
+          "control": 15.8824,
+          "contiguous": 15.9235,
+          "single": 16.0012
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9960302777551315,
+          "contiguous": 0.9986077751368708,
+          "single": 1.003480562157823
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 50000,
+        "length": 12,
+        "kind": 3,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            51.2025,
+            50.403,
+            50.8098,
+            53.5544,
+            49.7192
+          ],
+          "control": [
+            50.6346,
+            50.0919,
+            55.8842,
+            50.863,
+            50.0408
+          ],
+          "contiguous": [
+            50.1431,
+            49.6227,
+            52.6978,
+            49.9196,
+            50.314
+          ],
+          "single": [
+            48.9877,
+            49.8793,
+            50.1131,
+            55.6223,
+            49.7549
+          ]
+        },
+        "median_ms": {
+          "baseline": 50.8098,
+          "control": 50.6346,
+          "contiguous": 50.1431,
+          "single": 49.8793
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9965518462973677,
+          "contiguous": 0.9868785155619584,
+          "single": 0.9816866037654153
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 50000,
+        "length": 12,
+        "kind": 4,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            14.7657,
+            14.707,
+            14.7175,
+            14.7171,
+            14.7253
+          ],
+          "control": [
+            14.7329,
+            14.7273,
+            14.8382,
+            14.7353,
+            14.6973
+          ],
+          "contiguous": [
+            14.7815,
+            14.7613,
+            14.7364,
+            14.7672,
+            14.7601
+          ],
+          "single": [
+            14.6343,
+            14.6574,
+            14.7284,
+            14.6282,
+            14.6963
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.7175,
+          "control": 14.7329,
+          "contiguous": 14.7613,
+          "single": 14.6574
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0010463733650417,
+          "contiguous": 1.0029760489213522,
+          "single": 0.9959164260234415
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 10000,
+        "length": 100,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            28.1281,
+            26.4425,
+            26.1254,
+            26.412,
+            26.6349
+          ],
+          "control": [
+            26.3702,
+            28.2146,
+            25.9406,
+            26.4566,
+            26.4535
+          ],
+          "contiguous": [
+            25.6924,
+            28.5065,
+            27.1672,
+            25.783,
+            25.7507
+          ],
+          "single": [
+            27.6808,
+            26.1944,
+            26.5158,
+            25.4619,
+            26.0048
+          ]
+        },
+        "median_ms": {
+          "baseline": 26.4425,
+          "control": 26.4535,
+          "contiguous": 25.783,
+          "single": 26.1944
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0004159969745674,
+          "contiguous": 0.975059090479342,
+          "single": 0.990617377328165
+        }
+      }
+    ]
+  }
+}

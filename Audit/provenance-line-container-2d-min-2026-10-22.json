@@ -1,0 +1,199 @@
+{
+  "date": "2026-10-22",
+  "scope": "LineContainer2Dの由来・ライセンスと現在版の契約。最終版の追加APIも記録。",
+  "baseline_source": {
+    "path": "DataStructure/line-container-2d.cpp",
+    "sha256": "0a155a006903ed9eb2067ddcd6b9f0d206077e19e56b2207edb406daa053693e"
+  },
+  "history_bundle": {
+    "path": "/tmp/Atcoder_Env_before_initial_20261021T163122Z/history.bundle",
+    "sha256": "4201f74738404c4d6f7f5ce672f3a782327fa4613daf48b3e73f2918dccc9020"
+  },
+  "snapshots": {
+    "7f77a51:line-container-2d.cpp": "bb7386bdc33a9c1dfbe7a101cf4648b3de646112ff2f250283ed0714282bcb80",
+    "32fb166:line-container-2d.cpp": "bb7386bdc33a9c1dfbe7a101cf4648b3de646112ff2f250283ed0714282bcb80",
+    "b76e70f:DataStructure/line-container-2d.cpp": "ed919048c9122c0ab1c0899352e9b8981cc4e326c5b03b12b437b094f4a6e6f6",
+    "baseline:DataStructure/line-container-2d.cpp": "0a155a006903ed9eb2067ddcd6b9f0d206077e19e56b2207edb406daa053693e"
+  },
+  "local_evidence_sha256": {
+    "Audit/license-audit-2026-10-17.json": "d411536c0d25f4cf2ee0f87cb83aab23a480f054c59cfa9f6486ca22b0927a8c",
+    "Audit/performance-line-container-2d-2026-10-18.json": "317a221f572b2d6d2aa90e2de6a0c4a5a263c475098506ab37dfbeb683bd839d",
+    "Audit/performance-followup-2026-10-19.json": "6b51c058e84132194eacd0b7625aa1b9c50aa6489217877dce013e5acdfd7eb4",
+    "Audit/performance-targeted-2026-10-19.json": "53b7c1b4c69a8c9864a42366ea2ffaf63cd06c4189cd593fb3bbd6d8bd11d649",
+    "Audit/performance-line-container-final-2026-10-19.json": "61cfefc616da9805639a957bfae8d0dce20bb1cebf09e310d3c3fd7f7f7e3dd9",
+    "Audit/symbol-names-2026-10-20.json": "2b7dc18ebb1c3c69405465072c4c888825dd6bd18e28cd4a472ee437af2fc4d2",
+    "Audit/macro-prefix-sirkit-2026-10-22.json": "f628e53d5b4952d509ba6404881b38d6044633296b63d66b98263f14009f6787"
+  },
+  "primary_sources": [
+    {
+      "url": "https://nyaannyaan.github.io/library/data-structure/line-container-2d.hpp.html",
+      "access": "web open; 2026-10-22",
+      "role": "2D本体と展開された1D依存実装を由来確認のため閲覧。",
+      "finding": "四方向極値、2つの1D包絡、add(y,x)、係数比b/a、選択線から元点を復元し内積を評価する流れが旧履歴と対応。"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/LICENSE",
+      "access": "web open; 2026-10-22",
+      "finding": "CC0 1.0 Universalのライセンス本文。"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/kth-competitive-programming/kactl/main/content/data-structures/LineContainer.h",
+      "header_url": "https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/LineContainer.h",
+      "access": "web open; 2026-10-22",
+      "finding": "当該ファイルにAuthor Simon Lindholm、License CC0、Source own workの個別表示。p境界、交点の床除算、multiset、add時のiterator更新がNyaanおよび保持中1D部品と対応。これは1D部品の由来であり、KACTLに2Dラッパー全体の著作を帰属させる根拠ではない。"
+    }
+  ],
+  "lineage": [
+    {
+      "stage": "旧追加",
+      "source": "7f77a51:line-container-2d.cpp",
+      "sha256": "bb7386bdc33a9c1dfbe7a101cf4648b3de646112ff2f250283ed0714282bcb80",
+      "finding": "2026-09-06 addで追加。32fb166版も同一SHA。Nyaan本体と展開依存に対応する実装。"
+    },
+    {
+      "stage": "2026-10-18整備",
+      "record": "Audit/performance-line-container-2d-2026-10-18.json",
+      "before_sha256": "076a4f618a8a2810759d4e12bc76f9c92dbfdeb244fe9c51795e737b3b002c96",
+      "after_sha256": "96ea274d8cd71dac31dfca8a3a66e9144c30466149d30c8b2525393e7f811a44",
+      "finding": "一般API・検査・所有権・固定容量ヒント・点キャッシュ・不要追加/更新の省略などの改修記録。独立全面再実装として元ライセンスを解消したという記録ではない。"
+    },
+    {
+      "stage": "2026-10-19追加測定",
+      "record": "Audit/performance-line-container-final-2026-10-19.json",
+      "installed_sha256": "43f096558818e17f7618e5b8a8e21ab568e3d0e03821c9ce254bd86b9e1b8a49",
+      "finding": "有限性・比・丸め・相殺とヒント不変条件の照合、採用/棄却を区別した測定記録。"
+    },
+    {
+      "stage": "内部名の整理",
+      "record": "Audit/symbol-names-2026-10-20.json",
+      "before_sha256": "43f096558818e17f7618e5b8a8e21ab568e3d0e03821c9ce254bd86b9e1b8a49",
+      "after_sha256": "ed919048c9122c0ab1c0899352e9b8981cc4e326c5b03b12b437b094f4a6e6f6",
+      "finding": "LineComparator等の内部名前空間整理を記録。afterはb76e70f:DataStructure/line-container-2d.cppの実物SHAと一致。"
+    },
+    {
+      "stage": "ガード・設定名",
+      "record": "Audit/macro-prefix-sirkit-2026-10-22.json",
+      "before_sha256": "ed919048c9122c0ab1c0899352e9b8981cc4e326c5b03b12b437b094f4a6e6f6",
+      "after_sha256": "0a155a006903ed9eb2067ddcd6b9f0d206077e19e56b2207edb406daa053693e",
+      "finding": "b76e70f版のREINSIRK_をSIRKIT_へ置換したものと現在版がbyte一致。変更はguard4行とportable設定1行。",
+      "macro_replacement_byte_identity": true
+    }
+  ],
+  "shared_component": {
+    "guard": "SIRKIT_LINE_CONTAINER_DEFINED",
+    "files": [
+      "DataStructure/line-container.cpp",
+      "DataStructure/line-container-2d.cpp"
+    ],
+    "byte_identical": true,
+    "block_sha256": "3ba2b28a0f8c254ecf43666a9bde328300d0cdba67c73b243770ee34234beb71",
+    "note": "1D部品を変える場合は両ファイルとinclude順の検証・配布を同期する必要がある。"
+  },
+  "recommended_header": [
+    "// SPDX-License-Identifier: CC0-1.0",
+    "// Original Source: https://nyaannyaan.github.io/library/data-structure/line-container-2d.hpp.html",
+    "// Original Source: https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/LineContainer.h"
+  ],
+  "header_decision": "現在のCC0-1.0と2つのOriginal Source URLを維持する。Nyaanの2D構造とNyaan/KACTL由来1Dの処理が残っており、最適化しても原典の由来は消えない。参考への格下げや独立実装の断定はしない。",
+  "current_representation_contract": [
+    "現版のadd(x,y)はminlc/maxlcへk=y,m=xとして渡し、現版1Dは元係数を保存するため両包絡が元の(y,x)を保持する。公開メンバーは参照用で、利用者が変更すると2D不変条件が壊れる。",
+    "原典2Dも1D addへ(y,x)を渡すが、原典1DのMINIMIZEは内部にobjectiveで符号変換した係数を格納する。現在と原典の内部表現が完全同一とは説明しない。",
+    "原典Nyaanのmax_ll/min_llは丸めだったが、現版max_ll/min_llは0方向切り捨て、max_rounded_ll/min_rounded_llは半整数を0から遠い方向へ丸める別API。今回の互換基準は依頼開始時の現版。",
+    "size()は重複を含む追加点数で、minlc.size()/maxlc.size()の有効包絡点数とは違う。",
+    "copyは包絡を複製してhint参照を再構成し、move/swapは木とhintを一緒に移す。add途中の確保失敗ではclearして例外を伝える。照会はconstで状態を変更しない。"
+  ],
+  "numeric_constraints_to_preserve": [
+    "点と浮動係数は有限、long doubleの元の精度と既定丸めモードが前提。ゼロの符号と同点の選択点は未規定。",
+    "型全体がint64_t範囲に収まる整数引数のld版では比の有限性を型から保証して検査を省く。uint64_t全域などは同じ型の保証を持たない。",
+    "ll版の±4.1e18 clampと0方向切り捨て、rounded_llの半整数丸めを区別する。これらも厳密な整数内積ではない。",
+    "SKIP_RUNTIME_CHECKSでも有限非零分母の比がlong double範囲を越えた場合はoverflow_errorを維持する。巨大有限積のinf-infに対する相殺回復も維持する。",
+    "単位境界±1の除算省略は二進・正しい最近丸め等の証明範囲に限定される。0境界へ同じ主張を拡張しない。",
+    "木の境界pは丸められた値であり、キャッシュは既存の(previous.p,line.p]判定を保持する。同点や厳密交点を新しい規約へ黙って置き換えない。"
+  ],
+  "past_rejected_candidates": [
+    {
+      "record": "assume_summary.json",
+      "status": "rejected_no_effect",
+      "strategy": "Clang and SKIP_RUNTIME_CHECKS only: __builtin_assume(__builtin_isfinite(a)); same for b at value() entry. No assumptions about quotient or dot results.",
+      "decision": "Existing and candidate .text are byte-identical in mixed fixture; no optimization gained. Numeric output/overflow/cancellation protection remains correct. Not installed."
+    },
+    {
+      "record": "aunit_summary.json",
+      "status": "rejected",
+      "strategy": "Clang SKIP only: for abs(a)>=1 and finite inputs, b/a must be finite, so only result.isnan is checked/recovered. abs(a)<1 uses original combined c+result classification. Existing proof=true path unchanged.",
+      "decision": "Mixed max tiny11.110->12.111 and actual alternating tiny11.312->11.501 regress; narrow_inside max49.649->50.308 and min51.827->50.150 still behind original46.971/47.210. Single and some min calls improve but this does not satisfy global query requirements. Not installed."
+    },
+    {
+      "record": "bounded_summary.json",
+      "status": "rejected",
+      "strategy": "Clang/SKIP/x86 extended80 only. Preserve bool proving all inserted coordinate magnitudes <2^4097 using exponent bytes; require each nonzero normal query coefficient exponent in [-4096,+4096]. On proof path suppress quotient/result classification at compile time; otherwise original checked_result/recovery behavior. Bool copied/moved/swapped and reset on clear. No extra allocation or sizeof increase.",
+      "decision": "All primary query fixture medians regress; mixed max tiny11.192->11.510ms and actual alternating tiny11.298->12.007. Rejected before insertion-cost profiling; no need to advance candidate with slower primary path."
+    },
+    {
+      "record": "center_summary.json",
+      "status": "rejected_both_forms",
+      "strategy": {
+        "tag7": "Only Clang SKIP, cache_points true: common tag3 with previous and after present, previous.p and positive.p finite. Tag7 reuses tag3 selectors and refresh suppression, preserving the two local coefficient pairs.",
+        "early_proof": "Before original selector, if previous.p<c<=positive.p, evaluate central cached point and only recover NaN; otherwise original path.",
+        "finish_selector": "For tag7 duplicate entire original central/neighbor/tree selector once and directly return LD via finish<true> for center, finish<false> with original combined guard for other points. No comparison duplication."
+      },
+      "decision": "Both forms slow all6 mixed primary medians. finish max tiny10.756->11.061, random10.646->11.329, convex13.387->14.145. finish same-process maxold10.598/new11.183 (+5.5%), so no adoption or further variants. No main source edits."
+    },
+    {
+      "record": "cold_temp_summary.json",
+      "status": "rejected",
+      "strategy": "On Clang only, construct const Line{l.k,l.m,0} solely inside existing recover/checked_result failure branches and pass its address; the hot selected Line no longer escapes directly to cold helpers. Mathematical expressions and guards remain unchanged. GCC retains an alias to existing l.",
+      "decision": "Mixed max tiny11.050->12.461ms; same-process max old10.781/candidate13.905, minold11.981/candidate13.815. Correct numeric boundaries do not offset broad slowdown; not installed. No further derived variants were made."
+    },
+    {
+      "record": "compact_summary.json",
+      "status": "rejected",
+      "strategy": "Cache exact double representations when LD->double->LD equality holds; retain long double query coefficients and long double arithmetic; LD coefficients used for other points. No extra allocations.",
+      "decision": "Main target mixed max tiny and actual alternating tiny regress. sizeof grows 592 to784; small insertion workload ~6.3% slower; native long double exact fallback was exercised. Not installed."
+    },
+    {
+      "record": "constant_summary.json",
+      "status": "rejected",
+      "strategy": {
+        "A": "Clang proof=false/cache_points=true: abs(c+result)<LD infinity.",
+        "B": "Clang proof=false/cache_points=true: abs(c+result)<=LD(doublemax). Any extra large-value failure goes to unchanged checked_result.",
+        "scope": "GCC and proof=true remain prior code. Checked and SKIP Clang both use new constant but preserve numeric results."
+      },
+      "decision": "A regresses primary and same-process. B largely matches main primary but same-process max remains6.0% slower than original and does not improve baseline normalized4.6% gap; narrow_inside also remains slower. Neither satisfies objective; not installed."
+    },
+    {
+      "record": "preabs_summary.json",
+      "status": "rejected",
+      "strategy": "Only Clang SKIP, proof=false: explicitly check abs(c)<=LDmax before lookup using floating compare, then only isnan(result) after dot. proof=true, checked and GCC paths retain prior definitions. Unlike previous check_before this does not use std::isfinite(c).",
+      "decision": "Both af59 and selective bases regress in main mixed max tiny. af59 11.165->12.065; selective10.832->11.535, original10.855. Alternating and narrow_inside do not repair the regressions. Both implementations preserve numeric boundary results but are not installed."
+    },
+    {
+      "record": "summary.json",
+      "status": "rejected",
+      "strategy": null,
+      "decision": "CPU16 results did not transfer to CPU14; both bit_cast and exponent-only memcpy paths regress on target P-core. Keep existing floating classification."
+    },
+    {
+      "record": "zero_summary.json",
+      "status": "rejected",
+      "strategy": null,
+      "decision": "Both candidates regress 20-35% in primary Clang SKIP query workloads, so keep existing finite classification."
+    }
+  ],
+  "past_candidate_scope_note": "すべて過去に記録されたsource hashと当該環境/呼出条件の結果。今回の別候補が必ず同じ性能になるとは言わない。原典コードや過去棄却候補の実装本文はoptimizerへ送っていない。",
+  "limits": [
+    "NyaanやKACTLの全履歴・全ファイルのライセンスを一括認定する調査ではない。KACTLのCC0は当該LineContainer.hの個別表示として扱う。",
+    "数学的な一般手法と実装の由来を区別する。現在版が全入力で厳密な実数最適値を返すという保証は無い。",
+    "旧測定のAC・速度・型範囲を現在のソースhashの検証済みという意味に書き換えない。"
+  ],
+  "optimizer_received_external_implementation": false,
+  "final_source_sha256": "f5711e6a5512318ff06fdafbd8bd11eedb79cba03a15fb19ea52f71802302c7b",
+  "current_revision": {
+    "decision": "既存照会のホットパス変更は効果が安定しなかったため不採用。既存本文を維持し、Resultとmax_with_point/min_with_pointのみ追加。",
+    "api": "Resultはlong doubleのvalue,x,yを所有。既存selectを1回使い、選択点から内積を評価し、NaN相殺は既存recover_line_dotで回復する。",
+    "provenance": "今回の追加APIは既存部品を利用した新規追加。Nyaan/KACTL由来の既存本体を全面的な独立実装へ置き換えたものではない。既存のOriginal Source表示を維持。",
+    "external_implementation_given_to_optimizer": false
+  },
+  "document": "Document/line_container_2d.md",
+  "document_sha256": "ef1a976c13d0f11ff58271b84418d85e8ca2b9249215122b65e8dd34a652b3f2"
+}

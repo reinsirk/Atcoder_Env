@@ -1,0 +1,4146 @@
+{
+  "date": "2026-10-24",
+  "checked_at_utc": "2026-10-23T18:57:14.443357+00:00",
+  "status": "PASS",
+  "scope": "次のVerify対象: 三点の向きorientation、Geometry/Point.cppと全機能版。",
+  "online_submitted": false,
+  "body_changed": false,
+  "main_changed": false,
+  "io_changed": false,
+  "problem": {
+    "url": "https://atcoder.jp/contests/abc266/tasks/abc266_c",
+    "title": "C - Convex Quadrilateral",
+    "statement_checked": "公式ページを確認。各座標±100、重複/3点共線/非隣接辺交差のない反時計回り四角形。四つの内角が180度未満かを出力。",
+    "selection": "Library Checkerの問題一覧に直接の三点向き判定を確認できないため、対応するAtCoder問題を使う。",
+    "library_checker_index": "https://judge.yosupo.jp/",
+    "coverage": "4回の整数orientationを使う凸性判定。",
+    "limit": "整数全域・浮動許容幅・Pointの全APIをこの問題だけでオンラインVerifyしたとは扱わない。定数個のAPI呼出しなので、提出全体の時間からAPI単体の速さは評価しにくい。"
+  },
+  "source_hashes": {
+    "Geometry/geometory.cpp": "4cbddbb85028e774ce43903163b32531957957db920de625dac7235841dbdf59",
+    "Geometry/Point.cpp": "3dbbae5610bfec439a5c47112436e5c239c96fc3446e9eb86b8ff4896462e038",
+    "Geometry/components/point_functions.inc": "0118d7433e4cf2799abc2f188a6a4feaf20dd7ef07ac66bad2932493137e0c9d",
+    "Verify/current/drivers/geometry_quadrilateral_main.cpp": "1c559face6966ad79caa46f44a5897e060afb1f22f2820251de724f4ff9138ad",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+    "Verify/current/submissions/geometry_orientation_atcoder_full.cpp": "ebc744fd7dfbb356c8270912459745ebc1cfa122fc9c22bc94718f1b94316316",
+    "Verify/current/submissions/geometry_orientation_atcoder_split.cpp": "c81cf1b40cd7d7e8a673e377140f326443142c1075540d34c2c720a3e995fe31",
+    "Verify/current/tests/geometry_orientation_test.cpp": "7d599d95ccb05106dbb923525bf3b4b84561f4877a784491ac5003caa814b17e",
+    "Document/geometry_orientation.md": "70df1dac6daf4cda2b5e1f7c35599671bfefc8cfe19e249f9b28f5152c9c9071"
+  },
+  "verification": {
+    "status": "PASS",
+    "records": [
+      {
+        "mode": "gcc/False/False/full",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=736112 outside_contract=1258\n"
+      },
+      {
+        "mode": "gcc/False/False/split",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Point.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=736112 outside_contract=1258\n"
+      },
+      {
+        "mode": "gcc/False/True/full",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=732578 outside_contract=2436\n"
+      },
+      {
+        "mode": "gcc/False/True/split",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Point.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=732578 outside_contract=2436\n"
+      },
+      {
+        "mode": "gcc/True/False/full",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=736112 outside_contract=1258\n"
+      },
+      {
+        "mode": "gcc/True/False/split",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Point.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=736112 outside_contract=1258\n"
+      },
+      {
+        "mode": "gcc/True/True/full",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=732578 outside_contract=2436\n"
+      },
+      {
+        "mode": "gcc/True/True/split",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Point.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=732578 outside_contract=2436\n"
+      },
+      {
+        "mode": "clang/False/False/full",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=736112 outside_contract=1258\n"
+      },
+      {
+        "mode": "clang/False/False/split",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Point.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=736112 outside_contract=1258\n"
+      },
+      {
+        "mode": "clang/False/True/full",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=732578 outside_contract=2436\n"
+      },
+      {
+        "mode": "clang/False/True/split",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Point.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=732578 outside_contract=2436\n"
+      },
+      {
+        "mode": "clang/True/False/full",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=736112 outside_contract=1258\n"
+      },
+      {
+        "mode": "clang/True/False/split",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Point.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=736112 outside_contract=1258\n"
+      },
+      {
+        "mode": "clang/True/True/full",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=732578 outside_contract=2436\n"
+      },
+      {
+        "mode": "clang/True/True/split",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_ORIENTATION_TEST_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Point.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/reference"
+        ],
+        "stdout": "PASS checks=732578 outside_contract=2436\n"
+      },
+      {
+        "mode": "sanitizer/False/False/split",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/san_reference"
+        ],
+        "stdout": "PASS checks=736112 outside_contract=1258\n"
+      },
+      {
+        "mode": "sanitizer/True/True/split",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_orientation_test.cpp",
+          "-o",
+          "/tmp/sirkit_orientation_ready_20261024/san_reference"
+        ],
+        "stdout": "PASS checks=732578 outside_contract=2436\n"
+      }
+    ],
+    "fixtures": [
+      {
+        "input": "-36 43\n38 -33\n38 -29\n-41 53\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "74 54\n-37 -18\n-65 1\n-27 -89\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-21 -59\n-14 -44\n11 32\n-42 -44\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "71 23\n-9 96\n44 12\n39 -85\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-55 15\n-49 53\n-85 -61\n65 29\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-29 -45\n99 -53\n24 82\n-5 -27\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-22 -51\n-69 -82\n15 -57\n79 -5\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "95 73\n-60 7\n74 -64\n44 -31\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "95 -42\n-92 -14\n-100 -74\n36 -39\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-40 72\n-48 87\n34 -85\n76 -83\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-34 47\n-17 -26\n-15 23\n99 12\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "74 -53\n-52 91\n-61 54\n-63 0\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-66 0\n48 -100\n42 36\n-88 57\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "78 82\n-8 -65\n75 -54\n68 61\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "60 -37\n71 51\n-1 41\n-80 40\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-97 68\n97 -18\n45 39\n51 67\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-33 -5\n7 -73\n48 -68\n72 -30\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "55 76\n23 87\n-88 19\n73 -1\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "48 -25\n8 92\n-70 -16\n2 -1\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-13 20\n70 86\n-12 43\n-37 15\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-3 46\n86 84\n-60 70\n37 -64\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "36 45\n-61 -6\n29 -64\n62 -26\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "3 56\n-63 -22\n13 13\n68 81\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "27 65\n-91 75\n44 -32\n75 36\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-54 -20\n95 59\n90 94\n-15 49\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-59 -49\n-52 96\n-66 -90\n85 -34\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "80 45\n34 75\n3 -22\n36 60\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "7 34\n20 -52\n15 23\n98 70\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "75 27\n-99 55\n-42 -73\n56 13\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "44 46\n-23 -52\n61 -44\n90 19\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-22 7\n63 -45\n-61 56\n-100 -69\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-43 -61\n-46 -2\n70 88\n-86 25\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "28 -71\n91 22\n-76 48\n5 -97\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-46 -59\n23 -23\n61 78\n-38 98\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "31 22\n42 67\n-46 -98\n30 0\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-4 70\n-68 80\n-43 4\n-48 76\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "57 -50\n83 -41\n21 -7\n74 -37\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-30 92\n-89 -23\n-12 -53\n-24 99\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "16 -20\n97 -14\n100 39\n-10 -37\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-72 -52\n70 1\n100 15\n90 48\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "14 64\n24 71\n-33 100\n56 -44\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "53 40\n-48 -44\n47 -79\n-9 -40\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "77 4\n-64 69\n-100 -73\n-13 -36\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "31 42\n39 81\n-10 62\n-67 6\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "69 33\n7 46\n16 -86\n35 -27\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-60 -56\n-50 -70\n-23 -62\n76 -26\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "0 -92\n24 -60\n38 71\n-61 -90\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-42 -91\n84 -74\n-40 27\n-57 16\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-14 -76\n55 -31\n-4 -16\n-55 -35\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-65 77\n-74 43\n-25 -99\n-2 -28\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "26 -24\n66 -90\n82 63\n-83 8\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "7 64\n-88 -2\n45 -86\n91 -11\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-18 90\n17 -75\n24 32\n22 81\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "100 37\n-100 -4\n-17 -65\n-21 -94\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "15 44\n-58 46\n-67 -29\n58 24\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "47 -66\n-100 71\n-33 -87\n-86 45\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "65 -56\n63 41\n66 90\n6 -99\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-52 12\n-54 -4\n49 19\n12 73\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "54 -68\n69 52\n0 -5\n39 4\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-99 82\n-12 -90\n53 62\n-28 90\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "56 -78\n-26 64\n-91 23\n22 -44\n",
+        "expected": "No\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-23 50\n-51 -72\n6 -81\n14 -70\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-26 89\n-24 95\n-78 17\n-97 -29\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-64 -40\n12 -87\n30 49\n-39 29\n",
+        "expected": "Yes\n",
+        "reference": "非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。"
+      },
+      {
+        "input": "-100 -100\n100 -100\n100 100\n-100 100\n",
+        "expected": "Yes\n",
+        "reference": "境界座標と開始頂点の巡回。"
+      },
+      {
+        "input": "100 -100\n100 100\n-100 100\n-100 -100\n",
+        "expected": "Yes\n",
+        "reference": "境界座標と開始頂点の巡回。"
+      },
+      {
+        "input": "100 100\n-100 100\n-100 -100\n100 -100\n",
+        "expected": "Yes\n",
+        "reference": "境界座標と開始頂点の巡回。"
+      },
+      {
+        "input": "-100 100\n-100 -100\n100 -100\n100 100\n",
+        "expected": "Yes\n",
+        "reference": "境界座標と開始頂点の巡回。"
+      },
+      {
+        "input": "0 0\n100 100\n-100 0\n100 -100\n",
+        "expected": "No\n",
+        "reference": "境界座標と開始頂点の巡回。"
+      },
+      {
+        "input": "100 100\n-100 0\n100 -100\n0 0\n",
+        "expected": "No\n",
+        "reference": "境界座標と開始頂点の巡回。"
+      },
+      {
+        "input": "-100 0\n100 -100\n0 0\n100 100\n",
+        "expected": "No\n",
+        "reference": "境界座標と開始頂点の巡回。"
+      },
+      {
+        "input": "100 -100\n0 0\n100 100\n-100 0\n",
+        "expected": "No\n",
+        "reference": "境界座標と開始頂点の巡回。"
+      }
+    ],
+    "main_runs": [
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 0
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 1
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 2
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 3
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 4
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 5
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 6
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 7
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 8
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 9
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 10
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 11
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 12
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 13
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 14
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 15
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 16
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 17
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 18
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 19
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 20
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 21
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 22
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 23
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 24
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 25
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 26
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 27
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 28
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 29
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 30
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 31
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 32
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 33
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 34
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 35
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 36
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 37
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 38
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 39
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 40
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 41
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 42
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 43
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 44
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 45
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 46
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 47
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 48
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 49
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 50
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 51
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 52
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 53
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 54
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 55
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 56
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 57
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 58
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 59
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 60
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 61
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 62
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 63
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 64
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 65
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 66
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 67
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 68
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 69
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 70
+      },
+      {
+        "mode": "gcc",
+        "form": "full",
+        "fixture": 71
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 0
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 1
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 2
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 3
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 4
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 5
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 6
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 7
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 8
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 9
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 10
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 11
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 12
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 13
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 14
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 15
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 16
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 17
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 18
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 19
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 20
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 21
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 22
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 23
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 24
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 25
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 26
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 27
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 28
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 29
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 30
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 31
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 32
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 33
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 34
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 35
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 36
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 37
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 38
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 39
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 40
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 41
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 42
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 43
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 44
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 45
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 46
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 47
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 48
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 49
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 50
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 51
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 52
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 53
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 54
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 55
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 56
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 57
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 58
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 59
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 60
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 61
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 62
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 63
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 64
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 65
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 66
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 67
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 68
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 69
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 70
+      },
+      {
+        "mode": "gcc",
+        "form": "split",
+        "fixture": 71
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 1
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 2
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 3
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 4
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 5
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 6
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 7
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 8
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 9
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 10
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 11
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 12
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 13
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 14
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 15
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 16
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 17
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 18
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 19
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 20
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 21
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 22
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 23
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 24
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 25
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 26
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 27
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 28
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 29
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 30
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 31
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 32
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 33
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 34
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 35
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 36
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 37
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 38
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 39
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 40
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 41
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 42
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 43
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 44
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 45
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 46
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 47
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 48
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 49
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 50
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 51
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 52
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 53
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 54
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 55
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 56
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 57
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 58
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 59
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 60
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 61
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 62
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 63
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 64
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 65
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 66
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 67
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 68
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 69
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 70
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "fixture": 71
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 1
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 2
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 3
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 4
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 5
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 6
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 7
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 8
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 9
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 10
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 11
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 12
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 13
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 14
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 15
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 16
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 17
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 18
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 19
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 20
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 21
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 22
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 23
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 24
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 25
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 26
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 27
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 28
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 29
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 30
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 31
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 32
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 33
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 34
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 35
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 36
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 37
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 38
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 39
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 40
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 41
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 42
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 43
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 44
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 45
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 46
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 47
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 48
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 49
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 50
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 51
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 52
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 53
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 54
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 55
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 56
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 57
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 58
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 59
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 60
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 61
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 62
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 63
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 64
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 65
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 66
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 67
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 68
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 69
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 70
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "fixture": 71
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 0
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 1
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 2
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 3
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 4
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 5
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 6
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 7
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 8
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 9
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 10
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 11
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 12
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 13
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 14
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 15
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 16
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 17
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 18
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 19
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 20
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 21
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 22
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 23
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 24
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 25
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 26
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 27
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 28
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 29
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 30
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 31
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 32
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 33
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 34
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 35
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 36
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 37
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 38
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 39
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 40
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 41
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 42
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 43
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 44
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 45
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 46
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 47
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 48
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 49
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 50
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 51
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 52
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 53
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 54
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 55
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 56
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 57
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 58
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 59
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 60
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 61
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 62
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 63
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 64
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 65
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 66
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 67
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 68
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 69
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 70
+      },
+      {
+        "mode": "clang",
+        "form": "full",
+        "fixture": 71
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 0
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 1
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 2
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 3
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 4
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 5
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 6
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 7
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 8
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 9
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 10
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 11
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 12
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 13
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 14
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 15
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 16
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 17
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 18
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 19
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 20
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 21
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 22
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 23
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 24
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 25
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 26
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 27
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 28
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 29
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 30
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 31
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 32
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 33
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 34
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 35
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 36
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 37
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 38
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 39
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 40
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 41
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 42
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 43
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 44
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 45
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 46
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 47
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 48
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 49
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 50
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 51
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 52
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 53
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 54
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 55
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 56
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 57
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 58
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 59
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 60
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 61
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 62
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 63
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 64
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 65
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 66
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 67
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 68
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 69
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 70
+      },
+      {
+        "mode": "clang",
+        "form": "split",
+        "fixture": 71
+      }
+    ],
+    "test_sha256": "7d599d95ccb05106dbb923525bf3b4b84561f4877a784491ac5003caa814b17e"
+  },
+  "official_samples": {
+    "gcc": {
+      "results": [
+        {
+          "id": "geometry_orientation_atcoder_full",
+          "compiler": "g++",
+          "skip_runtime_checks": false,
+          "standard_fallback": false,
+          "submission_sha256": "ebc744fd7dfbb356c8270912459745ebc1cfa122fc9c22bc94718f1b94316316",
+          "tested_source_sha256": "2d6971f61cfc5e7fd83d694d64c473e5655689cb1f8a7728ff69ea616855f04e",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "/tmp/atcoder_verify_p8dam_4j/geometry_orientation_atcoder_full_checked.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "Yes\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "No\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "geometry_orientation_atcoder_full",
+          "compiler": "g++",
+          "skip_runtime_checks": true,
+          "standard_fallback": false,
+          "submission_sha256": "ebc744fd7dfbb356c8270912459745ebc1cfa122fc9c22bc94718f1b94316316",
+          "tested_source_sha256": "ebc744fd7dfbb356c8270912459745ebc1cfa122fc9c22bc94718f1b94316316",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/geometry_orientation_atcoder_full.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "Yes\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "No\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "geometry_orientation_atcoder_split",
+          "compiler": "g++",
+          "skip_runtime_checks": false,
+          "standard_fallback": false,
+          "submission_sha256": "c81cf1b40cd7d7e8a673e377140f326443142c1075540d34c2c720a3e995fe31",
+          "tested_source_sha256": "d4a15671e703b1e23070f08f874e26f506244c4d31c5e82ea9c94b57c0a40193",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "/tmp/atcoder_verify_p8dam_4j/geometry_orientation_atcoder_split_checked.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "Yes\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "No\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "geometry_orientation_atcoder_split",
+          "compiler": "g++",
+          "skip_runtime_checks": true,
+          "standard_fallback": false,
+          "submission_sha256": "c81cf1b40cd7d7e8a673e377140f326443142c1075540d34c2c720a3e995fe31",
+          "tested_source_sha256": "c81cf1b40cd7d7e8a673e377140f326443142c1075540d34c2c720a3e995fe31",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/geometry_orientation_atcoder_split.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "Yes\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "No\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        }
+      ]
+    },
+    "clang": {
+      "results": [
+        {
+          "id": "geometry_orientation_atcoder_full",
+          "compiler": "clang++",
+          "skip_runtime_checks": false,
+          "standard_fallback": false,
+          "submission_sha256": "ebc744fd7dfbb356c8270912459745ebc1cfa122fc9c22bc94718f1b94316316",
+          "tested_source_sha256": "2d6971f61cfc5e7fd83d694d64c473e5655689cb1f8a7728ff69ea616855f04e",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "/tmp/atcoder_verify_fad1k7in/geometry_orientation_atcoder_full_checked.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "Yes\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "No\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "geometry_orientation_atcoder_full",
+          "compiler": "clang++",
+          "skip_runtime_checks": true,
+          "standard_fallback": false,
+          "submission_sha256": "ebc744fd7dfbb356c8270912459745ebc1cfa122fc9c22bc94718f1b94316316",
+          "tested_source_sha256": "ebc744fd7dfbb356c8270912459745ebc1cfa122fc9c22bc94718f1b94316316",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/geometry_orientation_atcoder_full.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "Yes\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "No\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "geometry_orientation_atcoder_split",
+          "compiler": "clang++",
+          "skip_runtime_checks": false,
+          "standard_fallback": false,
+          "submission_sha256": "c81cf1b40cd7d7e8a673e377140f326443142c1075540d34c2c720a3e995fe31",
+          "tested_source_sha256": "d4a15671e703b1e23070f08f874e26f506244c4d31c5e82ea9c94b57c0a40193",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "/tmp/atcoder_verify_fad1k7in/geometry_orientation_atcoder_split_checked.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "Yes\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "No\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "geometry_orientation_atcoder_split",
+          "compiler": "clang++",
+          "skip_runtime_checks": true,
+          "standard_fallback": false,
+          "submission_sha256": "c81cf1b40cd7d7e8a673e377140f326443142c1075540d34c2c720a3e995fe31",
+          "tested_source_sha256": "c81cf1b40cd7d7e8a673e377140f326443142c1075540d34c2c720a3e995fe31",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/geometry_orientation_atcoder_split.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "Yes\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "No\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        }
+      ]
+    }
+  },
+  "independent_reference": {
+    "source": "Verify/current/tests/geometry_orientation_test.cpp",
+    "sha256": "7d599d95ccb05106dbb923525bf3b4b84561f4877a784491ac5003caa814b17e",
+    "integer": "Boost cpp_intで差/積を計算し、APIの計算型Cの範囲に収まる場合だけ呼び出す。符号は多倍長の外積から独立照合。8/16/32/64bit、重複、共線、並べ替え、整数端、差/積の境界を含む。",
+    "beyond_determinant": "C=int64でp=9e18,q=-9e18のように各積は収まるがp-qは収まらない場合もorientationを検証。a.orient/a.ccwは減算もC内の場合だけ照合。",
+    "floating": "float/double/long doubleの座標を整数/16、abs/relを整数/1024に限定。途中演算を正確に表せる入力で、任意精度整数の閾値計算と照合。許容幅3×3と重複/零外積を確認。",
+    "outside_contract": "差または個別の積がCを超える入力はAPIを呼ばず数える。対象外入力まで検証済みとはしない。",
+    "quad_main": "Python整数で非隣接辺の交差/3点共線/靴紐面積を確認し、問題制約内の四角形だけ生成。凸性の参照は対角線の真交差判定で求め、提出mainの4局所orientationとは分ける。72fixtures×GCC/標準代替/Clang×full/split=432実行。"
+  },
+  "configurations": "GCC15.2/Clang21.1、C++23 O2 Wall Wextra Werror pedantic-errors。検査有無×拡張/標準算術×full/splitで16構成。Clang ASan/UBSanの拡張checkedと標準skipで2構成。標準はFORCE_STANDARD_ARITHMETIC/DISABLE_SIMD/U__SIZEOF_INT128__。",
+  "sanitizer_limit": "ASan/UBSanは違反なし。環境制約によりdetect_leaks=0。",
+  "performance": {
+    "status": "PASS",
+    "builds": [
+      [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+        "/tmp/sirkit_orientation_ready_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_orientation_ready_20261024/bench_gcc_full"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Point.cpp\"",
+        "/tmp/sirkit_orientation_ready_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_orientation_ready_20261024/bench_gcc_split"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-march=native",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+        "/tmp/sirkit_orientation_ready_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_orientation_ready_20261024/bench_gcc_native_full"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-march=native",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Point.cpp\"",
+        "/tmp/sirkit_orientation_ready_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_orientation_ready_20261024/bench_gcc_native_split"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+        "/tmp/sirkit_orientation_ready_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_orientation_ready_20261024/bench_clang_full"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Point.cpp\"",
+        "/tmp/sirkit_orientation_ready_20261024/bench.cpp",
+        "-o",
+        "/tmp/sirkit_orientation_ready_20261024/bench_clang_split"
+      ]
+    ],
+    "api": {
+      "gcc": {
+        "native/32/0": {
+          "raw_ms": {
+            "full": [
+              0.640015,
+              0.651137,
+              0.63845,
+              0.635028,
+              0.635102,
+              0.635004,
+              0.634593
+            ],
+            "split": [
+              0.64604,
+              0.651395,
+              0.638168,
+              0.637354,
+              0.638401,
+              0.638267,
+              0.638244
+            ]
+          },
+          "medians_ms": {
+            "full": 0.635102,
+            "split": 0.638267
+          },
+          "checksum": 0,
+          "loops": 10000
+        },
+        "native/4096/0": {
+          "raw_ms": {
+            "full": [
+              2.08241,
+              2.07565,
+              2.07506,
+              2.07976,
+              2.09863,
+              2.09989,
+              2.07593
+            ],
+            "split": [
+              2.1086,
+              2.08895,
+              2.07439,
+              2.11152,
+              2.08412,
+              2.08813,
+              2.07588
+            ]
+          },
+          "medians_ms": {
+            "full": 2.07976,
+            "split": 2.08813
+          },
+          "checksum": 27648,
+          "loops": 256
+        },
+        "native/524288/0": {
+          "raw_ms": {
+            "full": [
+              7.95051,
+              6.51323,
+              6.49791,
+              6.29192,
+              6.24824,
+              6.09399,
+              6.19354
+            ],
+            "split": [
+              6.73011,
+              6.41674,
+              6.35987,
+              6.40465,
+              6.60124,
+              6.14413,
+              6.20226
+            ]
+          },
+          "medians_ms": {
+            "full": 6.29192,
+            "split": 6.40465
+          },
+          "checksum": 4624,
+          "loops": 4
+        },
+        "native/524288/1": {
+          "raw_ms": {
+            "full": [
+              6.45535,
+              6.26783,
+              6.34047,
+              6.16748,
+              6.23818,
+              6.4126,
+              6.18589
+            ],
+            "split": [
+              6.28396,
+              6.22348,
+              6.17098,
+              6.14371,
+              6.32937,
+              6.11594,
+              6.11636
+            ]
+          },
+          "medians_ms": {
+            "full": 6.26783,
+            "split": 6.17098
+          },
+          "checksum": 4,
+          "loops": 4
+        },
+        "native/524288/2": {
+          "raw_ms": {
+            "full": [
+              6.1302,
+              6.13029,
+              6.07677,
+              6.40305,
+              6.35142,
+              6.17186,
+              6.09259
+            ],
+            "split": [
+              6.0802,
+              6.40533,
+              6.12307,
+              6.20413,
+              6.24705,
+              6.21875,
+              6.43634
+            ]
+          },
+          "medians_ms": {
+            "full": 6.13029,
+            "split": 6.21875
+          },
+          "checksum": 4624,
+          "loops": 4
+        },
+        "native/524288/3": {
+          "raw_ms": {
+            "full": [
+              6.36389,
+              8.21295,
+              6.64421,
+              6.2626,
+              6.50148,
+              6.37636,
+              6.27182
+            ],
+            "split": [
+              6.13506,
+              7.48854,
+              6.42792,
+              6.48068,
+              6.34217,
+              6.34829,
+              6.69421
+            ]
+          },
+          "medians_ms": {
+            "full": 6.37636,
+            "split": 6.42792
+          },
+          "checksum": 2240,
+          "loops": 4
+        },
+        "native/524288/4": {
+          "raw_ms": {
+            "full": [
+              6.44355,
+              6.11397,
+              6.1682,
+              6.14161,
+              6.53901,
+              6.19201,
+              6.11554
+            ],
+            "split": [
+              6.11862,
+              6.18897,
+              6.10661,
+              6.15147,
+              6.24448,
+              6.17664,
+              6.32693
+            ]
+          },
+          "medians_ms": {
+            "full": 6.1682,
+            "split": 6.17664
+          },
+          "checksum": 2097142,
+          "loops": 4
+        },
+        "standard/524288/0": {
+          "raw_ms": {
+            "full": [
+              4.39605,
+              4.0655,
+              4.01731,
+              4.0724,
+              4.03307,
+              4.09468,
+              4.36118
+            ],
+            "split": [
+              4.07812,
+              4.05752,
+              4.29534,
+              4.17902,
+              4.07552,
+              4.05638,
+              4.07717
+            ]
+          },
+          "medians_ms": {
+            "full": 4.0724,
+            "split": 4.07717
+          },
+          "checksum": 4624,
+          "loops": 4
+        },
+        "floating/524288/0": {
+          "raw_ms": {
+            "full": [
+              5.3049,
+              5.5916,
+              5.54314,
+              5.25225,
+              5.30233,
+              5.30164,
+              5.28777
+            ],
+            "split": [
+              5.32326,
+              4.53148,
+              5.34121,
+              5.34328,
+              5.40197,
+              5.62131,
+              6.83593
+            ]
+          },
+          "medians_ms": {
+            "full": 5.30233,
+            "split": 5.34328
+          },
+          "checksum": 4624,
+          "loops": 4
+        }
+      },
+      "gcc_native": {
+        "native/32/0": {
+          "raw_ms": {
+            "full": [
+              0.750921,
+              0.724936,
+              0.726332,
+              0.728677,
+              0.728989,
+              0.727977,
+              0.727583
+            ],
+            "split": [
+              0.725002,
+              0.725348,
+              0.725424,
+              0.725278,
+              0.756562,
+              0.728813,
+              0.726062
+            ]
+          },
+          "medians_ms": {
+            "full": 0.727977,
+            "split": 0.725424
+          },
+          "checksum": 0,
+          "loops": 10000
+        },
+        "native/4096/0": {
+          "raw_ms": {
+            "full": [
+              2.29289,
+              2.24666,
+              2.31072,
+              2.28682,
+              2.26807,
+              2.36351,
+              2.31519
+            ],
+            "split": [
+              2.24838,
+              2.28952,
+              2.33732,
+              2.32854,
+              2.33281,
+              2.31126,
+              2.32256
+            ]
+          },
+          "medians_ms": {
+            "full": 2.29289,
+            "split": 2.32256
+          },
+          "checksum": 27648,
+          "loops": 256
+        },
+        "native/524288/0": {
+          "raw_ms": {
+            "full": [
+              7.95851,
+              6.5967,
+              6.37838,
+              6.44877,
+              6.37854,
+              6.28169,
+              6.6668
+            ],
+            "split": [
+              6.83215,
+              6.56552,
+              6.49626,
+              6.3,
+              6.26234,
+              6.45385,
+              6.28404
+            ]
+          },
+          "medians_ms": {
+            "full": 6.44877,
+            "split": 6.45385
+          },
+          "checksum": 4624,
+          "loops": 4
+        },
+        "native/524288/1": {
+          "raw_ms": {
+            "full": [
+              6.21089,
+              6.23538,
+              6.41273,
+              6.17165,
+              6.44946,
+              6.1893,
+              6.21696
+            ],
+            "split": [
+              6.25488,
+              6.25758,
+              6.44315,
+              6.20199,
+              6.31593,
+              6.28332,
+              6.20734
+            ]
+          },
+          "medians_ms": {
+            "full": 6.21696,
+            "split": 6.25758
+          },
+          "checksum": 4,
+          "loops": 4
+        },
+        "native/524288/2": {
+          "raw_ms": {
+            "full": [
+              6.2508,
+              6.33871,
+              6.22313,
+              6.44789,
+              6.22277,
+              6.47363,
+              6.56409
+            ],
+            "split": [
+              6.43669,
+              6.3203,
+              6.27885,
+              6.1868,
+              6.27043,
+              6.25321,
+              6.38241
+            ]
+          },
+          "medians_ms": {
+            "full": 6.33871,
+            "split": 6.27885
+          },
+          "checksum": 4624,
+          "loops": 4
+        },
+        "native/524288/3": {
+          "raw_ms": {
+            "full": [
+              6.76428,
+              6.6221,
+              6.30851,
+              6.63685,
+              6.27693,
+              6.31196,
+              6.26039
+            ],
+            "split": [
+              6.33895,
+              6.36646,
+              6.23677,
+              6.88873,
+              6.2873,
+              6.20081,
+              6.20229
+            ]
+          },
+          "medians_ms": {
+            "full": 6.31196,
+            "split": 6.2873
+          },
+          "checksum": 2240,
+          "loops": 4
+        },
+        "native/524288/4": {
+          "raw_ms": {
+            "full": [
+              6.33193,
+              6.40207,
+              6.26089,
+              6.44684,
+              6.40721,
+              6.27294,
+              6.21852
+            ],
+            "split": [
+              6.36516,
+              6.26542,
+              6.30713,
+              6.33945,
+              6.32005,
+              6.35415,
+              6.29888
+            ]
+          },
+          "medians_ms": {
+            "full": 6.33193,
+            "split": 6.32005
+          },
+          "checksum": 2097142,
+          "loops": 4
+        },
+        "standard/524288/0": {
+          "raw_ms": {
+            "full": [
+              4.59809,
+              4.06461,
+              4.13536,
+              4.06204,
+              4.06717,
+              4.08304,
+              4.21229
+            ],
+            "split": [
+              4.00164,
+              4.01186,
+              3.93275,
+              4.09458,
+              4.10049,
+              4.11801,
+              4.1997
+            ]
+          },
+          "medians_ms": {
+            "full": 4.08304,
+            "split": 4.09458
+          },
+          "checksum": 4624,
+          "loops": 4
+        },
+        "floating/524288/0": {
+          "raw_ms": {
+            "full": [
+              5.27272,
+              5.16869,
+              5.20517,
+              5.56604,
+              5.36299,
+              5.59295,
+              5.30958
+            ],
+            "split": [
+              5.18217,
+              5.24203,
+              5.2569,
+              6.27975,
+              5.26219,
+              5.54575,
+              5.19759
+            ]
+          },
+          "medians_ms": {
+            "full": 5.30958,
+            "split": 5.2569
+          },
+          "checksum": 4624,
+          "loops": 4
+        }
+      },
+      "clang": {
+        "native/32/0": {
+          "raw_ms": {
+            "full": [
+              0.550677,
+              0.551443,
+              0.546917,
+              0.552877,
+              0.550601,
+              0.549798,
+              0.589172
+            ],
+            "split": [
+              0.549999,
+              0.546094,
+              0.552273,
+              0.546868,
+              0.546624,
+              0.551293,
+              0.551778
+            ]
+          },
+          "medians_ms": {
+            "full": 0.550677,
+            "split": 0.549999
+          },
+          "checksum": 0,
+          "loops": 10000
+        },
+        "native/4096/0": {
+          "raw_ms": {
+            "full": [
+              1.92766,
+              1.92277,
+              1.88956,
+              1.91521,
+              1.92047,
+              1.89869,
+              1.91004
+            ],
+            "split": [
+              1.91302,
+              1.92054,
+              1.90049,
+              1.93488,
+              1.90984,
+              1.91412,
+              1.932
+            ]
+          },
+          "medians_ms": {
+            "full": 1.91521,
+            "split": 1.91412
+          },
+          "checksum": 27648,
+          "loops": 256
+        },
+        "native/524288/0": {
+          "raw_ms": {
+            "full": [
+              6.7752,
+              6.03165,
+              6.23118,
+              7.51545,
+              9.50546,
+              7.07562,
+              6.25327
+            ],
+            "split": [
+              5.98099,
+              6.2656,
+              5.85012,
+              8.31135,
+              9.13127,
+              8.35957,
+              6.21678
+            ]
+          },
+          "medians_ms": {
+            "full": 6.7752,
+            "split": 6.2656
+          },
+          "checksum": 4624,
+          "loops": 4
+        },
+        "native/524288/1": {
+          "raw_ms": {
+            "full": [
+              6.29378,
+              5.93886,
+              5.93775,
+              5.90101,
+              5.76721,
+              5.79367,
+              5.78402
+            ],
+            "split": [
+              6.25847,
+              6.13613,
+              5.88139,
+              5.76142,
+              5.85907,
+              6.11582,
+              6.06623
+            ]
+          },
+          "medians_ms": {
+            "full": 5.90101,
+            "split": 6.06623
+          },
+          "checksum": 4,
+          "loops": 4
+        },
+        "native/524288/2": {
+          "raw_ms": {
+            "full": [
+              6.05324,
+              5.80742,
+              6.08305,
+              6.01405,
+              5.80298,
+              6.15218,
+              5.79257
+            ],
+            "split": [
+              5.84313,
+              5.82357,
+              5.99515,
+              6.12635,
+              5.78517,
+              5.86827,
+              5.88237
+            ]
+          },
+          "medians_ms": {
+            "full": 6.01405,
+            "split": 5.86827
+          },
+          "checksum": 4624,
+          "loops": 4
+        },
+        "native/524288/3": {
+          "raw_ms": {
+            "full": [
+              5.84289,
+              6.06609,
+              5.91457,
+              6.27188,
+              5.90334,
+              6.00598,
+              5.93478
+            ],
+            "split": [
+              6.0013,
+              6.2083,
+              5.86153,
+              5.81309,
+              6.02678,
+              6.0896,
+              5.77544
+            ]
+          },
+          "medians_ms": {
+            "full": 5.93478,
+            "split": 6.0013
+          },
+          "checksum": 2240,
+          "loops": 4
+        },
+        "native/524288/4": {
+          "raw_ms": {
+            "full": [
+              5.94852,
+              6.22758,
+              6.06861,
+              5.98925,
+              5.77127,
+              6.23561,
+              5.88946
+            ],
+            "split": [
+              5.85145,
+              5.78435,
+              5.95949,
+              6.07596,
+              5.97851,
+              6.03094,
+              5.80405
+            ]
+          },
+          "medians_ms": {
+            "full": 5.98925,
+            "split": 5.95949
+          },
+          "checksum": 2097142,
+          "loops": 4
+        },
+        "standard/524288/0": {
+          "raw_ms": {
+            "full": [
+              4.22395,
+              4.70782,
+              4.9138,
+              3.94251,
+              4.10454,
+              3.89482,
+              3.85428
+            ],
+            "split": [
+              3.8374,
+              4.00799,
+              4.09519,
+              3.90871,
+              4.23447,
+              3.86594,
+              3.84288
+            ]
+          },
+          "medians_ms": {
+            "full": 4.10454,
+            "split": 3.90871
+          },
+          "checksum": 4624,
+          "loops": 4
+        },
+        "floating/524288/0": {
+          "raw_ms": {
+            "full": [
+              7.50233,
+              7.41266,
+              7.43057,
+              7.63417,
+              7.59892,
+              7.60162,
+              7.61283
+            ],
+            "split": [
+              7.5823,
+              7.4558,
+              7.52776,
+              7.48667,
+              7.71604,
+              6.62719,
+              7.45674
+            ]
+          },
+          "medians_ms": {
+            "full": 7.59892,
+            "split": 7.48667
+          },
+          "checksum": 4624,
+          "loops": 4
+        }
+      }
+    }
+  },
+  "performance_conditions": {
+    "cpu": "Intel Core i9-14900K",
+    "gcc": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: /usr/lib/llvm-21/bin\n",
+    "flags": "C++23 O2 SKIP_RUNTIME_CHECKS、GCC plain/native、Clang plain。詳細builds。",
+    "affinity": "compiler6/reference10/performance14",
+    "method": "7回・full/splitを順序交替しsteady_clockの中央値。配列の生成/確保は計時外。計時はorientation呼出しとchecksumおよび外側ループごとの1座標更新を含む。入力更新で全反復の単純な巻き上げを防ぐ。純粋な単一呼出しだけのコストとはしない。",
+    "shapes": "32/4096/524288三角形。小座標の乱数、共線、整数端への平行移動、±3e18の広い座標、ほぼ打ち消す積。明示int64計算型とdoubleも補足。",
+    "interpretation": "現行本体の基準測定のみ。今回の高速化の成果やAtCoderの実行時間予測として扱わない。full/splitは同じAPIだが配置/コンパイルの差や測定揺れがあり、比率をアルゴリズム差と説明しない。"
+  },
+  "optimization_decision": "今回は本体/問題用mainを変更せず、現在版をオンラインVerifyへ進める。問題は4回のAPI呼出しだけなので、プロセス起動/入出力時間を本体の成果に混ぜない。入力の±100という問題固有の範囲をライブラリへ持ち込まず、任意の契約内座標/計算型を維持。",
+  "simd": "新しい専用SIMD/CPU判定なし。単一三点APIの意味/前提と標準代替を維持。SIMDを使うバッチAPIやmainへの照会集約は今回追加しない。",
+  "provenance": "実装変更なし。新しい独立参照は外積の数式と二進有理数の整数化から作成。外部ライブラリ実装を転記しない。Boostはローカル試験だけの依存で、提出コードには含めない。",
+  "prior_core_verification": "Audit/verify-geometry-core-2026-10-22.json",
+  "reproduction": {
+    "verify.py": {
+      "sha256": "07f354e4cbd2b9183be82a1742f3d70e3bce646edf8b0d534b78c2afeace946c",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib,os,random,itertools\nr=Path('/home/reinsirk/Atcoder_Env');p=Path(__file__).parent;test=r/'Verify/current/tests/geometry_orientation_test.cpp';sha=lambda b:hashlib.sha256(b).hexdigest();d={'status':'INCOMPLETE','records':[],'fixtures':[],'main_runs':[],'test_sha256':sha(test.read_bytes())}\ndef turn(a,b,c):return(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0])\ndef crosses(a,b,c,e):return turn(a,b,c)*turn(a,b,e)<0 and turn(c,e,a)*turn(c,e,b)<0\nrng=random.Random(99118);counts={True:0,False:0}\nwhile min(counts.values())<32:\n q=[(rng.randint(-100,100),rng.randint(-100,100))for _ in range(4)]\n if len(set(q))<4 or any(turn(*t)==0 for t in itertools.combinations(q,3)):continue\n a,b,c,e=q\n if crosses(a,b,c,e)or crosses(b,c,e,a):continue\n if sum(q[i][0]*q[(i+1)%4][1]-q[i][1]*q[(i+1)%4][0]for i in range(4))<=0:continue\n expected=crosses(a,c,b,e)\n if counts[expected]>=32:continue\n counts[expected]+=1;d['fixtures'].append({'input':''.join(f'{x} {y}\\n'for x,y in q),'expected':'Yes\\n'if expected else'No\\n','reference':'非隣接辺の交差除外/正の靴紐面積で問題の前提を満たし、対角線の真交差で凸性を独立判定。'})\nfor q in [[(-100,-100),(100,-100),(100,100),(-100,100)],[(0,0),(100,100),(-100,0),(100,-100)]]:\n for i in range(4):\n  a=q[i:]+q[:i];d['fixtures'].append({'input':''.join(f'{x} {y}\\n'for x,y in a),'expected':'Yes\\n'if crosses(a[0],a[2],a[1],a[3])else'No\\n','reference':'境界座標と開始頂点の巡回。'})\nfor cc,compiler in [('gcc',['/usr/bin/g++']),('clang',['clang++','--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15'])]:\n for skip in [False,True]:\n  for standard in [False,True]:\n   for form,lib in [('full','Geometry/geometory.cpp'),('split','Geometry/Point.cpp')]:\n    flags=['-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors']\n    if skip:flags+=['-DSKIP_RUNTIME_CHECKS']\n    if standard:flags+=['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-DSIRKIT_DISABLE_SIMD','-U__SIZEOF_INT128__']\n    exe=p/'reference';cmd=['taskset','-c','10',*compiler,*flags,'-DSIRKIT_ORIENTATION_TEST_HEADER=\"'+str(r/lib)+'\"',str(test),'-o',str(exe)];q=subprocess.run(cmd,capture_output=True,text=True);assert q.returncode==0 and not q.stderr,(cmd,q.stderr);q=subprocess.run(['taskset','-c','10',str(exe)],capture_output=True,text=True);assert q.returncode==0 and not q.stderr,(cmd,q.stdout,q.stderr);d['records'].append({'mode':f'{cc}/{skip}/{standard}/{form}','command':cmd,'stdout':q.stdout});print(cc,skip,standard,form,q.stdout.strip(),flush=True)\nfor mode,cc,defs in [('gcc',['/usr/bin/g++'],[]),('gcc_standard',['/usr/bin/g++'],['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-DSIRKIT_DISABLE_SIMD','-U__SIZEOF_INT128__']),('clang',['clang++','--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15'],[])]:\n for form in ['full','split']:\n  path=r/f'Verify/current/submissions/geometry_orientation_atcoder_{form}.cpp';exe=p/(mode+'_'+form);cmd=['taskset','-c','6',*cc,'-std=c++23','-O2',*defs,str(path),'-o',str(exe)];subprocess.run(cmd,check=True)\n  for i,f in enumerate(d['fixtures']):\n   q=subprocess.run(['taskset','-c','10',str(exe)],input=f['input'],capture_output=True,text=True);assert q.returncode==0 and not q.stderr and q.stdout==f['expected'],(mode,form,i,q.stdout,q.stderr);d['main_runs'].append({'mode':mode,'form':form,'fixture':i})\n  print(mode,form,'72 valid quadrilateral cases PASS',flush=True)\nfor standard,skip in [(False,False),(True,True)]:\n flags=['-std=c++23','-O1','-g','-fsanitize=address,undefined','-fno-sanitize-recover=all']\n if skip:flags+=['-DSKIP_RUNTIME_CHECKS']\n if standard:flags+=['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-DSIRKIT_DISABLE_SIMD','-U__SIZEOF_INT128__']\n exe=p/'san_reference';cmd=['taskset','-c','10','clang++','--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15',*flags,str(test),'-o',str(exe)];q=subprocess.run(cmd,capture_output=True,text=True);assert q.returncode==0,(cmd,q.stderr);q=subprocess.run(['taskset','-c','10',str(exe)],capture_output=True,text=True,env={**os.environ,'ASAN_OPTIONS':'detect_leaks=0','UBSAN_OPTIONS':'halt_on_error=1'});assert q.returncode==0 and not q.stderr,(cmd,q.stdout,q.stderr);d['records'].append({'mode':f'sanitizer/{skip}/{standard}/split','command':cmd,'stdout':q.stdout});print('sanitizer',standard,skip,q.stdout.strip(),flush=True)\nd['status']='PASS';(p/'verification.json').write_text(json.dumps(d,indent=2)+'\\n')\n"
+    },
+    "bench.cpp": {
+      "sha256": "77648a25bf5102cbb1bce535d51d99a961a69ba03a45d0571dc081f3163e6876",
+      "source": "#include HEADER\n#include <array>\n#include <chrono>\n#include <cstdint>\n#include <iostream>\n#include <limits>\n#include <random>\n#include <string>\n#include <vector>\ntemplate<class P>int run(int n,int shape,int loops){\n std::mt19937_64 rng(910024);std::vector<std::array<P,3>> items(n);\n for(auto& item:items){\n  for(auto& q:item){q.x=static_cast<typename P::Value>(std::int64_t(rng()%2000001)-1000000);q.y=static_cast<typename P::Value>(std::int64_t(rng()%2000001)-1000000);}\n  if(shape==1){auto a=item[0],b=item[1];item[2]={2*b.x-a.x,2*b.y-a.y};}\n  if(shape==2){for(auto& q:item){q.x=static_cast<typename P::Value>(std::numeric_limits<std::int64_t>::min()+2000000+std::int64_t(q.x));q.y=static_cast<typename P::Value>(std::numeric_limits<std::int64_t>::max()-2000000+std::int64_t(q.y));}}\n  if(shape==3){for(auto& q:item){q.x=static_cast<typename P::Value>(std::int64_t(rng()%6000000000000000001ULL)-3000000000000000000);q.y=static_cast<typename P::Value>(std::int64_t(rng()%6000000000000000001ULL)-3000000000000000000);}}\n  if(shape==4){const auto k=static_cast<typename P::Value>(2000000000-rng()%1000000);item={P{0,0},P{k,k-1},P{k+1,k}};}\n }\n std::int64_t sum=0;auto start=std::chrono::steady_clock::now();\n for(int k=0;k<loops;++k){auto& q=items[std::size_t(k)%items.size()][0];if constexpr(std::is_integral_v<typename P::Value>)q.x^=1;else q.x+=1.0/16;for(const auto& t:items)sum+=geo::orientation(t[0],t[1],t[2]);}\n auto end=std::chrono::steady_clock::now();std::cout<<std::chrono::duration<double,std::milli>(end-start).count()<<' '<<sum<<'\\n';return 0;\n}\nint main(int argc,char**argv){if(argc!=5)return 1;const auto engine=std::string(argv[1]);int n=std::stoi(argv[2]),shape=std::stoi(argv[3]),loops=std::stoi(argv[4]);if(engine==\"floating\")return run<geo::Point<double>>(n,shape,loops);if(engine==\"standard\")return run<geo::Point<std::int64_t,std::int64_t>>(n,shape,loops);return run<geo::PointI>(n,shape,loops);}\n"
+    },
+    "performance.py": {
+      "sha256": "a59bebd6bd846bd2423ce1a06943a1d3feeeb5973ee421e719c111a9929c8f47",
+      "source": "from pathlib import Path\nimport subprocess,json,statistics,fcntl\nr=Path('/home/reinsirk/Atcoder_Env');p=Path(__file__).parent;d={'status':'INCOMPLETE','builds':[],'api':{}}\nmodes={'gcc':['/usr/bin/g++'],'gcc_native':['/usr/bin/g++','-march=native'],'clang':['clang++','--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15']}\nfor mode,cc in modes.items():\n for form,lib in [('full','Geometry/geometory.cpp'),('split','Geometry/Point.cpp')]:\n  exe=p/('bench_'+mode+'_'+form);cmd=['taskset','-c','6',*cc,'-std=c++23','-O2','-DSKIP_RUNTIME_CHECKS','-DHEADER=\"'+str(r/lib)+'\"',str(p/'bench.cpp'),'-o',str(exe)];q=subprocess.run(cmd,capture_output=True,text=True);assert q.returncode==0 and not q.stderr,(cmd,q.stderr);d['builds'].append(cmd)\nwith open('/tmp/sirkit_performance_cpu14.lock','a')as a,open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as b:\n fcntl.flock(a,fcntl.LOCK_EX);fcntl.flock(b,fcntl.LOCK_EX)\n for mode in modes:\n  d['api'][mode]={}\n  for engine,n,shape,loops in [('native',32,0,10000),('native',4096,0,256),*[('native',524288,s,4)for s in range(5)],('standard',524288,0,4),('floating',524288,0,4)]:\n   raw={'full':[],'split':[]};check=None\n   for rep in range(7):\n    for form in (['full','split']if rep%2==0 else['split','full']):\n     out=subprocess.check_output(['taskset','-c','14',str(p/('bench_'+mode+'_'+form)),engine,str(n),str(shape),str(loops)]).split();raw[form].append(float(out[0]));c=int(out[1]);check=c if check is None else check;assert c==check,(mode,form,engine,n,shape)\n   med={k:statistics.median(v)for k,v in raw.items()};key=f'{engine}/{n}/{shape}';d['api'][mode][key]={'raw_ms':raw,'medians_ms':med,'checksum':check,'loops':loops};print(mode,key,med,flush=True)\nd['status']='PASS';(p/'performance.json').write_text(json.dumps(d,indent=2)+'\\n')\n"
+    },
+    "audit.py": {
+      "sha256": "d2dc3af69516ed304193b55943e6955562f32de63f66ada00a4da689125c2c4a",
+      "source": "from pathlib import Path\nimport json,hashlib,datetime,subprocess\nr=Path('/home/reinsirk/Atcoder_Env');p=Path(__file__).parent;sha=lambda b:hashlib.sha256(b).hexdigest();load=lambda f:json.loads((p/f).read_text());verified=load('verification.json');perf=load('performance.json');samples={k:load('samples_'+k+'.json')for k in ['gcc','clang']};assert verified['status']=='PASS'and perf['status']=='PASS';assert len(verified['records'])==18 and len(verified['main_runs'])==432\nfiles=['Geometry/geometory.cpp','Geometry/Point.cpp','Geometry/components/point_functions.inc','Verify/current/drivers/geometry_quadrilateral_main.cpp','Verify/current/common/fast_io.hpp','Verify/current/submissions/geometry_orientation_atcoder_full.cpp','Verify/current/submissions/geometry_orientation_atcoder_split.cpp']\nfor f in files:assert (r/f).read_bytes()==(p/Path(f).name).read_bytes(),f\nprior=json.loads((r/'Audit/verify-geometry-core-2026-10-22.json').read_text());assert sha((r/'Geometry/Point.cpp').read_bytes())==prior['final_sources_sha256']['Geometry/Point.cpp'];last=json.loads((r/'Audit/verify-convex-hull-412899-2026-10-24.json').read_text());assert sha((r/'Geometry/geometory.cpp').read_bytes())==last['source_hashes']['Geometry/geometory.cpp']\nd={'date':'2026-10-24','checked_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS','scope':'次のVerify対象: 三点の向きorientation、Geometry/Point.cppと全機能版。','online_submitted':False,'body_changed':False,'main_changed':False,'io_changed':False,'problem':{'url':'https://atcoder.jp/contests/abc266/tasks/abc266_c','title':'C - Convex Quadrilateral','statement_checked':'公式ページを確認。各座標±100、重複/3点共線/非隣接辺交差のない反時計回り四角形。四つの内角が180度未満かを出力。','selection':'Library Checkerの問題一覧に直接の三点向き判定を確認できないため、対応するAtCoder問題を使う。','library_checker_index':'https://judge.yosupo.jp/','coverage':'4回の整数orientationを使う凸性判定。','limit':'整数全域・浮動許容幅・Pointの全APIをこの問題だけでオンラインVerifyしたとは扱わない。定数個のAPI呼出しなので、提出全体の時間からAPI単体の速さは評価しにくい。'},'source_hashes':{f:sha((r/f).read_bytes())for f in [*files,'Verify/current/tests/geometry_orientation_test.cpp','Document/geometry_orientation.md']},'verification':verified,'official_samples':samples,'independent_reference':{'source':'Verify/current/tests/geometry_orientation_test.cpp','sha256':sha((r/'Verify/current/tests/geometry_orientation_test.cpp').read_bytes()),'integer':'Boost cpp_intで差/積を計算し、APIの計算型Cの範囲に収まる場合だけ呼び出す。符号は多倍長の外積から独立照合。8/16/32/64bit、重複、共線、並べ替え、整数端、差/積の境界を含む。','beyond_determinant':'C=int64でp=9e18,q=-9e18のように各積は収まるがp-qは収まらない場合もorientationを検証。a.orient/a.ccwは減算もC内の場合だけ照合。','floating':'float/double/long doubleの座標を整数/16、abs/relを整数/1024に限定。途中演算を正確に表せる入力で、任意精度整数の閾値計算と照合。許容幅3×3と重複/零外積を確認。','outside_contract':'差または個別の積がCを超える入力はAPIを呼ばず数える。対象外入力まで検証済みとはしない。','quad_main':'Python整数で非隣接辺の交差/3点共線/靴紐面積を確認し、問題制約内の四角形だけ生成。凸性の参照は対角線の真交差判定で求め、提出mainの4局所orientationとは分ける。72fixtures×GCC/標準代替/Clang×full/split=432実行。'},'configurations':'GCC15.2/Clang21.1、C++23 O2 Wall Wextra Werror pedantic-errors。検査有無×拡張/標準算術×full/splitで16構成。Clang ASan/UBSanの拡張checkedと標準skipで2構成。標準はFORCE_STANDARD_ARITHMETIC/DISABLE_SIMD/U__SIZEOF_INT128__。','sanitizer_limit':'ASan/UBSanは違反なし。環境制約によりdetect_leaks=0。','performance':perf,'performance_conditions':{'cpu':'Intel Core i9-14900K','gcc':subprocess.check_output(['/usr/bin/g++','--version']).decode(),'clang':subprocess.check_output(['clang++','--version']).decode(),'flags':'C++23 O2 SKIP_RUNTIME_CHECKS、GCC plain/native、Clang plain。詳細builds。','affinity':'compiler6/reference10/performance14','method':'7回・full/splitを順序交替しsteady_clockの中央値。配列の生成/確保は計時外。計時はorientation呼出しとchecksumおよび外側ループごとの1座標更新を含む。入力更新で全反復の単純な巻き上げを防ぐ。純粋な単一呼出しだけのコストとはしない。','shapes':'32/4096/524288三角形。小座標の乱数、共線、整数端への平行移動、±3e18の広い座標、ほぼ打ち消す積。明示int64計算型とdoubleも補足。','interpretation':'現行本体の基準測定のみ。今回の高速化の成果やAtCoderの実行時間予測として扱わない。full/splitは同じAPIだが配置/コンパイルの差や測定揺れがあり、比率をアルゴリズム差と説明しない。'},'optimization_decision':'今回は本体/問題用mainを変更せず、現在版をオンラインVerifyへ進める。問題は4回のAPI呼出しだけなので、プロセス起動/入出力時間を本体の成果に混ぜない。入力の±100という問題固有の範囲をライブラリへ持ち込まず、任意の契約内座標/計算型を維持。','simd':'新しい専用SIMD/CPU判定なし。単一三点APIの意味/前提と標準代替を維持。SIMDを使うバッチAPIやmainへの照会集約は今回追加しない。','provenance':'実装変更なし。新しい独立参照は外積の数式と二進有理数の整数化から作成。外部ライブラリ実装を転記しない。Boostはローカル試験だけの依存で、提出コードには含めない。','prior_core_verification':'Audit/verify-geometry-core-2026-10-22.json','reproduction':{f:{'sha256':sha((p/f).read_bytes()),'source':(p/f).read_text()}for f in ['verify.py','bench.cpp','performance.py','audit.py']},'frozen_test':(r/'Verify/current/tests/geometry_orientation_test.cpp').read_text(),'frozen_driver':(r/'Verify/current/drivers/geometry_quadrilateral_main.cpp').read_text(),'distribution':{'zip':'/tmp/sirkit-cpp-library_20261024_orientation_ready.zip','checks_pending':True}}\n(r/'Audit/verify-orientation-ready-2026-10-24.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\\n');print('Ready audit PASS: 18 reference configurations,432 validquad main runs, online unsubmitted')\n"
+    }
+  },
+  "frozen_test": "// SPDX-License-Identifier: CC0-1.0\n#ifndef SIRKIT_ORIENTATION_TEST_HEADER\n#define SIRKIT_ORIENTATION_TEST_HEADER \"../../../Geometry/Point.cpp\"\n#endif\n#include SIRKIT_ORIENTATION_TEST_HEADER\n#include <boost/multiprecision/cpp_int.hpp>\n#include <array>\n#include <cstdint>\n#include <cstdlib>\n#include <iostream>\n#include <limits>\n#include <random>\n#include <vector>\n\nnamespace {\nusing Big = boost::multiprecision::cpp_int;\nstd::uint64_t checks = 0, outside_contract = 0;\nvoid require(bool value) {\n    ++checks;\n    if (!value) { std::cerr << \"orientation check \" << checks << \" failed\\n\"; std::abort(); }\n}\nint sign(const Big& x) { return (x > 0) - (x < 0); }\n\ntemplate<class P> void check(const P& a, const P& b, const P& c) {\n    const Big ux = Big(b.x) - a.x, uy = Big(b.y) - a.y;\n    const Big vx = Big(c.x) - a.x, vy = Big(c.y) - a.y;\n    const Big p = ux * vy, q = uy * vx;\n    const Big high = (Big{1} << std::numeric_limits<typename P::Calc>::digits) - 1;\n    const Big low = -high - 1;\n    for (const Big& x : std::array<Big, 6>{ux,uy,vx,vy,p,q}) {\n        if (x < low || x > high) { ++outside_contract; return; }\n    }\n    const Big determinant = p - q;\n    require(geo::orientation(a,b,c) == sign(determinant));\n    if (low <= determinant && determinant <= high) {\n        require(Big(a.orient(b,c)) == determinant);\n        require(a.ccw(b,c) == sign(determinant));\n    }\n}\n\ntemplate<class T, class C = geo::DefaultCalc<T>> void integers() {\n    using P = geo::Point<T,C>;\n    std::mt19937_64 rng(0xA891 + sizeof(T));\n    for (int i=0;i<10000;++i) {\n        const std::int64_t bound = sizeof(T)==1 ? 60 : sizeof(T)==2 ? 16000 : 1000000000;\n        auto point = [&] { return P{T(std::int64_t(rng()%std::uint64_t(2*bound+1))-bound),\n                                   T(std::int64_t(rng()%std::uint64_t(2*bound+1))-bound)}; };\n        const P a=point(),b=point(),c=i%7==0 ? a : point();\n        check(a,b,c); check(a,c,b); check(b,c,a);\n    }\n    const auto lo=std::numeric_limits<T>::min(), hi=std::numeric_limits<T>::max();\n    const std::vector<P> edges{{lo,0},{T(lo+7),T(-5)},{T(lo+11),13},\n                               {hi,0},{T(hi-7),T(-5)},{T(hi-11),13},\n                               {0,lo},{0,hi},{lo,lo},{hi,hi},{0,0}};\n    for (const P& a:edges) for (const P& b:edges) for (const P& c:edges) check(a,b,c);\n}\n\ntemplate<class T> void floating() {\n    using P=geo::Point<T>;\n    std::mt19937_64 rng(0xF10A);\n    // 座標・許容幅を二進有理数に限定し、参照側は整数だけで閾値を比較する。\n    for (int i=0;i<10000;++i) {\n        std::array<std::int64_t,6> v;\n        for(auto& x:v) x=std::int64_t(rng()%2047)-1023;\n        if(i%11==0) {v[4]=v[0];v[5]=v[1];}\n        const P a{T(v[0])/16,T(v[1])/16},b{T(v[2])/16,T(v[3])/16},c{T(v[4])/16,T(v[5])/16};\n        const Big p=Big(v[2]-v[0])*(v[5]-v[1]),q=Big(v[3]-v[1])*(v[4]-v[0]);\n        for (const int absolute:{0,64,1024}) for (const int relative:{0,1,32}) {\n            const Big value=(p-q)*1024, tolerance=Big(absolute)*256+Big(relative)*(abs(p)+abs(q));\n            const int expected=int(value>tolerance)-int(value < -tolerance);\n            require(geo::orientation(a,b,c,geo::Epsilon{absolute/1024.0L,relative/1024.0L})==expected);\n        }\n    }\n}\n}\n\nint main() {\n    integers<std::int8_t>(); integers<std::int16_t>();\n    integers<std::int32_t>(); integers<std::int64_t>();\n    integers<std::int64_t,std::int64_t>();\n    using P=geo::Point<std::int64_t,std::int64_t>;\n    check(P{0,0},P{3000000000,-3000000000},P{3000000000,3000000000});\n    floating<float>(); floating<double>(); floating<long double>();\n    std::cout << \"PASS checks=\" << checks << \" outside_contract=\" << outside_contract << '\\n';\n}\n",
+  "frozen_driver": "// SPDX-License-Identifier: CC0-1.0\n#include \"Verify/current/common/fast_io.hpp\"\n#include <array>\n\nint main() {\n    std::array<geo::PointI, 4> points;\n    for (auto& p : points) verify_in >> p.x >> p.y;\n    bool convex = true;\n    for (int i = 0; i < 4; ++i)\n        if (geo::orientation(points[i], points[(i + 1) % 4], points[(i + 2) % 4]) <= 0)\n            convex = false;\n    verify_out << (convex ? \"Yes\" : \"No\") << '\\n';\n}\n",
+  "distribution": {
+    "zip": "/tmp/sirkit-cpp-library_20261024_orientation_ready.zip",
+    "checks_pending": false,
+    "crc": "PASS",
+    "source_sync": "PASS",
+    "entries": 1134,
+    "full_bytes": 49996,
+    "split_bytes": 19307,
+    "all_submissions_within_512KiB": 142
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-22",
+  "scope": "LCA二周目の新規変更の出典と許諾。旧記事と独立実装の履歴は既存個別Auditを引き継ぐ。",
+  "baseline_source_sha256": "13873f0fd94df0e2b821ee73bc1f39e9ef611b2e3ab257cb1c08a2af0afedefa",
+  "final_source_sha256": "38e6aeaf62aa998625cb2902ef5193a42a87dcaff57809962ddeab1c7b49a7a9",
+  "inherited_evidence": {
+    "path": "Audit/provenance-lca-2026-10-22.json",
+    "sha256": "507a1632d6afc094fbcd7eb7f7c369bfb7ab6b77ad067f6b01a7de16bbedf8cc",
+    "prior_final_matches_this_baseline": true,
+    "findings": "2026-10-17にAPI/前提だけから独立作成した記録と、その後のSHA連鎖。旧ブログ実装の利用条件未確認を維持し、現在のCC0再実装とは区別する。今回その古い記事を再読して実装元に追加していない。"
+  },
+  "current_change": "現行のparent配列とlevels意味から、深さ1以下の1段表は親配列そのものであると判断してstd::copy_nを追加。外部実装を参照・移植していない。",
+  "external_implementation_consulted_for_this_change": false,
+  "mathematical_reference": "二分累乗表の0段目が親であるという既存API仕様と本体から導出。新しい外部数学文献は使っていない。",
+  "license": "既存の独立実装と今回の新規寄与はSPDX-License-Identifier: CC0-1.0。旧記事・旧git履歴を再許諾したとの主張ではない。",
+  "header_decision": "SPDXのみを維持。継承していない旧ブログをOriginal Source/参考として本体先頭へ新たに掲げない。",
+  "official_inputs": "既存のLibrary Checker lca生成器・問題形式と独立参照の入力/期待値を検証専用として再使用。本体の実装元ではない。元のAudit/performance-lca-2026-10-22.jsonおよびverify-lca-2026-10-22.jsonの由来/入力SHA記録を保持。",
+  "limits": "独立作成は当時の記録と今回の実作業に基づく。すべての第三者コードとの非一致を保証するものではない。"
+}

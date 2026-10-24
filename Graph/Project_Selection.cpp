@@ -1,5 +1,34 @@
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://drken1215.hatenablog.com/entry/2023/11/24/034300
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/project_selection.md
+//
+// API一覧
+// [TwoVariableSubmodularOpt]
+// COSTは64bit以下の符号付き整数。true側を始点側とする最小カット。
+// 分解途中の符号付きコスト・offsetもCOST範囲内が必要。
+// 有限辺容量の総和はmake_unsigned_t<COST>の最大値未満。算術・容量超過は例外。
+// V=補助頂点込み頂点数、E=辺数。追加は償却O(1)、集合項はO(|xs|)。
+// ctor(n=0)/ctor(n,inf): n変数で構築。旧inf引数の値は不要(厳密制約は内部で表現)。
+// init(n,inf=0)/clear(): 項を消去して再構築/変数数を維持して初期化、O(V+E)。clearは残る頂点の辺配列の領域を再利用、確保なし。
+// add_single_cost(i,F,T): xi=false/trueのコストF/Tを追加。
+// add_psp_constraint(i,j): xi=trueかつxj=falseを禁止。
+// add_psp_penalty(i,j,C): xi=trueかつxj=falseに非負コストC。
+// add_both_true_profit(i,j,P)/add_both_false_profit(i,j,P): 両方true/falseに非負利得P。
+// add_submodular_function(i,j,A,B,C,D): FF/FT/TF/TTのコスト、B+C>=A+D。同一変数はA/Dのみ。
+// add_all_true_profit(xs,P)/add_all_false_profit(xs,P): 全てtrue/falseに非負利得P。空集合も獲得、P=0は無操作。
+// add_any_true_cost(xs,C)/add_any_false_cost(xs,C): 1個以上true/falseなら非負費用C。空集合は0、C=0は無操作。O(|xs|)。
+// add_constant(C): 全割当に定数Cを加算、O(1)。
+// force(i,value): xiをvalueに固定。矛盾はsolveでdomain_error。
+// add_equality(i,j): xi=xjを強制。
+// solve(): 最小コスト、Dinic法O(V^2 E)。再呼出しO(1)、追加後は残余網から再開。
+// reconstruct(): 最適割当vector<bool>、未解決ならsolve後に復元、追加分O(n)。
+// solve_with_assignment(): {最小コスト,最適割当}を返す。
+// empty(): 変数数0ならtrue。O(1)。
+// variable_count()/node_count()/edge_count(): 変数数/補助頂点込み頂点数/順方向辺数、O(1)。
+// copy/move/swap(other)/swap(a,b): 独立コピー/移動(移動元は空の0変数)/定数時間交換。
+// 項追加・init・コピー代入が失敗した場合は、項・変数数・最適値を変更しない（予約済み容量は変わり得る）。
+// reserve_nodes(count): 補助頂点込みの頂点容量を予約、O(V)。辺容量の予約ではない。
+// operator<<: 現在の順方向辺をfrom->to(flow/capacity)形式で出力、O(E)。
 
 #include <algorithm>
 #include <cstddef>
@@ -14,28 +43,6 @@
 #ifndef SIRKIT_TWO_VARIABLE_SUBMODULAR_OPT_DEFINED
 #define SIRKIT_TWO_VARIABLE_SUBMODULAR_OPT_DEFINED
 
-// COSTは64bit以下の符号付き整数。true側を始点側とする最小カット。
-// 分解途中の符号付きコスト・offsetもCOST範囲内が必要。
-// 有限辺容量の総和はmake_unsigned_t<COST>の最大値未満。算術・容量超過は例外。
-// V=補助頂点込み頂点数、E=辺数。追加は償却O(1)、集合項はO(|xs|)。
-// ctor(n=0)/ctor(n,inf): n変数で構築。旧inf引数の値は不要(厳密制約は内部で表現)。
-// init(n,inf=0)/clear(): 項を消去して再構築/変数数を維持して初期化、O(V+E)。
-// add_single_cost(i,F,T): xi=false/trueのコストF/Tを追加。
-// add_psp_constraint(i,j): xi=trueかつxj=falseを禁止。
-// add_psp_penalty(i,j,C): xi=trueかつxj=falseに非負コストC。
-// add_both_true_profit(i,j,P)/add_both_false_profit(i,j,P): 両方true/falseに非負利得P。
-// add_submodular_function(i,j,A,B,C,D): FF/FT/TF/TTのコスト、B+C>=A+D。同一変数はA/Dのみ。
-// add_all_true_profit(xs,P)/add_all_false_profit(xs,P): 全てtrue/falseに非負利得P。空集合も獲得、P=0は無操作。
-// add_constant(C): 全割当に定数Cを加算、O(1)。
-// force(i,value): xiをvalueに固定。矛盾はsolveでdomain_error。
-// add_equality(i,j): xi=xjを強制。
-// solve(): 最小コスト、Dinic法O(V^2 E)。再呼出しO(1)、追加後は残余網から再開。
-// reconstruct(): 最適割当vector<bool>、未解決ならsolve後に復元、追加分O(n)。
-// solve_with_assignment(): {最小コスト,最適割当}を返す。
-// variable_count()/node_count()/edge_count(): 変数数/補助頂点込み頂点数/順方向辺数、O(1)。
-// copy/move/swap(other): 独立コピー/移動(移動元は空の0変数)/定数時間交換。
-// reserve_nodes(count): 補助頂点込みの頂点容量を予約、O(V)。辺容量の予約ではない。
-// operator<<: 現在の順方向辺をfrom->to(flow/capacity)形式で出力、O(E)。
 template<class COST = std::int64_t>
 class TwoVariableSubmodularOpt {
     static_assert(std::is_integral_v<COST> && std::is_signed_v<COST> && sizeof(COST) <= 8,
@@ -57,6 +64,23 @@ class TwoVariableSubmodularOpt {
     std::vector<int> level_, cursor_, queue_;
     std::vector<Frame> stack_;
 
+    static int checked_variable_count(int n) {
+        if (n < 0 || n > std::numeric_limits<int>::max() - 2)
+            throw std::length_error("Project Selection: invalid variable count");
+        return n;
+    }
+    void reserve_incident(int vertex, std::size_t extra) {
+        if (extra == 0) return;
+        auto& edges = graph_[vertex];
+        const auto maximum = std::min(edges.max_size(), static_cast<std::size_t>(std::numeric_limits<int>::max()));
+        if (extra > maximum - edges.size())
+            throw std::length_error("Project Selection: too many incident edges");
+        const auto required = edges.size() + extra;
+        if (required <= edges.capacity()) return;
+        const auto capacity = edges.capacity();
+        const auto growth = capacity > maximum - capacity ? maximum : capacity * 2;
+        edges.reserve(std::max(required, growth));
+    }
     static COST checked_add(COST a, COST b) {
         if ((b > 0 && a > std::numeric_limits<COST>::max() - b) ||
             (b < 0 && a < std::numeric_limits<COST>::min() - b))
@@ -113,9 +137,9 @@ class TwoVariableSubmodularOpt {
         solved_ = false;
         return result;
     }
-    void add_all_profit(const std::vector<int>& xs, COST profit, bool value) {
+    void add_all_profit(const std::vector<int>& xs, COST profit, bool value, bool reward = true) {
         check_nonnegative(profit);
-        const COST next = checked_sub(offset_, profit);
+        const COST next = reward ? checked_sub(offset_, profit) : offset_;
         if (xs.empty() || profit == 0) { offset_ = next; return; }
         check_budget(static_cast<Capacity>(profit));
         const bool was_solved = solved_;
@@ -197,6 +221,7 @@ class TwoVariableSubmodularOpt {
             sent += flow;
             if (sent == limit) break;
         }
+        if (sent < limit) level_[v] = -1;
         return sent;
     }
     COST answer() const {
@@ -239,8 +264,9 @@ public:
         graph_.swap(other.graph_); level_.swap(other.level_); cursor_.swap(other.cursor_);
         queue_.swap(other.queue_); stack_.swap(other.stack_);
     }
-    explicit TwoVariableSubmodularOpt(int n) { init(n); }
-    TwoVariableSubmodularOpt(int n, COST /*inf*/) { init(n); }
+    explicit TwoVariableSubmodularOpt(int n)
+        : n_(checked_variable_count(n)), source_(n_), sink_(n_ + 1), graph_(static_cast<std::size_t>(n_) + 2) {}
+    TwoVariableSubmodularOpt(int n, COST /*inf*/) : TwoVariableSubmodularOpt(n) {}
     void init(int n, COST /*inf*/ = 0) {
         if (n < 0 || n > std::numeric_limits<int>::max() - 2)
             throw std::length_error("Project Selection: invalid variable count");
@@ -251,7 +277,15 @@ public:
         solved_ = false; infeasible_ = false;
         level_.clear(); cursor_.clear(); queue_.clear(); stack_.clear();
     }
-    void clear() { init(n_); }
+    void clear() noexcept {
+        graph_.resize(static_cast<std::size_t>(n_) + 2);
+        for (auto& edges : graph_) edges.clear();
+        offset_ = 0; finite_capacity_ = 0; total_flow_ = 0; edge_count_ = 0;
+        solved_ = false; infeasible_ = false;
+        level_.clear(); cursor_.clear(); queue_.clear(); stack_.clear();
+    }
+    bool empty() const noexcept { return n_ == 0; }
+    friend void swap(TwoVariableSubmodularOpt& a, TwoVariableSubmodularOpt& b) noexcept { a.swap(b); }
     void add_constant(COST cost) { offset_ = checked_add(offset_, cost); }
     void add_single_cost(int xi, COST false_cost, COST true_cost) {
         check_variable(xi);
@@ -276,6 +310,11 @@ public:
         const Capacity p = static_cast<Capacity>(profit);
         if (xi == xj) check_budget(p);
         else { check_budget(p); if (p >= hard_capacity - finite_capacity_ - p) throw std::overflow_error("Project Selection: finite capacity budget exceeded"); }
+        if (p != 0) {
+            reserve_incident(source_, 1);
+            reserve_incident(xi, xi == xj ? 1 : 2);
+            if (xi != xj) reserve_incident(xj, 1);
+        }
         add_edge(source_, xi, p);
         add_edge(xi, xj, p);
         offset_ = next_offset;
@@ -286,6 +325,11 @@ public:
         const Capacity p = static_cast<Capacity>(profit);
         if (xi == xj) check_budget(p);
         else { check_budget(p); if (p >= hard_capacity - finite_capacity_ - p) throw std::overflow_error("Project Selection: finite capacity budget exceeded"); }
+        if (p != 0) {
+            reserve_incident(sink_, 1);
+            reserve_incident(xj, xi == xj ? 1 : 2);
+            if (xi != xj) reserve_incident(xi, 1);
+        }
         add_edge(xj, sink_, p);
         add_edge(xi, xj, p);
         offset_ = next_offset;
@@ -329,6 +373,11 @@ public:
         check_budget(cap);
         if (one >= hard_capacity - finite_capacity_ - cap || two >= hard_capacity - finite_capacity_ - cap - one)
             throw std::overflow_error("Project Selection: finite capacity budget exceeded");
+        // 複数辺の追加前に必要な容量を確保し、確保失敗時は項全体を未追加に保つ。
+        reserve_incident(xi, std::size_t(one != 0) + std::size_t(cap != 0));
+        reserve_incident(xj, std::size_t(two != 0) + std::size_t(cap != 0));
+        reserve_incident(source_, std::size_t(one != 0 && first <= 0) + std::size_t(two != 0 && second <= 0));
+        reserve_incident(sink_, std::size_t(one != 0 && first > 0) + std::size_t(two != 0 && second > 0));
         add_edge(first <= 0 ? source_ : xi, first <= 0 ? xi : sink_, one);
         add_edge(second <= 0 ? source_ : xj, second <= 0 ? xj : sink_, two);
         add_edge(xi, xj, cap);
@@ -336,11 +385,19 @@ public:
     }
     void add_all_true_profit(const std::vector<int>& xs, COST profit) { add_all_profit(xs, profit, true); }
     void add_all_false_profit(const std::vector<int>& xs, COST profit) { add_all_profit(xs, profit, false); }
+    void add_any_true_cost(const std::vector<int>& xs, COST cost) { add_all_profit(xs, cost, false, false); }
+    void add_any_false_cost(const std::vector<int>& xs, COST cost) { add_all_profit(xs, cost, true, false); }
     void force(int xi, bool value) {
         check_variable(xi);
         add_edge(value ? source_ : xi, value ? xi : sink_, hard_capacity, true);
     }
-    void add_equality(int xi, int xj) { add_psp_constraint(xi, xj); add_psp_constraint(xj, xi); }
+    void add_equality(int xi, int xj) {
+        check_variable(xi); check_variable(xj);
+        if (xi == xj) return;
+        reserve_incident(xi, 2); reserve_incident(xj, 2);
+        add_edge(xi, xj, hard_capacity, true);
+        add_edge(xj, xi, hard_capacity, true);
+    }
     COST solve() {
         if (infeasible_) throw std::domain_error("Project Selection: contradictory constraints");
         if (!solved_) {

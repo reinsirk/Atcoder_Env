@@ -1,0 +1,1526 @@
+{
+  "date": "2026-10-22",
+  "scope": "永続Union Find二周目。現在版の新規ローカル検証。オンライン提出は実施していない。",
+  "baseline_source_sha256": "4dcd71aed0fa24b2354f7f6faa23dec193d5fa0be77b8e155ca14a8aadeb8c73",
+  "final_source_sha256": "3515b6fba5752d4c8a2bc3a165afae44849deb77d5e54e36e7a1de40ae835935",
+  "files_sha256": {
+    "DataStructure/persistent-union-find.cpp": "3515b6fba5752d4c8a2bc3a165afae44849deb77d5e54e36e7a1de40ae835935",
+    "Document/persistent_union_find.md": "4d8ed07f95cf6bf99da4b3f2a595eee4f40620116ba29e3a8d0a5b7f08262e83",
+    "Examples/persistent_union_find_example.cpp": "e57ed9b0aa68bc065765f6948412441309f8f6048dd4bc48460485bca2335d9f",
+    "Verify/current/tests/puf_reference_test.cpp": "9b828c19ba80531cdbd2b7de80ac8abf4e7411b2799a54d2572baa3ddc0bb42d",
+    "Verify/current/tests/puf_exception_test.cpp": "d778d75c0bade8f168c44b5ec8a4d6016db9f605f86d32a4a2c2e0131c718b37",
+    "Verify/current/tests/puf_value_types_test.cpp": "93b95b4702fbd5f165aa30e44228badb8f1a5bf4067152cba97ad1c41cfe732c",
+    "Verify/current/tests/puf_pair_reference_test.cpp": "b875449bd87df9aff7a16f1218e411867d88976524b52dfd1bf713d9bb4eb653",
+    "Verify/current/tests/puf_second_performance_benchmark.cpp": "d82939698fe764fa2a9a25e2c8d893f6aa2bedbbbdcf79a1e05678611025a0dc"
+  },
+  "frozen_main_io_sha256": {
+    "Verify/current/drivers/persistent_union_find_main.cpp": "22c250df7a6f9f378ab792ea56e8204419103648eed046cffa42400fc33eae71",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "online_status": {
+    "current_source": "未提出",
+    "past_baseline": "Audit/online-persistent-union-find-412456-2026-10-22.json のACはbaseline4dcd版。今回の3515版のACへ読み替えない。"
+  },
+  "coverage": [
+    "既存の独立な頂点ラベル・全成分参照でUFの全公開API、任意版分岐・復元・コピー/移動・保存領域の寿命を照合。",
+    "既存配列参照/値型/例外suiteを最終版で再実行。copy-only/非default/overaligned/string/非自明defaultを含む。",
+    "get_twoはshift1..8で現在/過去/null版を独立vectorに照合。両添字が同じ場合、異なる葉、B/B²の前後、INT64_MAXの端点、foreign/null/不正添字を含む。",
+    "get_twoの戻り値コピー中の例外(1個目/2個目)でライブ値数と現在版を維持。",
+    "既存の割当失敗26回・値の失敗43回で過去版と現在版を維持し、所有者の破棄後のlive_delta=0。",
+    "公式14入力+独立参照付き補足4入力をGCC/Clang×checked/skipの同mainで実行。"
+  ],
+  "configuration": {
+    "gcc": "15.3.0",
+    "clang": "21.1.8 + GCC15.3 standard library",
+    "language": "C++23",
+    "flags": [
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors"
+    ],
+    "sanitizer": "Clang -O1 -fsanitize=address,undefined -fno-omit-frame-pointer、checked/skip",
+    "ASAN_OPTIONS": "detect_leaks=0。独立割当/値カウンタで所有寿命を確認。",
+    "compile_correctness_cpu": 10
+  },
+  "counts": {
+    "canonical_and_pair_suite": 16,
+    "asan_ubsan_suite": 8,
+    "duplicate_include": 4,
+    "example": 4,
+    "actual_main_builds": 4,
+    "actual_main_executions": 72,
+    "official_main_executions": 56,
+    "custom_main_executions": 16,
+    "preprocessor": 4
+  },
+  "results": {
+    "source_sha256": "3515b6fba5752d4c8a2bc3a165afae44849deb77d5e54e36e7a1de40ae835935",
+    "tests": [
+      {
+        "test": "puf_reference_test",
+        "configuration": "gcc_checked",
+        "source_sha256": "9b828c19ba80531cdbd2b7de80ac8abf4e7411b2799a54d2572baa3ddc0bb42d",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_reference_test_gcc_checked"
+        ],
+        "output": "PASS checks=647892 versions=634 operations=4800",
+        "passed": true
+      },
+      {
+        "test": "puf_exception_test",
+        "configuration": "gcc_checked",
+        "source_sha256": "d778d75c0bade8f168c44b5ec8a4d6016db9f605f86d32a4a2c2e0131c718b37",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_exception_test_gcc_checked"
+        ],
+        "output": "PASS checks=646 allocation_failures=26 value_failures=43 live_delta=0",
+        "passed": true
+      },
+      {
+        "test": "puf_value_types_test",
+        "configuration": "gcc_checked",
+        "source_sha256": "93b95b4702fbd5f165aa30e44228badb8f1a5bf4067152cba97ad1c41cfe732c",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_value_types_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_value_types_test_gcc_checked"
+        ],
+        "output": "PASS generic layout checks=1731 default_calls=0",
+        "passed": true
+      },
+      {
+        "test": "puf_reference_test",
+        "configuration": "gcc_skip",
+        "source_sha256": "9b828c19ba80531cdbd2b7de80ac8abf4e7411b2799a54d2572baa3ddc0bb42d",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_reference_test_gcc_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "output": "PASS checks=647733 versions=634 operations=4800",
+        "passed": true
+      },
+      {
+        "test": "puf_exception_test",
+        "configuration": "gcc_skip",
+        "source_sha256": "d778d75c0bade8f168c44b5ec8a4d6016db9f605f86d32a4a2c2e0131c718b37",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_exception_test_gcc_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "output": "PASS checks=646 allocation_failures=26 value_failures=43 live_delta=0",
+        "passed": true
+      },
+      {
+        "test": "puf_value_types_test",
+        "configuration": "gcc_skip",
+        "source_sha256": "93b95b4702fbd5f165aa30e44228badb8f1a5bf4067152cba97ad1c41cfe732c",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_value_types_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_value_types_test_gcc_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "output": "PASS generic layout checks=1731 default_calls=0",
+        "passed": true
+      },
+      {
+        "test": "puf_reference_test",
+        "configuration": "clang_checked",
+        "source_sha256": "9b828c19ba80531cdbd2b7de80ac8abf4e7411b2799a54d2572baa3ddc0bb42d",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_reference_test_clang_checked"
+        ],
+        "output": "PASS checks=647892 versions=634 operations=4800",
+        "passed": true
+      },
+      {
+        "test": "puf_exception_test",
+        "configuration": "clang_checked",
+        "source_sha256": "d778d75c0bade8f168c44b5ec8a4d6016db9f605f86d32a4a2c2e0131c718b37",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_exception_test_clang_checked"
+        ],
+        "output": "PASS checks=646 allocation_failures=26 value_failures=43 live_delta=0",
+        "passed": true
+      },
+      {
+        "test": "puf_value_types_test",
+        "configuration": "clang_checked",
+        "source_sha256": "93b95b4702fbd5f165aa30e44228badb8f1a5bf4067152cba97ad1c41cfe732c",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_value_types_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_value_types_test_clang_checked"
+        ],
+        "output": "PASS generic layout checks=1731 default_calls=0",
+        "passed": true
+      },
+      {
+        "test": "puf_reference_test",
+        "configuration": "clang_checked_san",
+        "source_sha256": "9b828c19ba80531cdbd2b7de80ac8abf4e7411b2799a54d2572baa3ddc0bb42d",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_reference_test_clang_checked_san",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "output": "PASS checks=647892 versions=634 operations=4800",
+        "passed": true
+      },
+      {
+        "test": "puf_exception_test",
+        "configuration": "clang_checked_san",
+        "source_sha256": "d778d75c0bade8f168c44b5ec8a4d6016db9f605f86d32a4a2c2e0131c718b37",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_exception_test_clang_checked_san",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "output": "PASS checks=646 allocation_failures=26 value_failures=43 live_delta=0",
+        "passed": true
+      },
+      {
+        "test": "puf_value_types_test",
+        "configuration": "clang_checked_san",
+        "source_sha256": "93b95b4702fbd5f165aa30e44228badb8f1a5bf4067152cba97ad1c41cfe732c",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_value_types_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_value_types_test_clang_checked_san",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "output": "PASS generic layout checks=1731 default_calls=0",
+        "passed": true
+      },
+      {
+        "test": "puf_reference_test",
+        "configuration": "clang_skip",
+        "source_sha256": "9b828c19ba80531cdbd2b7de80ac8abf4e7411b2799a54d2572baa3ddc0bb42d",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_reference_test_clang_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "output": "PASS checks=647733 versions=634 operations=4800",
+        "passed": true
+      },
+      {
+        "test": "puf_exception_test",
+        "configuration": "clang_skip",
+        "source_sha256": "d778d75c0bade8f168c44b5ec8a4d6016db9f605f86d32a4a2c2e0131c718b37",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_exception_test_clang_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "output": "PASS checks=646 allocation_failures=26 value_failures=43 live_delta=0",
+        "passed": true
+      },
+      {
+        "test": "puf_value_types_test",
+        "configuration": "clang_skip",
+        "source_sha256": "93b95b4702fbd5f165aa30e44228badb8f1a5bf4067152cba97ad1c41cfe732c",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_value_types_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_value_types_test_clang_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "output": "PASS generic layout checks=1731 default_calls=0",
+        "passed": true
+      },
+      {
+        "test": "puf_reference_test",
+        "configuration": "clang_skip_san",
+        "source_sha256": "9b828c19ba80531cdbd2b7de80ac8abf4e7411b2799a54d2572baa3ddc0bb42d",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_reference_test_clang_skip_san",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "output": "PASS checks=647733 versions=634 operations=4800",
+        "passed": true
+      },
+      {
+        "test": "puf_exception_test",
+        "configuration": "clang_skip_san",
+        "source_sha256": "d778d75c0bade8f168c44b5ec8a4d6016db9f605f86d32a4a2c2e0131c718b37",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_exception_test_clang_skip_san",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "output": "PASS checks=646 allocation_failures=26 value_failures=43 live_delta=0",
+        "passed": true
+      },
+      {
+        "test": "puf_value_types_test",
+        "configuration": "clang_skip_san",
+        "source_sha256": "93b95b4702fbd5f165aa30e44228badb8f1a5bf4067152cba97ad1c41cfe732c",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_value_types_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_value_types_test_clang_skip_san",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "output": "PASS generic layout checks=1731 default_calls=0",
+        "passed": true
+      },
+      {
+        "test": "puf_pair_reference_test",
+        "configuration": "gcc_checked",
+        "source_sha256": "b875449bd87df9aff7a16f1218e411867d88976524b52dfd1bf713d9bb4eb653",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_pair_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_pair_reference_test_gcc_checked"
+        ],
+        "output": "PASS pair reference checks=505353",
+        "passed": true
+      },
+      {
+        "test": "puf_pair_reference_test",
+        "configuration": "gcc_skip",
+        "source_sha256": "b875449bd87df9aff7a16f1218e411867d88976524b52dfd1bf713d9bb4eb653",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_pair_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_pair_reference_test_gcc_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "output": "PASS pair reference checks=505321",
+        "passed": true
+      },
+      {
+        "test": "puf_pair_reference_test",
+        "configuration": "clang_checked",
+        "source_sha256": "b875449bd87df9aff7a16f1218e411867d88976524b52dfd1bf713d9bb4eb653",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_pair_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_pair_reference_test_clang_checked"
+        ],
+        "output": "PASS pair reference checks=505353",
+        "passed": true
+      },
+      {
+        "test": "puf_pair_reference_test",
+        "configuration": "clang_checked_san",
+        "source_sha256": "b875449bd87df9aff7a16f1218e411867d88976524b52dfd1bf713d9bb4eb653",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_pair_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_pair_reference_test_clang_checked_san",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "output": "PASS pair reference checks=505353",
+        "passed": true
+      },
+      {
+        "test": "puf_pair_reference_test",
+        "configuration": "clang_skip",
+        "source_sha256": "b875449bd87df9aff7a16f1218e411867d88976524b52dfd1bf713d9bb4eb653",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_pair_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_pair_reference_test_clang_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "output": "PASS pair reference checks=505321",
+        "passed": true
+      },
+      {
+        "test": "puf_pair_reference_test",
+        "configuration": "clang_skip_san",
+        "source_sha256": "b875449bd87df9aff7a16f1218e411867d88976524b52dfd1bf713d9bb4eb653",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_PUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/persistent_second/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/puf_pair_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/puf_pair_reference_test_clang_skip_san",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "output": "PASS pair reference checks=505321",
+        "passed": true
+      }
+    ],
+    "examples": [],
+    "mains": [],
+    "guards": [
+      {
+        "configuration": "gcc_checked",
+        "passed": true
+      },
+      {
+        "configuration": "gcc_skip",
+        "passed": true
+      },
+      {
+        "configuration": "clang_checked",
+        "passed": true
+      },
+      {
+        "configuration": "clang_skip",
+        "passed": true
+      }
+    ]
+  },
+  "actual_mains_examples_preprocessor": {
+    "source_sha256": "3515b6fba5752d4c8a2bc3a165afae44849deb77d5e54e36e7a1de40ae835935",
+    "examples": [
+      {
+        "configuration": "gcc_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/persistent_union_find_example.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/example_gcc_checked"
+        ],
+        "passed": true,
+        "output": "4 3\n6 9 8\n",
+        "example_sha256": "e57ed9b0aa68bc065765f6948412441309f8f6048dd4bc48460485bca2335d9f"
+      },
+      {
+        "configuration": "gcc_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Examples/persistent_union_find_example.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/example_gcc_skip"
+        ],
+        "passed": true,
+        "output": "4 3\n6 9 8\n",
+        "example_sha256": "e57ed9b0aa68bc065765f6948412441309f8f6048dd4bc48460485bca2335d9f"
+      },
+      {
+        "configuration": "clang_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/persistent_union_find_example.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/example_clang_checked"
+        ],
+        "passed": true,
+        "output": "4 3\n6 9 8\n",
+        "example_sha256": "e57ed9b0aa68bc065765f6948412441309f8f6048dd4bc48460485bca2335d9f"
+      },
+      {
+        "configuration": "clang_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Examples/persistent_union_find_example.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/example_clang_skip"
+        ],
+        "passed": true,
+        "output": "4 3\n6 9 8\n",
+        "example_sha256": "e57ed9b0aa68bc065765f6948412441309f8f6048dd4bc48460485bca2335d9f"
+      }
+    ],
+    "mains": [
+      {
+        "configuration": "gcc_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/actual_gcc_checked.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/actual_gcc_checked"
+        ],
+        "translation_unit_sha256": "a3d15807c0a91c396f88ca86441e9b295c8834c880764bb63527ed78fe8991d5",
+        "cases": [
+          {
+            "case": "conchon_filliatre_tle_00.in",
+            "official": true,
+            "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+            "expected_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+            "passed": true
+          },
+          {
+            "case": "conchon_filliatre_tle_01.in",
+            "official": true,
+            "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+            "expected_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+            "passed": true
+          },
+          {
+            "case": "example_00.in",
+            "official": true,
+            "input_sha256": "69d26bf859c490cc455d2a702e04fb6f52a5454c14c0768418cf102e5c09f08d",
+            "expected_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+            "passed": true
+          },
+          {
+            "case": "hand_00.in",
+            "official": true,
+            "input_sha256": "ded143c4127c50bfef9f3a510b78a54de012e7b8cd981673fdf24aa70884b515",
+            "expected_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+            "passed": true
+          },
+          {
+            "case": "max_random_00.in",
+            "official": true,
+            "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+            "expected_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+            "passed": true
+          },
+          {
+            "case": "max_random_01.in",
+            "official": true,
+            "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+            "expected_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+            "passed": true
+          },
+          {
+            "case": "max_random_02.in",
+            "official": true,
+            "input_sha256": "e6be06d8a4be7e00d906e86e43a093f562b125717a43f65c557e0c7ee230f374",
+            "expected_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+            "passed": true
+          },
+          {
+            "case": "max_random_03.in",
+            "official": true,
+            "input_sha256": "9f8158268781ed9240eea2b30f5ef5956c431eb3de0c307189afdef7aea10a14",
+            "expected_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+            "passed": true
+          },
+          {
+            "case": "max_random_04.in",
+            "official": true,
+            "input_sha256": "dbded379487164e8125b385915a4c14df9cb8ede0af97772e18ceb4388ad11f2",
+            "expected_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+            "passed": true
+          },
+          {
+            "case": "random_00.in",
+            "official": true,
+            "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+            "expected_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+            "passed": true
+          },
+          {
+            "case": "random_01.in",
+            "official": true,
+            "input_sha256": "071c49e6c2e7e7a24acabe279648b4cc4211b58634d710c2b323b4614abf76ea",
+            "expected_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+            "passed": true
+          },
+          {
+            "case": "random_02.in",
+            "official": true,
+            "input_sha256": "8f93229ab776a7c5691fbb22fb037e270af7fe25b1a3a49990c140e37d42759c",
+            "expected_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+            "passed": true
+          },
+          {
+            "case": "random_03.in",
+            "official": true,
+            "input_sha256": "984ed94748529df4c100fc064a008fcbb5c8a461c6df9fce689e1a6cdbd825d9",
+            "expected_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+            "passed": true
+          },
+          {
+            "case": "random_04.in",
+            "official": true,
+            "input_sha256": "5d4a426b01bce8773c29de019fc1415fe309549c9a2ed38d31f11fab93ab3b89",
+            "expected_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+            "passed": true
+          },
+          {
+            "case": "balanced.in",
+            "official": false,
+            "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+            "expected_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+            "passed": true
+          },
+          {
+            "case": "branch_many.in",
+            "official": false,
+            "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+            "expected_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+            "passed": true
+          },
+          {
+            "case": "same_component.in",
+            "official": false,
+            "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+            "expected_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+            "passed": true
+          },
+          {
+            "case": "small_branch.in",
+            "official": false,
+            "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+            "expected_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "configuration": "gcc_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/actual_gcc_skip.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/actual_gcc_skip"
+        ],
+        "translation_unit_sha256": "5511819227728917632622d6f41befb54299addc7585f03ef564ce0d0f10dc62",
+        "cases": [
+          {
+            "case": "conchon_filliatre_tle_00.in",
+            "official": true,
+            "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+            "expected_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+            "passed": true
+          },
+          {
+            "case": "conchon_filliatre_tle_01.in",
+            "official": true,
+            "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+            "expected_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+            "passed": true
+          },
+          {
+            "case": "example_00.in",
+            "official": true,
+            "input_sha256": "69d26bf859c490cc455d2a702e04fb6f52a5454c14c0768418cf102e5c09f08d",
+            "expected_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+            "passed": true
+          },
+          {
+            "case": "hand_00.in",
+            "official": true,
+            "input_sha256": "ded143c4127c50bfef9f3a510b78a54de012e7b8cd981673fdf24aa70884b515",
+            "expected_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+            "passed": true
+          },
+          {
+            "case": "max_random_00.in",
+            "official": true,
+            "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+            "expected_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+            "passed": true
+          },
+          {
+            "case": "max_random_01.in",
+            "official": true,
+            "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+            "expected_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+            "passed": true
+          },
+          {
+            "case": "max_random_02.in",
+            "official": true,
+            "input_sha256": "e6be06d8a4be7e00d906e86e43a093f562b125717a43f65c557e0c7ee230f374",
+            "expected_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+            "passed": true
+          },
+          {
+            "case": "max_random_03.in",
+            "official": true,
+            "input_sha256": "9f8158268781ed9240eea2b30f5ef5956c431eb3de0c307189afdef7aea10a14",
+            "expected_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+            "passed": true
+          },
+          {
+            "case": "max_random_04.in",
+            "official": true,
+            "input_sha256": "dbded379487164e8125b385915a4c14df9cb8ede0af97772e18ceb4388ad11f2",
+            "expected_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+            "passed": true
+          },
+          {
+            "case": "random_00.in",
+            "official": true,
+            "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+            "expected_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+            "passed": true
+          },
+          {
+            "case": "random_01.in",
+            "official": true,
+            "input_sha256": "071c49e6c2e7e7a24acabe279648b4cc4211b58634d710c2b323b4614abf76ea",
+            "expected_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+            "passed": true
+          },
+          {
+            "case": "random_02.in",
+            "official": true,
+            "input_sha256": "8f93229ab776a7c5691fbb22fb037e270af7fe25b1a3a49990c140e37d42759c",
+            "expected_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+            "passed": true
+          },
+          {
+            "case": "random_03.in",
+            "official": true,
+            "input_sha256": "984ed94748529df4c100fc064a008fcbb5c8a461c6df9fce689e1a6cdbd825d9",
+            "expected_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+            "passed": true
+          },
+          {
+            "case": "random_04.in",
+            "official": true,
+            "input_sha256": "5d4a426b01bce8773c29de019fc1415fe309549c9a2ed38d31f11fab93ab3b89",
+            "expected_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+            "passed": true
+          },
+          {
+            "case": "balanced.in",
+            "official": false,
+            "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+            "expected_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+            "passed": true
+          },
+          {
+            "case": "branch_many.in",
+            "official": false,
+            "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+            "expected_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+            "passed": true
+          },
+          {
+            "case": "same_component.in",
+            "official": false,
+            "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+            "expected_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+            "passed": true
+          },
+          {
+            "case": "small_branch.in",
+            "official": false,
+            "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+            "expected_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "configuration": "clang_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/actual_clang_checked.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/actual_clang_checked"
+        ],
+        "translation_unit_sha256": "a3d15807c0a91c396f88ca86441e9b295c8834c880764bb63527ed78fe8991d5",
+        "cases": [
+          {
+            "case": "conchon_filliatre_tle_00.in",
+            "official": true,
+            "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+            "expected_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+            "passed": true
+          },
+          {
+            "case": "conchon_filliatre_tle_01.in",
+            "official": true,
+            "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+            "expected_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+            "passed": true
+          },
+          {
+            "case": "example_00.in",
+            "official": true,
+            "input_sha256": "69d26bf859c490cc455d2a702e04fb6f52a5454c14c0768418cf102e5c09f08d",
+            "expected_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+            "passed": true
+          },
+          {
+            "case": "hand_00.in",
+            "official": true,
+            "input_sha256": "ded143c4127c50bfef9f3a510b78a54de012e7b8cd981673fdf24aa70884b515",
+            "expected_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+            "passed": true
+          },
+          {
+            "case": "max_random_00.in",
+            "official": true,
+            "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+            "expected_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+            "passed": true
+          },
+          {
+            "case": "max_random_01.in",
+            "official": true,
+            "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+            "expected_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+            "passed": true
+          },
+          {
+            "case": "max_random_02.in",
+            "official": true,
+            "input_sha256": "e6be06d8a4be7e00d906e86e43a093f562b125717a43f65c557e0c7ee230f374",
+            "expected_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+            "passed": true
+          },
+          {
+            "case": "max_random_03.in",
+            "official": true,
+            "input_sha256": "9f8158268781ed9240eea2b30f5ef5956c431eb3de0c307189afdef7aea10a14",
+            "expected_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+            "passed": true
+          },
+          {
+            "case": "max_random_04.in",
+            "official": true,
+            "input_sha256": "dbded379487164e8125b385915a4c14df9cb8ede0af97772e18ceb4388ad11f2",
+            "expected_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+            "passed": true
+          },
+          {
+            "case": "random_00.in",
+            "official": true,
+            "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+            "expected_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+            "passed": true
+          },
+          {
+            "case": "random_01.in",
+            "official": true,
+            "input_sha256": "071c49e6c2e7e7a24acabe279648b4cc4211b58634d710c2b323b4614abf76ea",
+            "expected_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+            "passed": true
+          },
+          {
+            "case": "random_02.in",
+            "official": true,
+            "input_sha256": "8f93229ab776a7c5691fbb22fb037e270af7fe25b1a3a49990c140e37d42759c",
+            "expected_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+            "passed": true
+          },
+          {
+            "case": "random_03.in",
+            "official": true,
+            "input_sha256": "984ed94748529df4c100fc064a008fcbb5c8a461c6df9fce689e1a6cdbd825d9",
+            "expected_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+            "passed": true
+          },
+          {
+            "case": "random_04.in",
+            "official": true,
+            "input_sha256": "5d4a426b01bce8773c29de019fc1415fe309549c9a2ed38d31f11fab93ab3b89",
+            "expected_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+            "passed": true
+          },
+          {
+            "case": "balanced.in",
+            "official": false,
+            "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+            "expected_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+            "passed": true
+          },
+          {
+            "case": "branch_many.in",
+            "official": false,
+            "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+            "expected_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+            "passed": true
+          },
+          {
+            "case": "same_component.in",
+            "official": false,
+            "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+            "expected_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+            "passed": true
+          },
+          {
+            "case": "small_branch.in",
+            "official": false,
+            "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+            "expected_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "configuration": "clang_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/actual_clang_skip.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/persistent_second/actual_clang_skip"
+        ],
+        "translation_unit_sha256": "5511819227728917632622d6f41befb54299addc7585f03ef564ce0d0f10dc62",
+        "cases": [
+          {
+            "case": "conchon_filliatre_tle_00.in",
+            "official": true,
+            "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+            "expected_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+            "passed": true
+          },
+          {
+            "case": "conchon_filliatre_tle_01.in",
+            "official": true,
+            "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+            "expected_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+            "passed": true
+          },
+          {
+            "case": "example_00.in",
+            "official": true,
+            "input_sha256": "69d26bf859c490cc455d2a702e04fb6f52a5454c14c0768418cf102e5c09f08d",
+            "expected_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+            "passed": true
+          },
+          {
+            "case": "hand_00.in",
+            "official": true,
+            "input_sha256": "ded143c4127c50bfef9f3a510b78a54de012e7b8cd981673fdf24aa70884b515",
+            "expected_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+            "passed": true
+          },
+          {
+            "case": "max_random_00.in",
+            "official": true,
+            "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+            "expected_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+            "passed": true
+          },
+          {
+            "case": "max_random_01.in",
+            "official": true,
+            "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+            "expected_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+            "passed": true
+          },
+          {
+            "case": "max_random_02.in",
+            "official": true,
+            "input_sha256": "e6be06d8a4be7e00d906e86e43a093f562b125717a43f65c557e0c7ee230f374",
+            "expected_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+            "passed": true
+          },
+          {
+            "case": "max_random_03.in",
+            "official": true,
+            "input_sha256": "9f8158268781ed9240eea2b30f5ef5956c431eb3de0c307189afdef7aea10a14",
+            "expected_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+            "passed": true
+          },
+          {
+            "case": "max_random_04.in",
+            "official": true,
+            "input_sha256": "dbded379487164e8125b385915a4c14df9cb8ede0af97772e18ceb4388ad11f2",
+            "expected_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+            "passed": true
+          },
+          {
+            "case": "random_00.in",
+            "official": true,
+            "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+            "expected_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+            "passed": true
+          },
+          {
+            "case": "random_01.in",
+            "official": true,
+            "input_sha256": "071c49e6c2e7e7a24acabe279648b4cc4211b58634d710c2b323b4614abf76ea",
+            "expected_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+            "passed": true
+          },
+          {
+            "case": "random_02.in",
+            "official": true,
+            "input_sha256": "8f93229ab776a7c5691fbb22fb037e270af7fe25b1a3a49990c140e37d42759c",
+            "expected_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+            "passed": true
+          },
+          {
+            "case": "random_03.in",
+            "official": true,
+            "input_sha256": "984ed94748529df4c100fc064a008fcbb5c8a461c6df9fce689e1a6cdbd825d9",
+            "expected_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+            "passed": true
+          },
+          {
+            "case": "random_04.in",
+            "official": true,
+            "input_sha256": "5d4a426b01bce8773c29de019fc1415fe309549c9a2ed38d31f11fab93ab3b89",
+            "expected_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+            "passed": true
+          },
+          {
+            "case": "balanced.in",
+            "official": false,
+            "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+            "expected_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+            "passed": true
+          },
+          {
+            "case": "branch_many.in",
+            "official": false,
+            "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+            "expected_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+            "passed": true
+          },
+          {
+            "case": "same_component.in",
+            "official": false,
+            "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+            "expected_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+            "passed": true
+          },
+          {
+            "case": "small_branch.in",
+            "official": false,
+            "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+            "expected_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+            "passed": true
+          }
+        ],
+        "passed": true
+      }
+    ],
+    "preprocessing": {
+      "gcc_checked": {
+        "standard_disable_simd_identical": true,
+        "sha256": "42eba8cf9c3bae9c8a1245f38c05924e83c64683d7344847d0554bc65da85cfc",
+        "checks_removed_if_skip": true,
+        "internal_limits_retained": true
+      },
+      "gcc_skip": {
+        "standard_disable_simd_identical": true,
+        "sha256": "d6043cd9ca9d6f72b0faac601f2aa75cae20c1c78c090ff86d4ea5d8f8a69608",
+        "checks_removed_if_skip": true,
+        "internal_limits_retained": true
+      },
+      "clang_checked": {
+        "standard_disable_simd_identical": true,
+        "sha256": "b1588bc1cb9c1dca957e96c78c2c374e6204535fe98796ab0b3c2541b799ae83",
+        "checks_removed_if_skip": true,
+        "internal_limits_retained": true
+      },
+      "clang_skip": {
+        "standard_disable_simd_identical": true,
+        "sha256": "10c0b83c86bcd5029a8ce0dca0c0d1cde80139774d2f015bbbd8396c74d3eea2",
+        "checks_removed_if_skip": true,
+        "internal_limits_retained": true
+      }
+    }
+  },
+  "unchanged_sizes": [
+    {
+      "compiler": "gcc",
+      "checks_skipped": false,
+      "order": [
+        "Array<int> size",
+        "Node<int> size",
+        "Node<int> alignment",
+        "Array<string> size",
+        "Node<string> size",
+        "UF size"
+      ],
+      "sizes": {
+        "baseline": [
+          40,
+          136,
+          8,
+          40,
+          528,
+          48
+        ],
+        "final": [
+          40,
+          136,
+          8,
+          40,
+          528,
+          48
+        ]
+      },
+      "unchanged": true
+    },
+    {
+      "compiler": "gcc",
+      "checks_skipped": true,
+      "order": [
+        "Array<int> size",
+        "Node<int> size",
+        "Node<int> alignment",
+        "Array<string> size",
+        "Node<string> size",
+        "UF size"
+      ],
+      "sizes": {
+        "baseline": [
+          40,
+          128,
+          8,
+          40,
+          520,
+          48
+        ],
+        "final": [
+          40,
+          128,
+          8,
+          40,
+          520,
+          48
+        ]
+      },
+      "unchanged": true
+    },
+    {
+      "compiler": "clang",
+      "checks_skipped": false,
+      "order": [
+        "Array<int> size",
+        "Node<int> size",
+        "Node<int> alignment",
+        "Array<string> size",
+        "Node<string> size",
+        "UF size"
+      ],
+      "sizes": {
+        "baseline": [
+          40,
+          144,
+          8,
+          40,
+          528,
+          48
+        ],
+        "final": [
+          40,
+          144,
+          8,
+          40,
+          528,
+          48
+        ]
+      },
+      "unchanged": true
+    },
+    {
+      "compiler": "clang",
+      "checks_skipped": true,
+      "order": [
+        "Array<int> size",
+        "Node<int> size",
+        "Node<int> alignment",
+        "Array<string> size",
+        "Node<string> size",
+        "UF size"
+      ],
+      "sizes": {
+        "baseline": [
+          40,
+          136,
+          8,
+          40,
+          520,
+          48
+        ],
+        "final": [
+          40,
+          136,
+          8,
+          40,
+          520,
+          48
+        ]
+      },
+      "unchanged": true
+    }
+  ],
+  "fixture_provenance": "公式生成器・固定入力・独立期待値の由来とSHAは Audit/verify-persistent-union-find-2026-10-22.json。今回はそのローカル凍結入力/期待値を再利用しSHAも記録。",
+  "limits": [
+    "寿命切れポインタを検出できるという主張はしない。公開arrの直接更新によるUF不変条件の破壊は対象外。",
+    "SKIP_RUNTIME_CHECKSは入力検査とowner情報を除き、サイズ・容量上限を残す。追加SIMD/拡張整数経路はない。",
+    "配布生成・全体ZIPは親taskで同期する。"
+  ]
+}

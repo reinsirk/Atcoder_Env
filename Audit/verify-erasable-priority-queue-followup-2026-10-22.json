@@ -1,0 +1,700 @@
+{
+  "date": "2026-10-22",
+  "scope": "erasable-priority-queue 412313後の本体改修",
+  "source_sha256": "65f9eccd54a033a839cd7f9e8468509819f18b2b90e16356a048999747fd7abe",
+  "baseline_sha256": "fb0109dcd1964ddca8bb7a334bdd04a15814c80d219b0810e41f9666bd1d39b7",
+  "online_baseline_url": "https://judge.yosupo.jp/submission/412313",
+  "online_baseline_time_ms": 116,
+  "current_online_status": "再提出待ち。412313のACを最終版のACと扱わない。",
+  "changes": [
+    "bool以外の整数型では、相殺する二分ヒープのFloyd下降を交互に行い、末尾要素の復元は各々行う。通常push/popはstd::priority_queueを維持。",
+    "一般型とboolは実際の保存型もstd::priority_queueとし、normalizeも元の2回のpopを維持。"
+  ],
+  "driver_sha256": "e7e796d7768a99a8f1ecb11e5f01e69ed608697ca9b2bfba724260edd6a237bc",
+  "io_sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+  "main_unchanged": true,
+  "io_unchanged": true,
+  "test_source_sha256": "d634e148fadae9d1525275c6d331b8b21600b806ad79cfe44fe3ad5d2b7040ff",
+  "final_independent_checks": [
+    {
+      "name": "gcc_checked",
+      "command": [
+        "taskset",
+        "-c",
+        "4",
+        "g++",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-O2",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/erasable_priority_queue_test.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/final_correctness/gcc_checked"
+      ],
+      "compile_code": 0,
+      "warnings": "",
+      "run_code": 0,
+      "stdout": "PASS 928198 checks; live values 0\n",
+      "stderr": ""
+    },
+    {
+      "name": "gcc_skip",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/erasable_priority_queue_test.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/final_correctness/gcc_skip"
+      ],
+      "compile_code": 0,
+      "warnings": "",
+      "run_code": 0,
+      "stdout": "PASS 928190 checks; live values 0\n",
+      "stderr": ""
+    },
+    {
+      "name": "clang_checked",
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-O2",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/erasable_priority_queue_test.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/final_correctness/clang_checked"
+      ],
+      "compile_code": 0,
+      "warnings": "",
+      "run_code": 0,
+      "stdout": "PASS 928198 checks; live values 0\n",
+      "stderr": ""
+    },
+    {
+      "name": "clang_skip",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/erasable_priority_queue_test.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/final_correctness/clang_skip"
+      ],
+      "compile_code": 0,
+      "warnings": "",
+      "run_code": 0,
+      "stdout": "PASS 928190 checks; live values 0\n",
+      "stderr": ""
+    },
+    {
+      "name": "clang_sanitize",
+      "command": [
+        "taskset",
+        "-c",
+        "4",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/erasable_priority_queue_test.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/final_correctness/clang_sanitize"
+      ],
+      "compile_code": 0,
+      "warnings": "",
+      "run_code": 0,
+      "stdout": "PASS 928198 checks; live values 0\n",
+      "stderr": ""
+    }
+  ],
+  "final_official_checks": [
+    {
+      "name": "gcc_checked",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-DNDEBUG",
+        "/tmp/sirkit_epq_followup_20261022/final_gcc_checked.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/final_gcc_checked"
+      ],
+      "cases_passed": [
+        "example_00",
+        "random_n_max_q_max_00",
+        "random_n_max_q_max_01",
+        "random_n_max_q_max_many_pop_00",
+        "random_n_max_q_max_many_pop_01",
+        "random_n_max_q_max_only_type01_00",
+        "random_n_max_q_max_only_type01_01",
+        "random_n_max_q_max_small_value_00",
+        "random_n_max_q_max_small_value_01",
+        "random_n_zero_q_max_00",
+        "random_small_00",
+        "random_small_01",
+        "random_small_02",
+        "random_small_03",
+        "random_small_only_type01_00",
+        "random_small_only_type01_01",
+        "random_small_only_type01_02",
+        "random_small_only_type01_03"
+      ],
+      "compile_stderr": ""
+    },
+    {
+      "name": "gcc_skip",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-DNDEBUG",
+        "/tmp/sirkit_epq_followup_20261022/final_gcc_skip.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/final_gcc_skip"
+      ],
+      "cases_passed": [
+        "example_00",
+        "random_n_max_q_max_00",
+        "random_n_max_q_max_01",
+        "random_n_max_q_max_many_pop_00",
+        "random_n_max_q_max_many_pop_01",
+        "random_n_max_q_max_only_type01_00",
+        "random_n_max_q_max_only_type01_01",
+        "random_n_max_q_max_small_value_00",
+        "random_n_max_q_max_small_value_01",
+        "random_n_zero_q_max_00",
+        "random_small_00",
+        "random_small_01",
+        "random_small_02",
+        "random_small_03",
+        "random_small_only_type01_00",
+        "random_small_only_type01_01",
+        "random_small_only_type01_02",
+        "random_small_only_type01_03"
+      ],
+      "compile_stderr": "",
+      "performance_candidate_text_equal": true
+    },
+    {
+      "name": "clang_checked",
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-DNDEBUG",
+        "/tmp/sirkit_epq_followup_20261022/final_clang_checked.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/final_clang_checked"
+      ],
+      "cases_passed": [
+        "example_00",
+        "random_n_max_q_max_00",
+        "random_n_max_q_max_01",
+        "random_n_max_q_max_many_pop_00",
+        "random_n_max_q_max_many_pop_01",
+        "random_n_max_q_max_only_type01_00",
+        "random_n_max_q_max_only_type01_01",
+        "random_n_max_q_max_small_value_00",
+        "random_n_max_q_max_small_value_01",
+        "random_n_zero_q_max_00",
+        "random_small_00",
+        "random_small_01",
+        "random_small_02",
+        "random_small_03",
+        "random_small_only_type01_00",
+        "random_small_only_type01_01",
+        "random_small_only_type01_02",
+        "random_small_only_type01_03"
+      ],
+      "compile_stderr": ""
+    },
+    {
+      "name": "clang_skip",
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-DNDEBUG",
+        "/tmp/sirkit_epq_followup_20261022/final_clang_skip.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/final_clang_skip"
+      ],
+      "cases_passed": [
+        "example_00",
+        "random_n_max_q_max_00",
+        "random_n_max_q_max_01",
+        "random_n_max_q_max_many_pop_00",
+        "random_n_max_q_max_many_pop_01",
+        "random_n_max_q_max_only_type01_00",
+        "random_n_max_q_max_only_type01_01",
+        "random_n_max_q_max_small_value_00",
+        "random_n_max_q_max_small_value_01",
+        "random_n_zero_q_max_00",
+        "random_small_00",
+        "random_small_01",
+        "random_small_02",
+        "random_small_03",
+        "random_small_only_type01_00",
+        "random_small_only_type01_01",
+        "random_small_only_type01_02",
+        "random_small_only_type01_03"
+      ],
+      "compile_stderr": "",
+      "performance_candidate_text_equal": true
+    }
+  ],
+  "final_examples_and_local_driver": [
+    {
+      "name": "extra_gcc_checked_example",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "/home/reinsirk/Atcoder_Env/Examples/erasable_priority_queue_example.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/extra_gcc_checked_example"
+      ],
+      "passed": true,
+      "compile_stderr": ""
+    },
+    {
+      "name": "extra_gcc_checked_local",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "/tmp/sirkit_epq_followup_20261022/extra_gcc_checked_local.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/extra_gcc_checked_local"
+      ],
+      "passed": true,
+      "compile_stderr": ""
+    },
+    {
+      "name": "extra_gcc_skip_example",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Examples/erasable_priority_queue_example.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/extra_gcc_skip_example"
+      ],
+      "passed": true,
+      "compile_stderr": ""
+    },
+    {
+      "name": "extra_gcc_skip_local",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "/tmp/sirkit_epq_followup_20261022/extra_gcc_skip_local.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/extra_gcc_skip_local"
+      ],
+      "passed": true,
+      "compile_stderr": ""
+    },
+    {
+      "name": "extra_clang_checked_example",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "/home/reinsirk/Atcoder_Env/Examples/erasable_priority_queue_example.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/extra_clang_checked_example"
+      ],
+      "passed": true,
+      "compile_stderr": ""
+    },
+    {
+      "name": "extra_clang_checked_local",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "/tmp/sirkit_epq_followup_20261022/extra_clang_checked_local.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/extra_clang_checked_local"
+      ],
+      "passed": true,
+      "compile_stderr": ""
+    },
+    {
+      "name": "extra_clang_skip_example",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Examples/erasable_priority_queue_example.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/extra_clang_skip_example"
+      ],
+      "passed": true,
+      "compile_stderr": ""
+    },
+    {
+      "name": "extra_clang_skip_local",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "/tmp/sirkit_epq_followup_20261022/extra_clang_skip_local.cpp",
+        "-o",
+        "/tmp/sirkit_epq_followup_20261022/extra_clang_skip_local"
+      ],
+      "passed": true,
+      "compile_stderr": ""
+    }
+  ],
+  "generic_and_push_machine_code": {
+    "rows": [
+      {
+        "source": "generic",
+        "compiler": "gcc",
+        "tag": "baseline",
+        "command": [
+          "taskset",
+          "-c",
+          "4",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-DEPQ_SOURCE=\"/tmp/sirkit_epq_followup_20261022/baseline.cpp\"",
+          "/tmp/sirkit_epq_followup_20261022/review/generic.cpp",
+          "-o",
+          "/tmp/sirkit_epq_followup_20261022/review/final_generic_gcc_baseline"
+        ],
+        "warnings": "",
+        "text_sha256": "d1aec838fe7e85a3c2b6cb3098db25c08de688ba638dac4e53336cf900fc3078",
+        "text_bytes": 49608,
+        "outputs": {
+          "32": "8378643946145755479 16590411592253475631 16474737833743605669 3217971057882186858\n",
+          "4096": "12699390205892395212 4889872092218046725 8535449641913903697 17568132945376373520\n"
+        }
+      },
+      {
+        "source": "generic",
+        "compiler": "gcc",
+        "tag": "fused",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-DEPQ_SOURCE=\"/tmp/sirkit_epq_followup_20261022/fusion/final_fused.hpp\"",
+          "/tmp/sirkit_epq_followup_20261022/review/generic.cpp",
+          "-o",
+          "/tmp/sirkit_epq_followup_20261022/review/final_generic_gcc_fused"
+        ],
+        "warnings": "",
+        "text_sha256": "d1aec838fe7e85a3c2b6cb3098db25c08de688ba638dac4e53336cf900fc3078",
+        "text_bytes": 49608,
+        "outputs": {
+          "32": "8378643946145755479 16590411592253475631 16474737833743605669 3217971057882186858\n",
+          "4096": "12699390205892395212 4889872092218046725 8535449641913903697 17568132945376373520\n"
+        }
+      },
+      {
+        "source": "generic",
+        "compiler": "clang",
+        "tag": "baseline",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-DEPQ_SOURCE=\"/tmp/sirkit_epq_followup_20261022/baseline.cpp\"",
+          "/tmp/sirkit_epq_followup_20261022/review/generic.cpp",
+          "-o",
+          "/tmp/sirkit_epq_followup_20261022/review/final_generic_clang_baseline"
+        ],
+        "warnings": "",
+        "text_sha256": "193a9f308900fc7373f091cf9d96558c28632e4f4b11187f415aca0ba10a1c66",
+        "text_bytes": 36600,
+        "outputs": {
+          "32": "8378643946145755479 16590411592253475631 16474737833743605669 3217971057882186858\n",
+          "4096": "12699390205892395212 4889872092218046725 8535449641913903697 17568132945376373520\n"
+        }
+      },
+      {
+        "source": "generic",
+        "compiler": "clang",
+        "tag": "fused",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-DEPQ_SOURCE=\"/tmp/sirkit_epq_followup_20261022/fusion/final_fused.hpp\"",
+          "/tmp/sirkit_epq_followup_20261022/review/generic.cpp",
+          "-o",
+          "/tmp/sirkit_epq_followup_20261022/review/final_generic_clang_fused"
+        ],
+        "warnings": "",
+        "text_sha256": "193a9f308900fc7373f091cf9d96558c28632e4f4b11187f415aca0ba10a1c66",
+        "text_bytes": 36600,
+        "outputs": {
+          "32": "8378643946145755479 16590411592253475631 16474737833743605669 3217971057882186858\n",
+          "4096": "12699390205892395212 4889872092218046725 8535449641913903697 17568132945376373520\n"
+        }
+      },
+      {
+        "source": "push_only",
+        "compiler": "gcc",
+        "tag": "baseline",
+        "command": [
+          "taskset",
+          "-c",
+          "4",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-DEPQ_SOURCE=\"/tmp/sirkit_epq_followup_20261022/baseline.cpp\"",
+          "/tmp/sirkit_epq_followup_20261022/review/push_only.cpp",
+          "-o",
+          "/tmp/sirkit_epq_followup_20261022/review/final_push_only_gcc_baseline"
+        ],
+        "warnings": "",
+        "text_sha256": "fe7a5542f49ddabb4a2ded62974b86d6f719a6da21bbca4c5c27bc3bef6a7b49",
+        "text_bytes": 1617,
+        "outputs": {
+          "32": "32 32\n",
+          "4096": "4096 4096\n"
+        }
+      },
+      {
+        "source": "push_only",
+        "compiler": "gcc",
+        "tag": "fused",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-DEPQ_SOURCE=\"/tmp/sirkit_epq_followup_20261022/fusion/final_fused.hpp\"",
+          "/tmp/sirkit_epq_followup_20261022/review/push_only.cpp",
+          "-o",
+          "/tmp/sirkit_epq_followup_20261022/review/final_push_only_gcc_fused"
+        ],
+        "warnings": "",
+        "text_sha256": "fe7a5542f49ddabb4a2ded62974b86d6f719a6da21bbca4c5c27bc3bef6a7b49",
+        "text_bytes": 1617,
+        "outputs": {
+          "32": "32 32\n",
+          "4096": "4096 4096\n"
+        }
+      },
+      {
+        "source": "push_only",
+        "compiler": "clang",
+        "tag": "baseline",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-DEPQ_SOURCE=\"/tmp/sirkit_epq_followup_20261022/baseline.cpp\"",
+          "/tmp/sirkit_epq_followup_20261022/review/push_only.cpp",
+          "-o",
+          "/tmp/sirkit_epq_followup_20261022/review/final_push_only_clang_baseline"
+        ],
+        "warnings": "",
+        "text_sha256": "3eec947352b282a1b7aa4a1a9a6a44642477a70a009b0665bf13b843e62b8806",
+        "text_bytes": 1393,
+        "outputs": {
+          "32": "32 32\n",
+          "4096": "4096 4096\n"
+        }
+      },
+      {
+        "source": "push_only",
+        "compiler": "clang",
+        "tag": "fused",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-DEPQ_SOURCE=\"/tmp/sirkit_epq_followup_20261022/fusion/final_fused.hpp\"",
+          "/tmp/sirkit_epq_followup_20261022/review/push_only.cpp",
+          "-o",
+          "/tmp/sirkit_epq_followup_20261022/review/final_push_only_clang_fused"
+        ],
+        "warnings": "",
+        "text_sha256": "3eec947352b282a1b7aa4a1a9a6a44642477a70a009b0665bf13b843e62b8806",
+        "text_bytes": 1393,
+        "outputs": {
+          "32": "32 32\n",
+          "4096": "4096 4096\n"
+        }
+      }
+    ],
+    "checks": [
+      {
+        "source": "generic",
+        "compiler": "gcc",
+        "text_identical": true,
+        "bytes": {
+          "baseline": 49608,
+          "fused": 49608
+        }
+      },
+      {
+        "source": "generic",
+        "compiler": "clang",
+        "text_identical": true,
+        "bytes": {
+          "baseline": 36600,
+          "fused": 36600
+        }
+      },
+      {
+        "source": "push_only",
+        "compiler": "gcc",
+        "text_identical": true,
+        "bytes": {
+          "baseline": 1617,
+          "fused": 1617
+        }
+      },
+      {
+        "source": "push_only",
+        "compiler": "clang",
+        "text_identical": true,
+        "bytes": {
+          "baseline": 1393,
+          "fused": 1393
+        }
+      }
+    ]
+  },
+  "typed_test_scope": "最小/最大、bool、8/16/32/64bit整数の符号有無、float/double/long double、無限大・denorm・符号付き0（NaN除外）、整数端、重複、補助API、copy/move/swap、要素コピー例外。",
+  "sanitizer": "Clang ASan/UBSan、detect_leaks=0。LeakSanitizer成功とは扱わない。Value生存数0。",
+  "overflow_argument": "下降はhole<count/2のときだけ子添字を生成する。上昇はhole!=0で親添字を生成する。空になった配列への復元は行わない。整数型の比較と代入は例外を投げず、2本の物理保存数を同時に1ずつ減らす。",
+  "algorithm_argument": "既存の二分ヒープの頂点削除を独立した二配列に対して行う。下降の順序を交互にしても、互いの配列を参照せず、両方のheap性とmultisetの1要素削除を保つ。",
+  "api_argument": "公開API、Queueの公開型別名、コピー・move・swapの所有関係、遅延削除の前提、検査設定、計算量を維持。追加領域O(1)。CPU専用命令や追加拡張型はなし。",
+  "license": "既存のCC0 Original Source表示を維持。今回の二配列の交互下降は標準二分ヒープ操作から構成した。外部の追加実装は移植していない。"
+}

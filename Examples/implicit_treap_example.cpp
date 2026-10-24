@@ -1,4 +1,5 @@
 #include "../DataStructure/implicit_treap.cpp"
+#include <cassert>
 #include <cstdint>
 #include <iostream>
 #include <utility>
@@ -24,6 +25,14 @@ int main() {
     SumTreap copy = sequence;
     SumTreap moved = std::move(copy);
     std::cout << copy.empty() << ' ' << moved.size() << '\n'; // 1 4
+    moved.pop_front();
+    moved.pop_back();
+    std::cout << moved.get(0).sum << ' ' << moved.size() << '\n'; // 7 2
+    SumTreap assigned;
+    assigned.reserve(8);
+    assigned = sequence;
+    assigned.erase_at(0);
+    assert(assigned.size() == 3 && sequence.size() == 4); // コピー代入後も独立した列。
 
     lazy_implicit_treap<> ordered;
     ordered.reserve(10);

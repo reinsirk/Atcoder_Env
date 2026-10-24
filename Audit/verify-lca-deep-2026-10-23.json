@@ -1,0 +1,602 @@
+{
+  "date": "2026-10-23",
+  "status": "BASELINE_PASS_SUPPLEMENTAL_COVERAGE",
+  "source_sha256": "38e6aeaf62aa998625cb2902ef5193a42a87dcaff57809962ddeab1c7b49a7a9",
+  "online_audit": "Audit/online-lca-412738-2026-10-23.json",
+  "existing_verification": "Audit/verify-lca-ready-2026-10-23.json",
+  "baseline_results": {
+    "candidate": "unchanged online baseline38e",
+    "baseline_sha256": "38e6aeaf62aa998625cb2902ef5193a42a87dcaff57809962ddeab1c7b49a7a9",
+    "reused_baseline_record": "deep_validation.json tests[8]",
+    "tests": [
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+        "source_sha256": "6fa3f5bbfdb4a6b11186626e858b08eadfb037e7d2adcf7280f93fc962aa78df",
+        "baseline": true,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/baseline_frozen.hpp\"",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_baseline"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_baseline"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":66,\"checks\":70520525}\n",
+        "stderr": "",
+        "run_seconds": 2.322650481015444
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+        "source_sha256": "eb903c7ce5119a777072143e1a134ccbc619247e7ff594f11da34057d2eabaa8",
+        "baseline": true,
+        "compiler": "gcc15_2",
+        "skip": false,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/baseline_frozen.hpp\"",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_baseline_gcc15_2_checked"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_baseline_gcc15_2_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":430,\"allocation_failure_points\":131,\"live_delta\":0}\n",
+        "stderr": ""
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+        "source_sha256": "6fa3f5bbfdb4a6b11186626e858b08eadfb037e7d2adcf7280f93fc962aa78df",
+        "baseline": true,
+        "compiler": "gcc15_2",
+        "skip": true,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/baseline_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_baseline_gcc15_2_skip"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_baseline_gcc15_2_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":66,\"checks\":70520525}\n",
+        "stderr": ""
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+        "source_sha256": "eb903c7ce5119a777072143e1a134ccbc619247e7ff594f11da34057d2eabaa8",
+        "baseline": true,
+        "compiler": "gcc15_2",
+        "skip": true,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/baseline_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_baseline_gcc15_2_skip"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_baseline_gcc15_2_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":430,\"allocation_failure_points\":131,\"live_delta\":0}\n",
+        "stderr": ""
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+        "source_sha256": "6fa3f5bbfdb4a6b11186626e858b08eadfb037e7d2adcf7280f93fc962aa78df",
+        "baseline": true,
+        "compiler": "clang21",
+        "skip": false,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/baseline_frozen.hpp\"",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_baseline_clang21_checked"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_baseline_clang21_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":66,\"checks\":70520525}\n",
+        "stderr": ""
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+        "source_sha256": "eb903c7ce5119a777072143e1a134ccbc619247e7ff594f11da34057d2eabaa8",
+        "baseline": true,
+        "compiler": "clang21",
+        "skip": false,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/baseline_frozen.hpp\"",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_baseline_clang21_checked"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_baseline_clang21_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":430,\"allocation_failure_points\":131,\"live_delta\":0}\n",
+        "stderr": ""
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+        "source_sha256": "6fa3f5bbfdb4a6b11186626e858b08eadfb037e7d2adcf7280f93fc962aa78df",
+        "baseline": true,
+        "compiler": "clang21",
+        "skip": true,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/baseline_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_baseline_clang21_skip"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_baseline_clang21_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":66,\"checks\":70520525}\n",
+        "stderr": ""
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+        "source_sha256": "eb903c7ce5119a777072143e1a134ccbc619247e7ff594f11da34057d2eabaa8",
+        "baseline": true,
+        "compiler": "clang21",
+        "skip": true,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/baseline_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_baseline_clang21_skip"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_baseline_clang21_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":430,\"allocation_failure_points\":131,\"live_delta\":0}\n",
+        "stderr": ""
+      }
+    ],
+    "status": "PASS"
+  },
+  "reused_baseline_source_report": {
+    "candidate_source": "/tmp/sirkit_lca_deep_review_20261023/candidate_frozen.hpp",
+    "candidate_sha256": "83d2f0caaf25d851e3d02c0843835ec12f5bc3c986d8b2ab6850cc1b00d39aef",
+    "baseline_sha256": "38e6aeaf62aa998625cb2902ef5193a42a87dcaff57809962ddeab1c7b49a7a9",
+    "tests": [
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+        "source_sha256": "6fa3f5bbfdb4a6b11186626e858b08eadfb037e7d2adcf7280f93fc962aa78df",
+        "compiler": "gcc15_2",
+        "skip": false,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/candidate_frozen.hpp\"",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_gcc15_2_checked"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "build_seconds": 0.7007025519851595,
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_gcc15_2_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":66,\"checks\":70520525}\n",
+        "stderr": "",
+        "run_seconds": 2.5064821030246094
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+        "source_sha256": "eb903c7ce5119a777072143e1a134ccbc619247e7ff594f11da34057d2eabaa8",
+        "compiler": "gcc15_2",
+        "skip": false,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/candidate_frozen.hpp\"",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_gcc15_2_checked"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "build_seconds": 0.5326661709696054,
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_gcc15_2_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":453,\"allocation_failure_points\":140,\"live_delta\":0}\n",
+        "stderr": "",
+        "run_seconds": 0.02499617892317474
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+        "source_sha256": "6fa3f5bbfdb4a6b11186626e858b08eadfb037e7d2adcf7280f93fc962aa78df",
+        "compiler": "gcc15_2",
+        "skip": true,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_gcc15_2_skip"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "build_seconds": 0.6872574869776145,
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_gcc15_2_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":66,\"checks\":70520525}\n",
+        "stderr": "",
+        "run_seconds": 2.505944833974354
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+        "source_sha256": "eb903c7ce5119a777072143e1a134ccbc619247e7ff594f11da34057d2eabaa8",
+        "compiler": "gcc15_2",
+        "skip": true,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_gcc15_2_skip"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "build_seconds": 0.5200020959600806,
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_gcc15_2_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":453,\"allocation_failure_points\":140,\"live_delta\":0}\n",
+        "stderr": "",
+        "run_seconds": 0.023437120020389557
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+        "source_sha256": "6fa3f5bbfdb4a6b11186626e858b08eadfb037e7d2adcf7280f93fc962aa78df",
+        "compiler": "clang21",
+        "skip": false,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/candidate_frozen.hpp\"",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_clang21_checked"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "build_seconds": 0.5997091890312731,
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_clang21_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":66,\"checks\":70520525}\n",
+        "stderr": "",
+        "run_seconds": 2.399739654036239
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+        "source_sha256": "eb903c7ce5119a777072143e1a134ccbc619247e7ff594f11da34057d2eabaa8",
+        "compiler": "clang21",
+        "skip": false,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/candidate_frozen.hpp\"",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_clang21_checked"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "build_seconds": 0.5275204260833561,
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_clang21_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":453,\"allocation_failure_points\":140,\"live_delta\":0}\n",
+        "stderr": "",
+        "run_seconds": 0.03474936995189637
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+        "source_sha256": "6fa3f5bbfdb4a6b11186626e858b08eadfb037e7d2adcf7280f93fc962aa78df",
+        "compiler": "clang21",
+        "skip": true,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_clang21_skip"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "build_seconds": 0.5954456549370661,
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_clang21_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":66,\"checks\":70520525}\n",
+        "stderr": "",
+        "run_seconds": 2.3719491839874536
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+        "source_sha256": "eb903c7ce5119a777072143e1a134ccbc619247e7ff594f11da34057d2eabaa8",
+        "compiler": "clang21",
+        "skip": true,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_clang21_skip"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "build_seconds": 0.48367935488931835,
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test_clang21_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":453,\"allocation_failure_points\":140,\"live_delta\":0}\n",
+        "stderr": "",
+        "run_seconds": 0.028715752996504307
+      },
+      {
+        "source": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+        "source_sha256": "6fa3f5bbfdb4a6b11186626e858b08eadfb037e7d2adcf7280f93fc962aa78df",
+        "baseline": true,
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_deep_review_20261023/baseline_frozen.hpp\"",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_baseline"
+        ],
+        "build_exit": 0,
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test_baseline"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":66,\"checks\":70520525}\n",
+        "stderr": "",
+        "run_seconds": 2.322650481015444
+      }
+    ],
+    "locks_acquired": [
+      "/tmp/sirkit_performance_cpu14.lock",
+      "/tmp/atcoder_full_performance_20261018/benchmark.lock"
+    ],
+    "status": "PASS"
+  },
+  "source_port_note": "実行時はSIRKIT_LCA_SOURCEを明示。リポジトリへの移植では未定義時の既定includeパスだけを相対パスへ変更し、それ以外がバイト一致することを確認。",
+  "tests": {
+    "lca_deep_branch_test.cpp": {
+      "path": "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_deep_branch_test.cpp",
+      "sha256": "87d40e746a2e3feb8ce4816b9de206468f65f9a66069b4706a9837a56fbe8ca3",
+      "source": "// SPDX-License-Identifier: CC0-1.0\n#ifndef SIRKIT_LCA_SOURCE\n#define SIRKIT_LCA_SOURCE \"../../../Graph/LCA.cpp\"\n#endif\n#include SIRKIT_LCA_SOURCE\n#include <algorithm>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#include <numeric>\n#include <random>\n#include <utility>\n#include <vector>\nusing Graph=std::vector<std::vector<int>>;\nstatic std::size_t checks=0,cases=0;\nstatic void need(bool ok) {++checks;if(!ok){std::fprintf(stderr,\"failure case %zu check %zu\\n\",cases,checks);std::abort();}}\nstatic void edge(Graph&g,int u,int v){g[u].push_back(v);g[v].push_back(u);}\nstruct Ref {\n std::vector<int> p,d,c,r;\n Ref(const Graph&g,int root):p(g.size(),-2),d(g.size()),c(g.size()),r(g.size()) {\n  int components=0;std::vector<int> q;\n  for(int k=-1;k<static_cast<int>(g.size());++k){int s=k<0?root:k;if(p[s]!=-2)continue;p[s]=-1;q.clear();q.push_back(s);c[s]=components;r[s]=s;\n   for(std::size_t i=0;i<q.size();++i){int v=q[i];for(int w:g[v])if(p[w]==-2){p[w]=v;d[w]=d[v]+1;c[w]=components;r[w]=s;q.push_back(w);}}\n   ++components;\n  }\n }\n int ancestor(int v,std::uint64_t k)const{if(k>static_cast<std::uint64_t>(d[v]))return -1;while(k--)v=p[v];return v;}\n int lca(int u,int v)const{if(c[u]!=c[v])return -1;while(d[u]>d[v])u=p[u];while(d[v]>d[u])v=p[v];while(u!=v){u=p[u];v=p[v];}return u;}\n int distance(int u,int v)const{int a=lca(u,v);return a<0?-1:(d[u]-d[a])+(d[v]-d[a]);}\n int path(int u,int v,std::uint64_t k)const{int a=lca(u,v);if(a<0)return -1;std::uint64_t x=d[u]-d[a],y=d[v]-d[a];if(k>x+y)return -1;return k<=x?ancestor(u,k):ancestor(v,x+y-k);}\n int rooted(int u,int v,int root)const{if(c[u]!=c[v]||c[u]!=c[root])return -1;int a=lca(u,v),b=lca(u,root),z=lca(v,root);return d[a]>d[b]?(d[a]>d[z]?a:z):(d[b]>d[z]?b:z);}\n bool above(int u,int v)const{return c[u]==c[v]&&d[u]<=d[v]&&ancestor(v,d[v]-d[u])==u;}\n};\nstatic void verify(const LCA&t,const Ref&r,int root){\n const int n=static_cast<int>(r.p.size());need(t.size()==r.p.size());need(t.empty()==(n==0));need(t.root()==root);int comps=0;for(int v=0;v<n;++v)if(r.p[v]<0)++comps;need(t.component_count()==static_cast<std::size_t>(comps));\n std::vector<int> seen(n);std::mt19937_64 rng(41+n);\n for(int v=0;v<n;++v){need(t.parent(v)==r.p[v]);need(t.depth_of(v)==r.d[v]);need(t.component_of(v)==r.c[v]);need(t.root_of(v)==r.r[v]);auto[a,b]=t.subtree_range(v);need(a==t.order_index(v));need(a>=0&&a<b&&b<=n);need(++seen[a]==1);need(t.subtree_size(v)==b-a);int descendants=0;\n  for(int u=0;u<n;++u){bool above=r.above(v,u);descendants+=above;need(t.is_ancestor(v,u)==above);need((a<=t.order_index(u)&&t.order_index(u)<b)==above);need(t.same_component(v,u)==(r.c[v]==r.c[u]));int l=r.lca(v,u);need(t.get(v,u)==l);need(t(v,u)==l);need(t.get_distance(v,u)==r.distance(v,u));\n   const auto d=r.distance(v,u);const std::uint64_t k=d<0?1:rng()%static_cast<std::uint64_t>(d+2);need(t.kth_on_path(v,u,k)==r.path(v,u,k));need(t.kth_on_path(v,u,UINT64_MAX)==-1);\n  }\n  need(t.subtree_size(v)==descendants);\n  for(std::uint64_t k=0;k<=static_cast<std::uint64_t>(r.d[v])+1;++k)need(t.kth_ancestor(v,k)==r.ancestor(v,k));need(t.kth_ancestor(v,UINT64_MAX)==-1);\n }\n for(int k=0;k<4000;++k){int u=rng()%n,v=rng()%n,w=rng()%n;need(t.get(u,v,w)==r.rooted(u,v,w));}\n}\nstatic void run(const Graph&g,int root,bool lifecycle){++cases;Ref r(g,root);LCA t(g,root);verify(t,r,root);if(!lifecycle)return;\n LCA copy(t);verify(copy,r,root);copy=copy;copy.swap(copy);verify(copy,r,root);LCA moved(std::move(copy));need(copy.empty()&&copy.root()==-1&&copy.component_count()==0);verify(moved,r,root);copy=std::move(moved);need(moved.empty()&&moved.root()==-1);verify(copy,r,root);copy=std::move(copy);verify(copy,r,root);LCA assigned;assigned=t;verify(assigned,r,root);LCA small(Graph(1));swap(small,assigned);verify(small,r,root);need(assigned.size()==1&&assigned.parent(0)==-1);t.clear();need(t.empty()&&t.root()==-1&&t.component_count()==0);t.clear();t.build(g,root);verify(t,r,root);t.build(Graph{});need(t.empty()&&t.root()==-1);t.build(g,root);verify(t,r,root);\n}\nstatic Graph shape(int depth,int kind){\n const int extras=kind==0?1:kind==1?depth:kind==2?depth:depth/2;\n Graph g(depth+1+extras+4);for(int i=1;i<=depth;++i)edge(g,i-1,i);\n for(int i=0;i<extras;++i){int parent=kind==0?0:kind==1?i:kind==2?(i?depth+i:0):depth/2;edge(g,parent,depth+1+i);}return g;\n}\nint main(){std::mt19937 rng(29173);\n for(int h:{64,65,66,129,257})for(int kind=0;kind<4;++kind){Graph g=shape(h,kind);run(g,0,h==65&&kind==1);run(g,h,false);std::vector<int> perm(g.size());std::iota(perm.begin(),perm.end(),0);std::shuffle(perm.begin(),perm.end(),rng);Graph shuffled(g.size());for(int v=0;v<static_cast<int>(g.size());++v)for(int w:g[v])shuffled[perm[v]].push_back(perm[w]);for(auto&v:shuffled)std::shuffle(v.begin(),v.end(),rng);run(shuffled,perm[0],false);}\n for(int stem:{64,65,66}){Graph g(stem+511+4);for(int v=1;v<=stem;++v)edge(g,v-1,v);for(int i=1;i<511;++i)edge(g,stem+(i-1)/2,stem+i);run(g,0,stem==65);run(g,stem+510,false);}\n std::printf(\"{\\\"status\\\":\\\"PASS\\\",\\\"cases\\\":%zu,\\\"checks\\\":%zu}\\n\",cases,checks);\n}\n"
+    },
+    "lca_deep_allocation_test.cpp": {
+      "path": "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_deep_allocation_test.cpp",
+      "sha256": "eb903c7ce5119a777072143e1a134ccbc619247e7ff594f11da34057d2eabaa8",
+      "source": "// SPDX-License-Identifier: CC0-1.0\n#ifndef SIRKIT_LCA_REQUIRE_EXTRA\n#define SIRKIT_LCA_REQUIRE_EXTRA\n#endif\n#ifndef SIRKIT_LCA_SOURCE\n#define SIRKIT_LCA_SOURCE \"../../../Graph/LCA.cpp\"\n#endif\n#include SIRKIT_LCA_SOURCE\n#include <cstddef>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#include <limits>\n#include <new>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\nstatic std::ptrdiff_t failure_countdown = -1;\nstatic std::size_t live_allocations = 0, checks = 0, failures = 0;\n[[gnu::noinline]] void* operator new(std::size_t n) {\n    if (failure_countdown == 0) throw std::bad_alloc();\n    if (failure_countdown > 0) --failure_countdown;\n    if (void* p = std::malloc(n ? n : 1)) { ++live_allocations; return p; }\n    throw std::bad_alloc();\n}\n[[gnu::noinline]] void* operator new[](std::size_t n) { return ::operator new(n); }\n[[gnu::noinline]] static void free_block(void* p) noexcept { if (p) --live_allocations; std::free(p); }\nvoid operator delete(void* p) noexcept { free_block(p); }\nvoid operator delete[](void* p) noexcept { free_block(p); }\nvoid operator delete(void* p, std::size_t) noexcept { free_block(p); }\nvoid operator delete[](void* p, std::size_t) noexcept { free_block(p); }\nstatic void require(bool ok) { ++checks; if (!ok) std::abort(); }\nusing Graph = std::vector<std::vector<int>>;\nstatic Graph make_graph(int n, bool forest) {\n    Graph g(n); for(int v=1;v<n;++v) if(!forest || v%7) {int p=(v-1)/2;g[v].push_back(p);g[p].push_back(v);}return g;\n}\ntemplate<class Tree> static void append_extra(std::vector<int>& out,const Tree& tree,int v) {\n    if constexpr(requires { tree.subtree_size(v);tree.subtree_range(v);tree.order_index(v); }) {\n        out.push_back(tree.subtree_size(v));out.push_back(tree.order_index(v));\n        const auto [first,last]=tree.subtree_range(v);out.push_back(first);out.push_back(last);\n    }\n}\nstatic std::vector<int> snapshot(const LCA& tree) {\n    std::vector<int> result{static_cast<int>(tree.size()),tree.root(),static_cast<int>(tree.component_count())};\n    for (int v=0;v<static_cast<int>(tree.size());++v) {\n        result.push_back(tree.parent(v));result.push_back(tree.depth_of(v));result.push_back(tree.root_of(v));result.push_back(tree.component_of(v));\n        result.push_back(tree.kth_ancestor(v,UINT64_MAX));append_extra(result,tree,v);\n        for(int u=0;u<static_cast<int>(tree.size());++u) {result.push_back(tree.get(v,u));result.push_back(tree.get_distance(v,u));result.push_back(tree.is_ancestor(v,u));result.push_back(tree.kth_on_path(v,u,1));}\n    }\n    return result;\n}\nstatic void constructor_failures(const Graph& g,int root) {\n    LCA reference(g,root);const auto expected=snapshot(reference);bool succeeded=false;\n    for(std::ptrdiff_t point=0;point<256;++point) {\n        const auto before=live_allocations;bool caught=false;\n        try {failure_countdown=point;LCA tree(g,root);failure_countdown=-1;require(snapshot(tree)==expected);succeeded=true;}\n        catch(const std::bad_alloc&) {failure_countdown=-1;caught=true;++failures;}\n        require(live_allocations==before);\n        if(!caught)break;\n    }\n    require(succeeded);\n}\nstatic void copy_failures(const LCA& source) {\n    const auto expected=snapshot(source);bool succeeded=false;\n    for(std::ptrdiff_t point=0;point<256;++point) {\n        const auto before=live_allocations;bool caught=false;\n        try {failure_countdown=point;LCA copy(source);failure_countdown=-1;require(snapshot(copy)==expected);succeeded=true;}\n        catch(const std::bad_alloc&) {failure_countdown=-1;caught=true;++failures;}\n        require(snapshot(source)==expected);require(live_allocations==before);if(!caught)break;\n    }\n    require(succeeded);\n}\nstatic void assignment_failures(const LCA& source,const Graph& original,int root) {\n    const auto expected=snapshot(source);bool succeeded=false;\n    for(std::ptrdiff_t point=0;point<256;++point) {\n        const auto outside=live_allocations;bool caught=false;\n        {\n            LCA target(original,root);const auto previous=snapshot(target);const auto before=live_allocations;\n            try {failure_countdown=point;target=source;failure_countdown=-1;require(snapshot(target)==expected);succeeded=true;}\n            catch(const std::bad_alloc&) {failure_countdown=-1;caught=true;++failures;require(snapshot(target)==previous);require(live_allocations==before);}\n            require(snapshot(source)==expected);\n        }\n        require(live_allocations==outside);if(!caught)break;\n    }\n    require(succeeded);\n}\nstatic void build_failures(const Graph& next,int root,const Graph& original) {\n    LCA reference(next,root);const auto expected=snapshot(reference);bool succeeded=false;\n    for(std::ptrdiff_t point=0;point<256;++point) {\n        const auto outside=live_allocations;bool caught=false;\n        {\n            LCA target(original);const auto previous=snapshot(target);const auto before=live_allocations;\n            try {failure_countdown=point;target.build(next,root);failure_countdown=-1;require(snapshot(target)==expected);succeeded=true;}\n            catch(const std::bad_alloc&) {failure_countdown=-1;caught=true;++failures;require(snapshot(target)==previous);require(live_allocations==before);target.build(original);require(snapshot(target)==previous);}\n        }\n        require(live_allocations==outside);if(!caught)break;\n    }\n    require(succeeded);\n}\nint main() {\n    static_assert(std::is_nothrow_move_constructible_v<LCA> && std::is_nothrow_move_assignable_v<LCA>);\n    const auto initial=live_allocations;\n    {\n        const Graph empty,one(1),original=make_graph(9,false),forest=make_graph(73,true);\n        Graph star(73),matching(74);\n        for(int v=1;v<73;++v){star[0].push_back(v);star[v].push_back(0);}\n        for(int v=0;v<74;v+=2){matching[v].push_back(v+1);matching[v+1].push_back(v);}\n        constructor_failures(empty,0);constructor_failures(one,0);constructor_failures(forest,41);\n        constructor_failures(star,0);constructor_failures(star,1);constructor_failures(matching,72);\n        build_failures(star,0,forest);build_failures(forest,41,star);build_failures(matching,72,star);\n        LCA shallow(star);copy_failures(shallow);assignment_failures(shallow,forest,41);\n        LCA source(forest,41);copy_failures(source);assignment_failures(source,original,3);build_failures(forest,41,original);\n        Graph deep_branch(140),comb(144);\n        for(int v=1;v<=70;++v){deep_branch[v-1].push_back(v);deep_branch[v].push_back(v-1);}\n        deep_branch[0].push_back(71);deep_branch[71].push_back(0);\n        for(int v=1;v<=70;++v){comb[v-1].push_back(v);comb[v].push_back(v-1);comb[v-1].push_back(70+v);comb[70+v].push_back(v-1);}\n        constructor_failures(deep_branch,0);constructor_failures(comb,0);\n        constructor_failures(comb,70);build_failures(deep_branch,0,comb);\n        build_failures(comb,0,deep_branch);build_failures(original,0,deep_branch);\n        LCA deep_source(deep_branch),comb_source(comb);\n        copy_failures(deep_source);copy_failures(comb_source);\n        assignment_failures(deep_source,original,0);assignment_failures(comb_source,deep_branch,0);\n        assignment_failures(shallow,deep_branch,0);\n        const auto expected=snapshot(source);const auto before=live_allocations;\n        failure_countdown=0;\n        LCA moved(std::move(source));source=std::move(moved);source.swap(source);\n        failure_countdown=-1;require(snapshot(source)==expected);require(live_allocations==before);\n        failure_countdown=0;source.clear();source.clear();failure_countdown=-1;require(source.empty()&&source.root()==-1);\n        source.build(forest,41);require(snapshot(source)==expected);\n    }\n    require(live_allocations==initial);\n    std::printf(\"{\\\"status\\\":\\\"PASS\\\",\\\"checks\\\":%zu,\\\"allocation_failure_points\\\":%zu,\\\"live_delta\\\":%zu}\\n\",checks,failures,live_allocations-initial);\n}\n"
+    }
+  },
+  "execution_sources": {
+    "lca_deep_branch_test.cpp": {
+      "path": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_branch_test.cpp",
+      "sha256": "6fa3f5bbfdb4a6b11186626e858b08eadfb037e7d2adcf7280f93fc962aa78df",
+      "source": "// SPDX-License-Identifier: CC0-1.0\n#ifndef SIRKIT_LCA_SOURCE\n#define SIRKIT_LCA_SOURCE \"/home/reinsirk/Atcoder_Env/Graph/LCA.cpp\"\n#endif\n#include SIRKIT_LCA_SOURCE\n#include <algorithm>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#include <numeric>\n#include <random>\n#include <utility>\n#include <vector>\nusing Graph=std::vector<std::vector<int>>;\nstatic std::size_t checks=0,cases=0;\nstatic void need(bool ok) {++checks;if(!ok){std::fprintf(stderr,\"failure case %zu check %zu\\n\",cases,checks);std::abort();}}\nstatic void edge(Graph&g,int u,int v){g[u].push_back(v);g[v].push_back(u);}\nstruct Ref {\n std::vector<int> p,d,c,r;\n Ref(const Graph&g,int root):p(g.size(),-2),d(g.size()),c(g.size()),r(g.size()) {\n  int components=0;std::vector<int> q;\n  for(int k=-1;k<static_cast<int>(g.size());++k){int s=k<0?root:k;if(p[s]!=-2)continue;p[s]=-1;q.clear();q.push_back(s);c[s]=components;r[s]=s;\n   for(std::size_t i=0;i<q.size();++i){int v=q[i];for(int w:g[v])if(p[w]==-2){p[w]=v;d[w]=d[v]+1;c[w]=components;r[w]=s;q.push_back(w);}}\n   ++components;\n  }\n }\n int ancestor(int v,std::uint64_t k)const{if(k>static_cast<std::uint64_t>(d[v]))return -1;while(k--)v=p[v];return v;}\n int lca(int u,int v)const{if(c[u]!=c[v])return -1;while(d[u]>d[v])u=p[u];while(d[v]>d[u])v=p[v];while(u!=v){u=p[u];v=p[v];}return u;}\n int distance(int u,int v)const{int a=lca(u,v);return a<0?-1:(d[u]-d[a])+(d[v]-d[a]);}\n int path(int u,int v,std::uint64_t k)const{int a=lca(u,v);if(a<0)return -1;std::uint64_t x=d[u]-d[a],y=d[v]-d[a];if(k>x+y)return -1;return k<=x?ancestor(u,k):ancestor(v,x+y-k);}\n int rooted(int u,int v,int root)const{if(c[u]!=c[v]||c[u]!=c[root])return -1;int a=lca(u,v),b=lca(u,root),z=lca(v,root);return d[a]>d[b]?(d[a]>d[z]?a:z):(d[b]>d[z]?b:z);}\n bool above(int u,int v)const{return c[u]==c[v]&&d[u]<=d[v]&&ancestor(v,d[v]-d[u])==u;}\n};\nstatic void verify(const LCA&t,const Ref&r,int root){\n const int n=static_cast<int>(r.p.size());need(t.size()==r.p.size());need(t.empty()==(n==0));need(t.root()==root);int comps=0;for(int v=0;v<n;++v)if(r.p[v]<0)++comps;need(t.component_count()==static_cast<std::size_t>(comps));\n std::vector<int> seen(n);std::mt19937_64 rng(41+n);\n for(int v=0;v<n;++v){need(t.parent(v)==r.p[v]);need(t.depth_of(v)==r.d[v]);need(t.component_of(v)==r.c[v]);need(t.root_of(v)==r.r[v]);auto[a,b]=t.subtree_range(v);need(a==t.order_index(v));need(a>=0&&a<b&&b<=n);need(++seen[a]==1);need(t.subtree_size(v)==b-a);int descendants=0;\n  for(int u=0;u<n;++u){bool above=r.above(v,u);descendants+=above;need(t.is_ancestor(v,u)==above);need((a<=t.order_index(u)&&t.order_index(u)<b)==above);need(t.same_component(v,u)==(r.c[v]==r.c[u]));int l=r.lca(v,u);need(t.get(v,u)==l);need(t(v,u)==l);need(t.get_distance(v,u)==r.distance(v,u));\n   const auto d=r.distance(v,u);const std::uint64_t k=d<0?1:rng()%static_cast<std::uint64_t>(d+2);need(t.kth_on_path(v,u,k)==r.path(v,u,k));need(t.kth_on_path(v,u,UINT64_MAX)==-1);\n  }\n  need(t.subtree_size(v)==descendants);\n  for(std::uint64_t k=0;k<=static_cast<std::uint64_t>(r.d[v])+1;++k)need(t.kth_ancestor(v,k)==r.ancestor(v,k));need(t.kth_ancestor(v,UINT64_MAX)==-1);\n }\n for(int k=0;k<4000;++k){int u=rng()%n,v=rng()%n,w=rng()%n;need(t.get(u,v,w)==r.rooted(u,v,w));}\n}\nstatic void run(const Graph&g,int root,bool lifecycle){++cases;Ref r(g,root);LCA t(g,root);verify(t,r,root);if(!lifecycle)return;\n LCA copy(t);verify(copy,r,root);copy=copy;copy.swap(copy);verify(copy,r,root);LCA moved(std::move(copy));need(copy.empty()&&copy.root()==-1&&copy.component_count()==0);verify(moved,r,root);copy=std::move(moved);need(moved.empty()&&moved.root()==-1);verify(copy,r,root);copy=std::move(copy);verify(copy,r,root);LCA assigned;assigned=t;verify(assigned,r,root);LCA small(Graph(1));swap(small,assigned);verify(small,r,root);need(assigned.size()==1&&assigned.parent(0)==-1);t.clear();need(t.empty()&&t.root()==-1&&t.component_count()==0);t.clear();t.build(g,root);verify(t,r,root);t.build(Graph{});need(t.empty()&&t.root()==-1);t.build(g,root);verify(t,r,root);\n}\nstatic Graph shape(int depth,int kind){\n const int extras=kind==0?1:kind==1?depth:kind==2?depth:depth/2;\n Graph g(depth+1+extras+4);for(int i=1;i<=depth;++i)edge(g,i-1,i);\n for(int i=0;i<extras;++i){int parent=kind==0?0:kind==1?i:kind==2?(i?depth+i:0):depth/2;edge(g,parent,depth+1+i);}return g;\n}\nint main(){std::mt19937 rng(29173);\n for(int h:{64,65,66,129,257})for(int kind=0;kind<4;++kind){Graph g=shape(h,kind);run(g,0,h==65&&kind==1);run(g,h,false);std::vector<int> perm(g.size());std::iota(perm.begin(),perm.end(),0);std::shuffle(perm.begin(),perm.end(),rng);Graph shuffled(g.size());for(int v=0;v<static_cast<int>(g.size());++v)for(int w:g[v])shuffled[perm[v]].push_back(perm[w]);for(auto&v:shuffled)std::shuffle(v.begin(),v.end(),rng);run(shuffled,perm[0],false);}\n for(int stem:{64,65,66}){Graph g(stem+511+4);for(int v=1;v<=stem;++v)edge(g,v-1,v);for(int i=1;i<511;++i)edge(g,stem+(i-1)/2,stem+i);run(g,0,stem==65);run(g,stem+510,false);}\n std::printf(\"{\\\"status\\\":\\\"PASS\\\",\\\"cases\\\":%zu,\\\"checks\\\":%zu}\\n\",cases,checks);\n}\n"
+    },
+    "lca_deep_allocation_test.cpp": {
+      "path": "/tmp/sirkit_lca_deep_review_20261023/lca_deep_allocation_test.cpp",
+      "sha256": "eb903c7ce5119a777072143e1a134ccbc619247e7ff594f11da34057d2eabaa8",
+      "source": "// SPDX-License-Identifier: CC0-1.0\n#ifndef SIRKIT_LCA_REQUIRE_EXTRA\n#define SIRKIT_LCA_REQUIRE_EXTRA\n#endif\n#ifndef SIRKIT_LCA_SOURCE\n#define SIRKIT_LCA_SOURCE \"../../../Graph/LCA.cpp\"\n#endif\n#include SIRKIT_LCA_SOURCE\n#include <cstddef>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#include <limits>\n#include <new>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\nstatic std::ptrdiff_t failure_countdown = -1;\nstatic std::size_t live_allocations = 0, checks = 0, failures = 0;\n[[gnu::noinline]] void* operator new(std::size_t n) {\n    if (failure_countdown == 0) throw std::bad_alloc();\n    if (failure_countdown > 0) --failure_countdown;\n    if (void* p = std::malloc(n ? n : 1)) { ++live_allocations; return p; }\n    throw std::bad_alloc();\n}\n[[gnu::noinline]] void* operator new[](std::size_t n) { return ::operator new(n); }\n[[gnu::noinline]] static void free_block(void* p) noexcept { if (p) --live_allocations; std::free(p); }\nvoid operator delete(void* p) noexcept { free_block(p); }\nvoid operator delete[](void* p) noexcept { free_block(p); }\nvoid operator delete(void* p, std::size_t) noexcept { free_block(p); }\nvoid operator delete[](void* p, std::size_t) noexcept { free_block(p); }\nstatic void require(bool ok) { ++checks; if (!ok) std::abort(); }\nusing Graph = std::vector<std::vector<int>>;\nstatic Graph make_graph(int n, bool forest) {\n    Graph g(n); for(int v=1;v<n;++v) if(!forest || v%7) {int p=(v-1)/2;g[v].push_back(p);g[p].push_back(v);}return g;\n}\ntemplate<class Tree> static void append_extra(std::vector<int>& out,const Tree& tree,int v) {\n    if constexpr(requires { tree.subtree_size(v);tree.subtree_range(v);tree.order_index(v); }) {\n        out.push_back(tree.subtree_size(v));out.push_back(tree.order_index(v));\n        const auto [first,last]=tree.subtree_range(v);out.push_back(first);out.push_back(last);\n    }\n}\nstatic std::vector<int> snapshot(const LCA& tree) {\n    std::vector<int> result{static_cast<int>(tree.size()),tree.root(),static_cast<int>(tree.component_count())};\n    for (int v=0;v<static_cast<int>(tree.size());++v) {\n        result.push_back(tree.parent(v));result.push_back(tree.depth_of(v));result.push_back(tree.root_of(v));result.push_back(tree.component_of(v));\n        result.push_back(tree.kth_ancestor(v,UINT64_MAX));append_extra(result,tree,v);\n        for(int u=0;u<static_cast<int>(tree.size());++u) {result.push_back(tree.get(v,u));result.push_back(tree.get_distance(v,u));result.push_back(tree.is_ancestor(v,u));result.push_back(tree.kth_on_path(v,u,1));}\n    }\n    return result;\n}\nstatic void constructor_failures(const Graph& g,int root) {\n    LCA reference(g,root);const auto expected=snapshot(reference);bool succeeded=false;\n    for(std::ptrdiff_t point=0;point<256;++point) {\n        const auto before=live_allocations;bool caught=false;\n        try {failure_countdown=point;LCA tree(g,root);failure_countdown=-1;require(snapshot(tree)==expected);succeeded=true;}\n        catch(const std::bad_alloc&) {failure_countdown=-1;caught=true;++failures;}\n        require(live_allocations==before);\n        if(!caught)break;\n    }\n    require(succeeded);\n}\nstatic void copy_failures(const LCA& source) {\n    const auto expected=snapshot(source);bool succeeded=false;\n    for(std::ptrdiff_t point=0;point<256;++point) {\n        const auto before=live_allocations;bool caught=false;\n        try {failure_countdown=point;LCA copy(source);failure_countdown=-1;require(snapshot(copy)==expected);succeeded=true;}\n        catch(const std::bad_alloc&) {failure_countdown=-1;caught=true;++failures;}\n        require(snapshot(source)==expected);require(live_allocations==before);if(!caught)break;\n    }\n    require(succeeded);\n}\nstatic void assignment_failures(const LCA& source,const Graph& original,int root) {\n    const auto expected=snapshot(source);bool succeeded=false;\n    for(std::ptrdiff_t point=0;point<256;++point) {\n        const auto outside=live_allocations;bool caught=false;\n        {\n            LCA target(original,root);const auto previous=snapshot(target);const auto before=live_allocations;\n            try {failure_countdown=point;target=source;failure_countdown=-1;require(snapshot(target)==expected);succeeded=true;}\n            catch(const std::bad_alloc&) {failure_countdown=-1;caught=true;++failures;require(snapshot(target)==previous);require(live_allocations==before);}\n            require(snapshot(source)==expected);\n        }\n        require(live_allocations==outside);if(!caught)break;\n    }\n    require(succeeded);\n}\nstatic void build_failures(const Graph& next,int root,const Graph& original) {\n    LCA reference(next,root);const auto expected=snapshot(reference);bool succeeded=false;\n    for(std::ptrdiff_t point=0;point<256;++point) {\n        const auto outside=live_allocations;bool caught=false;\n        {\n            LCA target(original);const auto previous=snapshot(target);const auto before=live_allocations;\n            try {failure_countdown=point;target.build(next,root);failure_countdown=-1;require(snapshot(target)==expected);succeeded=true;}\n            catch(const std::bad_alloc&) {failure_countdown=-1;caught=true;++failures;require(snapshot(target)==previous);require(live_allocations==before);target.build(original);require(snapshot(target)==previous);}\n        }\n        require(live_allocations==outside);if(!caught)break;\n    }\n    require(succeeded);\n}\nint main() {\n    static_assert(std::is_nothrow_move_constructible_v<LCA> && std::is_nothrow_move_assignable_v<LCA>);\n    const auto initial=live_allocations;\n    {\n        const Graph empty,one(1),original=make_graph(9,false),forest=make_graph(73,true);\n        Graph star(73),matching(74);\n        for(int v=1;v<73;++v){star[0].push_back(v);star[v].push_back(0);}\n        for(int v=0;v<74;v+=2){matching[v].push_back(v+1);matching[v+1].push_back(v);}\n        constructor_failures(empty,0);constructor_failures(one,0);constructor_failures(forest,41);\n        constructor_failures(star,0);constructor_failures(star,1);constructor_failures(matching,72);\n        build_failures(star,0,forest);build_failures(forest,41,star);build_failures(matching,72,star);\n        LCA shallow(star);copy_failures(shallow);assignment_failures(shallow,forest,41);\n        LCA source(forest,41);copy_failures(source);assignment_failures(source,original,3);build_failures(forest,41,original);\n        Graph deep_branch(140),comb(144);\n        for(int v=1;v<=70;++v){deep_branch[v-1].push_back(v);deep_branch[v].push_back(v-1);}\n        deep_branch[0].push_back(71);deep_branch[71].push_back(0);\n        for(int v=1;v<=70;++v){comb[v-1].push_back(v);comb[v].push_back(v-1);comb[v-1].push_back(70+v);comb[70+v].push_back(v-1);}\n        constructor_failures(deep_branch,0);constructor_failures(comb,0);\n        constructor_failures(comb,70);build_failures(deep_branch,0,comb);\n        build_failures(comb,0,deep_branch);build_failures(original,0,deep_branch);\n        LCA deep_source(deep_branch),comb_source(comb);\n        copy_failures(deep_source);copy_failures(comb_source);\n        assignment_failures(deep_source,original,0);assignment_failures(comb_source,deep_branch,0);\n        assignment_failures(shallow,deep_branch,0);\n        const auto expected=snapshot(source);const auto before=live_allocations;\n        failure_countdown=0;\n        LCA moved(std::move(source));source=std::move(moved);source.swap(source);\n        failure_countdown=-1;require(snapshot(source)==expected);require(live_allocations==before);\n        failure_countdown=0;source.clear();source.clear();failure_countdown=-1;require(source.empty()&&source.root()==-1);\n        source.build(forest,41);require(snapshot(source)==expected);\n    }\n    require(live_allocations==initial);\n    std::printf(\"{\\\"status\\\":\\\"PASS\\\",\\\"checks\\\":%zu,\\\"allocation_failure_points\\\":%zu,\\\"live_delta\\\":%zu}\\n\",checks,failures,live_allocations-initial);\n}\n"
+    }
+  },
+  "runner": {
+    "path": "/tmp/sirkit_lca_deep_review_20261023/run_baseline.py",
+    "sha256": "8bdc156b6e268700aaacc4971266ece5788d158e6118d623e614085f8ef28ce9",
+    "source": "import subprocess,pathlib,hashlib,json,time,fcntl\nout=pathlib.Path('/tmp/sirkit_lca_deep_review_20261023'); baseline=out/'baseline_frozen.hpp';locks=[]\nfor p in ['/tmp/sirkit_performance_cpu14.lock','/tmp/atcoder_full_performance_20261018/benchmark.lock']:\n f=open(p,'a');fcntl.flock(f,fcntl.LOCK_EX);locks.append(f)\nprevious=json.loads((out/'deep_validation.json').read_text()); reused=[t for t in previous['tests'] if t.get('baseline')]\nassert len(reused)==1 and reused[0]['run_exit']==0\nreport={'candidate':'unchanged online baseline38e','baseline_sha256':hashlib.sha256(baseline.read_bytes()).hexdigest(),'reused_baseline_record':'deep_validation.json tests[8]','tests':reused,'status':'INCOMPLETE'}\ntry:\n for name,cxx,skip in [('gcc15_2','/usr/bin/g++',False),('gcc15_2','/usr/bin/g++',True),('clang21','/usr/bin/clang++',False),('clang21','/usr/bin/clang++',True)]:\n  for test in ['lca_deep_branch_test','lca_deep_allocation_test']:\n   if name=='gcc15_2' and not skip and test=='lca_deep_branch_test':continue\n   source=out/(test+'.cpp');binary=out/(test+'_baseline_'+name+('_skip'if skip else '_checked'))\n   cmd=['taskset','-c','6',cxx]+(['--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15']if name=='clang21'else[])+['-std=c++23','-O2',f'-DSIRKIT_LCA_SOURCE=\"{baseline}\"']+(['-DSKIP_RUNTIME_CHECKS']if skip else[])+[str(source),'-o',str(binary)]\n   build=subprocess.run(cmd,capture_output=True,text=True);entry={'source':str(source),'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'baseline':True,'compiler':name,'skip':skip,'build_command':cmd,'build_exit':build.returncode,'build_stderr':build.stderr}\n   if build.returncode:report['tests'].append(entry);raise RuntimeError(entry)\n   command=['taskset','-c','14',str(binary)];run=subprocess.run(command,capture_output=True,text=True);entry.update({'run_command':command,'run_exit':run.returncode,'stdout':run.stdout,'stderr':run.stderr});report['tests'].append(entry);print(json.dumps(entry),flush=True)\n   if run.returncode:raise RuntimeError(entry)\n report['status']='PASS'\nfinally:\n (out/'baseline_deep_validation.json').write_text(json.dumps(report,indent=2)+'\\n')\n for f in reversed(locks):fcntl.flock(f,fcntl.LOCK_UN);f.close()\n"
+  },
+  "previous_runner": {
+    "path": "/tmp/sirkit_lca_deep_review_20261023/run_tests.py",
+    "sha256": "44a1d2f3a019e3daf775b84ea770ec2903344523f8e372bdac0a6813353f8baa",
+    "source": "import subprocess,pathlib,hashlib,json,time,fcntl\nroot=pathlib.Path('/home/reinsirk/Atcoder_Env'); out=pathlib.Path('/tmp/sirkit_lca_deep_review_20261023')\nlocks=[]\nfor p in ['/tmp/sirkit_performance_cpu14.lock','/tmp/atcoder_full_performance_20261018/benchmark.lock']:\n f=open(p,'a');fcntl.flock(f,fcntl.LOCK_EX);locks.append(f)\ncandidate=out/'candidate_frozen.hpp';baseline=out/'baseline_frozen.hpp'\ncandidate.write_bytes(pathlib.Path('/tmp/sirkit_lca_query_20261023/gate_splithead.hpp').read_bytes());baseline.write_bytes((root/'Graph/LCA.cpp').read_bytes())\nreport={'candidate_source':str(candidate),'candidate_sha256':hashlib.sha256(candidate.read_bytes()).hexdigest(),'baseline_sha256':hashlib.sha256(baseline.read_bytes()).hexdigest(),'tests':[],'locks_acquired':['/tmp/sirkit_performance_cpu14.lock','/tmp/atcoder_full_performance_20261018/benchmark.lock']}\ntry:\n report['tests']=json.loads((out/'gcc_completed.json').read_text())['tests']\n runs=[('clang21','/usr/bin/clang++',False),('clang21','/usr/bin/clang++',True)]\n for name,cxx,skip in runs:\n  for test in ['lca_deep_branch_test','lca_deep_allocation_test']:\n   source=out/(test+'.cpp');binary=out/(test+'_'+name+('_skip' if skip else '_checked'))\n   cmd=['taskset','-c','6',cxx,'--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15','-std=c++23','-O2',f'-DSIRKIT_LCA_SOURCE=\"{candidate}\"']+(['-DSKIP_RUNTIME_CHECKS'] if skip else [])+[str(source),'-o',str(binary)]\n   t=time.monotonic();build=subprocess.run(cmd,capture_output=True,text=True);entry={'source':str(source),'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'compiler':name,'skip':skip,'build_command':cmd,'build_exit':build.returncode,'build_stderr':build.stderr,'build_seconds':time.monotonic()-t}\n   if build.returncode:raise RuntimeError(entry)\n   command=['taskset','-c','14',str(binary)];t=time.monotonic();run=subprocess.run(command,capture_output=True,text=True);entry.update({'run_command':command,'run_exit':run.returncode,'stdout':run.stdout,'stderr':run.stderr,'run_seconds':time.monotonic()-t});report['tests'].append(entry);print(json.dumps(entry),flush=True)\n   if run.returncode:raise RuntimeError(entry)\n source=out/'lca_deep_branch_test.cpp';binary=out/'lca_deep_branch_test_baseline'\n cmd=['taskset','-c','6','/usr/bin/g++','-std=c++23','-O2',f'-DSIRKIT_LCA_SOURCE=\"{baseline}\"',str(source),'-o',str(binary)]\n build=subprocess.run(cmd,capture_output=True,text=True);entry={'source':str(source),'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'baseline':True,'build_command':cmd,'build_exit':build.returncode,'build_stderr':build.stderr}\n if build.returncode:raise RuntimeError(entry)\n command=['taskset','-c','14',str(binary)];t=time.monotonic();run=subprocess.run(command,capture_output=True,text=True);entry.update({'run_command':command,'run_exit':run.returncode,'stdout':run.stdout,'stderr':run.stderr,'run_seconds':time.monotonic()-t});report['tests'].append(entry);print(json.dumps(entry),flush=True)\n if run.returncode:raise RuntimeError(entry)\n report['status']='PASS'\nfinally:\n (out/'deep_validation.json').write_text(json.dumps(report,indent=2)+'\\n')\n for f in reversed(locks):fcntl.flock(f,fcntl.LOCK_UN);f.close()\n"
+  },
+  "scope": [
+    "GCC15.2/Clang21 ×検査有効/無効で深い分岐試験と確保失敗試験、計8試験PASS。既存baseline GCC検査有効の深い分岐結果1件を再利用。",
+    "深い分岐森66ケース、各70,520,525照合。長い幹・2本の長鎖・櫛形・深い幹の先の二分木・孤立成分・頂点番号/根の変更。",
+    "親を1段ずつ上げる独立参照で全公開照会API・部分木・ライフサイクルを照合。",
+    "構築・copy・assignment・buildに対する確保失敗131箇所、元状態保持・live_delta=0。",
+    "過去の小さい森と単純な深い形だけではhead候補の4回fallbackを十分通せなかったため、深い幹の先の二分木を補足した。追加試験は現行のheadを持たない版にも有効。"
+  ],
+  "environment_note": "Clangが不完全なGCC16を自動選択して標準ヘッダー不足になったため、完全なGCC15の/usr/lib/gcc/x86_64-linux-gnu/15を--gcc-install-dirで指定。ライブラリの修正は不要。"
+}

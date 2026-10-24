@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-22",
+  "scope": "union-find二周目の差分来歴と契約。以前の原典/履歴調査は保持。",
+  "baseline_source_sha256": "ec13728a641f79d14b8bcab9861885c2c0d59520cd62d5bc72717975d64da722",
+  "final_source_sha256": "cc6c9d1f9c3ad6c60b60ece40894f41d145a41bde313bbc055cbc744c458c556",
+  "spdx": "CC0-1.0",
+  "source_label": {
+    "label": "Original Source",
+    "reason": "元実装の表現とサイズ併合の手順を引き継いで改修しているため、単なる数学的参考とは区別して出典を維持する。新しい探索や便利APIを加えても旧版からの由来を消さない。",
+    "mathematics": "サイズ併合による深さ上限と、経路圧縮を組み合わせた償却計算量は数学的性質として説明する。今回は別の数学論文を実装の出典として追加していない。"
+  },
+  "primary_evidence": {
+    "audit": "Audit/provenance-union-find-2026-10-22.json",
+    "sha256": "79a3edbdd78d80f8c3edc2dc79662157880be81a7773e4a27c0ab3d65ea8c97a",
+    "license": {
+      "status": "confirmed_cc0",
+      "evidence": {
+        "url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming",
+        "source_snapshot_sha256": "801aa68bff0db38cc872e107dcb81b1801db8c7912f968a05c35af51f0fad1b2",
+        "short_excerpt": "記事中のソースコードは CC0 1.0",
+        "scope": "記事内のソースコード。書籍本文一般や全git履歴へ一括適用する意味ではない。"
+      },
+      "scope_note": "著者の書籍トップが記事中ソースコードへのCC0 1.0適用を明記する。本文一般・全リポジトリ・全履歴へ一括適用したという意味ではない。READMEの取得成功だけをライセンス根拠にはしない。"
+    },
+    "sources": [
+      {
+        "name": "chapter.html",
+        "url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/union-find",
+        "final_url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/union-find",
+        "status": 200,
+        "sha256": "04c95d1d0a91b403f2cb3d1cda2858033170837f989fac5376266ab2741abbaf",
+        "bytes": 51281
+      },
+      {
+        "name": "book.html",
+        "url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming",
+        "final_url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming",
+        "status": 200,
+        "sha256": "801aa68bff0db38cc872e107dcb81b1801db8c7912f968a05c35af51f0fad1b2",
+        "bytes": 99899
+      },
+      {
+        "name": "union-find.md",
+        "url": "https://raw.githubusercontent.com/Reputeless/Zenn.Public/main/books/standard-cpp-for-competitive-programming/union-find.md",
+        "final_url": "https://raw.githubusercontent.com/Reputeless/Zenn.Public/main/books/standard-cpp-for-competitive-programming/union-find.md",
+        "status": 200,
+        "sha256": "ce025cdf7efa5bf55b52f756bdf1caea25935c47b50d52f488a582cdb0201709",
+        "bytes": 21657
+      },
+      {
+        "name": "README.md",
+        "url": "https://raw.githubusercontent.com/Reputeless/Zenn.Public/main/README.md",
+        "final_url": "https://raw.githubusercontent.com/Reputeless/Zenn.Public/main/README.md",
+        "status": 200,
+        "sha256": "0c0d8be9515a33951c229bb3f139230b31c6591fdea78de511a9f4b5007bafec",
+        "bytes": 13
+      }
+    ],
+    "snapshot_sha_rechecked": [
+      {
+        "name": "chapter.html",
+        "sha256": "04c95d1d0a91b403f2cb3d1cda2858033170837f989fac5376266ab2741abbaf",
+        "previous_snapshot_matches": true
+      },
+      {
+        "name": "book.html",
+        "sha256": "801aa68bff0db38cc872e107dcb81b1801db8c7912f968a05c35af51f0fad1b2",
+        "previous_snapshot_matches": true
+      },
+      {
+        "name": "union-find.md",
+        "sha256": "ce025cdf7efa5bf55b52f756bdf1caea25935c47b50d52f488a582cdb0201709",
+        "previous_snapshot_matches": true
+      },
+      {
+        "name": "README.md",
+        "sha256": "0c0d8be9515a33951c229bb3f139230b31c6591fdea78de511a9f4b5007bafec",
+        "previous_snapshot_matches": true
+      }
+    ],
+    "note": "同日の既存取得とローカル履歴を再利用し、凍結一次資料のSHAを再照合。今回ネットワークで再取得したとは主張しない。"
+  },
+  "new_external_code": "なし。標準コンテナ/標準アルゴリズムによるローカル改修。",
+  "unchanged_lineage": "負サイズの親配列、サイズ併合、代表/差の基本処理を引き継ぐためOriginal Sourceを維持。",
+  "contract_review": "所有レイアウトはvector<int>と成分数のまま。groupsは結果確保後に非送出の整数書込みを行い、内部で一時上書きした根の負サイズを戻す。",
+  "verification_audit": "verify-union-find-second-pass-2026-10-22.json",
+  "performance_audit": "performance-union-find-second-pass-2026-10-22.json"
+}

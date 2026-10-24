@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -24,6 +25,17 @@ int main() {
     assert(closest_pair(points.begin(), 4) == 1);
     assert(points.front() == P(9, 7));
 
+    // 整列済み版の添字は、渡した整列済み列の位置を表す。
+    auto sorted = points;
+    std::sort(sorted.begin(), sorted.end());
+    const auto sorted_answer = nearest_two_points_sorted(sorted);
+    assert(sorted_answer && sorted_answer->distance_squared == 1);
+    assert(sorted_answer->first_index == 1 && sorted_answer->second_index == 2);
+    assert(nearest_two_points_sorted(sorted.begin(), sorted.end())->distance_squared == 1);
+    assert(nearest_two_points_sorted(sorted.begin(), std::ptrdiff_t{4})->distance_squared == 1);
+    std::cout << sorted_answer->distance_squared << ' ' << sorted_answer->first_index
+              << ' ' << sorted_answer->second_index << '\n';
+
     const std::vector<P> empty;
     assert(!nearest_two_points(empty));
     assert(closest_pair(empty.begin(), 0) == std::numeric_limits<std::int32_t>::max());
@@ -36,4 +48,9 @@ int main() {
                                   {std::numeric_limits<std::int32_t>::max() - 1,
                                    std::numeric_limits<std::int32_t>::max()}};
     assert(nearest_two_points(extremes)->distance_squared == 1);
+
+    const std::vector<P> repeated(2048, P{7, -19});
+    const auto zero = nearest_two_points(repeated);
+    assert(zero && zero->distance_squared == 0);
+    assert(zero->first_index < zero->second_index);
 }

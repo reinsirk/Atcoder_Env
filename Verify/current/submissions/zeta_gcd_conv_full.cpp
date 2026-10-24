@@ -1,10 +1,73 @@
 #define SKIP_RUNTIME_CHECKS
 // Verify: https://judge.yosupo.jp/problem/gcd_convolution
+// Submission: https://judge.yosupo.jp/submission/412862
 
 // Library: Math/Zeta_Mebius.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://nyaannyaan.github.io/library/set-function/zeta-mobius-transform.hpp.html
 // 参考: https://nyaannyaan.github.io/library/multiplicative-function/divisor-multiple-transform.hpp.html
+// Original Source: https://nyaannyaan.github.io/library/set-function/and-convolution.hpp.html
+// Original Source: https://nyaannyaan.github.io/library/set-function/or-convolution.hpp.html
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/zeta_mobius.md
+//
+// API一覧
+// [集合のゼータ／メビウス変換]
+// 集合4変換: 空配列または長さn=2^kを直接更新、O(1+n log(n+1))時間・O(1)追加領域。
+// superset_zeta_transform(f): f[S]を上位集合の総和へ更新、Tの+=が必要。
+// superset_mobius_transform(f): 上位集合ゼータ変換の逆、Tの-=が必要。
+// subset_zeta_transform(f): f[S]を部分集合の総和へ更新、Tの+=が必要。
+// subset_mobius_transform(f): 部分集合ゼータ変換の逆、Tの-=が必要。
+// Tはbool以外の加法型。符号付き整数の全途中結果は型の範囲内、符号なしは型の幅の剰余。値演算送出時は部分更新。
+//
+// [AND／OR畳み込み]
+// bitwise_and_convolution(f,g): h[k]=sum_{i&j=k}f[i]g[j]を返す。同長の空配列または長さn=2^k。
+// bitwise_or_convolution(f,g): h[k]=sum_{i|j=k}f[i]g[j]を返す。同長の空配列または長さn=2^k。
+// bitwise_and_square(f)/bitwise_or_square(f): 同じ式のg=fを返す。入力1本、変換2回（通常の畳み込みは3回）。
+// 各APIはO(1+n log(n+1))時間・O(n+1)領域。値渡しのためlvalue入力は保持、rvalueは領域を移譲できる。
+// Tはbool以外の環型で+=/-=/*=が必要。符号付き整数の全途中結果は型の範囲内、符号なしは型の幅の剰余。
+//
+// [IntegerSieve]
+// IntegerSieve(maxn): maxn>=0の最小素因数表・昇順素数列をO(maxn)時間・領域で作る。0,1の最小素因数は0。
+// least_prime_factor[x]は最小素因数、prime_listは昇順素数列。表は書き換えず利用する。
+// コピーは独立、コピー代入は強保証。ムーブ元は空となりmax_value()=-1。
+// swap(other): 表と素数列をO(1)で交換する。
+// max_value(): 表の上限を返す。is_prime(x): 0<=x<=max_value()の素数判定をO(1)で返す。
+// prime_factorization(x): 1<=x<=max_value()^2の素因数と指数のmapを返す。x=1は空の表でも許す。
+// enumerate_divisors(x), sorted_divisors(x): prime_factorizationと同じ前提で全約数を返す。後者だけ昇順。
+// divisor_totients(x): prime_factorizationと同じ前提で各約数dからphi(d)へのmapを返す。
+// mobius_table(): O(maxn)でmu表を返す。mu[0]=0,mu[1]=1。
+// totient_table(): O(maxn)でphi表を返す。phi[0]=0,phi[1]=1。
+// power_table<Mint>(k,nmax): 0<=nmax<=max_value(),k>=0でn^kの表。0^0=1。
+// べき乗表はO(nmax+pi(nmax)log(k+1))時間・O(nmax)領域。公開配列を変更せず使う。
+//
+// [約数／倍数のゼータ／メビウス変換]
+// 正の添字の4変換。f[0]は不変、空配列も可。時間O(n log log n)。
+// multiple_zeta_transform(f): f[d]=sum_{d|k} f[k]へ更新する。
+// multiple_mobius_transform(f): 倍数ゼータ変換を元に戻す。
+// divisor_zeta_transform(f): f[k]=sum_{d|k} f[d]へ更新する。
+// divisor_mobius_transform(f): 約数ゼータ変換を元に戻す。
+// 各(f,sieve)版: sieve.max_value()>=f.size()-1の素数表を再利用し、追加領域O(1)。
+// 各(f)版: 素数表も作る。f.size()-1<=INT_MAX、追加領域O(n)。
+//
+// [GCD／LCM畳み込み]
+// gcd_convolution(f,g): h[k]=sum_{gcd(i,j)=k}f[i]g[j]。gcd(0,k)=k（gcd(0,0)=0）。
+// lcm_convolution(f,g): h[k]=sum_{lcm(i,j)=k}f[i]g[j]。lcm(0,k)=0、結果k>=nは切り捨て。
+// 両者は同じ長さnの入力（空も可）、O(1+n log log(n+2))時間・O(n+1)領域。値渡しでlvalue入力は保持。
+// 各(f,g,sieve)版: sieve.max_value()>=n-1の素数表を再利用する。
+// 各(f,g)版: 素数表も作る。n-1<=INT_MAX。T{}は零、環の加減乗算に対応（bool以外）。
+// 符号付き整数の全途中結果はTの範囲内、符号なし整数は型の幅の剰余演算。
+//
+// gcd_square(f,sieve)/gcd_square(f): gcd_convolution(f,f)と同じ結果を返す。空も可、値渡し入力1本・変換2回。
+// 時間O(1+n log log(n+2))・領域O(n+1)。表あり版はmax_value()>=n-1、表なし版はn-1<=INT_MAX。
+//
+// lcm_square(f,sieve)/lcm_square(f): lcm_convolution(f,f)と同じ結果を返す。空も可、値渡し入力1本・変換2回。
+// 時間O(1+n log log(n+2))・領域O(n+1)。表あり版はmax_value()>=n-1、表なし版はn-1<=INT_MAX。
+//
+// [疎な倍数変換]
+// m=f.size()、rは各keyの素因数を重複込みで数えた総数（以下の両API共通）。
+// sparse_multiple_zeta_transform(f,sieve): 正で一意なkeyの全約数を含むfをkey昇順にし、各値を倍数和へ置換。key<=sieve.max_value()、Valは+=対応。O((m+r)log(m+1))時間、O(m+r)補助領域。
+// sparse_multiple_mobius_transform(f,sieve): 正で一意なkeyの全約数を含むfをkey昇順にし、倍数和の逆変換を実行。key<=sieve.max_value()、Valは-=対応。O((m+r)log(m+1))時間、O(m+r)補助領域。
+
 #include <algorithm>
 #include <array>
 #include <bit>
@@ -20,11 +83,108 @@
 #include <utility>
 #include <vector>
 
-// 集合変換は空配列または長さ2^k。各演算はO(n log n)、追加領域O(1)。
-// superset_zeta_transform(f): f[S]をSの上位集合の総和へ更新する。
-// superset_mobius_transform(f): 上位集合ゼータ変換を元に戻す。
-// subset_zeta_transform(f): f[S]をSの部分集合の総和へ更新する。
-// subset_mobius_transform(f): 部分集合ゼータ変換を元に戻す。
+#ifndef SIRKIT_SET_TRANSFORM_SCALAR_DETAIL_DEFINED
+#define SIRKIT_SET_TRANSFORM_SCALAR_DETAIL_DEFINED
+namespace reinsirk::detail {
+#if defined(__GNUC__) && !defined(__clang__)
+template <bool Subtract, class T>
+[[gnu::always_inline]] inline void set_transform_eight(T* out, T* in) {
+    if constexpr (Subtract) out[0] -= in[0]; else out[0] += in[0];
+    if constexpr (Subtract) out[1] -= in[1]; else out[1] += in[1];
+    if constexpr (Subtract) out[2] -= in[2]; else out[2] += in[2];
+    if constexpr (Subtract) out[3] -= in[3]; else out[3] += in[3];
+    if constexpr (Subtract) out[4] -= in[4]; else out[4] += in[4];
+    if constexpr (Subtract) out[5] -= in[5]; else out[5] += in[5];
+    if constexpr (Subtract) out[6] -= in[6]; else out[6] += in[6];
+    if constexpr (Subtract) out[7] -= in[7]; else out[7] += in[7];
+}
+#endif
+template <bool Subset, bool Subtract, class T>
+inline void set_transform_scalar(std::vector<T>& f) {
+    const std::size_t n = f.size();
+    if (n >= 8) {
+        for (std::size_t base = 0; base < n; base += 8) {
+            auto add = [&](std::size_t a, std::size_t b) {
+                if constexpr (Subtract) f[base + a] -= f[base + b];
+                else f[base + a] += f[base + b];
+            };
+            if constexpr (Subset) {
+                add(1, 0); add(3, 2); add(5, 4); add(7, 6);
+                add(2, 0); add(3, 1); add(6, 4); add(7, 5);
+                add(4, 0); add(5, 1); add(6, 2); add(7, 3);
+            } else {
+                add(0, 1); add(2, 3); add(4, 5); add(6, 7);
+                add(0, 2); add(1, 3); add(4, 6); add(5, 7);
+                add(0, 4); add(1, 5); add(2, 6); add(3, 7);
+            }
+        }
+    }
+    std::size_t half = n >= 8 ? 8 : 1;
+#if defined(__GNUC__) && !defined(__clang__)
+    if constexpr (Subset && std::is_trivially_copyable_v<T> && sizeof(T) <= 8) {
+        // 依存する段の順序を保って2段をまとめる。
+        for (; half >= 8 && half < n / 2; half *= 4) {
+            for (std::size_t base = 0; base < n; base += half * 4) {
+                auto* a = f.data() + base;
+                auto* b = a + half;
+                auto* c = b + half;
+                auto* d = c + half;
+                for (std::size_t j = 0; j < half; j += 8) {
+                    set_transform_eight<Subtract>(b+j,a+j);
+                    set_transform_eight<Subtract>(d+j,c+j);
+                    set_transform_eight<Subtract>(c+j,a+j);
+                    set_transform_eight<Subtract>(d+j,b+j);
+                }
+            }
+        }
+    }
+#endif
+    for (; half < n; half *= 2) {
+        for (std::size_t base = 0; base < n; base += half * 2) {
+#if defined(__GNUC__) && !defined(__clang__)
+            // 小さな単純型は8要素ずつ展開し、GCCの自動ベクトル化を促す。
+            if constexpr (std::is_trivially_copyable_v<T> && sizeof(T) <= 8) {
+                auto* out = f.data() + base + (Subset ? half : 0);
+                auto* in = f.data() + base + (Subset ? 0 : half);
+                std::size_t j = 0;
+                for (; half - j >= 8; j += 8) {
+                    if constexpr (Subtract) out[j] -= in[j];
+                    else out[j] += in[j];
+                    if constexpr (Subtract) out[j+1] -= in[j+1];
+                    else out[j+1] += in[j+1];
+                    if constexpr (Subtract) out[j+2] -= in[j+2];
+                    else out[j+2] += in[j+2];
+                    if constexpr (Subtract) out[j+3] -= in[j+3];
+                    else out[j+3] += in[j+3];
+                    if constexpr (Subtract) out[j+4] -= in[j+4];
+                    else out[j+4] += in[j+4];
+                    if constexpr (Subtract) out[j+5] -= in[j+5];
+                    else out[j+5] += in[j+5];
+                    if constexpr (Subtract) out[j+6] -= in[j+6];
+                    else out[j+6] += in[j+6];
+                    if constexpr (Subtract) out[j+7] -= in[j+7];
+                    else out[j+7] += in[j+7];
+                }
+                for (; j < half; ++j) {
+                    if constexpr (Subtract) out[j] -= in[j];
+                    else out[j] += in[j];
+                }
+            } else
+#endif
+            {
+                for (std::size_t j = 0; j < half; ++j) {
+                    auto& out = f[base + j + (Subset ? half : 0)];
+                    auto& in = f[base + j + (Subset ? 0 : half)];
+                    if constexpr (Subtract) out -= in;
+                    else out += in;
+                }
+            }
+        }
+    }
+}
+}
+#endif
+
 #ifndef SIRKIT_SET_TRANSFORM_SIMD_DETAIL_DEFINED
 #define SIRKIT_SET_TRANSFORM_SIMD_DETAIL_DEFINED
 #if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
@@ -113,11 +273,7 @@ template <class T> void superset_zeta_transform(std::vector<T>& f) {
         }
     }
 #endif
-    for (std::size_t half = 1; half < f.size(); half *= 2) {
-        for (std::size_t base = 0; base < f.size(); base += half * 2) {
-            for (std::size_t j = 0; j < half; ++j) f[base + j] += f[base + half + j];
-        }
-    }
+    reinsirk::detail::set_transform_scalar<false, false>(f);
 }
 #endif
 
@@ -146,11 +302,7 @@ template <class T> void superset_mobius_transform(std::vector<T>& f) {
         }
     }
 #endif
-    for (std::size_t half = 1; half < f.size(); half *= 2) {
-        for (std::size_t base = 0; base < f.size(); base += half * 2) {
-            for (std::size_t j = 0; j < half; ++j) f[base + j] -= f[base + half + j];
-        }
-    }
+    reinsirk::detail::set_transform_scalar<false, true>(f);
 }
 #endif
 
@@ -179,11 +331,7 @@ template <class T> void subset_zeta_transform(std::vector<T>& f) {
         }
     }
 #endif
-    for (std::size_t half = 1; half < f.size(); half *= 2) {
-        for (std::size_t base = 0; base < f.size(); base += half * 2) {
-            for (std::size_t j = 0; j < half; ++j) f[base + half + j] += f[base + j];
-        }
-    }
+    reinsirk::detail::set_transform_scalar<true, false>(f);
 }
 #endif
 
@@ -212,16 +360,21 @@ template <class T> void subset_mobius_transform(std::vector<T>& f) {
         }
     }
 #endif
-    for (std::size_t half = 1; half < f.size(); half *= 2) {
-        for (std::size_t base = 0; base < f.size(); base += half * 2) {
-            for (std::size_t j = 0; j < half; ++j) f[base + half + j] -= f[base + j];
-        }
-    }
+    reinsirk::detail::set_transform_scalar<true, true>(f);
 }
 #endif
 
-// bitwise_and_convolution(f,g): h[k]=sum_{i&j=k}f[i]g[j]。同じ長さ2^k、O(n log n)。
-// bitwise_or_convolution(f,g): h[k]=sum_{i|j=k}f[i]g[j]。同じ長さ2^k、O(n log n)。
+#ifndef SIRKIT_BITWISE_MULTIPLY_DETAIL_DEFINED
+#define SIRKIT_BITWISE_MULTIPLY_DETAIL_DEFINED
+namespace reinsirk::detail {
+template <class T> inline void bitwise_multiply_assign(T& left, T& right) {
+    if constexpr (std::is_unsigned_v<T> && sizeof(T) < sizeof(unsigned int))
+        left = static_cast<T>(static_cast<unsigned int>(left) * static_cast<unsigned int>(right));
+    else left *= right;
+}
+}
+#endif
+
 #ifndef SIRKIT_BITWISE_AND_CONVOLUTION_DEFINED
 #define SIRKIT_BITWISE_AND_CONVOLUTION_DEFINED
 template <class T> std::vector<T> bitwise_and_convolution(std::vector<T> f, std::vector<T> g) {
@@ -230,7 +383,7 @@ template <class T> std::vector<T> bitwise_and_convolution(std::vector<T> f, std:
 #endif
     superset_zeta_transform(f);
     superset_zeta_transform(g);
-    for (std::size_t i = 0; i < f.size(); ++i) f[i] *= g[i];
+    for (std::size_t i = 0; i < f.size(); ++i) reinsirk::detail::bitwise_multiply_assign(f[i], g[i]);
     superset_mobius_transform(f);
     return f;
 }
@@ -244,45 +397,65 @@ template <class T> std::vector<T> bitwise_or_convolution(std::vector<T> f, std::
 #endif
     subset_zeta_transform(f);
     subset_zeta_transform(g);
-    for (std::size_t i = 0; i < f.size(); ++i) f[i] *= g[i];
+    for (std::size_t i = 0; i < f.size(); ++i) reinsirk::detail::bitwise_multiply_assign(f[i], g[i]);
     subset_mobius_transform(f);
     return f;
 }
 #endif
 
 
+#ifndef SIRKIT_BITWISE_AND_SQUARE_DEFINED
+#define SIRKIT_BITWISE_AND_SQUARE_DEFINED
+template <class T> std::vector<T> bitwise_and_square(std::vector<T> f) {
+    superset_zeta_transform(f);
+    for (std::size_t i = 0; i < f.size(); ++i)
+        reinsirk::detail::bitwise_multiply_assign(f[i], f[i]);
+    superset_mobius_transform(f);
+    return f;
+}
+#endif
+
+#ifndef SIRKIT_BITWISE_OR_SQUARE_DEFINED
+#define SIRKIT_BITWISE_OR_SQUARE_DEFINED
+template <class T> std::vector<T> bitwise_or_square(std::vector<T> f) {
+    subset_zeta_transform(f);
+    for (std::size_t i = 0; i < f.size(); ++i)
+        reinsirk::detail::bitwise_multiply_assign(f[i], f[i]);
+    subset_mobius_transform(f);
+    return f;
+}
+#endif
+
 #ifndef SIRKIT_INTEGER_SIEVE_DEFINED
 #define SIRKIT_INTEGER_SIEVE_DEFINED
-// IntegerSieve(maxn): maxn>=0の最小素因数表・昇順素数列をO(maxn)時間・領域で作る。0,1の最小素因数は0。
-// least_prime_factor[x]は最小素因数、prime_listは昇順素数列。表は書き換えず利用する。
-// コピーは独立、コピー代入は強保証。ムーブ元は空となりmax_value()=-1。
-// swap(other): 表と素数列をO(1)で交換する。
-// max_value(): 表の上限を返す。is_prime(x): 0<=x<=max_value()の素数判定をO(1)で返す。
-// prime_factorization(x): 1<=x<=max_value()^2の素因数と指数のmapを返す。x=1は空の表でも許す。
-// enumerate_divisors(x), sorted_divisors(x): prime_factorizationと同じ前提で全約数を返す。後者だけ昇順。
-// divisor_totients(x): prime_factorizationと同じ前提で各約数dからphi(d)へのmapを返す。
-// mobius_table(): O(maxn)でmu表を返す。mu[0]=0,mu[1]=1。
-// totient_table(): O(maxn)でphi表を返す。phi[0]=0,phi[1]=1。
-// power_table<Mint>(k,nmax): 0<=nmax<=max_value(),k>=0でn^kの表。0^0=1。
-// べき乗表はO(nmax+pi(nmax)log(k+1))時間・O(nmax)領域。公開配列を変更せず使う。
 struct IntegerSieve {
     std::vector<int> least_prime_factor;
     std::vector<int> prime_list;
 
-    explicit IntegerSieve(int maxn) : least_prime_factor(table_size(maxn)) {
+    explicit IntegerSieve(int maxn) : least_prime_factor(table_size(maxn), 2) {
         const std::size_t limit = least_prime_factor.size();
-        for (std::size_t i = 2; i < limit; ++i) {
-            if (least_prime_factor[i] == 0) {
+        least_prime_factor[0] = 0;
+        if (limit > 1) least_prime_factor[1] = 0;
+        if (limit > 2) prime_list.push_back(2);
+        std::size_t i = 3;
+        for (; i <= (limit - 1) / 3; i += 2) {
+            if (least_prime_factor[i] == 2) {
                 least_prime_factor[i] = static_cast<int>(i);
                 prime_list.push_back(static_cast<int>(i));
             }
             const int first = least_prime_factor[i];
-            for (const int p : prime_list) {
-                const std::uint64_t next = static_cast<std::uint64_t>(i) *
-                                           static_cast<std::uint64_t>(p);
+            for (std::size_t j = 1; j < prime_list.size(); ++j) {
+                const int prime = prime_list[j];
+                const std::uint64_t next = static_cast<std::uint64_t>(i) * static_cast<std::uint64_t>(prime);
                 if (next >= limit) break;
-                least_prime_factor[static_cast<std::size_t>(next)] = p;
-                if (p == first) break;
+                least_prime_factor[static_cast<std::size_t>(next)] = prime;
+                if (prime == first) break;
+            }
+        }
+        for (; i < limit; i += 2) {
+            if (least_prime_factor[i] == 2) {
+                least_prime_factor[i] = static_cast<int>(i);
+                prime_list.push_back(static_cast<int>(i));
             }
         }
     }
@@ -505,13 +678,83 @@ private:
 namespace reinsirk::detail {
 struct IntegerTransform {
     // 素数pについて、指数を1段進める／戻す伝播を行う。
+#if defined(__GNUC__) && !defined(__clang__)
     template <bool ToMultiples, bool Subtract, class T, class PrimeRange>
     static void propagate(std::vector<T>& a, const PrimeRange& primes) {
+        if constexpr (std::is_trivially_copyable_v<T> && sizeof(T) <= 8) {
+            if (a.size() >= 257) {
+                propagate_expanded<ToMultiples, Subtract>(a, primes);
+                return;
+            }
+        }
+        propagate_scalar<ToMultiples, Subtract>(a, primes);
+    }
+    template <bool ToMultiples, bool Subtract, class T, class PrimeRange>
+    static void propagate_expanded(std::vector<T>& a, const PrimeRange& primes) {
         if (a.size() <= 2) return;
         const std::size_t upper = a.size() - 1;
-        for (const int value : primes) {
-            const auto p = static_cast<std::size_t>(value);
+        auto prime = primes.begin();
+        const auto end = primes.end();
+        for (; prime != end; ++prime) {
+            const auto p = static_cast<std::size_t>(*prime);
+            if (p > upper / 2) break;
+            const auto count = upper / p;
+            if constexpr (ToMultiples != Subtract) {
+                std::size_t from = 1, to = p;
+                for (; count - from + 1 >= 8; from += 8, to += p * 8) {
+                    if constexpr (ToMultiples) a[to + p * 0] += a[from + 0]; else a[from + 0] -= a[to + p * 0];
+                    if constexpr (ToMultiples) a[to + p * 1] += a[from + 1]; else a[from + 1] -= a[to + p * 1];
+                    if constexpr (ToMultiples) a[to + p * 2] += a[from + 2]; else a[from + 2] -= a[to + p * 2];
+                    if constexpr (ToMultiples) a[to + p * 3] += a[from + 3]; else a[from + 3] -= a[to + p * 3];
+                    if constexpr (ToMultiples) a[to + p * 4] += a[from + 4]; else a[from + 4] -= a[to + p * 4];
+                    if constexpr (ToMultiples) a[to + p * 5] += a[from + 5]; else a[from + 5] -= a[to + p * 5];
+                    if constexpr (ToMultiples) a[to + p * 6] += a[from + 6]; else a[from + 6] -= a[to + p * 6];
+                    if constexpr (ToMultiples) a[to + p * 7] += a[from + 7]; else a[from + 7] -= a[to + p * 7];
+                }
+                for (; from <= count; ++from, to += p) {
+                    if constexpr (ToMultiples) a[to] += a[from]; else a[from] -= a[to];
+                }
+            } else {
+                std::size_t from = count, to = count * p;
+                for (; from >= 8; from -= 8, to -= p * 8) {
+                    if constexpr (ToMultiples) a[to - p * 0] -= a[from - 0]; else a[from - 0] += a[to - p * 0];
+                    if constexpr (ToMultiples) a[to - p * 1] -= a[from - 1]; else a[from - 1] += a[to - p * 1];
+                    if constexpr (ToMultiples) a[to - p * 2] -= a[from - 2]; else a[from - 2] += a[to - p * 2];
+                    if constexpr (ToMultiples) a[to - p * 3] -= a[from - 3]; else a[from - 3] += a[to - p * 3];
+                    if constexpr (ToMultiples) a[to - p * 4] -= a[from - 4]; else a[from - 4] += a[to - p * 4];
+                    if constexpr (ToMultiples) a[to - p * 5] -= a[from - 5]; else a[from - 5] += a[to - p * 5];
+                    if constexpr (ToMultiples) a[to - p * 6] -= a[from - 6]; else a[from - 6] += a[to - p * 6];
+                    if constexpr (ToMultiples) a[to - p * 7] -= a[from - 7]; else a[from - 7] += a[to - p * 7];
+                }
+                for (; from; --from, to -= p) {
+                    if constexpr (ToMultiples) a[to] -= a[from]; else a[from] += a[to];
+                }
+            }
+        }
+        for (; prime != end; ++prime) {
+            const auto p = static_cast<std::size_t>(*prime);
             if (p > upper) break;
+            if constexpr (ToMultiples) {
+                if constexpr (Subtract) a[p] -= a[1]; else a[p] += a[1];
+            } else {
+                if constexpr (Subtract) a[1] -= a[p]; else a[1] += a[p];
+            }
+        }
+    }
+#endif
+    template <bool ToMultiples, bool Subtract, class T, class PrimeRange>
+#if defined(__GNUC__) && !defined(__clang__)
+    static void propagate_scalar(std::vector<T>& a, const PrimeRange& primes) {
+#else
+    static void propagate(std::vector<T>& a, const PrimeRange& primes) {
+#endif
+        if (a.size() <= 2) return;
+        const std::size_t upper = a.size() - 1;
+        auto prime = primes.begin();
+        const auto end = primes.end();
+        for (; prime != end; ++prime) {
+            const auto p = static_cast<std::size_t>(*prime);
+            if (p > upper / 2) break;
             const auto count = upper / p;
             if constexpr (ToMultiples != Subtract) {
                 for (std::size_t from = 1, to = p; from <= count; ++from, to += p) {
@@ -523,6 +766,15 @@ struct IntegerTransform {
                     if constexpr (ToMultiples) a[to] -= a[from];
                     else a[from] += a[to];
                 }
+            }
+        }
+        for (; prime != end; ++prime) {
+            const auto p = static_cast<std::size_t>(*prime);
+            if (p > upper) break;
+            if constexpr (ToMultiples) {
+                if constexpr (Subtract) a[p] -= a[1]; else a[p] += a[1];
+            } else {
+                if constexpr (Subtract) a[1] -= a[p]; else a[1] += a[p];
             }
         }
     }
@@ -566,13 +818,6 @@ struct IntegerTransform {
 };
 } // namespace reinsirk::detail
 #endif
-// 正の添字の4変換。f[0]は不変、空配列も可。時間O(n log log n)。
-// multiple_zeta_transform(f): f[d]=sum_{d|k} f[k]へ更新する。
-// multiple_mobius_transform(f): 倍数ゼータ変換を元に戻す。
-// divisor_zeta_transform(f): f[k]=sum_{d|k} f[d]へ更新する。
-// divisor_mobius_transform(f): 約数ゼータ変換を元に戻す。
-// 各(f,sieve)版: sieve.max_value()>=f.size()-1の素数表を再利用し、追加領域O(1)。
-// 各(f)版: 素数表も作る。f.size()-1<=INT_MAX、追加領域O(n)。
 #ifndef SIRKIT_MULTIPLE_ZETA_DEFINED
 #define SIRKIT_MULTIPLE_ZETA_DEFINED
 template <class T> void multiple_zeta_transform(std::vector<T>& f, const IntegerSieve& sieve) {
@@ -634,6 +879,17 @@ template <class T> void divisor_mobius_transform(std::vector<T>& f) {
 #define SIRKIT_INTEGER_CONVOLUTION_DETAIL_DEFINED
 namespace reinsirk::detail {
 struct IntegerConvolution {
+    template <class T> static decltype(auto) product(const T& left, const T& right) {
+        if constexpr (std::is_unsigned_v<T> && sizeof(T) < sizeof(unsigned int))
+            return static_cast<T>(static_cast<unsigned int>(left) * static_cast<unsigned int>(right));
+        else return left * right;
+    }
+    template <class T> static void multiply_assign(T& left, T& right) {
+        if constexpr (std::is_unsigned_v<T> && sizeof(T) < sizeof(unsigned int))
+            left = static_cast<T>(static_cast<unsigned int>(left) * static_cast<unsigned int>(right));
+        else left *= right;
+    }
+
     template <bool Gcd, class T, class PrimeRange>
     static std::vector<T> compute(std::vector<T> a, std::vector<T> b, const PrimeRange& primes) {
         if (a.empty()) return a;
@@ -646,27 +902,59 @@ struct IntegerConvolution {
             if (zero_terms_needed) {
                 mixed.resize(a.size());
                 for (std::size_t k = 1; k < a.size(); ++k)
-                    mixed[k] = left_zero * b[k] + a[k] * right_zero;
+                    mixed[k] = product(left_zero, b[k]) + product(a[k], right_zero);
             }
             reinsirk::detail::IntegerTransform::propagate<false, false>(a, primes);
             reinsirk::detail::IntegerTransform::propagate<false, false>(b, primes);
-            for (std::size_t k = 0; k < a.size(); ++k) a[k] *= b[k];
+            for (std::size_t k = 0; k < a.size(); ++k) multiply_assign(a[k], b[k]);
             reinsirk::detail::IntegerTransform::propagate<false, true>(a, primes);
             if (zero_terms_needed)
                 for (std::size_t k = 1; k < a.size(); ++k) a[k] += mixed[k];
         } else {
-            T at_zero = left_zero * right_zero;
+            T at_zero = product(left_zero, right_zero);
             if (zero_terms_needed) {
                 T left_sum{}, right_sum{};
                 for (std::size_t k = 1; k < a.size(); ++k) {
                     left_sum += a[k]; right_sum += b[k];
                 }
-                at_zero += left_zero * right_sum + left_sum * right_zero;
+                at_zero += product(left_zero, right_sum) + product(left_sum, right_zero);
             }
             reinsirk::detail::IntegerTransform::propagate<true, false>(a, primes);
             reinsirk::detail::IntegerTransform::propagate<true, false>(b, primes);
-            for (std::size_t k = 1; k < a.size(); ++k) a[k] *= b[k];
+            for (std::size_t k = 1; k < a.size(); ++k) multiply_assign(a[k], b[k]);
             reinsirk::detail::IntegerTransform::propagate<true, true>(a, primes);
+            a.front() = at_zero;
+        }
+        return a;
+    }
+    template <bool Gcd, class T, class PrimeRange>
+    static std::vector<T> square(std::vector<T> a, const PrimeRange& primes) {
+        if (a.empty()) return a;
+        const T zero = a.front();
+        bool zero_terms_needed = true;
+        if constexpr (std::equality_comparable<T>) zero_terms_needed = zero != T{};
+        if constexpr (Gcd) {
+            std::vector<T> mixed;
+            if (zero_terms_needed) {
+                mixed.resize(a.size());
+                for (std::size_t k = 1; k < a.size(); ++k)
+                    mixed[k] = product(zero, a[k]) + product(a[k], zero);
+            }
+            IntegerTransform::propagate<false, false>(a, primes);
+            for (std::size_t k = 0; k < a.size(); ++k) multiply_assign(a[k], a[k]);
+            IntegerTransform::propagate<false, true>(a, primes);
+            if (zero_terms_needed)
+                for (std::size_t k = 1; k < a.size(); ++k) a[k] += mixed[k];
+        } else {
+            T at_zero = product(zero, zero);
+            if (zero_terms_needed) {
+                T sum{};
+                for (std::size_t k = 1; k < a.size(); ++k) sum += a[k];
+                at_zero += product(zero, sum) + product(sum, zero);
+            }
+            IntegerTransform::propagate<true, false>(a, primes);
+            for (std::size_t k = 1; k < a.size(); ++k) multiply_assign(a[k], a[k]);
+            IntegerTransform::propagate<true, true>(a, primes);
             a.front() = at_zero;
         }
         return a;
@@ -674,11 +962,6 @@ struct IntegerConvolution {
 };
 } // namespace reinsirk::detail
 #endif
-// gcd_convolution(f,g): h[k]=sum_{gcd(i,j)=k}f[i]g[j]。gcd(0,k)=k（gcd(0,0)=0）。
-// lcm_convolution(f,g): h[k]=sum_{lcm(i,j)=k}f[i]g[j]。lcm(0,k)=0、結果k>=nは切り捨て。
-// 両者は同じ長さnの入力（空も可）、O(n log log n)時間・O(n)追加領域。
-// 各(f,g,sieve)版: sieve.max_value()>=n-1の素数表を再利用する。
-// 各(f,g)版: 素数表も作る。n-1<=INT_MAX。入力値・全中間値がTの範囲に収まること。
 #ifndef SIRKIT_GCDCONV_DEFINED
 #define SIRKIT_GCDCONV_DEFINED
 template <class T> std::vector<T> gcd_convolution(std::vector<T> f, std::vector<T> g, const IntegerSieve& sieve) {
@@ -716,6 +999,34 @@ template <class T> std::vector<T> lcm_convolution(std::vector<T> f, std::vector<
 }
 #endif
 
+#ifndef SIRKIT_GCD_SQUARE_DEFINED
+#define SIRKIT_GCD_SQUARE_DEFINED
+template <class T> std::vector<T> gcd_square(std::vector<T> f, const IntegerSieve& sieve) {
+#ifndef SKIP_RUNTIME_CHECKS
+    reinsirk::detail::IntegerTransform::require_sieve(f.size(), sieve);
+#endif
+    return reinsirk::detail::IntegerConvolution::square<true>(std::move(f), sieve.prime_list);
+}
+template <class T> std::vector<T> gcd_square(std::vector<T> f) {
+    std::vector<int> storage;
+    const auto primes = reinsirk::detail::IntegerTransform::prime_view_for(f.size(), storage);
+    return reinsirk::detail::IntegerConvolution::square<true>(std::move(f), primes);
+}
+#endif
+#ifndef SIRKIT_LCM_SQUARE_DEFINED
+#define SIRKIT_LCM_SQUARE_DEFINED
+template <class T> std::vector<T> lcm_square(std::vector<T> f, const IntegerSieve& sieve) {
+#ifndef SKIP_RUNTIME_CHECKS
+    reinsirk::detail::IntegerTransform::require_sieve(f.size(), sieve);
+#endif
+    return reinsirk::detail::IntegerConvolution::square<false>(std::move(f), sieve.prime_list);
+}
+template <class T> std::vector<T> lcm_square(std::vector<T> f) {
+    std::vector<int> storage;
+    const auto primes = reinsirk::detail::IntegerTransform::prime_view_for(f.size(), storage);
+    return reinsirk::detail::IntegerConvolution::square<false>(std::move(f), primes);
+}
+#endif
 #ifndef SIRKIT_INTERNAL_SPARSE_INTEGER_TRANSFORM_DEFINED
 #define SIRKIT_INTERNAL_SPARSE_INTEGER_TRANSFORM_DEFINED
 namespace reinsirk::detail {
@@ -724,6 +1035,74 @@ template <bool Inverse, std::integral Int, class Val>
 void sparse_integer_transform(std::vector<std::pair<Int, Val>>& f,
                                       const IntegerSieve& sieve) {
     if (f.empty()) return;
+    // 1..mが順番に並ぶ場合は、添字を直接使い並べ替えと位置配列を省く。
+    const std::size_t dense_size = f.size();
+    if (f.front().first == Int{1}
+        && static_cast<std::uintmax_t>(f.back().first) == dense_size) {
+        bool consecutive = true;
+        for (std::size_t i = 1; i + 1 < dense_size; ++i) {
+            if (static_cast<std::uintmax_t>(f[i].first) != i + 1) {
+                consecutive = false; break;
+            }
+        }
+        if (consecutive) {
+#ifndef SKIP_RUNTIME_CHECKS
+            if (sieve.max_value() < 0 || dense_size > static_cast<std::uintmax_t>(sieve.max_value()))
+                throw std::out_of_range("sparse integer transform: key out of range");
+#endif
+            auto prime = sieve.prime_list.begin();
+            const auto end = sieve.prime_list.end();
+            for (; prime != end; ++prime) {
+                const auto p = static_cast<std::size_t>(*prime);
+                if (p > dense_size / 2) break;
+                const auto count = dense_size / p;
+                if constexpr (Inverse) {
+                    std::size_t from = 1, to = p;
+#if defined(__GNUC__) && !defined(__clang__)
+                    if constexpr (std::is_trivially_copyable_v<Val> && sizeof(Val) <= 8) {
+                        for (; count - from + 1 >= 8; from += 8, to += p * 8) {
+                            f[from - 1].second -= f[to - 1].second;
+                            f[from].second -= f[to + p * 1 - 1].second;
+                            f[from + 1].second -= f[to + p * 2 - 1].second;
+                            f[from + 2].second -= f[to + p * 3 - 1].second;
+                            f[from + 3].second -= f[to + p * 4 - 1].second;
+                            f[from + 4].second -= f[to + p * 5 - 1].second;
+                            f[from + 5].second -= f[to + p * 6 - 1].second;
+                            f[from + 6].second -= f[to + p * 7 - 1].second;
+                        }
+                    }
+#endif
+                    for (; from <= count; ++from, to += p)
+                        f[from - 1].second -= f[to - 1].second;
+                } else {
+                    std::size_t from = count, to = count * p;
+#if defined(__GNUC__) && !defined(__clang__)
+                    if constexpr (std::is_trivially_copyable_v<Val> && sizeof(Val) <= 8) {
+                        for (; from >= 8; from -= 8, to -= p * 8) {
+                            f[from - 1].second += f[to - 1].second;
+                            f[from - 2].second += f[to - p * 1 - 1].second;
+                            f[from - 3].second += f[to - p * 2 - 1].second;
+                            f[from - 4].second += f[to - p * 3 - 1].second;
+                            f[from - 5].second += f[to - p * 4 - 1].second;
+                            f[from - 6].second += f[to - p * 5 - 1].second;
+                            f[from - 7].second += f[to - p * 6 - 1].second;
+                            f[from - 8].second += f[to - p * 7 - 1].second;
+                        }
+                    }
+#endif
+                    for (; from; --from, to -= p)
+                        f[from - 1].second += f[to - 1].second;
+                }
+            }
+            for (; prime != end; ++prime) {
+                const auto p = static_cast<std::size_t>(*prime);
+                if (p > dense_size) break;
+                if constexpr (Inverse) f[0].second -= f[p - 1].second;
+                else f[0].second += f[p - 1].second;
+            }
+            return;
+        }
+    }
     std::sort(f.begin(), f.end(), [](const auto& a, const auto& b) {
         return a.first < b.first;
     });
@@ -885,8 +1264,6 @@ void sparse_integer_transform(std::vector<std::pair<Int, Val>>& f,
 
 #ifndef SIRKIT_SPARSE_FAST_INTEGER_ZETA_DEFINED
 #define SIRKIT_SPARSE_FAST_INTEGER_ZETA_DEFINED
-// m=f.size()、rは各keyの素因数を重複込みで数えた総数（以下の両API共通）。
-// 正で一意なkeyの全約数を含むfをkey昇順にし、各値を倍数和へ置換。key<=sieve.max_value()、Valは+=対応。O((m+r)log(m+1))時間、O(m+r)補助領域。
 template <std::integral Int, class Val>
 void sparse_multiple_zeta_transform(std::vector<std::pair<Int, Val>>& f,
                               const IntegerSieve& sieve) {
@@ -896,7 +1273,6 @@ void sparse_multiple_zeta_transform(std::vector<std::pair<Int, Val>>& f,
 
 #ifndef SIRKIT_SPARSE_FAST_INTEGER_MOEBIUS_DEFINED
 #define SIRKIT_SPARSE_FAST_INTEGER_MOEBIUS_DEFINED
-// 正で一意なkeyの全約数を含むfをkey昇順にし、倍数和の逆変換を実行。key<=sieve.max_value()、Valは-=対応。O((m+r)log(m+1))時間、O(m+r)補助領域。
 template <std::integral Int, class Val>
 void sparse_multiple_mobius_transform(std::vector<std::pair<Int, Val>>& f,
                                  const IntegerSieve& sieve) {

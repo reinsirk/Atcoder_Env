@@ -2,10 +2,26 @@
 
 // Library: String/RollingHash.cpp
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/rolling_hash.md
+//
+// API一覧
+// [RollingHash]
+// RollingHash(s, base): 符号なしバイト列をO(|s|+1)時間・空間で構築。base<2は10、base>modulus-2はmodulus-10に補正。
+// modulus: ハッシュの法2^61-1。ハッシュ値は常に[0,modulus)。
+// get(l,r): 半開区間[l,r)のハッシュ、whole(): 全体のハッシュをO(1)で返す。空区間は0。
+// size(), empty(), base(): 長さ・空判定・補正後の底をO(1)で返す。
+// concat(left,right,right_length): 同じ底の正規化済みハッシュを連結してO(1)で返す。right_length<=size()。
+// equal(l,r,other,ol,orr): 同じ底の2区間の長さとハッシュをO(1)で比較する。
+// lcp(l,other,ol,limit): 同じ底の接尾辞の最長共通接頭辞長をlimit以下でO(log(min(残長,limit)+1))で返す。
+// compare(l,r,other,ol,orr): 同じ底の2区間を符号なしバイト辞書順で比較し-1/0/1をO(log(短い方の長さ+1))で返す。
+// 比較にはハッシュ衝突による誤判定の可能性がある。検査有効時は不正な範囲にout_of_range、底・ハッシュにinvalid_argument。
+// assign(s): 現在の底で再構築し容量・利用可能な累乗表を再利用、O(旧長+|s|+1)上界、強い例外保証。clear(): 空へ戻して底・容量を保持、O(旧長+1)上界、noexcept。
+// 元文字列は保持しない。コピーはO(n+1)で独立、代入は容量を再利用し強い例外保証。ムーブ元は空（自己ムーブ代入は保持）。swapはO(1)。
 
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 #include <limits>
 #include <stdexcept>
 #include <string_view>
@@ -15,16 +31,6 @@
 #ifndef SIRKIT_ROLLING_HASH_DEFINED
 #define SIRKIT_ROLLING_HASH_DEFINED
 
-// RollingHash(s, base): 符号なしバイト列をO(|s|)時間・空間で構築。base<2は10、base>modulus-2はmodulus-10に補正。
-// modulus: ハッシュの法2^61-1。ハッシュ値は常に[0,modulus)。
-// get(l,r): 半開区間[l,r)のハッシュ、whole(): 全体のハッシュをO(1)で返す。空区間は0。
-// size(), empty(), base(): 長さ・空判定・補正後の底をO(1)で返す。
-// concat(left,right,right_length): 同じ底の正規化済みハッシュを連結してO(1)で返す。right_length<=size()。
-// equal(l,r,other,ol,orr): 同じ底の2区間の長さとハッシュをO(1)で比較する。
-// lcp(l,other,ol,limit): 同じ底の接尾辞の最長共通接頭辞長をlimit以下でO(log(min(残長,limit)+1))で返す。
-// compare(l,r,other,ol,orr): 同じ底の2区間を符号なしバイト辞書順で比較し-1/0/1をO(log(短い方の長さ+1))で返す。
-// 比較にはハッシュ衝突による誤判定の可能性がある。検査有効時は不正な範囲にout_of_range、底・ハッシュにinvalid_argument。
-// コピーは独立し代入は強い例外保証。ムーブ元は空（自身へのムーブ代入は保持）。swapはO(1)。
 class RollingHash {
 public:
     static constexpr std::uint64_t modulus = (std::uint64_t{1} << 61) - 1;
@@ -46,6 +52,42 @@ public:
         std::uint64_t power = 1;
         prefixes[0].value = hash;
         powers[0].value = power;
+#if defined(__GNUC__) && !defined(__clang__) && defined(__x86_64__) && \
+    (!defined(__SIZEOF_INT128__) || defined(SIRKIT_FORCE_STANDARD_ARITHMETIC))
+        std::size_t i = 0;
+        for (; s.size() - i >= 4; i += 4) {
+            const auto byte0 = static_cast<unsigned char>(s[i + 0]);
+            hash = multiply_add_byte(hash, factor, byte0);
+            power = multiply(power, factor);
+            prefixes[i + 1].value = hash;
+            powers[i + 1].value = power;
+
+            const auto byte1 = static_cast<unsigned char>(s[i + 1]);
+            hash = multiply_add_byte(hash, factor, byte1);
+            power = multiply(power, factor);
+            prefixes[i + 2].value = hash;
+            powers[i + 2].value = power;
+
+            const auto byte2 = static_cast<unsigned char>(s[i + 2]);
+            hash = multiply_add_byte(hash, factor, byte2);
+            power = multiply(power, factor);
+            prefixes[i + 3].value = hash;
+            powers[i + 3].value = power;
+
+            const auto byte3 = static_cast<unsigned char>(s[i + 3]);
+            hash = multiply_add_byte(hash, factor, byte3);
+            power = multiply(power, factor);
+            prefixes[i + 4].value = hash;
+            powers[i + 4].value = power;
+        }
+        for (; i < s.size(); ++i) {
+            const auto byte = static_cast<unsigned char>(s[i]);
+            hash = multiply_add_byte(hash, factor, byte);
+            power = multiply(power, factor);
+            prefixes[i + 1].value = hash;
+            powers[i + 1].value = power;
+        }
+#else
         for (std::size_t i = 0; i < s.size(); ++i) {
             const auto byte = static_cast<unsigned char>(s[i]);
             hash = multiply_add_byte(hash, factor, byte);
@@ -53,6 +95,101 @@ public:
             prefixes[i + 1].value = hash;
             powers[i + 1].value = power;
         }
+#endif
+    }
+
+    void assign(std::string_view s) {
+        if (s.size() >= data_.max_size() / 2) {
+            throw std::length_error("RollingHash: capacity overflow");
+        }
+        const std::size_t count = s.size() + 1;
+        const bool reuse_powers = power_data_.size() >= count;
+        // 両方の確保を先に終え、失敗時も内容と非所有ポインタを保つ。
+        data_.reserve(count);
+        power_data_.reserve(count);
+        data_.resize(count);
+        power_data_.resize(count);
+        offset_ = count;
+        powers_ = power_data_.data();
+        Entry* const prefixes = data_.data();
+        Entry* const powers = power_data_.data();
+        const std::uint64_t factor = base_;
+        std::uint64_t hash = 0;
+        prefixes[0].value = hash;
+        powers[0].value = 1;
+        if (reuse_powers) {
+#if defined(__GNUC__) && !defined(__clang__) && defined(__x86_64__) && \
+    (!defined(__SIZEOF_INT128__) || defined(SIRKIT_FORCE_STANDARD_ARITHMETIC))
+            std::size_t i = 0;
+            for (; s.size() - i >= 4; i += 4) {
+                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i + 0]));
+                prefixes[i + 1].value = hash;
+
+                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i + 1]));
+                prefixes[i + 2].value = hash;
+
+                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i + 2]));
+                prefixes[i + 3].value = hash;
+
+                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i + 3]));
+                prefixes[i + 4].value = hash;
+            }
+            for (; i < s.size(); ++i) {
+                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));
+                prefixes[i + 1].value = hash;
+            }
+#else
+            for (std::size_t i = 0; i < s.size(); ++i) {
+                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));
+                prefixes[i + 1].value = hash;
+            }
+#endif
+        } else {
+            std::uint64_t power = 1;
+#if defined(__GNUC__) && !defined(__clang__) && defined(__x86_64__) && \
+    (!defined(__SIZEOF_INT128__) || defined(SIRKIT_FORCE_STANDARD_ARITHMETIC))
+            std::size_t i = 0;
+            for (; s.size() - i >= 4; i += 4) {
+                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i + 0]));
+                power = multiply(power, factor);
+                prefixes[i + 1].value = hash;
+                powers[i + 1].value = power;
+
+                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i + 1]));
+                power = multiply(power, factor);
+                prefixes[i + 2].value = hash;
+                powers[i + 2].value = power;
+
+                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i + 2]));
+                power = multiply(power, factor);
+                prefixes[i + 3].value = hash;
+                powers[i + 3].value = power;
+
+                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i + 3]));
+                power = multiply(power, factor);
+                prefixes[i + 4].value = hash;
+                powers[i + 4].value = power;
+            }
+            for (; i < s.size(); ++i) {
+                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));
+                power = multiply(power, factor);
+                prefixes[i + 1].value = hash;
+                powers[i + 1].value = power;
+            }
+#else
+            for (std::size_t i = 0; i < s.size(); ++i) {
+                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));
+                power = multiply(power, factor);
+                prefixes[i + 1].value = hash;
+                powers[i + 1].value = power;
+            }
+#endif
+        }
+    }
+
+    void clear() noexcept {
+        data_.clear(); power_data_.clear();
+        offset_ = 0; powers_ = nullptr;
     }
 
     RollingHash(const RollingHash& other)
@@ -62,8 +199,18 @@ public:
 
     RollingHash& operator=(const RollingHash& other) {
         if (this != &other) {
-            RollingHash copy(other);
-            swap(copy);
+            data_.reserve(other.data_.size());
+            power_data_.reserve(other.power_data_.size());
+            data_.resize(other.data_.size());
+            power_data_.resize(other.power_data_.size());
+            // Entryはtrivially copyable。独立した配列間で、構築済み要素の表現を写す。
+            if (!other.data_.empty()) {
+                std::memcpy(data_.data(), other.data_.data(), other.data_.size() * sizeof(Entry));
+                std::memcpy(power_data_.data(), other.power_data_.data(), other.power_data_.size() * sizeof(Entry));
+            }
+            base_ = other.base_;
+            offset_ = other.offset_;
+            powers_ = data_.empty() ? nullptr : power_data_.data();
         }
         return *this;
     }
@@ -139,9 +286,19 @@ public:
             throw std::invalid_argument("RollingHash: noncanonical hash");
         }
 #endif
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
+        if (right_length == 0) return add(left, right);
+        const __uint128_t product =
+            static_cast<__uint128_t>(left) * powers_[right_length].value + right;
+        const std::uint64_t folded =
+            (static_cast<std::uint64_t>(product) & modulus) +
+            static_cast<std::uint64_t>(product >> 61);
+        return folded >= modulus ? folded - modulus : folded;
+#else
         return add(right_length == 0 ? left
                                     : multiply(left, powers_[right_length].value),
                    right);
+#endif
     }
 
     [[nodiscard]] bool equal(std::size_t l, std::size_t r,
@@ -280,16 +437,45 @@ private:
                                            const RollingHash& other,
                                            std::size_t ol,
                                            std::size_t limit) const noexcept {
-        std::size_t low = 0;
-        std::size_t high = limit;
+        if (limit == 0) return 0;
+        const Entry* const left = data_.data() + l;
+        const Entry* const right = other.data_.data() + ol;
+        const Entry* const powers = powers_;
+        const std::uint64_t start = left[0].value + modulus - right[0].value;
+        const std::uint64_t delta = start >= modulus ? start - modulus : start;
+        // 開始接頭辞が同じなら、端点の比較だけで区間ハッシュを比較できる。
+        if (delta == 0) {
+            if (left[limit].value == right[limit].value) return limit;
+            std::size_t low = 0, high = limit - 1;
+            while (low < high) {
+                const std::size_t middle = high - (high - low) / 2;
+                if (left[middle].value == right[middle].value) low = middle;
+                else high = middle - 1;
+            }
+            return low;
+        }
+        const auto equal_prefix = [&](std::size_t length) noexcept {
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
+            // 0<product<=p²。折り返し結果がpなら、区間ハッシュの差は0。
+            const __uint128_t product =
+                static_cast<__uint128_t>(delta) * powers[length].value +
+                (right[length].value + modulus - left[length].value);
+            return ((static_cast<std::uint64_t>(product) & modulus) +
+                    static_cast<std::uint64_t>(product >> 61)) == modulus;
+#else
+            // raw積は4p未満。0<difference<6pで、全中間値は64bitに収まる。
+            const std::uint64_t difference = left[length].value + 5 * modulus -
+                multiply_raw(delta, powers[length].value) - right[length].value;
+            return ((difference & modulus) + (difference >> 61)) == modulus;
+#endif
+        };
+        if (!equal_prefix(1)) return 0;
+        if (equal_prefix(limit)) return limit;
+        std::size_t low = 1, high = limit - 1;
         while (low < high) {
             const std::size_t middle = high - (high - low) / 2;
-            if (get_unchecked(l, l + middle) ==
-                other.get_unchecked(ol, ol + middle)) {
-                low = middle;
-            } else {
-                high = middle - 1;
-            }
+            if (equal_prefix(middle)) low = middle;
+            else high = middle - 1;
         }
         return low;
     }

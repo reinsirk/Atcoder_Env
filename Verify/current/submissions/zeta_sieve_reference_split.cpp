@@ -2,18 +2,10 @@
 
 // Library: Math/Zeta/Sieve.cpp
 // SPDX-License-Identifier: CC0-1.0
-#include <algorithm>
-#include <concepts>
-#include <cstddef>
-#include <cstdint>
-#include <limits>
-#include <map>
-#include <stdexcept>
-#include <utility>
-#include <vector>
-
-#ifndef SIRKIT_INTEGER_SIEVE_DEFINED
-#define SIRKIT_INTEGER_SIEVE_DEFINED
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/zeta_mobius.md
+//
+// API一覧
+// [IntegerSieve]
 // IntegerSieve(maxn): maxn>=0の最小素因数表・昇順素数列をO(maxn)時間・領域で作る。0,1の最小素因数は0。
 // least_prime_factor[x]は最小素因数、prime_listは昇順素数列。表は書き換えず利用する。
 // コピーは独立、コピー代入は強保証。ムーブ元は空となりmax_value()=-1。
@@ -26,24 +18,47 @@
 // totient_table(): O(maxn)でphi表を返す。phi[0]=0,phi[1]=1。
 // power_table<Mint>(k,nmax): 0<=nmax<=max_value(),k>=0でn^kの表。0^0=1。
 // べき乗表はO(nmax+pi(nmax)log(k+1))時間・O(nmax)領域。公開配列を変更せず使う。
+
+#include <algorithm>
+#include <concepts>
+#include <cstddef>
+#include <cstdint>
+#include <limits>
+#include <map>
+#include <stdexcept>
+#include <utility>
+#include <vector>
+
+#ifndef SIRKIT_INTEGER_SIEVE_DEFINED
+#define SIRKIT_INTEGER_SIEVE_DEFINED
 struct IntegerSieve {
     std::vector<int> least_prime_factor;
     std::vector<int> prime_list;
 
-    explicit IntegerSieve(int maxn) : least_prime_factor(table_size(maxn)) {
+    explicit IntegerSieve(int maxn) : least_prime_factor(table_size(maxn), 2) {
         const std::size_t limit = least_prime_factor.size();
-        for (std::size_t i = 2; i < limit; ++i) {
-            if (least_prime_factor[i] == 0) {
+        least_prime_factor[0] = 0;
+        if (limit > 1) least_prime_factor[1] = 0;
+        if (limit > 2) prime_list.push_back(2);
+        std::size_t i = 3;
+        for (; i <= (limit - 1) / 3; i += 2) {
+            if (least_prime_factor[i] == 2) {
                 least_prime_factor[i] = static_cast<int>(i);
                 prime_list.push_back(static_cast<int>(i));
             }
             const int first = least_prime_factor[i];
-            for (const int p : prime_list) {
-                const std::uint64_t next = static_cast<std::uint64_t>(i) *
-                                           static_cast<std::uint64_t>(p);
+            for (std::size_t j = 1; j < prime_list.size(); ++j) {
+                const int prime = prime_list[j];
+                const std::uint64_t next = static_cast<std::uint64_t>(i) * static_cast<std::uint64_t>(prime);
                 if (next >= limit) break;
-                least_prime_factor[static_cast<std::size_t>(next)] = p;
-                if (p == first) break;
+                least_prime_factor[static_cast<std::size_t>(next)] = prime;
+                if (prime == first) break;
+            }
+        }
+        for (; i < limit; i += 2) {
+            if (least_prime_factor[i] == 2) {
+                least_prime_factor[i] = static_cast<int>(i);
+                prime_list.push_back(static_cast<int>(i));
             }
         }
     }

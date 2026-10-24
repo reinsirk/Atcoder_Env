@@ -2,18 +2,35 @@
 
 // Library: Math/prime_judge(Miller-Rabin).cpp
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/primality.md
+//
+// API一覧
+// [MillerRabin / is_prime / 隣接素数]
+// MillerRabin(n, bases): 指定した底の強擬素数検査を通ればtrue。底の選択により合成数も通る。
+// n<2はfalse。底はnで剰余を取り、0なら省く。奇数n>=3で空の底列ならtrue。
+// k個の底にO(k log n)回の剰余乗算、追加領域O(1)。独自の底列の例外は伝える。
+//
+// MillerRabin(n, {2, 7, 61})のような底の直接指定に対応する。
+//
+// is_prime(n): 符号付きの負数はfalse、非負整数はuint64_t全域で素数かを確定する。
+// 32ビット以下は共通判定、4'759'123'141未満は3個、それ以上は7個の底。O(log n)回の剰余乗算、動的確保なし。
+//
+// next_prime(n): n以上で最小の素数をoptional<uint64_t>で返す。負数は2、上端で存在しなければnullopt。
+// prev_prime(n): n以下で最大の素数。同じ戻り値型で、n<2はnullopt。入力は64bit以下の整数。
+// C候補の探索にO(C log(max(n,2)))回の剰余乗算、追加領域O(1)。動的確保なし。
 
 #include <bit>
 #include <cstdint>
 #include <initializer_list>
 #include <limits>
+#include <optional>
+#include <utility>
 #include <type_traits>
 
 #ifndef SIRKIT_PRIMALITY32_DEFINED
 #define SIRKIT_PRIMALITY32_DEFINED
 namespace reinsirk::detail {
 // uint32_t全域の素数判定。Miller-Rabinの底2,7,61を使う。
-// 理論参考: G. Jaeschke (1993), https://doi.org/10.1090/S0025-5718-1993-1192971-8
 inline bool is_prime_u32(std::uint32_t n) noexcept
 {
     // 競技プログラミングでよく使う素数は、累乗計算を省く。
@@ -34,11 +51,11 @@ inline bool is_prime_u32(std::uint32_t n) noexcept
     }
     if (n < 2)
         return false;
-    for (std::uint32_t p : {2u, 3u, 5u, 7u, 11u})
-    {
-        if (n % p == 0)
-            return n == p;
-    }
+    if (n % 2u == 0) return n == 2u;
+    if (n % 3u == 0) return n == 3u;
+    if (n % 5u == 0) return n == 5u;
+    if (n % 7u == 0) return n == 7u;
+    if (n % 11u == 0) return n == 11u;
     std::uint32_t odd = n - 1;
     unsigned shifts = 0;
     while ((odd & 1u) == 0)
@@ -46,7 +63,7 @@ inline bool is_prime_u32(std::uint32_t n) noexcept
         odd >>= 1;
         ++shifts;
     }
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
     // R=2^64。n<2^32なので、累乗中の剰余は2n未満のまま保持できる。
     using u64 = std::uint64_t;
     using u128 = __uint128_t; // GCC/Clangの128ビット整数拡張。
@@ -131,11 +148,32 @@ inline bool is_prime_u32(std::uint32_t n) noexcept
 #ifndef SIRKIT_MILLER_RABIN64_DEFINED
 #define SIRKIT_MILLER_RABIN64_DEFINED
 namespace reinsirk::detail {
+// member begin/endと配列だけを判定し、ADL専用の列は保守的にfalseとする。
+template<class Bases>
+inline constexpr bool miller_rabin_bases_nothrow = [] {
+    if constexpr (requires(const Bases& bases) { bases.begin(); bases.end(); }) {
+        using Begin = decltype(std::declval<const Bases&>().begin());
+        using End = decltype(std::declval<const Bases&>().end());
+        using Iterator = std::decay_t<Begin>;
+        using Sentinel = std::decay_t<End>;
+        if constexpr (requires(Iterator& it, Sentinel& end) { ++it; *it; static_cast<bool>(it != end); }) {
+            return noexcept(std::declval<const Bases&>().begin()) &&
+                   noexcept(std::declval<const Bases&>().end()) &&
+                   std::is_nothrow_constructible_v<Iterator, Begin> &&
+                   std::is_nothrow_constructible_v<Sentinel, End> &&
+                   noexcept(++std::declval<Iterator&>()) &&
+                   noexcept(*std::declval<Iterator&>()) &&
+                   noexcept(static_cast<bool>(std::declval<Iterator&>() != std::declval<Sentinel&>())) &&
+                   std::is_nothrow_destructible_v<Iterator> && std::is_nothrow_destructible_v<Sentinel>;
+        } else return false;
+    } else return std::is_array_v<Bases>;
+}();
+
 template <bool Relaxed>
 class MillerRabin64
 {
     using u64 = std::uint64_t;
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
     using u128 = __uint128_t; // GCC/Clangの拡張。未対応環境では下の標準実装を使う。
 #else
     struct Wide
@@ -144,11 +182,11 @@ class MillerRabin64
     };
 #endif
     const u64 modulus_;
-    u64 negative_inverse_, one_, r_squared_;
+    u64 reduction_inverse_, one_, r_squared_;
     u64 odd_;
     unsigned shifts_ = 0;
 
-#if !((defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__))
+#if !((defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC))
     // 128ビット整数のない環境では32ビットずつに分けて積を得る。
     static Wide product(u64 a, u64 b) noexcept
     {
@@ -165,47 +203,32 @@ class MillerRabin64
     // 通常はa,b<modulus_。Relaxedではmodulus_<2^62、a,b<2*modulus_。
     u64 multiply(u64 a, u64 b) const noexcept
     {
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
         const u128 value = static_cast<u128>(a) * b;
-        const u128 correction = static_cast<u128>(static_cast<u64>(value) * negative_inverse_) * modulus_;
-        const u128 sum = value + correction;
-        const u64 result = static_cast<u64>(sum >> 64);
-        if constexpr (Relaxed)
-            return result;
-        else
-        {
-            if (sum < value || result >= modulus_)
-                return result - modulus_;
-            return result;
-        }
+        const u64 low = static_cast<u64>(value);
+        const u64 high = static_cast<u64>(value >> 64);
+        const u64 correction_high = static_cast<u64>((static_cast<u128>(low * reduction_inverse_) * modulus_) >> 64);
 #else
         const auto value = product(a, b);
-        const auto correction = product(value.low * negative_inverse_, modulus_);
-        const u64 upper = value.high + correction.high;
-        const u64 result = upper + (value.low != 0);
-        if constexpr (Relaxed)
-            return result; // 2*modulus_未満のまま保持し、累乗中の条件分岐を省く。
-        else
-        {
-            // 129ビット目の桁上がりがある場合も、減算後はmodulus_未満。
-            if (upper < value.high || result < upper || result >= modulus_)
-                return result - modulus_;
-            return result;
-        }
+        const u64 high = value.high;
+        const u64 correction_high = product(value.low * reduction_inverse_, modulus_).high;
 #endif
+        if constexpr (Relaxed)
+            return high + modulus_ - correction_high;
+        else {
+            const u64 result = high - correction_high;
+            return high < correction_high ? result + modulus_ : result;
+        }
     }
 
-    u64 power(u64 base, u64 exponent) const noexcept
-    {
+    u64 power(u64 base, u64 exponent) const noexcept {
         u64 result = one_;
-        while (exponent)
-        {
-            if (exponent & 1u)
-                result = multiply(result, base);
-            base = multiply(base, base);
+        for (;;) {
+            if (exponent & 1u) result = multiply(result, base);
             exponent >>= 1;
+            if (!exponent) return result;
+            base = multiply(base, base);
         }
-        return result;
     }
 
     u64 normalize(u64 value) const noexcept
@@ -223,8 +246,8 @@ public:
         u64 inverse = n;
         for (int i = 0; i < 5; ++i)
             inverse *= 2u - n * inverse;
-        negative_inverse_ = 0u - inverse;
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)
+        reduction_inverse_ = inverse;
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
         r_squared_ = (u128{0} - n) % n; // 2^128 mod n。
         one_ = multiply(1, r_squared_);
 #else
@@ -245,7 +268,7 @@ public:
 
     // 指定した底の強擬素数検査を全て通ればtrue。底は整数型とする。
     template <class Bases>
-    bool test(const Bases &bases) const noexcept
+    bool test(const Bases &bases) const noexcept(miller_rabin_bases_nothrow<Bases>)
     {
         for (auto base : bases)
         {
@@ -283,16 +306,54 @@ public:
         }
         return true;
     }
+    // 固定7底用。n>=4'759'123'141で、底2の通過後に残りを3個ずつ進める。
+    bool test_deterministic() const noexcept {
+        if (!test(std::initializer_list<u64>{2})) return false;
+        return test_triple(325, 9375, 28178) && test_triple(450775, 9780504, 1795265022);
+    }
+private:
+    bool test_triple(u64 a, u64 b, u64 c) const noexcept {
+        u64 ta[4], tb[4], tc[4];
+        ta[0] = tb[0] = tc[0] = one_;
+        ta[1] = multiply(a, r_squared_); tb[1] = multiply(b, r_squared_); tc[1] = multiply(c, r_squared_);
+        for (unsigned i = 2; i < 4; ++i) {
+            ta[i] = multiply(ta[i-1], ta[1]); tb[i] = multiply(tb[i-1], tb[1]); tc[i] = multiply(tc[i-1], tc[1]);
+        }
+        const unsigned width = std::bit_width(odd_);
+        const unsigned first_bits = (width - 1) % 2 + 1;
+        int shift = static_cast<int>(width - first_bits);
+        unsigned chunk = static_cast<unsigned>(odd_ >> shift);
+        u64 x = ta[chunk], y = tb[chunk], z = tc[chunk];
+        for (shift -= 2; shift >= 0; shift -= 2) {
+            x = multiply(x,x); y = multiply(y,y); z = multiply(z,z);
+            x = multiply(x,x); y = multiply(y,y); z = multiply(z,z);
+            chunk = static_cast<unsigned>((odd_ >> shift) & 3u);
+            if (chunk != 0) {
+                x = multiply(x,ta[chunk]); y = multiply(y,tb[chunk]); z = multiply(z,tc[chunk]);
+            }
+        }
+        x = normalize(x); y = normalize(y); z = normalize(z);
+        bool pass_a = x == one_ || x == modulus_ - one_;
+        bool pass_b = y == one_ || y == modulus_ - one_;
+        bool pass_c = z == one_ || z == modulus_ - one_;
+        // 一度通った底の結果は、ほかの底の平方を続けても保持する。
+        for (unsigned step = 1; step < shifts_ && !(pass_a && pass_b && pass_c); ++step) {
+            x = normalize(multiply(x, x)); y = normalize(multiply(y, y)); z = normalize(multiply(z, z));
+            pass_a |= x == modulus_ - one_;
+            pass_b |= y == modulus_ - one_;
+            pass_c |= z == modulus_ - one_;
+        }
+        return pass_a && pass_b && pass_c;
+    }
+
 };
 } // namespace reinsirk::detail
 #endif
 
 #ifndef SIRKIT_MILLER_RABIN_DEFINED
 #define SIRKIT_MILLER_RABIN_DEFINED
-// MillerRabin(n, bases): 指定した底の強擬素数検査を通ればtrue。底の選択により合成数も通る。
-// n<2はfalse。底はnで剰余を取り、0なら省く。奇数n>=3で空の底列ならtrue。
 template <class Integer, class Bases>
-inline bool MillerRabin(Integer n, const Bases &bases) noexcept
+inline bool MillerRabin(Integer n, const Bases &bases) noexcept(reinsirk::detail::miller_rabin_bases_nothrow<Bases>)
 {
     static_assert(std::is_integral_v<Integer> && sizeof(Integer) <= sizeof(std::uint64_t),
                   "MillerRabin: n must be an integer of at most 64 bits");
@@ -309,7 +370,6 @@ inline bool MillerRabin(Integer n, const Bases &bases) noexcept
     return reinsirk::detail::MillerRabin64<false>(value).test(bases);
 }
 
-// MillerRabin(n, {2, 7, 61})のような底の直接指定に対応する。
 template <class Integer>
 inline bool MillerRabin(Integer n, std::initializer_list<std::uint64_t> bases) noexcept
 {
@@ -317,11 +377,17 @@ inline bool MillerRabin(Integer n, std::initializer_list<std::uint64_t> bases) n
 }
 #endif
 
+#ifndef SIRKIT_PRIMALITY_FILTER_DEFINED
+#define SIRKIT_PRIMALITY_FILTER_DEFINED
+namespace reinsirk::detail {
+// 105の各剰余が3・5・7のいずれでも割り切れなければ、そのbitを1にする。
+inline constexpr std::uint64_t primality_coprime_105[2] = {
+    0x6c30da65a4cb2916ULL, 0x000001a2534c9699ULL};
+} // namespace reinsirk::detail
+#endif
+
 #ifndef SIRKIT_IS_PRIME_DEFINED
 #define SIRKIT_IS_PRIME_DEFINED
-// is_prime(n): 符号付きの負数はfalse、非負整数はuint64_t全域で素数かを確定する。
-// 32ビット以下は共通判定、4'759'123'141未満は3個、それ以上は7個の底。動的確保なし。
-// 底の理論参考: Jim Sinclair, https://miller-rabin.appspot.com/
 template <class Integer>
 inline bool is_prime(Integer n) noexcept
 {
@@ -335,19 +401,73 @@ inline bool is_prime(Integer n) noexcept
         return false;
     if (value <= std::numeric_limits<std::uint32_t>::max())
         return reinsirk::detail::is_prime_u32(static_cast<std::uint32_t>(value));
-    for (std::uint32_t prime : {2u, 3u, 5u, 7u, 11u})
-        if (value % prime == 0)
-            return false;
+    if ((value & 1u) == 0) return false;
+    // 32bitを超える値は小素数3・5・7をまとめて除外する。
+    const auto residue = value % 105u;
+    if (((reinsirk::detail::primality_coprime_105[residue >> 6] >> (residue & 63)) & 1u) == 0 ||
+        value % 11u == 0 || value % 13u == 0 || value % 17u == 0)
+        return false;
     if (value < std::uint64_t{4'759'123'141})
         return MillerRabin(value, {2, 7, 61});
-    return MillerRabin(value, {2, 325, 9375, 28178, 450775, 9780504, 1795265022});
+    if (value < (std::uint64_t{1} << 62))
+        return reinsirk::detail::MillerRabin64<true>(value).test_deterministic();
+    return reinsirk::detail::MillerRabin64<false>(value).test_deterministic();
+}
+#endif
+
+#ifndef SIRKIT_NEXT_PREV_PRIME_DEFINED
+#define SIRKIT_NEXT_PREV_PRIME_DEFINED
+template<class Integer>
+inline std::optional<std::uint64_t> next_prime(Integer n) noexcept {
+    static_assert(std::is_integral_v<Integer> && sizeof(Integer) <= sizeof(std::uint64_t),
+                  "next_prime: n must be an integer of at most 64 bits");
+    if constexpr (std::is_signed_v<Integer>) if (n <= 2) return std::uint64_t{2};
+    auto value = static_cast<std::uint64_t>(n);
+    if (value <= 2) return std::uint64_t{2};
+    if ((value & 1u) == 0) ++value;
+    for (;;) {
+        if (is_prime(value)) return value;
+        if (value > std::numeric_limits<std::uint64_t>::max() - 2) return std::nullopt;
+        value += 2;
+    }
+}
+
+template<class Integer>
+inline std::optional<std::uint64_t> prev_prime(Integer n) noexcept {
+    static_assert(std::is_integral_v<Integer> && sizeof(Integer) <= sizeof(std::uint64_t),
+                  "prev_prime: n must be an integer of at most 64 bits");
+    if constexpr (std::is_signed_v<Integer>) if (n < 2) return std::nullopt;
+    auto value = static_cast<std::uint64_t>(n);
+    if (value < 2) return std::nullopt;
+    if (value == 2) return std::uint64_t{2};
+    if ((value & 1u) == 0) --value;
+    for (; value >= 3; value -= 2) if (is_prime(value)) return value;
+    return std::uint64_t{2};
 }
 #endif
 
 
 // Library: Math/Eratosthenes.cpp
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/prime_sieve.md
+//
+// API一覧
+// [PrimeSieve]
+// PrimeSieve(limit=0): [0,limit]の素数表を構築する。O(limit log log limit)、奇数1個につき1bit。
+// コピーは独立した表を持ち、移動元はlimit=0の空の素数表として再利用できる。
+// is_prime(n): 0<=n<=limitの素数判定をO(1)で返す。
+// limit(): 構築時の上限を返す。O(1)。
+// prime_count(): 上限以下の素数の個数を返す。O(limit/64)。
+// primes(): 上限以下の素数を昇順のvectorで返す。O(limit/64+素数数)。
+// append_to(ans): 上限以下の素数を昇順でansの末尾に追加する。O(limit/64+素数数)、償却。
+// for_each_prime(f): 昇順にf(uint64_tの素数)を呼ぶ。O(limit/64+素数数)、呼出し中に表を変更しない。
+//
+// [eratosthenes]
+// eratosthenes(limit, ans): limit以下の素数を昇順でansの末尾へ追加する。O(limit log log limit)。
+// eratosthenes(limit): limit以下の素数を昇順のvectorで返す。同じ計算量。
 
+#include <algorithm>
+#include <array>
 #include <bit>
 #include <cstddef>
 #include <cstdint>
@@ -364,7 +484,7 @@ inline bool is_prime(Integer n) noexcept
 #define SIRKIT_PRIME_SIEVE_POPCOUNT_DEFINED
 namespace reinsirk::detail {
 #if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
-// 内部用。4語ずつ数え、端の1〜3語だけ標準のpopcountを使う。
+// 内部用。32語単位で集計し、残りを4語・1語ずつ処理する。
 [[gnu::target("avx2"), gnu::noinline]] inline std::uint64_t popcount_words_avx2(
     const std::uint64_t* words, std::size_t count) noexcept {
     const auto table = _mm256_setr_epi8(
@@ -374,6 +494,18 @@ namespace reinsirk::detail {
     const auto zero = _mm256_setzero_si256();
     auto sum = zero;
     std::size_t i = 0;
+    for (; count - i >= 32; i += 32) {
+        auto bytes = zero;
+        for (std::size_t j = 0; j < 32; j += 4) {
+            const auto value = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(words + i + j));
+            const auto low = _mm256_and_si256(value, mask);
+            const auto high = _mm256_and_si256(_mm256_srli_epi16(value, 4), mask);
+            const auto bits = _mm256_add_epi8(_mm256_shuffle_epi8(table, low),
+                                             _mm256_shuffle_epi8(table, high));
+            bytes = _mm256_add_epi8(bytes, bits);
+        }
+        sum = _mm256_add_epi64(sum, _mm256_sad_epu8(bytes, zero));
+    }
     for (; count - i >= 4; i += 4) {
         const auto value = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(words + i));
         const auto low = _mm256_and_si256(value, mask);
@@ -392,41 +524,61 @@ namespace reinsirk::detail {
 } // namespace reinsirk::detail
 #endif
 
+
+#ifndef SIRKIT_PRIME_SIEVE_PATTERN_DEFINED
+#define SIRKIT_PRIME_SIEVE_PATTERN_DEFINED
+namespace reinsirk::detail {
+inline constexpr auto sieve_pattern = [] {
+    std::array<std::uint64_t, 1155> values{};
+    for (std::size_t word = 0; word < values.size(); ++word)
+        for (unsigned bit = 0; bit < 64; ++bit) {
+            const auto n = (word * 64 + bit) * 2 + 1;
+            if (n % 3 != 0 && n % 5 != 0 && n % 7 != 0 && n % 11 != 0)
+                values[word] |= std::uint64_t{1} << bit;
+        }
+    return values;
+}();
+inline void fill_sieve_pattern(std::uint64_t* dest, std::size_t count) noexcept {
+    constexpr std::size_t period = sieve_pattern.size();
+    while (count >= period) {
+        std::copy(sieve_pattern.begin(), sieve_pattern.end(), dest);
+        dest += period; count -= period;
+    }
+    std::copy_n(sieve_pattern.begin(), count, dest);
+}
+}
+#endif
 #ifndef SIRKIT_PRIME_SIEVE_DEFINED
 #define SIRKIT_PRIME_SIEVE_DEFINED
 
-// PrimeSieve(limit=0): [0,limit]の素数表を構築する。O(limit log log limit)、奇数1個につき1bit。
-// コピーは独立した表を持ち、移動元はlimit=0の空の素数表として再利用できる。
-// is_prime(n): 0<=n<=limitの素数判定をO(1)で返す。
-// limit(): 構築時の上限を返す。O(1)。
-// prime_count(): 上限以下の素数の個数を返す。O(limit/64)。
-// primes(): 上限以下の素数を昇順のvectorで返す。O(limit/64+素数数)。
-// append_to(ans): 上限以下の素数を昇順でansの末尾に追加する。O(limit/64+素数数)、償却。
 class PrimeSieve {
 public:
     explicit PrimeSieve(std::uint64_t limit = 0) : limit_(limit) {
+        if (limit < 128) {
+            if (limit != 0) {
+                // 127以下の奇合成数は3・5・7・11のいずれかの倍数。
+                constexpr auto primes = (reinsirk::detail::sieve_pattern[0] |
+                    (std::uint64_t{1} << 1) | (std::uint64_t{1} << 2) |
+                    (std::uint64_t{1} << 3) | (std::uint64_t{1} << 5)) & ~std::uint64_t{1};
+                const auto bits = static_cast<unsigned>((limit + 1) / 2);
+                flags_.push_back(primes & (~std::uint64_t{0} >> (64 - bits)));
+            }
+            return;
+        }
         const std::uint64_t odds = limit / 2 + limit % 2;
         const std::uint64_t words = odds / 64 + (odds % 64 != 0);
         if (words > flags_.max_size())
             throw std::length_error("PrimeSieve: limit exceeds capacity");
         flags_.assign(static_cast<std::size_t>(words), ~std::uint64_t{0});
-        if (odds == 0) return;
-        flags_[0] &= ~std::uint64_t{1};
-        if (odds % 64 != 0)
-            flags_.back() &= (std::uint64_t{1} << (odds % 64)) - 1;
-        for (std::uint64_t p = 3; p <= limit / p; p += 2) {
-            const std::uint64_t index = p / 2;
-            if ((flags_[static_cast<std::size_t>(index / 64)] >> (index % 64) & 1) == 0)
-                continue;
-            // odds<=2^63、p<=sqrt(limit)なのでk+pもuint64_tに収まる。
-            for (std::uint64_t k = p * p / 2; k < odds; k += p) {
-                flags_[static_cast<std::size_t>(k / 64)] &= ~(std::uint64_t{1} << (k % 64));
-            }
-        }
+        build_large(odds);
     }
 
     PrimeSieve(const PrimeSieve&) = default;
-    PrimeSieve& operator=(const PrimeSieve&) = default;
+    PrimeSieve& operator=(const PrimeSieve& other) {
+        flags_ = other.flags_;
+        limit_ = other.limit_;
+        return *this;
+    }
     PrimeSieve(PrimeSieve&& other) noexcept : limit_(std::exchange(other.limit_, 0)) {
         flags_.swap(other.flags_);
     }
@@ -461,11 +613,38 @@ public:
         for (std::uint64_t word : flags_) count += std::popcount(word);
         return count;
     }
+#if defined(__clang__) && !defined(__AVX2__)
     std::vector<std::uint64_t> primes() const {
         std::vector<std::uint64_t> result;
+        if (limit_ < 2) return result;
+        if (limit_ >= 16) {
+            const auto count = prime_count();
+            if (count > result.max_size())
+                throw std::length_error("PrimeSieve::primes: capacity exceeded");
+            result.reserve(static_cast<std::size_t>(count));
+        }
         append_to(result);
         return result;
     }
+#else
+    std::vector<std::uint64_t> primes() const {
+        std::vector<std::uint64_t> result;
+        if (limit_ < 2) return result;
+        if (limit_ >= 16384) {
+            const auto count = prime_count();
+            if (count > result.max_size())
+                throw std::length_error("PrimeSieve::primes: capacity exceeded");
+            result.reserve(static_cast<std::size_t>(count));
+        } else if (limit_ >= 16) {
+            return small_primes();
+        }
+        append_to(result);
+        return result;
+    }
+#endif
+#if defined(__clang__)
+    [[gnu::always_inline]]
+#endif
     void append_to(std::vector<std::uint64_t>& ans) const {
         if (limit_ >= 2) ans.push_back(2);
         for (std::size_t i = 0; i < flags_.size(); ++i) {
@@ -478,7 +657,139 @@ public:
         }
     }
 
+    template <class Function>
+    void for_each_prime(Function&& function) const {
+        if (limit_ >= 2) function(std::uint64_t{2});
+        for (std::size_t i = 0; i < flags_.size(); ++i) {
+            std::uint64_t word = flags_[i];
+            while (word != 0) {
+                const unsigned bit = std::countr_zero(word);
+                function((static_cast<std::uint64_t>(i) * 64 + bit) * 2 + 1);
+                word &= word - 1;
+            }
+        }
+    }
+
 private:
+#if !defined(__clang__) || defined(__AVX2__)
+#if defined(__GNUC__) || defined(__clang__)
+    [[gnu::noinline]]
+#endif
+    std::vector<std::uint64_t> small_primes() const {
+        std::vector<std::uint64_t> result;
+        const auto count = prime_count();
+        if (count > result.max_size())
+            throw std::length_error("PrimeSieve::primes: capacity exceeded");
+        result.reserve(static_cast<std::size_t>(count));
+        append_to(result);
+        return result;
+    }
+#endif
+
+    void build_large(std::uint64_t odds) {
+        reinsirk::detail::fill_sieve_pattern(flags_.data(), flags_.size());
+        flags_[0] |= (std::uint64_t{1} << 1) | (std::uint64_t{1} << 2) |
+                     (std::uint64_t{1} << 3) | (std::uint64_t{1} << 5);
+        flags_[0] &= ~std::uint64_t{1};
+        if (odds % 64 != 0)
+            flags_.back() &= (std::uint64_t{1} << (odds % 64)) - 1;
+        if (limit_ >= 262144) {
+            build_blocked(odds);
+            return;
+        }
+        for (std::uint64_t p = 13; p <= limit_ / p; p += 2) {
+            const auto index = p / 2;
+            if (((flags_[index / 64] >> (index % 64)) & 1) == 0) continue;
+            for (auto k = p * p / 2; k < odds; k += p)
+                flags_[k / 64] &= ~(std::uint64_t{1} << (k % 64));
+        }
+    }
+
+    // 小素数の倍数をp語周期のANDで消す。素数自身は呼出側で復元する。
+    template <unsigned Prime>
+#if defined(__GNUC__) || defined(__clang__)
+    [[gnu::noinline]]
+#endif
+    static void mask_multiples(std::uint64_t* flags, std::uint64_t first_word,
+                               std::uint64_t word_count) noexcept {
+        static constexpr auto pattern = [] {
+            std::array<std::uint64_t, Prime> result{};
+            for (unsigned w = 0; w < Prime; ++w)
+                for (unsigned bit = 0; bit < 64; ++bit)
+                    if ((w * 128 + bit * 2 + 1) % Prime != 0)
+                        result[w] |= std::uint64_t{1} << bit;
+            return result;
+        }();
+        auto* dest = flags + first_word;
+        auto phase = first_word % Prime;
+        while (phase != 0 && word_count != 0) {
+            *dest++ &= pattern[phase];
+            --word_count;
+            if (++phase == Prime) phase = 0;
+        }
+        while (word_count >= Prime) {
+            for (unsigned j = 0; j < Prime; ++j) dest[j] &= pattern[j];
+            dest += Prime;
+            word_count -= Prime;
+        }
+        for (unsigned j = 0; j < word_count; ++j) dest[j] &= pattern[j];
+    }
+
+    void build_blocked(std::uint64_t odds) {
+        std::uint64_t root = std::uint64_t{1} << ((std::bit_width(limit_) + 1) / 2);
+        for (;;) {
+            const auto next = (root + limit_ / root) / 2;
+            if (next >= root) break;
+            root = next;
+        }
+        const std::uint64_t base_odds = root / 2 + root % 2;
+        auto* const flags = flags_.data();
+        for (std::uint64_t p = 13; p <= root / p; p += 2) {
+            const auto index = p / 2;
+            if (((flags[index / 64] >> (index % 64)) & 1) == 0) continue;
+            for (auto k = p * p / 2; k < base_odds; k += p)
+                flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));
+        }
+        struct Strike { std::uint64_t prime, next; };
+        std::vector<Strike> strikes;
+        for (std::uint64_t p = 37; p <= root; p += 2) {
+            const auto index = p / 2;
+            if ((flags[index / 64] >> (index % 64)) & 1)
+                strikes.push_back({p, p * p / 2});
+        }
+        const std::uint64_t block_bits = std::max(std::uint64_t{262144},
+            (root + 63) & ~std::uint64_t{63});
+        std::size_t active = 0;
+        for (std::uint64_t begin = 0; begin < odds; begin += block_bits) {
+            const auto end = std::min(odds, begin + block_bits);
+            const auto first_word = begin / 64;
+            const auto word_count = (end + 63) / 64 - first_word;
+            mask_multiples<13>(flags, first_word, word_count);
+            mask_multiples<17>(flags, first_word, word_count);
+            mask_multiples<19>(flags, first_word, word_count);
+            mask_multiples<23>(flags, first_word, word_count);
+            mask_multiples<29>(flags, first_word, word_count);
+            mask_multiples<31>(flags, first_word, word_count);
+            while (active < strikes.size() && strikes[active].next < end) ++active;
+            for (std::size_t i = 0; i < active; ++i) {
+                auto k = strikes[i].next;
+                const auto step = strikes[i].prime;
+                for (; k + step * 3 < end; k += step * 4) {
+                    flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));
+                    flags[(k + step * 1) / 64] &= ~(std::uint64_t{1} << ((k + step * 1) % 64));
+                    flags[(k + step * 2) / 64] &= ~(std::uint64_t{1} << ((k + step * 2) % 64));
+                    flags[(k + step * 3) / 64] &= ~(std::uint64_t{1} << ((k + step * 3) % 64));
+                }
+                for (; k < end; k += step)
+                    flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));
+                strikes[i].next = k;
+            }
+        }
+        flags[0] |= (std::uint64_t{1} << 6) | (std::uint64_t{1} << 8) |
+                    (std::uint64_t{1} << 9) | (std::uint64_t{1} << 11) |
+                    (std::uint64_t{1} << 14) | (std::uint64_t{1} << 15);
+    }
+
     std::uint64_t limit_;
     std::vector<std::uint64_t> flags_;
 };
@@ -486,8 +797,6 @@ private:
 
 #ifndef SIRKIT_ERATOSTHENES_DEFINED
 #define SIRKIT_ERATOSTHENES_DEFINED
-// eratosthenes(limit, ans): limit以下の素数を昇順でansの末尾へ追加する。O(limit log log limit)。
-// eratosthenes(limit): limit以下の素数を昇順のvectorで返す。同じ計算量。
 inline void eratosthenes(std::uint64_t limit, std::vector<std::uint64_t>& ans) {
     PrimeSieve(limit).append_to(ans);
 }

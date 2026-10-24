@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-22",
+  "scope": "内部表と埋め込み3本に出典表示を同期。",
+  "history_bundle": {
+    "path": "/tmp/Atcoder_Env_before_initial_20261021T163122Z/history.bundle",
+    "sha256": "4201f74738404c4d6f7f5ce672f3a782327fa4613daf48b3e73f2918dccc9020"
+  },
+  "repository_snapshots": {
+    "30c83f0:Nyaan_hash_map_min.cpp": "5a3f0ed6ec4944c57df2a36a6ccec97c941be63f4ca5092f4af898fa23ae85ad",
+    "32fb166:Nyaan_hash_map_min.cpp": "4b29feb563be311574582f07794668da50fccf319189788bdd394fa53308b1af"
+  },
+  "primary_sources": [
+    {
+      "url": "https://nyaannyaan.github.io/library/data-structure/hash-map-variable-length.hpp.html",
+      "observation": "公式本文のcap/s、keys/vals/flag/r/shift/DefaultValue、rehashと線形探索・列挙・既定値設定が保存履歴30c83f0と対応。",
+      "access": "web open; code section inspected only for provenance"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/LICENSE",
+      "observation": "CC0 1.0 Universalの正式本文。",
+      "access": "web open"
+    },
+    {
+      "requested_url": "https://prng.di.unimi.it/splitmix64.c",
+      "final_url": "https://prng.di.unimi.it/splitmix.c",
+      "observation": "Sebastiano Vignaの2015年の実装。PDへの提供声明と使用・複製・改変・配布の無条件許諾、免責を記載。CC0という名称やSPDX表示はない。",
+      "matching_component": "現行mixの30/27/31のシフトとbf58476d1ce4e5b9/94d049bb133111ebの乗算がfinalizerと一致。状態加算とnext関数全体は現行へ移していない。",
+      "access": "web open, redirected"
+    }
+  ],
+  "history_findings": [
+    "30c83f0の旧ライブラリはNyaan公式可変長HashMapの本文とほぼ同じ。依存includeとusingの差を含む。",
+    "32fb166でクラス名・所有・容量境界・整数型・既定構築・占有byte・salt等を改修。保存された監査も由来をNyaanとして扱い、改修を元ライセンスの解消根拠にしていない。",
+    "現行もSoA配列・rehash時の要素走査から新配列への線形probeコピーとswap・乗算hash・operator[]/find/enumerateの流れを継承。全面的な独立再実装を示す履歴は確認していない。"
+  ],
+  "recommended_header": [
+    "// SPDX-License-Identifier: CC0-1.0",
+    "// Original Source: https://nyaannyaan.github.io/library/data-structure/hash-map-variable-length.hpp.html",
+    "// Original Source (mix): https://prng.di.unimi.it/splitmix64.c"
+  ],
+  "recommendation_basis": "AGENTS.mdの実装を引き継いでいる場合Original Sourceという区分に対応する。原典のCC0名義とPD提供声明はAuditのcomponent単位で区別する。既存SPDXは本体配布表示として維持する案であり、Vigna原典自身がCC0であるとの事実認定には使わない。",
+  "limits": [
+    "Nyaanの依存先すべて・全コミットのライセンス履歴は再監査していない。",
+    "PD提供声明をCC0と同一の名前・法文として扱わない。",
+    "現行アルゴリズムの改良は原典の実装の由来を消す根拠とはしない。",
+    "SPDXを複合表記またはLicenseRefへ変更する法的必要性までは断定していない。今回の必要な修正は出典ラベルとmix出典追加。"
+  ],
+  "optimizer_received_external_code": false,
+  "baseline_source_sha256": "b2190629df379d9127bc6f28eb2b632d57a9f53bda8b725cfda5c9c0f58a42c6",
+  "implemented_header": [
+    "// SPDX-License-Identifier: CC0-1.0",
+    "// Original Source: https://nyaannyaan.github.io/library/data-structure/hash-map-variable-length.hpp.html",
+    "// Original Source (mix): https://prng.di.unimi.it/splitmix64.c"
+  ],
+  "final_source_hashes": {
+    "Internal/Nyaan_hash_map_min.cpp": "45c193856ee6d1562e2a671bc41dd0424660be5db92b6009f23483a2dc5ef500",
+    "DataStructure/dynamic-binary-indexed-tree.cpp": "83d0001d060151679a13ecc91c02f87be2330826ef01f81e1fbb4293fd426689",
+    "DataStructure/dynamic-binary-indexed-tree-2d.cpp": "1fe36a34dbffc1bc6eb4fbc64d021c744955d6bb825cad046a3cce1cb06b99c8",
+    "DataStructure/dynamic-union-find.cpp": "d2627ac9eefeb73e0a7eff02c339e950d6299038dbbcbbe67038305b2169251c"
+  }
+}

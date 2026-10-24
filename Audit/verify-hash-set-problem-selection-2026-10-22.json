@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-22",
+  "library": "DataStructure/Hash_set.cpp",
+  "a_plus_b_assessment": "固定種の内蔵unit testの正常終了は確認できるが、ジャッジ入力のA+Bは集合操作に関与しない。HashSetのオンライン問題検証・性能比較の提出先には採用しない。",
+  "local_unit": "Verify/current/drivers/hash_set_unit_main.cpp",
+  "library_checker_catalog_tree_sha": "1814c4e5205517e368bb57a8d1127eb961cfeaae",
+  "library_checker_catalog_url": "https://github.com/yosupo06/library-checker-problems",
+  "rejected_candidates": [
+    {
+      "url": "https://judge.yosupo.jp/problem/ordered_set",
+      "reason": "k番目・rank・前後要素を必要とする。HashSetに順序APIはない。",
+      "task_source_url": "https://github.com/yosupo06/library-checker-problems/blob/master/data_structure/ordered_set/task.md",
+      "task_sha256": "6e0d4f4fe4eeeb6716a0e458eacd7974ef0a23b17578ca36561d14b93fa1edf8"
+    },
+    {
+      "url": "https://judge.yosupo.jp/problem/set_xor_min",
+      "reason": "XOR最小値の効率的照会を必要とする。HashSetの基本操作だけでは対応しない。",
+      "task_source_url": "https://github.com/yosupo06/library-checker-problems/blob/master/data_structure/set_xor_min/task.md",
+      "task_sha256": "f60a59234c2d8309397bcef42e11fa93170f9289baef06c4048f6fd928b33c62"
+    }
+  ],
+  "selected_problems": [
+    {
+      "id": "hash_set_membership",
+      "url": "https://atcoder.jp/contests/abc344/tasks/abc344_c",
+      "coverage": [
+        "insert",
+        "contains",
+        "整数キー・重複・未登録照会"
+      ],
+      "source_embedded": true,
+      "acl_dependency": false
+    },
+    {
+      "id": "hash_set_toggle",
+      "url": "https://atcoder.jp/contests/abc073/tasks/abc073_c",
+      "coverage": [
+        "insert",
+        "find",
+        "erase(iterator,false)",
+        "size",
+        "削除後の再登録"
+      ],
+      "source_embedded": true,
+      "acl_dependency": false
+    },
+    {
+      "id": "hash_set_strings",
+      "url": "https://atcoder.jp/contests/abc164/tasks/abc164_c",
+      "coverage": [
+        "insert",
+        "size",
+        "文字列キー・重複"
+      ],
+      "source_embedded": true,
+      "acl_dependency": false
+    }
+  ],
+  "main_policy": "共通高速入出力を使い、問題に必要な配列読み込み・三重ループ・素直な集合API・出力だけを行う。照会の並べ替え・バッチ化・入力分布による切り替えはない。",
+  "old_records_policy": "旧A+B形式の記録を、新しい3問題のオンライン検証済み結果へ置き換えない。"
+}

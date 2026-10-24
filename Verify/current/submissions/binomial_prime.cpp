@@ -3,6 +3,17 @@
 
 // Library: Math/Combination_AtCoderMod.cpp
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/binomial_coefficient.md
+//
+// API一覧
+// [PrimeBinomial<Mint>]
+// AtCoder modint用・素数専用。Mintは利用側で用意し、動的な法を変えたら計算器も作り直す。
+// PrimeBinomial(max_n=5'000'000,max_steps=1'000'000): 前計算範囲と表外の積の回数上限を指定して構築。
+// prepare(max_n=5'000'000): min(max_n,mod-1)まで階乗・逆階乗を準備。move元も再準備して利用可。
+// COM(n,k): nCkをMintで返す。n<0,k<0,k>nは0。準備済みn<modはO(1)、n>=modはLucas。
+// Lucas(n,k): COMと同じ。COMもLucasを自動選択する。
+// H(n,k): nHkをMintで返す。0H0=1、0Hk=0（k>0）。int64_t超過はoverflow_error。
+// 表外は積で計算し、回数上限超過はlength_error。SKIP_RUNTIME_CHECKSで入力検査を除く。
 
 #include <algorithm>
 #include <cstddef>
@@ -20,20 +31,44 @@ inline bool is_prime_u32(std::uint32_t n) noexcept;
 } // namespace reinsirk::detail
 #endif
 
-// AtCoder modint用・素数専用（C++20以降）。他の二項係数ヘッダーへの依存なし。
-// 準備済みのn<modはO(1)、n>=modはLucas。表外は積で計算する。
-// dynamic_modintの法を変更したら、計算器も作り直す。
-// SKIP_RUNTIME_CHECKSで入力検査を省略する。ACLは利用側で読み込む。
 #ifndef SIRKIT_PRIME_BINOMIAL_DEFINED
 #define SIRKIT_PRIME_BINOMIAL_DEFINED
+#ifndef SIRKIT_PRIME_BINOMIAL_LUCAS_THREE_DEFINED
+#define SIRKIT_PRIME_BINOMIAL_LUCAS_THREE_DEFINED
+namespace reinsirk::detail {
+// 法3は6桁ごとの桁和で0を判定し、2の個数の偶奇から符号を求める。
+inline std::uint32_t lucas_mod3(std::uint64_t n, std::uint64_t k) noexcept {
+    constexpr std::uint32_t Base = 729;
+    static constexpr auto table = [] {
+        struct Table { std::uint8_t value[Base]{}; };
+        Table result;
+        for (std::uint32_t i = 1; i < Base; ++i) {
+            const auto previous = result.value[i / 3];
+            const auto digit = i % 3;
+            result.value[i] = static_cast<std::uint8_t>(((previous & 31) + digit) |
+                ((previous & 32) ^ (digit == 2 ? 32 : 0)));
+        }
+        return result;
+    }();
+    unsigned parity = 0;
+    while (k) {
+        const auto a = static_cast<std::uint32_t>(n % Base);
+        const auto b = static_cast<std::uint32_t>(k % Base);
+        if (b > a) return 0;
+        const auto x = table.value[a], y = table.value[b], z = table.value[a - b];
+        if ((x & 31) != (y & 31) + (z & 31)) return 0;
+        parity ^= x ^ y ^ z;
+        n /= Base;
+        k /= Base;
+    }
+    return 1 + ((parity >> 5) & 1);
+}
+} // namespace reinsirk::detail
+#endif
+
 template <class Mint>
 class PrimeBinomial
 {
-    // PrimeBinomial(max_n=5'000'000, max_steps=1'000'000): Mintの素数の法で構築し、前計算する。
-    // prepare(max_n=5'000'000): min(max_n, mod-1)まで階乗・逆階乗を準備する。
-    // COM(n, k): nCkをMintで返す。n<0、k<0、k>nは0。
-    // Lucas(n, k): COMと同じ。n>=modの処理もCOMが自動で行う。
-    // H(n, k): 重複組合せnHkをMintで返す。0H0=1、0Hk=0（k>0）。
     using i64 = std::int64_t;
     using u64 = std::uint64_t;
     const int modulus_;
@@ -242,19 +277,12 @@ class PrimeBinomial
         const auto p = modulus();
         if (p == 2 && fac_.size() == 2)
             return Mint::raw((static_cast<u64>(k) & ~static_cast<u64>(n)) == 0);
-        if (p == 3 && fac_.size() == 3)
-        {
-            auto nn = static_cast<u64>(n), kk = static_cast<u64>(k);
-            unsigned parity = 0;
-            while (kk)
-            {
-                const auto nq = nn / 3, kq = kk / 3;
-                const auto ni = nn - nq * 3, ki = kk - kq * 3;
-                if (ki > ni) return Mint(0);
-                parity ^= ni == 2 && ki == 1;
-                nn = nq; kk = kq;
-            }
-            return Mint::raw(1 + parity);
+        if (p == 3 && fac_.size() == 3) {
+            // kは2以上かつn/2以下。2桁以内なら定数個の整数演算で返す。
+            if (n < 9)
+                return Mint::raw(k == 2 ? (n % 3 == 2) : (k == 3 ? 2 : 1));
+            return Mint::raw(static_cast<int>(reinsirk::detail::lucas_mod3(
+                static_cast<u64>(n), static_cast<u64>(k))));
         }
         u64 remaining_steps = max_steps_;
         if (n < modulus())
@@ -263,7 +291,6 @@ class PrimeBinomial
     }
 
 public:
-    // 既定で500万まで前計算する。max_stepsは表外の積の回数上限。
     explicit PrimeBinomial(i64 max_n = 5'000'000, u64 max_steps = 1'000'000)
         : modulus_(Mint::mod()), max_steps_(max_steps)
     {
@@ -274,7 +301,6 @@ public:
         prepare(max_n);
     }
 
-    // max_nまで前計算する。mod以上を指定した場合はmod-1まで。
     void prepare(i64 max_n = 5'000'000)
     {
         check_modulus();
@@ -286,7 +312,7 @@ public:
         if (bound >= std::numeric_limits<std::size_t>::max())
             throw std::length_error("PrimeBinomial: table size exceeds size_t");
         const auto target = static_cast<std::size_t>(bound);
-        const auto old_size = fac_.size();
+        auto old_size = fac_.size();
         if (target < old_size)
             return;
         try
@@ -300,6 +326,11 @@ public:
             ifac_.resize(old_size);
             throw;
         }
+        if (old_size == 0) {
+            fac_[0] = Mint(1);
+            ifac_[0] = Mint(1);
+            old_size = 1;
+        }
         if (target + 1 - old_size >= 4096)
         {
             extend_large(old_size, target);
@@ -312,7 +343,6 @@ public:
             ifac_[i - 1] = ifac_[i] * Mint::raw(static_cast<int>(i));
     }
 
-    // nCk。n<0、k<0、k>nは0。表外の計算上限超過はlength_error。
     [[nodiscard]] Mint COM(i64 n, i64 k) const
     {
         check_modulus();
@@ -323,10 +353,8 @@ public:
         return compute_uncached(n, k);
     }
 
-    // COMが自動でLucasも処理するため、どちらを呼んでも同じ。
     [[nodiscard]] Mint Lucas(i64 n, i64 k) const { return COM(n, k); }
 
-    // 重複組合せnHk。0H0=1、0Hk=0(k>0)。n+k-1の桁あふれは例外。
     [[nodiscard]] Mint H(i64 n, i64 k) const
     {
         check_modulus();
@@ -347,7 +375,6 @@ public:
 #define SIRKIT_PRIMALITY32_DEFINED
 namespace reinsirk::detail {
 // uint32_t全域の素数判定。Miller-Rabinの底2,7,61を使う。
-// 理論参考: G. Jaeschke (1993), https://doi.org/10.1090/S0025-5718-1993-1192971-8
 inline bool is_prime_u32(std::uint32_t n) noexcept
 {
     // 競技プログラミングでよく使う素数は、累乗計算を省く。
@@ -368,11 +395,11 @@ inline bool is_prime_u32(std::uint32_t n) noexcept
     }
     if (n < 2)
         return false;
-    for (std::uint32_t p : {2u, 3u, 5u, 7u, 11u})
-    {
-        if (n % p == 0)
-            return n == p;
-    }
+    if (n % 2u == 0) return n == 2u;
+    if (n % 3u == 0) return n == 3u;
+    if (n % 5u == 0) return n == 5u;
+    if (n % 7u == 0) return n == 7u;
+    if (n % 11u == 0) return n == 11u;
     std::uint32_t odd = n - 1;
     unsigned shifts = 0;
     while ((odd & 1u) == 0)
@@ -380,7 +407,7 @@ inline bool is_prime_u32(std::uint32_t n) noexcept
         odd >>= 1;
         ++shifts;
     }
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
     // R=2^64。n<2^32なので、累乗中の剰余は2n未満のまま保持できる。
     using u64 = std::uint64_t;
     using u128 = __uint128_t; // GCC/Clangの128ビット整数拡張。

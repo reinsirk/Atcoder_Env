@@ -1,0 +1,2576 @@
+{
+  "date": "2026-10-22",
+  "scope": "LIS現在版の独立ローカル検証。オンライン未提出。",
+  "source_sha256": "83840e64868646779fa364b6d1140843e3de9ace73e67acf41334fc68b197c12",
+  "submission_sha256": "eb8f1baa51bf8457f2cdfc047525ecb66bd870ad936d47acde71bacbc3564cbd",
+  "online_submission_performed": false,
+  "online_status": "未提出",
+  "problem_url": "https://judge.yosupo.jp/problem/longest_increasing_subsequence",
+  "official_sources": [
+    {
+      "source": "common/random.h",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/common/random.h",
+      "sha256": "d0ae9470c3a04425e1ab8c39f376a0e707507659b8f5aa3ca06c5b47f193613c",
+      "bytes": 3742
+    },
+    {
+      "source": "common/testlib.h",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/common/testlib.h",
+      "sha256": "8d6d68c9708ff3f8d094488506a8171802496bd1ae04942b31f2a47057564497",
+      "bytes": 194404
+    },
+    {
+      "source": "other/longest_increasing_subsequence/info.toml",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/other/longest_increasing_subsequence/info.toml",
+      "sha256": "d835fe397d3b36e9ca45300c73072cbc30a5ea9fdf1c5a7fd64ed8d7b1e94b9f",
+      "bytes": 557
+    },
+    {
+      "source": "other/longest_increasing_subsequence/task.md",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/other/longest_increasing_subsequence/task.md",
+      "sha256": "e86310396c5e6bde1b1c4bd68450626068e09d1d1e45ef19fa6f02a6364d0eff",
+      "bytes": 1109
+    },
+    {
+      "source": "other/longest_increasing_subsequence/checker.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/other/longest_increasing_subsequence/checker.cpp",
+      "sha256": "42d29c9ca5b52972c1b6ddb5b38e91e495c5d1adcd8d2fb5b25678b6faaf7eca",
+      "bytes": 1357
+    },
+    {
+      "source": "other/longest_increasing_subsequence/gen/example_00.in",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/other/longest_increasing_subsequence/gen/example_00.in",
+      "sha256": "60579e098bead3427f868ad19ddba1f56f19671934c02bbca3b129d5fb369773",
+      "bytes": 12
+    },
+    {
+      "source": "other/longest_increasing_subsequence/gen/example_01.in",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/other/longest_increasing_subsequence/gen/example_01.in",
+      "sha256": "3db246433a5c101e6bdc52b682ec4998306f8b55bd992f6335b05b7ff3c93035",
+      "bytes": 12
+    },
+    {
+      "source": "other/longest_increasing_subsequence/gen/small.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/other/longest_increasing_subsequence/gen/small.cpp",
+      "sha256": "286949e07d5502f57385a9aac3895e1cd5f2ba8bcfd7c67fab4d7e8e8a021f7b",
+      "bytes": 413
+    },
+    {
+      "source": "other/longest_increasing_subsequence/gen/random.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/other/longest_increasing_subsequence/gen/random.cpp",
+      "sha256": "f0b6bcf17aaa857b234008766dd5ae5b6ac7280b2b8a1b2659eb083e7b671133",
+      "bytes": 416
+    },
+    {
+      "source": "other/longest_increasing_subsequence/gen/max_random.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/other/longest_increasing_subsequence/gen/max_random.cpp",
+      "sha256": "bb39774489ddefd02ac4ee1463dc171e73be95005f18ee95eef42efe6027c6fd",
+      "bytes": 416
+    },
+    {
+      "source": "other/longest_increasing_subsequence/gen/hand_max.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/other/longest_increasing_subsequence/gen/hand_max.cpp",
+      "sha256": "a043b8e6d36ea810d619185099d941e1b095acf088a9df99daf6b75a5677366c",
+      "bytes": 419
+    },
+    {
+      "source": "other/longest_increasing_subsequence/gen/hand_min.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/other/longest_increasing_subsequence/gen/hand_min.cpp",
+      "sha256": "26d35aed9e5911c293e4f1c325d7a23f908efee3e938266007cfe2c2d85d43f2",
+      "bytes": 419
+    }
+  ],
+  "official_inputs": [
+    {
+      "name": "example_00.in",
+      "bytes": 12,
+      "sha256": "60579e098bead3427f868ad19ddba1f56f19671934c02bbca3b129d5fb369773"
+    },
+    {
+      "name": "example_01.in",
+      "bytes": 12,
+      "sha256": "3db246433a5c101e6bdc52b682ec4998306f8b55bd992f6335b05b7ff3c93035"
+    },
+    {
+      "name": "small_00.in",
+      "bytes": 52,
+      "sha256": "01a73883cda3df4748c4c2758f4f4a57e3aa1e8e26d8006159c3a318ad736d9a"
+    },
+    {
+      "name": "small_01.in",
+      "bytes": 61,
+      "sha256": "13c168720129a50b89df308071327e6502b144a3700a07e72bb425b677788ef4"
+    },
+    {
+      "name": "small_02.in",
+      "bytes": 80,
+      "sha256": "0a8ce70dc2f1d319e129a05802b09091bcb0283883e95619a9080f47f8976a8b"
+    },
+    {
+      "name": "small_03.in",
+      "bytes": 12,
+      "sha256": "f67fe9848ebfc47df6109d17555c13343187ad31febd7409bbee33e3044ceddd"
+    },
+    {
+      "name": "small_04.in",
+      "bytes": 42,
+      "sha256": "17a7e4021062ad0156d411deedaf7ae9ce1a3098d70a3914770fe650afd138ca"
+    },
+    {
+      "name": "random_00.in",
+      "bytes": 3855214,
+      "sha256": "e28af8b18f73895f3bfe13d4d6e17c6d722e3212510fbcafd2fe6259da72fc56"
+    },
+    {
+      "name": "random_01.in",
+      "bytes": 4579280,
+      "sha256": "7746b3e883c47e76787cc4a35975ee2f3131fedfbcbb6d0a9f8e44ba220c7b6d"
+    },
+    {
+      "name": "random_02.in",
+      "bytes": 527442,
+      "sha256": "a13590700562537b2df91b53b301c2f5e7921825e689fd5d90f33e1563b9ec8a"
+    },
+    {
+      "name": "random_03.in",
+      "bytes": 4244807,
+      "sha256": "5d379cd7560c3521a56ed9f0f28abd3a9d68a450d3608d6ff1bed7eb10a3b543"
+    },
+    {
+      "name": "random_04.in",
+      "bytes": 2739337,
+      "sha256": "853ded845e4005507bfa780f49ad7e8f0a90238cba19f5d00005a000ad694049"
+    },
+    {
+      "name": "max_random_00.in",
+      "bytes": 4944940,
+      "sha256": "3e2d9fc5f2a4004e7baf602a5e7150f9bce32e24b6ca70ac89ddc71bbed3717f"
+    },
+    {
+      "name": "max_random_01.in",
+      "bytes": 4944780,
+      "sha256": "388ef5ce643c07c73fbca9af841c33e58af5f6bd99b16d37ce88833962c43018"
+    },
+    {
+      "name": "max_random_02.in",
+      "bytes": 4944321,
+      "sha256": "f2bef770c0e38f592913c0a11a34ee7c22d4d975caba0b1e5c09c22e87a01c19"
+    },
+    {
+      "name": "max_random_03.in",
+      "bytes": 4944585,
+      "sha256": "7cd43c6e7fd73eabfe334b4175e35d4cdbd43c9117f411b5b38d1d0daf23869d"
+    },
+    {
+      "name": "max_random_04.in",
+      "bytes": 4944227,
+      "sha256": "133596d3847d1573d3ddc32510fdc9bbf5423f20008884d0d82a2f34e0ad1b9c"
+    },
+    {
+      "name": "hand_max_00.in",
+      "bytes": 3388897,
+      "sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98"
+    },
+    {
+      "name": "hand_min_00.in",
+      "bytes": 5000008,
+      "sha256": "a2791806f8ce247bcd5de2bf408a8690d8cf4511e09b4558ea879011d10aac1d"
+    }
+  ],
+  "custom_inputs": [
+    {
+      "name": "equal_500k.in",
+      "bytes": 1000007,
+      "sha256": "b747b82188a3df1572ca37d39ae33bfdb4a6ce5bb7819eef6cec1e26b786a956"
+    },
+    {
+      "name": "alternating_500k.in",
+      "bytes": 4138898,
+      "sha256": "2e106c8c8afdcbd021de74cfb3389a26340321b6d2c4a41ebb6ccab478b33277"
+    },
+    {
+      "name": "tiny32.in",
+      "bytes": 67,
+      "sha256": "cb23c132f4fe1c48f68d7ec0066200dcb2b4bb6be90689ca7cd57753e1c75b0f"
+    },
+    {
+      "name": "empty.in",
+      "bytes": 3,
+      "sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+    }
+  ],
+  "fixture_note": "公式info.tomlの全19入力を生成。params.hは全値がintに収まるためconstexpr intで生成し、取得した生成器は改変していない。",
+  "reference_source": "#include <algorithm>\n#include <cstddef>\n#include <cstdint>\n#include <iostream>\n#include <vector>\nstruct Node{std::size_t length=0,index=0;};\nint main(){\n std::size_t n{};if(!(std::cin>>n))return 0;std::vector<std::int64_t>a(n);for(auto&v:a)std::cin>>v;\n auto coords=a;std::sort(coords.begin(),coords.end());coords.erase(std::unique(coords.begin(),coords.end()),coords.end());\n const auto none=n;std::vector<Node> tree(coords.size()+1);std::vector<std::size_t>prev(n,none);Node best{};\n for(std::size_t i=0;i<n;++i){\n  const auto pos=static_cast<std::size_t>(std::lower_bound(coords.begin(),coords.end(),a[i])-coords.begin());Node current{};\n  for(auto j=pos;j;j-=j&(~j+1))if(tree[j].length>current.length)current=tree[j];\n  if(current.length)prev[i]=current.index;const Node update{current.length+1,i};\n  for(auto j=pos+1;j<tree.size();j+=j&(~j+1))if(update.length>tree[j].length)tree[j]=update;\n  if(update.length>best.length)best=update;\n }\n std::vector<std::size_t>ans(best.length);auto index=best.index;\n for(std::size_t left=ans.size();left;--left){ans[left-1]=index;index=prev[index];}\n std::cout<<ans.size()<<'\\n';for(auto i:ans)std::cout<<i<<' ';std::cout<<'\\n';\n}\n",
+  "reference_method": "値を座標圧縮したFenwick木の最長長DPと前駆復元。製品のtails配列とは独立。各要素より小さい値の最大長から更新し、同値を延長に使わない。",
+  "reference_selfcheck": {
+    "status": "PASS",
+    "seed": 91182,
+    "cases": 328,
+    "dp_elements": 6560,
+    "method": "O(N^2) Python dynamic programming, index and value order checks",
+    "build_command": [
+      "g++",
+      "-std=c++23",
+      "-O2",
+      "/tmp/sirkit_lis_20261022/reference.cpp",
+      "-o",
+      "/tmp/sirkit_lis_20261022/reference"
+    ]
+  },
+  "expected_official_answers": [
+    {
+      "case": "example_00.in",
+      "length": 3,
+      "output_sha256": "3fd5e26e5d489427feec6be21ec8c7b32e429a45d598110d716386315df550b8"
+    },
+    {
+      "case": "example_01.in",
+      "length": 2,
+      "output_sha256": "01a86ba5a44a13ad7c081ee252cabd2323803a1897e448b018d93c6f405e7c0c"
+    },
+    {
+      "case": "small_00.in",
+      "length": 2,
+      "output_sha256": "4e0c9bbd1c581409adbb665110ae370d2be9c8693ef9bc4506b6cd58da86b260"
+    },
+    {
+      "case": "small_01.in",
+      "length": 4,
+      "output_sha256": "66efe8108880114f7f2b0c43351de31efbbd5464585b5d916868dbb91be77d27"
+    },
+    {
+      "case": "small_02.in",
+      "length": 4,
+      "output_sha256": "49464bd60dded4ca2bdb8e67ecb56e514c38269f7baa019f7726f051b2e50bba"
+    },
+    {
+      "case": "small_03.in",
+      "length": 1,
+      "output_sha256": "120ca22bf8c3e963b3e889ad4012fd8b1abf0f782697e2dcc543675649e7a78a"
+    },
+    {
+      "case": "small_04.in",
+      "length": 3,
+      "output_sha256": "f93458053c7c4992b241201607036181f88b2ff19037935e1b1eb6c373ef3f03"
+    },
+    {
+      "case": "random_00.in",
+      "length": 1224,
+      "output_sha256": "dc6edc1263afc22b5e3ecd147f15a70531f768e234c8064496aa0c112e78b394"
+    },
+    {
+      "case": "random_01.in",
+      "length": 1342,
+      "output_sha256": "e6f9ad370ffbd27b01284972b4fd21b9bce0f444897ca206968cca637fb8e53a"
+    },
+    {
+      "case": "random_02.in",
+      "length": 451,
+      "output_sha256": "9d4d2aaba5e17a6a3b327bc839b3a91dface4e21918c26e73df1361808418eef"
+    },
+    {
+      "case": "random_03.in",
+      "length": 1299,
+      "output_sha256": "5765afb83b57c72e440d45e11a46a726d8536c0a88e2156201aaba013fe07109"
+    },
+    {
+      "case": "random_04.in",
+      "length": 1046,
+      "output_sha256": "adc3016a792341c7c98b7aa7ccb0760abc296945d4d23c87a9e0173c853a8679"
+    },
+    {
+      "case": "max_random_00.in",
+      "length": 1390,
+      "output_sha256": "7c45941484a2e058aa8390993a188cf16934596ce1122fb5d0cc1b3c34b40c28"
+    },
+    {
+      "case": "max_random_01.in",
+      "length": 1386,
+      "output_sha256": "6e1cbc7b22725ffe639b803ae02e35b0c165ef1dec405e9006dc26c2477382e9"
+    },
+    {
+      "case": "max_random_02.in",
+      "length": 1399,
+      "output_sha256": "7c041353847f90cb07af0258c03f27e0cf8c4ec2ee729483268b67734f4bdffe"
+    },
+    {
+      "case": "max_random_03.in",
+      "length": 1398,
+      "output_sha256": "89c9080af43d46a5921629caa49850f856064e6f3fb3b6d2b530a414bc2f4160"
+    },
+    {
+      "case": "max_random_04.in",
+      "length": 1388,
+      "output_sha256": "a7619439431050eef18ed2bd866cb28f5866410fb4241bc48a5b27acc3496317"
+    },
+    {
+      "case": "hand_max_00.in",
+      "length": 500000,
+      "output_sha256": "72ef70714e0ef859368f876cbf13c15bb1a58f22b0adeed492b1f0d7dfef5bcf"
+    },
+    {
+      "case": "hand_min_00.in",
+      "length": 1,
+      "output_sha256": "120ca22bf8c3e963b3e889ad4012fd8b1abf0f782697e2dcc543675649e7a78a"
+    }
+  ],
+  "final_official_verification": {
+    "status": "PASS",
+    "source_sha256": "83840e64868646779fa364b6d1140843e3de9ace73e67acf41334fc68b197c12",
+    "submission_sha256": "eb8f1baa51bf8457f2cdfc047525ecb66bd870ad936d47acde71bacbc3564cbd",
+    "builds": [
+      {
+        "name": "gcc_checked",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_lis_20261022/official_final/gcc_checked.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/official_final/gcc_checked"
+        ],
+        "source_sha256": "b9351fc27dc9378e471163725274cdceb83653553861a8855cedb9092767e5dd"
+      },
+      {
+        "name": "gcc_skip",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_lis_20261022/official_final/gcc_skip.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/official_final/gcc_skip"
+        ],
+        "source_sha256": "eb8f1baa51bf8457f2cdfc047525ecb66bd870ad936d47acde71bacbc3564cbd"
+      },
+      {
+        "name": "clang_checked",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_lis_20261022/official_final/clang_checked.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/official_final/clang_checked"
+        ],
+        "source_sha256": "b9351fc27dc9378e471163725274cdceb83653553861a8855cedb9092767e5dd"
+      },
+      {
+        "name": "clang_skip",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_lis_20261022/official_final/clang_skip.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/official_final/clang_skip"
+        ],
+        "source_sha256": "eb8f1baa51bf8457f2cdfc047525ecb66bd870ad936d47acde71bacbc3564cbd"
+      }
+    ],
+    "runs": [
+      {
+        "build": "gcc_checked",
+        "case": "example_00.in",
+        "kind": "official",
+        "length": 3,
+        "output_sha256": "6bc483d79494871372efc9ca2c842ec6237034fe8144c9dbe9438e19d8151857",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "example_01.in",
+        "kind": "official",
+        "length": 2,
+        "output_sha256": "62f31da50e4ee0cbc1064619de41935ea25e0c6a296e9849de8130365a188c4d",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "small_00.in",
+        "kind": "official",
+        "length": 2,
+        "output_sha256": "ebceeb73bc26d609a8f2352a66781b66d71e3edd80024d48160e4960ac9f7503",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "small_01.in",
+        "kind": "official",
+        "length": 4,
+        "output_sha256": "d15403b38edd11e98cfda4d6ec234b53896437fb89765d6dbe9fcf68ee6eae36",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "small_02.in",
+        "kind": "official",
+        "length": 4,
+        "output_sha256": "15a15c047478f3e0e3cab6ed3f632a29e89952fba136b5a78394d1c0ad79c6e5",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "small_03.in",
+        "kind": "official",
+        "length": 1,
+        "output_sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "small_04.in",
+        "kind": "official",
+        "length": 3,
+        "output_sha256": "122def0ca1e13a8a9706a3c0bceb5e2eb393e7e0303d1bd04d31989d74e414f3",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_00.in",
+        "kind": "official",
+        "length": 1224,
+        "output_sha256": "9c1544f3273b967cb16eeff152ae6d1ec477d1a00232630ba848a5dc9e845110",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_01.in",
+        "kind": "official",
+        "length": 1342,
+        "output_sha256": "743d8ba2a9e1c4a952b819865c66ed83deb1d19c46e52e421cc2869b4517c80d",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_02.in",
+        "kind": "official",
+        "length": 451,
+        "output_sha256": "af7b6af54f7be68b403c7f10d571652c7ae52c0cf4842c7323004dc07ebe6f34",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_03.in",
+        "kind": "official",
+        "length": 1299,
+        "output_sha256": "cee582ac220b12361d75ba3b10fd433a7443590bd86636e1a6b0fba61df0e943",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_04.in",
+        "kind": "official",
+        "length": 1046,
+        "output_sha256": "6c6055de8c628605a838a7a5d2c73979a67643eab1abadee2ebdd224f20ab9f8",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_00.in",
+        "kind": "official",
+        "length": 1390,
+        "output_sha256": "b9e5b62067fc1fe5597856516026901bee41591c1d036d36949b1913b609da0c",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_01.in",
+        "kind": "official",
+        "length": 1386,
+        "output_sha256": "b165d9c4ca2f9a962e1a66ef2b0639bafab4ed40c6b7c79b96eafa19ec1c050b",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_02.in",
+        "kind": "official",
+        "length": 1399,
+        "output_sha256": "1441250d1ff3f5a80928c9faa71093dbbc5d7375f05635ab9a9e67b491282066",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_03.in",
+        "kind": "official",
+        "length": 1398,
+        "output_sha256": "5475d9ebc4bdf2f12a6e4628267fce71922742cd1182e9d7893e025affdf68eb",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_04.in",
+        "kind": "official",
+        "length": 1388,
+        "output_sha256": "4e6dbcc1d1e88c9c59c8f048d39c45b6f7a83e4c8349da3161fcf76b942dd3fc",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "hand_max_00.in",
+        "kind": "official",
+        "length": 500000,
+        "output_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "hand_min_00.in",
+        "kind": "official",
+        "length": 1,
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "equal_500k.in",
+        "kind": "custom",
+        "length": 1,
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "alternating_500k.in",
+        "kind": "custom",
+        "length": 250000,
+        "output_sha256": "9cf15b7e2aa95bc85239aadeab91ecb983954a2a8602b202cf01982754be638f"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "tiny32.in",
+        "kind": "custom",
+        "length": 7,
+        "output_sha256": "6a60248ac098a2b55859f6c0d6048b127fe8119936cb819baaece310372e100a"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "empty.in",
+        "kind": "custom",
+        "length": 0,
+        "output_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "example_00.in",
+        "kind": "official",
+        "length": 3,
+        "output_sha256": "6bc483d79494871372efc9ca2c842ec6237034fe8144c9dbe9438e19d8151857",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "example_01.in",
+        "kind": "official",
+        "length": 2,
+        "output_sha256": "62f31da50e4ee0cbc1064619de41935ea25e0c6a296e9849de8130365a188c4d",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "small_00.in",
+        "kind": "official",
+        "length": 2,
+        "output_sha256": "ebceeb73bc26d609a8f2352a66781b66d71e3edd80024d48160e4960ac9f7503",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "small_01.in",
+        "kind": "official",
+        "length": 4,
+        "output_sha256": "d15403b38edd11e98cfda4d6ec234b53896437fb89765d6dbe9fcf68ee6eae36",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "small_02.in",
+        "kind": "official",
+        "length": 4,
+        "output_sha256": "15a15c047478f3e0e3cab6ed3f632a29e89952fba136b5a78394d1c0ad79c6e5",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "small_03.in",
+        "kind": "official",
+        "length": 1,
+        "output_sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "small_04.in",
+        "kind": "official",
+        "length": 3,
+        "output_sha256": "122def0ca1e13a8a9706a3c0bceb5e2eb393e7e0303d1bd04d31989d74e414f3",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_00.in",
+        "kind": "official",
+        "length": 1224,
+        "output_sha256": "9c1544f3273b967cb16eeff152ae6d1ec477d1a00232630ba848a5dc9e845110",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_01.in",
+        "kind": "official",
+        "length": 1342,
+        "output_sha256": "743d8ba2a9e1c4a952b819865c66ed83deb1d19c46e52e421cc2869b4517c80d",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_02.in",
+        "kind": "official",
+        "length": 451,
+        "output_sha256": "af7b6af54f7be68b403c7f10d571652c7ae52c0cf4842c7323004dc07ebe6f34",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_03.in",
+        "kind": "official",
+        "length": 1299,
+        "output_sha256": "cee582ac220b12361d75ba3b10fd433a7443590bd86636e1a6b0fba61df0e943",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_04.in",
+        "kind": "official",
+        "length": 1046,
+        "output_sha256": "6c6055de8c628605a838a7a5d2c73979a67643eab1abadee2ebdd224f20ab9f8",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_00.in",
+        "kind": "official",
+        "length": 1390,
+        "output_sha256": "b9e5b62067fc1fe5597856516026901bee41591c1d036d36949b1913b609da0c",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_01.in",
+        "kind": "official",
+        "length": 1386,
+        "output_sha256": "b165d9c4ca2f9a962e1a66ef2b0639bafab4ed40c6b7c79b96eafa19ec1c050b",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_02.in",
+        "kind": "official",
+        "length": 1399,
+        "output_sha256": "1441250d1ff3f5a80928c9faa71093dbbc5d7375f05635ab9a9e67b491282066",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_03.in",
+        "kind": "official",
+        "length": 1398,
+        "output_sha256": "5475d9ebc4bdf2f12a6e4628267fce71922742cd1182e9d7893e025affdf68eb",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_04.in",
+        "kind": "official",
+        "length": 1388,
+        "output_sha256": "4e6dbcc1d1e88c9c59c8f048d39c45b6f7a83e4c8349da3161fcf76b942dd3fc",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "hand_max_00.in",
+        "kind": "official",
+        "length": 500000,
+        "output_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "hand_min_00.in",
+        "kind": "official",
+        "length": 1,
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "equal_500k.in",
+        "kind": "custom",
+        "length": 1,
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "alternating_500k.in",
+        "kind": "custom",
+        "length": 250000,
+        "output_sha256": "9cf15b7e2aa95bc85239aadeab91ecb983954a2a8602b202cf01982754be638f"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "tiny32.in",
+        "kind": "custom",
+        "length": 7,
+        "output_sha256": "6a60248ac098a2b55859f6c0d6048b127fe8119936cb819baaece310372e100a"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "empty.in",
+        "kind": "custom",
+        "length": 0,
+        "output_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+      },
+      {
+        "build": "clang_checked",
+        "case": "example_00.in",
+        "kind": "official",
+        "length": 3,
+        "output_sha256": "6bc483d79494871372efc9ca2c842ec6237034fe8144c9dbe9438e19d8151857",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "example_01.in",
+        "kind": "official",
+        "length": 2,
+        "output_sha256": "62f31da50e4ee0cbc1064619de41935ea25e0c6a296e9849de8130365a188c4d",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "small_00.in",
+        "kind": "official",
+        "length": 2,
+        "output_sha256": "ebceeb73bc26d609a8f2352a66781b66d71e3edd80024d48160e4960ac9f7503",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "small_01.in",
+        "kind": "official",
+        "length": 4,
+        "output_sha256": "d15403b38edd11e98cfda4d6ec234b53896437fb89765d6dbe9fcf68ee6eae36",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "small_02.in",
+        "kind": "official",
+        "length": 4,
+        "output_sha256": "15a15c047478f3e0e3cab6ed3f632a29e89952fba136b5a78394d1c0ad79c6e5",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "small_03.in",
+        "kind": "official",
+        "length": 1,
+        "output_sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "small_04.in",
+        "kind": "official",
+        "length": 3,
+        "output_sha256": "122def0ca1e13a8a9706a3c0bceb5e2eb393e7e0303d1bd04d31989d74e414f3",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_00.in",
+        "kind": "official",
+        "length": 1224,
+        "output_sha256": "9c1544f3273b967cb16eeff152ae6d1ec477d1a00232630ba848a5dc9e845110",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_01.in",
+        "kind": "official",
+        "length": 1342,
+        "output_sha256": "743d8ba2a9e1c4a952b819865c66ed83deb1d19c46e52e421cc2869b4517c80d",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_02.in",
+        "kind": "official",
+        "length": 451,
+        "output_sha256": "af7b6af54f7be68b403c7f10d571652c7ae52c0cf4842c7323004dc07ebe6f34",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_03.in",
+        "kind": "official",
+        "length": 1299,
+        "output_sha256": "cee582ac220b12361d75ba3b10fd433a7443590bd86636e1a6b0fba61df0e943",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_04.in",
+        "kind": "official",
+        "length": 1046,
+        "output_sha256": "6c6055de8c628605a838a7a5d2c73979a67643eab1abadee2ebdd224f20ab9f8",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_00.in",
+        "kind": "official",
+        "length": 1390,
+        "output_sha256": "b9e5b62067fc1fe5597856516026901bee41591c1d036d36949b1913b609da0c",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_01.in",
+        "kind": "official",
+        "length": 1386,
+        "output_sha256": "b165d9c4ca2f9a962e1a66ef2b0639bafab4ed40c6b7c79b96eafa19ec1c050b",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_02.in",
+        "kind": "official",
+        "length": 1399,
+        "output_sha256": "1441250d1ff3f5a80928c9faa71093dbbc5d7375f05635ab9a9e67b491282066",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_03.in",
+        "kind": "official",
+        "length": 1398,
+        "output_sha256": "5475d9ebc4bdf2f12a6e4628267fce71922742cd1182e9d7893e025affdf68eb",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_04.in",
+        "kind": "official",
+        "length": 1388,
+        "output_sha256": "4e6dbcc1d1e88c9c59c8f048d39c45b6f7a83e4c8349da3161fcf76b942dd3fc",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "hand_max_00.in",
+        "kind": "official",
+        "length": 500000,
+        "output_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "hand_min_00.in",
+        "kind": "official",
+        "length": 1,
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_checked",
+        "case": "equal_500k.in",
+        "kind": "custom",
+        "length": 1,
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863"
+      },
+      {
+        "build": "clang_checked",
+        "case": "alternating_500k.in",
+        "kind": "custom",
+        "length": 250000,
+        "output_sha256": "9cf15b7e2aa95bc85239aadeab91ecb983954a2a8602b202cf01982754be638f"
+      },
+      {
+        "build": "clang_checked",
+        "case": "tiny32.in",
+        "kind": "custom",
+        "length": 7,
+        "output_sha256": "6a60248ac098a2b55859f6c0d6048b127fe8119936cb819baaece310372e100a"
+      },
+      {
+        "build": "clang_checked",
+        "case": "empty.in",
+        "kind": "custom",
+        "length": 0,
+        "output_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+      },
+      {
+        "build": "clang_skip",
+        "case": "example_00.in",
+        "kind": "official",
+        "length": 3,
+        "output_sha256": "6bc483d79494871372efc9ca2c842ec6237034fe8144c9dbe9438e19d8151857",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "example_01.in",
+        "kind": "official",
+        "length": 2,
+        "output_sha256": "62f31da50e4ee0cbc1064619de41935ea25e0c6a296e9849de8130365a188c4d",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "small_00.in",
+        "kind": "official",
+        "length": 2,
+        "output_sha256": "ebceeb73bc26d609a8f2352a66781b66d71e3edd80024d48160e4960ac9f7503",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "small_01.in",
+        "kind": "official",
+        "length": 4,
+        "output_sha256": "d15403b38edd11e98cfda4d6ec234b53896437fb89765d6dbe9fcf68ee6eae36",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "small_02.in",
+        "kind": "official",
+        "length": 4,
+        "output_sha256": "15a15c047478f3e0e3cab6ed3f632a29e89952fba136b5a78394d1c0ad79c6e5",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "small_03.in",
+        "kind": "official",
+        "length": 1,
+        "output_sha256": "5d90ef7fc0d040fd56a1e48697cfa99e0dfaf4fd803aefefc3b5053ec1d36aea",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "small_04.in",
+        "kind": "official",
+        "length": 3,
+        "output_sha256": "122def0ca1e13a8a9706a3c0bceb5e2eb393e7e0303d1bd04d31989d74e414f3",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_00.in",
+        "kind": "official",
+        "length": 1224,
+        "output_sha256": "9c1544f3273b967cb16eeff152ae6d1ec477d1a00232630ba848a5dc9e845110",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_01.in",
+        "kind": "official",
+        "length": 1342,
+        "output_sha256": "743d8ba2a9e1c4a952b819865c66ed83deb1d19c46e52e421cc2869b4517c80d",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_02.in",
+        "kind": "official",
+        "length": 451,
+        "output_sha256": "af7b6af54f7be68b403c7f10d571652c7ae52c0cf4842c7323004dc07ebe6f34",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_03.in",
+        "kind": "official",
+        "length": 1299,
+        "output_sha256": "cee582ac220b12361d75ba3b10fd433a7443590bd86636e1a6b0fba61df0e943",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_04.in",
+        "kind": "official",
+        "length": 1046,
+        "output_sha256": "6c6055de8c628605a838a7a5d2c73979a67643eab1abadee2ebdd224f20ab9f8",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_00.in",
+        "kind": "official",
+        "length": 1390,
+        "output_sha256": "b9e5b62067fc1fe5597856516026901bee41591c1d036d36949b1913b609da0c",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_01.in",
+        "kind": "official",
+        "length": 1386,
+        "output_sha256": "b165d9c4ca2f9a962e1a66ef2b0639bafab4ed40c6b7c79b96eafa19ec1c050b",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_02.in",
+        "kind": "official",
+        "length": 1399,
+        "output_sha256": "1441250d1ff3f5a80928c9faa71093dbbc5d7375f05635ab9a9e67b491282066",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_03.in",
+        "kind": "official",
+        "length": 1398,
+        "output_sha256": "5475d9ebc4bdf2f12a6e4628267fce71922742cd1182e9d7893e025affdf68eb",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_04.in",
+        "kind": "official",
+        "length": 1388,
+        "output_sha256": "4e6dbcc1d1e88c9c59c8f048d39c45b6f7a83e4c8349da3161fcf76b942dd3fc",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "hand_max_00.in",
+        "kind": "official",
+        "length": 500000,
+        "output_sha256": "043853a77b5c68e9e080047a85c4f4645a98f1b5a9badfbad025dba60bceaf98",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "hand_min_00.in",
+        "kind": "official",
+        "length": 1,
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863",
+        "official_checker_returncode": 0,
+        "checker_stdout": "",
+        "checker_stderr": "ok OK\n"
+      },
+      {
+        "build": "clang_skip",
+        "case": "equal_500k.in",
+        "kind": "custom",
+        "length": 1,
+        "output_sha256": "0c2b70dbfae6042a4fcf55bafc8f6d760dacfb65f4e3c212146749ffe13ae863"
+      },
+      {
+        "build": "clang_skip",
+        "case": "alternating_500k.in",
+        "kind": "custom",
+        "length": 250000,
+        "output_sha256": "9cf15b7e2aa95bc85239aadeab91ecb983954a2a8602b202cf01982754be638f"
+      },
+      {
+        "build": "clang_skip",
+        "case": "tiny32.in",
+        "kind": "custom",
+        "length": 7,
+        "output_sha256": "6a60248ac098a2b55859f6c0d6048b127fe8119936cb819baaece310372e100a"
+      },
+      {
+        "build": "clang_skip",
+        "case": "empty.in",
+        "kind": "custom",
+        "length": 0,
+        "output_sha256": "74d01a0c051c963d9a9b8ab9dbeab1723f0ad8534ea9fa6a942f358d7fa011b4"
+      }
+    ],
+    "official_runs": 76,
+    "custom_runs": 16,
+    "reference": "independent Fenwick DP + official checker"
+  },
+  "official_checker": "公式checker.cppと、独自の長さ・添字範囲・添字順・値順検査を併用。任意の最適解を許すため出力SHAの一致を正しさの条件にしない。",
+  "independent_suite": {
+    "status": "PASS",
+    "source_sha256": "83840e64868646779fa364b6d1140843e3de9ace73e67acf41334fc68b197c12",
+    "suite": "candidate",
+    "expected_runs": 12,
+    "results": [
+      {
+        "name": "lis_reference_test_gcc_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/candidate/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_reference_test_gcc_checked",
+          "-DSIRKIT_LIS_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "2967b4ab05c2c777e690dcc6fb0bf9e8524aa07549d8c60136a32ffd6ffc9a52",
+        "returncode": 0,
+        "stdout": "PASS 1648251 checks; 9308 API cases; independent DP/subset reference\n",
+        "stderr": "",
+        "binary_sha256": "93710b2a20da30480d8aa6bac5f6dede71b468812b65dca552733a63b4b8370b"
+      },
+      {
+        "name": "lis_exception_test_gcc_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/candidate/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_exception_test_gcc_checked",
+          "-DSIRKIT_LIS_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f28bd290e52d19b2bdf6b99785975a0be3b25abb6904052a43bcb5bc00ebe1ea",
+        "returncode": 0,
+        "stdout": "PASS 1367987 checks; allocation failures=68 copy failures=2998 comparison failures=7144 live_delta=0 value_alive=0\n",
+        "stderr": "",
+        "binary_sha256": "75106d0afff18260801d15ab49fd694d7df549fc0cd34583e9b2203141cc486e"
+      },
+      {
+        "name": "lis_reference_test_gcc_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/candidate/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_reference_test_gcc_skip",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_LIS_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "2967b4ab05c2c777e690dcc6fb0bf9e8524aa07549d8c60136a32ffd6ffc9a52",
+        "returncode": 0,
+        "stdout": "PASS 1648071 checks; 9308 API cases; independent DP/subset reference\n",
+        "stderr": "",
+        "binary_sha256": "2eb9f42a6f094d1b36d2a3e996836810d3d3b9c7e2f03ff9a34059ed6e248a18"
+      },
+      {
+        "name": "lis_exception_test_gcc_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/candidate/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_exception_test_gcc_skip",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_LIS_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f28bd290e52d19b2bdf6b99785975a0be3b25abb6904052a43bcb5bc00ebe1ea",
+        "returncode": 0,
+        "stdout": "PASS 1367987 checks; allocation failures=68 copy failures=2998 comparison failures=7144 live_delta=0 value_alive=0\n",
+        "stderr": "",
+        "binary_sha256": "75106d0afff18260801d15ab49fd694d7df549fc0cd34583e9b2203141cc486e"
+      },
+      {
+        "name": "lis_reference_test_clang_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/candidate/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_reference_test_clang_checked",
+          "-DSIRKIT_LIS_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "2967b4ab05c2c777e690dcc6fb0bf9e8524aa07549d8c60136a32ffd6ffc9a52",
+        "returncode": 0,
+        "stdout": "PASS 1648251 checks; 9308 API cases; independent DP/subset reference\n",
+        "stderr": "",
+        "binary_sha256": "6a93a13be3b557cde56ed5982e7c089b44dfa95c642139899a5edbe123ee2dfa"
+      },
+      {
+        "name": "lis_exception_test_clang_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/candidate/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_exception_test_clang_checked",
+          "-DSIRKIT_LIS_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f28bd290e52d19b2bdf6b99785975a0be3b25abb6904052a43bcb5bc00ebe1ea",
+        "returncode": 0,
+        "stdout": "PASS 1367987 checks; allocation failures=68 copy failures=2998 comparison failures=7144 live_delta=0 value_alive=0\n",
+        "stderr": "",
+        "binary_sha256": "069a12e59d045733a990b86f145f80aa400464c916e3fcbd8486bdb2b9f934db"
+      },
+      {
+        "name": "lis_reference_test_clang_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/candidate/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_reference_test_clang_skip",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_LIS_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "2967b4ab05c2c777e690dcc6fb0bf9e8524aa07549d8c60136a32ffd6ffc9a52",
+        "returncode": 0,
+        "stdout": "PASS 1648071 checks; 9308 API cases; independent DP/subset reference\n",
+        "stderr": "",
+        "binary_sha256": "892ae4e1d68e2944f9d98d05de37036c50e6e697f544880b223d154c213ef164"
+      },
+      {
+        "name": "lis_exception_test_clang_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/candidate/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_exception_test_clang_skip",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_LIS_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f28bd290e52d19b2bdf6b99785975a0be3b25abb6904052a43bcb5bc00ebe1ea",
+        "returncode": 0,
+        "stdout": "PASS 1367987 checks; allocation failures=68 copy failures=2998 comparison failures=7144 live_delta=0 value_alive=0\n",
+        "stderr": "",
+        "binary_sha256": "069a12e59d045733a990b86f145f80aa400464c916e3fcbd8486bdb2b9f934db"
+      },
+      {
+        "name": "lis_reference_test_clang_checked_san",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/candidate/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_reference_test_clang_checked_san",
+          "-DSIRKIT_LIS_REQUIRE_EXTRA",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "2967b4ab05c2c777e690dcc6fb0bf9e8524aa07549d8c60136a32ffd6ffc9a52",
+        "returncode": 0,
+        "stdout": "PASS 1648251 checks; 9308 API cases; independent DP/subset reference\n",
+        "stderr": "",
+        "binary_sha256": "23874ac7356c5e43dd12c6207fe43e9a456d45a8f3476861615eec47c694477d"
+      },
+      {
+        "name": "lis_exception_test_clang_checked_san",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/candidate/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_exception_test_clang_checked_san",
+          "-DSIRKIT_LIS_REQUIRE_EXTRA",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f28bd290e52d19b2bdf6b99785975a0be3b25abb6904052a43bcb5bc00ebe1ea",
+        "returncode": 0,
+        "stdout": "PASS 1367987 checks; allocation failures=68 copy failures=2998 comparison failures=7144 live_delta=0 value_alive=0\n",
+        "stderr": "",
+        "binary_sha256": "007abe904b91377f0b1ae173b60401987ec6f5967da24497b3f13eb5cfbe3012"
+      },
+      {
+        "name": "lis_reference_test_clang_skip_san",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/candidate/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_reference_test_clang_skip_san",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_LIS_REQUIRE_EXTRA",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "2967b4ab05c2c777e690dcc6fb0bf9e8524aa07549d8c60136a32ffd6ffc9a52",
+        "returncode": 0,
+        "stdout": "PASS 1648071 checks; 9308 API cases; independent DP/subset reference\n",
+        "stderr": "",
+        "binary_sha256": "ef90bdd9f040b2d50db850b33ec56dfb55679ea3701c310b2b55d6cf867078aa"
+      },
+      {
+        "name": "lis_exception_test_clang_skip_san",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/candidate/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/candidate/lis_exception_test_clang_skip_san",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_LIS_REQUIRE_EXTRA",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f28bd290e52d19b2bdf6b99785975a0be3b25abb6904052a43bcb5bc00ebe1ea",
+        "returncode": 0,
+        "stdout": "PASS 1367987 checks; allocation failures=68 copy failures=2998 comparison failures=7144 live_delta=0 value_alive=0\n",
+        "stderr": "",
+        "binary_sha256": "ce45535a0a1bae55f770a58c60509cdbfd85e4f04fa3594686a61ea2493d8020"
+      }
+    ]
+  },
+  "summary": {
+    "status": "PASS",
+    "runs": 12,
+    "unique_runs": 12,
+    "source_sha256": "83840e64868646779fa364b6d1140843e3de9ace73e67acf41334fc68b197c12",
+    "source_unchanged": true,
+    "all_build_and_run_returncodes_zero": true,
+    "all_stderr_empty": true,
+    "all_child_processes_waited": true,
+    "results_sha256": "cc1fc00e673764863888af3836c936a2cf1ec572bba441a8c71647dcd34f1ed8",
+    "test_sha256": {
+      "lis_reference_test.cpp": "2967b4ab05c2c777e690dcc6fb0bf9e8524aa07549d8c60136a32ffd6ffc9a52",
+      "lis_exception_test.cpp": "f28bd290e52d19b2bdf6b99785975a0be3b25abb6904052a43bcb5bc00ebe1ea"
+    },
+    "extra_api_required": true,
+    "leak_sanitizer": false
+  },
+  "repository_test_copy": {
+    "status": "PASS",
+    "source_sha256": "83840e64868646779fa364b6d1140843e3de9ace73e67acf41334fc68b197c12",
+    "core_summary": {
+      "status": "PASS",
+      "runs": 12,
+      "unique_runs": 12,
+      "source_sha256": "83840e64868646779fa364b6d1140843e3de9ace73e67acf41334fc68b197c12",
+      "source_unchanged": true,
+      "all_build_and_run_returncodes_zero": true,
+      "all_stderr_empty": true,
+      "all_child_processes_waited": true,
+      "results_sha256": "cc1fc00e673764863888af3836c936a2cf1ec572bba441a8c71647dcd34f1ed8",
+      "test_sha256": {
+        "lis_reference_test.cpp": "2967b4ab05c2c777e690dcc6fb0bf9e8524aa07549d8c60136a32ffd6ffc9a52",
+        "lis_exception_test.cpp": "f28bd290e52d19b2bdf6b99785975a0be3b25abb6904052a43bcb5bc00ebe1ea"
+      },
+      "extra_api_required": true,
+      "leak_sanitizer": false
+    },
+    "repository_test_sources": [
+      {
+        "source": "Verify/current/tests/lis_reference_test.cpp",
+        "tested_sha256": "2967b4ab05c2c777e690dcc6fb0bf9e8524aa07549d8c60136a32ffd6ffc9a52",
+        "repository_sha256": "e2cb1b03f62509a8cc05f7940e3ff1878af58b16e16f6915427714e4c1e71fee",
+        "difference": "default SIRKIT_LIS_REQUIRE_EXTRA enabled; final suite command already defined it; otherwise byte-identical"
+      },
+      {
+        "source": "Verify/current/tests/lis_exception_test.cpp",
+        "tested_sha256": "f28bd290e52d19b2bdf6b99785975a0be3b25abb6904052a43bcb5bc00ebe1ea",
+        "repository_sha256": "d4872e3ac0f5883992aade8b3e4e56808928f62cb5f8d1c46b5a4e1cb856a167",
+        "difference": "default SIRKIT_LIS_REQUIRE_EXTRA enabled; final suite command already defined it; otherwise byte-identical"
+      }
+    ],
+    "repository_default_macro_checks": [
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/lis_reference_test_repo_gcc"
+        ],
+        "stdout": "PASS 1648251 checks; 9308 API cases; independent DP/subset reference\n",
+        "returncode": 0,
+        "repository_test_sha256": "e2cb1b03f62509a8cc05f7940e3ff1878af58b16e16f6915427714e4c1e71fee"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/lis_exception_test_repo_gcc"
+        ],
+        "stdout": "PASS 1367987 checks; allocation failures=68 copy failures=2998 comparison failures=7144 live_delta=0 value_alive=0\n",
+        "returncode": 0,
+        "repository_test_sha256": "d4872e3ac0f5883992aade8b3e4e56808928f62cb5f8d1c46b5a4e1cb856a167"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/lis_reference_test_repo_clang",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "stdout": "PASS 1648071 checks; 9308 API cases; independent DP/subset reference\n",
+        "returncode": 0,
+        "repository_test_sha256": "e2cb1b03f62509a8cc05f7940e3ff1878af58b16e16f6915427714e4c1e71fee"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/lis_exception_test_repo_clang",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "stdout": "PASS 1367987 checks; allocation failures=68 copy failures=2998 comparison failures=7144 live_delta=0 value_alive=0\n",
+        "returncode": 0,
+        "repository_test_sha256": "d4872e3ac0f5883992aade8b3e4e56808928f62cb5f8d1c46b5a4e1cb856a167"
+      }
+    ],
+    "all_processes_waited": true,
+    "note": "Only two authorized tests copied into Verify/current/tests. No library files edited."
+  },
+  "examples_and_local_regression": {
+    "status": "PASS",
+    "runs": [
+      {
+        "name": "example",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/lis_example.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/samples_final/example_gcc_checked"
+        ],
+        "source_sha256": "3e5a1bf4251f4708d10c56952930295012a73dd5bc1db0a90b5be991b2e54779",
+        "stdout": "1 1 2 2 3 3 \n1 1 2 2 3 1 \n3 4\n1 3 4 \n1 2 2 4 \n",
+        "returncode": 0
+      },
+      {
+        "name": "lis_local",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/lis_local.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/samples_final/lis_local_gcc_checked"
+        ],
+        "source_sha256": "c7732b6cdacd7d14d60f505dbd043913220ebdec33becbc91ade15330baa94c5",
+        "stdout": "OK\n",
+        "returncode": 0
+      },
+      {
+        "name": "example",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/lis_example.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/samples_final/example_gcc_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "source_sha256": "3e5a1bf4251f4708d10c56952930295012a73dd5bc1db0a90b5be991b2e54779",
+        "stdout": "1 1 2 2 3 3 \n1 1 2 2 3 1 \n3 4\n1 3 4 \n1 2 2 4 \n",
+        "returncode": 0
+      },
+      {
+        "name": "lis_local",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/lis_local.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/samples_final/lis_local_gcc_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "source_sha256": "c7732b6cdacd7d14d60f505dbd043913220ebdec33becbc91ade15330baa94c5",
+        "stdout": "OK\n",
+        "returncode": 0
+      },
+      {
+        "name": "example",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/lis_example.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/samples_final/example_clang_checked"
+        ],
+        "source_sha256": "3e5a1bf4251f4708d10c56952930295012a73dd5bc1db0a90b5be991b2e54779",
+        "stdout": "1 1 2 2 3 3 \n1 1 2 2 3 1 \n3 4\n1 3 4 \n1 2 2 4 \n",
+        "returncode": 0
+      },
+      {
+        "name": "lis_local",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/lis_local.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/samples_final/lis_local_clang_checked"
+        ],
+        "source_sha256": "c7732b6cdacd7d14d60f505dbd043913220ebdec33becbc91ade15330baa94c5",
+        "stdout": "OK\n",
+        "returncode": 0
+      },
+      {
+        "name": "example",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/lis_example.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/samples_final/example_clang_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "source_sha256": "3e5a1bf4251f4708d10c56952930295012a73dd5bc1db0a90b5be991b2e54779",
+        "stdout": "1 1 2 2 3 3 \n1 1 2 2 3 1 \n3 4\n1 3 4 \n1 2 2 4 \n",
+        "returncode": 0
+      },
+      {
+        "name": "lis_local",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/submissions/lis_local.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/samples_final/lis_local_clang_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "source_sha256": "c7732b6cdacd7d14d60f505dbd043913220ebdec33becbc91ade15330baa94c5",
+        "stdout": "OK\n",
+        "returncode": 0
+      }
+    ]
+  },
+  "preprocessor": [
+    {
+      "command": [
+        "g++",
+        "-std=c++23",
+        "-E",
+        "-P",
+        "-x",
+        "c++",
+        "/tmp/sirkit_lis_20261022/final.hpp"
+      ],
+      "nan_message_present": true,
+      "helper_present": true
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++23",
+        "-E",
+        "-P",
+        "-x",
+        "c++",
+        "/tmp/sirkit_lis_20261022/final.hpp",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "nan_message_present": false,
+      "helper_present": false
+    }
+  ],
+  "memory_sanitizer": {
+    "command": [
+      "clang++",
+      "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+      "-std=c++23",
+      "-O1",
+      "-g",
+      "-fsanitize=memory",
+      "-fPIE",
+      "-pie",
+      "-fno-omit-frame-pointer",
+      "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/final.hpp\"",
+      "/tmp/sirkit_lis_20261022/msan_test.cpp",
+      "-o",
+      "/tmp/sirkit_lis_20261022/msan_test"
+    ],
+    "source_sha256": "83840e64868646779fa364b6d1140843e3de9ace73e67acf41334fc68b197c12",
+    "test_sha256": "8c81ced900c5f2e3dd8aa6d4db7344f29a6cd36072e045f572ea0cd98acb628d",
+    "build_returncode": 0,
+    "build_stderr": "",
+    "returncode": 0,
+    "stdout": "PASS MemorySanitizer predecessor chains\n",
+    "stderr": "",
+    "test_source": "#include SIRKIT_LIS_SOURCE\n#include <cassert>\n#include <cstdint>\n#include <cstdio>\n#include <vector>\ntemplate<bool Strict>void check(const std::vector<int>& v){\n const auto ids=LISIndices<Strict>(v);std::vector<std::size_t> dp(v.size(),1);std::size_t best=0;\n for(std::size_t i=0;i<v.size();++i){for(std::size_t j=0;j<i;++j)if(Strict?v[j]<v[i]:!(v[i]<v[j]))dp[i]=std::max(dp[i],dp[j]+1);best=std::max(best,dp[i]);}\n assert(ids.size()==best);for(std::size_t j=0;j<ids.size();++j){assert(ids[j]<v.size());if(j)assert(ids[j-1]<ids[j]&&(Strict?v[ids[j-1]]<v[ids[j]]:!(v[ids[j]]<v[ids[j-1]])));}\n}\nint main(){std::uint64_t state=821793;\n for(int n=0;n<=258;++n){std::vector<int> v(n);for(int mode=0;mode<5;++mode){for(int i=0;i<n;++i){state=state*UINT64_C(6364136223846793005)+1;v[i]=mode==0?i:mode==1?-i:mode==2?0:mode==3?(i%2?i:-i):static_cast<int>((state>>32)%101)-50;}check<true>(v);check<false>(v);}}\n std::puts(\"PASS MemorySanitizer predecessor chains\");}\n"
+  },
+  "baseline_suite": {
+    "status": "PASS",
+    "source_sha256": "7f16f92c939fdce2d15ca1cd769c0c8e9d6a16fddb7ea407594897029da5e80a",
+    "suite": "baseline",
+    "expected_runs": 4,
+    "results": [
+      {
+        "name": "lis_reference_test_gcc_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/baseline/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/baseline/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/baseline/lis_reference_test_gcc_checked"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "654a9517ef65d8cc8f1ebd9db8b1000fc98c9f73198035942d092425f2d9df45",
+        "returncode": 0,
+        "stdout": "PASS 1298161 checks; 9114 API cases; independent DP/subset reference\n",
+        "stderr": "",
+        "binary_sha256": "afc50403003f5dd4d6d198394611ed753872c0a4b57d7857bdaf0af515f4851f"
+      },
+      {
+        "name": "lis_exception_test_gcc_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/baseline/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/baseline/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/baseline/lis_exception_test_gcc_checked"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f71394df4cc62145d78ee57022489010c5dd708bd681f6a21eb28474410f3780",
+        "returncode": 0,
+        "stdout": "PASS 663654 checks; allocation failures=20 copy failures=556 comparison failures=4384 live_delta=0 value_alive=0\n",
+        "stderr": "",
+        "binary_sha256": "070c8694f5447de5cb2f3bd38c44192fee6e008517696640af47391b4a57dedc"
+      },
+      {
+        "name": "lis_reference_test_clang_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/baseline/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/baseline/lis_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/baseline/lis_reference_test_clang_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "654a9517ef65d8cc8f1ebd9db8b1000fc98c9f73198035942d092425f2d9df45",
+        "returncode": 0,
+        "stdout": "PASS 1298161 checks; 9114 API cases; independent DP/subset reference\n",
+        "stderr": "",
+        "binary_sha256": "2563bbe8246482fb29531fde57ca8f32680be224509ec91c5c59a910c16703ab"
+      },
+      {
+        "name": "lis_exception_test_clang_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/baseline/header.hpp\"",
+          "/tmp/sirkit_lis_20261022/verify/baseline/lis_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/verify/baseline/lis_exception_test_clang_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f71394df4cc62145d78ee57022489010c5dd708bd681f6a21eb28474410f3780",
+        "returncode": 0,
+        "stdout": "PASS 663654 checks; allocation failures=20 copy failures=556 comparison failures=4384 live_delta=0 value_alive=0\n",
+        "stderr": "",
+        "binary_sha256": "56c3b67a3a96dc40ba7f9ba67fc2eddabbe325b23afa6c3971fb8c5283b51b86"
+      }
+    ]
+  },
+  "other_diagnostic_suites": {
+    "verify/current_baseline/results.json": {
+      "status": "PASS",
+      "source_sha256": "7f16f92c939fdce2d15ca1cd769c0c8e9d6a16fddb7ea407594897029da5e80a",
+      "suite": "current_baseline",
+      "expected_runs": 4,
+      "results": [
+        {
+          "name": "lis_reference_test_gcc_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/current_baseline/header.hpp\"",
+            "/tmp/sirkit_lis_20261022/verify/current_baseline/lis_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_lis_20261022/verify/current_baseline/lis_reference_test_gcc_checked"
+          ],
+          "build_returncode": 0,
+          "build_stderr": "",
+          "test_sha256": "2967b4ab05c2c777e690dcc6fb0bf9e8524aa07549d8c60136a32ffd6ffc9a52",
+          "returncode": 0,
+          "stdout": "PASS 1310785 checks; 9308 API cases; independent DP/subset reference\n",
+          "stderr": "",
+          "binary_sha256": "fdc2b7f2401f7ed0d3b16494139a3e81fe085534666b155740f033420985388e"
+        },
+        {
+          "name": "lis_exception_test_gcc_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/current_baseline/header.hpp\"",
+            "/tmp/sirkit_lis_20261022/verify/current_baseline/lis_exception_test.cpp",
+            "-o",
+            "/tmp/sirkit_lis_20261022/verify/current_baseline/lis_exception_test_gcc_checked"
+          ],
+          "build_returncode": 0,
+          "build_stderr": "",
+          "test_sha256": "f28bd290e52d19b2bdf6b99785975a0be3b25abb6904052a43bcb5bc00ebe1ea",
+          "returncode": 0,
+          "stdout": "PASS 1013686 checks; allocation failures=56 copy failures=2098 comparison failures=5408 live_delta=0 value_alive=0\n",
+          "stderr": "",
+          "binary_sha256": "37a73c14ed3e0d809672e1a7d0570f87651412d0d5726508dd840dc19d1cfd3e"
+        },
+        {
+          "name": "lis_reference_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/current_baseline/header.hpp\"",
+            "/tmp/sirkit_lis_20261022/verify/current_baseline/lis_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_lis_20261022/verify/current_baseline/lis_reference_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "build_returncode": 0,
+          "build_stderr": "",
+          "test_sha256": "2967b4ab05c2c777e690dcc6fb0bf9e8524aa07549d8c60136a32ffd6ffc9a52",
+          "returncode": 0,
+          "stdout": "PASS 1310785 checks; 9308 API cases; independent DP/subset reference\n",
+          "stderr": "",
+          "binary_sha256": "d63f4a588968f628e4b3cfea0a5ee55f8c1c23e64f7aaaec7421e8c85ac55ad1"
+        },
+        {
+          "name": "lis_exception_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/current_baseline/header.hpp\"",
+            "/tmp/sirkit_lis_20261022/verify/current_baseline/lis_exception_test.cpp",
+            "-o",
+            "/tmp/sirkit_lis_20261022/verify/current_baseline/lis_exception_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "build_returncode": 0,
+          "build_stderr": "",
+          "test_sha256": "f28bd290e52d19b2bdf6b99785975a0be3b25abb6904052a43bcb5bc00ebe1ea",
+          "returncode": 0,
+          "stdout": "PASS 1013686 checks; allocation failures=56 copy failures=2098 comparison failures=5408 live_delta=0 value_alive=0\n",
+          "stderr": "",
+          "binary_sha256": "45e8f433d6ff317404903aaa1043bdeaacf6c2cd7f1a4efcaf073bd816d7ea87"
+        }
+      ]
+    },
+    "verify/latest_baseline/results.json": {
+      "status": "PASS",
+      "source_sha256": "7f16f92c939fdce2d15ca1cd769c0c8e9d6a16fddb7ea407594897029da5e80a",
+      "suite": "latest_baseline",
+      "expected_runs": 4,
+      "results": [
+        {
+          "name": "lis_reference_test_gcc_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/latest_baseline/header.hpp\"",
+            "/tmp/sirkit_lis_20261022/verify/latest_baseline/lis_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_lis_20261022/verify/latest_baseline/lis_reference_test_gcc_checked"
+          ],
+          "build_returncode": 0,
+          "build_stderr": "",
+          "test_sha256": "52c01530ab1f615b0a014ffff3677d43912c19acefcf5ecc1c7d57af49c5899f",
+          "returncode": 0,
+          "stdout": "PASS 1298272 checks; 9120 API cases; independent DP/subset reference\n",
+          "stderr": "",
+          "binary_sha256": "af64a3ff838fcea1e56d67c3c01652bd108db67d17eaa4f259c4b7817f83cd28"
+        },
+        {
+          "name": "lis_exception_test_gcc_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/latest_baseline/header.hpp\"",
+            "/tmp/sirkit_lis_20261022/verify/latest_baseline/lis_exception_test.cpp",
+            "-o",
+            "/tmp/sirkit_lis_20261022/verify/latest_baseline/lis_exception_test_gcc_checked"
+          ],
+          "build_returncode": 0,
+          "build_stderr": "",
+          "test_sha256": "b797ec15d6800d5d6a9a54e8c2c8947f5cabc1f9566c96499d94905d97306298",
+          "returncode": 0,
+          "stdout": "PASS 1013686 checks; allocation failures=56 copy failures=2098 comparison failures=5408 live_delta=0 value_alive=0\n",
+          "stderr": "",
+          "binary_sha256": "b046b4dbb46aaf5d7d508bf05665a3ca4b895f55b5cb00fb7b4355932f856ac7"
+        },
+        {
+          "name": "lis_reference_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/latest_baseline/header.hpp\"",
+            "/tmp/sirkit_lis_20261022/verify/latest_baseline/lis_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_lis_20261022/verify/latest_baseline/lis_reference_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "build_returncode": 0,
+          "build_stderr": "",
+          "test_sha256": "52c01530ab1f615b0a014ffff3677d43912c19acefcf5ecc1c7d57af49c5899f",
+          "returncode": 0,
+          "stdout": "PASS 1298272 checks; 9120 API cases; independent DP/subset reference\n",
+          "stderr": "",
+          "binary_sha256": "ebe7bbcff77ef16ee1f26b60210cc596bb443f49e63d90841f403edf43cbd30f"
+        },
+        {
+          "name": "lis_exception_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/latest_baseline/header.hpp\"",
+            "/tmp/sirkit_lis_20261022/verify/latest_baseline/lis_exception_test.cpp",
+            "-o",
+            "/tmp/sirkit_lis_20261022/verify/latest_baseline/lis_exception_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "build_returncode": 0,
+          "build_stderr": "",
+          "test_sha256": "b797ec15d6800d5d6a9a54e8c2c8947f5cabc1f9566c96499d94905d97306298",
+          "returncode": 0,
+          "stdout": "PASS 1013686 checks; allocation failures=56 copy failures=2098 comparison failures=5408 live_delta=0 value_alive=0\n",
+          "stderr": "",
+          "binary_sha256": "5c93f46ee9b6448edda68179b6017bc52b85fdc81612d068aac91b18ac0f22c5"
+        }
+      ]
+    },
+    "verify/baseline/results.json": {
+      "status": "PASS",
+      "source_sha256": "7f16f92c939fdce2d15ca1cd769c0c8e9d6a16fddb7ea407594897029da5e80a",
+      "suite": "baseline",
+      "expected_runs": 4,
+      "results": [
+        {
+          "name": "lis_reference_test_gcc_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/baseline/header.hpp\"",
+            "/tmp/sirkit_lis_20261022/verify/baseline/lis_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_lis_20261022/verify/baseline/lis_reference_test_gcc_checked"
+          ],
+          "build_returncode": 0,
+          "build_stderr": "",
+          "test_sha256": "654a9517ef65d8cc8f1ebd9db8b1000fc98c9f73198035942d092425f2d9df45",
+          "returncode": 0,
+          "stdout": "PASS 1298161 checks; 9114 API cases; independent DP/subset reference\n",
+          "stderr": "",
+          "binary_sha256": "afc50403003f5dd4d6d198394611ed753872c0a4b57d7857bdaf0af515f4851f"
+        },
+        {
+          "name": "lis_exception_test_gcc_checked",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/baseline/header.hpp\"",
+            "/tmp/sirkit_lis_20261022/verify/baseline/lis_exception_test.cpp",
+            "-o",
+            "/tmp/sirkit_lis_20261022/verify/baseline/lis_exception_test_gcc_checked"
+          ],
+          "build_returncode": 0,
+          "build_stderr": "",
+          "test_sha256": "f71394df4cc62145d78ee57022489010c5dd708bd681f6a21eb28474410f3780",
+          "returncode": 0,
+          "stdout": "PASS 663654 checks; allocation failures=20 copy failures=556 comparison failures=4384 live_delta=0 value_alive=0\n",
+          "stderr": "",
+          "binary_sha256": "070c8694f5447de5cb2f3bd38c44192fee6e008517696640af47391b4a57dedc"
+        },
+        {
+          "name": "lis_reference_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/baseline/header.hpp\"",
+            "/tmp/sirkit_lis_20261022/verify/baseline/lis_reference_test.cpp",
+            "-o",
+            "/tmp/sirkit_lis_20261022/verify/baseline/lis_reference_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "build_returncode": 0,
+          "build_stderr": "",
+          "test_sha256": "654a9517ef65d8cc8f1ebd9db8b1000fc98c9f73198035942d092425f2d9df45",
+          "returncode": 0,
+          "stdout": "PASS 1298161 checks; 9114 API cases; independent DP/subset reference\n",
+          "stderr": "",
+          "binary_sha256": "2563bbe8246482fb29531fde57ca8f32680be224509ec91c5c59a910c16703ab"
+        },
+        {
+          "name": "lis_exception_test_clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_LIS_SOURCE=\"/tmp/sirkit_lis_20261022/verify/baseline/header.hpp\"",
+            "/tmp/sirkit_lis_20261022/verify/baseline/lis_exception_test.cpp",
+            "-o",
+            "/tmp/sirkit_lis_20261022/verify/baseline/lis_exception_test_clang_skip",
+            "-DSKIP_RUNTIME_CHECKS"
+          ],
+          "build_returncode": 0,
+          "build_stderr": "",
+          "test_sha256": "f71394df4cc62145d78ee57022489010c5dd708bd681f6a21eb28474410f3780",
+          "returncode": 0,
+          "stdout": "PASS 663654 checks; allocation failures=20 copy failures=556 comparison failures=4384 live_delta=0 value_alive=0\n",
+          "stderr": "",
+          "binary_sha256": "56c3b67a3a96dc40ba7f9ba67fc2eddabbe325b23afa6c3971fb8c5283b51b86"
+        }
+      ]
+    }
+  },
+  "candidate_safety": {
+    "status": "PASS",
+    "final_sha256": "83840e64868646779fa364b6d1140843e3de9ace73e67acf41334fc68b197c12",
+    "tests": [
+      {
+        "name": "gcc_checked",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DHEADER=\"/tmp/sirkit_lis_20261022/opt/final_api/final.hpp\"",
+          "/tmp/sirkit_lis_20261022/opt/final_api/safety.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/opt/final_api/safety_gcc_checked"
+        ],
+        "stdout": "PASS move-only/nondefault, throwing Sequence copy ownership, finite/infinite float order and checked NaN\n",
+        "returncode": 0
+      },
+      {
+        "name": "gcc_skip",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DHEADER=\"/tmp/sirkit_lis_20261022/opt/final_api/final.hpp\"",
+          "/tmp/sirkit_lis_20261022/opt/final_api/safety.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/opt/final_api/safety_gcc_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "stdout": "PASS move-only/nondefault, throwing Sequence copy ownership, finite/infinite float order and checked NaN\n",
+        "returncode": 0
+      },
+      {
+        "name": "clang_checked",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DHEADER=\"/tmp/sirkit_lis_20261022/opt/final_api/final.hpp\"",
+          "/tmp/sirkit_lis_20261022/opt/final_api/safety.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/opt/final_api/safety_clang_checked"
+        ],
+        "stdout": "PASS move-only/nondefault, throwing Sequence copy ownership, finite/infinite float order and checked NaN\n",
+        "returncode": 0
+      },
+      {
+        "name": "clang_skip",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DHEADER=\"/tmp/sirkit_lis_20261022/opt/final_api/final.hpp\"",
+          "/tmp/sirkit_lis_20261022/opt/final_api/safety.cpp",
+          "-o",
+          "/tmp/sirkit_lis_20261022/opt/final_api/safety_clang_skip",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "stdout": "PASS move-only/nondefault, throwing Sequence copy ownership, finite/infinite float order and checked NaN\n",
+        "returncode": 0
+      }
+    ],
+    "length_prefix_body_byte_identical_with_checks_removed": true,
+    "new_ending_api_excluded_from_speed_comparison": true
+  },
+  "source_consistency": {
+    "driver_io_hashes": {
+      "Verify/current/drivers/lis_main.cpp": "a29976f6877b9608c0f81b5d9397d55462ec6d9d1e237f2032abd8c16ec7f26a",
+      "Verify/current/drivers/lis_local_main.cpp": "24c80a51d7fecd091b126a56f05d27368f894578769819942b7682e32bd68881",
+      "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+    },
+    "final_identical_to_measured_candidate": true,
+    "submission_records": {
+      "lis": {
+        "submission_sha256": "eb8f1baa51bf8457f2cdfc047525ecb66bd870ad936d47acde71bacbc3564cbd",
+        "judge_status": "未提出"
+      },
+      "lis_local": {
+        "submission_sha256": "c7732b6cdacd7d14d60f505dbd043913220ebdec33becbc91ade15330baa94c5",
+        "judge_status": "未提出"
+      }
+    }
+  },
+  "limits": [
+    "全5 APIを狭義/広義、独立DP・小配列の全列挙で照合。検査は有限ケースであり全入力の証明ではない。",
+    "入力のoperator<には狭義弱順序を要求する。汎用型の比較の推移性や副作用は検査しない。",
+    "標準浮動型のNaNは既定拒否、SKIP時は前提外。±inf、符号付き0、vector<bool>、unsigned高位bit、非default/コピー不能型を補足。",
+    "前駆はlo!=0なら必ず代入され、その前駆の順位は1小さい。復元ループは順位1の前駆を読まず終了する。MemorySanitizerの専用ケースとASan/UBSanも通過。",
+    "確保・比較・コピー失敗の注入で入力を保ち、確保収支と値の生存数0を確認。ユーザー定義比較自体による入力変更を回復する保証ではない。",
+    "Clang ASan/UBSan checked/skip、LSanは無効。MemorySanitizerは前駆連鎖の専用検査で、他の全APIをMSanで網羅したという意味ではない。",
+    "過去のオンライン判定記録を現在版の検証済みという意味に書き換えていない。"
+  ],
+  "package_preparation": {
+    "note": "別workのHashMap提出URL注記と生成元の不一致を、配布専用コピーだけで取り込んでmanifestを再生成。本体・driver・提出コード・判定履歴は同一。共有作業フォルダは変更していない。",
+    "source_workspace": "/home/reinsirk/Atcoder_Env",
+    "snapshot": "/tmp/sirkit_lis_20261022/package_snapshot",
+    "changed_only_in_snapshot": [
+      {
+        "path": "Verify/current/manifest.json",
+        "before_sha256": "f37e71b45961e2481f07bc78122df7d4bd1d9e447f3b28f0fcd43f73f19a1488",
+        "after_sha256": "cf58e22c1663231a0da4da3132b7b27474c11891193f3f9493ea60d38aaeb72f"
+      },
+      {
+        "path": "Verify/current/groups/dynamic_hash.json",
+        "before_sha256": "8d0af1058af46c0931f4fb55263da285ad4f3f878d03caf3cbe3c76a9fcd7fc3",
+        "after_sha256": "ce715daa681f135221922e4a7d1e5b4e4456237b651c0b794ed10bdcc79e3208"
+      }
+    ],
+    "preparation_command": [
+      "python3",
+      "/tmp/sirkit_lis_20261022/package_snapshot/Scripts/prepare_verify.py"
+    ],
+    "stdout": "137件の提出・補助コードを生成しました。\n"
+  }
+}

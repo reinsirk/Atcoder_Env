@@ -1,4 +1,37 @@
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/trie.md
+//
+// API一覧
+// [TrieNode]
+// TrieNode(): 空で生成。TrieNode(children): 子mapを受け取り、コピーは子を共有する。
+// children: 指すノード自体を所有する子（別対象の所有を借りるaliasingは対象外）。
+// 破棄は反復処理。循環所有は解消しない。指定初期化は不可。
+//
+// [Trie]
+// 全バイトを扱う多重集合。辞書順は符号なしバイト順、空文字列も登録可。
+// Trie(): 空で生成。コピーは独立、move元は空で再利用可。
+// insert(word, copies=1): copies個追加し、その語の個数を返す。0なら照会のみ。
+// erase(word, copies=1): copies個だけ削除。個数不足ならfalseで不変、0ならtrue。
+// erase_all(word): その語を全削除し、削除した個数を返す。
+// count(word)/contains(word): その語の個数/存在を返す。
+// prefix_count(prefix)/starts_with(prefix): 接頭辞を持つ語の総個数/存在を返す。
+// size()/distinct_size()/empty(): 総個数/異なる語数/空かを返す。
+// node_count()/capacity(): rootを含む使用ノード数/確保済みノード枠を返す。
+// longest_prefix(text): 登録語のうちtextの最長接頭辞長。該当なしはnullopt。
+// count_less(word): word未満の語の総個数を返す（重複込み）。
+// kth(k): 0始まりのk番目の語。重複込み、範囲外はnullopt。
+// lower_bound(word): word以上の最小登録語。該当なしはnullopt。
+// items(prefix="", limit=SIZE_MAX): prefixを持つ異なる語と個数を辞書順に最大limit件返す。
+// clear(): 全削除し、確保枠を保持。reserve_nodes(n): 少なくともn枠を確保。
+// swap(other): 内容と確保枠を定数時間で交換。
+// count/contains/prefix系/longest_prefixは長さLに対しO(16L)、size系はO(1)。
+// insertは償却O(16L+256)、再確保時は保持ノード/索引枠数ぶんのコピーも発生。
+// erase/erase_allはO(16L+256)。count_less/kthは語長L/戻す長さKに対しO(256L)/O(256K)。
+// lower_boundはO(256(L+K))。itemsは接頭辞探索＋訪問ノード数＋返す文字列総長。
+// 保持ノード数N・保持索引数TとしてコピーはO(N+256T)、破棄・clearはO(N+T)。
+// reserve_nodesは最悪O(N)。使用メモリはノード枠数＋256×索引枠数に比例。
+// 個数・ノード枠の上限超過は検査省略時もlength_error。確保失敗はbad_alloc。
+
 #include <array>
 #include <cstddef>
 #include <cstdint>
@@ -14,9 +47,6 @@
 
 #ifndef SIRKIT_TRIE_NODE_DEFINED
 #define SIRKIT_TRIE_NODE_DEFINED
-// TrieNode(): 空で生成。TrieNode(children): 子mapを受け取り、コピーは子を共有する。
-// children: 指すノード自体を所有する子（別対象の所有を借りるaliasingは対象外）。
-// 破棄は反復処理。循環所有は解消しない。指定初期化は不可。
 struct TrieNode {
     std::unordered_map<char, std::shared_ptr<TrieNode>> children;
     TrieNode() = default;
@@ -53,31 +83,8 @@ private:
 
 #ifndef SIRKIT_TRIE_DEFINED
 #define SIRKIT_TRIE_DEFINED
-// 全バイトを扱う多重集合。辞書順は符号なしバイト順、空文字列も登録可。
-// Trie(): 空で生成。コピーは独立、move元は空で再利用可。
-// insert(word, copies=1): copies個追加し、その語の個数を返す。0なら照会のみ。
-// erase(word, copies=1): copies個だけ削除。個数不足ならfalseで不変、0ならtrue。
-// erase_all(word): その語を全削除し、削除した個数を返す。
-// count(word)/contains(word): その語の個数/存在を返す。
-// prefix_count(prefix)/starts_with(prefix): 接頭辞を持つ語の総個数/存在を返す。
-// size()/distinct_size()/empty(): 総個数/異なる語数/空かを返す。
-// node_count()/capacity(): rootを含む使用ノード数/確保済みノード枠を返す。
-// longest_prefix(text): 登録語のうちtextの最長接頭辞長。該当なしはnullopt。
-// count_less(word): word未満の語の総個数を返す（重複込み）。
-// kth(k): 0始まりのk番目の語。重複込み、範囲外はnullopt。
-// lower_bound(word): word以上の最小登録語。該当なしはnullopt。
-// items(prefix="", limit=SIZE_MAX): prefixを持つ異なる語と個数を辞書順に最大limit件返す。
-// clear(): 全削除し、確保枠を保持。reserve_nodes(n): 少なくともn枠を確保。
-// swap(other): 内容と確保枠を定数時間で交換。
 // 子はソート済み兄弟リスト。次数16で256要素の索引を追加、8未満で回収。
-// count/contains/prefix系/longest_prefixは長さLに対しO(16L)、size系はO(1)。
-// insertは償却O(16L+256)、再確保時は保持ノード/索引枠数ぶんのコピーも発生。
-// erase/erase_allはO(16L+256)。count_less/kthは語長L/戻す長さKに対しO(256L)/O(256K)。
-// lower_boundはO(256(L+K))。itemsは接頭辞探索＋訪問ノード数＋返す文字列総長。
-// 保持ノード数N・保持索引数TとしてコピーはO(N+256T)、破棄・clearはO(N+T)。
-// reserve_nodesは最悪O(N)。使用メモリはノード枠数＋256×索引枠数に比例。
 // 破棄・clear・列挙は再帰しない。64文字までの追加経路は固定長の作業配列へ記録。
-// 個数・ノード枠の上限超過は検査省略時もlength_error。確保失敗はbad_alloc。
 class Trie {
     static constexpr std::size_t none = std::numeric_limits<std::size_t>::max();
     static constexpr std::uint32_t no_table = std::numeric_limits<std::uint32_t>::max();
@@ -256,7 +263,29 @@ public:
             p = i < path.size() ? path[i] : child(p, static_cast<unsigned char>(word[i]));
             nodes_[p].subtree += copies;
         }
-        for (std::size_t i = matched; i < word.size(); ++i) {
+        // 新規ノードだけの末尾は単一路としてまとめて接続する。
+        if (needed != 0 && free_head_ == none) {
+            const std::size_t first = fresh;
+            for (std::size_t i = matched; i < word.size(); ++i) {
+                auto& node = nodes_[fresh++];
+                node.byte = static_cast<unsigned char>(word[i]);
+                node.subtree = copies;
+                if (i + 1 != word.size()) {
+                    node.first_child = fresh;
+                    node.degree = 1;
+                }
+            }
+            const unsigned char byte = static_cast<unsigned char>(word[matched]);
+            std::size_t* link = &nodes_[p].first_child;
+            while (*link != none && nodes_[*link].byte < byte)
+                link = &nodes_[*link].next_sibling;
+            nodes_[first].next_sibling = *link;
+            *link = first;
+            ++nodes_[p].degree;
+            if (nodes_[p].table != no_table) tables_[nodes_[p].table].entries[byte] = first;
+            live_ += needed;
+            p = fresh - 1;
+        } else for (std::size_t i = matched; i < word.size(); ++i) {
             const unsigned char byte = static_cast<unsigned char>(word[i]);
             const std::size_t next = allocate_node(byte, fresh);
             nodes_[next].subtree = copies;

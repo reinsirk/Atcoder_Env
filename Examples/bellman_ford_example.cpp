@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: CC0-1.0
 #include "../Graph/Bellman-Ford.cpp"
 #include <iostream>
 
@@ -19,4 +20,6 @@ int main()
         else
             std::cout << distance << '\n';
     }
+    std::cout << BellmanFord(graph, distances, 4) << ' ' << distances[4] << '\n'; // 0 0
+
 }

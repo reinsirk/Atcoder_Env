@@ -1,15 +1,17 @@
+// SIRKIT_API_BEGIN
+// [ModIntBinomial<Mint>]
+// AtCoder modint用。Mintは利用側で用意し、動的な法を変えたら計算器も作り直す。
+// ModIntBinomial(max_n=5'000'000,options={}): Mint::mod()を法として構築・前計算。合成数にも対応。
+// ModIntBinomial(options): 指定した上限で500万まで前計算する。
+// prepare(max_n=5'000'000): 上限内で表を準備。制限・例外はBinomialModと同じ。
+// COM(n,k): nCkをMintで返す。n<0,k<0,k>nと法1は0。素数でn<modかつ準備済みならO(1)。
+// Lucas(n,k): 素数の法でCOMと同じ結果。合成数・法1ではCOMを使う。
+// H(n,k): nHkをMintで返す。0H0=1（法1は0）、0Hk=0（k>0）。int64_t超過はoverflow_error。
+// SIRKIT_API_END
 #ifndef SIRKIT_MODINT_BINOMIAL_DEFINED
 #define SIRKIT_MODINT_BINOMIAL_DEFINED
-// AtCoder modint用。素数ではMintの階乗表、合成数ではBinomialModを使う。
-// dynamic_modintの法を変えたら作り直す。
 template <class Mint>
 class ModIntBinomial {
-  // ModIntBinomial(max_n=5'000'000, options={}): Mintの法で構築し、前計算する。合成数の法にも対応。
-  // ModIntBinomial(options): 指定した上限で構築し、500万まで前計算する。
-  // prepare(max_n=5'000'000): max_nまでの問い合わせ用テーブルを準備する。
-  // COM(n, k): nCkをMintで返す。n<0、k<0、k>nは0。
-  // Lucas(n, k): 素数の法でnCkをMintで返す。合成数・法1ではCOMを使う。
-  // H(n, k): 重複組合せnHkをMintで返す。0H0=1（法1は0）、0Hk=0（k>0）。
   using u64 = std::uint64_t;
   using u32 = std::uint32_t;
   BinomialMod engine_;
@@ -281,17 +283,14 @@ class ModIntBinomial {
   }
 
  public:
-  // Mint::mod()を法として構築し、既定では500万まで前計算する。
   explicit ModIntBinomial(std::int64_t max_n = 5'000'000, BinomialOptions options = {})
       : engine_(Mint::mod(), 0, options), options_(options), prime_(engine_.is_prime_modulus()) {
     prepare(max_n);
   }
 
-  // オプションだけ指定した場合も、既定では500万まで前計算する。
   explicit ModIntBinomial(BinomialOptions options)
       : ModIntBinomial(5'000'000, options) {}
 
-  // max_nまでの問い合わせ用テーブルを準備する。制限はBinomialModと同じ。
   void prepare(std::int64_t max_n = 5'000'000) {
     check_modulus();
 #ifndef SKIP_RUNTIME_CHECKS
@@ -306,7 +305,6 @@ class ModIntBinomial {
     ensure_factorials(static_cast<u32>(target));
   }
 
-  // nCkをMintで返す。素数でn<mod・準備済みならO(1)。
   [[nodiscard]] Mint COM(std::int64_t n, std::int64_t k) {
     check_modulus();
     // 通常の準備済み範囲では、Mint の乗算2回だけで答えを求める。
@@ -317,7 +315,6 @@ class ModIntBinomial {
     return compute_uncached(n, k);
   }
 
-  // 素数の法でnCkをMintで返す。法は素数を前提とする。
   [[nodiscard]] Mint Lucas(std::int64_t n, std::int64_t k) {
 #ifndef SKIP_RUNTIME_CHECKS
     if (!prime_)
@@ -326,7 +323,6 @@ class ModIntBinomial {
     return COM(n, k);
   }
 
-  // 重複組合せnHkをMintで返す。規則はBinomialMod::Hと同じ。
   [[nodiscard]] Mint H(std::int64_t n, std::int64_t k) {
     check_modulus();
     if (n < 0 || k < 0) return Mint(0);

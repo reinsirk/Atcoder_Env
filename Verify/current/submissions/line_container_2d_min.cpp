@@ -1,10 +1,51 @@
 #define SKIP_RUNTIME_CHECKS
 // Verify: https://judge.yosupo.jp/problem/line_add_get_min
+// Submission: https://judge.yosupo.jp/submission/412409
 
 // Library: DataStructure/line-container-2d.cpp
 // SPDX-License-Identifier: CC0-1.0
 // Original Source: https://nyaannyaan.github.io/library/data-structure/line-container-2d.hpp.html
 // Original Source: https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/LineContainer.h
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/line_container_2d.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/line_container.md
+//
+// API一覧
+// [LineContainer2D]
+// add(x,y): 有限の点を追加、償却O(log h)。確保失敗時は空に戻して例外を伝える。
+// max_ld(a,b)/min_ld(a,b): ax+byの最大/最小をO(log h)で返す。有限係数・非空が前提。
+// max_ld/min_ld(整数,整数): 値域がint64_t内の整数型は、型から保証できる有限性・比の検査を省く。
+// b/aが浮動型の範囲を超える問い合わせは常にoverflow_error。
+// max_ll(a,b)/min_ll(a,b): 浮動計算を±4.1e18に制限し、0方向へ切り捨てる(旧挙動)。
+// max_rounded_ll(a,b)/min_rounded_ll(a,b): 同じ範囲制限後、半整数は0から遠い方へ丸める。
+// max_optional(a,b)/min_optional(a,b): 空ならnullopt、それ以外はld版と同じ。
+// argmax(a,b)/argmin(a,b): 最適な元の点(x,y)をO(log h)で返す。同点の点は未規定。
+// max_with_point(a,b)/min_with_point(a,b): 1回の探索でResult{内積値,x,y}を返す。ld係数・非空、O(log h)。
+// argmax_optional(a,b)/argmin_optional(a,b): 空ならnullopt、それ以外はarg版と同じ。
+// size()/empty()/clear(): 登録点数(重複込み)・空判定・全削除、O(1)/O(1)/O(h)。
+// swap(other): 2コンテナの全状態をO(1)で交換する。コピーは独立、move後の元は空。
+// 公開のminlc/maxlc・座標範囲は参照用。外からの変更は不変条件を壊す。
+// long doubleの丸め誤差があり、ll版も厳密な整数内積ではない。hは包絡に残る点数。
+// 既定の丸めモード・型本来の精度が前提。ゼロの符号は未規定。
+//
+// [同梱: LineContainer<T,objective>]
+// add(k,m): y=k*x+mを追加、償却O(log h)。整数は符号付き64bit以下、浮動係数は有限値。
+// query(x): 最適値をO(log h)で返す。空は検査時例外、省略時は非空が前提。整数範囲外は常に例外。
+// query_optional(x): 空ならnullopt、それ以外はqueryと同じ。xは浮動小数点なら有限値。
+// query_line(x): 選択した元の(k,m)をO(log h)で返す。同点の係数は未規定。
+// query_line_optional(x): 空ならnullopt、それ以外はquery_lineと同じ。
+// query_with_line(x): 1回の探索でResult{最適値,k,m}を返す。queryと同じ前提・O(log h)。
+// query_with_line_optional(x): 空ならnullopt、それ以外はquery_with_lineと同じ。
+// size()/empty()/clear(): 有効な包絡直線の本数・空判定・全削除、O(1)/O(1)/O(h)。
+// begin()/end()/lower_bound(x): 元係数と交点を参照。最小化の傾き順は降順。直接変更は不変条件を壊す。
+// insect(x,y): 旧互換の内部交点更新。正しい包絡iterator以外では呼び出さない。
+// コピーは独立した包絡。hは有効直線数。浮動小数点版の交点・最適値には丸め誤差がある。
+// objectiveはMINIMIZE/MAXIMIZE。MinLineContainer<T>/MaxLineContainer<T>は最小化/最大化の別名。
+//
+// [Line<T>・補助関数]
+// Line<T>のk,m: 元の係数。p: この直線が選ばれる右端(整数は型の範囲に制限)。
+// lc_inf<T>(): 整数では最大値、浮動小数点では正の無限大を返す。
+// lc_div(a,b): 整数は床除算、浮動小数点は通常除算。0除算・整数結果の範囲外は例外。
+
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
@@ -22,7 +63,6 @@
 
 enum Objective { MAXIMIZE = +1, MINIMIZE = -1 };
 
-// k,m: 元の係数。p: この直線が選ばれる右端(整数は型の範囲に制限)。
 template <typename T>
 struct Line {
   mutable T k, m, p;
@@ -30,14 +70,12 @@ struct Line {
   bool operator<(T x) const { return p < x; }
 };
 
-// lc_inf<T>(): 整数では最大値、浮動小数点では正の無限大を返す。
 template <typename T>
 constexpr T lc_inf() {
   if constexpr (std::is_floating_point_v<T>) return std::numeric_limits<T>::infinity();
   else return std::numeric_limits<T>::max();
 }
 
-// lc_div(a,b): 整数は床除算、浮動小数点は通常除算。0除算・整数結果の範囲外は例外。
 template <typename T>
 T lc_div(T a, T b) {
   if (b == 0) throw std::domain_error("lc_div: division by zero");
@@ -62,15 +100,6 @@ struct LineComparator {
 };
 }  // namespace reinsirk::detail
 
-// add(k,m): y=k*x+mを追加、償却O(log h)。整数は符号付き64bit以下、浮動係数は有限値。
-// query(x): 最適値をO(log h)で返す。空は検査時例外、省略時は非空が前提。整数範囲外は常に例外。
-// query_optional(x): 空ならnullopt、それ以外はqueryと同じ。xは浮動小数点なら有限値。
-// query_line(x): 選択した元の(k,m)をO(log h)で返す。同点の係数は未規定。
-// query_line_optional(x): 空ならnullopt、それ以外はquery_lineと同じ。
-// size()/empty()/clear(): 有効な包絡直線の本数・空判定・全削除、O(1)/O(1)/O(h)。
-// begin()/end()/lower_bound(x): 元係数と交点を参照。最小化の傾き順は降順。直接変更は不変条件を壊す。
-// insect(x,y): 旧互換の内部交点更新。正しい包絡iterator以外では呼び出さない。
-// コピーは独立した包絡。hは有効直線数。浮動小数点版の交点・最適値には丸め誤差がある。
 template <typename T, Objective objective>
 struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T, objective>> {
   static_assert((std::is_integral_v<T> && std::is_signed_v<T> && sizeof(T) <= 8) ||
@@ -80,6 +109,7 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
   using super::begin, super::end, super::insert, super::erase;
   using super::empty, super::lower_bound;
   static constexpr T inf = lc_inf<T>();
+  struct Result { T value, k, m; };
 
  private:
   static bool boundary_less(const Line<T>& a, const Line<T>& b) {
@@ -219,6 +249,52 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
  private:
   friend struct LineContainer2D;
   void add_unchecked(T k, T m) {
+    if constexpr (std::is_integral_v<T>) {
+      // 小さい包絡では、確保前に不要な直線を除く。
+      if (super::size() <= 256) {
+        Line<T> candidate{k, m, inf};
+        auto z = lower_bound(candidate);
+        if (z != end() && z->k == k) {
+          const bool better = objective == MAXIMIZE ? m > z->m : m < z->m;
+          if (!better) return;
+        } else if (z != end() && intersection(candidate, *z)) return;
+        auto x = z;
+        const bool has_previous = z != begin();
+        Line<T> previous{};
+        // 下端だけで選ばれる直線と、選択域が型の範囲外の直線を区別する。
+        bool previous_below = false;
+        if (has_previous) {
+          --x;
+          previous = *x;
+          previous_below = intersection(previous, candidate);
+          if (!previous_below && previous.p >= candidate.p &&
+              (z == end() || candidate.p < z->p)) return;
+        }
+        auto y = insert(z, candidate);
+        while (z != end() && !boundary_less(*y, *z)) {
+          z = erase(z);
+          insect(y, z);
+        }
+        if (has_previous) {
+          x->p = previous.p;
+          if (!previous_below && !boundary_less(*x, *y)) insect(x, y = erase(y));
+        } else x = y;
+        while ((y = x) != begin() && !boundary_less(*--x, *y)) insect(x, erase(y));
+        // floorが最小値の直線はその点で最適になり得る。真の域外だけ除く。
+        if constexpr (std::is_integral_v<T>) {
+          const auto first = begin();
+          if (first->p == std::numeric_limits<T>::min()) [[unlikely]] {
+            const auto next = std::next(first);
+            if (next != end()) {
+              bool first_below;
+              insect_impl(first, next, first_below);
+              if (first_below) erase(first);
+            }
+          }
+        }
+        return;
+      }
+    }
     auto z = insert({k, m, 0}), y = z++, x = y;
     bool below;
     while (insect_impl(y, z, below)) z = erase(z);
@@ -273,6 +349,22 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
     const auto line = lower_bound(x);
     return std::pair<T,T>{line->k, line->m};
   }
+#if defined(__GNUC__) || defined(__clang__)
+  __attribute__((always_inline))
+#endif
+  Result query_with_line(T x) const {
+    const auto line = selected(x);
+    return {evaluate(line->k, line->m, x), line->k, line->m};
+  }
+#if defined(__GNUC__) || defined(__clang__)
+  __attribute__((always_inline))
+#endif
+  std::optional<Result> query_with_line_optional(T x) const {
+    check_x(x);
+    if (empty()) return std::nullopt;
+    const auto line = lower_bound(x);
+    return Result{evaluate(line->k, line->m, x), line->k, line->m};
+  }
 };
 template <typename T> using MinLineContainer = LineContainer<T, MINIMIZE>;
 template <typename T> using MaxLineContainer = LineContainer<T, MAXIMIZE>;
@@ -281,23 +373,10 @@ template <typename T> using MaxLineContainer = LineContainer<T, MAXIMIZE>;
 #ifndef SIRKIT_LINE_CONTAINER_2D_DEFINED
 #define SIRKIT_LINE_CONTAINER_2D_DEFINED
 
-// add(x,y): 有限の点を追加、償却O(log h)。確保失敗時は空に戻して例外を伝える。
-// max_ld(a,b)/min_ld(a,b): ax+byの最大/最小をO(log h)で返す。有限係数・非空が前提。
-// max_ld/min_ld(整数,整数): 値域がint64_t内の整数型は、型から保証できる有限性・比の検査を省く。
-// b/aが浮動型の範囲を超える問い合わせは常にoverflow_error。
-// max_ll(a,b)/min_ll(a,b): 浮動計算を±4.1e18に制限し、0方向へ切り捨てる(旧挙動)。
-// max_rounded_ll(a,b)/min_rounded_ll(a,b): 同じ範囲制限後、半整数は0から遠い方へ丸める。
-// max_optional(a,b)/min_optional(a,b): 空ならnullopt、それ以外はld版と同じ。
-// argmax(a,b)/argmin(a,b): 最適な元の点(x,y)をO(log h)で返す。同点の点は未規定。
-// argmax_optional(a,b)/argmin_optional(a,b): 空ならnullopt、それ以外はarg版と同じ。
-// size()/empty()/clear(): 登録点数(重複込み)・空判定・全削除、O(1)/O(1)/O(h)。
-// swap(other): 2コンテナの全状態をO(1)で交換する。コピーは独立、move後の元は空。
-// 公開のminlc/maxlc・座標範囲は参照用。外からの変更は不変条件を壊す。
-// long doubleの丸め誤差があり、ll版も厳密な整数内積ではない。hは包絡に残る点数。
-// 既定の丸めモード・型本来の精度が前提。ゼロの符号は未規定。
 struct LineContainer2D {
   using ld = long double;
   using ll = std::int64_t;
+  struct Result { ld value, x, y; };
   static constexpr ld INF = 4.1e18L;
   static constexpr ll INTEGER_LIMIT = 4'100'000'000'000'000'000;
   ld Xmax = -std::numeric_limits<ld>::infinity();
@@ -764,6 +843,20 @@ struct LineContainer2D {
   ll min_ll(ll a, ll b) const { return static_cast<ll>(std::clamp(integer_value<true>(a, b), -INF, INF)); }
   ll max_rounded_ll(ll a, ll b) const { return to_rounded_integer(integer_value<false>(a, b)); }
   ll min_rounded_ll(ll a, ll b) const { return to_rounded_integer(integer_value<true>(a, b)); }
+  Result max_with_point(ld a, ld b) const {
+    check_empty();
+    const auto [x, y] = select(a, b);
+    ld result = a * x + b * y;
+    if (std::isnan(result)) [[unlikely]] {
+      const Line<ld> line{y, x, 0};
+      result = recover_line_dot(a, b, &line);
+    }
+    return {result, x, y};
+  }
+  Result min_with_point(ld a, ld b) const {
+    const auto result = max_with_point(-a, -b);
+    return {-result.value, result.x, result.y};
+  }
   std::pair<ld, ld> argmax(ld a, ld b) const { check_empty(); return select(a, b); }
   std::pair<ld, ld> argmin(ld a, ld b) const { return argmax(-a, -b); }
 #if (defined(__clang__) || defined(__GNUC__))

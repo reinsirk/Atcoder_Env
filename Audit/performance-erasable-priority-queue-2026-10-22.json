@@ -1,0 +1,4847 @@
+{
+  "date": "2026-10-22",
+  "library": "DataStructure/erasable-priority-queue.cpp",
+  "baseline_sha256": "e05c7ef5765267eba02b0f12eacf0b4714dded9f83d188e2b86e57a314cf08f0",
+  "selected_source_sha256": "fb0109dcd1964ddca8bb7a334bdd04a15814c80d219b0810e41f9666bd1d39b7",
+  "driver_sha256": "e7e796d7768a99a8f1ecb11e5f01e69ed608697ca9b2bfba724260edd6a237bc",
+  "io_sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+  "method": {
+    "flags": "-std=c++23 -O2 -DNDEBUG -DSKIP_RUNTIME_CHECKS。-march=nativeなし。",
+    "compilers": {
+      "g++": "g++ (GCC) 15.3.0",
+      "clang++": "Ubuntu clang version 21.1.8 (6ubuntu1)"
+    },
+    "cpu_affinity": 14,
+    "lock": "/tmp/atcoder_full_performance_20261018/benchmark.lock",
+    "api": "n=32/100000 × 最小/最大 × 9操作条件、5巡の順序交替。処理本体を反復し生成・表示を計測区間から除く。",
+    "official": "公式大規模9ケース、同一main・I/O、7巡のケース内順序交替。入力ファイルと出力先/dev/nullを固定。プロセス起動と入出力を含むローカル時間。",
+    "control": "別名でコンパイルした同じbaselineを対照に含め、同じ版同士の揺れも確認。"
+  },
+  "decision": "独自popと即時eraseへの変更は採用しない。冗長ガードの省略は簡潔化として採用するが、測定範囲で明確な速度改善を主張しない。swapは既存処理を変更しない追加API。",
+  "results": {
+    "decision": "No algorithm candidate is recommended; redundant values_.empty guard removal is valid simplification but no strong speed gain established.",
+    "baseline_sha256": "e05c7ef5765267eba02b0f12eacf0b4714dded9f83d188e2b86e57a314cf08f0",
+    "compiler_flags": "-std=c++23 -O2 -DNDEBUG -DSKIP_RUNTIME_CHECKS, no march/native",
+    "benchmark": "CPU14, shared flock, baseline/control identical executables, medians over rotated paired runs",
+    "api": {
+      "gcc": {
+        "control": {
+          "32:1:0": {
+            "baseline_ns": 77.3438,
+            "candidate_ns": 76.7465,
+            "ratio": 0.992277338325761
+          },
+          "32:1:1": {
+            "baseline_ns": 276.881,
+            "candidate_ns": 276.254,
+            "ratio": 0.9977354892535062
+          },
+          "32:1:2": {
+            "baseline_ns": 380.958,
+            "candidate_ns": 380.882,
+            "ratio": 0.9998005029425815
+          },
+          "32:1:3": {
+            "baseline_ns": 378.631,
+            "candidate_ns": 378.698,
+            "ratio": 1.0001769532869733
+          },
+          "32:1:4": {
+            "baseline_ns": 382.082,
+            "candidate_ns": 382.327,
+            "ratio": 1.0006412236116855
+          },
+          "32:1:5": {
+            "baseline_ns": 3601.33,
+            "candidate_ns": 3599.75,
+            "ratio": 0.9995612731962914
+          },
+          "32:1:6": {
+            "baseline_ns": 271.667,
+            "candidate_ns": 271.333,
+            "ratio": 0.9987705536557626
+          },
+          "32:1:7": {
+            "baseline_ns": 66.4121,
+            "candidate_ns": 66.5994,
+            "ratio": 1.0028202691979324
+          },
+          "32:1:8": {
+            "baseline_ns": 388.637,
+            "candidate_ns": 385.567,
+            "ratio": 0.9921005977300155
+          },
+          "32:0:0": {
+            "baseline_ns": 71.4274,
+            "candidate_ns": 70.6614,
+            "ratio": 0.9892758241235156
+          },
+          "32:0:1": {
+            "baseline_ns": 275.898,
+            "candidate_ns": 276.332,
+            "ratio": 1.0015730451108742
+          },
+          "32:0:2": {
+            "baseline_ns": 436.853,
+            "candidate_ns": 437.466,
+            "ratio": 1.001403218016129
+          },
+          "32:0:3": {
+            "baseline_ns": 368.303,
+            "candidate_ns": 368.371,
+            "ratio": 1.0001846305894875
+          },
+          "32:0:4": {
+            "baseline_ns": 384.27,
+            "candidate_ns": 385.039,
+            "ratio": 1.0020011970749734
+          },
+          "32:0:5": {
+            "baseline_ns": 3598.52,
+            "candidate_ns": 3598.56,
+            "ratio": 1.000011115680891
+          },
+          "32:0:6": {
+            "baseline_ns": 269.097,
+            "candidate_ns": 268.955,
+            "ratio": 0.999472309241649
+          },
+          "32:0:7": {
+            "baseline_ns": 80.7721,
+            "candidate_ns": 81.398,
+            "ratio": 1.0077489628225589
+          },
+          "32:0:8": {
+            "baseline_ns": 406.3,
+            "candidate_ns": 405.376,
+            "ratio": 0.9977258183608171
+          },
+          "100000:1:0": {
+            "baseline_ns": 1021290.0,
+            "candidate_ns": 1023350.0,
+            "ratio": 1.002017056859462
+          },
+          "100000:1:1": {
+            "baseline_ns": 3716350.0,
+            "candidate_ns": 3697090.0,
+            "ratio": 0.9948174956610653
+          },
+          "100000:1:2": {
+            "baseline_ns": 4788460.0,
+            "candidate_ns": 4640830.0,
+            "ratio": 0.9691696286488767
+          },
+          "100000:1:3": {
+            "baseline_ns": 5923390.0,
+            "candidate_ns": 5918400.0,
+            "ratio": 0.9991575769956056
+          },
+          "100000:1:4": {
+            "baseline_ns": 5262050.0,
+            "candidate_ns": 5307860.0,
+            "ratio": 1.0087057325567033
+          },
+          "100000:1:5": {
+            "baseline_ns": 412207.0,
+            "candidate_ns": 411024.0,
+            "ratio": 0.9971300827011671
+          },
+          "100000:1:6": {
+            "baseline_ns": 3630520.0,
+            "candidate_ns": 3586600.0,
+            "ratio": 0.9879025594129767
+          },
+          "100000:1:7": {
+            "baseline_ns": 407544.0,
+            "candidate_ns": 405406.0,
+            "ratio": 0.9947539406787979
+          },
+          "100000:1:8": {
+            "baseline_ns": 3051960.0,
+            "candidate_ns": 3011420.0,
+            "ratio": 0.9867167328536416
+          },
+          "100000:0:0": {
+            "baseline_ns": 758576.0,
+            "candidate_ns": 758094.0,
+            "ratio": 0.9993645989327371
+          },
+          "100000:0:1": {
+            "baseline_ns": 3717750.0,
+            "candidate_ns": 3683240.0,
+            "ratio": 0.990717503866586
+          },
+          "100000:0:2": {
+            "baseline_ns": 4169290.0,
+            "candidate_ns": 4170340.0,
+            "ratio": 1.000251841440629
+          },
+          "100000:0:3": {
+            "baseline_ns": 5915980.0,
+            "candidate_ns": 5837600.0,
+            "ratio": 0.9867511384419826
+          },
+          "100000:0:4": {
+            "baseline_ns": 5313010.0,
+            "candidate_ns": 5278080.0,
+            "ratio": 0.9934255723215277
+          },
+          "100000:0:5": {
+            "baseline_ns": 412759.0,
+            "candidate_ns": 410234.0,
+            "ratio": 0.9938826288463728
+          },
+          "100000:0:6": {
+            "baseline_ns": 3638100.0,
+            "candidate_ns": 3617670.0,
+            "ratio": 0.9943844314339902
+          },
+          "100000:0:7": {
+            "baseline_ns": 408243.0,
+            "candidate_ns": 406694.0,
+            "ratio": 0.9962056912182206
+          },
+          "100000:0:8": {
+            "baseline_ns": 3049850.0,
+            "candidate_ns": 3084980.0,
+            "ratio": 1.0115185992753741
+          }
+        },
+        "redundant": {
+          "32:1:0": {
+            "baseline_ns": 77.3438,
+            "candidate_ns": 76.5473,
+            "ratio": 0.9897018248392244
+          },
+          "32:1:1": {
+            "baseline_ns": 276.881,
+            "candidate_ns": 276.934,
+            "ratio": 1.0001914179737867
+          },
+          "32:1:2": {
+            "baseline_ns": 380.958,
+            "candidate_ns": 380.753,
+            "ratio": 0.9994618829372266
+          },
+          "32:1:3": {
+            "baseline_ns": 378.631,
+            "candidate_ns": 368.254,
+            "ratio": 0.9725933692698169
+          },
+          "32:1:4": {
+            "baseline_ns": 382.082,
+            "candidate_ns": 385.843,
+            "ratio": 1.0098434367491795
+          },
+          "32:1:5": {
+            "baseline_ns": 3601.33,
+            "candidate_ns": 3601.11,
+            "ratio": 0.9999389114577115
+          },
+          "32:1:6": {
+            "baseline_ns": 271.667,
+            "candidate_ns": 271.477,
+            "ratio": 0.9993006143550744
+          },
+          "32:1:7": {
+            "baseline_ns": 66.4121,
+            "candidate_ns": 66.1892,
+            "ratio": 0.996643683906999
+          },
+          "32:1:8": {
+            "baseline_ns": 388.637,
+            "candidate_ns": 387.989,
+            "ratio": 0.9983326343091368
+          },
+          "32:0:0": {
+            "baseline_ns": 71.4274,
+            "candidate_ns": 70.8776,
+            "ratio": 0.9923026737638496
+          },
+          "32:0:1": {
+            "baseline_ns": 275.898,
+            "candidate_ns": 276.533,
+            "ratio": 1.0023015752198277
+          },
+          "32:0:2": {
+            "baseline_ns": 436.853,
+            "candidate_ns": 437.035,
+            "ratio": 1.0004166161157186
+          },
+          "32:0:3": {
+            "baseline_ns": 368.303,
+            "candidate_ns": 362.188,
+            "ratio": 0.9833968227247674
+          },
+          "32:0:4": {
+            "baseline_ns": 384.27,
+            "candidate_ns": 386.09,
+            "ratio": 1.0047362531553334
+          },
+          "32:0:5": {
+            "baseline_ns": 3598.52,
+            "candidate_ns": 3598.11,
+            "ratio": 0.9998860642708669
+          },
+          "32:0:6": {
+            "baseline_ns": 269.097,
+            "candidate_ns": 269.028,
+            "ratio": 0.9997435868850267
+          },
+          "32:0:7": {
+            "baseline_ns": 80.7721,
+            "candidate_ns": 81.2292,
+            "ratio": 1.0056591322993955
+          },
+          "32:0:8": {
+            "baseline_ns": 406.3,
+            "candidate_ns": 408.778,
+            "ratio": 1.0060989416687178
+          },
+          "100000:1:0": {
+            "baseline_ns": 1021290.0,
+            "candidate_ns": 1018220.0,
+            "ratio": 0.9969939977871124
+          },
+          "100000:1:1": {
+            "baseline_ns": 3716350.0,
+            "candidate_ns": 3690520.0,
+            "ratio": 0.9930496320314287
+          },
+          "100000:1:2": {
+            "baseline_ns": 4788460.0,
+            "candidate_ns": 4705430.0,
+            "ratio": 0.9826603960354686
+          },
+          "100000:1:3": {
+            "baseline_ns": 5923390.0,
+            "candidate_ns": 5875190.0,
+            "ratio": 0.9918627677731839
+          },
+          "100000:1:4": {
+            "baseline_ns": 5262050.0,
+            "candidate_ns": 5290020.0,
+            "ratio": 1.0053154188956774
+          },
+          "100000:1:5": {
+            "baseline_ns": 412207.0,
+            "candidate_ns": 411472.0,
+            "ratio": 0.9982169152877074
+          },
+          "100000:1:6": {
+            "baseline_ns": 3630520.0,
+            "candidate_ns": 3591770.0,
+            "ratio": 0.9893265978427332
+          },
+          "100000:1:7": {
+            "baseline_ns": 407544.0,
+            "candidate_ns": 407484.0,
+            "ratio": 0.9998527766327071
+          },
+          "100000:1:8": {
+            "baseline_ns": 3051960.0,
+            "candidate_ns": 3016340.0,
+            "ratio": 0.9883288116489076
+          },
+          "100000:0:0": {
+            "baseline_ns": 758576.0,
+            "candidate_ns": 759922.0,
+            "ratio": 1.0017743772542238
+          },
+          "100000:0:1": {
+            "baseline_ns": 3717750.0,
+            "candidate_ns": 3670260.0,
+            "ratio": 0.9872261448456728
+          },
+          "100000:0:2": {
+            "baseline_ns": 4169290.0,
+            "candidate_ns": 4162000.0,
+            "ratio": 0.9982515008550616
+          },
+          "100000:0:3": {
+            "baseline_ns": 5915980.0,
+            "candidate_ns": 5899940.0,
+            "ratio": 0.9972886994208905
+          },
+          "100000:0:4": {
+            "baseline_ns": 5313010.0,
+            "candidate_ns": 5273790.0,
+            "ratio": 0.9926181204251451
+          },
+          "100000:0:5": {
+            "baseline_ns": 412759.0,
+            "candidate_ns": 410312.0,
+            "ratio": 0.9940716011037918
+          },
+          "100000:0:6": {
+            "baseline_ns": 3638100.0,
+            "candidate_ns": 3607840.0,
+            "ratio": 0.9916824716198015
+          },
+          "100000:0:7": {
+            "baseline_ns": 408243.0,
+            "candidate_ns": 404135.0,
+            "ratio": 0.9899373657356035
+          },
+          "100000:0:8": {
+            "baseline_ns": 3049850.0,
+            "candidate_ns": 3040360.0,
+            "ratio": 0.996888371559257
+          }
+        },
+        "smallheap": {
+          "32:1:0": {
+            "baseline_ns": 77.3438,
+            "candidate_ns": 74.7562,
+            "ratio": 0.9665441832441645
+          },
+          "32:1:1": {
+            "baseline_ns": 276.881,
+            "candidate_ns": 280.826,
+            "ratio": 1.01424799823751
+          },
+          "32:1:2": {
+            "baseline_ns": 380.958,
+            "candidate_ns": 375.868,
+            "ratio": 0.9866389470755306
+          },
+          "32:1:3": {
+            "baseline_ns": 378.631,
+            "candidate_ns": 354.719,
+            "ratio": 0.9368461642073682
+          },
+          "32:1:4": {
+            "baseline_ns": 382.082,
+            "candidate_ns": 390.125,
+            "ratio": 1.0210504551379023
+          },
+          "32:1:5": {
+            "baseline_ns": 3601.33,
+            "candidate_ns": 12915.6,
+            "ratio": 3.586341712645051
+          },
+          "32:1:6": {
+            "baseline_ns": 271.667,
+            "candidate_ns": 269.102,
+            "ratio": 0.9905582937935046
+          },
+          "32:1:7": {
+            "baseline_ns": 66.4121,
+            "candidate_ns": 58.4334,
+            "ratio": 0.8798607482672586
+          },
+          "32:1:8": {
+            "baseline_ns": 388.637,
+            "candidate_ns": 394.2,
+            "ratio": 1.0143141286084443
+          },
+          "32:0:0": {
+            "baseline_ns": 71.4274,
+            "candidate_ns": 68.5353,
+            "ratio": 0.9595099359629498
+          },
+          "32:0:1": {
+            "baseline_ns": 275.898,
+            "candidate_ns": 281.639,
+            "ratio": 1.0208084147039846
+          },
+          "32:0:2": {
+            "baseline_ns": 436.853,
+            "candidate_ns": 412.027,
+            "ratio": 0.9431708148965441
+          },
+          "32:0:3": {
+            "baseline_ns": 368.303,
+            "candidate_ns": 363.586,
+            "ratio": 0.9871926104321713
+          },
+          "32:0:4": {
+            "baseline_ns": 384.27,
+            "candidate_ns": 387.511,
+            "ratio": 1.0084341738881517
+          },
+          "32:0:5": {
+            "baseline_ns": 3598.52,
+            "candidate_ns": 12965.1,
+            "ratio": 3.6028978580082924
+          },
+          "32:0:6": {
+            "baseline_ns": 269.097,
+            "candidate_ns": 268.961,
+            "ratio": 0.9994946060342554
+          },
+          "32:0:7": {
+            "baseline_ns": 80.7721,
+            "candidate_ns": 74.9681,
+            "ratio": 0.9281435049973941
+          },
+          "32:0:8": {
+            "baseline_ns": 406.3,
+            "candidate_ns": 392.818,
+            "ratio": 0.9668176224464681
+          },
+          "100000:1:0": {
+            "baseline_ns": 1021290.0,
+            "candidate_ns": 1009860.0,
+            "ratio": 0.9888082718914314
+          },
+          "100000:1:1": {
+            "baseline_ns": 3716350.0,
+            "candidate_ns": 3767600.0,
+            "ratio": 1.0137904126360542
+          },
+          "100000:1:2": {
+            "baseline_ns": 4788460.0,
+            "candidate_ns": 4812610.0,
+            "ratio": 1.0050433751143373
+          },
+          "100000:1:3": {
+            "baseline_ns": 5923390.0,
+            "candidate_ns": 6026800.0,
+            "ratio": 1.0174579083936732
+          },
+          "100000:1:4": {
+            "baseline_ns": 5262050.0,
+            "candidate_ns": 5339590.0,
+            "ratio": 1.0147357018652425
+          },
+          "100000:1:5": {
+            "baseline_ns": 412207.0,
+            "candidate_ns": 410644.0,
+            "ratio": 0.9962082157750839
+          },
+          "100000:1:6": {
+            "baseline_ns": 3630520.0,
+            "candidate_ns": 3722600.0,
+            "ratio": 1.0253627579520288
+          },
+          "100000:1:7": {
+            "baseline_ns": 407544.0,
+            "candidate_ns": 397056.0,
+            "ratio": 0.9742653553972086
+          },
+          "100000:1:8": {
+            "baseline_ns": 3051960.0,
+            "candidate_ns": 3115740.0,
+            "ratio": 1.0208980458459482
+          },
+          "100000:0:0": {
+            "baseline_ns": 758576.0,
+            "candidate_ns": 749790.0,
+            "ratio": 0.9884177722469469
+          },
+          "100000:0:1": {
+            "baseline_ns": 3717750.0,
+            "candidate_ns": 3737730.0,
+            "ratio": 1.0053742182771839
+          },
+          "100000:0:2": {
+            "baseline_ns": 4169290.0,
+            "candidate_ns": 4177630.0,
+            "ratio": 1.0020003405855673
+          },
+          "100000:0:3": {
+            "baseline_ns": 5915980.0,
+            "candidate_ns": 6024620.0,
+            "ratio": 1.0183638213787065
+          },
+          "100000:0:4": {
+            "baseline_ns": 5313010.0,
+            "candidate_ns": 5351310.0,
+            "ratio": 1.007208719727612
+          },
+          "100000:0:5": {
+            "baseline_ns": 412759.0,
+            "candidate_ns": 402354.0,
+            "ratio": 0.9747915854045581
+          },
+          "100000:0:6": {
+            "baseline_ns": 3638100.0,
+            "candidate_ns": 3726020.0,
+            "ratio": 1.024166460515104
+          },
+          "100000:0:7": {
+            "baseline_ns": 408243.0,
+            "candidate_ns": 391557.0,
+            "ratio": 0.9591272844849759
+          },
+          "100000:0:8": {
+            "baseline_ns": 3049850.0,
+            "candidate_ns": 3148490.0,
+            "ratio": 1.032342574224962
+          }
+        }
+      },
+      "clang": {
+        "control": {
+          "32:1:0": {
+            "baseline_ns": 116.958,
+            "candidate_ns": 115.495,
+            "ratio": 0.9874912361702493
+          },
+          "32:1:1": {
+            "baseline_ns": 223.201,
+            "candidate_ns": 223.378,
+            "ratio": 1.0007930071997886
+          },
+          "32:1:2": {
+            "baseline_ns": 293.389,
+            "candidate_ns": 295.103,
+            "ratio": 1.0058420731520268
+          },
+          "32:1:3": {
+            "baseline_ns": 290.403,
+            "candidate_ns": 290.171,
+            "ratio": 0.9992011101813686
+          },
+          "32:1:4": {
+            "baseline_ns": 276.475,
+            "candidate_ns": 279.792,
+            "ratio": 1.0119974681255084
+          },
+          "32:1:5": {
+            "baseline_ns": 3575.32,
+            "candidate_ns": 3575.19,
+            "ratio": 0.999963639618272
+          },
+          "32:1:6": {
+            "baseline_ns": 186.863,
+            "candidate_ns": 181.951,
+            "ratio": 0.9737133621958333
+          },
+          "32:1:7": {
+            "baseline_ns": 40.4668,
+            "candidate_ns": 39.8133,
+            "ratio": 0.9838509593049116
+          },
+          "32:1:8": {
+            "baseline_ns": 361.874,
+            "candidate_ns": 360.574,
+            "ratio": 0.9964075893819395
+          },
+          "32:0:0": {
+            "baseline_ns": 102.881,
+            "candidate_ns": 102.023,
+            "ratio": 0.9916602676879113
+          },
+          "32:0:1": {
+            "baseline_ns": 227.496,
+            "candidate_ns": 226.995,
+            "ratio": 0.99779776347716
+          },
+          "32:0:2": {
+            "baseline_ns": 344.636,
+            "candidate_ns": 346.956,
+            "ratio": 1.00673174015483
+          },
+          "32:0:3": {
+            "baseline_ns": 279.254,
+            "candidate_ns": 280.116,
+            "ratio": 1.003086795533815
+          },
+          "32:0:4": {
+            "baseline_ns": 255.161,
+            "candidate_ns": 254.744,
+            "ratio": 0.9983657377107003
+          },
+          "32:0:5": {
+            "baseline_ns": 3586.83,
+            "candidate_ns": 3585.65,
+            "ratio": 0.9996710186989627
+          },
+          "32:0:6": {
+            "baseline_ns": 198.253,
+            "candidate_ns": 195.868,
+            "ratio": 0.9879699172269777
+          },
+          "32:0:7": {
+            "baseline_ns": 49.1319,
+            "candidate_ns": 47.6856,
+            "ratio": 0.9705629133007272
+          },
+          "32:0:8": {
+            "baseline_ns": 355.203,
+            "candidate_ns": 355.316,
+            "ratio": 1.0003181279437392
+          },
+          "100000:1:0": {
+            "baseline_ns": 1099660.0,
+            "candidate_ns": 1100790.0,
+            "ratio": 1.001027590346107
+          },
+          "100000:1:1": {
+            "baseline_ns": 5647730.0,
+            "candidate_ns": 5648860.0,
+            "ratio": 1.0002000803862792
+          },
+          "100000:1:2": {
+            "baseline_ns": 6253060.0,
+            "candidate_ns": 6278350.0,
+            "ratio": 1.0040444198520404
+          },
+          "100000:1:3": {
+            "baseline_ns": 8761760.0,
+            "candidate_ns": 8767650.0,
+            "ratio": 1.000672239367433
+          },
+          "100000:1:4": {
+            "baseline_ns": 7466650.0,
+            "candidate_ns": 7467210.0,
+            "ratio": 1.000075000167411
+          },
+          "100000:1:5": {
+            "baseline_ns": 540405.0,
+            "candidate_ns": 536685.0,
+            "ratio": 0.9931162739056818
+          },
+          "100000:1:6": {
+            "baseline_ns": 5510950.0,
+            "candidate_ns": 5510170.0,
+            "ratio": 0.9998584636042788
+          },
+          "100000:1:7": {
+            "baseline_ns": 535670.0,
+            "candidate_ns": 533539.0,
+            "ratio": 0.9960218044691694
+          },
+          "100000:1:8": {
+            "baseline_ns": 4344030.0,
+            "candidate_ns": 4348550.0,
+            "ratio": 1.0010405084679435
+          },
+          "100000:0:0": {
+            "baseline_ns": 819484.0,
+            "candidate_ns": 821831.0,
+            "ratio": 1.0028639973446705
+          },
+          "100000:0:1": {
+            "baseline_ns": 5712450.0,
+            "candidate_ns": 5709670.0,
+            "ratio": 0.9995133436616513
+          },
+          "100000:0:2": {
+            "baseline_ns": 2213930.0,
+            "candidate_ns": 2248120.0,
+            "ratio": 1.0154431260247614
+          },
+          "100000:0:3": {
+            "baseline_ns": 8684280.0,
+            "candidate_ns": 8678330.0,
+            "ratio": 0.9993148539660167
+          },
+          "100000:0:4": {
+            "baseline_ns": 7351450.0,
+            "candidate_ns": 7343080.0,
+            "ratio": 0.9988614491018779
+          },
+          "100000:0:5": {
+            "baseline_ns": 535046.0,
+            "candidate_ns": 534401.0,
+            "ratio": 0.9987944961741607
+          },
+          "100000:0:6": {
+            "baseline_ns": 5544430.0,
+            "candidate_ns": 5547450.0,
+            "ratio": 1.0005446907977917
+          },
+          "100000:0:7": {
+            "baseline_ns": 535304.0,
+            "candidate_ns": 532397.0,
+            "ratio": 0.994569440915816
+          },
+          "100000:0:8": {
+            "baseline_ns": 4174580.0,
+            "candidate_ns": 4183640.0,
+            "ratio": 1.002170278207628
+          }
+        },
+        "redundant": {
+          "32:1:0": {
+            "baseline_ns": 116.958,
+            "candidate_ns": 116.41,
+            "ratio": 0.995314557362472
+          },
+          "32:1:1": {
+            "baseline_ns": 223.201,
+            "candidate_ns": 221.276,
+            "ratio": 0.9913754866689666
+          },
+          "32:1:2": {
+            "baseline_ns": 293.389,
+            "candidate_ns": 289.236,
+            "ratio": 0.9858447317384087
+          },
+          "32:1:3": {
+            "baseline_ns": 290.403,
+            "candidate_ns": 289.888,
+            "ratio": 0.9982266023422621
+          },
+          "32:1:4": {
+            "baseline_ns": 276.475,
+            "candidate_ns": 278.139,
+            "ratio": 1.0060186273623293
+          },
+          "32:1:5": {
+            "baseline_ns": 3575.32,
+            "candidate_ns": 3575.64,
+            "ratio": 1.0000895024780998
+          },
+          "32:1:6": {
+            "baseline_ns": 186.863,
+            "candidate_ns": 186.46,
+            "ratio": 0.9978433397729888
+          },
+          "32:1:7": {
+            "baseline_ns": 40.4668,
+            "candidate_ns": 41.1587,
+            "ratio": 1.0170979667282811
+          },
+          "32:1:8": {
+            "baseline_ns": 361.874,
+            "candidate_ns": 363.291,
+            "ratio": 1.0039157275736859
+          },
+          "32:0:0": {
+            "baseline_ns": 102.881,
+            "candidate_ns": 102.839,
+            "ratio": 0.9995917613553523
+          },
+          "32:0:1": {
+            "baseline_ns": 227.496,
+            "candidate_ns": 229.817,
+            "ratio": 1.0102023771846538
+          },
+          "32:0:2": {
+            "baseline_ns": 344.636,
+            "candidate_ns": 334.192,
+            "ratio": 0.969695562854722
+          },
+          "32:0:3": {
+            "baseline_ns": 279.254,
+            "candidate_ns": 279.903,
+            "ratio": 1.0023240490736032
+          },
+          "32:0:4": {
+            "baseline_ns": 255.161,
+            "candidate_ns": 255.762,
+            "ratio": 1.0023553756255854
+          },
+          "32:0:5": {
+            "baseline_ns": 3586.83,
+            "candidate_ns": 3588.24,
+            "ratio": 1.0003931047749683
+          },
+          "32:0:6": {
+            "baseline_ns": 198.253,
+            "candidate_ns": 197.532,
+            "ratio": 0.9963632328388474
+          },
+          "32:0:7": {
+            "baseline_ns": 49.1319,
+            "candidate_ns": 46.9811,
+            "ratio": 0.956223960400473
+          },
+          "32:0:8": {
+            "baseline_ns": 355.203,
+            "candidate_ns": 352.742,
+            "ratio": 0.9930715675261753
+          },
+          "100000:1:0": {
+            "baseline_ns": 1099660.0,
+            "candidate_ns": 1102230.0,
+            "ratio": 1.0023370860084027
+          },
+          "100000:1:1": {
+            "baseline_ns": 5647730.0,
+            "candidate_ns": 5639520.0,
+            "ratio": 0.9985463186094236
+          },
+          "100000:1:2": {
+            "baseline_ns": 6253060.0,
+            "candidate_ns": 6262020.0,
+            "ratio": 1.0014328984529175
+          },
+          "100000:1:3": {
+            "baseline_ns": 8761760.0,
+            "candidate_ns": 8752560.0,
+            "ratio": 0.9989499826518873
+          },
+          "100000:1:4": {
+            "baseline_ns": 7466650.0,
+            "candidate_ns": 7441030.0,
+            "ratio": 0.9965687423409427
+          },
+          "100000:1:5": {
+            "baseline_ns": 540405.0,
+            "candidate_ns": 541477.0,
+            "ratio": 1.0019836974121261
+          },
+          "100000:1:6": {
+            "baseline_ns": 5510950.0,
+            "candidate_ns": 5510490.0,
+            "ratio": 0.999916529817908
+          },
+          "100000:1:7": {
+            "baseline_ns": 535670.0,
+            "candidate_ns": 531134.0,
+            "ratio": 0.9915320999869323
+          },
+          "100000:1:8": {
+            "baseline_ns": 4344030.0,
+            "candidate_ns": 4339990.0,
+            "ratio": 0.9990699880065285
+          },
+          "100000:0:0": {
+            "baseline_ns": 819484.0,
+            "candidate_ns": 818796.0,
+            "ratio": 0.9991604473058656
+          },
+          "100000:0:1": {
+            "baseline_ns": 5712450.0,
+            "candidate_ns": 5714850.0,
+            "ratio": 1.0004201349683586
+          },
+          "100000:0:2": {
+            "baseline_ns": 2213930.0,
+            "candidate_ns": 2216950.0,
+            "ratio": 1.0013640901022165
+          },
+          "100000:0:3": {
+            "baseline_ns": 8684280.0,
+            "candidate_ns": 8681350.0,
+            "ratio": 0.999662608759736
+          },
+          "100000:0:4": {
+            "baseline_ns": 7351450.0,
+            "candidate_ns": 7338200.0,
+            "ratio": 0.9981976344802725
+          },
+          "100000:0:5": {
+            "baseline_ns": 535046.0,
+            "candidate_ns": 535701.0,
+            "ratio": 1.0012241938076352
+          },
+          "100000:0:6": {
+            "baseline_ns": 5544430.0,
+            "candidate_ns": 5547350.0,
+            "ratio": 1.0005266546786595
+          },
+          "100000:0:7": {
+            "baseline_ns": 535304.0,
+            "candidate_ns": 529552.0,
+            "ratio": 0.9892547038692033
+          },
+          "100000:0:8": {
+            "baseline_ns": 4174580.0,
+            "candidate_ns": 4164970.0,
+            "ratio": 0.9976979720115556
+          }
+        },
+        "smallheap": {
+          "32:1:0": {
+            "baseline_ns": 116.958,
+            "candidate_ns": 117.009,
+            "ratio": 1.0004360539680912
+          },
+          "32:1:1": {
+            "baseline_ns": 223.201,
+            "candidate_ns": 149.662,
+            "ratio": 0.6705256696878599
+          },
+          "32:1:2": {
+            "baseline_ns": 293.389,
+            "candidate_ns": 226.981,
+            "ratio": 0.7736520455777142
+          },
+          "32:1:3": {
+            "baseline_ns": 290.403,
+            "candidate_ns": 261.812,
+            "ratio": 0.9015471603254787
+          },
+          "32:1:4": {
+            "baseline_ns": 276.475,
+            "candidate_ns": 288.414,
+            "ratio": 1.0431829279320008
+          },
+          "32:1:5": {
+            "baseline_ns": 3575.32,
+            "candidate_ns": 2536.38,
+            "ratio": 0.709413423134153
+          },
+          "32:1:6": {
+            "baseline_ns": 186.863,
+            "candidate_ns": 150.829,
+            "ratio": 0.8071635369227723
+          },
+          "32:1:7": {
+            "baseline_ns": 40.4668,
+            "candidate_ns": 37.2053,
+            "ratio": 0.9194030662172448
+          },
+          "32:1:8": {
+            "baseline_ns": 361.874,
+            "candidate_ns": 333.257,
+            "ratio": 0.9209199887253574
+          },
+          "32:0:0": {
+            "baseline_ns": 102.881,
+            "candidate_ns": 98.6652,
+            "ratio": 0.9590225600451007
+          },
+          "32:0:1": {
+            "baseline_ns": 227.496,
+            "candidate_ns": 169.056,
+            "ratio": 0.7431163624854943
+          },
+          "32:0:2": {
+            "baseline_ns": 344.636,
+            "candidate_ns": 270.334,
+            "ratio": 0.7844044150930256
+          },
+          "32:0:3": {
+            "baseline_ns": 279.254,
+            "candidate_ns": 264.974,
+            "ratio": 0.948863758442135
+          },
+          "32:0:4": {
+            "baseline_ns": 255.161,
+            "candidate_ns": 288.848,
+            "ratio": 1.1320225269535706
+          },
+          "32:0:5": {
+            "baseline_ns": 3586.83,
+            "candidate_ns": 2505.35,
+            "ratio": 0.6984858496220897
+          },
+          "32:0:6": {
+            "baseline_ns": 198.253,
+            "candidate_ns": 145.213,
+            "ratio": 0.7324630648716539
+          },
+          "32:0:7": {
+            "baseline_ns": 49.1319,
+            "candidate_ns": 50.9894,
+            "ratio": 1.0378063946234524
+          },
+          "32:0:8": {
+            "baseline_ns": 355.203,
+            "candidate_ns": 338.597,
+            "ratio": 0.9532492687280232
+          },
+          "100000:1:0": {
+            "baseline_ns": 1099660.0,
+            "candidate_ns": 1092390.0,
+            "ratio": 0.9933888656493826
+          },
+          "100000:1:1": {
+            "baseline_ns": 5647730.0,
+            "candidate_ns": 5458540.0,
+            "ratio": 0.9665015855927956
+          },
+          "100000:1:2": {
+            "baseline_ns": 6253060.0,
+            "candidate_ns": 6127100.0,
+            "ratio": 0.9798562623739417
+          },
+          "100000:1:3": {
+            "baseline_ns": 8761760.0,
+            "candidate_ns": 8533530.0,
+            "ratio": 0.9739515805043736
+          },
+          "100000:1:4": {
+            "baseline_ns": 7466650.0,
+            "candidate_ns": 7176060.0,
+            "ratio": 0.9610816095571642
+          },
+          "100000:1:5": {
+            "baseline_ns": 540405.0,
+            "candidate_ns": 532957.0,
+            "ratio": 0.9862177440993329
+          },
+          "100000:1:6": {
+            "baseline_ns": 5510950.0,
+            "candidate_ns": 5493050.0,
+            "ratio": 0.996751921175115
+          },
+          "100000:1:7": {
+            "baseline_ns": 535670.0,
+            "candidate_ns": 531664.0,
+            "ratio": 0.9925215151119159
+          },
+          "100000:1:8": {
+            "baseline_ns": 4344030.0,
+            "candidate_ns": 4213910.0,
+            "ratio": 0.9700462473785862
+          },
+          "100000:0:0": {
+            "baseline_ns": 819484.0,
+            "candidate_ns": 819137.0,
+            "ratio": 0.9995765628126968
+          },
+          "100000:0:1": {
+            "baseline_ns": 5712450.0,
+            "candidate_ns": 5586860.0,
+            "ratio": 0.9780146872182689
+          },
+          "100000:0:2": {
+            "baseline_ns": 2213930.0,
+            "candidate_ns": 1944090.0,
+            "ratio": 0.8781171943105699
+          },
+          "100000:0:3": {
+            "baseline_ns": 8684280.0,
+            "candidate_ns": 8634610.0,
+            "ratio": 0.9942804699986643
+          },
+          "100000:0:4": {
+            "baseline_ns": 7351450.0,
+            "candidate_ns": 7350580.0,
+            "ratio": 0.9998816559998368
+          },
+          "100000:0:5": {
+            "baseline_ns": 535046.0,
+            "candidate_ns": 536907.0,
+            "ratio": 1.0034782056122278
+          },
+          "100000:0:6": {
+            "baseline_ns": 5544430.0,
+            "candidate_ns": 5547310.0,
+            "ratio": 1.0005194402310067
+          },
+          "100000:0:7": {
+            "baseline_ns": 535304.0,
+            "candidate_ns": 535878.0,
+            "ratio": 1.0010722878962235
+          },
+          "100000:0:8": {
+            "baseline_ns": 4174580.0,
+            "candidate_ns": 4200320.0,
+            "ratio": 1.0061658897422017
+          }
+        }
+      }
+    },
+    "official": {
+      "gcc": {
+        "random_n_max_q_max_00": {
+          "control": {
+            "baseline_ms": 56.17346,
+            "candidate_ms": 55.882642,
+            "ratio": 0.9948228576270716
+          },
+          "redundant": {
+            "baseline_ms": 56.17346,
+            "candidate_ms": 55.109253,
+            "ratio": 0.9810549857530585
+          },
+          "immediate": {
+            "baseline_ms": 56.17346,
+            "candidate_ms": 54.854428,
+            "ratio": 0.9765185908078299
+          },
+          "smallheap": {
+            "baseline_ms": 56.17346,
+            "candidate_ms": 55.251336,
+            "ratio": 0.9835843474836694
+          }
+        },
+        "random_n_max_q_max_01": {
+          "control": {
+            "baseline_ms": 54.748207,
+            "candidate_ms": 54.756312,
+            "ratio": 1.0001480413778665
+          },
+          "redundant": {
+            "baseline_ms": 54.748207,
+            "candidate_ms": 55.165535,
+            "ratio": 1.0076226788577751
+          },
+          "immediate": {
+            "baseline_ms": 54.748207,
+            "candidate_ms": 55.087881,
+            "ratio": 1.0062042945077636
+          },
+          "smallheap": {
+            "baseline_ms": 54.748207,
+            "candidate_ms": 55.071409,
+            "ratio": 1.0059034262071815
+          }
+        },
+        "random_n_max_q_max_many_pop_00": {
+          "control": {
+            "baseline_ms": 65.858712,
+            "candidate_ms": 66.237062,
+            "ratio": 1.005744873965953
+          },
+          "redundant": {
+            "baseline_ms": 65.858712,
+            "candidate_ms": 66.167245,
+            "ratio": 1.004684771241806
+          },
+          "immediate": {
+            "baseline_ms": 65.858712,
+            "candidate_ms": 65.431981,
+            "ratio": 0.9935205079625608
+          },
+          "smallheap": {
+            "baseline_ms": 65.858712,
+            "candidate_ms": 65.756662,
+            "ratio": 0.9984504707592825
+          }
+        },
+        "random_n_max_q_max_many_pop_01": {
+          "control": {
+            "baseline_ms": 66.00553,
+            "candidate_ms": 65.808428,
+            "ratio": 0.9970138562632557
+          },
+          "redundant": {
+            "baseline_ms": 66.00553,
+            "candidate_ms": 65.94186,
+            "ratio": 0.999035383853444
+          },
+          "immediate": {
+            "baseline_ms": 66.00553,
+            "candidate_ms": 65.310168,
+            "ratio": 0.9894650948185707
+          },
+          "smallheap": {
+            "baseline_ms": 66.00553,
+            "candidate_ms": 66.665363,
+            "ratio": 1.009996632100371
+          }
+        },
+        "random_n_max_q_max_only_type01_00": {
+          "control": {
+            "baseline_ms": 49.212576,
+            "candidate_ms": 49.031777,
+            "ratio": 0.9963261626459058
+          },
+          "redundant": {
+            "baseline_ms": 49.212576,
+            "candidate_ms": 49.880865,
+            "ratio": 1.0135796386679699
+          },
+          "immediate": {
+            "baseline_ms": 49.212576,
+            "candidate_ms": 48.729926,
+            "ratio": 0.9901925475309401
+          },
+          "smallheap": {
+            "baseline_ms": 49.212576,
+            "candidate_ms": 49.313601,
+            "ratio": 1.0020528289354331
+          }
+        },
+        "random_n_max_q_max_only_type01_01": {
+          "control": {
+            "baseline_ms": 49.062928,
+            "candidate_ms": 49.323572,
+            "ratio": 1.0053124428285243
+          },
+          "redundant": {
+            "baseline_ms": 49.062928,
+            "candidate_ms": 49.271313,
+            "ratio": 1.0042473005280077
+          },
+          "immediate": {
+            "baseline_ms": 49.062928,
+            "candidate_ms": 48.362359,
+            "ratio": 0.9857210111879177
+          },
+          "smallheap": {
+            "baseline_ms": 49.062928,
+            "candidate_ms": 49.18063,
+            "ratio": 1.0023990007282078
+          }
+        },
+        "random_n_max_q_max_small_value_00": {
+          "control": {
+            "baseline_ms": 55.248451,
+            "candidate_ms": 56.210342,
+            "ratio": 1.0174102799732792
+          },
+          "redundant": {
+            "baseline_ms": 55.248451,
+            "candidate_ms": 56.058964,
+            "ratio": 1.0146703298523247
+          },
+          "immediate": {
+            "baseline_ms": 55.248451,
+            "candidate_ms": 55.345546,
+            "ratio": 1.0017574248371235
+          },
+          "smallheap": {
+            "baseline_ms": 55.248451,
+            "candidate_ms": 55.767415,
+            "ratio": 1.0093932769264427
+          }
+        },
+        "random_n_max_q_max_small_value_01": {
+          "control": {
+            "baseline_ms": 55.512278,
+            "candidate_ms": 55.191135,
+            "ratio": 0.9942149194453883
+          },
+          "redundant": {
+            "baseline_ms": 55.512278,
+            "candidate_ms": 55.558738,
+            "ratio": 1.0008369319666541
+          },
+          "immediate": {
+            "baseline_ms": 55.512278,
+            "candidate_ms": 55.495624,
+            "ratio": 0.9996999942967572
+          },
+          "smallheap": {
+            "baseline_ms": 55.512278,
+            "candidate_ms": 55.128298,
+            "ratio": 0.9930829716625933
+          }
+        },
+        "random_n_zero_q_max_00": {
+          "control": {
+            "baseline_ms": 35.034926,
+            "candidate_ms": 35.034047,
+            "ratio": 0.9999749107504895
+          },
+          "redundant": {
+            "baseline_ms": 35.034926,
+            "candidate_ms": 34.693643,
+            "ratio": 0.9902587777693609
+          },
+          "immediate": {
+            "baseline_ms": 35.034926,
+            "candidate_ms": 34.696606,
+            "ratio": 0.99034335051828
+          },
+          "smallheap": {
+            "baseline_ms": 35.034926,
+            "candidate_ms": 36.283124,
+            "ratio": 1.0356272480781037
+          }
+        }
+      },
+      "clang": {
+        "random_n_max_q_max_00": {
+          "control": {
+            "baseline_ms": 48.062859,
+            "candidate_ms": 48.081194,
+            "ratio": 1.000381479595294
+          },
+          "redundant": {
+            "baseline_ms": 48.062859,
+            "candidate_ms": 48.328597,
+            "ratio": 1.005528967804433
+          },
+          "immediate": {
+            "baseline_ms": 48.062859,
+            "candidate_ms": 47.657027,
+            "ratio": 0.9915562243186573
+          },
+          "smallheap": {
+            "baseline_ms": 48.062859,
+            "candidate_ms": 47.683355,
+            "ratio": 0.992104006963048
+          }
+        },
+        "random_n_max_q_max_01": {
+          "control": {
+            "baseline_ms": 48.359573,
+            "candidate_ms": 47.967648,
+            "ratio": 0.9918956066878424
+          },
+          "redundant": {
+            "baseline_ms": 48.359573,
+            "candidate_ms": 47.904427,
+            "ratio": 0.9905882957237857
+          },
+          "immediate": {
+            "baseline_ms": 48.359573,
+            "candidate_ms": 47.993773,
+            "ratio": 0.9924358306472226
+          },
+          "smallheap": {
+            "baseline_ms": 48.359573,
+            "candidate_ms": 48.018227,
+            "ratio": 0.9929415009516318
+          }
+        },
+        "random_n_max_q_max_many_pop_00": {
+          "control": {
+            "baseline_ms": 56.316972,
+            "candidate_ms": 56.068747,
+            "ratio": 0.9955923589073646
+          },
+          "redundant": {
+            "baseline_ms": 56.316972,
+            "candidate_ms": 56.255724,
+            "ratio": 0.9989124415282838
+          },
+          "immediate": {
+            "baseline_ms": 56.316972,
+            "candidate_ms": 56.420248,
+            "ratio": 1.0018338343901019
+          },
+          "smallheap": {
+            "baseline_ms": 56.316972,
+            "candidate_ms": 56.545528,
+            "ratio": 1.0040583858095211
+          }
+        },
+        "random_n_max_q_max_many_pop_01": {
+          "control": {
+            "baseline_ms": 56.221434,
+            "candidate_ms": 56.407163,
+            "ratio": 1.0033035265518129
+          },
+          "redundant": {
+            "baseline_ms": 56.221434,
+            "candidate_ms": 56.286658,
+            "ratio": 1.0011601269366412
+          },
+          "immediate": {
+            "baseline_ms": 56.221434,
+            "candidate_ms": 56.087335,
+            "ratio": 0.9976148064811011
+          },
+          "smallheap": {
+            "baseline_ms": 56.221434,
+            "candidate_ms": 56.06075,
+            "ratio": 0.9971419441204576
+          }
+        },
+        "random_n_max_q_max_only_type01_00": {
+          "control": {
+            "baseline_ms": 44.773153,
+            "candidate_ms": 45.009902,
+            "ratio": 1.0052877446446533
+          },
+          "redundant": {
+            "baseline_ms": 44.773153,
+            "candidate_ms": 44.751349,
+            "ratio": 0.9995130117371899
+          },
+          "immediate": {
+            "baseline_ms": 44.773153,
+            "candidate_ms": 45.373666,
+            "ratio": 1.0134123455634227
+          },
+          "smallheap": {
+            "baseline_ms": 44.773153,
+            "candidate_ms": 45.223036,
+            "ratio": 1.0100480526801408
+          }
+        },
+        "random_n_max_q_max_only_type01_01": {
+          "control": {
+            "baseline_ms": 44.938168,
+            "candidate_ms": 44.660371,
+            "ratio": 0.9938182393194133
+          },
+          "redundant": {
+            "baseline_ms": 44.938168,
+            "candidate_ms": 44.963699,
+            "ratio": 1.0005681361999448
+          },
+          "immediate": {
+            "baseline_ms": 44.938168,
+            "candidate_ms": 45.37743,
+            "ratio": 1.0097748087995042
+          },
+          "smallheap": {
+            "baseline_ms": 44.938168,
+            "candidate_ms": 45.120537,
+            "ratio": 1.0040582206199415
+          }
+        },
+        "random_n_max_q_max_small_value_00": {
+          "control": {
+            "baseline_ms": 49.510992,
+            "candidate_ms": 49.66073,
+            "ratio": 1.0030243385145665
+          },
+          "redundant": {
+            "baseline_ms": 49.510992,
+            "candidate_ms": 49.149305,
+            "ratio": 0.9926948141131973
+          },
+          "immediate": {
+            "baseline_ms": 49.510992,
+            "candidate_ms": 49.302189,
+            "ratio": 0.9957826940732676
+          },
+          "smallheap": {
+            "baseline_ms": 49.510992,
+            "candidate_ms": 49.961701,
+            "ratio": 1.009103210858712
+          }
+        },
+        "random_n_max_q_max_small_value_01": {
+          "control": {
+            "baseline_ms": 49.387698,
+            "candidate_ms": 49.280645,
+            "ratio": 0.9978323954277034
+          },
+          "redundant": {
+            "baseline_ms": 49.387698,
+            "candidate_ms": 49.381016,
+            "ratio": 0.9998647031493552
+          },
+          "immediate": {
+            "baseline_ms": 49.387698,
+            "candidate_ms": 49.404605,
+            "ratio": 1.0003423322139857
+          },
+          "smallheap": {
+            "baseline_ms": 49.387698,
+            "candidate_ms": 50.088805,
+            "ratio": 1.0141959845951922
+          }
+        },
+        "random_n_zero_q_max_00": {
+          "control": {
+            "baseline_ms": 44.036751,
+            "candidate_ms": 43.959663,
+            "ratio": 0.9982494621367503
+          },
+          "redundant": {
+            "baseline_ms": 44.036751,
+            "candidate_ms": 43.896329,
+            "ratio": 0.9968112543089294
+          },
+          "immediate": {
+            "baseline_ms": 44.036751,
+            "candidate_ms": 44.066183,
+            "ratio": 1.000668350850861
+          },
+          "smallheap": {
+            "baseline_ms": 44.036751,
+            "candidate_ms": 44.202367,
+            "ratio": 1.0037608587427351
+          }
+        }
+      }
+    },
+    "correctness": "180 outputs passed: 18 official cases × baseline/control/redundant/immediate/smallheap × GCC/Clang; four earlier candidates passed old multiset unit test GCC skipped checks. No production edits."
+  },
+  "raw_api_runs": {
+    "gcc": {
+      "baseline": [
+        {
+          "32:1:0": 77.1724,
+          "32:1:1": 277.341,
+          "32:1:2": 380.859,
+          "32:1:3": 378.003,
+          "32:1:4": 381.922,
+          "32:1:5": 3601.33,
+          "32:1:6": 270.941,
+          "32:1:7": 65.7242,
+          "32:1:8": 386.168,
+          "32:0:0": 71.3133,
+          "32:0:1": 276.112,
+          "32:0:2": 437.077,
+          "32:0:3": 368.522,
+          "32:0:4": 384.236,
+          "32:0:5": 3598.52,
+          "32:0:6": 269.097,
+          "32:0:7": 81.9835,
+          "32:0:8": 404.216,
+          "100000:1:0": 1024530.0,
+          "100000:1:1": 3691220.0,
+          "100000:1:2": 4794890.0,
+          "100000:1:3": 5967640.0,
+          "100000:1:4": 5262050.0,
+          "100000:1:5": 412300.0,
+          "100000:1:6": 3610410.0,
+          "100000:1:7": 409971.0,
+          "100000:1:8": 3032250.0,
+          "100000:0:0": 757276.0,
+          "100000:0:1": 3712910.0,
+          "100000:0:2": 4166320.0,
+          "100000:0:3": 5901380.0,
+          "100000:0:4": 5315450.0,
+          "100000:0:5": 412759.0,
+          "100000:0:6": 3609450.0,
+          "100000:0:7": 403819.0,
+          "100000:0:8": 3067460.0
+        },
+        {
+          "32:1:0": 77.5352,
+          "32:1:1": 276.892,
+          "32:1:2": 381.255,
+          "32:1:3": 378.725,
+          "32:1:4": 382.082,
+          "32:1:5": 3602.78,
+          "32:1:6": 271.687,
+          "32:1:7": 66.4121,
+          "32:1:8": 387.264,
+          "32:0:0": 71.4274,
+          "32:0:1": 276.631,
+          "32:0:2": 436.208,
+          "32:0:3": 368.218,
+          "32:0:4": 384.28,
+          "32:0:5": 3631.2,
+          "32:0:6": 453.678,
+          "32:0:7": 244.51,
+          "32:0:8": 445.945,
+          "100000:1:0": 1020650.0,
+          "100000:1:1": 3756920.0,
+          "100000:1:2": 4788460.0,
+          "100000:1:3": 5920090.0,
+          "100000:1:4": 5221030.0,
+          "100000:1:5": 413780.0,
+          "100000:1:6": 3688680.0,
+          "100000:1:7": 407256.0,
+          "100000:1:8": 3051960.0,
+          "100000:0:0": 760539.0,
+          "100000:0:1": 3761210.0,
+          "100000:0:2": 4154540.0,
+          "100000:0:3": 5915980.0,
+          "100000:0:4": 5332620.0,
+          "100000:0:5": 410158.0,
+          "100000:0:6": 3672670.0,
+          "100000:0:7": 408243.0,
+          "100000:0:8": 3049850.0
+        },
+        {
+          "32:1:0": 79.3816,
+          "32:1:1": 276.034,
+          "32:1:2": 380.898,
+          "32:1:3": 378.213,
+          "32:1:4": 381.822,
+          "32:1:5": 3602.09,
+          "32:1:6": 271.773,
+          "32:1:7": 66.3798,
+          "32:1:8": 389.515,
+          "32:0:0": 71.4224,
+          "32:0:1": 275.847,
+          "32:0:2": 436.646,
+          "32:0:3": 368.289,
+          "32:0:4": 384.914,
+          "32:0:5": 3597.33,
+          "32:0:6": 269.068,
+          "32:0:7": 77.5627,
+          "32:0:8": 406.57,
+          "100000:1:0": 1017940.0,
+          "100000:1:1": 3807050.0,
+          "100000:1:2": 4694030.0,
+          "100000:1:3": 5923390.0,
+          "100000:1:4": 5277090.0,
+          "100000:1:5": 412207.0,
+          "100000:1:6": 3683340.0,
+          "100000:1:7": 414673.0,
+          "100000:1:8": 3031690.0,
+          "100000:0:0": 758767.0,
+          "100000:0:1": 3763910.0,
+          "100000:0:2": 4174540.0,
+          "100000:0:3": 6036980.0,
+          "100000:0:4": 5244000.0,
+          "100000:0:5": 413912.0,
+          "100000:0:6": 3725510.0,
+          "100000:0:7": 409780.0,
+          "100000:0:8": 3049570.0
+        },
+        {
+          "32:1:0": 77.3438,
+          "32:1:1": 276.881,
+          "32:1:2": 381.746,
+          "32:1:3": 378.631,
+          "32:1:4": 382.658,
+          "32:1:5": 3600.75,
+          "32:1:6": 271.217,
+          "32:1:7": 67.8483,
+          "32:1:8": 390.58,
+          "32:0:0": 72.1133,
+          "32:0:1": 275.808,
+          "32:0:2": 436.853,
+          "32:0:3": 368.303,
+          "32:0:4": 383.389,
+          "32:0:5": 3598.53,
+          "32:0:6": 268.639,
+          "32:0:7": 74.6567,
+          "32:0:8": 406.3,
+          "100000:1:0": 1024780.0,
+          "100000:1:1": 3716350.0,
+          "100000:1:2": 4680260.0,
+          "100000:1:3": 6093780.0,
+          "100000:1:4": 5226920.0,
+          "100000:1:5": 411084.0,
+          "100000:1:6": 3630520.0,
+          "100000:1:7": 407544.0,
+          "100000:1:8": 3190580.0,
+          "100000:0:0": 758576.0,
+          "100000:0:1": 3717750.0,
+          "100000:0:2": 4169290.0,
+          "100000:0:3": 5917440.0,
+          "100000:0:4": 5266320.0,
+          "100000:0:5": 413254.0,
+          "100000:0:6": 3638100.0,
+          "100000:0:7": 405718.0,
+          "100000:0:8": 3041030.0
+        },
+        {
+          "32:1:0": 77.0521,
+          "32:1:1": 276.626,
+          "32:1:2": 380.958,
+          "32:1:3": 380.402,
+          "32:1:4": 382.569,
+          "32:1:5": 3599.49,
+          "32:1:6": 271.667,
+          "32:1:7": 66.835,
+          "32:1:8": 388.637,
+          "32:0:0": 71.4382,
+          "32:0:1": 275.898,
+          "32:0:2": 437.508,
+          "32:0:3": 369.25,
+          "32:0:4": 384.27,
+          "32:0:5": 3594.76,
+          "32:0:6": 269.824,
+          "32:0:7": 80.7721,
+          "32:0:8": 405.969,
+          "100000:1:0": 1021290.0,
+          "100000:1:1": 3560130.0,
+          "100000:1:2": 4862120.0,
+          "100000:1:3": 5777460.0,
+          "100000:1:4": 5303150.0,
+          "100000:1:5": 410555.0,
+          "100000:1:6": 3479710.0,
+          "100000:1:7": 403803.0,
+          "100000:1:8": 3059800.0,
+          "100000:0:0": 757596.0,
+          "100000:0:1": 3565090.0,
+          "100000:0:2": 4174710.0,
+          "100000:0:3": 5878320.0,
+          "100000:0:4": 5313010.0,
+          "100000:0:5": 410104.0,
+          "100000:0:6": 3473370.0,
+          "100000:0:7": 409517.0,
+          "100000:0:8": 3058880.0
+        }
+      ],
+      "control": [
+        {
+          "32:1:0": 76.7465,
+          "32:1:1": 276.254,
+          "32:1:2": 380.74,
+          "32:1:3": 377.341,
+          "32:1:4": 381.269,
+          "32:1:5": 3599.47,
+          "32:1:6": 271.333,
+          "32:1:7": 66.5994,
+          "32:1:8": 385.567,
+          "32:0:0": 71.1735,
+          "32:0:1": 276.242,
+          "32:0:2": 437.783,
+          "32:0:3": 368.167,
+          "32:0:4": 384.417,
+          "32:0:5": 3598.56,
+          "32:0:6": 268.417,
+          "32:0:7": 79.9864,
+          "32:0:8": 405.414,
+          "100000:1:0": 1023350.0,
+          "100000:1:1": 3697090.0,
+          "100000:1:2": 4639790.0,
+          "100000:1:3": 5918400.0,
+          "100000:1:4": 5291060.0,
+          "100000:1:5": 409984.0,
+          "100000:1:6": 3586600.0,
+          "100000:1:7": 405183.0,
+          "100000:1:8": 3011420.0,
+          "100000:0:0": 753822.0,
+          "100000:0:1": 3683240.0,
+          "100000:0:2": 4170340.0,
+          "100000:0:3": 5839520.0,
+          "100000:0:4": 5268860.0,
+          "100000:0:5": 410527.0,
+          "100000:0:6": 3617670.0,
+          "100000:0:7": 410959.0,
+          "100000:0:8": 3039830.0
+        },
+        {
+          "32:1:0": 76.6184,
+          "32:1:1": 276.2,
+          "32:1:2": 380.727,
+          "32:1:3": 378.698,
+          "32:1:4": 383.289,
+          "32:1:5": 3601.95,
+          "32:1:6": 271.087,
+          "32:1:7": 65.7132,
+          "32:1:8": 385.159,
+          "32:0:0": 70.3378,
+          "32:0:1": 276.332,
+          "32:0:2": 436.742,
+          "32:0:3": 369.703,
+          "32:0:4": 383.281,
+          "32:0:5": 3595.04,
+          "32:0:6": 268.955,
+          "32:0:7": 82.317,
+          "32:0:8": 404.275,
+          "100000:1:0": 1033770.0,
+          "100000:1:1": 3682320.0,
+          "100000:1:2": 4707190.0,
+          "100000:1:3": 5912830.0,
+          "100000:1:4": 5329030.0,
+          "100000:1:5": 410616.0,
+          "100000:1:6": 3564640.0,
+          "100000:1:7": 404159.0,
+          "100000:1:8": 3011990.0,
+          "100000:0:0": 755794.0,
+          "100000:0:1": 3671890.0,
+          "100000:0:2": 4186630.0,
+          "100000:0:3": 5837600.0,
+          "100000:0:4": 5304390.0,
+          "100000:0:5": 411333.0,
+          "100000:0:6": 3610360.0,
+          "100000:0:7": 406694.0,
+          "100000:0:8": 3092560.0
+        },
+        {
+          "32:1:0": 76.3562,
+          "32:1:1": 276.864,
+          "32:1:2": 382.049,
+          "32:1:3": 380.335,
+          "32:1:4": 382.295,
+          "32:1:5": 3599.55,
+          "32:1:6": 271.462,
+          "32:1:7": 68.3685,
+          "32:1:8": 387.994,
+          "32:0:0": 70.8855,
+          "32:0:1": 276.367,
+          "32:0:2": 438.585,
+          "32:0:3": 367.768,
+          "32:0:4": 385.039,
+          "32:0:5": 3595.73,
+          "32:0:6": 268.488,
+          "32:0:7": 81.398,
+          "32:0:8": 405.403,
+          "100000:1:0": 1017800.0,
+          "100000:1:1": 3710980.0,
+          "100000:1:2": 4619730.0,
+          "100000:1:3": 6157570.0,
+          "100000:1:4": 5307860.0,
+          "100000:1:5": 411107.0,
+          "100000:1:6": 3624320.0,
+          "100000:1:7": 412153.0,
+          "100000:1:8": 3043260.0,
+          "100000:0:0": 758094.0,
+          "100000:0:1": 3714350.0,
+          "100000:0:2": 4162990.0,
+          "100000:0:3": 5820760.0,
+          "100000:0:4": 5278080.0,
+          "100000:0:5": 410141.0,
+          "100000:0:6": 3625260.0,
+          "100000:0:7": 407394.0,
+          "100000:0:8": 3094720.0
+        },
+        {
+          "32:1:0": 77.8788,
+          "32:1:1": 275.959,
+          "32:1:2": 381.265,
+          "32:1:3": 381.093,
+          "32:1:4": 395.693,
+          "32:1:5": 3599.75,
+          "32:1:6": 271.14,
+          "32:1:7": 65.9942,
+          "32:1:8": 387.653,
+          "32:0:0": 70.4751,
+          "32:0:1": 276.467,
+          "32:0:2": 436.783,
+          "32:0:3": 368.371,
+          "32:0:4": 396.281,
+          "32:0:5": 3599.13,
+          "32:0:6": 270.038,
+          "32:0:7": 81.5358,
+          "32:0:8": 403.862,
+          "100000:1:0": 1016240.0,
+          "100000:1:1": 3866740.0,
+          "100000:1:2": 4801490.0,
+          "100000:1:3": 5919450.0,
+          "100000:1:4": 5337490.0,
+          "100000:1:5": 411757.0,
+          "100000:1:6": 3815010.0,
+          "100000:1:7": 407657.0,
+          "100000:1:8": 2999350.0,
+          "100000:0:0": 760304.0,
+          "100000:0:1": 3918310.0,
+          "100000:0:2": 4162320.0,
+          "100000:0:3": 5959870.0,
+          "100000:0:4": 5349920.0,
+          "100000:0:5": 410234.0,
+          "100000:0:6": 3769560.0,
+          "100000:0:7": 406346.0,
+          "100000:0:8": 3084980.0
+        },
+        {
+          "32:1:0": 79.2079,
+          "32:1:1": 276.665,
+          "32:1:2": 380.882,
+          "32:1:3": 378.11,
+          "32:1:4": 382.327,
+          "32:1:5": 3599.94,
+          "32:1:6": 271.523,
+          "32:1:7": 67.7806,
+          "32:1:8": 384.318,
+          "32:0:0": 70.6614,
+          "32:0:1": 276.213,
+          "32:0:2": 437.466,
+          "32:0:3": 368.597,
+          "32:0:4": 385.237,
+          "32:0:5": 3598.59,
+          "32:0:6": 269.193,
+          "32:0:7": 76.0497,
+          "32:0:8": 405.376,
+          "100000:1:0": 1027790.0,
+          "100000:1:1": 3627130.0,
+          "100000:1:2": 4640830.0,
+          "100000:1:3": 5813610.0,
+          "100000:1:4": 5265510.0,
+          "100000:1:5": 411024.0,
+          "100000:1:6": 3542740.0,
+          "100000:1:7": 405406.0,
+          "100000:1:8": 2988680.0,
+          "100000:0:0": 761326.0,
+          "100000:0:1": 3631580.0,
+          "100000:0:2": 4389940.0,
+          "100000:0:3": 5798330.0,
+          "100000:0:4": 5261820.0,
+          "100000:0:5": 407988.0,
+          "100000:0:6": 3514370.0,
+          "100000:0:7": 405622.0,
+          "100000:0:8": 3050410.0
+        }
+      ],
+      "redundant": [
+        {
+          "32:1:0": 77.3237,
+          "32:1:1": 276.934,
+          "32:1:2": 380.753,
+          "32:1:3": 368.254,
+          "32:1:4": 385.852,
+          "32:1:5": 3600.28,
+          "32:1:6": 270.931,
+          "32:1:7": 67.9031,
+          "32:1:8": 390.77,
+          "32:0:0": 70.9125,
+          "32:0:1": 276.548,
+          "32:0:2": 437.035,
+          "32:0:3": 362.482,
+          "32:0:4": 385.413,
+          "32:0:5": 3598.33,
+          "32:0:6": 269.105,
+          "32:0:7": 74.7069,
+          "32:0:8": 408.594,
+          "100000:1:0": 1028530.0,
+          "100000:1:1": 3698780.0,
+          "100000:1:2": 4685430.0,
+          "100000:1:3": 5878940.0,
+          "100000:1:4": 5305840.0,
+          "100000:1:5": 411472.0,
+          "100000:1:6": 3625680.0,
+          "100000:1:7": 408347.0,
+          "100000:1:8": 3024030.0,
+          "100000:0:0": 778314.0,
+          "100000:0:1": 3710620.0,
+          "100000:0:2": 4164430.0,
+          "100000:0:3": 5912880.0,
+          "100000:0:4": 5262190.0,
+          "100000:0:5": 410312.0,
+          "100000:0:6": 3615990.0,
+          "100000:0:7": 399093.0,
+          "100000:0:8": 3040360.0
+        },
+        {
+          "32:1:0": 75.1577,
+          "32:1:1": 277.211,
+          "32:1:2": 381.086,
+          "32:1:3": 367.201,
+          "32:1:4": 386.06,
+          "32:1:5": 3602.5,
+          "32:1:6": 271.647,
+          "32:1:7": 64.8366,
+          "32:1:8": 389.353,
+          "32:0:0": 71.2102,
+          "32:0:1": 276.533,
+          "32:0:2": 437.885,
+          "32:0:3": 361.541,
+          "32:0:4": 386.36,
+          "32:0:5": 3596.7,
+          "32:0:6": 269.028,
+          "32:0:7": 77.8425,
+          "32:0:8": 407.993,
+          "100000:1:0": 1018220.0,
+          "100000:1:1": 3665660.0,
+          "100000:1:2": 4705430.0,
+          "100000:1:3": 5844330.0,
+          "100000:1:4": 5290020.0,
+          "100000:1:5": 412097.0,
+          "100000:1:6": 3572960.0,
+          "100000:1:7": 409873.0,
+          "100000:1:8": 3027470.0,
+          "100000:0:0": 754544.0,
+          "100000:0:1": 3659660.0,
+          "100000:0:2": 4162000.0,
+          "100000:0:3": 6107060.0,
+          "100000:0:4": 5273790.0,
+          "100000:0:5": 411491.0,
+          "100000:0:6": 3584760.0,
+          "100000:0:7": 410146.0,
+          "100000:0:8": 3074150.0
+        },
+        {
+          "32:1:0": 76.2749,
+          "32:1:1": 275.823,
+          "32:1:2": 381.183,
+          "32:1:3": 367.024,
+          "32:1:4": 385.843,
+          "32:1:5": 3602.26,
+          "32:1:6": 271.477,
+          "32:1:7": 66.1892,
+          "32:1:8": 386.177,
+          "32:0:0": 70.848,
+          "32:0:1": 276.255,
+          "32:0:2": 436.797,
+          "32:0:3": 363.511,
+          "32:0:4": 385.481,
+          "32:0:5": 3597.06,
+          "32:0:6": 268.552,
+          "32:0:7": 82.1459,
+          "32:0:8": 411.773,
+          "100000:1:0": 1025470.0,
+          "100000:1:1": 3563990.0,
+          "100000:1:2": 4814580.0,
+          "100000:1:3": 5875190.0,
+          "100000:1:4": 5288040.0,
+          "100000:1:5": 411592.0,
+          "100000:1:6": 3491230.0,
+          "100000:1:7": 405817.0,
+          "100000:1:8": 3006260.0,
+          "100000:0:0": 759922.0,
+          "100000:0:1": 3550220.0,
+          "100000:0:2": 4161620.0,
+          "100000:0:3": 5899940.0,
+          "100000:0:4": 5283430.0,
+          "100000:0:5": 409613.0,
+          "100000:0:6": 3485620.0,
+          "100000:0:7": 404135.0,
+          "100000:0:8": 3026620.0
+        },
+        {
+          "32:1:0": 77.0355,
+          "32:1:1": 277.818,
+          "32:1:2": 380.721,
+          "32:1:3": 370.852,
+          "32:1:4": 385.743,
+          "32:1:5": 3600.05,
+          "32:1:6": 270.819,
+          "32:1:7": 65.4065,
+          "32:1:8": 387.517,
+          "32:0:0": 70.8504,
+          "32:0:1": 281.779,
+          "32:0:2": 436.899,
+          "32:0:3": 362.188,
+          "32:0:4": 386.09,
+          "32:0:5": 3600.64,
+          "32:0:6": 269.034,
+          "32:0:7": 83.5904,
+          "32:0:8": 410.036,
+          "100000:1:0": 1015050.0,
+          "100000:1:1": 3690520.0,
+          "100000:1:2": 4743770.0,
+          "100000:1:3": 5791590.0,
+          "100000:1:4": 5259650.0,
+          "100000:1:5": 409135.0,
+          "100000:1:6": 3591770.0,
+          "100000:1:7": 406597.0,
+          "100000:1:8": 3016340.0,
+          "100000:0:0": 756946.0,
+          "100000:0:1": 3670260.0,
+          "100000:0:2": 4173000.0,
+          "100000:0:3": 5875940.0,
+          "100000:0:4": 5306260.0,
+          "100000:0:5": 407740.0,
+          "100000:0:6": 3607840.0,
+          "100000:0:7": 406242.0,
+          "100000:0:8": 3029500.0
+        },
+        {
+          "32:1:0": 76.5473,
+          "32:1:1": 276.755,
+          "32:1:2": 380.675,
+          "32:1:3": 368.479,
+          "32:1:4": 385.635,
+          "32:1:5": 3601.11,
+          "32:1:6": 271.725,
+          "32:1:7": 67.9277,
+          "32:1:8": 387.989,
+          "32:0:0": 70.8776,
+          "32:0:1": 275.132,
+          "32:0:2": 437.322,
+          "32:0:3": 361.932,
+          "32:0:4": 386.259,
+          "32:0:5": 3598.11,
+          "32:0:6": 268.731,
+          "32:0:7": 81.2292,
+          "32:0:8": 408.778,
+          "100000:1:0": 1017800.0,
+          "100000:1:1": 3755020.0,
+          "100000:1:2": 4677240.0,
+          "100000:1:3": 5922630.0,
+          "100000:1:4": 5327600.0,
+          "100000:1:5": 409009.0,
+          "100000:1:6": 3662620.0,
+          "100000:1:7": 407484.0,
+          "100000:1:8": 2984520.0,
+          "100000:0:0": 761724.0,
+          "100000:0:1": 3754680.0,
+          "100000:0:2": 4160750.0,
+          "100000:0:3": 5857670.0,
+          "100000:0:4": 5224500.0,
+          "100000:0:5": 446800.0,
+          "100000:0:6": 3671210.0,
+          "100000:0:7": 404064.0,
+          "100000:0:8": 3080980.0
+        }
+      ],
+      "smallheap": [
+        {
+          "32:1:0": 75.49,
+          "32:1:1": 281.984,
+          "32:1:2": 376.492,
+          "32:1:3": 354.719,
+          "32:1:4": 390.858,
+          "32:1:5": 12902.8,
+          "32:1:6": 268.303,
+          "32:1:7": 58.4993,
+          "32:1:8": 394.268,
+          "32:0:0": 68.4001,
+          "32:0:1": 282.228,
+          "32:0:2": 412.027,
+          "32:0:3": 363.747,
+          "32:0:4": 385.326,
+          "32:0:5": 12962.3,
+          "32:0:6": 274.06,
+          "32:0:7": 75.9805,
+          "32:0:8": 393.869,
+          "100000:1:0": 1039400.0,
+          "100000:1:1": 3690860.0,
+          "100000:1:2": 4812610.0,
+          "100000:1:3": 6145980.0,
+          "100000:1:4": 5306660.0,
+          "100000:1:5": 411059.0,
+          "100000:1:6": 3694290.0,
+          "100000:1:7": 397920.0,
+          "100000:1:8": 3157960.0,
+          "100000:0:0": 749790.0,
+          "100000:0:1": 3737730.0,
+          "100000:0:2": 4172370.0,
+          "100000:0:3": 6020600.0,
+          "100000:0:4": 5315910.0,
+          "100000:0:5": 401624.0,
+          "100000:0:6": 3676420.0,
+          "100000:0:7": 391557.0,
+          "100000:0:8": 3137580.0
+        },
+        {
+          "32:1:0": 74.0164,
+          "32:1:1": 280.729,
+          "32:1:2": 375.868,
+          "32:1:3": 353.099,
+          "32:1:4": 384.305,
+          "32:1:5": 12912.9,
+          "32:1:6": 270.078,
+          "32:1:7": 58.1235,
+          "32:1:8": 393.437,
+          "32:0:0": 69.5539,
+          "32:0:1": 281.639,
+          "32:0:2": 412.695,
+          "32:0:3": 363.586,
+          "32:0:4": 387.647,
+          "32:0:5": 12965.1,
+          "32:0:6": 268.217,
+          "32:0:7": 73.9072,
+          "32:0:8": 392.273,
+          "100000:1:0": 1004330.0,
+          "100000:1:1": 3621340.0,
+          "100000:1:2": 4883110.0,
+          "100000:1:3": 6015790.0,
+          "100000:1:4": 5343870.0,
+          "100000:1:5": 410644.0,
+          "100000:1:6": 3582960.0,
+          "100000:1:7": 398702.0,
+          "100000:1:8": 3119130.0,
+          "100000:0:0": 749940.0,
+          "100000:0:1": 3634380.0,
+          "100000:0:2": 4177630.0,
+          "100000:0:3": 6024620.0,
+          "100000:0:4": 5351310.0,
+          "100000:0:5": 402522.0,
+          "100000:0:6": 3584280.0,
+          "100000:0:7": 386892.0,
+          "100000:0:8": 3196170.0
+        },
+        {
+          "32:1:0": 74.894,
+          "32:1:1": 279.526,
+          "32:1:2": 373.377,
+          "32:1:3": 353.152,
+          "32:1:4": 390.125,
+          "32:1:5": 12915.6,
+          "32:1:6": 269.668,
+          "32:1:7": 58.3458,
+          "32:1:8": 394.391,
+          "32:0:0": 68.5126,
+          "32:0:1": 280.163,
+          "32:0:2": 410.718,
+          "32:0:3": 363.484,
+          "32:0:4": 378.954,
+          "32:0:5": 12974.5,
+          "32:0:6": 267.921,
+          "32:0:7": 74.9681,
+          "32:0:8": 392.818,
+          "100000:1:0": 1002680.0,
+          "100000:1:1": 3855110.0,
+          "100000:1:2": 4836850.0,
+          "100000:1:3": 6041600.0,
+          "100000:1:4": 5366560.0,
+          "100000:1:5": 411743.0,
+          "100000:1:6": 3795620.0,
+          "100000:1:7": 397056.0,
+          "100000:1:8": 3115740.0,
+          "100000:0:0": 746616.0,
+          "100000:0:1": 3847890.0,
+          "100000:0:2": 4182950.0,
+          "100000:0:3": 6336170.0,
+          "100000:0:4": 5374190.0,
+          "100000:0:5": 402354.0,
+          "100000:0:6": 3804730.0,
+          "100000:0:7": 391411.0,
+          "100000:0:8": 3126390.0
+        },
+        {
+          "32:1:0": 74.3465,
+          "32:1:1": 280.826,
+          "32:1:2": 374.971,
+          "32:1:3": 354.998,
+          "32:1:4": 395.97,
+          "32:1:5": 12925.6,
+          "32:1:6": 269.102,
+          "32:1:7": 58.5052,
+          "32:1:8": 394.063,
+          "32:0:0": 68.5353,
+          "32:0:1": 282.392,
+          "32:0:2": 412.825,
+          "32:0:3": 363.376,
+          "32:0:4": 387.511,
+          "32:0:5": 12963.8,
+          "32:0:6": 268.961,
+          "32:0:7": 72.2887,
+          "32:0:8": 391.445,
+          "100000:1:0": 1013980.0,
+          "100000:1:1": 3767600.0,
+          "100000:1:2": 4773280.0,
+          "100000:1:3": 5966780.0,
+          "100000:1:4": 5339590.0,
+          "100000:1:5": 409077.0,
+          "100000:1:6": 3723180.0,
+          "100000:1:7": 395993.0,
+          "100000:1:8": 3097680.0,
+          "100000:0:0": 750472.0,
+          "100000:0:1": 3729840.0,
+          "100000:0:2": 4179980.0,
+          "100000:0:3": 5953860.0,
+          "100000:0:4": 5311830.0,
+          "100000:0:5": 401125.0,
+          "100000:0:6": 3726020.0,
+          "100000:0:7": 391672.0,
+          "100000:0:8": 3148490.0
+        },
+        {
+          "32:1:0": 74.7562,
+          "32:1:1": 284.85,
+          "32:1:2": 379.602,
+          "32:1:3": 354.98,
+          "32:1:4": 388.026,
+          "32:1:5": 12924.2,
+          "32:1:6": 266.116,
+          "32:1:7": 58.4334,
+          "32:1:8": 394.2,
+          "32:0:0": 68.7165,
+          "32:0:1": 279.35,
+          "32:0:2": 411.259,
+          "32:0:3": 364.45,
+          "32:0:4": 388.801,
+          "32:0:5": 12983.3,
+          "32:0:6": 270.376,
+          "32:0:7": 75.6213,
+          "32:0:8": 398.095,
+          "100000:1:0": 1009860.0,
+          "100000:1:1": 3793040.0,
+          "100000:1:2": 4807770.0,
+          "100000:1:3": 6026800.0,
+          "100000:1:4": 5309730.0,
+          "100000:1:5": 408934.0,
+          "100000:1:6": 3722600.0,
+          "100000:1:7": 395513.0,
+          "100000:1:8": 3113420.0,
+          "100000:0:0": 748037.0,
+          "100000:0:1": 3752400.0,
+          "100000:0:2": 4170170.0,
+          "100000:0:3": 6095970.0,
+          "100000:0:4": 5356240.0,
+          "100000:0:5": 403982.0,
+          "100000:0:6": 3726820.0,
+          "100000:0:7": 393659.0,
+          "100000:0:8": 3203140.0
+        }
+      ]
+    },
+    "clang": {
+      "baseline": [
+        {
+          "32:1:0": 117.91,
+          "32:1:1": 219.181,
+          "32:1:2": 294.458,
+          "32:1:3": 294.611,
+          "32:1:4": 276.717,
+          "32:1:5": 3573.7,
+          "32:1:6": 188.781,
+          "32:1:7": 39.5774,
+          "32:1:8": 364.637,
+          "32:0:0": 100.131,
+          "32:0:1": 226.164,
+          "32:0:2": 330.164,
+          "32:0:3": 282.023,
+          "32:0:4": 254.346,
+          "32:0:5": 3582.32,
+          "32:0:6": 198.253,
+          "32:0:7": 50.3317,
+          "32:0:8": 351.041,
+          "100000:1:0": 1099660.0,
+          "100000:1:1": 5647730.0,
+          "100000:1:2": 6253060.0,
+          "100000:1:3": 8769380.0,
+          "100000:1:4": 7468920.0,
+          "100000:1:5": 542939.0,
+          "100000:1:6": 5509000.0,
+          "100000:1:7": 538984.0,
+          "100000:1:8": 4350370.0,
+          "100000:0:0": 819484.0,
+          "100000:0:1": 5730200.0,
+          "100000:0:2": 2191460.0,
+          "100000:0:3": 8694800.0,
+          "100000:0:4": 7351450.0,
+          "100000:0:5": 542044.0,
+          "100000:0:6": 5548900.0,
+          "100000:0:7": 538586.0,
+          "100000:0:8": 4174580.0
+        },
+        {
+          "32:1:0": 116.958,
+          "32:1:1": 226.189,
+          "32:1:2": 294.371,
+          "32:1:3": 288.962,
+          "32:1:4": 276.475,
+          "32:1:5": 3575.32,
+          "32:1:6": 181.938,
+          "32:1:7": 37.483,
+          "32:1:8": 364.735,
+          "32:0:0": 102.8,
+          "32:0:1": 227.496,
+          "32:0:2": 350.036,
+          "32:0:3": 283.207,
+          "32:0:4": 255.161,
+          "32:0:5": 3586.83,
+          "32:0:6": 196.678,
+          "32:0:7": 47.1947,
+          "32:0:8": 355.572,
+          "100000:1:0": 1096710.0,
+          "100000:1:1": 5648410.0,
+          "100000:1:2": 6251570.0,
+          "100000:1:3": 8771170.0,
+          "100000:1:4": 7445260.0,
+          "100000:1:5": 540405.0,
+          "100000:1:6": 5510950.0,
+          "100000:1:7": 535670.0,
+          "100000:1:8": 4336400.0,
+          "100000:0:0": 819153.0,
+          "100000:0:1": 5712140.0,
+          "100000:0:2": 2199880.0,
+          "100000:0:3": 8672250.0,
+          "100000:0:4": 7355950.0,
+          "100000:0:5": 534808.0,
+          "100000:0:6": 5543810.0,
+          "100000:0:7": 534007.0,
+          "100000:0:8": 4170150.0
+        },
+        {
+          "32:1:0": 112.577,
+          "32:1:1": 228.206,
+          "32:1:2": 293.389,
+          "32:1:3": 296.562,
+          "32:1:4": 275.477,
+          "32:1:5": 3585.25,
+          "32:1:6": 186.863,
+          "32:1:7": 41.2151,
+          "32:1:8": 361.874,
+          "32:0:0": 102.881,
+          "32:0:1": 229.068,
+          "32:0:2": 348.64,
+          "32:0:3": 279.005,
+          "32:0:4": 251.734,
+          "32:0:5": 3584.37,
+          "32:0:6": 201.022,
+          "32:0:7": 51.6424,
+          "32:0:8": 358.042,
+          "100000:1:0": 1100740.0,
+          "100000:1:1": 5667530.0,
+          "100000:1:2": 6353310.0,
+          "100000:1:3": 8761760.0,
+          "100000:1:4": 7510180.0,
+          "100000:1:5": 541829.0,
+          "100000:1:6": 5511200.0,
+          "100000:1:7": 538322.0,
+          "100000:1:8": 4348890.0,
+          "100000:0:0": 821754.0,
+          "100000:0:1": 5712450.0,
+          "100000:0:2": 2218160.0,
+          "100000:0:3": 8691920.0,
+          "100000:0:4": 7379110.0,
+          "100000:0:5": 578527.0,
+          "100000:0:6": 5551580.0,
+          "100000:0:7": 542627.0,
+          "100000:0:8": 4194820.0
+        },
+        {
+          "32:1:0": 118.063,
+          "32:1:1": 223.201,
+          "32:1:2": 286.534,
+          "32:1:3": 289.493,
+          "32:1:4": 275.092,
+          "32:1:5": 3577.73,
+          "32:1:6": 184.494,
+          "32:1:7": 42.0676,
+          "32:1:8": 355.909,
+          "32:0:0": 102.923,
+          "32:0:1": 232.409,
+          "32:0:2": 342.07,
+          "32:0:3": 278.771,
+          "32:0:4": 255.734,
+          "32:0:5": 3586.99,
+          "32:0:6": 201.2,
+          "32:0:7": 49.1319,
+          "32:0:8": 352.664,
+          "100000:1:0": 1099750.0,
+          "100000:1:1": 5630100.0,
+          "100000:1:2": 6277570.0,
+          "100000:1:3": 8754800.0,
+          "100000:1:4": 7466650.0,
+          "100000:1:5": 535152.0,
+          "100000:1:6": 5509290.0,
+          "100000:1:7": 531360.0,
+          "100000:1:8": 4340840.0,
+          "100000:0:0": 818286.0,
+          "100000:0:1": 5728220.0,
+          "100000:0:2": 2219210.0,
+          "100000:0:3": 8684280.0,
+          "100000:0:4": 7340060.0,
+          "100000:0:5": 535046.0,
+          "100000:0:6": 5539130.0,
+          "100000:0:7": 530355.0,
+          "100000:0:8": 4175630.0
+        },
+        {
+          "32:1:0": 115.826,
+          "32:1:1": 221.285,
+          "32:1:2": 292.195,
+          "32:1:3": 290.403,
+          "32:1:4": 279.97,
+          "32:1:5": 3572.7,
+          "32:1:6": 192.346,
+          "32:1:7": 40.4668,
+          "32:1:8": 359.078,
+          "32:0:0": 103.756,
+          "32:0:1": 227.353,
+          "32:0:2": 344.636,
+          "32:0:3": 279.254,
+          "32:0:4": 255.355,
+          "32:0:5": 3591.11,
+          "32:0:6": 195.171,
+          "32:0:7": 48.1745,
+          "32:0:8": 355.203,
+          "100000:1:0": 1093980.0,
+          "100000:1:1": 5646770.0,
+          "100000:1:2": 6243920.0,
+          "100000:1:3": 8755500.0,
+          "100000:1:4": 7464510.0,
+          "100000:1:5": 534610.0,
+          "100000:1:6": 5512520.0,
+          "100000:1:7": 527775.0,
+          "100000:1:8": 4344030.0,
+          "100000:0:0": 834527.0,
+          "100000:0:1": 5693170.0,
+          "100000:0:2": 2213930.0,
+          "100000:0:3": 8670660.0,
+          "100000:0:4": 7340900.0,
+          "100000:0:5": 533751.0,
+          "100000:0:6": 5544430.0,
+          "100000:0:7": 535304.0,
+          "100000:0:8": 4160400.0
+        }
+      ],
+      "control": [
+        {
+          "32:1:0": 115.372,
+          "32:1:1": 227.161,
+          "32:1:2": 295.319,
+          "32:1:3": 293.751,
+          "32:1:4": 273.755,
+          "32:1:5": 3577.77,
+          "32:1:6": 180.87,
+          "32:1:7": 39.6223,
+          "32:1:8": 359.893,
+          "32:0:0": 102.223,
+          "32:0:1": 226.494,
+          "32:0:2": 348.332,
+          "32:0:3": 279.455,
+          "32:0:4": 254.111,
+          "32:0:5": 3585.65,
+          "32:0:6": 199.709,
+          "32:0:7": 48.2202,
+          "32:0:8": 355.19,
+          "100000:1:0": 1100790.0,
+          "100000:1:1": 5648860.0,
+          "100000:1:2": 6278350.0,
+          "100000:1:3": 8765730.0,
+          "100000:1:4": 7472100.0,
+          "100000:1:5": 536685.0,
+          "100000:1:6": 5499550.0,
+          "100000:1:7": 532852.0,
+          "100000:1:8": 4325080.0,
+          "100000:0:0": 826470.0,
+          "100000:0:1": 5709670.0,
+          "100000:0:2": 2210840.0,
+          "100000:0:3": 8688340.0,
+          "100000:0:4": 7343080.0,
+          "100000:0:5": 533582.0,
+          "100000:0:6": 5536040.0,
+          "100000:0:7": 525605.0,
+          "100000:0:8": 4198460.0
+        },
+        {
+          "32:1:0": 118.458,
+          "32:1:1": 219.016,
+          "32:1:2": 287.686,
+          "32:1:3": 290.171,
+          "32:1:4": 275.312,
+          "32:1:5": 3575.1,
+          "32:1:6": 183.363,
+          "32:1:7": 40.7122,
+          "32:1:8": 360.574,
+          "32:0:0": 105.124,
+          "32:0:1": 227.798,
+          "32:0:2": 340.006,
+          "32:0:3": 281.066,
+          "32:0:4": 255.17,
+          "32:0:5": 3585.49,
+          "32:0:6": 196.837,
+          "32:0:7": 49.4429,
+          "32:0:8": 355.316,
+          "100000:1:0": 1105220.0,
+          "100000:1:1": 5642700.0,
+          "100000:1:2": 6279370.0,
+          "100000:1:3": 8769520.0,
+          "100000:1:4": 7467210.0,
+          "100000:1:5": 542070.0,
+          "100000:1:6": 5510170.0,
+          "100000:1:7": 538804.0,
+          "100000:1:8": 4348550.0,
+          "100000:0:0": 820970.0,
+          "100000:0:1": 5709250.0,
+          "100000:0:2": 2289720.0,
+          "100000:0:3": 8686270.0,
+          "100000:0:4": 7351970.0,
+          "100000:0:5": 540984.0,
+          "100000:0:6": 5553860.0,
+          "100000:0:7": 532397.0,
+          "100000:0:8": 4200290.0
+        },
+        {
+          "32:1:0": 115.757,
+          "32:1:1": 224.734,
+          "32:1:2": 295.103,
+          "32:1:3": 296.89,
+          "32:1:4": 279.792,
+          "32:1:5": 3629.8,
+          "32:1:6": 181.951,
+          "32:1:7": 39.2809,
+          "32:1:8": 363.471,
+          "32:0:0": 102.023,
+          "32:0:1": 227.957,
+          "32:0:2": 341.892,
+          "32:0:3": 280.116,
+          "32:0:4": 253.022,
+          "32:0:5": 3585.77,
+          "32:0:6": 195.537,
+          "32:0:7": 47.3282,
+          "32:0:8": 357.648,
+          "100000:1:0": 1098790.0,
+          "100000:1:1": 5655020.0,
+          "100000:1:2": 6279430.0,
+          "100000:1:3": 8779310.0,
+          "100000:1:4": 7505670.0,
+          "100000:1:5": 542761.0,
+          "100000:1:6": 5519120.0,
+          "100000:1:7": 539384.0,
+          "100000:1:8": 4352250.0,
+          "100000:0:0": 820099.0,
+          "100000:0:1": 5713400.0,
+          "100000:0:2": 2248120.0,
+          "100000:0:3": 8678180.0,
+          "100000:0:4": 7374060.0,
+          "100000:0:5": 534768.0,
+          "100000:0:6": 5550100.0,
+          "100000:0:7": 533719.0,
+          "100000:0:8": 4161120.0
+        },
+        {
+          "32:1:0": 115.495,
+          "32:1:1": 219.953,
+          "32:1:2": 288.631,
+          "32:1:3": 289.199,
+          "32:1:4": 280.503,
+          "32:1:5": 3575.19,
+          "32:1:6": 182.649,
+          "32:1:7": 39.8133,
+          "32:1:8": 356.758,
+          "32:0:0": 100.374,
+          "32:0:1": 226.995,
+          "32:0:2": 350.229,
+          "32:0:3": 276.661,
+          "32:0:4": 254.744,
+          "32:0:5": 3583.29,
+          "32:0:6": 195.055,
+          "32:0:7": 47.5735,
+          "32:0:8": 351.905,
+          "100000:1:0": 1091170.0,
+          "100000:1:1": 5666920.0,
+          "100000:1:2": 6260430.0,
+          "100000:1:3": 8767650.0,
+          "100000:1:4": 7464760.0,
+          "100000:1:5": 535986.0,
+          "100000:1:6": 5498660.0,
+          "100000:1:7": 532926.0,
+          "100000:1:8": 4350320.0,
+          "100000:0:0": 824935.0,
+          "100000:0:1": 5700120.0,
+          "100000:0:2": 2400860.0,
+          "100000:0:3": 8672910.0,
+          "100000:0:4": 7330510.0,
+          "100000:0:5": 534401.0,
+          "100000:0:6": 5547450.0,
+          "100000:0:7": 531885.0,
+          "100000:0:8": 4183640.0
+        },
+        {
+          "32:1:0": 112.815,
+          "32:1:1": 223.378,
+          "32:1:2": 295.503,
+          "32:1:3": 288.868,
+          "32:1:4": 281.046,
+          "32:1:5": 3574.57,
+          "32:1:6": 179.554,
+          "32:1:7": 42.4863,
+          "32:1:8": 361.967,
+          "32:0:0": 100.749,
+          "32:0:1": 226.334,
+          "32:0:2": 346.956,
+          "32:0:3": 284.206,
+          "32:0:4": 255.748,
+          "32:0:5": 3601.69,
+          "32:0:6": 195.868,
+          "32:0:7": 47.6856,
+          "32:0:8": 356.232,
+          "100000:1:0": 1110970.0,
+          "100000:1:1": 5635860.0,
+          "100000:1:2": 6237690.0,
+          "100000:1:3": 8755700.0,
+          "100000:1:4": 7456040.0,
+          "100000:1:5": 534653.0,
+          "100000:1:6": 5529910.0,
+          "100000:1:7": 533539.0,
+          "100000:1:8": 4321100.0,
+          "100000:0:0": 821831.0,
+          "100000:0:1": 5721450.0,
+          "100000:0:2": 2228490.0,
+          "100000:0:3": 8678330.0,
+          "100000:0:4": 7332050.0,
+          "100000:0:5": 534178.0,
+          "100000:0:6": 5537510.0,
+          "100000:0:7": 533818.0,
+          "100000:0:8": 4175310.0
+        }
+      ],
+      "redundant": [
+        {
+          "32:1:0": 122.38,
+          "32:1:1": 230.922,
+          "32:1:2": 296.827,
+          "32:1:3": 296.02,
+          "32:1:4": 281.261,
+          "32:1:5": 3574.09,
+          "32:1:6": 185.808,
+          "32:1:7": 41.8317,
+          "32:1:8": 363.291,
+          "32:0:0": 100.53,
+          "32:0:1": 227.12,
+          "32:0:2": 327.073,
+          "32:0:3": 273.716,
+          "32:0:4": 255.762,
+          "32:0:5": 3588.24,
+          "32:0:6": 199.705,
+          "32:0:7": 46.4755,
+          "32:0:8": 353.832,
+          "100000:1:0": 1102230.0,
+          "100000:1:1": 5617430.0,
+          "100000:1:2": 6233580.0,
+          "100000:1:3": 8727740.0,
+          "100000:1:4": 7428860.0,
+          "100000:1:5": 535142.0,
+          "100000:1:6": 5506500.0,
+          "100000:1:7": 530288.0,
+          "100000:1:8": 4328800.0,
+          "100000:0:0": 817846.0,
+          "100000:0:1": 5714850.0,
+          "100000:0:2": 2216950.0,
+          "100000:0:3": 8687280.0,
+          "100000:0:4": 7338200.0,
+          "100000:0:5": 535701.0,
+          "100000:0:6": 5547350.0,
+          "100000:0:7": 531484.0,
+          "100000:0:8": 4154940.0
+        },
+        {
+          "32:1:0": 121.546,
+          "32:1:1": 221.276,
+          "32:1:2": 289.102,
+          "32:1:3": 289.888,
+          "32:1:4": 278.139,
+          "32:1:5": 3575.67,
+          "32:1:6": 183.294,
+          "32:1:7": 41.7484,
+          "32:1:8": 362.3,
+          "32:0:0": 102.839,
+          "32:0:1": 232.133,
+          "32:0:2": 336.862,
+          "32:0:3": 279.903,
+          "32:0:4": 256.482,
+          "32:0:5": 3586.56,
+          "32:0:6": 196.33,
+          "32:0:7": 46.9811,
+          "32:0:8": 349.51,
+          "100000:1:0": 1110380.0,
+          "100000:1:1": 5639000.0,
+          "100000:1:2": 6286140.0,
+          "100000:1:3": 8763810.0,
+          "100000:1:4": 7447570.0,
+          "100000:1:5": 542036.0,
+          "100000:1:6": 5505760.0,
+          "100000:1:7": 529724.0,
+          "100000:1:8": 4339990.0,
+          "100000:0:0": 832066.0,
+          "100000:0:1": 5696730.0,
+          "100000:0:2": 2209480.0,
+          "100000:0:3": 8669530.0,
+          "100000:0:4": 7320930.0,
+          "100000:0:5": 535235.0,
+          "100000:0:6": 5534960.0,
+          "100000:0:7": 528053.0,
+          "100000:0:8": 4164970.0
+        },
+        {
+          "32:1:0": 116.41,
+          "32:1:1": 224.692,
+          "32:1:2": 287.487,
+          "32:1:3": 290.707,
+          "32:1:4": 279.405,
+          "32:1:5": 3579.28,
+          "32:1:6": 186.46,
+          "32:1:7": 41.1587,
+          "32:1:8": 360.949,
+          "32:0:0": 103.119,
+          "32:0:1": 229.817,
+          "32:0:2": 331.701,
+          "32:0:3": 275.666,
+          "32:0:4": 258.122,
+          "32:0:5": 3592.78,
+          "32:0:6": 196.47,
+          "32:0:7": 47.4883,
+          "32:0:8": 352.742,
+          "100000:1:0": 1096620.0,
+          "100000:1:1": 5665990.0,
+          "100000:1:2": 6262020.0,
+          "100000:1:3": 8752560.0,
+          "100000:1:4": 7459590.0,
+          "100000:1:5": 542911.0,
+          "100000:1:6": 5516350.0,
+          "100000:1:7": 540675.0,
+          "100000:1:8": 4345680.0,
+          "100000:0:0": 817864.0,
+          "100000:0:1": 5721750.0,
+          "100000:0:2": 2222150.0,
+          "100000:0:3": 8690900.0,
+          "100000:0:4": 7340070.0,
+          "100000:0:5": 541583.0,
+          "100000:0:6": 5589550.0,
+          "100000:0:7": 529552.0,
+          "100000:0:8": 4212050.0
+        },
+        {
+          "32:1:0": 115.991,
+          "32:1:1": 215.909,
+          "32:1:2": 290.792,
+          "32:1:3": 285.897,
+          "32:1:4": 274.054,
+          "32:1:5": 3573.75,
+          "32:1:6": 186.594,
+          "32:1:7": 38.9414,
+          "32:1:8": 365.337,
+          "32:0:0": 103.598,
+          "32:0:1": 228.385,
+          "32:0:2": 334.192,
+          "32:0:3": 280.364,
+          "32:0:4": 254.056,
+          "32:0:5": 3583.25,
+          "32:0:6": 197.532,
+          "32:0:7": 46.5668,
+          "32:0:8": 350.25,
+          "100000:1:0": 1086250.0,
+          "100000:1:1": 5639520.0,
+          "100000:1:2": 6242180.0,
+          "100000:1:3": 8753630.0,
+          "100000:1:4": 7420860.0,
+          "100000:1:5": 541477.0,
+          "100000:1:6": 5519510.0,
+          "100000:1:7": 538089.0,
+          "100000:1:8": 4368560.0,
+          "100000:0:0": 819248.0,
+          "100000:0:1": 5728760.0,
+          "100000:0:2": 2229980.0,
+          "100000:0:3": 8681350.0,
+          "100000:0:4": 7347760.0,
+          "100000:0:5": 537484.0,
+          "100000:0:6": 5532140.0,
+          "100000:0:7": 528858.0,
+          "100000:0:8": 4158290.0
+        },
+        {
+          "32:1:0": 115.647,
+          "32:1:1": 214.71,
+          "32:1:2": 289.236,
+          "32:1:3": 287.789,
+          "32:1:4": 278.032,
+          "32:1:5": 3575.64,
+          "32:1:6": 190.4,
+          "32:1:7": 38.1529,
+          "32:1:8": 363.371,
+          "32:0:0": 102.53,
+          "32:0:1": 233.011,
+          "32:0:2": 343.935,
+          "32:0:3": 281.651,
+          "32:0:4": 254.336,
+          "32:0:5": 3592.97,
+          "32:0:6": 200.075,
+          "32:0:7": 49.0372,
+          "32:0:8": 353.893,
+          "100000:1:0": 1120800.0,
+          "100000:1:1": 5649000.0,
+          "100000:1:2": 6287290.0,
+          "100000:1:3": 8731280.0,
+          "100000:1:4": 7441030.0,
+          "100000:1:5": 535469.0,
+          "100000:1:6": 5510490.0,
+          "100000:1:7": 531134.0,
+          "100000:1:8": 4325070.0,
+          "100000:0:0": 818796.0,
+          "100000:0:1": 5696650.0,
+          "100000:0:2": 2200360.0,
+          "100000:0:3": 8677700.0,
+          "100000:0:4": 7327270.0,
+          "100000:0:5": 534149.0,
+          "100000:0:6": 5552220.0,
+          "100000:0:7": 532374.0,
+          "100000:0:8": 4184640.0
+        }
+      ],
+      "smallheap": [
+        {
+          "32:1:0": 117.854,
+          "32:1:1": 148.869,
+          "32:1:2": 227.643,
+          "32:1:3": 266.485,
+          "32:1:4": 290.815,
+          "32:1:5": 2511.58,
+          "32:1:6": 153.479,
+          "32:1:7": 37.2053,
+          "32:1:8": 331.283,
+          "32:0:0": 96.526,
+          "32:0:1": 167.528,
+          "32:0:2": 270.296,
+          "32:0:3": 264.974,
+          "32:0:4": 287.566,
+          "32:0:5": 2505.35,
+          "32:0:6": 145.213,
+          "32:0:7": 51.064,
+          "32:0:8": 340.531,
+          "100000:1:0": 1092390.0,
+          "100000:1:1": 5465460.0,
+          "100000:1:2": 6127100.0,
+          "100000:1:3": 8536850.0,
+          "100000:1:4": 7150610.0,
+          "100000:1:5": 533403.0,
+          "100000:1:6": 5493050.0,
+          "100000:1:7": 530049.0,
+          "100000:1:8": 4240510.0,
+          "100000:0:0": 819137.0,
+          "100000:0:1": 5589640.0,
+          "100000:0:2": 2097120.0,
+          "100000:0:3": 8634610.0,
+          "100000:0:4": 7316660.0,
+          "100000:0:5": 536907.0,
+          "100000:0:6": 5555240.0,
+          "100000:0:7": 550112.0,
+          "100000:0:8": 4260280.0
+        },
+        {
+          "32:1:0": 119.374,
+          "32:1:1": 149.662,
+          "32:1:2": 226.043,
+          "32:1:3": 261.812,
+          "32:1:4": 288.001,
+          "32:1:5": 2724.06,
+          "32:1:6": 150.103,
+          "32:1:7": 36.9073,
+          "32:1:8": 334.18,
+          "32:0:0": 98.1472,
+          "32:0:1": 163.336,
+          "32:0:2": 270.334,
+          "32:0:3": 268.364,
+          "32:0:4": 286.417,
+          "32:0:5": 2531.77,
+          "32:0:6": 142.514,
+          "32:0:7": 50.4601,
+          "32:0:8": 338.597,
+          "100000:1:0": 1106320.0,
+          "100000:1:1": 5460470.0,
+          "100000:1:2": 6123250.0,
+          "100000:1:3": 8542670.0,
+          "100000:1:4": 7191760.0,
+          "100000:1:5": 541019.0,
+          "100000:1:6": 5497100.0,
+          "100000:1:7": 539174.0,
+          "100000:1:8": 4211430.0,
+          "100000:0:0": 823213.0,
+          "100000:0:1": 5595520.0,
+          "100000:0:2": 1924450.0,
+          "100000:0:3": 8666740.0,
+          "100000:0:4": 7350580.0,
+          "100000:0:5": 543878.0,
+          "100000:0:6": 5527410.0,
+          "100000:0:7": 539848.0,
+          "100000:0:8": 4188450.0
+        },
+        {
+          "32:1:0": 117.009,
+          "32:1:1": 148.343,
+          "32:1:2": 229.849,
+          "32:1:3": 267.064,
+          "32:1:4": 288.414,
+          "32:1:5": 2583.77,
+          "32:1:6": 153.703,
+          "32:1:7": 39.5235,
+          "32:1:8": 344.449,
+          "32:0:0": 105.395,
+          "32:0:1": 173.299,
+          "32:0:2": 274.779,
+          "32:0:3": 263.841,
+          "32:0:4": 288.848,
+          "32:0:5": 2464.41,
+          "32:0:6": 144.954,
+          "32:0:7": 50.4917,
+          "32:0:8": 337.194,
+          "100000:1:0": 1089670.0,
+          "100000:1:1": 5458540.0,
+          "100000:1:2": 6135700.0,
+          "100000:1:3": 8533530.0,
+          "100000:1:4": 7230080.0,
+          "100000:1:5": 532957.0,
+          "100000:1:6": 5493970.0,
+          "100000:1:7": 532750.0,
+          "100000:1:8": 4229980.0,
+          "100000:0:0": 824140.0,
+          "100000:0:1": 5586860.0,
+          "100000:0:2": 1913370.0,
+          "100000:0:3": 8623690.0,
+          "100000:0:4": 7378960.0,
+          "100000:0:5": 536994.0,
+          "100000:0:6": 5551320.0,
+          "100000:0:7": 531782.0,
+          "100000:0:8": 4226200.0
+        },
+        {
+          "32:1:0": 115.359,
+          "32:1:1": 151.742,
+          "32:1:2": 224.241,
+          "32:1:3": 260.037,
+          "32:1:4": 289.326,
+          "32:1:5": 2512.47,
+          "32:1:6": 150.806,
+          "32:1:7": 38.8345,
+          "32:1:8": 331.204,
+          "32:0:0": 98.6652,
+          "32:0:1": 176.468,
+          "32:0:2": 269.541,
+          "32:0:3": 263.931,
+          "32:0:4": 290.24,
+          "32:0:5": 2533.2,
+          "32:0:6": 153.482,
+          "32:0:7": 52.2267,
+          "32:0:8": 343.57,
+          "100000:1:0": 1081170.0,
+          "100000:1:1": 5450780.0,
+          "100000:1:2": 6117790.0,
+          "100000:1:3": 8500440.0,
+          "100000:1:4": 7148600.0,
+          "100000:1:5": 532273.0,
+          "100000:1:6": 5476720.0,
+          "100000:1:7": 531664.0,
+          "100000:1:8": 4209370.0,
+          "100000:0:0": 818095.0,
+          "100000:0:1": 5582750.0,
+          "100000:0:2": 1953610.0,
+          "100000:0:3": 8650540.0,
+          "100000:0:4": 7307760.0,
+          "100000:0:5": 536903.0,
+          "100000:0:6": 5534640.0,
+          "100000:0:7": 530418.0,
+          "100000:0:8": 4200320.0
+        },
+        {
+          "32:1:0": 114.355,
+          "32:1:1": 150.949,
+          "32:1:2": 226.981,
+          "32:1:3": 259.058,
+          "32:1:4": 285.084,
+          "32:1:5": 2536.38,
+          "32:1:6": 150.829,
+          "32:1:7": 37.0119,
+          "32:1:8": 333.257,
+          "32:0:0": 100.437,
+          "32:0:1": 169.056,
+          "32:0:2": 275.918,
+          "32:0:3": 269.287,
+          "32:0:4": 293.113,
+          "32:0:5": 2502.1,
+          "32:0:6": 147.503,
+          "32:0:7": 50.9894,
+          "32:0:8": 337.283,
+          "100000:1:0": 1096930.0,
+          "100000:1:1": 5447900.0,
+          "100000:1:2": 6135220.0,
+          "100000:1:3": 8501490.0,
+          "100000:1:4": 7176060.0,
+          "100000:1:5": 532764.0,
+          "100000:1:6": 5483080.0,
+          "100000:1:7": 531404.0,
+          "100000:1:8": 4213910.0,
+          "100000:0:0": 817407.0,
+          "100000:0:1": 5580590.0,
+          "100000:0:2": 1944090.0,
+          "100000:0:3": 8611630.0,
+          "100000:0:4": 7357600.0,
+          "100000:0:5": 536486.0,
+          "100000:0:6": 5547310.0,
+          "100000:0:7": 535878.0,
+          "100000:0:8": 4188320.0
+        }
+      ]
+    }
+  },
+  "raw_official_runs": {
+    "gcc": {
+      "random_n_max_q_max_00": {
+        "baseline": [
+          60.677803,
+          55.00953,
+          55.666103,
+          56.17346,
+          59.661523,
+          57.358029,
+          55.153545
+        ],
+        "control": [
+          54.611427,
+          57.702884,
+          55.882642,
+          55.415689,
+          60.005708,
+          54.464126,
+          57.408186
+        ],
+        "redundant": [
+          55.585488,
+          55.109253,
+          59.308808,
+          54.960198,
+          57.1037,
+          54.837794,
+          54.818262
+        ],
+        "immediate": [
+          65.232186,
+          53.998974,
+          54.894359,
+          57.299239,
+          54.139561,
+          54.258709,
+          54.854428
+        ],
+        "smallheap": [
+          76.453411,
+          55.144707,
+          55.251336,
+          56.57844,
+          58.440741,
+          54.640114,
+          55.006436
+        ]
+      },
+      "random_n_max_q_max_01": {
+        "baseline": [
+          54.552739,
+          55.346899,
+          54.748207,
+          54.684977,
+          54.493322,
+          55.672364,
+          55.808424
+        ],
+        "control": [
+          55.818171,
+          54.750921,
+          54.488881,
+          55.221217,
+          55.318174,
+          54.756312,
+          54.198312
+        ],
+        "redundant": [
+          55.34026,
+          55.903711,
+          55.165535,
+          54.941061,
+          54.667496,
+          54.876108,
+          55.816244
+        ],
+        "immediate": [
+          54.018848,
+          56.423112,
+          55.087881,
+          54.762345,
+          55.859513,
+          54.117551,
+          55.124983
+        ],
+        "smallheap": [
+          54.903987,
+          55.35345,
+          55.30841,
+          54.984866,
+          55.624599,
+          54.779732,
+          55.071409
+        ]
+      },
+      "random_n_max_q_max_many_pop_00": {
+        "baseline": [
+          65.400286,
+          67.194305,
+          66.03594,
+          66.545505,
+          65.858712,
+          65.717127,
+          63.892201
+        ],
+        "control": [
+          66.261072,
+          66.174611,
+          66.261835,
+          88.240041,
+          66.237062,
+          66.00888,
+          66.22344
+        ],
+        "redundant": [
+          65.754257,
+          66.036725,
+          67.077509,
+          67.621807,
+          66.225414,
+          65.684795,
+          66.167245
+        ],
+        "immediate": [
+          65.431981,
+          66.267509,
+          65.755416,
+          65.483359,
+          64.705355,
+          65.350025,
+          64.829412
+        ],
+        "smallheap": [
+          65.756662,
+          66.533805,
+          66.495157,
+          65.552824,
+          63.987928,
+          66.338134,
+          64.534176
+        ]
+      },
+      "random_n_max_q_max_many_pop_01": {
+        "baseline": [
+          65.827645,
+          65.505406,
+          66.034792,
+          65.280278,
+          66.955116,
+          66.282886,
+          66.00553
+        ],
+        "control": [
+          65.068036,
+          70.679552,
+          65.808428,
+          64.768389,
+          65.678839,
+          66.963806,
+          65.853164
+        ],
+        "redundant": [
+          65.94186,
+          66.514365,
+          65.854858,
+          65.476117,
+          65.394268,
+          67.354268,
+          67.041192
+        ],
+        "immediate": [
+          65.537238,
+          65.310168,
+          64.723241,
+          64.995297,
+          62.980786,
+          65.540854,
+          69.049069
+        ],
+        "smallheap": [
+          66.680606,
+          66.308389,
+          68.344845,
+          66.585481,
+          71.560096,
+          66.665363,
+          65.997291
+        ]
+      },
+      "random_n_max_q_max_only_type01_00": {
+        "baseline": [
+          49.212576,
+          49.748062,
+          49.210588,
+          48.775362,
+          49.224894,
+          48.866565,
+          49.763949
+        ],
+        "control": [
+          49.031777,
+          49.511274,
+          52.084561,
+          48.724172,
+          48.429611,
+          48.942252,
+          49.385407
+        ],
+        "redundant": [
+          49.217254,
+          49.880865,
+          50.340062,
+          49.728648,
+          50.067373,
+          48.931074,
+          50.097193
+        ],
+        "immediate": [
+          48.729926,
+          49.112557,
+          48.201224,
+          47.79453,
+          49.03368,
+          48.105648,
+          49.201515
+        ],
+        "smallheap": [
+          49.855024,
+          49.271531,
+          49.424264,
+          48.554756,
+          48.795577,
+          49.86073,
+          49.313601
+        ]
+      },
+      "random_n_max_q_max_only_type01_01": {
+        "baseline": [
+          49.062928,
+          49.048989,
+          49.444101,
+          50.09823,
+          49.4467,
+          48.824766,
+          48.716632
+        ],
+        "control": [
+          49.115994,
+          49.876064,
+          49.325735,
+          49.020291,
+          49.106531,
+          49.323572,
+          49.875252
+        ],
+        "redundant": [
+          49.19528,
+          49.96045,
+          48.945945,
+          49.168138,
+          49.48537,
+          49.271313,
+          49.875614
+        ],
+        "immediate": [
+          48.362359,
+          49.012708,
+          49.509246,
+          47.928019,
+          48.318973,
+          49.65589,
+          48.207073
+        ],
+        "smallheap": [
+          49.18063,
+          49.03713,
+          49.33164,
+          48.908542,
+          50.283258,
+          51.142247,
+          49.01235
+        ]
+      },
+      "random_n_max_q_max_small_value_00": {
+        "baseline": [
+          56.148027,
+          55.56416,
+          56.255707,
+          55.018109,
+          55.213793,
+          55.248451,
+          54.981331
+        ],
+        "control": [
+          56.641376,
+          55.455834,
+          56.210342,
+          56.535762,
+          55.048641,
+          57.266421,
+          55.624543
+        ],
+        "redundant": [
+          56.058964,
+          59.054419,
+          57.174935,
+          56.653159,
+          55.366399,
+          55.728942,
+          55.118162
+        ],
+        "immediate": [
+          55.407846,
+          58.899036,
+          55.851582,
+          54.997272,
+          54.969606,
+          55.002675,
+          55.345546
+        ],
+        "smallheap": [
+          56.697965,
+          55.926284,
+          57.603804,
+          55.153602,
+          54.739019,
+          55.767415,
+          55.718229
+        ]
+      },
+      "random_n_max_q_max_small_value_01": {
+        "baseline": [
+          55.512278,
+          55.333221,
+          55.69175,
+          55.076184,
+          56.831829,
+          54.420848,
+          55.905255
+        ],
+        "control": [
+          58.498766,
+          55.518473,
+          55.191135,
+          54.978027,
+          55.053729,
+          54.589922,
+          56.387138
+        ],
+        "redundant": [
+          56.61463,
+          55.527269,
+          55.558738,
+          55.700772,
+          55.039271,
+          55.223022,
+          58.103664
+        ],
+        "immediate": [
+          55.554272,
+          55.247047,
+          54.799584,
+          55.495624,
+          56.511883,
+          54.863599,
+          55.59057
+        ],
+        "smallheap": [
+          54.963893,
+          55.42817,
+          55.633688,
+          55.128298,
+          58.909819,
+          54.459594,
+          55.067627
+        ]
+      },
+      "random_n_zero_q_max_00": {
+        "baseline": [
+          34.845599,
+          35.285477,
+          35.204341,
+          34.86446,
+          34.828384,
+          35.034926,
+          35.253777
+        ],
+        "control": [
+          34.531544,
+          35.034047,
+          35.326412,
+          35.187804,
+          34.769408,
+          35.105686,
+          34.680913
+        ],
+        "redundant": [
+          34.693643,
+          34.621903,
+          34.862253,
+          35.212539,
+          35.131307,
+          34.533518,
+          34.587581
+        ],
+        "immediate": [
+          34.756476,
+          34.796431,
+          34.298817,
+          34.696606,
+          34.889673,
+          34.624901,
+          34.42796
+        ],
+        "smallheap": [
+          36.08399,
+          36.284331,
+          35.654756,
+          36.283124,
+          36.235906,
+          36.330858,
+          37.158371
+        ]
+      }
+    },
+    "clang": {
+      "random_n_max_q_max_00": {
+        "baseline": [
+          48.808182,
+          47.144932,
+          48.062859,
+          47.674944,
+          48.324212,
+          48.939267,
+          47.356122
+        ],
+        "control": [
+          47.415169,
+          49.267086,
+          47.441023,
+          49.413144,
+          47.908646,
+          48.081194,
+          49.279253
+        ],
+        "redundant": [
+          47.74915,
+          48.49747,
+          49.229267,
+          48.978479,
+          48.328597,
+          47.526331,
+          47.37518
+        ],
+        "immediate": [
+          47.940973,
+          47.619861,
+          47.363972,
+          49.495094,
+          47.961306,
+          47.128027,
+          47.657027
+        ],
+        "smallheap": [
+          47.646287,
+          47.283162,
+          48.389782,
+          48.235536,
+          49.077073,
+          47.311981,
+          47.683355
+        ]
+      },
+      "random_n_max_q_max_01": {
+        "baseline": [
+          48.471736,
+          48.359573,
+          48.999554,
+          49.039296,
+          47.318109,
+          47.821052,
+          47.920557
+        ],
+        "control": [
+          48.848692,
+          47.967648,
+          48.505983,
+          47.29823,
+          48.055061,
+          47.878379,
+          47.737279
+        ],
+        "redundant": [
+          48.226326,
+          47.904594,
+          47.561856,
+          47.662939,
+          47.755326,
+          49.244677,
+          47.904427
+        ],
+        "immediate": [
+          47.993773,
+          47.835428,
+          48.442499,
+          48.075998,
+          47.663899,
+          50.053808,
+          47.824074
+        ],
+        "smallheap": [
+          48.018227,
+          47.652725,
+          48.411467,
+          51.153817,
+          47.933882,
+          48.232931,
+          47.405419
+        ]
+      },
+      "random_n_max_q_max_many_pop_00": {
+        "baseline": [
+          55.987449,
+          56.316972,
+          56.483753,
+          56.000914,
+          56.841168,
+          56.311245,
+          56.614919
+        ],
+        "control": [
+          56.349835,
+          56.011772,
+          55.962974,
+          56.718834,
+          56.068747,
+          56.021996,
+          56.079514
+        ],
+        "redundant": [
+          56.925912,
+          56.46161,
+          56.255724,
+          56.2285,
+          56.102983,
+          56.085428,
+          56.921634
+        ],
+        "immediate": [
+          57.625794,
+          56.434783,
+          56.420248,
+          56.953758,
+          56.32245,
+          56.022031,
+          56.265281
+        ],
+        "smallheap": [
+          56.959084,
+          56.422615,
+          56.517167,
+          56.60469,
+          56.662107,
+          56.516213,
+          56.545528
+        ]
+      },
+      "random_n_max_q_max_many_pop_01": {
+        "baseline": [
+          56.201799,
+          56.070726,
+          103.425159,
+          55.618482,
+          57.92355,
+          56.221434,
+          58.450766
+        ],
+        "control": [
+          56.407163,
+          56.977718,
+          62.780956,
+          55.947,
+          56.151749,
+          56.107835,
+          56.677543
+        ],
+        "redundant": [
+          56.540865,
+          56.966312,
+          56.286658,
+          55.949634,
+          56.602232,
+          56.199366,
+          55.31808
+        ],
+        "immediate": [
+          56.656651,
+          56.652952,
+          55.794669,
+          55.893346,
+          56.540733,
+          56.087335,
+          55.932661
+        ],
+        "smallheap": [
+          55.746244,
+          57.470423,
+          56.06075,
+          55.869222,
+          56.470957,
+          55.85809,
+          64.709275
+        ]
+      },
+      "random_n_max_q_max_only_type01_00": {
+        "baseline": [
+          44.690664,
+          44.903221,
+          45.117295,
+          44.345295,
+          44.721201,
+          45.020878,
+          44.773153
+        ],
+        "control": [
+          44.643085,
+          44.909856,
+          45.009902,
+          45.010201,
+          45.016727,
+          44.958251,
+          45.461011
+        ],
+        "redundant": [
+          44.999948,
+          44.751349,
+          44.446831,
+          45.029065,
+          44.987421,
+          44.389338,
+          44.67918
+        ],
+        "immediate": [
+          45.441245,
+          45.245775,
+          44.8891,
+          44.658849,
+          46.635257,
+          45.373666,
+          45.842726
+        ],
+        "smallheap": [
+          45.564593,
+          45.31657,
+          45.223036,
+          45.079912,
+          45.584793,
+          45.204017,
+          44.460568
+        ]
+      },
+      "random_n_max_q_max_only_type01_01": {
+        "baseline": [
+          45.034289,
+          44.536997,
+          44.746645,
+          44.938168,
+          44.563924,
+          46.049403,
+          46.292001
+        ],
+        "control": [
+          44.660371,
+          44.646983,
+          44.475442,
+          44.410047,
+          44.717598,
+          45.626022,
+          44.789164
+        ],
+        "redundant": [
+          44.951552,
+          46.397179,
+          45.295704,
+          44.542232,
+          44.963699,
+          45.403377,
+          44.319054
+        ],
+        "immediate": [
+          45.220965,
+          46.109199,
+          45.93683,
+          45.37743,
+          44.986535,
+          45.194211,
+          45.393003
+        ],
+        "smallheap": [
+          47.539056,
+          45.651702,
+          44.808016,
+          45.870531,
+          44.923106,
+          45.120537,
+          45.015716
+        ]
+      },
+      "random_n_max_q_max_small_value_00": {
+        "baseline": [
+          50.140639,
+          49.347396,
+          49.167038,
+          49.510992,
+          49.594318,
+          49.524417,
+          49.099516
+        ],
+        "control": [
+          53.684041,
+          50.009829,
+          49.233299,
+          49.66073,
+          49.713148,
+          49.250405,
+          48.91171
+        ],
+        "redundant": [
+          50.206776,
+          48.96454,
+          49.149305,
+          49.88967,
+          49.342964,
+          49.095311,
+          49.122059
+        ],
+        "immediate": [
+          50.022722,
+          49.302189,
+          49.219237,
+          50.218365,
+          49.504789,
+          49.066316,
+          49.195005
+        ],
+        "smallheap": [
+          50.450992,
+          49.764322,
+          49.975204,
+          49.766078,
+          50.536331,
+          49.783452,
+          49.961701
+        ]
+      },
+      "random_n_max_q_max_small_value_01": {
+        "baseline": [
+          50.396678,
+          49.387698,
+          49.650362,
+          49.969213,
+          49.008374,
+          49.280241,
+          49.20751
+        ],
+        "control": [
+          49.495044,
+          49.665267,
+          49.152837,
+          49.280645,
+          50.367478,
+          49.172756,
+          49.03353
+        ],
+        "redundant": [
+          51.147017,
+          50.530861,
+          49.092305,
+          49.381016,
+          50.748107,
+          49.126101,
+          48.571259
+        ],
+        "immediate": [
+          50.779659,
+          49.491639,
+          49.234026,
+          49.404605,
+          57.125745,
+          49.376992,
+          49.25358
+        ],
+        "smallheap": [
+          51.636867,
+          50.088805,
+          49.846715,
+          49.607833,
+          50.429237,
+          49.487999,
+          50.122695
+        ]
+      },
+      "random_n_zero_q_max_00": {
+        "baseline": [
+          43.840573,
+          44.036751,
+          44.684428,
+          43.671991,
+          43.822731,
+          44.125853,
+          44.202871
+        ],
+        "control": [
+          43.892465,
+          44.07905,
+          43.977018,
+          44.741482,
+          43.906069,
+          43.959663,
+          43.940527
+        ],
+        "redundant": [
+          43.870173,
+          43.87238,
+          43.763622,
+          44.378067,
+          43.942318,
+          44.270055,
+          43.896329
+        ],
+        "immediate": [
+          44.153591,
+          44.063655,
+          44.049924,
+          43.713135,
+          44.136437,
+          44.386016,
+          44.066183
+        ],
+        "smallheap": [
+          44.557298,
+          44.671451,
+          43.679286,
+          44.046035,
+          44.202367,
+          44.497484,
+          44.19154
+        ]
+      }
+    }
+  },
+  "candidate_official_checks": {
+    "passed": [
+      [
+        "gcc",
+        "baseline",
+        "example_00"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_n_max_q_max_00"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_n_max_q_max_01"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_n_max_q_max_many_pop_00"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_n_max_q_max_many_pop_01"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_n_max_q_max_only_type01_00"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_n_max_q_max_only_type01_01"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_n_max_q_max_small_value_00"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_n_max_q_max_small_value_01"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_n_zero_q_max_00"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_small_00"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_small_01"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_small_02"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_small_03"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_small_only_type01_00"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_small_only_type01_01"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_small_only_type01_02"
+      ],
+      [
+        "gcc",
+        "baseline",
+        "random_small_only_type01_03"
+      ],
+      [
+        "gcc",
+        "control",
+        "example_00"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_n_max_q_max_00"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_n_max_q_max_01"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_n_max_q_max_many_pop_00"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_n_max_q_max_many_pop_01"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_n_max_q_max_only_type01_00"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_n_max_q_max_only_type01_01"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_n_max_q_max_small_value_00"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_n_max_q_max_small_value_01"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_n_zero_q_max_00"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_small_00"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_small_01"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_small_02"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_small_03"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_small_only_type01_00"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_small_only_type01_01"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_small_only_type01_02"
+      ],
+      [
+        "gcc",
+        "control",
+        "random_small_only_type01_03"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "example_00"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_n_max_q_max_00"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_n_max_q_max_01"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_n_max_q_max_many_pop_00"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_n_max_q_max_many_pop_01"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_n_max_q_max_only_type01_00"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_n_max_q_max_only_type01_01"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_n_max_q_max_small_value_00"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_n_max_q_max_small_value_01"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_n_zero_q_max_00"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_small_00"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_small_01"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_small_02"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_small_03"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_small_only_type01_00"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_small_only_type01_01"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_small_only_type01_02"
+      ],
+      [
+        "gcc",
+        "redundant",
+        "random_small_only_type01_03"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "example_00"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_n_max_q_max_00"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_n_max_q_max_01"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_n_max_q_max_many_pop_00"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_n_max_q_max_many_pop_01"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_n_max_q_max_only_type01_00"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_n_max_q_max_only_type01_01"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_n_max_q_max_small_value_00"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_n_max_q_max_small_value_01"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_n_zero_q_max_00"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_small_00"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_small_01"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_small_02"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_small_03"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_small_only_type01_00"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_small_only_type01_01"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_small_only_type01_02"
+      ],
+      [
+        "gcc",
+        "immediate",
+        "random_small_only_type01_03"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "example_00"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_n_max_q_max_00"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_n_max_q_max_01"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_n_max_q_max_many_pop_00"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_n_max_q_max_many_pop_01"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_n_max_q_max_only_type01_00"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_n_max_q_max_only_type01_01"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_n_max_q_max_small_value_00"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_n_max_q_max_small_value_01"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_n_zero_q_max_00"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_small_00"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_small_01"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_small_02"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_small_03"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_small_only_type01_00"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_small_only_type01_01"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_small_only_type01_02"
+      ],
+      [
+        "gcc",
+        "smallheap",
+        "random_small_only_type01_03"
+      ],
+      [
+        "clang",
+        "baseline",
+        "example_00"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_n_max_q_max_00"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_n_max_q_max_01"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_n_max_q_max_many_pop_00"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_n_max_q_max_many_pop_01"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_n_max_q_max_only_type01_00"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_n_max_q_max_only_type01_01"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_n_max_q_max_small_value_00"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_n_max_q_max_small_value_01"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_n_zero_q_max_00"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_small_00"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_small_01"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_small_02"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_small_03"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_small_only_type01_00"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_small_only_type01_01"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_small_only_type01_02"
+      ],
+      [
+        "clang",
+        "baseline",
+        "random_small_only_type01_03"
+      ],
+      [
+        "clang",
+        "control",
+        "example_00"
+      ],
+      [
+        "clang",
+        "control",
+        "random_n_max_q_max_00"
+      ],
+      [
+        "clang",
+        "control",
+        "random_n_max_q_max_01"
+      ],
+      [
+        "clang",
+        "control",
+        "random_n_max_q_max_many_pop_00"
+      ],
+      [
+        "clang",
+        "control",
+        "random_n_max_q_max_many_pop_01"
+      ],
+      [
+        "clang",
+        "control",
+        "random_n_max_q_max_only_type01_00"
+      ],
+      [
+        "clang",
+        "control",
+        "random_n_max_q_max_only_type01_01"
+      ],
+      [
+        "clang",
+        "control",
+        "random_n_max_q_max_small_value_00"
+      ],
+      [
+        "clang",
+        "control",
+        "random_n_max_q_max_small_value_01"
+      ],
+      [
+        "clang",
+        "control",
+        "random_n_zero_q_max_00"
+      ],
+      [
+        "clang",
+        "control",
+        "random_small_00"
+      ],
+      [
+        "clang",
+        "control",
+        "random_small_01"
+      ],
+      [
+        "clang",
+        "control",
+        "random_small_02"
+      ],
+      [
+        "clang",
+        "control",
+        "random_small_03"
+      ],
+      [
+        "clang",
+        "control",
+        "random_small_only_type01_00"
+      ],
+      [
+        "clang",
+        "control",
+        "random_small_only_type01_01"
+      ],
+      [
+        "clang",
+        "control",
+        "random_small_only_type01_02"
+      ],
+      [
+        "clang",
+        "control",
+        "random_small_only_type01_03"
+      ],
+      [
+        "clang",
+        "redundant",
+        "example_00"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_n_max_q_max_00"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_n_max_q_max_01"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_n_max_q_max_many_pop_00"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_n_max_q_max_many_pop_01"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_n_max_q_max_only_type01_00"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_n_max_q_max_only_type01_01"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_n_max_q_max_small_value_00"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_n_max_q_max_small_value_01"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_n_zero_q_max_00"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_small_00"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_small_01"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_small_02"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_small_03"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_small_only_type01_00"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_small_only_type01_01"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_small_only_type01_02"
+      ],
+      [
+        "clang",
+        "redundant",
+        "random_small_only_type01_03"
+      ],
+      [
+        "clang",
+        "immediate",
+        "example_00"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_n_max_q_max_00"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_n_max_q_max_01"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_n_max_q_max_many_pop_00"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_n_max_q_max_many_pop_01"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_n_max_q_max_only_type01_00"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_n_max_q_max_only_type01_01"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_n_max_q_max_small_value_00"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_n_max_q_max_small_value_01"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_n_zero_q_max_00"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_small_00"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_small_01"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_small_02"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_small_03"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_small_only_type01_00"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_small_only_type01_01"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_small_only_type01_02"
+      ],
+      [
+        "clang",
+        "immediate",
+        "random_small_only_type01_03"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "example_00"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_n_max_q_max_00"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_n_max_q_max_01"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_n_max_q_max_many_pop_00"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_n_max_q_max_many_pop_01"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_n_max_q_max_only_type01_00"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_n_max_q_max_only_type01_01"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_n_max_q_max_small_value_00"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_n_max_q_max_small_value_01"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_n_zero_q_max_00"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_small_00"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_small_01"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_small_02"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_small_03"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_small_only_type01_00"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_small_only_type01_01"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_small_only_type01_02"
+      ],
+      [
+        "clang",
+        "smallheap",
+        "random_small_only_type01_03"
+      ]
+    ]
+  },
+  "performance_source_matches_final": "GCC/Clangとも最終版SKIPの提出コードと測定候補redundantの.text一致。最終公式照合記録のperformance_candidate_text_equalを参照。",
+  "rejected_candidates": [
+    "算術型向け独自popを常用：大規模の重複・混在処理で後退。",
+    "保存数64以下だけ独自pop：反復topのインライン化などに影響しGCCで約3.6倍、小規模の遅延削除はClangで約13%後退。",
+    "erase時に物理先頭と一致すれば直接pop：測定条件によって小さな改善・後退があり、全体の明確な改善なし。",
+    "normalizeのnoinline：GCCでは元と同じ命令列。"
+  ],
+  "exploratory_note": "初期の短いprobeは誤って2回起動され、ロックで直列化されたが結果ファイルが上書きされた。探索用としてのみ扱い、採否の数値根拠は長いprobe2とofficial_probeの対照付き測定に置く。",
+  "benchmark_sources": {
+    "bench2.cpp": "#include HEADER\n#include <algorithm>\n#include <chrono>\n#include <cstdint>\n#include <iostream>\n#include <numeric>\n#include <random>\n#include <string>\nvolatile std::uint64_t sink;\ntemplate<bool Min> void run(int n, int mode, const std::vector<std::int64_t>& a) {\n using Q=ErasablePriorityQueue<std::int64_t,Min>;\n std::uint64_t sum=0;\n if(mode==0) {Q q; for(auto x:a) q.push(x); sum=q.size();}\n if(mode==1||mode==2||mode==3||mode==4||mode==5||mode==6||mode==7) {\n  Q q(a);\n  if(mode==1) {while(!q.empty()){sum+=q.top();q.pop();}}\n  if(mode==2) {for(int i=0;i<n;++i) {q.push(a[i]+n);sum+=q.top();q.pop();}}\n  if(mode==3) {for(int i=0;i<n/2;++i)q.erase(a[i]);while(!q.empty()){sum+=q.top();q.pop();}}\n  if(mode==4) {for(auto x:a)q.erase(x); sum=q.size();q.push(-1);sum+=q.top();q.pop();}\n  if(mode==5) {for(int i=0;i<10000;++i){sum+=q.top();asm volatile(\"\" : : \"g\"(&q) : \"memory\");}}\n  if(mode==6) {while(auto x=q.extract_top())sum+=*x;}\n  if(mode==7) {sum=q.size();}\n }\n if(mode==8) {Q q;for(int i=0;i<n;++i)q.push(i%8); for(int i=0;i<n/2;++i)q.erase(i%8);while(!q.empty()){sum+=q.top();q.pop();}}\n sink=sum;\n}\ntemplate<bool Min>void test(int n, const std::vector<std::int64_t>& a){\n for(int mode=0;mode<=8;++mode){\n  run<Min>(n,mode,a); int reps=n==32?100000:8;if(mode==5)reps=1000;\n  auto start=std::chrono::steady_clock::now();\n  for(int r=0;r<reps;++r)run<Min>(n,mode,a);\n  auto ns=std::chrono::duration<double,std::nano>(std::chrono::steady_clock::now()-start).count()/reps;\n  std::cout<<n<<' '<<Min<<' '<<mode<<' '<<ns<<'\\n';\n }\n}\nint main(){for(int n:{32,100000}) {std::vector<std::int64_t>a(n);std::iota(a.begin(),a.end(),-n/2);std::mt19937 g(7);std::shuffle(a.begin(),a.end(),g);test<true>(n,a);test<false>(n,a);}}\n",
+    "probe2.py": "from pathlib import Path\nimport subprocess,concurrent.futures,json,time,statistics,fcntl,random\np=Path('/tmp/sirkit_epq_20261022/opt')\nvariants=['baseline','control','redundant','smallheap']\ncomps={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']}\ndef build(item):\n comp,v=item;header='baseline' if v=='control' else v\n cmd=['taskset','-c','4' if comp=='gcc' else '6']+comps[comp]+['-std=c++23','-O2','-DNDEBUG','-DSKIP_RUNTIME_CHECKS',f'-DHEADER=\"{p/header}.hpp\"',str(p/'bench2.cpp'),'-o',str(p/f'{comp}_{v}')]\n subprocess.run(cmd,check=True,capture_output=True)\nwith concurrent.futures.ThreadPoolExecutor(2) as ex:list(ex.map(build,[(c,v)for c in comps for v in variants]))\nresults={c:{v:[]for v in variants}for c in comps}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a') as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(5):\n  for comp in comps:\n   order=variants[rep%len(variants):]+variants[:rep%len(variants)]\n   for v in order:\n    r=subprocess.run(['taskset','-c','14',str(p/f'{comp}_{v}')],check=True,capture_output=True,text=True)\n    results[comp][v].append({':'.join(t[:3]):float(t[3])for line in r.stdout.splitlines()if(t:=line.split())})\n  print('round',rep,flush=True)\n(p/'results2.json').write_text(json.dumps(results,indent=2))\nfor c,r in results.items():\n b={k:statistics.median(x[k]for x in r['baseline'])for k in r['baseline'][0]}\n for v in variants[1:]:\n  ratios={k:statistics.median(x[k]for x in r[v])/b[k]for k in b}\n  print(c,v,'geomean',statistics.geometric_mean(ratios.values()),'best',sorted(ratios.items(),key=lambda t:t[1])[:4],'worst',sorted(ratios.items(),key=lambda t:t[1])[-6:],flush=True)\n",
+    "official_probe.py": "from pathlib import Path\nimport subprocess,concurrent.futures,json,time,statistics,fcntl,random,hashlib\np=Path('/tmp/sirkit_epq_20261022/opt');root=Path('/home/reinsirk/Atcoder_Env');casep=p.parent/'official'\nvariants=['baseline','control','redundant','immediate','smallheap']\ncomps={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']}\ns=(root/'Verify/current/drivers/erasable_priority_queue_double_main.cpp').read_text().replace('#include \"Verify/current/common/fast_io.hpp\"',(root/'Verify/current/common/fast_io.hpp').read_text())\n(p/'official_main.cpp').write_text('#define SKIP_RUNTIME_CHECKS\\n#include HEADER\\n'+s)\ndef build(item):\n comp,v=item;header='baseline' if v=='control' else v\n cmd=['taskset','-c','8' if comp=='gcc' else '10']+comps[comp]+['-std=c++23','-O2','-DNDEBUG',f'-DHEADER=\"{p/header}.hpp\"',str(p/'official_main.cpp'),'-o',str(p/f'official_{comp}_{v}')]\n subprocess.run(cmd,check=True,capture_output=True)\nwith concurrent.futures.ThreadPoolExecutor(2) as ex:list(ex.map(build,[(c,v)for c in comps for v in variants]))\nchecks=[]\nfor comp in comps:\n for v in variants:\n  for f in sorted((casep/'in').glob('*.in')):\n   x=subprocess.run([str(p/f'official_{comp}_{v}')],input=f.read_bytes(),stdout=subprocess.PIPE,check=True)\n   expected=(casep/'out'/(f.stem+'.out')).read_bytes();assert x.stdout.split()==expected.split(),(comp,v,f.name)\n   checks.append((comp,v,f.stem))\n(p/'official_checks.json').write_text(json.dumps({'passed':checks},indent=2))\ncases=[f for f in sorted((casep/'in').glob('*.in'))if f.stem.startswith(('random_n_max','random_n_zero'))]\nresults={c:{f.stem:{v:[]for v in variants}for f in cases}for c in comps}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a') as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(7):\n  for comp in comps:\n   for i,f in enumerate(cases):\n    shift=(rep+i)%len(variants); order=variants[shift:]+variants[:shift]\n    for v in order:\n     with f.open('rb') as source:\n      t=time.perf_counter_ns();subprocess.run(['taskset','-c','14',str(p/f'official_{comp}_{v}')],stdin=source,stdout=subprocess.DEVNULL,check=True); elapsed=time.perf_counter_ns()-t\n     results[comp][f.stem][v].append(elapsed/1e6)\n  print('round',rep,flush=True)\n(p/'official_results.json').write_text(json.dumps(results,indent=2))\nfor c,r in results.items():\n for case,values in r.items():\n  b=statistics.median(values['baseline']);print(c,case,'baseline',round(b,4),'control',round(statistics.median(values['control'])/b,4),'variants',{v:round(statistics.median(values[v])/b,4)for v in variants[2:]},flush=True)\n"
+  },
+  "candidate_sources": {
+    "baseline.hpp": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/erasable-priority-queue.hpp\n\n#include <cstddef>\n#include <functional>\n#include <optional>\n#include <queue>\n#include <stdexcept>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED\n#define SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED\n\n// ErasablePriorityQueue<T, Minimize>: trueなら最小値、falseなら最大値を先頭にする。\n// ErasablePriorityQueue(values): vectorを受け取りO(n)で一括構築する。\n// push(value), push(T&&): 1要素を追加する。O(log H)。\n// emplace(args...): 引数から要素を構築して追加する。O(log H)。\n// top(): 先頭の値を返す。空でないこと。遅延削除を含め償却O(log H)。\n// pop(): 先頭を1個削除する。空でないこと。償却O(log H)。\n// erase(value): 存在する値を1個遅延削除する。存在・個数は検査しない。O(log H)。\n// empty(), size(): 有効な要素の有無・個数を返す。const、O(1)。\n// try_top(): 空ならnullopt、そうでなければ先頭の値を返す。償却O(log H)。\n// extract_top(): 空ならnullopt、そうでなければ先頭を1個削除して返す。償却O(log H)。\n// clear(): 全要素と遅延削除を破棄する。O(H)。Hは未回収の削除済み要素も含む保存数。\n// Tの比較は厳密弱順序を満たし、==はその同値関係と一致すること。\ntemplate <typename T, bool Minimize = true>\nclass ErasablePriorityQueue {\npublic:\n    using Queue = std::conditional_t<Minimize,\n        std::priority_queue<T, std::vector<T>, std::greater<T>>,\n        std::priority_queue<T>>;\n\n    ErasablePriorityQueue() = default;\n    explicit ErasablePriorityQueue(std::vector<T> values)\n        : values_(typename Queue::value_compare{}, std::move(values)) {}\n\n    ErasablePriorityQueue(const ErasablePriorityQueue&) = default;\n    ErasablePriorityQueue& operator=(const ErasablePriorityQueue&) = default;\n    ErasablePriorityQueue(ErasablePriorityQueue&& other) noexcept {\n        values_.swap(other.values_);\n        erased_.swap(other.erased_);\n    }\n    ErasablePriorityQueue& operator=(ErasablePriorityQueue&& other) noexcept {\n        if (this != &other) {\n            ErasablePriorityQueue next(std::move(other));\n            values_.swap(next.values_);\n            erased_.swap(next.erased_);\n        }\n        return *this;\n    }\n\n    void push(const T& value) { values_.push(value); }\n    void push(T&& value) { values_.push(std::move(value)); }\n    template <class... Args>\n    void emplace(Args&&... args) { values_.emplace(std::forward<Args>(args)...); }\n\n    T top() {\n        normalize();\n#ifndef SKIP_RUNTIME_CHECKS\n        if (values_.empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::top: empty queue\");\n#endif\n        return values_.top();\n    }\n    void pop() {\n        normalize();\n#ifndef SKIP_RUNTIME_CHECKS\n        if (values_.empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::pop: empty queue\");\n#endif\n        values_.pop();\n    }\n    void erase(const T& value) {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::erase: empty queue\");\n#endif\n        erased_.push(value);\n    }\n    bool empty() const noexcept { return values_.size() == erased_.size(); }\n    std::size_t size() const noexcept { return values_.size() - erased_.size(); }\n\n    std::optional<T> try_top() {\n        if (empty()) return std::nullopt;\n        normalize();\n        return values_.top();\n    }\n    std::optional<T> extract_top() {\n        if (empty()) return std::nullopt;\n        normalize();\n        std::optional<T> result(values_.top());\n        values_.pop();\n        return result;\n    }\n    void clear() noexcept {\n        Queue{}.swap(values_);\n        Queue{}.swap(erased_);\n    }\n\nprivate:\n    Queue values_, erased_;\n\n    void normalize() {\n        while (!erased_.empty() && !values_.empty() && values_.top() == erased_.top()) {\n            values_.pop();\n            erased_.pop();\n        }\n    }\n};\n#endif\n",
+    "redundant.hpp": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/erasable-priority-queue.hpp\n\n#include <cstddef>\n#include <functional>\n#include <optional>\n#include <queue>\n#include <stdexcept>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED\n#define SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED\n\n// ErasablePriorityQueue<T, Minimize>: trueなら最小値、falseなら最大値を先頭にする。\n// ErasablePriorityQueue(values): vectorを受け取りO(n)で一括構築する。\n// push(value), push(T&&): 1要素を追加する。O(log H)。\n// emplace(args...): 引数から要素を構築して追加する。O(log H)。\n// top(): 先頭の値を返す。空でないこと。遅延削除を含め償却O(log H)。\n// pop(): 先頭を1個削除する。空でないこと。償却O(log H)。\n// erase(value): 存在する値を1個遅延削除する。存在・個数は検査しない。O(log H)。\n// empty(), size(): 有効な要素の有無・個数を返す。const、O(1)。\n// try_top(): 空ならnullopt、そうでなければ先頭の値を返す。償却O(log H)。\n// extract_top(): 空ならnullopt、そうでなければ先頭を1個削除して返す。償却O(log H)。\n// clear(): 全要素と遅延削除を破棄する。O(H)。Hは未回収の削除済み要素も含む保存数。\n// Tの比較は厳密弱順序を満たし、==はその同値関係と一致すること。\ntemplate <typename T, bool Minimize = true>\nclass ErasablePriorityQueue {\npublic:\n    using Queue = std::conditional_t<Minimize,\n        std::priority_queue<T, std::vector<T>, std::greater<T>>,\n        std::priority_queue<T>>;\n\n    ErasablePriorityQueue() = default;\n    explicit ErasablePriorityQueue(std::vector<T> values)\n        : values_(typename Queue::value_compare{}, std::move(values)) {}\n\n    ErasablePriorityQueue(const ErasablePriorityQueue&) = default;\n    ErasablePriorityQueue& operator=(const ErasablePriorityQueue&) = default;\n    ErasablePriorityQueue(ErasablePriorityQueue&& other) noexcept {\n        values_.swap(other.values_);\n        erased_.swap(other.erased_);\n    }\n    ErasablePriorityQueue& operator=(ErasablePriorityQueue&& other) noexcept {\n        if (this != &other) {\n            ErasablePriorityQueue next(std::move(other));\n            values_.swap(next.values_);\n            erased_.swap(next.erased_);\n        }\n        return *this;\n    }\n\n    void push(const T& value) { values_.push(value); }\n    void push(T&& value) { values_.push(std::move(value)); }\n    template <class... Args>\n    void emplace(Args&&... args) { values_.emplace(std::forward<Args>(args)...); }\n\n    T top() {\n        normalize();\n#ifndef SKIP_RUNTIME_CHECKS\n        if (values_.empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::top: empty queue\");\n#endif\n        return values_.top();\n    }\n    void pop() {\n        normalize();\n#ifndef SKIP_RUNTIME_CHECKS\n        if (values_.empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::pop: empty queue\");\n#endif\n        values_.pop();\n    }\n    void erase(const T& value) {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::erase: empty queue\");\n#endif\n        erased_.push(value);\n    }\n    bool empty() const noexcept { return values_.size() == erased_.size(); }\n    std::size_t size() const noexcept { return values_.size() - erased_.size(); }\n\n    std::optional<T> try_top() {\n        if (empty()) return std::nullopt;\n        normalize();\n        return values_.top();\n    }\n    std::optional<T> extract_top() {\n        if (empty()) return std::nullopt;\n        normalize();\n        std::optional<T> result(values_.top());\n        values_.pop();\n        return result;\n    }\n    void clear() noexcept {\n        Queue{}.swap(values_);\n        Queue{}.swap(erased_);\n    }\n\nprivate:\n    Queue values_, erased_;\n\n    void normalize() {\n        while (!erased_.empty() && values_.top() == erased_.top()) {\n            values_.pop();\n            erased_.pop();\n        }\n    }\n};\n#endif\n",
+    "immediate.hpp": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/erasable-priority-queue.hpp\n\n#include <cstddef>\n#include <functional>\n#include <optional>\n#include <queue>\n#include <stdexcept>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED\n#define SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED\n\n// ErasablePriorityQueue<T, Minimize>: trueなら最小値、falseなら最大値を先頭にする。\n// ErasablePriorityQueue(values): vectorを受け取りO(n)で一括構築する。\n// push(value), push(T&&): 1要素を追加する。O(log H)。\n// emplace(args...): 引数から要素を構築して追加する。O(log H)。\n// top(): 先頭の値を返す。空でないこと。遅延削除を含め償却O(log H)。\n// pop(): 先頭を1個削除する。空でないこと。償却O(log H)。\n// erase(value): 存在する値を1個遅延削除する。存在・個数は検査しない。O(log H)。\n// empty(), size(): 有効な要素の有無・個数を返す。const、O(1)。\n// try_top(): 空ならnullopt、そうでなければ先頭の値を返す。償却O(log H)。\n// extract_top(): 空ならnullopt、そうでなければ先頭を1個削除して返す。償却O(log H)。\n// clear(): 全要素と遅延削除を破棄する。O(H)。Hは未回収の削除済み要素も含む保存数。\n// Tの比較は厳密弱順序を満たし、==はその同値関係と一致すること。\ntemplate <typename T, bool Minimize = true>\nclass ErasablePriorityQueue {\npublic:\n    using Queue = std::conditional_t<Minimize,\n        std::priority_queue<T, std::vector<T>, std::greater<T>>,\n        std::priority_queue<T>>;\n\n    ErasablePriorityQueue() = default;\n    explicit ErasablePriorityQueue(std::vector<T> values)\n        : values_(typename Queue::value_compare{}, std::move(values)) {}\n\n    ErasablePriorityQueue(const ErasablePriorityQueue&) = default;\n    ErasablePriorityQueue& operator=(const ErasablePriorityQueue&) = default;\n    ErasablePriorityQueue(ErasablePriorityQueue&& other) noexcept {\n        values_.swap(other.values_);\n        erased_.swap(other.erased_);\n    }\n    ErasablePriorityQueue& operator=(ErasablePriorityQueue&& other) noexcept {\n        if (this != &other) {\n            ErasablePriorityQueue next(std::move(other));\n            values_.swap(next.values_);\n            erased_.swap(next.erased_);\n        }\n        return *this;\n    }\n\n    void push(const T& value) { values_.push(value); }\n    void push(T&& value) { values_.push(std::move(value)); }\n    template <class... Args>\n    void emplace(Args&&... args) { values_.emplace(std::forward<Args>(args)...); }\n\n    T top() {\n        normalize();\n#ifndef SKIP_RUNTIME_CHECKS\n        if (values_.empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::top: empty queue\");\n#endif\n        return values_.top();\n    }\n    void pop() {\n        normalize();\n#ifndef SKIP_RUNTIME_CHECKS\n        if (values_.empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::pop: empty queue\");\n#endif\n        values_.pop();\n    }\n    void erase(const T& value) {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::erase: empty queue\");\n#endif\n        if (values_.top() == value) values_.pop();\n        else erased_.push(value);\n    }\n    bool empty() const noexcept { return values_.size() == erased_.size(); }\n    std::size_t size() const noexcept { return values_.size() - erased_.size(); }\n\n    std::optional<T> try_top() {\n        if (empty()) return std::nullopt;\n        normalize();\n        return values_.top();\n    }\n    std::optional<T> extract_top() {\n        if (empty()) return std::nullopt;\n        normalize();\n        std::optional<T> result(values_.top());\n        values_.pop();\n        return result;\n    }\n    void clear() noexcept {\n        Queue{}.swap(values_);\n        Queue{}.swap(erased_);\n    }\n\nprivate:\n    Queue values_, erased_;\n\n    void normalize() {\n        while (!erased_.empty() && !values_.empty() && values_.top() == erased_.top()) {\n            values_.pop();\n            erased_.pop();\n        }\n    }\n};\n#endif\n",
+    "earlyheap.hpp": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/erasable-priority-queue.hpp\n\n#include <cstddef>\n#include <functional>\n#include <optional>\n#include <queue>\n#include <stdexcept>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED\n#define SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED\n\n// ErasablePriorityQueue<T, Minimize>: trueなら最小値、falseなら最大値を先頭にする。\n// ErasablePriorityQueue(values): vectorを受け取りO(n)で一括構築する。\n// push(value), push(T&&): 1要素を追加する。O(log H)。\n// emplace(args...): 引数から要素を構築して追加する。O(log H)。\n// top(): 先頭の値を返す。空でないこと。遅延削除を含め償却O(log H)。\n// pop(): 先頭を1個削除する。空でないこと。償却O(log H)。\n// erase(value): 存在する値を1個遅延削除する。存在・個数は検査しない。O(log H)。\n// empty(), size(): 有効な要素の有無・個数を返す。const、O(1)。\n// try_top(): 空ならnullopt、そうでなければ先頭の値を返す。償却O(log H)。\n// extract_top(): 空ならnullopt、そうでなければ先頭を1個削除して返す。償却O(log H)。\n// clear(): 全要素と遅延削除を破棄する。O(H)。Hは未回収の削除済み要素も含む保存数。\n// Tの比較は厳密弱順序を満たし、==はその同値関係と一致すること。\ntemplate <typename T, bool Minimize = true>\nclass ErasablePriorityQueue {\npublic:\n    using Queue = std::conditional_t<Minimize,\n        std::priority_queue<T, std::vector<T>, std::greater<T>>,\n        std::priority_queue<T>>;\n\n    ErasablePriorityQueue() = default;\n    explicit ErasablePriorityQueue(std::vector<T> values)\n        : values_(typename Queue::value_compare{}, std::move(values)) {}\n\n    ErasablePriorityQueue(const ErasablePriorityQueue&) = default;\n    ErasablePriorityQueue& operator=(const ErasablePriorityQueue&) = default;\n    ErasablePriorityQueue(ErasablePriorityQueue&& other) noexcept {\n        values_.swap(other.values_);\n        erased_.swap(other.erased_);\n    }\n    ErasablePriorityQueue& operator=(ErasablePriorityQueue&& other) noexcept {\n        if (this != &other) {\n            ErasablePriorityQueue next(std::move(other));\n            values_.swap(next.values_);\n            erased_.swap(next.erased_);\n        }\n        return *this;\n    }\n\n    void push(const T& value) { values_.push(value); }\n    void push(T&& value) { values_.push(std::move(value)); }\n    template <class... Args>\n    void emplace(Args&&... args) { values_.emplace(std::forward<Args>(args)...); }\n\n    T top() {\n        normalize();\n#ifndef SKIP_RUNTIME_CHECKS\n        if (values_.empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::top: empty queue\");\n#endif\n        return values_.top();\n    }\n    void pop() {\n        normalize();\n#ifndef SKIP_RUNTIME_CHECKS\n        if (values_.empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::pop: empty queue\");\n#endif\n        values_.pop();\n    }\n    void erase(const T& value) {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::erase: empty queue\");\n#endif\n        erased_.push(value);\n    }\n    bool empty() const noexcept { return values_.size() == erased_.size(); }\n    std::size_t size() const noexcept { return values_.size() - erased_.size(); }\n\n    std::optional<T> try_top() {\n        if (empty()) return std::nullopt;\n        normalize();\n        return values_.top();\n    }\n    std::optional<T> extract_top() {\n        if (empty()) return std::nullopt;\n        normalize();\n        std::optional<T> result(values_.top());\n        values_.pop();\n        return result;\n    }\n    void clear() noexcept {\n        Heap{}.swap(values_);\n        Heap{}.swap(erased_);\n    }\n\nprivate:\n\n    struct Heap : Queue {\n        using Queue::Queue;\n        void pop() {\n            if constexpr (!std::is_arithmetic_v<T>) Queue::pop();\n            else {\n                auto& a = this->c;\n                if (a.size() == 1) { a.pop_back(); return; }\n                T value = std::move(a.back()); a.pop_back();\n                auto* data = a.data(); const auto n = a.size();\n                std::size_t hole = 0;\n                const auto cmp = typename Queue::value_compare{};\n                while (hole < n / 2) {\n                    std::size_t child = hole * 2 + 1;\n                    if (child + 1 < n && cmp(data[child], data[child + 1])) ++child;\n                    if (!cmp(value, data[child])) break;\n                    data[hole] = std::move(data[child]); hole = child;\n                }\n                data[hole] = std::move(value);\n            }\n        }\n    };\n    Heap values_, erased_;\n\n    void normalize() {\n        while (!erased_.empty() && !values_.empty() && values_.top() == erased_.top()) {\n            values_.pop();\n            erased_.pop();\n        }\n    }\n};\n#endif\n",
+    "smallheap.hpp": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/erasable-priority-queue.hpp\n\n#include <cstddef>\n#include <functional>\n#include <optional>\n#include <queue>\n#include <stdexcept>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED\n#define SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED\n\n// ErasablePriorityQueue<T, Minimize>: trueなら最小値、falseなら最大値を先頭にする。\n// ErasablePriorityQueue(values): vectorを受け取りO(n)で一括構築する。\n// push(value), push(T&&): 1要素を追加する。O(log H)。\n// emplace(args...): 引数から要素を構築して追加する。O(log H)。\n// top(): 先頭の値を返す。空でないこと。遅延削除を含め償却O(log H)。\n// pop(): 先頭を1個削除する。空でないこと。償却O(log H)。\n// erase(value): 存在する値を1個遅延削除する。存在・個数は検査しない。O(log H)。\n// empty(), size(): 有効な要素の有無・個数を返す。const、O(1)。\n// try_top(): 空ならnullopt、そうでなければ先頭の値を返す。償却O(log H)。\n// extract_top(): 空ならnullopt、そうでなければ先頭を1個削除して返す。償却O(log H)。\n// clear(): 全要素と遅延削除を破棄する。O(H)。Hは未回収の削除済み要素も含む保存数。\n// Tの比較は厳密弱順序を満たし、==はその同値関係と一致すること。\ntemplate <typename T, bool Minimize = true>\nclass ErasablePriorityQueue {\npublic:\n    using Queue = std::conditional_t<Minimize,\n        std::priority_queue<T, std::vector<T>, std::greater<T>>,\n        std::priority_queue<T>>;\n\n    ErasablePriorityQueue() = default;\n    explicit ErasablePriorityQueue(std::vector<T> values)\n        : values_(typename Queue::value_compare{}, std::move(values)) {}\n\n    ErasablePriorityQueue(const ErasablePriorityQueue&) = default;\n    ErasablePriorityQueue& operator=(const ErasablePriorityQueue&) = default;\n    ErasablePriorityQueue(ErasablePriorityQueue&& other) noexcept {\n        values_.swap(other.values_);\n        erased_.swap(other.erased_);\n    }\n    ErasablePriorityQueue& operator=(ErasablePriorityQueue&& other) noexcept {\n        if (this != &other) {\n            ErasablePriorityQueue next(std::move(other));\n            values_.swap(next.values_);\n            erased_.swap(next.erased_);\n        }\n        return *this;\n    }\n\n    void push(const T& value) { values_.push(value); }\n    void push(T&& value) { values_.push(std::move(value)); }\n    template <class... Args>\n    void emplace(Args&&... args) { values_.emplace(std::forward<Args>(args)...); }\n\n    T top() {\n        normalize();\n#ifndef SKIP_RUNTIME_CHECKS\n        if (values_.empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::top: empty queue\");\n#endif\n        return values_.top();\n    }\n    void pop() {\n        normalize();\n#ifndef SKIP_RUNTIME_CHECKS\n        if (values_.empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::pop: empty queue\");\n#endif\n        values_.pop();\n    }\n    void erase(const T& value) {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::erase: empty queue\");\n#endif\n        erased_.push(value);\n    }\n    bool empty() const noexcept { return values_.size() == erased_.size(); }\n    std::size_t size() const noexcept { return values_.size() - erased_.size(); }\n\n    std::optional<T> try_top() {\n        if (empty()) return std::nullopt;\n        normalize();\n        return values_.top();\n    }\n    std::optional<T> extract_top() {\n        if (empty()) return std::nullopt;\n        normalize();\n        std::optional<T> result(values_.top());\n        values_.pop();\n        return result;\n    }\n    void clear() noexcept {\n        Heap{}.swap(values_);\n        Heap{}.swap(erased_);\n    }\n\nprivate:\n\n    struct Heap : Queue {\n        using Queue::Queue;\n        void pop() {\n            if constexpr (!std::is_arithmetic_v<T>) Queue::pop();\n            else {\n                if (this->c.size() > 64) { Queue::pop(); return; }\n                auto& a = this->c;\n                if (a.size() == 1) { a.pop_back(); return; }\n                T value = std::move(a.back()); a.pop_back();\n                auto* data = a.data(); const auto n = a.size();\n                std::size_t hole = 0;\n                const auto cmp = typename Queue::value_compare{};\n                while (hole < n / 2) {\n                    std::size_t child = hole * 2 + 1;\n                    if (child + 1 < n && cmp(data[child], data[child + 1])) ++child;\n                    if (!cmp(value, data[child])) break;\n                    data[hole] = std::move(data[child]); hole = child;\n                }\n                data[hole] = std::move(value);\n            }\n        }\n    };\n    Heap values_, erased_;\n\n    void normalize() {\n        while (!erased_.empty() && !values_.empty() && values_.top() == erased_.top()) {\n            values_.pop();\n            erased_.pop();\n        }\n    }\n};\n#endif\n",
+    "noinline.hpp": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://nyaannyaan.github.io/library/data-structure/erasable-priority-queue.hpp\n\n#include <cstddef>\n#include <functional>\n#include <optional>\n#include <queue>\n#include <stdexcept>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED\n#define SIRKIT_ERASABLE_PRIORITY_QUEUE_DEFINED\n\n// ErasablePriorityQueue<T, Minimize>: trueなら最小値、falseなら最大値を先頭にする。\n// ErasablePriorityQueue(values): vectorを受け取りO(n)で一括構築する。\n// push(value), push(T&&): 1要素を追加する。O(log H)。\n// emplace(args...): 引数から要素を構築して追加する。O(log H)。\n// top(): 先頭の値を返す。空でないこと。遅延削除を含め償却O(log H)。\n// pop(): 先頭を1個削除する。空でないこと。償却O(log H)。\n// erase(value): 存在する値を1個遅延削除する。存在・個数は検査しない。O(log H)。\n// empty(), size(): 有効な要素の有無・個数を返す。const、O(1)。\n// try_top(): 空ならnullopt、そうでなければ先頭の値を返す。償却O(log H)。\n// extract_top(): 空ならnullopt、そうでなければ先頭を1個削除して返す。償却O(log H)。\n// clear(): 全要素と遅延削除を破棄する。O(H)。Hは未回収の削除済み要素も含む保存数。\n// Tの比較は厳密弱順序を満たし、==はその同値関係と一致すること。\ntemplate <typename T, bool Minimize = true>\nclass ErasablePriorityQueue {\npublic:\n    using Queue = std::conditional_t<Minimize,\n        std::priority_queue<T, std::vector<T>, std::greater<T>>,\n        std::priority_queue<T>>;\n\n    ErasablePriorityQueue() = default;\n    explicit ErasablePriorityQueue(std::vector<T> values)\n        : values_(typename Queue::value_compare{}, std::move(values)) {}\n\n    ErasablePriorityQueue(const ErasablePriorityQueue&) = default;\n    ErasablePriorityQueue& operator=(const ErasablePriorityQueue&) = default;\n    ErasablePriorityQueue(ErasablePriorityQueue&& other) noexcept {\n        values_.swap(other.values_);\n        erased_.swap(other.erased_);\n    }\n    ErasablePriorityQueue& operator=(ErasablePriorityQueue&& other) noexcept {\n        if (this != &other) {\n            ErasablePriorityQueue next(std::move(other));\n            values_.swap(next.values_);\n            erased_.swap(next.erased_);\n        }\n        return *this;\n    }\n\n    void push(const T& value) { values_.push(value); }\n    void push(T&& value) { values_.push(std::move(value)); }\n    template <class... Args>\n    void emplace(Args&&... args) { values_.emplace(std::forward<Args>(args)...); }\n\n    T top() {\n        normalize();\n#ifndef SKIP_RUNTIME_CHECKS\n        if (values_.empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::top: empty queue\");\n#endif\n        return values_.top();\n    }\n    void pop() {\n        normalize();\n#ifndef SKIP_RUNTIME_CHECKS\n        if (values_.empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::pop: empty queue\");\n#endif\n        values_.pop();\n    }\n    void erase(const T& value) {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (empty()) [[unlikely]]\n            throw std::out_of_range(\"ErasablePriorityQueue::erase: empty queue\");\n#endif\n        erased_.push(value);\n    }\n    bool empty() const noexcept { return values_.size() == erased_.size(); }\n    std::size_t size() const noexcept { return values_.size() - erased_.size(); }\n\n    std::optional<T> try_top() {\n        if (empty()) return std::nullopt;\n        normalize();\n        return values_.top();\n    }\n    std::optional<T> extract_top() {\n        if (empty()) return std::nullopt;\n        normalize();\n        std::optional<T> result(values_.top());\n        values_.pop();\n        return result;\n    }\n    void clear() noexcept {\n        Queue{}.swap(values_);\n        Queue{}.swap(erased_);\n    }\n\nprivate:\n    Queue values_, erased_;\n\n    [[gnu::noinline]] void normalize() {\n        while (!erased_.empty() && !values_.empty() && values_.top() == erased_.top()) {\n            values_.pop();\n            erased_.pop();\n        }\n    }\n};\n#endif\n"
+  }
+}

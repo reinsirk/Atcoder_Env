@@ -1,0 +1,3277 @@
+{
+  "date": "2026-10-24",
+  "checked_at_utc": "2026-10-23T18:19:52.285138+00:00",
+  "status": "PASS",
+  "scope": "次のVerify対象として整数凸包の全機能版/用途別版を準備。",
+  "online_submitted": false,
+  "problem_url": "https://judge.yosupo.jp/problem/static_convex_hull",
+  "body_changed": false,
+  "main_changed": false,
+  "io_changed": false,
+  "source_hashes": {
+    "Geometry/geometory.cpp": "61c7ba32d9a4283fe6b47dd02a53d5aeca3d7f0e4adbf06f8f06e43f330abfc6",
+    "Geometry/Polygon.cpp": "b3f5a79ef5e9f182c19071e00747224c0da85245b9d993a70ab4695657652168",
+    "Geometry/components/polygon.inc": "d4ce5700cf76a0e9117dc74f3c0b88c7d51853ca7028aba47c654c6207cdc67f",
+    "Verify/current/drivers/geometry_convex_hull_main.cpp": "138537e3e1c8fac7c923493e502d36379a675f6321773a2e19397a3015821d56",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+    "Verify/current/submissions/geometry_convex_hull_full.cpp": "a05398f956f9543406f70d20999c3882fd778772f60d9fc0ed5c0ca04b4d6bc1",
+    "Verify/current/submissions/geometry_convex_hull_split.cpp": "caa5a24aa82e9921aa906057fed997806a0120de70f9276cc07be8d86f424061"
+  },
+  "problem_coverage": "合計500000点、座標±10^9の整数凸包。反時計回り・重複点除去・辺の中間点除去・0/1/2点。",
+  "official_sources": [
+    {
+      "name": "official_solution.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/geo/static_convex_hull/sol/correct.cpp",
+      "sha256": "886f59ebeb1bdda3a7ad6b03f06c2781414e2bd658ef22e75840aaf37b8ee653"
+    },
+    {
+      "name": "official_checker.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/geo/static_convex_hull/checker.cpp",
+      "sha256": "0d0e425488811e0411fa51ed5e1f38d9efda42bc79ef11e00825856490746ad9"
+    },
+    {
+      "name": "info.toml",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/geo/static_convex_hull/info.toml",
+      "sha256": "815d2550ae2d0322eddc5eb16164c6d00b52ffe68e1c3d0b17b4b468ee14ead9"
+    },
+    {
+      "name": "task.md",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/geo/static_convex_hull/task.md",
+      "sha256": "621a43660bbd1b91a50d8e55d6c657e06a7a94c9a9e1cfebc2d8fb1dbf2b9748"
+    },
+    {
+      "name": "testlib.h",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/common/testlib.h",
+      "sha256": "8d6d68c9708ff3f8d094488506a8171802496bd1ae04942b31f2a47057564497"
+    }
+  ],
+  "official_fixtures_origin": "2026-10-22に公式generatorから生成した25入力を当時記録のSHA256と照合し再利用。参照解とcheckerは今回取得。",
+  "verification": {
+    "status": "PASS",
+    "builds": [
+      {
+        "command": [
+          "/usr/bin/g++",
+          "-O2",
+          "-std=c++23",
+          "/tmp/sirkit_convex_hull_ready_20261024/official_solution.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/official_solution"
+        ],
+        "diagnostics": "/tmp/sirkit_convex_hull_ready_20261024/official_solution.cpp: In function ‘void solve()’:\n/tmp/sirkit_convex_hull_ready_20261024/official_solution.cpp:136:8: warning: ignoring return value of ‘int scanf(const char*, ...)’ declared with attribute ‘warn_unused_result’ [-Wunused-result]\n  136 |   scanf(\"%d\", &N);\n      |   ~~~~~^~~~~~~~~~\n/tmp/sirkit_convex_hull_ready_20261024/official_solution.cpp:141:10: warning: ignoring return value of ‘int scanf(const char*, ...)’ declared with attribute ‘warn_unused_result’ [-Wunused-result]\n  141 |     scanf(\"%d %d\", &x, &y);\n      |     ~~~~~^~~~~~~~~~~~~~~~~\n/tmp/sirkit_convex_hull_ready_20261024/official_solution.cpp: In function ‘int main()’:\n/tmp/sirkit_convex_hull_ready_20261024/official_solution.cpp:158:8: warning: ignoring return value of ‘int scanf(const char*, ...)’ declared with attribute ‘warn_unused_result’ [-Wunused-result]\n  158 |   scanf(\"%d\", &T);\n      |   ~~~~~^~~~~~~~~~\n"
+      },
+      {
+        "command": [
+          "/usr/bin/g++",
+          "-O2",
+          "-std=c++23",
+          "-I/tmp/sirkit_hull_20261022/official",
+          "/tmp/sirkit_convex_hull_ready_20261024/official_checker.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/official_checker"
+        ],
+        "diagnostics": ""
+      },
+      {
+        "command": [
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_skip_full.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_skip_full"
+        ],
+        "diagnostics": "",
+        "source_sha256": "a05398f956f9543406f70d20999c3882fd778772f60d9fc0ed5c0ca04b4d6bc1"
+      },
+      {
+        "command": [
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_skip_split.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_skip_split"
+        ],
+        "diagnostics": "",
+        "source_sha256": "caa5a24aa82e9921aa906057fed997806a0120de70f9276cc07be8d86f424061"
+      },
+      {
+        "command": [
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_checked_full.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_checked_full"
+        ],
+        "diagnostics": "",
+        "source_sha256": "37929db70ef519bb8eb6eb99b95f65a62e5674afcd6c52a73bd02febde30ef7d"
+      },
+      {
+        "command": [
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_checked_split.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_checked_split"
+        ],
+        "diagnostics": "",
+        "source_sha256": "fdbabc2af0d77b487403667eb55a79d4bac8b8c1d8b1489acb34f8ad5b3658f6"
+      },
+      {
+        "command": [
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-march=native",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_native_full.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_native_full"
+        ],
+        "diagnostics": "",
+        "source_sha256": "a05398f956f9543406f70d20999c3882fd778772f60d9fc0ed5c0ca04b4d6bc1"
+      },
+      {
+        "command": [
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-march=native",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_native_split.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_native_split"
+        ],
+        "diagnostics": "",
+        "source_sha256": "caa5a24aa82e9921aa906057fed997806a0120de70f9276cc07be8d86f424061"
+      },
+      {
+        "command": [
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_standard_full.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_standard_full"
+        ],
+        "diagnostics": "",
+        "source_sha256": "a05398f956f9543406f70d20999c3882fd778772f60d9fc0ed5c0ca04b4d6bc1"
+      },
+      {
+        "command": [
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_standard_split.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/gcc_standard_split"
+        ],
+        "diagnostics": "",
+        "source_sha256": "caa5a24aa82e9921aa906057fed997806a0120de70f9276cc07be8d86f424061"
+      },
+      {
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_convex_hull_ready_20261024/clang_skip_full.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/clang_skip_full"
+        ],
+        "diagnostics": "",
+        "source_sha256": "a05398f956f9543406f70d20999c3882fd778772f60d9fc0ed5c0ca04b4d6bc1"
+      },
+      {
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_convex_hull_ready_20261024/clang_skip_split.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/clang_skip_split"
+        ],
+        "diagnostics": "",
+        "source_sha256": "caa5a24aa82e9921aa906057fed997806a0120de70f9276cc07be8d86f424061"
+      }
+    ],
+    "fixtures": [
+      {
+        "name": "example_00.in",
+        "input": "/tmp/sirkit_hull_20261022/official/example_00.in",
+        "input_sha256": "ca0b22ea58a53c78da535745ad343c5bd8e975584f88c2d1f89dc2b6dc75ae7c",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/example_00.in.expected",
+        "output_sha256": "cf65132621da49bbfe3aadcba3f6fd1a05d5a93cd481e909bcd9fed3f57edbb6"
+      },
+      {
+        "name": "example_01.in",
+        "input": "/tmp/sirkit_hull_20261022/official/example_01.in",
+        "input_sha256": "bbbb8b81b630f7f49a9fa19850ec15db135c87e3b810e16fd64f2bb0bcf75138",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/example_01.in.expected",
+        "output_sha256": "a2e444e80ddcd8302c0cae311f730a89c0fac1983f05d67390f255d344727bbb"
+      },
+      {
+        "name": "all_same_00.in",
+        "input": "/tmp/sirkit_hull_20261022/official/all_same_00.in",
+        "input_sha256": "1a734c9559a4b04f288c868ce132c692356fe856dec0a09ba3a60c23f6dcc915",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/all_same_00.in.expected",
+        "output_sha256": "fbc9a823e5e02cb499315160cfbf953ae68b85b7d91be38f1b02cf65fc381971"
+      },
+      {
+        "name": "all_same_01.in",
+        "input": "/tmp/sirkit_hull_20261022/official/all_same_01.in",
+        "input_sha256": "44b3f8817f43a82c31544acbb299d87a3830b934968bd484b0be59b267556bce",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/all_same_01.in.expected",
+        "output_sha256": "cc452f3bbcd6fc158329985718ad789755340a0a3d3caeb5e02acd05e3030d3f"
+      },
+      {
+        "name": "small_random_00.in",
+        "input": "/tmp/sirkit_hull_20261022/official/small_random_00.in",
+        "input_sha256": "9fe922ae59a53443032eaa4b762201344553d53fe6c4edfb8059a1c4dee6b3cd",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/small_random_00.in.expected",
+        "output_sha256": "1fec982a51132de19ece95730c671442afbdc71d5fb481897701c173497fc63a"
+      },
+      {
+        "name": "small_random_01.in",
+        "input": "/tmp/sirkit_hull_20261022/official/small_random_01.in",
+        "input_sha256": "13c442b25e2c775116e33aae63fddd7629c0b323a3e0482223b40ab7fdfa84a2",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/small_random_01.in.expected",
+        "output_sha256": "12df840633b2001e86ecb640dcd95ea03455fc847adb70150e8aed5f1565bf3d"
+      },
+      {
+        "name": "small_random_02.in",
+        "input": "/tmp/sirkit_hull_20261022/official/small_random_02.in",
+        "input_sha256": "e9f9315d8e19e62428585b18fd6157cc5cb36d2a4759481162cda663935ccc61",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/small_random_02.in.expected",
+        "output_sha256": "f3000800b27922a04d991a5872731867b8dbbd1ad04fda9b53569eb033233bfe"
+      },
+      {
+        "name": "small_random_03.in",
+        "input": "/tmp/sirkit_hull_20261022/official/small_random_03.in",
+        "input_sha256": "85b8558575abfc6940f3b38b05df9207cb680e0fea946be0a91f671a0416717a",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/small_random_03.in.expected",
+        "output_sha256": "c4a750422fa21f78b73ad320aab3ca2db797ad8865b098e6dac080e3a2fa2448"
+      },
+      {
+        "name": "small_random_04.in",
+        "input": "/tmp/sirkit_hull_20261022/official/small_random_04.in",
+        "input_sha256": "e1fe42bc5c1a63327c455680dd853656a7f2977f9071f5fa1a201a4b670ea520",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/small_random_04.in.expected",
+        "output_sha256": "f30cb8cfd526395d237cf792c908f23f0d674f3c6239d0f1736dc18f9a004698"
+      },
+      {
+        "name": "small_random_05.in",
+        "input": "/tmp/sirkit_hull_20261022/official/small_random_05.in",
+        "input_sha256": "cdeb46fe6332f81e71e5dd938af417e25fb38ffa2d59a7441770cabdfe3a8b2e",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/small_random_05.in.expected",
+        "output_sha256": "9168352b3a99bd0f643192c08b5bfbb3195e6567c17b3944c6298488bf86a89a"
+      },
+      {
+        "name": "small_random_06.in",
+        "input": "/tmp/sirkit_hull_20261022/official/small_random_06.in",
+        "input_sha256": "9f41bf704869aa113b17e3a82cdc8ed2062afce521435acc271f720f791a58a9",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/small_random_06.in.expected",
+        "output_sha256": "4f426a7da1ea479be5424abe20afad7ec9bf4fd7f7830f218df422a768a96a43"
+      },
+      {
+        "name": "small_random_07.in",
+        "input": "/tmp/sirkit_hull_20261022/official/small_random_07.in",
+        "input_sha256": "8658fe7b4a9764b3661371bccdaca25ed20984c3e2f178f1014525a96f3e8e32",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/small_random_07.in.expected",
+        "output_sha256": "ae6132e4e0f0e780ece8cd69b824dd17336b536acbab73006463358ffc5543cb"
+      },
+      {
+        "name": "max_random_00.in",
+        "input": "/tmp/sirkit_hull_20261022/official/max_random_00.in",
+        "input_sha256": "48e621261bfd31af801cdf2f51a10091d00761477f9797c7f8942f88b57e50a8",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/max_random_00.in.expected",
+        "output_sha256": "ef861759c4c67510bae10ae2a80eece30b8571415dc6674edaabb9838501d9ed"
+      },
+      {
+        "name": "max_random_01.in",
+        "input": "/tmp/sirkit_hull_20261022/official/max_random_01.in",
+        "input_sha256": "cc31871052fe533b3df8fe0ee3594932f94d7fc53b650bcded10df57bf9b7111",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/max_random_01.in.expected",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68"
+      },
+      {
+        "name": "max_random_02.in",
+        "input": "/tmp/sirkit_hull_20261022/official/max_random_02.in",
+        "input_sha256": "a85df3a369efb2db4005ee392fbe5ed321d93e9628a28353f1b1fdbfaa052f8e",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/max_random_02.in.expected",
+        "output_sha256": "4bc6630c13fb44c90b31627657d983edb176955a090ec72131e667726ec91f9b"
+      },
+      {
+        "name": "max_random_03.in",
+        "input": "/tmp/sirkit_hull_20261022/official/max_random_03.in",
+        "input_sha256": "b404052a29aa638e548c89cbb0e1dabb6d6d70a74cc21739d3a020b26008fb0f",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/max_random_03.in.expected",
+        "output_sha256": "747cb3fb85093189bc3843f00b3cf15cdcc26758fc82a3998b524e015f683997"
+      },
+      {
+        "name": "max_random_04.in",
+        "input": "/tmp/sirkit_hull_20261022/official/max_random_04.in",
+        "input_sha256": "82add770894ec3a31c3eb7266bb9801e826b0354fc15d09adb5760596dcfc08c",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/max_random_04.in.expected",
+        "output_sha256": "652bffb06c48e0f50cd120ea48279d3c6681cf756606030ddaf0bb56bf738939"
+      },
+      {
+        "name": "max_random_05.in",
+        "input": "/tmp/sirkit_hull_20261022/official/max_random_05.in",
+        "input_sha256": "61bde89bdea7671424bf96327caec5e503ddfff8fbbea6f13dc8459acaf5d5e5",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/max_random_05.in.expected",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68"
+      },
+      {
+        "name": "max_random_06.in",
+        "input": "/tmp/sirkit_hull_20261022/official/max_random_06.in",
+        "input_sha256": "e4aa4ce9783a698fa6e1e9e68f40489cce0ae38941d830b2d9c99db4fec123c0",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/max_random_06.in.expected",
+        "output_sha256": "265e3ad950ce3085961d10428ff5fd7ef5b2884f72d57b36548af37679150d24"
+      },
+      {
+        "name": "max_random_07.in",
+        "input": "/tmp/sirkit_hull_20261022/official/max_random_07.in",
+        "input_sha256": "aa1d14750ba9d4a9f6d54cfc1a674fce5f4c5d6d5f83d71956c5f2a63fe5eec4",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/max_random_07.in.expected",
+        "output_sha256": "6e12dd1c87b8ca5311629f8c80046336f63384165b5d7903ea1bdaaab6d9f26d"
+      },
+      {
+        "name": "max_colinear_00.in",
+        "input": "/tmp/sirkit_hull_20261022/official/max_colinear_00.in",
+        "input_sha256": "5d4f28d52e3dd30d222d59841d229d4b80341c93dd913302292a6621672bf2ac",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/max_colinear_00.in.expected",
+        "output_sha256": "260584105867cb16ef78fabd0b30a23a0ee0a6e9136980fdff6842d589276a56"
+      },
+      {
+        "name": "max_colinear_01.in",
+        "input": "/tmp/sirkit_hull_20261022/official/max_colinear_01.in",
+        "input_sha256": "395f91f1c4db482a7bc5b8756f10e4edbfd6d619df7cbd452a5602afbd276d02",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/max_colinear_01.in.expected",
+        "output_sha256": "12a1a43683896669f40343ad747edb4cd1eeae13428a843a354ee04729d858fc"
+      },
+      {
+        "name": "near_circle_00.in",
+        "input": "/tmp/sirkit_hull_20261022/official/near_circle_00.in",
+        "input_sha256": "ec5f9c2455fb75de974d9a627f2daaec5406dfe7ef43b3a81cbdf7364432c77d",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/near_circle_00.in.expected",
+        "output_sha256": "a1695b4bc6a5e003a57ed57c299677770b86d39d6c74da0456bb0e6fbacd89ff"
+      },
+      {
+        "name": "near_circle_01.in",
+        "input": "/tmp/sirkit_hull_20261022/official/near_circle_01.in",
+        "input_sha256": "b3948ea253a4d18876e1f3452f5d635898438ae8a7b4697611e6f41d89ad6b17",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/near_circle_01.in.expected",
+        "output_sha256": "c8d06e0289ee61bd19997a62dee5011ef8d8b2ee89ed16bc93a3e32e5d98f330"
+      },
+      {
+        "name": "max_ans_00.in",
+        "input": "/tmp/sirkit_hull_20261022/official/max_ans_00.in",
+        "input_sha256": "d9a60c640d44fc44fadf771950c75480fb2ba2ac0ebc2bbe51e99e46301b0644",
+        "output": "/tmp/sirkit_convex_hull_ready_20261024/max_ans_00.in.expected",
+        "output_sha256": "164b2f6eb288fdcf9488d2a533cffa03325a5b9b5c054e97869005ab41ec7faa"
+      }
+    ],
+    "runs": [
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "example_00.in",
+        "output_sha256": "cf65132621da49bbfe3aadcba3f6fd1a05d5a93cd481e909bcd9fed3f57edbb6",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "example_01.in",
+        "output_sha256": "a2e444e80ddcd8302c0cae311f730a89c0fac1983f05d67390f255d344727bbb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "all_same_00.in",
+        "output_sha256": "fbc9a823e5e02cb499315160cfbf953ae68b85b7d91be38f1b02cf65fc381971",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "all_same_01.in",
+        "output_sha256": "cc452f3bbcd6fc158329985718ad789755340a0a3d3caeb5e02acd05e3030d3f",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "small_random_00.in",
+        "output_sha256": "1fec982a51132de19ece95730c671442afbdc71d5fb481897701c173497fc63a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "small_random_01.in",
+        "output_sha256": "12df840633b2001e86ecb640dcd95ea03455fc847adb70150e8aed5f1565bf3d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "small_random_02.in",
+        "output_sha256": "f3000800b27922a04d991a5872731867b8dbbd1ad04fda9b53569eb033233bfe",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "small_random_03.in",
+        "output_sha256": "c4a750422fa21f78b73ad320aab3ca2db797ad8865b098e6dac080e3a2fa2448",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "small_random_04.in",
+        "output_sha256": "f30cb8cfd526395d237cf792c908f23f0d674f3c6239d0f1736dc18f9a004698",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "small_random_05.in",
+        "output_sha256": "9168352b3a99bd0f643192c08b5bfbb3195e6567c17b3944c6298488bf86a89a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "small_random_06.in",
+        "output_sha256": "4f426a7da1ea479be5424abe20afad7ec9bf4fd7f7830f218df422a768a96a43",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "small_random_07.in",
+        "output_sha256": "ae6132e4e0f0e780ece8cd69b824dd17336b536acbab73006463358ffc5543cb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "max_random_00.in",
+        "output_sha256": "ef861759c4c67510bae10ae2a80eece30b8571415dc6674edaabb9838501d9ed",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "max_random_01.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "max_random_02.in",
+        "output_sha256": "4bc6630c13fb44c90b31627657d983edb176955a090ec72131e667726ec91f9b",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "max_random_03.in",
+        "output_sha256": "747cb3fb85093189bc3843f00b3cf15cdcc26758fc82a3998b524e015f683997",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "max_random_04.in",
+        "output_sha256": "652bffb06c48e0f50cd120ea48279d3c6681cf756606030ddaf0bb56bf738939",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "max_random_05.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "max_random_06.in",
+        "output_sha256": "265e3ad950ce3085961d10428ff5fd7ef5b2884f72d57b36548af37679150d24",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "max_random_07.in",
+        "output_sha256": "6e12dd1c87b8ca5311629f8c80046336f63384165b5d7903ea1bdaaab6d9f26d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "max_colinear_00.in",
+        "output_sha256": "260584105867cb16ef78fabd0b30a23a0ee0a6e9136980fdff6842d589276a56",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "max_colinear_01.in",
+        "output_sha256": "12a1a43683896669f40343ad747edb4cd1eeae13428a843a354ee04729d858fc",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "near_circle_00.in",
+        "output_sha256": "a1695b4bc6a5e003a57ed57c299677770b86d39d6c74da0456bb0e6fbacd89ff",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "near_circle_01.in",
+        "output_sha256": "c8d06e0289ee61bd19997a62dee5011ef8d8b2ee89ed16bc93a3e32e5d98f330",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "full",
+        "case": "max_ans_00.in",
+        "output_sha256": "164b2f6eb288fdcf9488d2a533cffa03325a5b9b5c054e97869005ab41ec7faa",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "example_00.in",
+        "output_sha256": "cf65132621da49bbfe3aadcba3f6fd1a05d5a93cd481e909bcd9fed3f57edbb6",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "example_01.in",
+        "output_sha256": "a2e444e80ddcd8302c0cae311f730a89c0fac1983f05d67390f255d344727bbb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "all_same_00.in",
+        "output_sha256": "fbc9a823e5e02cb499315160cfbf953ae68b85b7d91be38f1b02cf65fc381971",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "all_same_01.in",
+        "output_sha256": "cc452f3bbcd6fc158329985718ad789755340a0a3d3caeb5e02acd05e3030d3f",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "small_random_00.in",
+        "output_sha256": "1fec982a51132de19ece95730c671442afbdc71d5fb481897701c173497fc63a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "small_random_01.in",
+        "output_sha256": "12df840633b2001e86ecb640dcd95ea03455fc847adb70150e8aed5f1565bf3d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "small_random_02.in",
+        "output_sha256": "f3000800b27922a04d991a5872731867b8dbbd1ad04fda9b53569eb033233bfe",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "small_random_03.in",
+        "output_sha256": "c4a750422fa21f78b73ad320aab3ca2db797ad8865b098e6dac080e3a2fa2448",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "small_random_04.in",
+        "output_sha256": "f30cb8cfd526395d237cf792c908f23f0d674f3c6239d0f1736dc18f9a004698",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "small_random_05.in",
+        "output_sha256": "9168352b3a99bd0f643192c08b5bfbb3195e6567c17b3944c6298488bf86a89a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "small_random_06.in",
+        "output_sha256": "4f426a7da1ea479be5424abe20afad7ec9bf4fd7f7830f218df422a768a96a43",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "small_random_07.in",
+        "output_sha256": "ae6132e4e0f0e780ece8cd69b824dd17336b536acbab73006463358ffc5543cb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "max_random_00.in",
+        "output_sha256": "ef861759c4c67510bae10ae2a80eece30b8571415dc6674edaabb9838501d9ed",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "max_random_01.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "max_random_02.in",
+        "output_sha256": "4bc6630c13fb44c90b31627657d983edb176955a090ec72131e667726ec91f9b",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "max_random_03.in",
+        "output_sha256": "747cb3fb85093189bc3843f00b3cf15cdcc26758fc82a3998b524e015f683997",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "max_random_04.in",
+        "output_sha256": "652bffb06c48e0f50cd120ea48279d3c6681cf756606030ddaf0bb56bf738939",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "max_random_05.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "max_random_06.in",
+        "output_sha256": "265e3ad950ce3085961d10428ff5fd7ef5b2884f72d57b36548af37679150d24",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "max_random_07.in",
+        "output_sha256": "6e12dd1c87b8ca5311629f8c80046336f63384165b5d7903ea1bdaaab6d9f26d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "max_colinear_00.in",
+        "output_sha256": "260584105867cb16ef78fabd0b30a23a0ee0a6e9136980fdff6842d589276a56",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "max_colinear_01.in",
+        "output_sha256": "12a1a43683896669f40343ad747edb4cd1eeae13428a843a354ee04729d858fc",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "near_circle_00.in",
+        "output_sha256": "a1695b4bc6a5e003a57ed57c299677770b86d39d6c74da0456bb0e6fbacd89ff",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "near_circle_01.in",
+        "output_sha256": "c8d06e0289ee61bd19997a62dee5011ef8d8b2ee89ed16bc93a3e32e5d98f330",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_skip",
+        "form": "split",
+        "case": "max_ans_00.in",
+        "output_sha256": "164b2f6eb288fdcf9488d2a533cffa03325a5b9b5c054e97869005ab41ec7faa",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "example_00.in",
+        "output_sha256": "cf65132621da49bbfe3aadcba3f6fd1a05d5a93cd481e909bcd9fed3f57edbb6",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "example_01.in",
+        "output_sha256": "a2e444e80ddcd8302c0cae311f730a89c0fac1983f05d67390f255d344727bbb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "all_same_00.in",
+        "output_sha256": "fbc9a823e5e02cb499315160cfbf953ae68b85b7d91be38f1b02cf65fc381971",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "all_same_01.in",
+        "output_sha256": "cc452f3bbcd6fc158329985718ad789755340a0a3d3caeb5e02acd05e3030d3f",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "small_random_00.in",
+        "output_sha256": "1fec982a51132de19ece95730c671442afbdc71d5fb481897701c173497fc63a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "small_random_01.in",
+        "output_sha256": "12df840633b2001e86ecb640dcd95ea03455fc847adb70150e8aed5f1565bf3d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "small_random_02.in",
+        "output_sha256": "f3000800b27922a04d991a5872731867b8dbbd1ad04fda9b53569eb033233bfe",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "small_random_03.in",
+        "output_sha256": "c4a750422fa21f78b73ad320aab3ca2db797ad8865b098e6dac080e3a2fa2448",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "small_random_04.in",
+        "output_sha256": "f30cb8cfd526395d237cf792c908f23f0d674f3c6239d0f1736dc18f9a004698",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "small_random_05.in",
+        "output_sha256": "9168352b3a99bd0f643192c08b5bfbb3195e6567c17b3944c6298488bf86a89a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "small_random_06.in",
+        "output_sha256": "4f426a7da1ea479be5424abe20afad7ec9bf4fd7f7830f218df422a768a96a43",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "small_random_07.in",
+        "output_sha256": "ae6132e4e0f0e780ece8cd69b824dd17336b536acbab73006463358ffc5543cb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "max_random_00.in",
+        "output_sha256": "ef861759c4c67510bae10ae2a80eece30b8571415dc6674edaabb9838501d9ed",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "max_random_01.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "max_random_02.in",
+        "output_sha256": "4bc6630c13fb44c90b31627657d983edb176955a090ec72131e667726ec91f9b",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "max_random_03.in",
+        "output_sha256": "747cb3fb85093189bc3843f00b3cf15cdcc26758fc82a3998b524e015f683997",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "max_random_04.in",
+        "output_sha256": "652bffb06c48e0f50cd120ea48279d3c6681cf756606030ddaf0bb56bf738939",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "max_random_05.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "max_random_06.in",
+        "output_sha256": "265e3ad950ce3085961d10428ff5fd7ef5b2884f72d57b36548af37679150d24",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "max_random_07.in",
+        "output_sha256": "6e12dd1c87b8ca5311629f8c80046336f63384165b5d7903ea1bdaaab6d9f26d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "max_colinear_00.in",
+        "output_sha256": "260584105867cb16ef78fabd0b30a23a0ee0a6e9136980fdff6842d589276a56",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "max_colinear_01.in",
+        "output_sha256": "12a1a43683896669f40343ad747edb4cd1eeae13428a843a354ee04729d858fc",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "near_circle_00.in",
+        "output_sha256": "a1695b4bc6a5e003a57ed57c299677770b86d39d6c74da0456bb0e6fbacd89ff",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "near_circle_01.in",
+        "output_sha256": "c8d06e0289ee61bd19997a62dee5011ef8d8b2ee89ed16bc93a3e32e5d98f330",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "full",
+        "case": "max_ans_00.in",
+        "output_sha256": "164b2f6eb288fdcf9488d2a533cffa03325a5b9b5c054e97869005ab41ec7faa",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "example_00.in",
+        "output_sha256": "cf65132621da49bbfe3aadcba3f6fd1a05d5a93cd481e909bcd9fed3f57edbb6",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "example_01.in",
+        "output_sha256": "a2e444e80ddcd8302c0cae311f730a89c0fac1983f05d67390f255d344727bbb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "all_same_00.in",
+        "output_sha256": "fbc9a823e5e02cb499315160cfbf953ae68b85b7d91be38f1b02cf65fc381971",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "all_same_01.in",
+        "output_sha256": "cc452f3bbcd6fc158329985718ad789755340a0a3d3caeb5e02acd05e3030d3f",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "small_random_00.in",
+        "output_sha256": "1fec982a51132de19ece95730c671442afbdc71d5fb481897701c173497fc63a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "small_random_01.in",
+        "output_sha256": "12df840633b2001e86ecb640dcd95ea03455fc847adb70150e8aed5f1565bf3d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "small_random_02.in",
+        "output_sha256": "f3000800b27922a04d991a5872731867b8dbbd1ad04fda9b53569eb033233bfe",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "small_random_03.in",
+        "output_sha256": "c4a750422fa21f78b73ad320aab3ca2db797ad8865b098e6dac080e3a2fa2448",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "small_random_04.in",
+        "output_sha256": "f30cb8cfd526395d237cf792c908f23f0d674f3c6239d0f1736dc18f9a004698",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "small_random_05.in",
+        "output_sha256": "9168352b3a99bd0f643192c08b5bfbb3195e6567c17b3944c6298488bf86a89a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "small_random_06.in",
+        "output_sha256": "4f426a7da1ea479be5424abe20afad7ec9bf4fd7f7830f218df422a768a96a43",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "small_random_07.in",
+        "output_sha256": "ae6132e4e0f0e780ece8cd69b824dd17336b536acbab73006463358ffc5543cb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "max_random_00.in",
+        "output_sha256": "ef861759c4c67510bae10ae2a80eece30b8571415dc6674edaabb9838501d9ed",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "max_random_01.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "max_random_02.in",
+        "output_sha256": "4bc6630c13fb44c90b31627657d983edb176955a090ec72131e667726ec91f9b",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "max_random_03.in",
+        "output_sha256": "747cb3fb85093189bc3843f00b3cf15cdcc26758fc82a3998b524e015f683997",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "max_random_04.in",
+        "output_sha256": "652bffb06c48e0f50cd120ea48279d3c6681cf756606030ddaf0bb56bf738939",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "max_random_05.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "max_random_06.in",
+        "output_sha256": "265e3ad950ce3085961d10428ff5fd7ef5b2884f72d57b36548af37679150d24",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "max_random_07.in",
+        "output_sha256": "6e12dd1c87b8ca5311629f8c80046336f63384165b5d7903ea1bdaaab6d9f26d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "max_colinear_00.in",
+        "output_sha256": "260584105867cb16ef78fabd0b30a23a0ee0a6e9136980fdff6842d589276a56",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "max_colinear_01.in",
+        "output_sha256": "12a1a43683896669f40343ad747edb4cd1eeae13428a843a354ee04729d858fc",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "near_circle_00.in",
+        "output_sha256": "a1695b4bc6a5e003a57ed57c299677770b86d39d6c74da0456bb0e6fbacd89ff",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "near_circle_01.in",
+        "output_sha256": "c8d06e0289ee61bd19997a62dee5011ef8d8b2ee89ed16bc93a3e32e5d98f330",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_checked",
+        "form": "split",
+        "case": "max_ans_00.in",
+        "output_sha256": "164b2f6eb288fdcf9488d2a533cffa03325a5b9b5c054e97869005ab41ec7faa",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "example_00.in",
+        "output_sha256": "cf65132621da49bbfe3aadcba3f6fd1a05d5a93cd481e909bcd9fed3f57edbb6",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "example_01.in",
+        "output_sha256": "a2e444e80ddcd8302c0cae311f730a89c0fac1983f05d67390f255d344727bbb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "all_same_00.in",
+        "output_sha256": "fbc9a823e5e02cb499315160cfbf953ae68b85b7d91be38f1b02cf65fc381971",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "all_same_01.in",
+        "output_sha256": "cc452f3bbcd6fc158329985718ad789755340a0a3d3caeb5e02acd05e3030d3f",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "small_random_00.in",
+        "output_sha256": "1fec982a51132de19ece95730c671442afbdc71d5fb481897701c173497fc63a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "small_random_01.in",
+        "output_sha256": "12df840633b2001e86ecb640dcd95ea03455fc847adb70150e8aed5f1565bf3d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "small_random_02.in",
+        "output_sha256": "f3000800b27922a04d991a5872731867b8dbbd1ad04fda9b53569eb033233bfe",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "small_random_03.in",
+        "output_sha256": "c4a750422fa21f78b73ad320aab3ca2db797ad8865b098e6dac080e3a2fa2448",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "small_random_04.in",
+        "output_sha256": "f30cb8cfd526395d237cf792c908f23f0d674f3c6239d0f1736dc18f9a004698",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "small_random_05.in",
+        "output_sha256": "9168352b3a99bd0f643192c08b5bfbb3195e6567c17b3944c6298488bf86a89a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "small_random_06.in",
+        "output_sha256": "4f426a7da1ea479be5424abe20afad7ec9bf4fd7f7830f218df422a768a96a43",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "small_random_07.in",
+        "output_sha256": "ae6132e4e0f0e780ece8cd69b824dd17336b536acbab73006463358ffc5543cb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "max_random_00.in",
+        "output_sha256": "ef861759c4c67510bae10ae2a80eece30b8571415dc6674edaabb9838501d9ed",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "max_random_01.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "max_random_02.in",
+        "output_sha256": "4bc6630c13fb44c90b31627657d983edb176955a090ec72131e667726ec91f9b",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "max_random_03.in",
+        "output_sha256": "747cb3fb85093189bc3843f00b3cf15cdcc26758fc82a3998b524e015f683997",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "max_random_04.in",
+        "output_sha256": "652bffb06c48e0f50cd120ea48279d3c6681cf756606030ddaf0bb56bf738939",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "max_random_05.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "max_random_06.in",
+        "output_sha256": "265e3ad950ce3085961d10428ff5fd7ef5b2884f72d57b36548af37679150d24",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "max_random_07.in",
+        "output_sha256": "6e12dd1c87b8ca5311629f8c80046336f63384165b5d7903ea1bdaaab6d9f26d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "max_colinear_00.in",
+        "output_sha256": "260584105867cb16ef78fabd0b30a23a0ee0a6e9136980fdff6842d589276a56",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "max_colinear_01.in",
+        "output_sha256": "12a1a43683896669f40343ad747edb4cd1eeae13428a843a354ee04729d858fc",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "near_circle_00.in",
+        "output_sha256": "a1695b4bc6a5e003a57ed57c299677770b86d39d6c74da0456bb0e6fbacd89ff",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "near_circle_01.in",
+        "output_sha256": "c8d06e0289ee61bd19997a62dee5011ef8d8b2ee89ed16bc93a3e32e5d98f330",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "full",
+        "case": "max_ans_00.in",
+        "output_sha256": "164b2f6eb288fdcf9488d2a533cffa03325a5b9b5c054e97869005ab41ec7faa",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "example_00.in",
+        "output_sha256": "cf65132621da49bbfe3aadcba3f6fd1a05d5a93cd481e909bcd9fed3f57edbb6",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "example_01.in",
+        "output_sha256": "a2e444e80ddcd8302c0cae311f730a89c0fac1983f05d67390f255d344727bbb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "all_same_00.in",
+        "output_sha256": "fbc9a823e5e02cb499315160cfbf953ae68b85b7d91be38f1b02cf65fc381971",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "all_same_01.in",
+        "output_sha256": "cc452f3bbcd6fc158329985718ad789755340a0a3d3caeb5e02acd05e3030d3f",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "small_random_00.in",
+        "output_sha256": "1fec982a51132de19ece95730c671442afbdc71d5fb481897701c173497fc63a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "small_random_01.in",
+        "output_sha256": "12df840633b2001e86ecb640dcd95ea03455fc847adb70150e8aed5f1565bf3d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "small_random_02.in",
+        "output_sha256": "f3000800b27922a04d991a5872731867b8dbbd1ad04fda9b53569eb033233bfe",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "small_random_03.in",
+        "output_sha256": "c4a750422fa21f78b73ad320aab3ca2db797ad8865b098e6dac080e3a2fa2448",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "small_random_04.in",
+        "output_sha256": "f30cb8cfd526395d237cf792c908f23f0d674f3c6239d0f1736dc18f9a004698",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "small_random_05.in",
+        "output_sha256": "9168352b3a99bd0f643192c08b5bfbb3195e6567c17b3944c6298488bf86a89a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "small_random_06.in",
+        "output_sha256": "4f426a7da1ea479be5424abe20afad7ec9bf4fd7f7830f218df422a768a96a43",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "small_random_07.in",
+        "output_sha256": "ae6132e4e0f0e780ece8cd69b824dd17336b536acbab73006463358ffc5543cb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "max_random_00.in",
+        "output_sha256": "ef861759c4c67510bae10ae2a80eece30b8571415dc6674edaabb9838501d9ed",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "max_random_01.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "max_random_02.in",
+        "output_sha256": "4bc6630c13fb44c90b31627657d983edb176955a090ec72131e667726ec91f9b",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "max_random_03.in",
+        "output_sha256": "747cb3fb85093189bc3843f00b3cf15cdcc26758fc82a3998b524e015f683997",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "max_random_04.in",
+        "output_sha256": "652bffb06c48e0f50cd120ea48279d3c6681cf756606030ddaf0bb56bf738939",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "max_random_05.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "max_random_06.in",
+        "output_sha256": "265e3ad950ce3085961d10428ff5fd7ef5b2884f72d57b36548af37679150d24",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "max_random_07.in",
+        "output_sha256": "6e12dd1c87b8ca5311629f8c80046336f63384165b5d7903ea1bdaaab6d9f26d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "max_colinear_00.in",
+        "output_sha256": "260584105867cb16ef78fabd0b30a23a0ee0a6e9136980fdff6842d589276a56",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "max_colinear_01.in",
+        "output_sha256": "12a1a43683896669f40343ad747edb4cd1eeae13428a843a354ee04729d858fc",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "near_circle_00.in",
+        "output_sha256": "a1695b4bc6a5e003a57ed57c299677770b86d39d6c74da0456bb0e6fbacd89ff",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "near_circle_01.in",
+        "output_sha256": "c8d06e0289ee61bd19997a62dee5011ef8d8b2ee89ed16bc93a3e32e5d98f330",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_native",
+        "form": "split",
+        "case": "max_ans_00.in",
+        "output_sha256": "164b2f6eb288fdcf9488d2a533cffa03325a5b9b5c054e97869005ab41ec7faa",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "example_00.in",
+        "output_sha256": "cf65132621da49bbfe3aadcba3f6fd1a05d5a93cd481e909bcd9fed3f57edbb6",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "example_01.in",
+        "output_sha256": "a2e444e80ddcd8302c0cae311f730a89c0fac1983f05d67390f255d344727bbb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "all_same_00.in",
+        "output_sha256": "fbc9a823e5e02cb499315160cfbf953ae68b85b7d91be38f1b02cf65fc381971",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "all_same_01.in",
+        "output_sha256": "cc452f3bbcd6fc158329985718ad789755340a0a3d3caeb5e02acd05e3030d3f",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "small_random_00.in",
+        "output_sha256": "1fec982a51132de19ece95730c671442afbdc71d5fb481897701c173497fc63a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "small_random_01.in",
+        "output_sha256": "12df840633b2001e86ecb640dcd95ea03455fc847adb70150e8aed5f1565bf3d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "small_random_02.in",
+        "output_sha256": "f3000800b27922a04d991a5872731867b8dbbd1ad04fda9b53569eb033233bfe",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "small_random_03.in",
+        "output_sha256": "c4a750422fa21f78b73ad320aab3ca2db797ad8865b098e6dac080e3a2fa2448",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "small_random_04.in",
+        "output_sha256": "f30cb8cfd526395d237cf792c908f23f0d674f3c6239d0f1736dc18f9a004698",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "small_random_05.in",
+        "output_sha256": "9168352b3a99bd0f643192c08b5bfbb3195e6567c17b3944c6298488bf86a89a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "small_random_06.in",
+        "output_sha256": "4f426a7da1ea479be5424abe20afad7ec9bf4fd7f7830f218df422a768a96a43",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "small_random_07.in",
+        "output_sha256": "ae6132e4e0f0e780ece8cd69b824dd17336b536acbab73006463358ffc5543cb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "max_random_00.in",
+        "output_sha256": "ef861759c4c67510bae10ae2a80eece30b8571415dc6674edaabb9838501d9ed",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "max_random_01.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "max_random_02.in",
+        "output_sha256": "4bc6630c13fb44c90b31627657d983edb176955a090ec72131e667726ec91f9b",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "max_random_03.in",
+        "output_sha256": "747cb3fb85093189bc3843f00b3cf15cdcc26758fc82a3998b524e015f683997",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "max_random_04.in",
+        "output_sha256": "652bffb06c48e0f50cd120ea48279d3c6681cf756606030ddaf0bb56bf738939",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "max_random_05.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "max_random_06.in",
+        "output_sha256": "265e3ad950ce3085961d10428ff5fd7ef5b2884f72d57b36548af37679150d24",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "max_random_07.in",
+        "output_sha256": "6e12dd1c87b8ca5311629f8c80046336f63384165b5d7903ea1bdaaab6d9f26d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "max_colinear_00.in",
+        "output_sha256": "260584105867cb16ef78fabd0b30a23a0ee0a6e9136980fdff6842d589276a56",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "max_colinear_01.in",
+        "output_sha256": "12a1a43683896669f40343ad747edb4cd1eeae13428a843a354ee04729d858fc",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "near_circle_00.in",
+        "output_sha256": "a1695b4bc6a5e003a57ed57c299677770b86d39d6c74da0456bb0e6fbacd89ff",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "near_circle_01.in",
+        "output_sha256": "c8d06e0289ee61bd19997a62dee5011ef8d8b2ee89ed16bc93a3e32e5d98f330",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "full",
+        "case": "max_ans_00.in",
+        "output_sha256": "164b2f6eb288fdcf9488d2a533cffa03325a5b9b5c054e97869005ab41ec7faa",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "example_00.in",
+        "output_sha256": "cf65132621da49bbfe3aadcba3f6fd1a05d5a93cd481e909bcd9fed3f57edbb6",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "example_01.in",
+        "output_sha256": "a2e444e80ddcd8302c0cae311f730a89c0fac1983f05d67390f255d344727bbb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "all_same_00.in",
+        "output_sha256": "fbc9a823e5e02cb499315160cfbf953ae68b85b7d91be38f1b02cf65fc381971",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "all_same_01.in",
+        "output_sha256": "cc452f3bbcd6fc158329985718ad789755340a0a3d3caeb5e02acd05e3030d3f",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "small_random_00.in",
+        "output_sha256": "1fec982a51132de19ece95730c671442afbdc71d5fb481897701c173497fc63a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "small_random_01.in",
+        "output_sha256": "12df840633b2001e86ecb640dcd95ea03455fc847adb70150e8aed5f1565bf3d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "small_random_02.in",
+        "output_sha256": "f3000800b27922a04d991a5872731867b8dbbd1ad04fda9b53569eb033233bfe",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "small_random_03.in",
+        "output_sha256": "c4a750422fa21f78b73ad320aab3ca2db797ad8865b098e6dac080e3a2fa2448",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "small_random_04.in",
+        "output_sha256": "f30cb8cfd526395d237cf792c908f23f0d674f3c6239d0f1736dc18f9a004698",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "small_random_05.in",
+        "output_sha256": "9168352b3a99bd0f643192c08b5bfbb3195e6567c17b3944c6298488bf86a89a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "small_random_06.in",
+        "output_sha256": "4f426a7da1ea479be5424abe20afad7ec9bf4fd7f7830f218df422a768a96a43",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "small_random_07.in",
+        "output_sha256": "ae6132e4e0f0e780ece8cd69b824dd17336b536acbab73006463358ffc5543cb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "max_random_00.in",
+        "output_sha256": "ef861759c4c67510bae10ae2a80eece30b8571415dc6674edaabb9838501d9ed",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "max_random_01.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "max_random_02.in",
+        "output_sha256": "4bc6630c13fb44c90b31627657d983edb176955a090ec72131e667726ec91f9b",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "max_random_03.in",
+        "output_sha256": "747cb3fb85093189bc3843f00b3cf15cdcc26758fc82a3998b524e015f683997",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "max_random_04.in",
+        "output_sha256": "652bffb06c48e0f50cd120ea48279d3c6681cf756606030ddaf0bb56bf738939",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "max_random_05.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "max_random_06.in",
+        "output_sha256": "265e3ad950ce3085961d10428ff5fd7ef5b2884f72d57b36548af37679150d24",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "max_random_07.in",
+        "output_sha256": "6e12dd1c87b8ca5311629f8c80046336f63384165b5d7903ea1bdaaab6d9f26d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "max_colinear_00.in",
+        "output_sha256": "260584105867cb16ef78fabd0b30a23a0ee0a6e9136980fdff6842d589276a56",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "max_colinear_01.in",
+        "output_sha256": "12a1a43683896669f40343ad747edb4cd1eeae13428a843a354ee04729d858fc",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "near_circle_00.in",
+        "output_sha256": "a1695b4bc6a5e003a57ed57c299677770b86d39d6c74da0456bb0e6fbacd89ff",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "near_circle_01.in",
+        "output_sha256": "c8d06e0289ee61bd19997a62dee5011ef8d8b2ee89ed16bc93a3e32e5d98f330",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "gcc_standard",
+        "form": "split",
+        "case": "max_ans_00.in",
+        "output_sha256": "164b2f6eb288fdcf9488d2a533cffa03325a5b9b5c054e97869005ab41ec7faa",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "example_00.in",
+        "output_sha256": "cf65132621da49bbfe3aadcba3f6fd1a05d5a93cd481e909bcd9fed3f57edbb6",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "example_01.in",
+        "output_sha256": "a2e444e80ddcd8302c0cae311f730a89c0fac1983f05d67390f255d344727bbb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "all_same_00.in",
+        "output_sha256": "fbc9a823e5e02cb499315160cfbf953ae68b85b7d91be38f1b02cf65fc381971",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "all_same_01.in",
+        "output_sha256": "cc452f3bbcd6fc158329985718ad789755340a0a3d3caeb5e02acd05e3030d3f",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "small_random_00.in",
+        "output_sha256": "1fec982a51132de19ece95730c671442afbdc71d5fb481897701c173497fc63a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "small_random_01.in",
+        "output_sha256": "12df840633b2001e86ecb640dcd95ea03455fc847adb70150e8aed5f1565bf3d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "small_random_02.in",
+        "output_sha256": "f3000800b27922a04d991a5872731867b8dbbd1ad04fda9b53569eb033233bfe",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "small_random_03.in",
+        "output_sha256": "c4a750422fa21f78b73ad320aab3ca2db797ad8865b098e6dac080e3a2fa2448",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "small_random_04.in",
+        "output_sha256": "f30cb8cfd526395d237cf792c908f23f0d674f3c6239d0f1736dc18f9a004698",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "small_random_05.in",
+        "output_sha256": "9168352b3a99bd0f643192c08b5bfbb3195e6567c17b3944c6298488bf86a89a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "small_random_06.in",
+        "output_sha256": "4f426a7da1ea479be5424abe20afad7ec9bf4fd7f7830f218df422a768a96a43",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "small_random_07.in",
+        "output_sha256": "ae6132e4e0f0e780ece8cd69b824dd17336b536acbab73006463358ffc5543cb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "max_random_00.in",
+        "output_sha256": "ef861759c4c67510bae10ae2a80eece30b8571415dc6674edaabb9838501d9ed",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "max_random_01.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "max_random_02.in",
+        "output_sha256": "4bc6630c13fb44c90b31627657d983edb176955a090ec72131e667726ec91f9b",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "max_random_03.in",
+        "output_sha256": "747cb3fb85093189bc3843f00b3cf15cdcc26758fc82a3998b524e015f683997",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "max_random_04.in",
+        "output_sha256": "652bffb06c48e0f50cd120ea48279d3c6681cf756606030ddaf0bb56bf738939",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "max_random_05.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "max_random_06.in",
+        "output_sha256": "265e3ad950ce3085961d10428ff5fd7ef5b2884f72d57b36548af37679150d24",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "max_random_07.in",
+        "output_sha256": "6e12dd1c87b8ca5311629f8c80046336f63384165b5d7903ea1bdaaab6d9f26d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "max_colinear_00.in",
+        "output_sha256": "260584105867cb16ef78fabd0b30a23a0ee0a6e9136980fdff6842d589276a56",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "max_colinear_01.in",
+        "output_sha256": "12a1a43683896669f40343ad747edb4cd1eeae13428a843a354ee04729d858fc",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "near_circle_00.in",
+        "output_sha256": "a1695b4bc6a5e003a57ed57c299677770b86d39d6c74da0456bb0e6fbacd89ff",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "near_circle_01.in",
+        "output_sha256": "c8d06e0289ee61bd19997a62dee5011ef8d8b2ee89ed16bc93a3e32e5d98f330",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "full",
+        "case": "max_ans_00.in",
+        "output_sha256": "164b2f6eb288fdcf9488d2a533cffa03325a5b9b5c054e97869005ab41ec7faa",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "example_00.in",
+        "output_sha256": "cf65132621da49bbfe3aadcba3f6fd1a05d5a93cd481e909bcd9fed3f57edbb6",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "example_01.in",
+        "output_sha256": "a2e444e80ddcd8302c0cae311f730a89c0fac1983f05d67390f255d344727bbb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "all_same_00.in",
+        "output_sha256": "fbc9a823e5e02cb499315160cfbf953ae68b85b7d91be38f1b02cf65fc381971",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "all_same_01.in",
+        "output_sha256": "cc452f3bbcd6fc158329985718ad789755340a0a3d3caeb5e02acd05e3030d3f",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "small_random_00.in",
+        "output_sha256": "1fec982a51132de19ece95730c671442afbdc71d5fb481897701c173497fc63a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "small_random_01.in",
+        "output_sha256": "12df840633b2001e86ecb640dcd95ea03455fc847adb70150e8aed5f1565bf3d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "small_random_02.in",
+        "output_sha256": "f3000800b27922a04d991a5872731867b8dbbd1ad04fda9b53569eb033233bfe",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "small_random_03.in",
+        "output_sha256": "c4a750422fa21f78b73ad320aab3ca2db797ad8865b098e6dac080e3a2fa2448",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "small_random_04.in",
+        "output_sha256": "f30cb8cfd526395d237cf792c908f23f0d674f3c6239d0f1736dc18f9a004698",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "small_random_05.in",
+        "output_sha256": "9168352b3a99bd0f643192c08b5bfbb3195e6567c17b3944c6298488bf86a89a",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "small_random_06.in",
+        "output_sha256": "4f426a7da1ea479be5424abe20afad7ec9bf4fd7f7830f218df422a768a96a43",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "small_random_07.in",
+        "output_sha256": "ae6132e4e0f0e780ece8cd69b824dd17336b536acbab73006463358ffc5543cb",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "max_random_00.in",
+        "output_sha256": "ef861759c4c67510bae10ae2a80eece30b8571415dc6674edaabb9838501d9ed",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "max_random_01.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "max_random_02.in",
+        "output_sha256": "4bc6630c13fb44c90b31627657d983edb176955a090ec72131e667726ec91f9b",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "max_random_03.in",
+        "output_sha256": "747cb3fb85093189bc3843f00b3cf15cdcc26758fc82a3998b524e015f683997",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "max_random_04.in",
+        "output_sha256": "652bffb06c48e0f50cd120ea48279d3c6681cf756606030ddaf0bb56bf738939",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "max_random_05.in",
+        "output_sha256": "dc1e8e04fb5e8d2e7da04c81b233c6beb3ae039eaffdb748f225b82d7f69ec68",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "max_random_06.in",
+        "output_sha256": "265e3ad950ce3085961d10428ff5fd7ef5b2884f72d57b36548af37679150d24",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "max_random_07.in",
+        "output_sha256": "6e12dd1c87b8ca5311629f8c80046336f63384165b5d7903ea1bdaaab6d9f26d",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "max_colinear_00.in",
+        "output_sha256": "260584105867cb16ef78fabd0b30a23a0ee0a6e9136980fdff6842d589276a56",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "max_colinear_01.in",
+        "output_sha256": "12a1a43683896669f40343ad747edb4cd1eeae13428a843a354ee04729d858fc",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "near_circle_00.in",
+        "output_sha256": "a1695b4bc6a5e003a57ed57c299677770b86d39d6c74da0456bb0e6fbacd89ff",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "near_circle_01.in",
+        "output_sha256": "c8d06e0289ee61bd19997a62dee5011ef8d8b2ee89ed16bc93a3e32e5d98f330",
+        "checker_returncode": 0
+      },
+      {
+        "mode": "clang_skip",
+        "form": "split",
+        "case": "max_ans_00.in",
+        "output_sha256": "164b2f6eb288fdcf9488d2a533cffa03325a5b9b5c054e97869005ab41ec7faa",
+        "checker_returncode": 0
+      }
+    ]
+  },
+  "independent_reference": {
+    "source": "Verify/current/tests/convex_hull_test.cpp",
+    "sha256": "9a1d6f20fc2205d7ae71dc796a725e5b53bae696945a6539772c2a127bb52b57",
+    "algorithm": "Jarvis法。対象の単調走査とは別の支持線探索。参照の差・積には128bit整数拡張を使う。標準代替の対象本体ではその拡張を除外して確認。",
+    "coverage": "3x3格子の全512集合・乱数・共線・重複・基数整列2048閾値付近・平行移動で整数端・広い整数座標・double/long double・誤差設定・sorted版と未整列の検査。"
+  },
+  "local_verification": {
+    "status": "PASS",
+    "records": [
+      {
+        "mode": "gcc/False/False/full",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10618 independent convex hull checks\n"
+      },
+      {
+        "mode": "gcc/False/False/split",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Polygon.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10618 independent convex hull checks\n"
+      },
+      {
+        "mode": "gcc/False/True/full",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10196 independent convex hull checks\n"
+      },
+      {
+        "mode": "gcc/False/True/split",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Polygon.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10196 independent convex hull checks\n"
+      },
+      {
+        "mode": "gcc/True/False/full",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10614 independent convex hull checks\n"
+      },
+      {
+        "mode": "gcc/True/False/split",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Polygon.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10614 independent convex hull checks\n"
+      },
+      {
+        "mode": "gcc/True/True/full",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10192 independent convex hull checks\n"
+      },
+      {
+        "mode": "gcc/True/True/split",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Polygon.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10192 independent convex hull checks\n"
+      },
+      {
+        "mode": "clang/False/False/full",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10618 independent convex hull checks\n"
+      },
+      {
+        "mode": "clang/False/False/split",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Polygon.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10618 independent convex hull checks\n"
+      },
+      {
+        "mode": "clang/False/True/full",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10196 independent convex hull checks\n"
+      },
+      {
+        "mode": "clang/False/True/split",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Polygon.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10196 independent convex hull checks\n"
+      },
+      {
+        "mode": "clang/True/False/full",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10614 independent convex hull checks\n"
+      },
+      {
+        "mode": "clang/True/False/split",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Polygon.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10614 independent convex hull checks\n"
+      },
+      {
+        "mode": "clang/True/True/full",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/geometory.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10192 independent convex hull checks\n"
+      },
+      {
+        "mode": "clang/True/True/split",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-DHULL_HEADER=\"/home/reinsirk/Atcoder_Env/Geometry/Polygon.cpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/reference"
+        ],
+        "stdout": "passed 10192 independent convex hull checks\n"
+      },
+      {
+        "mode": "sanitizer/False/False/split",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/san_reference"
+        ],
+        "stdout": "passed 10618 independent convex hull checks\n"
+      },
+      {
+        "mode": "sanitizer/True/True/split",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/convex_hull_test.cpp",
+          "-o",
+          "/tmp/sirkit_convex_hull_ready_20261024/san_reference"
+        ],
+        "stdout": "passed 10192 independent convex hull checks\n"
+      }
+    ],
+    "test_sha256": "9a1d6f20fc2205d7ae71dc796a725e5b53bae696945a6539772c2a127bb52b57"
+  },
+  "performance": {
+    "status": "PASS",
+    "measurements": {
+      "gcc_skip": {
+        "example_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              1.42,
+              1.0980000000000003,
+              1.0800000000000005,
+              1.081,
+              1.072,
+              1.0959999999999996,
+              1.0629999999999997
+            ],
+            "split": [
+              1.204,
+              1.1919999999999997,
+              1.0780000000000003,
+              1.0729999999999997,
+              1.0819999999999996,
+              1.0570000000000006,
+              1.0559999999999996
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 1.081,
+            "split": 1.0780000000000003
+          }
+        },
+        "all_same_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              11.379999999999997,
+              10.504999999999995,
+              10.490000000000004,
+              10.998000000000001,
+              10.714999999999995,
+              10.545000000000002,
+              10.471999999999985
+            ],
+            "split": [
+              11.402999999999999,
+              10.688,
+              10.659000000000006,
+              11.153999999999987,
+              10.610999999999992,
+              10.595000000000004,
+              10.623000000000008
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 10.545000000000002,
+            "split": 10.659000000000006
+          }
+        },
+        "small_random_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              37.67899999999998,
+              37.53099999999995,
+              38.10100000000002,
+              38.22299999999996,
+              38.09500000000003,
+              38.157999999999916,
+              38.315000000000005
+            ],
+            "split": [
+              38.506999999999984,
+              30.17900000000003,
+              38.032000000000004,
+              38.250999999999976,
+              38.23699999999998,
+              38.29100000000005,
+              38.37800000000009
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 38.10100000000002,
+            "split": 38.250999999999976
+          }
+        },
+        "max_random_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              35.87699999999998,
+              33.679000000000016,
+              33.69400000000002,
+              33.79599999999995,
+              34.21600000000001,
+              34.5689999999999,
+              34.18099999999993
+            ],
+            "split": [
+              34.41099999999998,
+              33.96500000000004,
+              33.77099999999994,
+              33.613000000000085,
+              33.88099999999991,
+              34.552000000000056,
+              34.239999999999995
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 34.18099999999993,
+            "split": 33.96500000000004
+          }
+        },
+        "max_random_01.in": {
+          "raw_cpu_ms": {
+            "full": [
+              15.484999999999916,
+              14.879999999999892,
+              14.831999999999928,
+              14.576999999999895,
+              14.547000000000116,
+              14.804999999999986,
+              14.834999999999848
+            ],
+            "split": [
+              14.956999999999997,
+              14.851000000000003,
+              15.036999999999995,
+              14.629000000000142,
+              14.508999999999883,
+              14.767000000000003,
+              14.728999999999937
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 14.831999999999928,
+            "split": 14.767000000000003
+          }
+        },
+        "max_colinear_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              28.371000000000063,
+              28.370999999999952,
+              28.497000000000106,
+              28.4540000000002,
+              28.30399999999994,
+              28.93800000000002,
+              28.69199999999983
+            ],
+            "split": [
+              28.586,
+              28.584000000000138,
+              28.20399999999995,
+              28.21399999999985,
+              28.484000000000176,
+              28.394999999999836,
+              28.46800000000016
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 28.4540000000002,
+            "split": 28.46800000000016
+          }
+        },
+        "near_circle_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              47.97999999999997,
+              41.815000000000104,
+              42.11399999999998,
+              40.71799999999964,
+              41.379,
+              41.28900000000013,
+              41.330000000000034
+            ],
+            "split": [
+              41.28900000000002,
+              41.42799999999996,
+              42.221000000000174,
+              41.04500000000011,
+              41.52000000000011,
+              41.579999999999785,
+              41.60699999999995
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 41.379,
+            "split": 41.52000000000011
+          }
+        },
+        "max_ans_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              44.010000000000105,
+              44.250000000000064,
+              44.12100000000019,
+              44.4770000000001,
+              44.50799999999988,
+              44.038000000000025,
+              44.44199999999976
+            ],
+            "split": [
+              44.26299999999978,
+              44.32800000000031,
+              44.242999999999974,
+              44.321000000000055,
+              44.45599999999994,
+              44.544000000000025,
+              44.42600000000052
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 44.250000000000064,
+            "split": 44.32800000000031
+          }
+        }
+      },
+      "gcc_native": {
+        "example_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              1.9919999999997717,
+              1.2450000000004957,
+              1.0719999999998508,
+              1.0620000000000074,
+              1.0479999999998268,
+              1.0579999999997813,
+              1.0410000000000696
+            ],
+            "split": [
+              1.4009999999999856,
+              1.3130000000001196,
+              1.0580000000001144,
+              1.1039999999998829,
+              1.0660000000001224,
+              1.0590000000002542,
+              1.0629999999999251
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 1.0620000000000074,
+            "split": 1.0660000000001224
+          }
+        },
+        "all_same_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              11.660000000000338,
+              10.85199999999964,
+              10.807000000000123,
+              10.801999999999756,
+              10.819000000000024,
+              10.810999999999904,
+              10.774999999999867
+            ],
+            "split": [
+              11.44299999999998,
+              10.939000000000142,
+              10.81500000000013,
+              10.749000000000564,
+              10.777000000000037,
+              10.792000000000023,
+              10.77700000000048
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 10.810999999999904,
+            "split": 10.792000000000023
+          }
+        },
+        "small_random_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              37.52100000000003,
+              37.973999999999954,
+              37.8529999999998,
+              38.00500000000018,
+              37.813999999999794,
+              37.62600000000016,
+              38.44599999999987
+            ],
+            "split": [
+              38.10599999999964,
+              37.88900000000051,
+              37.82900000000022,
+              37.75000000000017,
+              37.93000000000013,
+              37.92000000000017,
+              38.09999999999947
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 37.8529999999998,
+            "split": 37.92000000000017
+          }
+        },
+        "max_random_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              35.46500000000019,
+              34.34999999999988,
+              34.03500000000026,
+              37.133000000000195,
+              36.293000000000134,
+              33.718999999999944,
+              33.68300000000013
+            ],
+            "split": [
+              33.84799999999999,
+              34.14100000000031,
+              34.274999999999835,
+              35.76899999999972,
+              35.37899999999994,
+              35.1100000000002,
+              33.49199999999974
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 34.34999999999988,
+            "split": 34.274999999999835
+          }
+        },
+        "max_random_01.in": {
+          "raw_cpu_ms": {
+            "full": [
+              15.213000000000033,
+              14.842000000000022,
+              14.459000000000222,
+              14.53300000000013,
+              14.753999999999934,
+              14.85700000000012,
+              14.512999999999998
+            ],
+            "split": [
+              14.841000000000548,
+              14.674999999999883,
+              14.445999999999515,
+              14.348999999999945,
+              14.749000000000013,
+              14.612999999999765,
+              14.402999999999722
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 14.753999999999934,
+            "split": 14.612999999999765
+          }
+        },
+        "max_colinear_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              28.5420000000004,
+              28.54399999999979,
+              28.361000000000303,
+              28.423000000000197,
+              28.399999999999757,
+              28.260999999999314,
+              28.473999999999666
+            ],
+            "split": [
+              28.956999999999567,
+              28.70099999999953,
+              28.556000000000136,
+              28.366000000000003,
+              28.325000000000266,
+              28.532999999999696,
+              28.402999999999622
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 28.423000000000197,
+            "split": 28.532999999999696
+          }
+        },
+        "near_circle_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              40.140999999999984,
+              41.26800000000064,
+              41.200999999999155,
+              40.998999999999675,
+              40.854000000000944,
+              40.9539999999996,
+              40.88000000000047
+            ],
+            "split": [
+              40.845999999999826,
+              41.40899999999981,
+              41.14500000000088,
+              40.7909999999998,
+              40.999999999999815,
+              40.97300000000048,
+              41.38799999999976
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 40.9539999999996,
+            "split": 40.999999999999815
+          }
+        },
+        "max_ans_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              43.62199999999983,
+              43.925999999999796,
+              44.11799999999988,
+              43.78499999999963,
+              43.80900000000032,
+              43.682999999999694,
+              44.53499999999955
+            ],
+            "split": [
+              44.1429999999996,
+              43.8470000000003,
+              43.30699999999943,
+              43.88900000000007,
+              43.7270000000004,
+              43.63799999999984,
+              44.341000000000186
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 43.80900000000032,
+            "split": 43.8470000000003
+          }
+        }
+      },
+      "clang_skip": {
+        "example_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              1.4479999999998938,
+              1.0729999999998796,
+              1.0699999999994603,
+              1.204000000000205,
+              1.0339999999999794,
+              1.0670000000001512,
+              1.0740000000002414
+            ],
+            "split": [
+              1.2900000000000134,
+              1.2220000000002784,
+              1.0689999999997646,
+              1.0559999999999459,
+              1.0550000000000281,
+              1.0570000000003077,
+              1.1020000000006025
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 1.0729999999998796,
+            "split": 1.0689999999997646
+          }
+        },
+        "all_same_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              13.022999999999119,
+              12.275999999999954,
+              12.271000000000143,
+              12.327000000000199,
+              12.34399999999991,
+              12.443000000000204,
+              12.35000000000075
+            ],
+            "split": [
+              12.920000000000709,
+              12.402000000000246,
+              12.286999999999937,
+              12.552000000000563,
+              12.281000000000875,
+              12.195999999999652,
+              12.531999999999544
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 12.34399999999991,
+            "split": 12.402000000000246
+          }
+        },
+        "small_random_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              38.591000000000044,
+              38.894999999999456,
+              38.71199999999986,
+              39.03600000000074,
+              38.87799999999997,
+              39.05700000000034,
+              39.181999999999164
+            ],
+            "split": [
+              39.12099999999974,
+              38.83400000000003,
+              38.99800000000053,
+              39.21999999999959,
+              38.96900000000003,
+              38.78799999999916,
+              38.923999999999516
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 38.894999999999456,
+            "split": 38.96900000000003
+          }
+        },
+        "max_random_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              38.467000000000255,
+              36.76499999999994,
+              36.63300000000014,
+              36.607000000000056,
+              36.51399999999927,
+              36.54999999999986,
+              36.36599999999967
+            ],
+            "split": [
+              36.70099999999965,
+              36.36000000000039,
+              36.35000000000011,
+              36.437000000000275,
+              36.68400000000016,
+              36.46700000000003,
+              36.46300000000058
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 36.607000000000056,
+            "split": 36.46300000000058
+          }
+        },
+        "max_random_01.in": {
+          "raw_cpu_ms": {
+            "full": [
+              16.55799999999985,
+              15.717999999999899,
+              15.796000000000143,
+              15.86699999999941,
+              15.927000000000024,
+              15.797000000000061,
+              15.684999999999949
+            ],
+            "split": [
+              16.261000000000525,
+              15.943000000000263,
+              15.838999999999714,
+              16.221000000000263,
+              15.88799999999968,
+              15.8250000000002,
+              16.145999999999994
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 15.797000000000061,
+            "split": 15.943000000000263
+          }
+        },
+        "max_colinear_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              31.042000000000456,
+              30.845999999999485,
+              31.158000000000463,
+              30.80600000000011,
+              30.90899999999963,
+              30.93400000000046,
+              31.092999999998927
+            ],
+            "split": [
+              31.175999999999647,
+              31.043000000000376,
+              30.908000000000158,
+              31.11000000000019,
+              31.021999999999885,
+              31.323000000000654,
+              30.922000000000782
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 30.93400000000046,
+            "split": 31.043000000000376
+          }
+        },
+        "near_circle_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              42.21200000000036,
+              43.19399999999995,
+              43.149000000001436,
+              43.422000000000736,
+              43.3089999999996,
+              43.286000000001046,
+              43.44799999999882
+            ],
+            "split": [
+              44.07000000000005,
+              44.154999999999724,
+              43.45699999999919,
+              43.29899999999931,
+              43.65099999999988,
+              43.3319999999997,
+              42.96900000000026
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 43.286000000001046,
+            "split": 43.45699999999919
+          }
+        },
+        "max_ans_00.in": {
+          "raw_cpu_ms": {
+            "full": [
+              44.99200000000059,
+              45.741000000001144,
+              45.60800000000054,
+              45.78000000000016,
+              45.19000000000028,
+              45.96399999999945,
+              45.31599999999925
+            ],
+            "split": [
+              45.77999999999949,
+              45.249000000000095,
+              45.66299999999978,
+              45.9429999999994,
+              45.77399999999976,
+              45.75200000000024,
+              45.056999999999015
+            ]
+          },
+          "medians_cpu_ms": {
+            "full": 45.60800000000054,
+            "split": 45.75200000000024
+          }
+        }
+      }
+    }
+  },
+  "performance_conditions": {
+    "cpu": "Intel Core i9-14900K",
+    "gcc": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: /usr/lib/llvm-21/bin\n",
+    "affinity": "performance14、official/compile6/10、Jarvis/ASan8",
+    "flags": "C++23 -O2、SKIP_RUNTIME_CHECKS、GCC plain/native（DEVAL/ONLINE_JUDGE）、Clang plain。詳細はverification.builds。",
+    "method": "現行のfull/splitを8公式入力・各7回、順序交替して測定。main/共通I/O/出力SHA256は同一。CPU時間中央値。入出力・プロセス起動・pipeへの出力を含む。",
+    "limitation": "これは現行版の基準であり、今回の速度改善やオンライン時間予測ではない。旧2026-10-22の/dev/null壁時計測定とは条件が違うため直接比較しない。",
+    "baseline_only": true
+  },
+  "optimization_policy": "既存の座標幅による整数演算選択・整列済み判定・基数整列は維持。オンライン提出のケース別結果を取得後、この固定main/I/Oを基準に残るボトルネックを比較する。今回は本体を変更しない。",
+  "simd": "新しい専用SIMD実装は追加していない。現行版の通常経路と標準算術代替を確認。",
+  "prior_evidence": [
+    "Audit/performance-convex-hull-2026-10-22.json",
+    "Audit/verify-convex-hull-2026-10-22.json",
+    "Audit/verify-geometry-core-2026-10-22.json"
+  ],
+  "license": "今回は実装変更なし。公式の解答/チェッカーは外部参照として実行しただけで、ライブラリや提出コードへ取り込まない。既存CC0表示を維持。",
+  "sanitizer_limit": "ASan/UBSanはPASS、環境制約でLSanはdetect_leaks=0。",
+  "reproduction": {
+    "verify.py": {
+      "sha256": "da8a6529e4c21445b275f119cb4676d664fd24a231ba664f796fc02859e49f28",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib\nr=Path('/home/reinsirk/Atcoder_Env');p=Path(__file__).parent;o=Path('/tmp/sirkit_hull_20261022/official');sha=lambda b:hashlib.sha256(b).hexdigest();d={'status':'INCOMPLETE','builds':[],'fixtures':[],'runs':[]}\ndef build(cmd):\n q=subprocess.run(['taskset','-c','6',*cmd],capture_output=True,text=True);assert q.returncode==0,(cmd,q.stderr);d['builds'].append({'command':cmd,'diagnostics':q.stderr})\nbuild(['/usr/bin/g++','-O2','-std=c++23',str(p/'official_solution.cpp'),'-o',str(p/'official_solution')])\nbuild(['/usr/bin/g++','-O2','-std=c++23','-I'+str(o),str(p/'official_checker.cpp'),'-o',str(p/'official_checker')])\nold=json.loads((Path('/tmp/sirkit_hull_20261022')/'official_cases.json').read_text());assert len(old)==25\nfor c in old:\n inp=o/c['name'];assert sha(inp.read_bytes())==c['sha256'];q=subprocess.run(['taskset','-c','10',str(p/'official_solution')],input=inp.read_bytes(),capture_output=True);assert q.returncode==0 and not q.stderr;out=p/(c['name']+'.expected');out.write_bytes(q.stdout);d['fixtures'].append({'name':c['name'],'input':str(inp),'input_sha256':c['sha256'],'output':str(out),'output_sha256':sha(q.stdout)})\nprint('Official reference25 ready',flush=True)\nconfigs=[('gcc_skip',['/usr/bin/g++'],[],False),('gcc_checked',['/usr/bin/g++'],[],True),('gcc_native',['/usr/bin/g++'],['-march=native','-DEVAL','-DONLINE_JUDGE'],False),('gcc_standard',['/usr/bin/g++'],['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-DSIRKIT_DISABLE_SIMD','-U__SIZEOF_INT128__'],False),('clang_skip',['clang++','--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15'],[],False)]\nfor mode,cc,defs,checked in configs:\n for form in ['full','split']:\n  source=r/f'Verify/current/submissions/geometry_convex_hull_{form}.cpp';s=source.read_text();assert s.startswith('#define SKIP_RUNTIME_CHECKS\\n') and '#include <atcoder'not in s\n  if checked:s=s.replace('#define SKIP_RUNTIME_CHECKS\\n','',1)\n  cpp=p/(mode+'_'+form+'.cpp');cpp.write_text(s);exe=cpp.with_suffix('');build([*cc,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',*defs,str(cpp),'-o',str(exe)]);d['builds'][-1]['source_sha256']=sha(cpp.read_bytes())\n  for c in d['fixtures']:\n   q=subprocess.run(['taskset','-c','10',str(exe)],input=Path(c['input']).read_bytes(),capture_output=True);assert q.returncode==0 and not q.stderr,(mode,form,c['name'],q.stderr)\n   actual=p/'actual.out';actual.write_bytes(q.stdout);ch=subprocess.run(['taskset','-c','10',str(p/'official_checker'),c['input'],str(actual),c['output']],capture_output=True,text=True);assert ch.returncode==0,(mode,form,c['name'],ch.stderr)\n   assert sha(q.stdout)==c['output_sha256'],(mode,form,c['name'],'normalization would be needed')\n   d['runs'].append({'mode':mode,'form':form,'case':c['name'],'output_sha256':sha(q.stdout),'checker_returncode':ch.returncode})\n  print(mode,form,'25 official checker PASS',flush=True)\nd['status']='PASS';(p/'verification.json').write_text(json.dumps(d,indent=2)+'\\n')\n"
+    },
+    "local.py": {
+      "sha256": "80f0f2dd99cfcda676ddb6c9c333ae7235cae98136b0682c4579f384ff4d8804",
+      "source": "from pathlib import Path\nimport subprocess,json,os,hashlib\nr=Path('/home/reinsirk/Atcoder_Env');p=Path(__file__).parent;test=r/'Verify/current/tests/convex_hull_test.cpp';d={'status':'INCOMPLETE','records':[],'test_sha256':hashlib.sha256(test.read_bytes()).hexdigest()}\nfor cc,compiler in [('gcc',['/usr/bin/g++']),('clang',['clang++','--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15'])]:\n for skip in [False,True]:\n  for standard in [False,True]:\n   for form,lib in [('full','Geometry/geometory.cpp'),('split','Geometry/Polygon.cpp')]:\n    flags=['-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors']\n    if skip:flags+=['-DSKIP_RUNTIME_CHECKS']\n    if standard:flags+=['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-DSIRKIT_DISABLE_SIMD','-U__SIZEOF_INT128__']\n    exe=p/'reference';cmd=['taskset','-c','8',*compiler,*flags,'-DHULL_HEADER=\"'+str(r/lib)+'\"',str(test),'-o',str(exe)];q=subprocess.run(cmd,capture_output=True,text=True);assert q.returncode==0 and not q.stderr,(cmd,q.stderr);q=subprocess.run(['taskset','-c','8',str(exe)],capture_output=True,text=True);assert q.returncode==0 and not q.stderr,(cmd,q.stdout,q.stderr);d['records'].append({'mode':f'{cc}/{skip}/{standard}/{form}','command':cmd,'stdout':q.stdout});print(cc,skip,standard,form,q.stdout.strip(),flush=True)\nfor standard,skip in [(False,False),(True,True)]:\n flags=['-std=c++23','-O1','-g','-fsanitize=address,undefined','-fno-sanitize-recover=all']\n if skip:flags+=['-DSKIP_RUNTIME_CHECKS']\n if standard:flags+=['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-DSIRKIT_DISABLE_SIMD','-U__SIZEOF_INT128__']\n exe=p/'san_reference';cmd=['taskset','-c','8','clang++','--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15',*flags,str(test),'-o',str(exe)];q=subprocess.run(cmd,capture_output=True,text=True);assert q.returncode==0,(cmd,q.stderr);q=subprocess.run(['taskset','-c','8',str(exe)],capture_output=True,text=True,env={**os.environ,'ASAN_OPTIONS':'detect_leaks=0','UBSAN_OPTIONS':'halt_on_error=1'});assert q.returncode==0 and not q.stderr,(cmd,q.stdout,q.stderr);d['records'].append({'mode':f'sanitizer/{skip}/{standard}/split','command':cmd,'stdout':q.stdout});print('sanitizer',standard,skip,q.stdout.strip(),flush=True)\nd['status']='PASS';(p/'local_verification.json').write_text(json.dumps(d,indent=2)+'\\n')\n"
+    },
+    "performance.py": {
+      "sha256": "e2fa3e7ccb5ea3d4c05a00a364722ef9b973f29100996f84056d3ab2111e5ec8",
+      "source": "from pathlib import Path\nimport subprocess,json,statistics,resource,fcntl,hashlib\np=Path(__file__).parent;fixtures=json.loads((p/'verification.json').read_text())['fixtures'];names=['example_00.in','all_same_00.in','small_random_00.in','max_random_00.in','max_random_01.in','max_colinear_00.in','near_circle_00.in','max_ans_00.in'];fixtures=[f for f in fixtures if f['name']in names];sha=lambda b:hashlib.sha256(b).hexdigest();d={'status':'INCOMPLETE','measurements':{}}\nwith open('/tmp/sirkit_performance_cpu14.lock','a')as a,open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as b:\n fcntl.flock(a,fcntl.LOCK_EX);fcntl.flock(b,fcntl.LOCK_EX)\n for mode in ['gcc_skip','gcc_native','clang_skip']:\n  d['measurements'][mode]={}\n  for f in fixtures:\n   raw={'full':[],'split':[]}\n   for rep in range(7):\n    for form in (['full','split']if rep%2==0 else['split','full']):\n     with open(f['input'],'rb')as inp:\n      before=resource.getrusage(resource.RUSAGE_CHILDREN);q=subprocess.run(['taskset','-c','14',str(p/(mode+'_'+form))],stdin=inp,capture_output=True);after=resource.getrusage(resource.RUSAGE_CHILDREN)\n     assert q.returncode==0 and not q.stderr and sha(q.stdout)==f['output_sha256'];raw[form].append(1000*(after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime))\n   med={form:statistics.median(v)for form,v in raw.items()};d['measurements'][mode][f['name']]={'raw_cpu_ms':raw,'medians_cpu_ms':med};print(mode,f['name'],{k:round(v,3)for k,v in med.items()},flush=True)\nd['status']='PASS';(p/'performance.json').write_text(json.dumps(d,indent=2)+'\\n')\n"
+    },
+    "audit.py": {
+      "sha256": "f4842d10da26cd8d0379bacaeed6d09d0c515cf2b80338379273d0553ee1d599",
+      "source": "from pathlib import Path\nimport json,hashlib,datetime,subprocess\nr=Path('/home/reinsirk/Atcoder_Env');p=Path(__file__).parent;o=Path('/tmp/sirkit_hull_20261022/official');sha=lambda b:hashlib.sha256(b).hexdigest();load=lambda f:json.loads((p/f).read_text());v=load('verification.json');loc=load('local_verification.json');perf=load('performance.json');assert all(d['status']=='PASS'for d in [v,loc,perf]);assert len(v['runs'])==250 and len(loc['records'])==18\nfiles=['Geometry/geometory.cpp','Geometry/Polygon.cpp','Geometry/components/polygon.inc','Verify/current/drivers/geometry_convex_hull_main.cpp','Verify/current/common/fast_io.hpp','Verify/current/submissions/geometry_convex_hull_full.cpp','Verify/current/submissions/geometry_convex_hull_split.cpp']\nfor f in files:assert (r/f).read_bytes()==(p/Path(f).name).read_bytes(),f\nsources=[]\nfor name,path,url in [('official_solution.cpp',p/'official_solution.cpp','https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/geo/static_convex_hull/sol/correct.cpp'),('official_checker.cpp',p/'official_checker.cpp','https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/geo/static_convex_hull/checker.cpp'),('info.toml',o/'info.toml','https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/geo/static_convex_hull/info.toml'),('task.md',o/'task.md','https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/geo/static_convex_hull/task.md'),('testlib.h',o/'testlib.h','https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/common/testlib.h')]:sources.append({'name':name,'url':url,'sha256':sha(path.read_bytes())})\nd={'date':'2026-10-24','checked_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS','scope':'次のVerify対象として整数凸包の全機能版/用途別版を準備。','online_submitted':False,'problem_url':'https://judge.yosupo.jp/problem/static_convex_hull','body_changed':False,'main_changed':False,'io_changed':False,'source_hashes':{f:sha((r/f).read_bytes())for f in files},'problem_coverage':'合計500000点、座標±10^9の整数凸包。反時計回り・重複点除去・辺の中間点除去・0/1/2点。','official_sources':sources,'official_fixtures_origin':'2026-10-22に公式generatorから生成した25入力を当時記録のSHA256と照合し再利用。参照解とcheckerは今回取得。','verification':v,'independent_reference':{'source':'Verify/current/tests/convex_hull_test.cpp','sha256':sha((r/'Verify/current/tests/convex_hull_test.cpp').read_bytes()),'algorithm':'Jarvis法。対象の単調走査とは別の支持線探索。参照の差・積には128bit整数拡張を使う。標準代替の対象本体ではその拡張を除外して確認。','coverage':'3x3格子の全512集合・乱数・共線・重複・基数整列2048閾値付近・平行移動で整数端・広い整数座標・double/long double・誤差設定・sorted版と未整列の検査。'},'local_verification':loc,'performance':perf,'performance_conditions':{'cpu':'Intel Core i9-14900K','gcc':subprocess.check_output(['/usr/bin/g++','--version']).decode(),'clang':subprocess.check_output(['clang++','--version']).decode(),'affinity':'performance14、official/compile6/10、Jarvis/ASan8','flags':'C++23 -O2、SKIP_RUNTIME_CHECKS、GCC plain/native（DEVAL/ONLINE_JUDGE）、Clang plain。詳細はverification.builds。','method':'現行のfull/splitを8公式入力・各7回、順序交替して測定。main/共通I/O/出力SHA256は同一。CPU時間中央値。入出力・プロセス起動・pipeへの出力を含む。','limitation':'これは現行版の基準であり、今回の速度改善やオンライン時間予測ではない。旧2026-10-22の/dev/null壁時計測定とは条件が違うため直接比較しない。','baseline_only':True},'optimization_policy':'既存の座標幅による整数演算選択・整列済み判定・基数整列は維持。オンライン提出のケース別結果を取得後、この固定main/I/Oを基準に残るボトルネックを比較する。今回は本体を変更しない。','simd':'新しい専用SIMD実装は追加していない。現行版の通常経路と標準算術代替を確認。','prior_evidence':['Audit/performance-convex-hull-2026-10-22.json','Audit/verify-convex-hull-2026-10-22.json','Audit/verify-geometry-core-2026-10-22.json'],'license':'今回は実装変更なし。公式の解答/チェッカーは外部参照として実行しただけで、ライブラリや提出コードへ取り込まない。既存CC0表示を維持。','sanitizer_limit':'ASan/UBSanはPASS、環境制約でLSanはdetect_leaks=0。','reproduction':{f:{'sha256':sha((p/f).read_bytes()),'source':(p/f).read_text()}for f in ['verify.py','local.py','performance.py','audit.py']},'frozen_driver':(r/'Verify/current/drivers/geometry_convex_hull_main.cpp').read_text(),'distribution':{'zip':'/tmp/sirkit-cpp-library_20261024_convex_hull_ready.zip','checks_pending':True}}\n(r/'Audit/verify-convex-hull-ready-2026-10-24.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\\n');print('Ready audit PASS: official250/reference18, online unsubmitted')\n"
+    }
+  },
+  "frozen_driver": "// SPDX-License-Identifier: CC0-1.0\n#include \"Verify/current/common/fast_io.hpp\"\n#include <utility>\n#include <vector>\n\nint main() {\n    int t{};\n    verify_in >> t;\n    while (t--) {\n        int n{};\n        verify_in >> n;\n        std::vector<geo::PointI> points(n);\n        for (auto& p : points) verify_in >> p.x >> p.y;\n        const auto hull = geo::convex_hull(std::move(points));\n        verify_out << hull.size() << '\\n';\n        for (const auto& p : hull) verify_out << p.x << ' ' << p.y << '\\n';\n    }\n}\n",
+  "distribution": {
+    "zip": "/tmp/sirkit-cpp-library_20261024_convex_hull_ready.zip",
+    "checks_pending": false,
+    "crc": "PASS",
+    "source_sync": "PASS",
+    "entries": 1126,
+    "full_bytes": 48297,
+    "split_bytes": 32393,
+    "all_submission_sources_within_512KiB": 142
+  }
+}

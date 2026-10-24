@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-22",
+  "files": {
+    "Graph/Topological.cpp": {
+      "baseline_sha256": "852b7fb1bea5cbaabce4c20670d429626122144bdc6affa53c69ae86ab45539f",
+      "final_sha256": "020f03338bbcc1429862b96176daba34badcc44db5d6a6c5940cc2cbfc244028"
+    },
+    "Graph/Topological_sort.cpp": {
+      "baseline_sha256": "852b7fb1bea5cbaabce4c20670d429626122144bdc6affa53c69ae86ab45539f",
+      "final_sha256": "020f03338bbcc1429862b96176daba34badcc44db5d6a6c5940cc2cbfc244028"
+    }
+  },
+  "spdx": "CC0-1.0",
+  "current_header_label": "参考",
+  "primary_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/Reputeless/Zenn.Public/main/books/standard-cpp-for-competitive-programming/topological-sort.md",
+      "status": 200,
+      "file": "topological.md",
+      "sha256": "f82704d16d5b6110344f228d4fafa6576f1a01b42b3ddaea2bb23ae5b245fde6"
+    },
+    {
+      "url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming",
+      "status": 200,
+      "file": "book.html",
+      "sha256": "8c9f5f84c5593ec5e5ba0b00d171738a5468b83bb750625a9087c0a3ff6ac070"
+    },
+    {
+      "url": "https://atcoder.jp/contests/abc223/tasks/abc223_d",
+      "status": 200,
+      "file": "abc223_d.html",
+      "sha256": "db4f4f8ead289b0278a7cd490c79cb4a12bb563c567225cad6b494a2e0aff2a7"
+    },
+    {
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_g",
+      "status": 200,
+      "file": "dp_g.html",
+      "sha256": "95f4eefd763a28812a2dd908d8212ac978deb5c9475e48574a08c779bddbceb7"
+    }
+  ],
+  "historical_sources": [
+    {
+      "command": [
+        "git",
+        "show",
+        "30c83f07b0f12777217d7098cbb56da372fabfbe:Topological.cpp"
+      ],
+      "sha256": "4f31e199bf52d1dc056e5764551fcb4aa27678c932fb20e608ebeb04f9864800",
+      "bytes": 1106
+    },
+    {
+      "command": [
+        "git",
+        "show",
+        "30c83f07b0f12777217d7098cbb56da372fabfbe:Topological_sort.cpp"
+      ],
+      "sha256": "c3f640bc99fe97ab4b04978dd8c290dd124802fb3291ce6eb70fd5da93a18f0b",
+      "bytes": 1168
+    }
+  ],
+  "evidence": [
+    "著者書籍トップのライセンス欄は記事中のソースコードをCC0 1.0と明示。取得本文とSHAを固定。",
+    "原典Markdownの2.1はqueueを使うKahn FIFO版、2.3は最小priority_queueを使う辞書順版。",
+    "ローカル30c83f07b0f12777217d7098cbb56da372fabfbeのTopological.cpp/Topological_sort.cppはそれぞれ上記に対応し、変数名from/to、閉路判定!=等に差がある。",
+    "現版の共通template core、直接出力vectorを使うFIFO、詳細結果と入力/容量検査、および今回の階層bitsetは実装を組み直したもの。記事のコードと全行一致するとは説明せず、参考表記を維持。"
+  ],
+  "source_texts": {
+    "historic_fifo": "#include <bits/stdc++.h>\nusing namespace std;\nusing Graph = vector<vector<int>>;\n\n/// @brief トポロジカルソート\n/// @param graph グラフ\n/// @return トポロジカルソートの結果。グラフが閉路を含む場合は空の配列\n/// @note 1.2 幅優先探索を用いたトポロジカルソート\n/// @see https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/topological-sort\nstd::vector<int> TopologicalSort(const std::vector<std::vector<int>>& graph)\n{\n\tstd::vector<int> indegrees(graph.size());\n\n\tfor (const auto& v : graph)\n\t{\n\t\tfor (const auto& to : v)\n\t\t{\n\t\t\t++indegrees[to];\n\t\t}\n\t}\n\n\tstd::queue<int> q;\n\n\tfor (int i = 0; i < (int)graph.size(); ++i)\n\t{\n\t\tif (indegrees[i] == 0)\n\t\t{\n\t\t\tq.push(i);\n\t\t}\n\t}\n\n\tstd::vector<int> result;\n\n\twhile (!q.empty())\n\t{\n\t\tconst int from = q.front(); q.pop();\n\n\t\tresult.push_back(from);\n\n\t\tfor (const auto& to : graph[from])\n\t\t{\n\t\t\tif (--indegrees[to] == 0)\n\t\t\t{\n\t\t\t\tq.push(to);\n\t\t\t}\n\t\t}\n\t}\n\n\tif (result.size() != graph.size())\n\t{\n\t\treturn{};\n\t}\n\n\treturn result;\n}",
+    "historic_lex": "#include <bits/stdc++.h>\nusing namespace std;\nusing Graph = vector<vector<int>>;\n\n/// @brief トポロジカルソート\n/// @param graph グラフ\n/// @return トポロジカルソートの結果で辞書順最小のもの。グラフが閉路を含む場合は空の配列\n/// @note 1.3 トポロジカルソートの結果で辞書順最小のもの\n/// @see https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/topological-sort\nstd::vector<int> TopologicalSort(const Graph& graph)\n{\n\tstd::vector<int> indegrees(graph.size());\n\n\tfor (const auto& v : graph)\n\t{\n\t\tfor (const auto& to : v)\n\t\t{\n\t\t\t++indegrees[to];\n\t\t}\n\t}\n\n\tstd::priority_queue<int, std::vector<int>, std::greater<int>> pq;\n\n\tfor (int i = 0; i < (int)graph.size(); ++i)\n\t{\n\t\tif (indegrees[i] == 0)\n\t\t{\n\t\t\tpq.push(i);\n\t\t}\n\t}\n\n\tstd::vector<int> result;\n\n\twhile (!pq.empty())\n\t{\n\t\tconst int from = pq.top(); pq.pop();\n\n\t\tresult.push_back(from);\n\n\t\tfor (const auto& to : graph[from])\n\t\t{\n\t\t\tif (--indegrees[to] == 0)\n\t\t\t{\n\t\t\t\tpq.push(to);\n\t\t\t}\n\t\t}\n\t}\n\n\tif (result.size() != graph.size())\n\t{\n\t\treturn{};\n\t}\n\n\treturn result;\n}",
+    "original_cpp_blocks": [
+      "// グラフを表現する隣接リスト\nstd::vector<std::vector<int>> graph(V);\n\n// 各頂点の入次数を管理する配列\n// indegrees[i] は頂点 i に入ってくる辺の本数を表す\nstd::vector<int> indegrees(V);\n\n// 入次数が 0 の頂点を管理するキュー\nstd::queue<int> q;\n\n// 求めたトポロジカル順序を格納する配列\nstd::vector<int> result;\n",
+      "#include <vector>\n#include <queue>\n\n/// @brief Kahn のアルゴリズムでトポロジカルソートを行い、トポロジカル順序を返します。\n/// @param graph 隣接リスト表現のグラフ\n/// @return トポロジカル順序。閉路がある場合は空の配列\n/// @note 出典:『競プロのための標準 C++』\nstd::vector<int> TopologicalSort(const std::vector<std::vector<int>>& graph)\n{\n\t// 各頂点の入次数を管理する配列\n\tstd::vector<int> indegrees(graph.size());\n\n\t// 入次数を計算する\n\tfor (const auto& v : graph)\n\t{\n\t\tfor (const auto& next : v)\n\t\t{\n\t\t\t++indegrees[next];\n\t\t}\n\t}\n\n\t// 入次数が 0 の頂点を管理するキュー\n\tstd::queue<int> q;\n\n\t// 現時点で入次数が 0 の頂点をすべてキューに追加する\n\tfor (int i = 0; i < static_cast<int>(graph.size()); ++i)\n\t{\n\t\tif (indegrees[i] == 0)\n\t\t{\n\t\t\tq.push(i);\n\t\t}\n\t}\n\n\t// 結果（トポロジカル順序）を格納する配列\n\tstd::vector<int> result;\n\n\twhile (!q.empty())\n\t{\n\t\t// 入次数が 0 の頂点を 1 つ取り出す\n\t\tconst int current = q.front();\n\t\tq.pop();\n\n\t\t// トポロジカル順序に追加する\n\t\tresult.push_back(current);\n\n\t\t// その頂点から出る各辺について\n\t\tfor (const auto& next : graph[current])\n\t\t{\n\t\t\t// その先の頂点の入次数を減らし、新たに 0 になったらキューに追加する\n\t\t\tif (--indegrees[next] == 0)\n\t\t\t{\n\t\t\t\tq.push(next);\n\t\t\t}\n\t\t}\n\t}\n\n\t// 閉路が存在する（頂点をすべて処理できていない）場合\n\tif (result.size() < graph.size())\n\t{\n\t\t// 空の配列を返す\n\t\treturn{};\n\t}\n\n\treturn result;\n}\n",
+      "while (!q.empty())\n{\n\t// キューに 2 つ以上要素がある場合、順序が一意にはならない\n\tif (1 < q.size())\n\t{\n\t\t// トポロジカル順序は一意ではない\n\t}\n\n\t// 入次数が 0 の頂点を取り出す\n\tconst int current = q.front();\n\tq.pop();\n\n\t// ...\n}\n",
+      "#include <vector>\n#include <queue>\n#include <functional>\n\n/// @brief Kahn のアルゴリズムでトポロジカルソートを行い、辞書順最小のトポロジカル順序を返します。\n/// @param graph 隣接リスト表現のグラフ\n/// @return 辞書順最小のトポロジカル順序。閉路がある場合は空の配列\n/// @note 出典:『競プロのための標準 C++』\nstd::vector<int> TopologicalSort(const std::vector<std::vector<int>>& graph)\n{\n\t// 各頂点の入次数を管理する配列\n\tstd::vector<int> indegrees(graph.size());\n\n\t// 入次数を計算する\n\tfor (const auto& v : graph)\n\t{\n\t\tfor (const auto& next : v)\n\t\t{\n\t\t\t++indegrees[next];\n\t\t}\n\t}\n\n\t// 入次数が 0 の頂点を管理するキュー（辞書順最小の結果を得るため、優先度付きキューを使用する）\n\tstd::priority_queue<int, std::vector<int>, std::greater<>> q;\n\n\t// 現時点で入次数が 0 の頂点をすべてキューに追加する\n\tfor (int i = 0; i < static_cast<int>(graph.size()); ++i)\n\t{\n\t\tif (indegrees[i] == 0)\n\t\t{\n\t\t\tq.push(i);\n\t\t}\n\t}\n\n\t// 結果（トポロジカル順序）を格納する配列\n\tstd::vector<int> result;\n\n\twhile (!q.empty())\n\t{\n\t\t// 入次数が 0 の頂点のうち、頂点番号が小さいものから取り出す\n\t\tconst int current = q.top();\n\t\tq.pop();\n\n\t\t// トポロジカル順序に追加する\n\t\tresult.push_back(current);\n\n\t\t// その頂点から出る各辺について\n\t\tfor (const auto& next : graph[current])\n\t\t{\n\t\t\t// その先の頂点の入次数を減らし、新たに 0 になったらキューに追加する\n\t\t\tif (--indegrees[next] == 0)\n\t\t\t{\n\t\t\t\tq.push(next);\n\t\t\t}\n\t\t}\n\t}\n\n\t// 閉路が存在する（頂点をすべて処理できていない）場合\n\tif (result.size() < graph.size())\n\t{\n\t\t// 空の配列を返す\n\t\treturn{};\n\t}\n\n\treturn result;\n}\n",
+      "#include <iostream>\n#include <vector>\n#include <queue>\n\n/// @brief Kahn のアルゴリズムでトポロジカルソートを行い、トポロジカル順序を返します。\n/// @param graph 隣接リスト表現のグラフ\n/// @return トポロジカル順序。閉路がある場合は空の配列\n/// @note 出典:『競プロのための標準 C++』\nstd::vector<int> TopologicalSort(const std::vector<std::vector<int>>& graph)\n{\n\t// 各頂点の入次数を管理する配列\n\tstd::vector<int> indegrees(graph.size());\n\n\t// 入次数を計算する\n\tfor (const auto& v : graph)\n\t{\n\t\tfor (const auto& next : v)\n\t\t{\n\t\t\t++indegrees[next];\n\t\t}\n\t}\n\n\t// 入次数が 0 の頂点を管理するキュー\n\tstd::queue<int> q;\n\n\t// 現時点で入次数が 0 の頂点をすべてキューに追加する\n\tfor (int i = 0; i < static_cast<int>(graph.size()); ++i)\n\t{\n\t\tif (indegrees[i] == 0)\n\t\t{\n\t\t\tq.push(i);\n\t\t}\n\t}\n\n\t// 結果（トポロジカル順序）を格納する配列\n\tstd::vector<int> result;\n\n\twhile (!q.empty())\n\t{\n\t\t// 入次数が 0 の頂点を 1 つ取り出す\n\t\tconst int current = q.front();\n\t\tq.pop();\n\n\t\t// トポロジカル順序に追加する\n\t\tresult.push_back(current);\n\n\t\t// その頂点から出る各辺について\n\t\tfor (const auto& next : graph[current])\n\t\t{\n\t\t\t// その先の頂点の入次数を減らし、新たに 0 になったらキューに追加する\n\t\t\tif (--indegrees[next] == 0)\n\t\t\t{\n\t\t\t\tq.push(next);\n\t\t\t}\n\t\t}\n\t}\n\n\t// 閉路が存在する（頂点をすべて処理できていない）場合\n\tif (result.size() < graph.size())\n\t{\n\t\t// 空の配列を返す\n\t\treturn{};\n\t}\n\n\treturn result;\n}\n\nint main()\n{\n\t// 頂点数 V, 辺数 E\n\tint V, E;\n\tstd::cin >> V >> E;\n\n\t// 隣接リストを構築する\n\tstd::vector<std::vector<int>> graph(V);\n\tfor (int i = 0; i < E; ++i)\n\t{\n\t\tint s, t;\n\t\tstd::cin >> s >> t;\n\t\tgraph[s].push_back(t);\n\t}\n\n\t// トポロジカル順序\n\tconst std::vector<int> result = TopologicalSort(graph);\n\n\tfor (const auto& v : result)\n\t{\n\t\tstd::cout << v << '\\n';\n\t}\n}\n",
+      "#include <iostream>\n#include <vector>\n#include <queue>\n\nstd::vector<int> TopologicalSort(const std::vector<std::vector<int>>& graph, bool& isUnique)\n{\n\t// 各頂点の入次数を管理する配列\n\tstd::vector<int> indegrees(graph.size());\n\n\t// 入次数を計算する\n\tfor (const auto& v : graph)\n\t{\n\t\tfor (const auto& next : v)\n\t\t{\n\t\t\t++indegrees[next];\n\t\t}\n\t}\n\n\t// 入次数が 0 の頂点を管理するキュー\n\tstd::queue<int> q;\n\n\t// 現時点で入次数が 0 の頂点をすべてキューに追加する\n\tfor (int i = 0; i < static_cast<int>(graph.size()); ++i)\n\t{\n\t\tif (indegrees[i] == 0)\n\t\t{\n\t\t\tq.push(i);\n\t\t}\n\t}\n\n\t// 結果（トポロジカル順序）を格納する配列\n\tstd::vector<int> result;\n\n\tisUnique = true;\n\n\twhile (!q.empty())\n\t{\n\t\t// キューに 2 つ以上要素がある場合、順序が一意にはならない\n\t\tif (1 < q.size())\n\t\t{\n\t\t\tisUnique = false;\n\t\t}\n\n\t\t// 入次数が 0 の頂点を 1 つ取り出す\n\t\tconst int current = q.front();\n\t\tq.pop();\n\n\t\t// トポロジカル順序に追加する\n\t\tresult.push_back(current);\n\n\t\t// その頂点から出る各辺について\n\t\tfor (const auto& next : graph[current])\n\t\t{\n\t\t\t// その先の頂点の入次数を減らし、新たに 0 になったらキューに追加する\n\t\t\tif (--indegrees[next] == 0)\n\t\t\t{\n\t\t\t\tq.push(next);\n\t\t\t}\n\t\t}\n\t}\n\n\t// 閉路が存在する（頂点をすべて処理できていない）場合\n\tif (result.size() < graph.size())\n\t{\n\t\t// 空の配列を返す\n\t\treturn{};\n\t}\n\n\treturn result;\n}\n\nint main()\n{\n\t// N 個のチーム, M 個の対戦結果\n\tint N, M;\n\tstd::cin >> N >> M;\n\n\t// 隣接リストを構築する\n\t// s が t に勝ったなら、s から t に辺を張る\n\tstd::vector<std::vector<int>> graph(N);\n\tfor (int i = 0; i < M; ++i)\n\t{\n\t\tint s, t;\n\t\tstd::cin >> s >> t;\n\t\t--s; --t;\n\t\tgraph[s].push_back(t);\n\t}\n\n\t// トポロジカル順序が一意かどうか\n\tbool isUnique = true;\n\n\t// トポロジカル順序\n\tconst std::vector<int> result = TopologicalSort(graph, isUnique);\n\n\tfor (const auto& v : result)\n\t{\n\t\tstd::cout << (v + 1) << '\\n';\n\t}\n\n\t// トポロジカル順序が一意かどうかを出力する\n\tif (isUnique)\n\t{\n\t\tstd::cout << \"0\\n\";\n\t}\n\telse\n\t{\n\t\tstd::cout << \"1\\n\";\n\t}\n}\n",
+      "#include <iostream>\n#include <vector>\n#include <queue>\n#include <functional>\n\n/// @brief Kahn のアルゴリズムでトポロジカルソートを行い、辞書順最小のトポロジカル順序を返します。\n/// @param graph 隣接リスト表現のグラフ\n/// @return 辞書順最小のトポロジカル順序。閉路がある場合は空の配列\n/// @note 出典:『競プロのための標準 C++』\nstd::vector<int> TopologicalSort(const std::vector<std::vector<int>>& graph)\n{\n\t// 各頂点の入次数を管理する配列\n\tstd::vector<int> indegrees(graph.size());\n\n\t// 入次数を計算する\n\tfor (const auto& v : graph)\n\t{\n\t\tfor (const auto& next : v)\n\t\t{\n\t\t\t++indegrees[next];\n\t\t}\n\t}\n\n\t// 入次数が 0 の頂点を管理するキュー（辞書順最小の結果を得るため、優先度付きキューを使用する）\n\tstd::priority_queue<int, std::vector<int>, std::greater<>> q;\n\n\t// 現時点で入次数が 0 の頂点をすべてキューに追加する\n\tfor (int i = 0; i < static_cast<int>(graph.size()); ++i)\n\t{\n\t\tif (indegrees[i] == 0)\n\t\t{\n\t\t\tq.push(i);\n\t\t}\n\t}\n\n\t// 結果（トポロジカル順序）を格納する配列\n\tstd::vector<int> result;\n\n\twhile (!q.empty())\n\t{\n\t\t// 入次数が 0 の頂点のうち、頂点番号が小さいものから取り出す\n\t\tconst int current = q.top();\n\t\tq.pop();\n\n\t\t// トポロジカル順序に追加する\n\t\tresult.push_back(current);\n\n\t\t// その頂点から出る各辺について\n\t\tfor (const auto& next : graph[current])\n\t\t{\n\t\t\t// その先の頂点の入次数を減らし、新たに 0 になったらキューに追加する\n\t\t\tif (--indegrees[next] == 0)\n\t\t\t{\n\t\t\t\tq.push(next);\n\t\t\t}\n\t\t}\n\t}\n\n\t// 閉路が存在する（頂点をすべて処理できていない）場合\n\tif (result.size() < graph.size())\n\t{\n\t\t// 空の配列を返す\n\t\treturn{};\n\t}\n\n\treturn result;\n}\n\nint main()\n{\n\tint N, M;\n\tstd::cin >> N >> M;\n\n\t// 隣接リストを構築する\n\tstd::vector<std::vector<int>> graph(N);\n\tfor (int i = 0; i < M; ++i)\n\t{\n\t\tint A, B;\n\t\tstd::cin >> A >> B;\n\t\t--A; --B;\n\t\tgraph[A].push_back(B);\n\t}\n\n\t// 辞書順最小のトポロジカル順序\n\tconst std::vector<int> result = TopologicalSort(graph);\n\n\t// 閉路が存在する場合\n\tif (result.empty())\n\t{\n\t\tstd::cout << \"-1\\n\";\n\t\treturn 0;\n\t}\n\n\tfor (const auto& v : result)\n\t{\n\t\tstd::cout << (v + 1) << ' ';\n\t}\n\n\tstd::cout << '\\n';\n}\n"
+    ]
+  },
+  "licenses_scope": "原典コードのCC0と現在のSPDX表示を確認。数学的なKahn法の説明を実装の独占的出典とはしない。",
+  "verify_selection": [
+    "通常版はDP_G、辞書順版は参照元に掲載されているABC223_D。AOJの過去記録は書き換えない。"
+  ],
+  "prior_audits": [
+    "Audit/license-audit-2026-10-17.json",
+    "Audit/performance-all-libraries-2026-10-18.json"
+  ],
+  "distribution_note": "書籍のCC0表示が対象とするコード片だけを埋め込み、記事の説明本文やHTMLは配布Auditへ転載しない。取得した本文の同定はURL/HTTP status/SHAで行う。"
+}

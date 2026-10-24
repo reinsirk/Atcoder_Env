@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-22",
+  "scope": "永続UF二周目の差分来歴。以前の原典・履歴調査を保持。",
+  "baseline_source_sha256": "4dcd71aed0fa24b2354f7f6faa23dec193d5fa0be77b8e155ca14a8aadeb8c73",
+  "final_source_sha256": "3515b6fba5752d4c8a2bc3a165afae44849deb77d5e54e36e7a1de40ae835935",
+  "new_external_code": "なし。2経路参照・get_two・葉単位の初期構築を既存所有構造の上に実装した。",
+  "spdx": "CC0-1.0",
+  "labels": {
+    "PersistentUnionFind": {
+      "label": "Original Source",
+      "url": "https://nyaannyaan.github.io/library/data-structure/persistent-union-find.hpp.html",
+      "reason": "負サイズの根表現、union by size、指定rootからの分岐、find_with_size/get_rootと結合の基本手順を継承している。静的rootはインスタンスごとへ変更し、所有管理・検査・便利APIは追加実装。"
+    },
+    "PersistentArray": {
+      "label": "参考",
+      "url": "https://nyaannyaan.github.io/library/data-structure/persistent-array.hpp.html",
+      "reason": "原典の版Node*とget/update APIを参考に、2026-10-18にMSB順の木、複数値leaf、std::variantと所有poolで組み直した。旧raw newと型の読み替えによる葉は引き継がない。"
+    }
+  },
+  "primary_source_evidence": {
+    "audit": "Audit/provenance-persistent-union-find-2026-10-22.json",
+    "sha256": "205e6231f28819fe32c2a6dc321d13950a4039a6b957d2f61ea3c73154e3b44c",
+    "sources": [
+      {
+        "file": "persistent_union_find.hpp",
+        "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/data-structure/persistent-union-find.hpp",
+        "final_url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/data-structure/persistent-union-find.hpp",
+        "status": 200,
+        "bytes": 1114,
+        "sha256": "ab76298b3f14e91c579265a96c0eaab5605563d6d1b4d95f9667bcf4adae33ad",
+        "retrieved_utc": "2026-10-22T01:12:31.047098+00:00"
+      },
+      {
+        "file": "persistent_array.hpp",
+        "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/data-structure/persistent-array.hpp",
+        "final_url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/data-structure/persistent-array.hpp",
+        "status": 200,
+        "bytes": 2167,
+        "sha256": "5c7635a7db2b5144d2f7dbfda33939fd1cef9cc14c0783fa68fc9090d4a4bb52",
+        "retrieved_utc": "2026-10-22T01:12:31.266229+00:00"
+      },
+      {
+        "file": "LICENSE",
+        "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/LICENSE",
+        "final_url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/LICENSE",
+        "status": 200,
+        "bytes": 7048,
+        "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+        "retrieved_utc": "2026-10-22T01:12:31.481752+00:00"
+      },
+      {
+        "file": "README.md",
+        "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/README.md",
+        "final_url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/README.md",
+        "status": 200,
+        "bytes": 1019,
+        "sha256": "fc5c5029cf7dcd7100ae79b931f791314172d81a456f6f44e1905fb54d12907a",
+        "retrieved_utc": "2026-10-22T01:12:31.765086+00:00"
+      },
+      {
+        "file": "persistent_union_find.html",
+        "url": "https://nyaannyaan.github.io/library/data-structure/persistent-union-find.hpp.html",
+        "final_url": "https://nyaannyaan.github.io/library/data-structure/persistent-union-find.hpp.html",
+        "status": 200,
+        "bytes": 40325,
+        "sha256": "7daf0e35d10ee34746639255d50e1608d2707430e9e264e8cbcd6775aaa3a063",
+        "retrieved_utc": "2026-10-22T01:12:32.191512+00:00"
+      },
+      {
+        "file": "persistent_array.html",
+        "url": "https://nyaannyaan.github.io/library/data-structure/persistent-array.hpp.html",
+        "final_url": "https://nyaannyaan.github.io/library/data-structure/persistent-array.hpp.html",
+        "status": 200,
+        "bytes": 39944,
+        "sha256": "876797aa80bfc95419c67c4ea21d61df715dad28ca813b2390d0ffd409af7036",
+        "retrieved_utc": "2026-10-22T01:12:32.402334+00:00"
+      }
+    ],
+    "note": "今回ネットワークで再取得したという主張はしない。同日の以前の取得内容・SHA・ローカル履歴に基づく。"
+  },
+  "unchanged_contracts": [
+    "Original Source はUFの負サイズ根・union by size・版指定分岐・基本APIの継承に対応。",
+    "PersistentArrayは参考表記。既存の標準所有・MSB順木・多値leafを維持し、原典のraw new/型の読み替えを導入しない。",
+    "独立コピーした現在版ハンドルと共有Storage所有、最後の所有者による反復解放、owner検査/入力検査省略の条件は維持。"
+  ],
+  "verification_audit": "verify-persistent-union-find-second-pass-2026-10-22.json",
+  "performance_audit": "performance-persistent-union-find-second-pass-2026-10-22.json"
+}

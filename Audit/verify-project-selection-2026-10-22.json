@@ -1,0 +1,5549 @@
+{
+  "date": "2026-10-22",
+  "scope": "Project Selection のローカル検証。オンライン提出は実施していない。過去提出を現在版の検証済みに変更しない。",
+  "baseline_source_sha256": "d70fbe582c7ad4353cc3a5e33e8f8ef2ab1bbadeee709fa5dcfe595692be2e82",
+  "final_source_sha256": "b7e9db9be3437bbaf2ca93c0f481093f785ec8373388d671e91814885becaa6f",
+  "files_sha256": {
+    "Graph/Project_Selection.cpp": "b7e9db9be3437bbaf2ca93c0f481093f785ec8373388d671e91814885becaa6f",
+    "Examples/project_selection_example.cpp": "56e48e3da09cf679efdd2964abde1b53d7f8d8fa52847e34232d977ee74df541",
+    "Verify/current/tests/project_selection_reference_test.cpp": "4ced4d493342284d73583868e2a6528112aac21fa7ffedda40af279ddb173c25",
+    "Verify/current/tests/project_selection_exception_test.cpp": "8dae426a480a33c79acac3d33ed0a0a118ef4b5b7e182c8082c801f666261020",
+    "Verify/current/tests/project_selection_performance_benchmark.cpp": "b35f94ce38f2452a75cae061825805a5ebcb03731fccb4d3170fcceec18b8795",
+    "Verify/current/tests/project_selection_cases.py": "3ed167b3d5526b8289c16cfcc0e5e85eb86b6b5880a0c1ee11e08cbe75036804",
+    "Document/project_selection.md": "fd3643b9c8782783ce38102ebe1debf0af09226a0e97608c319bdbea3ac5fb28"
+  },
+  "unchanged_main_io_sha256": {
+    "Verify/current/drivers/project_selection_main.cpp": "250b98a7c2785922b37c1817d9f74e69066a03c640b8854b27e5809acff60fa4",
+    "Verify/current/drivers/project_selection_reference_main.cpp": "bdfc53d92db3c60a63e9e13654a19afb3b4bc440c69a624653d1b383740eca33",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "problem": {
+    "url": "https://atcoder.jp/contests/typical90/tasks/typical90_an",
+    "official_samples": 2,
+    "official_hidden_tests": "取得・実行していない。",
+    "coverage_limit": "提出先のmainは単一項・含意制約のみ。集合項・数値境界・所有権は独立ローカル試験で補完。"
+  },
+  "normal_builds": {
+    "compilers": [
+      "GCC 15.3.0",
+      "Clang 21.1.8"
+    ],
+    "standard": "C++23",
+    "flags": [
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors"
+    ],
+    "checks": [
+      "checked",
+      "SKIP_RUNTIME_CHECKS"
+    ],
+    "cpu": 10
+  },
+  "independent_references": [
+    "4整数型(int8/16/32/64)について全割当エネルギー表と最小値・割当を比較。増分solve・保存済み解・全公開項・重複/空集合・同一変数を含む。",
+    "別実装の密行列Edmonds–Karp法でAtCoder形式212入力を照合し、うち202小入力は全割当列挙にも一致。",
+    "100000頂点の経路で固定深さ再帰から明示スタックへの切替を検証。"
+  ],
+  "boundary_ownership_exception": [
+    "COST最小/最大、有限容量総和の境界、厳密制約矛盾、最適値超過と定数調整後の復帰。",
+    "any_true/false費用はoffset最大でも不要な中間加減算を行わない。",
+    "コピーの独立性、移動元再利用、自己コピー/自己移動、交換、clear/init、確保失敗後の再試行。",
+    "グローバル割当フックで所有中の割当数・バイト数を追跡し、全所有者の破棄後に0を確認。",
+    "最終版は構成ごと92回の注入失敗で部分追加0。baselineは68回中6回の部分追加を診断した。clearは割当予算0で成功。"
+  ],
+  "execution_counts": {
+    "reference": 4,
+    "exceptions": 4,
+    "asan_ubsan": 4,
+    "example": 4,
+    "duplicate_include": 4,
+    "actual_main_builds": 8,
+    "actual_main_executions": 852,
+    "official_sample_main_executions": 8,
+    "custom_problem_main_executions": 840,
+    "local_reference_main_executions": 4,
+    "baseline_diagnostic_runs": 4
+  },
+  "sanitizer": {
+    "compiler": "Clang 21.1.8",
+    "flags": [
+      "-std=c++23",
+      "-O1",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer"
+    ],
+    "checks": [
+      "checked",
+      "SKIP_RUNTIME_CHECKS"
+    ],
+    "ASAN_OPTIONS": "detect_leaks=0",
+    "note": "リーク検出器は無効。独立の割当カウンタで寿命と所有数を検査した。"
+  },
+  "case_generator": "Verify/current/tests/project_selection_cases.py",
+  "case_manifest": [
+    {
+      "name": "sample_00",
+      "n": 5,
+      "constraints": 3,
+      "official_sample": true,
+      "input_sha256": "9782cc21c59ff6d7681ec34f2281c3ec7b27aceba71c05a3da7c61e7a7440c2b",
+      "expected_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "name": "sample_01",
+      "n": 6,
+      "constraints": 6,
+      "official_sample": true,
+      "input_sha256": "69b1b62569743d5236451fe62362175dae29d17181bae96fd4af0d48ccbe8343",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_000",
+      "n": 12,
+      "constraints": 27,
+      "official_sample": false,
+      "input_sha256": "7824c3d8eee628470b0989d29be956fb1ed21e921b28b9f08fb5743299fc90da",
+      "expected_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58"
+    },
+    {
+      "name": "small_001",
+      "n": 6,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "db60347b31de63bde9c4eb0c4c98ed1b247b21ab5882de6a54c0882ea89a6c74",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_002",
+      "n": 4,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "b5a21f462bc2cd82ef47a25b3e2fb5b8b251cc14c6a08d1dcbd6a197b625ed2e",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_003",
+      "n": 12,
+      "constraints": 18,
+      "official_sample": false,
+      "input_sha256": "bef5d8ed1d4df4f26ded03c378ddaacaca6827352ae66699c3db39d94989d31c",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_004",
+      "n": 10,
+      "constraints": 9,
+      "official_sample": false,
+      "input_sha256": "c0cf18ac3d70b580b23586e9ced0544a8dcf09b48dfdd5a92890ace67f032027",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_005",
+      "n": 2,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "42c3d957763713730b69072d3a009fb691ade4e7222de31b1d9f77f0eb584796",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_006",
+      "n": 6,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "cc5406d9201991bb697fc2d4a60d4d4b068c724e2fc5e11405ba92babf76e747",
+      "expected_sha256": "a5331f18877e9e1543361e44b4cb0a1f5f0ed5f8297d850bf1fcc68bd7a3ab5f"
+    },
+    {
+      "name": "small_007",
+      "n": 10,
+      "constraints": 13,
+      "official_sample": false,
+      "input_sha256": "5bd895132b57019dca25b33d24d18a128698ed9f05dff647abeeae5e7789564b",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_008",
+      "n": 9,
+      "constraints": 11,
+      "official_sample": false,
+      "input_sha256": "45a7c3a91fe87a41a882d5854ea2dbd8be6fafae389a7ae331481dadc16e7478",
+      "expected_sha256": "076320a2a08267b4c026d06573bba408ea68841e73cdc20e62cce59de165ece3"
+    },
+    {
+      "name": "small_009",
+      "n": 4,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "b65bea0bf91384affd3961d929c855136cd4f05ca8ab43fd52125d587b1a9dd0",
+      "expected_sha256": "ea243e5457028e97f9bc93b37a72f8e80ea61ae081911bb037765590ee6aa435"
+    },
+    {
+      "name": "small_010",
+      "n": 6,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "6c6c4fb34161815be866fc7e43692213769957b5d3d1d3aa494bd93784d55bf9",
+      "expected_sha256": "a5331f18877e9e1543361e44b4cb0a1f5f0ed5f8297d850bf1fcc68bd7a3ab5f"
+    },
+    {
+      "name": "small_011",
+      "n": 4,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "acb960c11d0ee6fc26ebdb69b200cbf04a519b479ce475201b9dbf0da83048ed",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_012",
+      "n": 5,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "5d0b43ec691ff049a384d3411fc09719a905d13533476c1e3eaa12bdb0f1e534",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_013",
+      "n": 11,
+      "constraints": 9,
+      "official_sample": false,
+      "input_sha256": "f0c6444d06205fc602aaee16ee921dd24dc27ca0a3228cb01b3c117d5657a6bc",
+      "expected_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "name": "small_014",
+      "n": 4,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "e4385c58abd4ba0f462d9a73415eb9d5de5385f4ca05df640da669d1676a47ef",
+      "expected_sha256": "32c2643e0dc65524c9f1f6f9f00937322fd68d59986bc381d9ff2285d23e353d"
+    },
+    {
+      "name": "small_015",
+      "n": 6,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "291ae050a2f2491d1793ed37bf925b6540b7d67ff152c9c9d92bf465c8689f9a",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_016",
+      "n": 2,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "cc5a715dfd695091cd963ba55281a368a85045f59255d41dc5676fc4be86f70e",
+      "expected_sha256": "7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d"
+    },
+    {
+      "name": "small_017",
+      "n": 3,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "36b4df923a1ee2151f3975c64ef5214e1b949c77b4431c7c8c06392659f178de",
+      "expected_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "name": "small_018",
+      "n": 11,
+      "constraints": 12,
+      "official_sample": false,
+      "input_sha256": "c10400bdba2e508eace95dda590605c561bceabc243302b98306bf7d21b58ab0",
+      "expected_sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    },
+    {
+      "name": "small_019",
+      "n": 4,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "0166295e7cda4f18b1b5c7fa46367dc479dd87a6897347a7194e2186e6b30423",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_020",
+      "n": 5,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "4c0c315e2e5f3439b2015029b75519ded3f9f3372d6847cd46e370ec3147600b",
+      "expected_sha256": "32c2643e0dc65524c9f1f6f9f00937322fd68d59986bc381d9ff2285d23e353d"
+    },
+    {
+      "name": "small_021",
+      "n": 3,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "dcba99b8f2942172b6828962f7bdcdb940605e688b2ccd53ec312cab4e9f57d3",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_022",
+      "n": 12,
+      "constraints": 16,
+      "official_sample": false,
+      "input_sha256": "e9c180861965be3db461dacadce802f9e1fcf1c3a12429bae2951a13e49de682",
+      "expected_sha256": "7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d"
+    },
+    {
+      "name": "small_023",
+      "n": 4,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "54bf9a6ca07b1ddb163ad93e0cc763ef3a05ee1391bb38b8e081fef59c9d3d48",
+      "expected_sha256": "32c2643e0dc65524c9f1f6f9f00937322fd68d59986bc381d9ff2285d23e353d"
+    },
+    {
+      "name": "small_024",
+      "n": 9,
+      "constraints": 10,
+      "official_sample": false,
+      "input_sha256": "90fe1366da48daf592f4a6b6c68c7be8ccee540f0a40bf9a4d1b9f9b88a00ec1",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_025",
+      "n": 5,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "6cae2de07e8269ed0c34fb186aa49ae283e9f95dbcd02ab628c75b578a8300d9",
+      "expected_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58"
+    },
+    {
+      "name": "small_026",
+      "n": 9,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "19581eede3fbc8f69754fb4cbfb65faacde1bccdce76a60247458c496f640ce7",
+      "expected_sha256": "54183f4323f377b737433a1e98229ead0fdc686f93bab057ecb612daa94002b5"
+    },
+    {
+      "name": "small_027",
+      "n": 6,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "cf23470786c9d3f5f7b800c1212435d18936e469974b40629a832803677c43e0",
+      "expected_sha256": "040316eca5e77dbb2212c1efe8b81cb23bc67ce0ac8cb5c9d902d98bd45ddfa1"
+    },
+    {
+      "name": "small_028",
+      "n": 3,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "b1bb71861f0b386ba01869781751540ed74a3d4ff5d8028f6507b89ad27d3d87",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_029",
+      "n": 3,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "ea04726aa1620bc6f1bfe350a69f789040f1079b90c9e21695aba20ff2292bfc",
+      "expected_sha256": "f0b5c2c2211c8d67ed15e75e656c7862d086e9245420892a7de62cd9ec582a06"
+    },
+    {
+      "name": "small_030",
+      "n": 3,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "e57b3235fd5b22938fe2aa951d084588a5c5a4bd33d8573979e5f754cc16ee4a",
+      "expected_sha256": "9a92adbc0cee38ef658c71ce1b1bf8c65668f166bfb213644c895ccb1ad07a25"
+    },
+    {
+      "name": "small_031",
+      "n": 9,
+      "constraints": 9,
+      "official_sample": false,
+      "input_sha256": "7c14027a57bcfc3ea85cbf4455f6dc9ad50feca0e24be7be341d875d38c9607a",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_032",
+      "n": 6,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "9f85a345f4dd8a1475b5996aa35ef178bcdad0445cfb3df4490140af5f6d507a",
+      "expected_sha256": "54183f4323f377b737433a1e98229ead0fdc686f93bab057ecb612daa94002b5"
+    },
+    {
+      "name": "small_033",
+      "n": 9,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "d35d09f80782b4d3bf7798cf4809960e6f0b501ef4117e7b1f55af011e970219",
+      "expected_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "name": "small_034",
+      "n": 7,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "2720e5dcd6513abb3174e2b0d334cbdc1050e4f751bcb5bcd955f262463f64d8",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_035",
+      "n": 8,
+      "constraints": 7,
+      "official_sample": false,
+      "input_sha256": "174987777097c6f07d3ff013b625d1fb4c76a411f584d279fbba4e25592a4ac2",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_036",
+      "n": 12,
+      "constraints": 18,
+      "official_sample": false,
+      "input_sha256": "40fe963bbd98539caadc605c971ef09fc7d78328078a9cc25d11835d86090da9",
+      "expected_sha256": "f0b5c2c2211c8d67ed15e75e656c7862d086e9245420892a7de62cd9ec582a06"
+    },
+    {
+      "name": "small_037",
+      "n": 11,
+      "constraints": 11,
+      "official_sample": false,
+      "input_sha256": "ac96feba7c6a2650c6d7548c00d43ed037df6b38df4901e433e04c49d38a24de",
+      "expected_sha256": "69a9cd8a9e12b122cdf59392131bf6c83e7360c2f745921e76f48a16f1cc541a"
+    },
+    {
+      "name": "small_038",
+      "n": 7,
+      "constraints": 4,
+      "official_sample": false,
+      "input_sha256": "40071d971c8a0323b5e82c590eb9c751cdd9d36895a014387efe5458b49e2607",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_039",
+      "n": 10,
+      "constraints": 9,
+      "official_sample": false,
+      "input_sha256": "9a67e671c0c1feb7d5a6f3bbf2c2609fbd9e02c43948c7b89c29cfa990aee45f",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_040",
+      "n": 5,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "4d7595d692581f1fa063605295d968eea7a4154395eb22396ec29200579a93eb",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_041",
+      "n": 7,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "8c0884139dd21dccb812a8b22fb9d7cf17e479b991e8d2a9fbab03249c77fd0f",
+      "expected_sha256": "95cf32708a31caa478a0e9141103ac567d85e5186e697e7e0c81f75589999e31"
+    },
+    {
+      "name": "small_042",
+      "n": 4,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "fe4e46090b91fd30cc67804f68a7d74ec8fec29a312edf46b76cf12dd447b743",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_043",
+      "n": 8,
+      "constraints": 4,
+      "official_sample": false,
+      "input_sha256": "a7d9a603f8673009e3aa51072f2edd31a8bcbd6b4ee638b573fc1abdbae5bfd4",
+      "expected_sha256": "6950980e3aca96f4dc400eb2e47cc5c343e0d3f483a4e70adcae1d7e6bb22d9c"
+    },
+    {
+      "name": "small_044",
+      "n": 8,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "8ddbfa9161f15fb5de94653282a05542848fd598c3ea9a4be4f2991d4dd44cb3",
+      "expected_sha256": "826b6832e45ba17d625debc95ae8554e148550b00c05b47fa8f7be1c555bc83c"
+    },
+    {
+      "name": "small_045",
+      "n": 9,
+      "constraints": 10,
+      "official_sample": false,
+      "input_sha256": "4ebcfd2747745eab8e9b311526620e65e8eb47bbc52f8e25239c54d77ec473cd",
+      "expected_sha256": "9961d158a7e0e2f990765971a9e490af826c0743b7d603020f34cc8944319fcb"
+    },
+    {
+      "name": "small_046",
+      "n": 7,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "cf3ea280383ac735f307602b3e1aef8271f9c26977e46e349109395ae33f0dd9",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_047",
+      "n": 7,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "f344e91f359fe020ec3383c37fd989d5797a16329077777814d9d3f7c6bb70bc",
+      "expected_sha256": "917df3320d778ddbaa5c5c7742bc4046bf803c36ed2b050f30844ed206783469"
+    },
+    {
+      "name": "small_048",
+      "n": 3,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "4c50c84c8ba22fd65b109ca81a0f872617c32148cd892ba8707cf0f93e99c6d5",
+      "expected_sha256": "2115cdb6bfcfb008eb2bab2bb79347cb064a48e4e7c4115ccbe4469c787bb6c4"
+    },
+    {
+      "name": "small_049",
+      "n": 10,
+      "constraints": 12,
+      "official_sample": false,
+      "input_sha256": "d716b595d28ca5b63cc205e58bff412d2414768026c643f44fe4d2d1553e2f5e",
+      "expected_sha256": "9a92adbc0cee38ef658c71ce1b1bf8c65668f166bfb213644c895ccb1ad07a25"
+    },
+    {
+      "name": "small_050",
+      "n": 8,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "9d00a1f9386ba9101fdffbc0feca550dd9b2eb33ec59e5c3306dabcdde3b8965",
+      "expected_sha256": "b1ce0aa6fdf3cf349d773243dab9fbbe09d30619f38b0c1e8977e28c4f0bc495"
+    },
+    {
+      "name": "small_051",
+      "n": 5,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "537260c6aa6c97237c90098a06ddcffecc0f281a9940a56ff19c32897ca68aeb",
+      "expected_sha256": "54183f4323f377b737433a1e98229ead0fdc686f93bab057ecb612daa94002b5"
+    },
+    {
+      "name": "small_052",
+      "n": 3,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "1fcedacba6951aee343b84528e3de7b5d34864805cb316c46ba94dfd111b4a5d",
+      "expected_sha256": "7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d"
+    },
+    {
+      "name": "small_053",
+      "n": 11,
+      "constraints": 11,
+      "official_sample": false,
+      "input_sha256": "45bc6c7776ccbc0f7409f0d1e7bc61e900f896a9346766a2276fe634ec0964d0",
+      "expected_sha256": "3840bc236ee03aacbb1ef7d5108ddfa347c59f10b68d4174affbb53140f31273"
+    },
+    {
+      "name": "small_054",
+      "n": 6,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "9a19d8902963a0565f33553a5e96f9d2d8c517ed8870cc5831d5a091c1d54ac9",
+      "expected_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "name": "small_055",
+      "n": 9,
+      "constraints": 9,
+      "official_sample": false,
+      "input_sha256": "efda96fc772d8a2e0150b97311ef9c9389f4ae1fc8df8ad2550803c493719573",
+      "expected_sha256": "1326faec3eb42dc72ddffe46daf3940b932f48b9799f6cbf28e80504e7b34958"
+    },
+    {
+      "name": "small_056",
+      "n": 7,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "a1eee303457b895e35e5bfdb80f22b41e69972d06bd82cb2d71967caff92ba3b",
+      "expected_sha256": "eecd262c3ecab667b61ebb70835f3b181a1d1530d3ebc0ef99a3a8dc3d5b193f"
+    },
+    {
+      "name": "small_057",
+      "n": 9,
+      "constraints": 10,
+      "official_sample": false,
+      "input_sha256": "9a3c88733c3b3299d61fa87d08b2fe12dfc4fcbab0cc00ee6bac717505bf750f",
+      "expected_sha256": "20d2add851bf39edcc6b5e830930f962db7e19dffa2cab8610eed551eda6c302"
+    },
+    {
+      "name": "small_058",
+      "n": 11,
+      "constraints": 19,
+      "official_sample": false,
+      "input_sha256": "8df3cc0764205f832dc3ef36cbb8490b9b52a2bb08671be043d1adfc561892ad",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_059",
+      "n": 2,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "525cb3012dd21594fb06162c6b80a60c247c931512289648145d2d1a60b90176",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_060",
+      "n": 3,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "6c2d5daa496e01efbd396b8178b7180f4e0d178ad83864e82a9a71554d741a43",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_061",
+      "n": 12,
+      "constraints": 14,
+      "official_sample": false,
+      "input_sha256": "f0c7ac24df5cc0a9ce1f0c9069af9f6748f2e49863a0eea4e9fe0d94f5a552c8",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_062",
+      "n": 3,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "560a0a92518d41e2fedcb5ce29d0a2cac1070243d8b90a5784558ef968b78643",
+      "expected_sha256": "420002158111bff8adb3347d84029e480f45e60e1869b454b6adac3345f9f7d4"
+    },
+    {
+      "name": "small_063",
+      "n": 5,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "db467dd147850e03db14a41f2ec1ac161657735bc7c3cce9260a71df85dbbbbe",
+      "expected_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58"
+    },
+    {
+      "name": "small_064",
+      "n": 9,
+      "constraints": 10,
+      "official_sample": false,
+      "input_sha256": "1f91c8b9189684893b18517f914b7d15aa626d9a9a3322b7ed9c8e73e232eac6",
+      "expected_sha256": "6169555d9248be7e184f52250129b0d66c9932af74f4ac7bc716c20013fca362"
+    },
+    {
+      "name": "small_065",
+      "n": 5,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "ea964dbbd48dacf2f5050791fa1d58e5b1f8ec389c8d2640edefe29da25a05c3",
+      "expected_sha256": "1a252402972f6057fa53cc172b52b9ffca698e18311facd0f3b06ecaaef79e17"
+    },
+    {
+      "name": "small_066",
+      "n": 4,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "5ffd4d6489f5e095f553300aac431bd28652ee0895c59791ce273571b6ec118a",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_067",
+      "n": 8,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "083bd61923ac0d9a1ffa4a479e7398e7952d21612c0f690fd311b510e5e573c7",
+      "expected_sha256": "b1ce0aa6fdf3cf349d773243dab9fbbe09d30619f38b0c1e8977e28c4f0bc495"
+    },
+    {
+      "name": "small_068",
+      "n": 5,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "397d98f6167bb789e15f92537dbcc23464dd6d3a16d7744c66f3157f94068260",
+      "expected_sha256": "f0b5c2c2211c8d67ed15e75e656c7862d086e9245420892a7de62cd9ec582a06"
+    },
+    {
+      "name": "small_069",
+      "n": 12,
+      "constraints": 13,
+      "official_sample": false,
+      "input_sha256": "786fa88d01ba82000f452f52efd887cf608cf3c03c92e9082bb035393fe52e66",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_070",
+      "n": 2,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "d3bd6cbaa00db6d8570d02983942df1271c63d172aeaf7a8bc7347791237c955",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_071",
+      "n": 12,
+      "constraints": 13,
+      "official_sample": false,
+      "input_sha256": "3abd94da8f1cf231198d3ddda64d1b430c8cb7d556bf1b1f652424860ad1becf",
+      "expected_sha256": "eedb85ab90d324a555a45560d75c88cecf23721990c3b6353697d707e6465c74"
+    },
+    {
+      "name": "small_072",
+      "n": 11,
+      "constraints": 18,
+      "official_sample": false,
+      "input_sha256": "49dbf80aa25a8a2e398af752acac51027c3d2fd790f876c16123f38cbc19b112",
+      "expected_sha256": "5ced0deaf966775a8b592f6bd95a33a67053b242a7c13654896cd9f2d36a0e37"
+    },
+    {
+      "name": "small_073",
+      "n": 3,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "03d06b55bf8d00c9e5666447803f5442a768bb027d16b99043b4e6a77f352b82",
+      "expected_sha256": "238903180cc104ec2c5d8b3f20c5bc61b389ec0a967df8cc208cdc7cd454174f"
+    },
+    {
+      "name": "small_074",
+      "n": 7,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "d486bc514dd0e60bbd610066b852addcd2267c9b6929d21285a3a532cc53765f",
+      "expected_sha256": "1a252402972f6057fa53cc172b52b9ffca698e18311facd0f3b06ecaaef79e17"
+    },
+    {
+      "name": "small_075",
+      "n": 2,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "6b11a51498b793fc5fe52234efd026a52ff9cc10b3dc84d2ddb915978181e860",
+      "expected_sha256": "7ee29791fc17e986b97128845622b077fb45e349fdb80523fac9dba879b4ad60"
+    },
+    {
+      "name": "small_076",
+      "n": 5,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "cf22ae7f8d073628da9956ba4f61897a14a116556c716077d3d7f71bd74b8fa0",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_077",
+      "n": 12,
+      "constraints": 18,
+      "official_sample": false,
+      "input_sha256": "933f7d31f8dc787cef52c6cd7272fbbba914027c8011261d368f8486b54d6577",
+      "expected_sha256": "f1769867b0abc7068f5cb7dd41574a420b3cfa4553856f459857ff8e5a525b13"
+    },
+    {
+      "name": "small_078",
+      "n": 9,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "6f9d94357d82654a7063c6ae7913f8c8eeb9126dd1ec57ea22c73741ae8f477e",
+      "expected_sha256": "e3667f7d8c030260bf49046f955ec9bebdb9a4cb8a66b812fd498ded5431a821"
+    },
+    {
+      "name": "small_079",
+      "n": 2,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "6b1f5cbf6c744635b0bb8f5959b81b91bd1d500bff86de32e937236205c80f3c",
+      "expected_sha256": "aa67a169b0bba217aa0aa88a65346920c84c42447c36ba5f7ea65f422c1fe5d8"
+    },
+    {
+      "name": "small_080",
+      "n": 4,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "b422ab7aede375baa489df98629498b77d62678f5b8e4ed9da631b1d344db824",
+      "expected_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0"
+    },
+    {
+      "name": "small_081",
+      "n": 7,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "a4f52c7ad537a79b85e781e159b64b7e364cf77390e200cb591cff87cbaff624",
+      "expected_sha256": "913f5d1da2feaf4deeccc9e55cbb350a20f12b3f507e87be85dbb77fdd3cb9bc"
+    },
+    {
+      "name": "small_082",
+      "n": 8,
+      "constraints": 7,
+      "official_sample": false,
+      "input_sha256": "6d63a216757b6abeeba708373e5b35f41fe57f90a2986f43acc018246a2bb197",
+      "expected_sha256": "69a9cd8a9e12b122cdf59392131bf6c83e7360c2f745921e76f48a16f1cc541a"
+    },
+    {
+      "name": "small_083",
+      "n": 11,
+      "constraints": 21,
+      "official_sample": false,
+      "input_sha256": "12d3ec157ce6b5086e93f1fbfdb44cefb76fd1a9b324aced6c6676236a72ad83",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_084",
+      "n": 6,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "5bcb21194fd32b4d712f234a0eb4bb4e85a742759c0f1924cfa8c12c47ab47c6",
+      "expected_sha256": "90d7ec0f0acef104d8b6252794295f661a0149634868d02a1ae0c358099638f5"
+    },
+    {
+      "name": "small_085",
+      "n": 4,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "fe51a102408307525fa4b7b140454c0757d2dfb7ed7def9f411f5be5253ebf29",
+      "expected_sha256": "932ab0a0e4191d32c0af7b3f565b7b180dbe9869378abc5816f9add54b806e7f"
+    },
+    {
+      "name": "small_086",
+      "n": 10,
+      "constraints": 10,
+      "official_sample": false,
+      "input_sha256": "90db092b7fb8214b968b19c17a81757c3354728c24f81edb0dcdc282b77856bf",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_087",
+      "n": 3,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "d32f69b3f82e6db2d825e2094acb87554689eebc84cf3110120a9a54a0d91b5f",
+      "expected_sha256": "f0b5c2c2211c8d67ed15e75e656c7862d086e9245420892a7de62cd9ec582a06"
+    },
+    {
+      "name": "small_088",
+      "n": 2,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "d58633dd679b66811893e4cb95abdd86e777db74ffefaf2b1ff1b45c52a09ad9",
+      "expected_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "name": "small_089",
+      "n": 2,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "ffe268576716dd75e397fd720e39b998abfb18f58f189757c8dbf219966de086",
+      "expected_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "name": "small_090",
+      "n": 4,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "3cd8c2a77e8a79846c45a9c55cf207f748343a649d7c71f193bb95b120f58893",
+      "expected_sha256": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a"
+    },
+    {
+      "name": "small_091",
+      "n": 7,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "375d5144266e089e9e0e0ff009d9f08372a3117ce3a830732e51a32784c2db08",
+      "expected_sha256": "a9742eb8ee320e006666aef25ae9aeed948247f3125c9cafa7cf97b7e7467dd5"
+    },
+    {
+      "name": "small_092",
+      "n": 3,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "309dae848099b8592d9de0e9e415604d2266da39f6acc0e64ce6f88e22029ab8",
+      "expected_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "name": "small_093",
+      "n": 4,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "cf8e14222a22d69ca168aaa00226c9c2de0381901b9ef20398499c440ae630eb",
+      "expected_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "name": "small_094",
+      "n": 7,
+      "constraints": 4,
+      "official_sample": false,
+      "input_sha256": "df7d1bfd3cc4fc84901bf9c5f94d2b3550823f27ae48afd33ddfe8dfe5f66b7b",
+      "expected_sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    },
+    {
+      "name": "small_095",
+      "n": 12,
+      "constraints": 16,
+      "official_sample": false,
+      "input_sha256": "9cd6c90fadc7be733b64bf7fd100815edf4365d387f65c7df8f1121e1be4f297",
+      "expected_sha256": "6442bc26a7c562f5afe6467dab36365c709909f6a81afcecfc0c25cff0f1bab0"
+    },
+    {
+      "name": "small_096",
+      "n": 10,
+      "constraints": 10,
+      "official_sample": false,
+      "input_sha256": "aeb0425ec965b99dab6a570503094ba59506b6a05e259b3b9e2dbdb745a3f684",
+      "expected_sha256": "d867d3f88fa20d7cb936ecd93651adeedf473a6177218cd0987f462ff5511cb6"
+    },
+    {
+      "name": "small_097",
+      "n": 6,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "e20b6e3d6a67fb1160874170b6dcd1d5a091e6f54a3b6a7c87bb5da975aceea0",
+      "expected_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58"
+    },
+    {
+      "name": "small_098",
+      "n": 4,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "3cb3293064d7729d3ac4a51ba17c22e0f91c7d968b9689d3bd902cfba61292d7",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_099",
+      "n": 3,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "514317a965bda028763975ad12ea446a5fbbfd2bc1afaf0ca6e3be218974305e",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_100",
+      "n": 6,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "2285304f9ecfd13c030b46f74943f2bfd2074b3bc586cf2e6ef6066cc158e51d",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_101",
+      "n": 12,
+      "constraints": 9,
+      "official_sample": false,
+      "input_sha256": "ec6f8e021b8a41c3bebeda3f40ec426fb259e56838853a91d7c6e0fae0530d73",
+      "expected_sha256": "1dadd7223f8953c76459851cca53c62990c1a7b87a5795d31bbfa4059160e9f8"
+    },
+    {
+      "name": "small_102",
+      "n": 8,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "bfa2e4a416a1cef8976daf34fe90d33e21b54198b0591a136d4b7273b50b9d21",
+      "expected_sha256": "7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d"
+    },
+    {
+      "name": "small_103",
+      "n": 4,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "ed7e6a1d0fb5e2130535e2af004b413ffb472a29e985214d4e609e87764ec536",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_104",
+      "n": 7,
+      "constraints": 7,
+      "official_sample": false,
+      "input_sha256": "bd01d296c32161f6f8b9c4b90367626a952cde529c1f79cac3c1a12e4332ff24",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_105",
+      "n": 3,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "ff962227ee152cc37e1f9cced4bc92a9d77f40111ddbc1ca5a948887a4c39f45",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_106",
+      "n": 8,
+      "constraints": 7,
+      "official_sample": false,
+      "input_sha256": "6a9c47aadca5eee49d6eb316a0e9dccd24d03d49888bac6b57d7656cfff05865",
+      "expected_sha256": "f0b5c2c2211c8d67ed15e75e656c7862d086e9245420892a7de62cd9ec582a06"
+    },
+    {
+      "name": "small_107",
+      "n": 2,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "9d806845c36d6220cbd9edd855e954910c59490e455d16308d692faa076563bf",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_108",
+      "n": 11,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "df2c40ea1d3a221938d1d7ed7424772d29f317382292283a70eeed542eabd42b",
+      "expected_sha256": "877a8799041017f1719854e4e295c6dca56cd1cf1b1914d1bfed9281f7fc2686"
+    },
+    {
+      "name": "small_109",
+      "n": 11,
+      "constraints": 14,
+      "official_sample": false,
+      "input_sha256": "929b4a0698ddddf43ed93a5ae54b3cb630bfefa197c6225b4512cb5382e53520",
+      "expected_sha256": "bcea5d7d8b256f1bda5f90a3ede41899e94b89fccb4e4d2786073b5bfaa0002a"
+    },
+    {
+      "name": "small_110",
+      "n": 4,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "a1337faba7e7dadf9cdf6f4169a0611f62d13bd2ceb0fcae633647a8d8028637",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_111",
+      "n": 4,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "449dad1cb09c5a08c98c0f74a49f4cd92a1b445c5e3e1c5e42be2a22bfe5339a",
+      "expected_sha256": "917df3320d778ddbaa5c5c7742bc4046bf803c36ed2b050f30844ed206783469"
+    },
+    {
+      "name": "small_112",
+      "n": 6,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "7a1d368b8b5957a481d2c9c742f4c801c3f8fd41e5aa5a936882db2a1b1968ef",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_113",
+      "n": 5,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "ad3d9cbbf5753244ba90d732611317b2e798bb00cc28b88cb595fce65ef496ff",
+      "expected_sha256": "420002158111bff8adb3347d84029e480f45e60e1869b454b6adac3345f9f7d4"
+    },
+    {
+      "name": "small_114",
+      "n": 12,
+      "constraints": 19,
+      "official_sample": false,
+      "input_sha256": "8394baffc5c46eeb2014061555dd8fe29e852fd8d764e3a9fc48149f08a10e4b",
+      "expected_sha256": "b1ce0aa6fdf3cf349d773243dab9fbbe09d30619f38b0c1e8977e28c4f0bc495"
+    },
+    {
+      "name": "small_115",
+      "n": 9,
+      "constraints": 10,
+      "official_sample": false,
+      "input_sha256": "066ca3ff6e691e2e1b646e8375b362e200db7ccff588284ea52a315e361645de",
+      "expected_sha256": "c6ebc76be5dc1f8b433f8d6fd9bd85cd9325086038442db8614bb799fec6fd85"
+    },
+    {
+      "name": "small_116",
+      "n": 7,
+      "constraints": 9,
+      "official_sample": false,
+      "input_sha256": "c37e095f5bd7b16bea71ec732645f54048f083ddb13d6bf78b152a39bbff95fa",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_117",
+      "n": 8,
+      "constraints": 10,
+      "official_sample": false,
+      "input_sha256": "d95c5d1e787bb399484467f8befb8fd3abdb2f1c6b7c992555c17e0e2d810d45",
+      "expected_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0"
+    },
+    {
+      "name": "small_118",
+      "n": 7,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "f6fb9688a28f5c1f6014eda4610a900e7f6c81ea90d8d38f8e4a61b97ec1b7f0",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_119",
+      "n": 5,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "650fca0c05fdf92381e4080b9609f82e115ec039e075827e3b176c8be5510bc6",
+      "expected_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "name": "small_120",
+      "n": 5,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "f3e3b9f05546c1aae817bb779a53b950e68cb944c2e1bb27cb6ae8952dfc3757",
+      "expected_sha256": "673650f936cb3b0a2f93ce09d81be10748b1b203c19e8176b4eefc1964a0cf3a"
+    },
+    {
+      "name": "small_121",
+      "n": 4,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "697a1c2a05381ec48736a5ce18ecaacae14cffea0d25b863a8ff7917a5f64b04",
+      "expected_sha256": "a9742eb8ee320e006666aef25ae9aeed948247f3125c9cafa7cf97b7e7467dd5"
+    },
+    {
+      "name": "small_122",
+      "n": 7,
+      "constraints": 4,
+      "official_sample": false,
+      "input_sha256": "540567d28ba02279492e77e9826ac12514148ff9bd4976dea290ea8de2f13cd0",
+      "expected_sha256": "f0b5c2c2211c8d67ed15e75e656c7862d086e9245420892a7de62cd9ec582a06"
+    },
+    {
+      "name": "small_123",
+      "n": 10,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "cdf6f545bf6d25cfbb6c315a7071e544926f3c3b6aac46cb1b66d442ac53f454",
+      "expected_sha256": "95aebc97bc646c67fdcd923a5965b001f3c8a5c4d3a77075112e12a3a311d760"
+    },
+    {
+      "name": "small_124",
+      "n": 12,
+      "constraints": 17,
+      "official_sample": false,
+      "input_sha256": "c2b8fdabbc3043259d38115e0e8c3928edb3a8f0a4b0cc1cbe5589cea2fd02c1",
+      "expected_sha256": "1fc917c7ad66487470e466c0ad40ddd45b9f7730a4b43e1b2542627f0596bbdc"
+    },
+    {
+      "name": "small_125",
+      "n": 5,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "c7c7b2355a95bb3ab9d95b63185dbfdb17e606df6c83098aca131b1e50022f97",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_126",
+      "n": 3,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "bc5c0791fbc6ee2d7d84503045459109b33ad27f95c671c525d5db3fc6ca0712",
+      "expected_sha256": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a"
+    },
+    {
+      "name": "small_127",
+      "n": 12,
+      "constraints": 17,
+      "official_sample": false,
+      "input_sha256": "d83d7f384dd1e7341d558b53f34e6dee378de5d9c36f30b7116b1283d3746b1a",
+      "expected_sha256": "ea243e5457028e97f9bc93b37a72f8e80ea61ae081911bb037765590ee6aa435"
+    },
+    {
+      "name": "small_128",
+      "n": 10,
+      "constraints": 13,
+      "official_sample": false,
+      "input_sha256": "5daf501979bbd9da8fddd3f5f8ffcac6abde1abdcd8faa6c0b51ed7ce5696083",
+      "expected_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58"
+    },
+    {
+      "name": "small_129",
+      "n": 12,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "4547f9bce746cee5777a8510568cffc7f8d05703fd42833bc938b080697f931a",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_130",
+      "n": 5,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "96dfd5eabea80592fa30bff6b89759e1c0735839762d066c7f1b8667a039e84b",
+      "expected_sha256": "c6ebc76be5dc1f8b433f8d6fd9bd85cd9325086038442db8614bb799fec6fd85"
+    },
+    {
+      "name": "small_131",
+      "n": 8,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "35d165297d724a1163891667c149a7c521c0061db925811712e4521f13032a6a",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_132",
+      "n": 3,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "f540c0794bc5f8a910676df51f8ebf8e60997c1fdcaff01bf7598a850c1eaa08",
+      "expected_sha256": "20d2add851bf39edcc6b5e830930f962db7e19dffa2cab8610eed551eda6c302"
+    },
+    {
+      "name": "small_133",
+      "n": 12,
+      "constraints": 20,
+      "official_sample": false,
+      "input_sha256": "8c7d72df5a16beb145c3721d9c8330eb4a217fa44b1728eb772ccc4c3ea9baff",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_134",
+      "n": 2,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "646b7255f50bd774bc13dd6dc745628ca9c70bdba21108372fa915f5f1593dd7",
+      "expected_sha256": "5378796307535df3ec8d8b15a2e2dc5641419c3d3060cfe32238c0fa973f7aa3"
+    },
+    {
+      "name": "small_135",
+      "n": 12,
+      "constraints": 16,
+      "official_sample": false,
+      "input_sha256": "4a786831498c6597ee2a58e59c09a391be6d1a943fa73c32116ed6f27cbb97a7",
+      "expected_sha256": "9e62e6489fcc4bc58be7cb23e74d25cbfcc3732c1f70e8c37f12a756d1db9381"
+    },
+    {
+      "name": "small_136",
+      "n": 7,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "76683270b51d3c872c4bc3688c1df7f971cf932c966c020261819b188bc1761f",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_137",
+      "n": 11,
+      "constraints": 19,
+      "official_sample": false,
+      "input_sha256": "4657f927463494f28b84489b3f9a0bffc8c20755695b7fdc99359e2b0185d212",
+      "expected_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "name": "small_138",
+      "n": 9,
+      "constraints": 7,
+      "official_sample": false,
+      "input_sha256": "4bcdbc6a9a52e42fa012b6d1add7e081548003b217d8556ea206256695fbf2b0",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_139",
+      "n": 5,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "a93b74d15c3dc1ace232be3e27023e6c35db52bca60cfa59fa5c6bd6b1fb5529",
+      "expected_sha256": "64459cd36006fa4bb2f5314f2a1ad69c8cbbb95f319c5459b32a9cdc870b54aa"
+    },
+    {
+      "name": "small_140",
+      "n": 3,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "67db2a81433dd6fec7a609c0ba5e86f527b2bc44753a8d09b3ec62455e9a6472",
+      "expected_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "name": "small_141",
+      "n": 8,
+      "constraints": 9,
+      "official_sample": false,
+      "input_sha256": "2134cb0c31f3263243459821d4ebd61566463d31a32193fd21cd03b033bcbafd",
+      "expected_sha256": "4b9258d432ecb4511cfe5471a58f3feea9e8aa513e1d32294894693827d3b0d4"
+    },
+    {
+      "name": "small_142",
+      "n": 3,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "e791e68eda2e302da4711d3b92a13d500d3ee869972784b9555d5ebe2edc89b4",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_143",
+      "n": 12,
+      "constraints": 23,
+      "official_sample": false,
+      "input_sha256": "22dbef621410f3bf962a4e7b7fc77de7b12390360d78d6416f59af685afecd8d",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_144",
+      "n": 3,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "473580c00e1533cda00635787f454e23816a09ceecfb0b1f74fe7f0ebbeb410e",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_145",
+      "n": 8,
+      "constraints": 9,
+      "official_sample": false,
+      "input_sha256": "3e0f5843d7d44b89f43b96dc7521c6a46d3d133fff525c0d97b290f712fa9a31",
+      "expected_sha256": "238903180cc104ec2c5d8b3f20c5bc61b389ec0a967df8cc208cdc7cd454174f"
+    },
+    {
+      "name": "small_146",
+      "n": 3,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "27742f717e185cb7c87adfdc2058a57e973c038b47de6213c66977a1f636a750",
+      "expected_sha256": "32c2643e0dc65524c9f1f6f9f00937322fd68d59986bc381d9ff2285d23e353d"
+    },
+    {
+      "name": "small_147",
+      "n": 3,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "18808e62a2baec70ced3f89b3c19c685961600af01cebe178e365d6b40863462",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_148",
+      "n": 8,
+      "constraints": 7,
+      "official_sample": false,
+      "input_sha256": "fb96491efcd4faa9b2397b03ccc6b7f4c3d3eb2e3d22b90088ec48177af82a12",
+      "expected_sha256": "90d7ec0f0acef104d8b6252794295f661a0149634868d02a1ae0c358099638f5"
+    },
+    {
+      "name": "small_149",
+      "n": 3,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "75fa3ca1405e6b1df2aff0a4fc74c34545d57180114e885b5bb9d1199e95c3c3",
+      "expected_sha256": "a9742eb8ee320e006666aef25ae9aeed948247f3125c9cafa7cf97b7e7467dd5"
+    },
+    {
+      "name": "small_150",
+      "n": 4,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "21e3718eaed96ab4bda42d406c57aa48d543d711b7599c9a9c89c58aeedd5b5a",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_151",
+      "n": 7,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "252453d7b4b491787ab4fb1a1bcddb477f559b098994fa5a9a287786cea09f94",
+      "expected_sha256": "917df3320d778ddbaa5c5c7742bc4046bf803c36ed2b050f30844ed206783469"
+    },
+    {
+      "name": "small_152",
+      "n": 6,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "ae54ac73f015d39b546b400580454c92b5f7b3b0841c8767fffaf94df316e407",
+      "expected_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "name": "small_153",
+      "n": 9,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "36b1ec0d62b6f0c02af815bd730d789019fde651db426ab9a4bf9391c0243545",
+      "expected_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "name": "small_154",
+      "n": 9,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "8b4dce7dfad42c3b26accff1f01064adcedfb43dabb756614176a8d434567e5e",
+      "expected_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "name": "small_155",
+      "n": 12,
+      "constraints": 18,
+      "official_sample": false,
+      "input_sha256": "7e0f5acc758f62372fbfac8771824534ebcd0168f45d57e8c32742914ceac945",
+      "expected_sha256": "5378796307535df3ec8d8b15a2e2dc5641419c3d3060cfe32238c0fa973f7aa3"
+    },
+    {
+      "name": "small_156",
+      "n": 5,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "835a57266ad01df75dba90a2a63627b92dad1189650bb4c488d8bf15ccf97dd1",
+      "expected_sha256": "238903180cc104ec2c5d8b3f20c5bc61b389ec0a967df8cc208cdc7cd454174f"
+    },
+    {
+      "name": "small_157",
+      "n": 6,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "be26d94a546407962cbc6dd6f71367bc191771900991981f29a00cc7d5ee8771",
+      "expected_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "name": "small_158",
+      "n": 9,
+      "constraints": 13,
+      "official_sample": false,
+      "input_sha256": "d5313bf320dbd3c9eb61125052fe860d9d60c3cb88d4595070bf984895878d8d",
+      "expected_sha256": "748ea33db356501af68a9e37a1583cfa57192a894aab2a692c5475f031d1e81a"
+    },
+    {
+      "name": "small_159",
+      "n": 3,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "db4479c3c70b0dcd792ac46252f58b1070b099bec48a0a0bcbb9c904c5b198fa",
+      "expected_sha256": "25d4f2a86deb5e2574bb3210b67bb24fcc4afb19f93a7b65a057daa874a9d18e"
+    },
+    {
+      "name": "small_160",
+      "n": 6,
+      "constraints": 5,
+      "official_sample": false,
+      "input_sha256": "7e7a9b23709b96b14a13889268672fb17e00dcc87a37a4c2c72f678d130431f3",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_161",
+      "n": 4,
+      "constraints": 2,
+      "official_sample": false,
+      "input_sha256": "33d0f4450affc897b3e99341b7bfd12f472b1a393ae7674588696e1bcbea2b68",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_162",
+      "n": 12,
+      "constraints": 17,
+      "official_sample": false,
+      "input_sha256": "12fa84d5c94936fe39e5b6952a2778d03a74ed28ede1a9731bacac6950792fcb",
+      "expected_sha256": "932ab0a0e4191d32c0af7b3f565b7b180dbe9869378abc5816f9add54b806e7f"
+    },
+    {
+      "name": "small_163",
+      "n": 6,
+      "constraints": 4,
+      "official_sample": false,
+      "input_sha256": "121e18a82e2ebb000fc425c2a71af370bc9904e02e91ff3a0f34987dcd223b5f",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_164",
+      "n": 12,
+      "constraints": 22,
+      "official_sample": false,
+      "input_sha256": "8bd14af69e0abbcdd70a6646ecaefa5633be5ba3717416e00e5db4b4896bf430",
+      "expected_sha256": "eecd262c3ecab667b61ebb70835f3b181a1d1530d3ebc0ef99a3a8dc3d5b193f"
+    },
+    {
+      "name": "small_165",
+      "n": 7,
+      "constraints": 9,
+      "official_sample": false,
+      "input_sha256": "b8c8fd7434886442a45a332734e34714f83d37d4121bb0617185c65f376ec2a3",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_166",
+      "n": 8,
+      "constraints": 7,
+      "official_sample": false,
+      "input_sha256": "f403405f5fd9fc5a4591e75d28e04ddcaaee2a5a8a8ceef166502503f1f26d72",
+      "expected_sha256": "aa67a169b0bba217aa0aa88a65346920c84c42447c36ba5f7ea65f422c1fe5d8"
+    },
+    {
+      "name": "small_167",
+      "n": 12,
+      "constraints": 14,
+      "official_sample": false,
+      "input_sha256": "a7677a659f763655187967eb2812884b664e017c37099e181f1979680e175135",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_168",
+      "n": 3,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "64951c08d26ba28c9e399ce2293d615cf779fc2b6876afdf5e6c6a961d76b3e6",
+      "expected_sha256": "9a92adbc0cee38ef658c71ce1b1bf8c65668f166bfb213644c895ccb1ad07a25"
+    },
+    {
+      "name": "small_169",
+      "n": 4,
+      "constraints": 1,
+      "official_sample": false,
+      "input_sha256": "64e356d8ccbfd36e558999b04cf6fbb84fd3b51f21f0a2ccc0b7c4b7d31ec53a",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_170",
+      "n": 7,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "4e7a8847631f3ceef9c2e3a82ee19f97e42cec224b5efae572c6d0f31eda70b0",
+      "expected_sha256": "076320a2a08267b4c026d06573bba408ea68841e73cdc20e62cce59de165ece3"
+    },
+    {
+      "name": "small_171",
+      "n": 8,
+      "constraints": 4,
+      "official_sample": false,
+      "input_sha256": "c5552f7951ce1a74a6f62ac3d5258dae890faa90f4ec134dfc88177cf09955c2",
+      "expected_sha256": "2a62cf402cd3396aa00f55f892f4545f308f74d01c8caa0f2837b1982f821595"
+    },
+    {
+      "name": "small_172",
+      "n": 9,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "f77402619fe7e885cd5e1bdd455482329d1b624e7053c6ae989d3e28e80cfaee",
+      "expected_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0"
+    },
+    {
+      "name": "small_173",
+      "n": 8,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "e49c2af7aafc54b68d6f7262b158615f07b3e223049afff39034e176199236c6",
+      "expected_sha256": "6169555d9248be7e184f52250129b0d66c9932af74f4ac7bc716c20013fca362"
+    },
+    {
+      "name": "small_174",
+      "n": 7,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "d7940cbe6b15fefc71bea8f22468445707a5a92a3d24a25ce96c61e3629e9df5",
+      "expected_sha256": "19b8d5c59e421f037fe563007c7254eb8d98bc221b278c3db3e5fdbbfd52e273"
+    },
+    {
+      "name": "small_175",
+      "n": 6,
+      "constraints": 4,
+      "official_sample": false,
+      "input_sha256": "4f1f8066af647eb003916b3902a313a8984b640ada47d7324954a259e65b2a44",
+      "expected_sha256": "076320a2a08267b4c026d06573bba408ea68841e73cdc20e62cce59de165ece3"
+    },
+    {
+      "name": "small_176",
+      "n": 3,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "71273aacd4d6cb253d893a6a05b25207324d24f9137975d79be52dd023b6ceed",
+      "expected_sha256": "10159baf262b43a92d95db59dae1f72c645127301661e0a3ce4e38b295a97c58"
+    },
+    {
+      "name": "small_177",
+      "n": 11,
+      "constraints": 16,
+      "official_sample": false,
+      "input_sha256": "a72af2ae1541cf922bbaa28d55f20fb03190e70aeb5484a226a25dfd404c3afb",
+      "expected_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "name": "small_178",
+      "n": 9,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "995ac2ffb37b7b193f6e724152bdfe3a4d049d20fec1022f7b026c0fbe30de3f",
+      "expected_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "name": "small_179",
+      "n": 10,
+      "constraints": 15,
+      "official_sample": false,
+      "input_sha256": "7ae472a78e65b2e8e3dc7e15aaa205176c683e0eba3fd49126941dd16bb43114",
+      "expected_sha256": "b58a3da5fde2680191877ec88a1aa7d06927cc3b30cdf0d0db8c39b488891576"
+    },
+    {
+      "name": "small_180",
+      "n": 12,
+      "constraints": 16,
+      "official_sample": false,
+      "input_sha256": "817f603187a86f18f1ac52812e0b221d1ab310e5cc06280ec865ac45464fb4c7",
+      "expected_sha256": "25d4f2a86deb5e2574bb3210b67bb24fcc4afb19f93a7b65a057daa874a9d18e"
+    },
+    {
+      "name": "small_181",
+      "n": 2,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "3fc745c3858c0f1841279c1334b3d0b65fea67f95b088ff5d9b0aa803d54b570",
+      "expected_sha256": "64aeb9975f234becd55bb4635e6e2f2da7a6b7bf0a896f0c07763bdfbfb31420"
+    },
+    {
+      "name": "small_182",
+      "n": 2,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "a75086e883f4f6b21ff40a0e27ee44646c8eaa7d085be3ce6d60ec26ad3a8ddb",
+      "expected_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "name": "small_183",
+      "n": 7,
+      "constraints": 8,
+      "official_sample": false,
+      "input_sha256": "e9079f826f8b2c1dc3d21796d54fd4ce64964cf68c9a758391c941f994b0c8d3",
+      "expected_sha256": "0e55092af0746630c98d1b2e0d960617c33f8ea7b55739fd18cb7cd5342a28ca"
+    },
+    {
+      "name": "small_184",
+      "n": 7,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "5a2da79d0f47f303c3a7598fd5187a907bf7018a74e2f91341937ee147398d12",
+      "expected_sha256": "673650f936cb3b0a2f93ce09d81be10748b1b203c19e8176b4eefc1964a0cf3a"
+    },
+    {
+      "name": "small_185",
+      "n": 5,
+      "constraints": 3,
+      "official_sample": false,
+      "input_sha256": "6e7d8bc87bef4534686b3658e0d432c162e0ac5caf146b06f8da4f6c554121ec",
+      "expected_sha256": "932ab0a0e4191d32c0af7b3f565b7b180dbe9869378abc5816f9add54b806e7f"
+    },
+    {
+      "name": "small_186",
+      "n": 10,
+      "constraints": 7,
+      "official_sample": false,
+      "input_sha256": "dbe85c63b46e9dbf0fb07f5022238b18ddaa540c3acb1507b072f394d09f757a",
+      "expected_sha256": "eecd262c3ecab667b61ebb70835f3b181a1d1530d3ebc0ef99a3a8dc3d5b193f"
+    },
+    {
+      "name": "small_187",
+      "n": 9,
+      "constraints": 7,
+      "official_sample": false,
+      "input_sha256": "d52fdb84efbc4a613dab194b27afebd7d68b8151aa914a694815bd88480ec9e1",
+      "expected_sha256": "4b9258d432ecb4511cfe5471a58f3feea9e8aa513e1d32294894693827d3b0d4"
+    },
+    {
+      "name": "small_188",
+      "n": 5,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "b31f556082c059aa3231fcb8910dc1fef0081a8e5555f561d94f180e030e91cd",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_189",
+      "n": 5,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "71404c30f43a682d4dbd536372af88cf1baabc3c4a69dd3902034f623cd1b2d2",
+      "expected_sha256": "2e6d31a5983a91251bfae5aefa1c0a19d8ba3cf601d0e8a706b4cfa9661a6b8a"
+    },
+    {
+      "name": "small_190",
+      "n": 8,
+      "constraints": 7,
+      "official_sample": false,
+      "input_sha256": "ca6fe8d6b797a844a771bc2aaa72724e635347d2e93a2cd57f17874a890f64b8",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_191",
+      "n": 8,
+      "constraints": 4,
+      "official_sample": false,
+      "input_sha256": "eb9967f8869cfa2c22811c30e5d0bc4cb219c5ad7e052637b12244114ee12f44",
+      "expected_sha256": "913f5d1da2feaf4deeccc9e55cbb350a20f12b3f507e87be85dbb77fdd3cb9bc"
+    },
+    {
+      "name": "small_192",
+      "n": 10,
+      "constraints": 16,
+      "official_sample": false,
+      "input_sha256": "5fd2873f2b6056601cc5c8e1fd47ddac30f799c3f30ef677b65b7a6dca4c9f32",
+      "expected_sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    },
+    {
+      "name": "small_193",
+      "n": 7,
+      "constraints": 4,
+      "official_sample": false,
+      "input_sha256": "db1e6b982bd85a81d69945b5ad8e55c763a62e3ccc727d89826cdc578b12ff24",
+      "expected_sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0"
+    },
+    {
+      "name": "small_194",
+      "n": 10,
+      "constraints": 9,
+      "official_sample": false,
+      "input_sha256": "c881f44fc11b47e80b5ab07f5b10da0aa2626144460226484a6656a60df8c62d",
+      "expected_sha256": "7de1555df0c2700329e815b93b32c571c3ea54dc967b89e81ab73b9972b72d1d"
+    },
+    {
+      "name": "small_195",
+      "n": 10,
+      "constraints": 6,
+      "official_sample": false,
+      "input_sha256": "4b3a14929346f978bc3ed7baf7d537057a4f97146e84edfbb27d54b05ecc942e",
+      "expected_sha256": "238903180cc104ec2c5d8b3f20c5bc61b389ec0a967df8cc208cdc7cd454174f"
+    },
+    {
+      "name": "small_196",
+      "n": 8,
+      "constraints": 4,
+      "official_sample": false,
+      "input_sha256": "29b93cde75eab2204743d2594869f0443155b9ffe9168f65fac752015ecc3b98",
+      "expected_sha256": "1a62e878f334291869f88f4b71f8c157ee774b6bdb11d2ca86cccf2b48cef87b"
+    },
+    {
+      "name": "small_197",
+      "n": 9,
+      "constraints": 14,
+      "official_sample": false,
+      "input_sha256": "b8322b98e0ed17dfac4a8b6a2e7aef8f18e64d1d8521018b947ef1073221d08b",
+      "expected_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "name": "small_198",
+      "n": 12,
+      "constraints": 13,
+      "official_sample": false,
+      "input_sha256": "98569d857268146c27348bf5cca9b00b0b2f21de55315ce97e99e06e1bb45692",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "small_199",
+      "n": 2,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "496d1b9dd985ee58249403af2567db545009845243b0eb3ab61ff4a0561c968b",
+      "expected_sha256": "06e9d52c1720fca412803e3b07c4b228ff113e303f4c7ab94665319d832bbfb7"
+    },
+    {
+      "name": "maximum_dense",
+      "n": 100,
+      "constraints": 4950,
+      "official_sample": false,
+      "input_sha256": "cb4ecfb1e9837831c2448d5fdc8972a3afd1223690ab80f5af6709007c2caf7c",
+      "expected_sha256": "56ba741f17d7b2e6b5881fd72315fe8ffc8ddfc2b5c948a8ded56ae5ea58569e"
+    },
+    {
+      "name": "maximum_sparse",
+      "n": 100,
+      "constraints": 317,
+      "official_sample": false,
+      "input_sha256": "688545c3710f3bdee95f1ef6a9df5bc46b58f1f74bb6312ba9f7c69c0c877ed7",
+      "expected_sha256": "fe64c21aef35dd247f93e9480c5d3a0fbbe62c617058c67b3d93ea9d318a6bbd"
+    },
+    {
+      "name": "maximum_chain",
+      "n": 100,
+      "constraints": 99,
+      "official_sample": false,
+      "input_sha256": "374a7871d1704c10fcce34c092a42fd031416a8d4e59dfb8a6f718ab2d0f1314",
+      "expected_sha256": "96eb7cac35121e57ba080d964999a356b84a6cfbed3d94b0b301c513de1a0764"
+    },
+    {
+      "name": "maximum_star",
+      "n": 100,
+      "constraints": 99,
+      "official_sample": false,
+      "input_sha256": "0b7f50f178022a91ae5a645b8d29a24c010ab03025e7144ede4fe6e624aad815",
+      "expected_sha256": "bc5a9888706925d35edb380abf76b36d4820a3c9eadd54b818c450254edcb70f"
+    },
+    {
+      "name": "maximum_none",
+      "n": 100,
+      "constraints": 0,
+      "official_sample": false,
+      "input_sha256": "13ce528b4cd964f3467e98e169a450d58162a97c23284733e896d766187dfdf3",
+      "expected_sha256": "303ea83ba2a32354e502bc1ca9786957cb7df1686f957d243194b2b374523b6d"
+    },
+    {
+      "name": "maximum_positive",
+      "n": 100,
+      "constraints": 4950,
+      "official_sample": false,
+      "input_sha256": "a7c2e2b7136b2e9ec7618267b11b67a344b39886ff256b4a1c7955bc526c5f4a",
+      "expected_sha256": "8bd5a23c3aef1243c78bac155b39b9d57a43d8c49665ccf6f42acf2992a94afa"
+    },
+    {
+      "name": "maximum_negative",
+      "n": 100,
+      "constraints": 4950,
+      "official_sample": false,
+      "input_sha256": "8a9e6f2a032466888bcd1a1e672303659d0e0bbd330dde2a72ce94c9448835e9",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "maximum_zero",
+      "n": 100,
+      "constraints": 4950,
+      "official_sample": false,
+      "input_sha256": "536f63607906a43c476fa6ee70a65488f64ffe2a17569cb9f2ef5e44eec18a38",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "maximum_alternating",
+      "n": 100,
+      "constraints": 4950,
+      "official_sample": false,
+      "input_sha256": "e228bbdc042311e03186e48a88eab3fa641832678a334c043c32b9a5c12fd24f",
+      "expected_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "name": "maximum_blocks",
+      "n": 100,
+      "constraints": 450,
+      "official_sample": false,
+      "input_sha256": "239a17cac79184a0b0ff51f8653557ea246ac3e8bdceceeb06cec979f9a86c40",
+      "expected_sha256": "cc163978753ef4dcaf8f6e5f898008e250ec22e93b0a0818df5eb1c220927bb6"
+    }
+  ],
+  "results": {
+    "source_sha256": "b7e9db9be3437bbaf2ca93c0f481093f785ec8373388d671e91814885becaa6f",
+    "reference": [
+      {
+        "configuration": "gcc_checked",
+        "passed": true,
+        "source_sha256": "4ced4d493342284d73583868e2a6528112aac21fa7ffedda40af279ddb173c25",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/project_selection_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/project_selection/project_selection_reference_test_gcc_checked"
+        ],
+        "output": "214007 independent project selection checks passed"
+      },
+      {
+        "configuration": "gcc_skip",
+        "passed": true,
+        "source_sha256": "4ced4d493342284d73583868e2a6528112aac21fa7ffedda40af279ddb173c25",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/project_selection_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/project_selection/project_selection_reference_test_gcc_skip"
+        ],
+        "output": "213987 independent project selection checks passed"
+      },
+      {
+        "configuration": "clang_checked",
+        "passed": true,
+        "source_sha256": "4ced4d493342284d73583868e2a6528112aac21fa7ffedda40af279ddb173c25",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/project_selection_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/project_selection/project_selection_reference_test_clang_checked"
+        ],
+        "output": "214007 independent project selection checks passed"
+      },
+      {
+        "configuration": "clang_skip",
+        "passed": true,
+        "source_sha256": "4ced4d493342284d73583868e2a6528112aac21fa7ffedda40af279ddb173c25",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/project_selection_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/project_selection/project_selection_reference_test_clang_skip"
+        ],
+        "output": "213987 independent project selection checks passed"
+      }
+    ],
+    "exceptions": [
+      {
+        "configuration": "gcc_checked",
+        "passed": true,
+        "source_sha256": "8dae426a480a33c79acac3d33ed0a0a118ef4b5b7e182c8082c801f666261020",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/project_selection_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/project_selection/project_selection_exception_test_gcc_checked"
+        ],
+        "output": "92 injected failures, 0 partial additions, ownership/exception checks passed"
+      },
+      {
+        "configuration": "gcc_skip",
+        "passed": true,
+        "source_sha256": "8dae426a480a33c79acac3d33ed0a0a118ef4b5b7e182c8082c801f666261020",
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/project_selection_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/project_selection/project_selection_exception_test_gcc_skip"
+        ],
+        "output": "92 injected failures, 0 partial additions, ownership/exception checks passed"
+      },
+      {
+        "configuration": "clang_checked",
+        "passed": true,
+        "source_sha256": "8dae426a480a33c79acac3d33ed0a0a118ef4b5b7e182c8082c801f666261020",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/project_selection_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/project_selection/project_selection_exception_test_clang_checked"
+        ],
+        "output": "92 injected failures, 0 partial additions, ownership/exception checks passed"
+      },
+      {
+        "configuration": "clang_skip",
+        "passed": true,
+        "source_sha256": "8dae426a480a33c79acac3d33ed0a0a118ef4b5b7e182c8082c801f666261020",
+        "command": [
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/project_selection_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/project_selection/project_selection_exception_test_clang_skip"
+        ],
+        "output": "92 injected failures, 0 partial additions, ownership/exception checks passed"
+      }
+    ],
+    "sanitizers": [
+      {
+        "test": "project_selection_reference_test",
+        "configuration": "clang_sanitizer_checked",
+        "passed": true,
+        "output": "214007 independent project selection checks passed"
+      },
+      {
+        "test": "project_selection_exception_test",
+        "configuration": "clang_sanitizer_checked",
+        "passed": true,
+        "output": "92 injected failures, 0 partial additions, ownership/exception checks passed"
+      },
+      {
+        "test": "project_selection_reference_test",
+        "configuration": "clang_sanitizer_skip",
+        "passed": true,
+        "output": "213987 independent project selection checks passed"
+      },
+      {
+        "test": "project_selection_exception_test",
+        "configuration": "clang_sanitizer_skip",
+        "passed": true,
+        "output": "92 injected failures, 0 partial additions, ownership/exception checks passed"
+      }
+    ],
+    "examples": [
+      {
+        "configuration": "gcc_checked",
+        "passed": true,
+        "output": "-3\n1 1 0 \n-3\n0\n5 3\n7"
+      },
+      {
+        "configuration": "gcc_skip",
+        "passed": true,
+        "output": "-3\n1 1 0 \n-3\n0\n5 3\n7"
+      },
+      {
+        "configuration": "clang_checked",
+        "passed": true,
+        "output": "-3\n1 1 0 \n-3\n0\n5 3\n7"
+      },
+      {
+        "configuration": "clang_skip",
+        "passed": true,
+        "output": "-3\n1 1 0 \n-3\n0\n5 3\n7"
+      }
+    ],
+    "mains": [
+      {
+        "entry": "project_selection",
+        "configuration": "gcc_checked",
+        "passed": true,
+        "source_sha256": "c25b4b675832ea452c6ada4f35eb0cf8b73c8ee91ccd297dbd0468ddefd8ec3a",
+        "libraries_sha256": {
+          "Graph/Project_Selection.cpp": "b7e9db9be3437bbaf2ca93c0f481093f785ec8373388d671e91814885becaa6f"
+        },
+        "cases": [
+          {
+            "name": "sample_00",
+            "passed": true
+          },
+          {
+            "name": "sample_01",
+            "passed": true
+          },
+          {
+            "name": "small_000",
+            "passed": true
+          },
+          {
+            "name": "small_001",
+            "passed": true
+          },
+          {
+            "name": "small_002",
+            "passed": true
+          },
+          {
+            "name": "small_003",
+            "passed": true
+          },
+          {
+            "name": "small_004",
+            "passed": true
+          },
+          {
+            "name": "small_005",
+            "passed": true
+          },
+          {
+            "name": "small_006",
+            "passed": true
+          },
+          {
+            "name": "small_007",
+            "passed": true
+          },
+          {
+            "name": "small_008",
+            "passed": true
+          },
+          {
+            "name": "small_009",
+            "passed": true
+          },
+          {
+            "name": "small_010",
+            "passed": true
+          },
+          {
+            "name": "small_011",
+            "passed": true
+          },
+          {
+            "name": "small_012",
+            "passed": true
+          },
+          {
+            "name": "small_013",
+            "passed": true
+          },
+          {
+            "name": "small_014",
+            "passed": true
+          },
+          {
+            "name": "small_015",
+            "passed": true
+          },
+          {
+            "name": "small_016",
+            "passed": true
+          },
+          {
+            "name": "small_017",
+            "passed": true
+          },
+          {
+            "name": "small_018",
+            "passed": true
+          },
+          {
+            "name": "small_019",
+            "passed": true
+          },
+          {
+            "name": "small_020",
+            "passed": true
+          },
+          {
+            "name": "small_021",
+            "passed": true
+          },
+          {
+            "name": "small_022",
+            "passed": true
+          },
+          {
+            "name": "small_023",
+            "passed": true
+          },
+          {
+            "name": "small_024",
+            "passed": true
+          },
+          {
+            "name": "small_025",
+            "passed": true
+          },
+          {
+            "name": "small_026",
+            "passed": true
+          },
+          {
+            "name": "small_027",
+            "passed": true
+          },
+          {
+            "name": "small_028",
+            "passed": true
+          },
+          {
+            "name": "small_029",
+            "passed": true
+          },
+          {
+            "name": "small_030",
+            "passed": true
+          },
+          {
+            "name": "small_031",
+            "passed": true
+          },
+          {
+            "name": "small_032",
+            "passed": true
+          },
+          {
+            "name": "small_033",
+            "passed": true
+          },
+          {
+            "name": "small_034",
+            "passed": true
+          },
+          {
+            "name": "small_035",
+            "passed": true
+          },
+          {
+            "name": "small_036",
+            "passed": true
+          },
+          {
+            "name": "small_037",
+            "passed": true
+          },
+          {
+            "name": "small_038",
+            "passed": true
+          },
+          {
+            "name": "small_039",
+            "passed": true
+          },
+          {
+            "name": "small_040",
+            "passed": true
+          },
+          {
+            "name": "small_041",
+            "passed": true
+          },
+          {
+            "name": "small_042",
+            "passed": true
+          },
+          {
+            "name": "small_043",
+            "passed": true
+          },
+          {
+            "name": "small_044",
+            "passed": true
+          },
+          {
+            "name": "small_045",
+            "passed": true
+          },
+          {
+            "name": "small_046",
+            "passed": true
+          },
+          {
+            "name": "small_047",
+            "passed": true
+          },
+          {
+            "name": "small_048",
+            "passed": true
+          },
+          {
+            "name": "small_049",
+            "passed": true
+          },
+          {
+            "name": "small_050",
+            "passed": true
+          },
+          {
+            "name": "small_051",
+            "passed": true
+          },
+          {
+            "name": "small_052",
+            "passed": true
+          },
+          {
+            "name": "small_053",
+            "passed": true
+          },
+          {
+            "name": "small_054",
+            "passed": true
+          },
+          {
+            "name": "small_055",
+            "passed": true
+          },
+          {
+            "name": "small_056",
+            "passed": true
+          },
+          {
+            "name": "small_057",
+            "passed": true
+          },
+          {
+            "name": "small_058",
+            "passed": true
+          },
+          {
+            "name": "small_059",
+            "passed": true
+          },
+          {
+            "name": "small_060",
+            "passed": true
+          },
+          {
+            "name": "small_061",
+            "passed": true
+          },
+          {
+            "name": "small_062",
+            "passed": true
+          },
+          {
+            "name": "small_063",
+            "passed": true
+          },
+          {
+            "name": "small_064",
+            "passed": true
+          },
+          {
+            "name": "small_065",
+            "passed": true
+          },
+          {
+            "name": "small_066",
+            "passed": true
+          },
+          {
+            "name": "small_067",
+            "passed": true
+          },
+          {
+            "name": "small_068",
+            "passed": true
+          },
+          {
+            "name": "small_069",
+            "passed": true
+          },
+          {
+            "name": "small_070",
+            "passed": true
+          },
+          {
+            "name": "small_071",
+            "passed": true
+          },
+          {
+            "name": "small_072",
+            "passed": true
+          },
+          {
+            "name": "small_073",
+            "passed": true
+          },
+          {
+            "name": "small_074",
+            "passed": true
+          },
+          {
+            "name": "small_075",
+            "passed": true
+          },
+          {
+            "name": "small_076",
+            "passed": true
+          },
+          {
+            "name": "small_077",
+            "passed": true
+          },
+          {
+            "name": "small_078",
+            "passed": true
+          },
+          {
+            "name": "small_079",
+            "passed": true
+          },
+          {
+            "name": "small_080",
+            "passed": true
+          },
+          {
+            "name": "small_081",
+            "passed": true
+          },
+          {
+            "name": "small_082",
+            "passed": true
+          },
+          {
+            "name": "small_083",
+            "passed": true
+          },
+          {
+            "name": "small_084",
+            "passed": true
+          },
+          {
+            "name": "small_085",
+            "passed": true
+          },
+          {
+            "name": "small_086",
+            "passed": true
+          },
+          {
+            "name": "small_087",
+            "passed": true
+          },
+          {
+            "name": "small_088",
+            "passed": true
+          },
+          {
+            "name": "small_089",
+            "passed": true
+          },
+          {
+            "name": "small_090",
+            "passed": true
+          },
+          {
+            "name": "small_091",
+            "passed": true
+          },
+          {
+            "name": "small_092",
+            "passed": true
+          },
+          {
+            "name": "small_093",
+            "passed": true
+          },
+          {
+            "name": "small_094",
+            "passed": true
+          },
+          {
+            "name": "small_095",
+            "passed": true
+          },
+          {
+            "name": "small_096",
+            "passed": true
+          },
+          {
+            "name": "small_097",
+            "passed": true
+          },
+          {
+            "name": "small_098",
+            "passed": true
+          },
+          {
+            "name": "small_099",
+            "passed": true
+          },
+          {
+            "name": "small_100",
+            "passed": true
+          },
+          {
+            "name": "small_101",
+            "passed": true
+          },
+          {
+            "name": "small_102",
+            "passed": true
+          },
+          {
+            "name": "small_103",
+            "passed": true
+          },
+          {
+            "name": "small_104",
+            "passed": true
+          },
+          {
+            "name": "small_105",
+            "passed": true
+          },
+          {
+            "name": "small_106",
+            "passed": true
+          },
+          {
+            "name": "small_107",
+            "passed": true
+          },
+          {
+            "name": "small_108",
+            "passed": true
+          },
+          {
+            "name": "small_109",
+            "passed": true
+          },
+          {
+            "name": "small_110",
+            "passed": true
+          },
+          {
+            "name": "small_111",
+            "passed": true
+          },
+          {
+            "name": "small_112",
+            "passed": true
+          },
+          {
+            "name": "small_113",
+            "passed": true
+          },
+          {
+            "name": "small_114",
+            "passed": true
+          },
+          {
+            "name": "small_115",
+            "passed": true
+          },
+          {
+            "name": "small_116",
+            "passed": true
+          },
+          {
+            "name": "small_117",
+            "passed": true
+          },
+          {
+            "name": "small_118",
+            "passed": true
+          },
+          {
+            "name": "small_119",
+            "passed": true
+          },
+          {
+            "name": "small_120",
+            "passed": true
+          },
+          {
+            "name": "small_121",
+            "passed": true
+          },
+          {
+            "name": "small_122",
+            "passed": true
+          },
+          {
+            "name": "small_123",
+            "passed": true
+          },
+          {
+            "name": "small_124",
+            "passed": true
+          },
+          {
+            "name": "small_125",
+            "passed": true
+          },
+          {
+            "name": "small_126",
+            "passed": true
+          },
+          {
+            "name": "small_127",
+            "passed": true
+          },
+          {
+            "name": "small_128",
+            "passed": true
+          },
+          {
+            "name": "small_129",
+            "passed": true
+          },
+          {
+            "name": "small_130",
+            "passed": true
+          },
+          {
+            "name": "small_131",
+            "passed": true
+          },
+          {
+            "name": "small_132",
+            "passed": true
+          },
+          {
+            "name": "small_133",
+            "passed": true
+          },
+          {
+            "name": "small_134",
+            "passed": true
+          },
+          {
+            "name": "small_135",
+            "passed": true
+          },
+          {
+            "name": "small_136",
+            "passed": true
+          },
+          {
+            "name": "small_137",
+            "passed": true
+          },
+          {
+            "name": "small_138",
+            "passed": true
+          },
+          {
+            "name": "small_139",
+            "passed": true
+          },
+          {
+            "name": "small_140",
+            "passed": true
+          },
+          {
+            "name": "small_141",
+            "passed": true
+          },
+          {
+            "name": "small_142",
+            "passed": true
+          },
+          {
+            "name": "small_143",
+            "passed": true
+          },
+          {
+            "name": "small_144",
+            "passed": true
+          },
+          {
+            "name": "small_145",
+            "passed": true
+          },
+          {
+            "name": "small_146",
+            "passed": true
+          },
+          {
+            "name": "small_147",
+            "passed": true
+          },
+          {
+            "name": "small_148",
+            "passed": true
+          },
+          {
+            "name": "small_149",
+            "passed": true
+          },
+          {
+            "name": "small_150",
+            "passed": true
+          },
+          {
+            "name": "small_151",
+            "passed": true
+          },
+          {
+            "name": "small_152",
+            "passed": true
+          },
+          {
+            "name": "small_153",
+            "passed": true
+          },
+          {
+            "name": "small_154",
+            "passed": true
+          },
+          {
+            "name": "small_155",
+            "passed": true
+          },
+          {
+            "name": "small_156",
+            "passed": true
+          },
+          {
+            "name": "small_157",
+            "passed": true
+          },
+          {
+            "name": "small_158",
+            "passed": true
+          },
+          {
+            "name": "small_159",
+            "passed": true
+          },
+          {
+            "name": "small_160",
+            "passed": true
+          },
+          {
+            "name": "small_161",
+            "passed": true
+          },
+          {
+            "name": "small_162",
+            "passed": true
+          },
+          {
+            "name": "small_163",
+            "passed": true
+          },
+          {
+            "name": "small_164",
+            "passed": true
+          },
+          {
+            "name": "small_165",
+            "passed": true
+          },
+          {
+            "name": "small_166",
+            "passed": true
+          },
+          {
+            "name": "small_167",
+            "passed": true
+          },
+          {
+            "name": "small_168",
+            "passed": true
+          },
+          {
+            "name": "small_169",
+            "passed": true
+          },
+          {
+            "name": "small_170",
+            "passed": true
+          },
+          {
+            "name": "small_171",
+            "passed": true
+          },
+          {
+            "name": "small_172",
+            "passed": true
+          },
+          {
+            "name": "small_173",
+            "passed": true
+          },
+          {
+            "name": "small_174",
+            "passed": true
+          },
+          {
+            "name": "small_175",
+            "passed": true
+          },
+          {
+            "name": "small_176",
+            "passed": true
+          },
+          {
+            "name": "small_177",
+            "passed": true
+          },
+          {
+            "name": "small_178",
+            "passed": true
+          },
+          {
+            "name": "small_179",
+            "passed": true
+          },
+          {
+            "name": "small_180",
+            "passed": true
+          },
+          {
+            "name": "small_181",
+            "passed": true
+          },
+          {
+            "name": "small_182",
+            "passed": true
+          },
+          {
+            "name": "small_183",
+            "passed": true
+          },
+          {
+            "name": "small_184",
+            "passed": true
+          },
+          {
+            "name": "small_185",
+            "passed": true
+          },
+          {
+            "name": "small_186",
+            "passed": true
+          },
+          {
+            "name": "small_187",
+            "passed": true
+          },
+          {
+            "name": "small_188",
+            "passed": true
+          },
+          {
+            "name": "small_189",
+            "passed": true
+          },
+          {
+            "name": "small_190",
+            "passed": true
+          },
+          {
+            "name": "small_191",
+            "passed": true
+          },
+          {
+            "name": "small_192",
+            "passed": true
+          },
+          {
+            "name": "small_193",
+            "passed": true
+          },
+          {
+            "name": "small_194",
+            "passed": true
+          },
+          {
+            "name": "small_195",
+            "passed": true
+          },
+          {
+            "name": "small_196",
+            "passed": true
+          },
+          {
+            "name": "small_197",
+            "passed": true
+          },
+          {
+            "name": "small_198",
+            "passed": true
+          },
+          {
+            "name": "small_199",
+            "passed": true
+          },
+          {
+            "name": "maximum_dense",
+            "passed": true
+          },
+          {
+            "name": "maximum_sparse",
+            "passed": true
+          },
+          {
+            "name": "maximum_chain",
+            "passed": true
+          },
+          {
+            "name": "maximum_star",
+            "passed": true
+          },
+          {
+            "name": "maximum_none",
+            "passed": true
+          },
+          {
+            "name": "maximum_positive",
+            "passed": true
+          },
+          {
+            "name": "maximum_negative",
+            "passed": true
+          },
+          {
+            "name": "maximum_zero",
+            "passed": true
+          },
+          {
+            "name": "maximum_alternating",
+            "passed": true
+          },
+          {
+            "name": "maximum_blocks",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "entry": "project_selection",
+        "configuration": "gcc_skip",
+        "passed": true,
+        "source_sha256": "72128d9da61abb1082b2370faf3fafe5915851781d344e4e03301505d45f986b",
+        "libraries_sha256": {
+          "Graph/Project_Selection.cpp": "b7e9db9be3437bbaf2ca93c0f481093f785ec8373388d671e91814885becaa6f"
+        },
+        "cases": [
+          {
+            "name": "sample_00",
+            "passed": true
+          },
+          {
+            "name": "sample_01",
+            "passed": true
+          },
+          {
+            "name": "small_000",
+            "passed": true
+          },
+          {
+            "name": "small_001",
+            "passed": true
+          },
+          {
+            "name": "small_002",
+            "passed": true
+          },
+          {
+            "name": "small_003",
+            "passed": true
+          },
+          {
+            "name": "small_004",
+            "passed": true
+          },
+          {
+            "name": "small_005",
+            "passed": true
+          },
+          {
+            "name": "small_006",
+            "passed": true
+          },
+          {
+            "name": "small_007",
+            "passed": true
+          },
+          {
+            "name": "small_008",
+            "passed": true
+          },
+          {
+            "name": "small_009",
+            "passed": true
+          },
+          {
+            "name": "small_010",
+            "passed": true
+          },
+          {
+            "name": "small_011",
+            "passed": true
+          },
+          {
+            "name": "small_012",
+            "passed": true
+          },
+          {
+            "name": "small_013",
+            "passed": true
+          },
+          {
+            "name": "small_014",
+            "passed": true
+          },
+          {
+            "name": "small_015",
+            "passed": true
+          },
+          {
+            "name": "small_016",
+            "passed": true
+          },
+          {
+            "name": "small_017",
+            "passed": true
+          },
+          {
+            "name": "small_018",
+            "passed": true
+          },
+          {
+            "name": "small_019",
+            "passed": true
+          },
+          {
+            "name": "small_020",
+            "passed": true
+          },
+          {
+            "name": "small_021",
+            "passed": true
+          },
+          {
+            "name": "small_022",
+            "passed": true
+          },
+          {
+            "name": "small_023",
+            "passed": true
+          },
+          {
+            "name": "small_024",
+            "passed": true
+          },
+          {
+            "name": "small_025",
+            "passed": true
+          },
+          {
+            "name": "small_026",
+            "passed": true
+          },
+          {
+            "name": "small_027",
+            "passed": true
+          },
+          {
+            "name": "small_028",
+            "passed": true
+          },
+          {
+            "name": "small_029",
+            "passed": true
+          },
+          {
+            "name": "small_030",
+            "passed": true
+          },
+          {
+            "name": "small_031",
+            "passed": true
+          },
+          {
+            "name": "small_032",
+            "passed": true
+          },
+          {
+            "name": "small_033",
+            "passed": true
+          },
+          {
+            "name": "small_034",
+            "passed": true
+          },
+          {
+            "name": "small_035",
+            "passed": true
+          },
+          {
+            "name": "small_036",
+            "passed": true
+          },
+          {
+            "name": "small_037",
+            "passed": true
+          },
+          {
+            "name": "small_038",
+            "passed": true
+          },
+          {
+            "name": "small_039",
+            "passed": true
+          },
+          {
+            "name": "small_040",
+            "passed": true
+          },
+          {
+            "name": "small_041",
+            "passed": true
+          },
+          {
+            "name": "small_042",
+            "passed": true
+          },
+          {
+            "name": "small_043",
+            "passed": true
+          },
+          {
+            "name": "small_044",
+            "passed": true
+          },
+          {
+            "name": "small_045",
+            "passed": true
+          },
+          {
+            "name": "small_046",
+            "passed": true
+          },
+          {
+            "name": "small_047",
+            "passed": true
+          },
+          {
+            "name": "small_048",
+            "passed": true
+          },
+          {
+            "name": "small_049",
+            "passed": true
+          },
+          {
+            "name": "small_050",
+            "passed": true
+          },
+          {
+            "name": "small_051",
+            "passed": true
+          },
+          {
+            "name": "small_052",
+            "passed": true
+          },
+          {
+            "name": "small_053",
+            "passed": true
+          },
+          {
+            "name": "small_054",
+            "passed": true
+          },
+          {
+            "name": "small_055",
+            "passed": true
+          },
+          {
+            "name": "small_056",
+            "passed": true
+          },
+          {
+            "name": "small_057",
+            "passed": true
+          },
+          {
+            "name": "small_058",
+            "passed": true
+          },
+          {
+            "name": "small_059",
+            "passed": true
+          },
+          {
+            "name": "small_060",
+            "passed": true
+          },
+          {
+            "name": "small_061",
+            "passed": true
+          },
+          {
+            "name": "small_062",
+            "passed": true
+          },
+          {
+            "name": "small_063",
+            "passed": true
+          },
+          {
+            "name": "small_064",
+            "passed": true
+          },
+          {
+            "name": "small_065",
+            "passed": true
+          },
+          {
+            "name": "small_066",
+            "passed": true
+          },
+          {
+            "name": "small_067",
+            "passed": true
+          },
+          {
+            "name": "small_068",
+            "passed": true
+          },
+          {
+            "name": "small_069",
+            "passed": true
+          },
+          {
+            "name": "small_070",
+            "passed": true
+          },
+          {
+            "name": "small_071",
+            "passed": true
+          },
+          {
+            "name": "small_072",
+            "passed": true
+          },
+          {
+            "name": "small_073",
+            "passed": true
+          },
+          {
+            "name": "small_074",
+            "passed": true
+          },
+          {
+            "name": "small_075",
+            "passed": true
+          },
+          {
+            "name": "small_076",
+            "passed": true
+          },
+          {
+            "name": "small_077",
+            "passed": true
+          },
+          {
+            "name": "small_078",
+            "passed": true
+          },
+          {
+            "name": "small_079",
+            "passed": true
+          },
+          {
+            "name": "small_080",
+            "passed": true
+          },
+          {
+            "name": "small_081",
+            "passed": true
+          },
+          {
+            "name": "small_082",
+            "passed": true
+          },
+          {
+            "name": "small_083",
+            "passed": true
+          },
+          {
+            "name": "small_084",
+            "passed": true
+          },
+          {
+            "name": "small_085",
+            "passed": true
+          },
+          {
+            "name": "small_086",
+            "passed": true
+          },
+          {
+            "name": "small_087",
+            "passed": true
+          },
+          {
+            "name": "small_088",
+            "passed": true
+          },
+          {
+            "name": "small_089",
+            "passed": true
+          },
+          {
+            "name": "small_090",
+            "passed": true
+          },
+          {
+            "name": "small_091",
+            "passed": true
+          },
+          {
+            "name": "small_092",
+            "passed": true
+          },
+          {
+            "name": "small_093",
+            "passed": true
+          },
+          {
+            "name": "small_094",
+            "passed": true
+          },
+          {
+            "name": "small_095",
+            "passed": true
+          },
+          {
+            "name": "small_096",
+            "passed": true
+          },
+          {
+            "name": "small_097",
+            "passed": true
+          },
+          {
+            "name": "small_098",
+            "passed": true
+          },
+          {
+            "name": "small_099",
+            "passed": true
+          },
+          {
+            "name": "small_100",
+            "passed": true
+          },
+          {
+            "name": "small_101",
+            "passed": true
+          },
+          {
+            "name": "small_102",
+            "passed": true
+          },
+          {
+            "name": "small_103",
+            "passed": true
+          },
+          {
+            "name": "small_104",
+            "passed": true
+          },
+          {
+            "name": "small_105",
+            "passed": true
+          },
+          {
+            "name": "small_106",
+            "passed": true
+          },
+          {
+            "name": "small_107",
+            "passed": true
+          },
+          {
+            "name": "small_108",
+            "passed": true
+          },
+          {
+            "name": "small_109",
+            "passed": true
+          },
+          {
+            "name": "small_110",
+            "passed": true
+          },
+          {
+            "name": "small_111",
+            "passed": true
+          },
+          {
+            "name": "small_112",
+            "passed": true
+          },
+          {
+            "name": "small_113",
+            "passed": true
+          },
+          {
+            "name": "small_114",
+            "passed": true
+          },
+          {
+            "name": "small_115",
+            "passed": true
+          },
+          {
+            "name": "small_116",
+            "passed": true
+          },
+          {
+            "name": "small_117",
+            "passed": true
+          },
+          {
+            "name": "small_118",
+            "passed": true
+          },
+          {
+            "name": "small_119",
+            "passed": true
+          },
+          {
+            "name": "small_120",
+            "passed": true
+          },
+          {
+            "name": "small_121",
+            "passed": true
+          },
+          {
+            "name": "small_122",
+            "passed": true
+          },
+          {
+            "name": "small_123",
+            "passed": true
+          },
+          {
+            "name": "small_124",
+            "passed": true
+          },
+          {
+            "name": "small_125",
+            "passed": true
+          },
+          {
+            "name": "small_126",
+            "passed": true
+          },
+          {
+            "name": "small_127",
+            "passed": true
+          },
+          {
+            "name": "small_128",
+            "passed": true
+          },
+          {
+            "name": "small_129",
+            "passed": true
+          },
+          {
+            "name": "small_130",
+            "passed": true
+          },
+          {
+            "name": "small_131",
+            "passed": true
+          },
+          {
+            "name": "small_132",
+            "passed": true
+          },
+          {
+            "name": "small_133",
+            "passed": true
+          },
+          {
+            "name": "small_134",
+            "passed": true
+          },
+          {
+            "name": "small_135",
+            "passed": true
+          },
+          {
+            "name": "small_136",
+            "passed": true
+          },
+          {
+            "name": "small_137",
+            "passed": true
+          },
+          {
+            "name": "small_138",
+            "passed": true
+          },
+          {
+            "name": "small_139",
+            "passed": true
+          },
+          {
+            "name": "small_140",
+            "passed": true
+          },
+          {
+            "name": "small_141",
+            "passed": true
+          },
+          {
+            "name": "small_142",
+            "passed": true
+          },
+          {
+            "name": "small_143",
+            "passed": true
+          },
+          {
+            "name": "small_144",
+            "passed": true
+          },
+          {
+            "name": "small_145",
+            "passed": true
+          },
+          {
+            "name": "small_146",
+            "passed": true
+          },
+          {
+            "name": "small_147",
+            "passed": true
+          },
+          {
+            "name": "small_148",
+            "passed": true
+          },
+          {
+            "name": "small_149",
+            "passed": true
+          },
+          {
+            "name": "small_150",
+            "passed": true
+          },
+          {
+            "name": "small_151",
+            "passed": true
+          },
+          {
+            "name": "small_152",
+            "passed": true
+          },
+          {
+            "name": "small_153",
+            "passed": true
+          },
+          {
+            "name": "small_154",
+            "passed": true
+          },
+          {
+            "name": "small_155",
+            "passed": true
+          },
+          {
+            "name": "small_156",
+            "passed": true
+          },
+          {
+            "name": "small_157",
+            "passed": true
+          },
+          {
+            "name": "small_158",
+            "passed": true
+          },
+          {
+            "name": "small_159",
+            "passed": true
+          },
+          {
+            "name": "small_160",
+            "passed": true
+          },
+          {
+            "name": "small_161",
+            "passed": true
+          },
+          {
+            "name": "small_162",
+            "passed": true
+          },
+          {
+            "name": "small_163",
+            "passed": true
+          },
+          {
+            "name": "small_164",
+            "passed": true
+          },
+          {
+            "name": "small_165",
+            "passed": true
+          },
+          {
+            "name": "small_166",
+            "passed": true
+          },
+          {
+            "name": "small_167",
+            "passed": true
+          },
+          {
+            "name": "small_168",
+            "passed": true
+          },
+          {
+            "name": "small_169",
+            "passed": true
+          },
+          {
+            "name": "small_170",
+            "passed": true
+          },
+          {
+            "name": "small_171",
+            "passed": true
+          },
+          {
+            "name": "small_172",
+            "passed": true
+          },
+          {
+            "name": "small_173",
+            "passed": true
+          },
+          {
+            "name": "small_174",
+            "passed": true
+          },
+          {
+            "name": "small_175",
+            "passed": true
+          },
+          {
+            "name": "small_176",
+            "passed": true
+          },
+          {
+            "name": "small_177",
+            "passed": true
+          },
+          {
+            "name": "small_178",
+            "passed": true
+          },
+          {
+            "name": "small_179",
+            "passed": true
+          },
+          {
+            "name": "small_180",
+            "passed": true
+          },
+          {
+            "name": "small_181",
+            "passed": true
+          },
+          {
+            "name": "small_182",
+            "passed": true
+          },
+          {
+            "name": "small_183",
+            "passed": true
+          },
+          {
+            "name": "small_184",
+            "passed": true
+          },
+          {
+            "name": "small_185",
+            "passed": true
+          },
+          {
+            "name": "small_186",
+            "passed": true
+          },
+          {
+            "name": "small_187",
+            "passed": true
+          },
+          {
+            "name": "small_188",
+            "passed": true
+          },
+          {
+            "name": "small_189",
+            "passed": true
+          },
+          {
+            "name": "small_190",
+            "passed": true
+          },
+          {
+            "name": "small_191",
+            "passed": true
+          },
+          {
+            "name": "small_192",
+            "passed": true
+          },
+          {
+            "name": "small_193",
+            "passed": true
+          },
+          {
+            "name": "small_194",
+            "passed": true
+          },
+          {
+            "name": "small_195",
+            "passed": true
+          },
+          {
+            "name": "small_196",
+            "passed": true
+          },
+          {
+            "name": "small_197",
+            "passed": true
+          },
+          {
+            "name": "small_198",
+            "passed": true
+          },
+          {
+            "name": "small_199",
+            "passed": true
+          },
+          {
+            "name": "maximum_dense",
+            "passed": true
+          },
+          {
+            "name": "maximum_sparse",
+            "passed": true
+          },
+          {
+            "name": "maximum_chain",
+            "passed": true
+          },
+          {
+            "name": "maximum_star",
+            "passed": true
+          },
+          {
+            "name": "maximum_none",
+            "passed": true
+          },
+          {
+            "name": "maximum_positive",
+            "passed": true
+          },
+          {
+            "name": "maximum_negative",
+            "passed": true
+          },
+          {
+            "name": "maximum_zero",
+            "passed": true
+          },
+          {
+            "name": "maximum_alternating",
+            "passed": true
+          },
+          {
+            "name": "maximum_blocks",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "entry": "project_selection",
+        "configuration": "clang_checked",
+        "passed": true,
+        "source_sha256": "c25b4b675832ea452c6ada4f35eb0cf8b73c8ee91ccd297dbd0468ddefd8ec3a",
+        "libraries_sha256": {
+          "Graph/Project_Selection.cpp": "b7e9db9be3437bbaf2ca93c0f481093f785ec8373388d671e91814885becaa6f"
+        },
+        "cases": [
+          {
+            "name": "sample_00",
+            "passed": true
+          },
+          {
+            "name": "sample_01",
+            "passed": true
+          },
+          {
+            "name": "small_000",
+            "passed": true
+          },
+          {
+            "name": "small_001",
+            "passed": true
+          },
+          {
+            "name": "small_002",
+            "passed": true
+          },
+          {
+            "name": "small_003",
+            "passed": true
+          },
+          {
+            "name": "small_004",
+            "passed": true
+          },
+          {
+            "name": "small_005",
+            "passed": true
+          },
+          {
+            "name": "small_006",
+            "passed": true
+          },
+          {
+            "name": "small_007",
+            "passed": true
+          },
+          {
+            "name": "small_008",
+            "passed": true
+          },
+          {
+            "name": "small_009",
+            "passed": true
+          },
+          {
+            "name": "small_010",
+            "passed": true
+          },
+          {
+            "name": "small_011",
+            "passed": true
+          },
+          {
+            "name": "small_012",
+            "passed": true
+          },
+          {
+            "name": "small_013",
+            "passed": true
+          },
+          {
+            "name": "small_014",
+            "passed": true
+          },
+          {
+            "name": "small_015",
+            "passed": true
+          },
+          {
+            "name": "small_016",
+            "passed": true
+          },
+          {
+            "name": "small_017",
+            "passed": true
+          },
+          {
+            "name": "small_018",
+            "passed": true
+          },
+          {
+            "name": "small_019",
+            "passed": true
+          },
+          {
+            "name": "small_020",
+            "passed": true
+          },
+          {
+            "name": "small_021",
+            "passed": true
+          },
+          {
+            "name": "small_022",
+            "passed": true
+          },
+          {
+            "name": "small_023",
+            "passed": true
+          },
+          {
+            "name": "small_024",
+            "passed": true
+          },
+          {
+            "name": "small_025",
+            "passed": true
+          },
+          {
+            "name": "small_026",
+            "passed": true
+          },
+          {
+            "name": "small_027",
+            "passed": true
+          },
+          {
+            "name": "small_028",
+            "passed": true
+          },
+          {
+            "name": "small_029",
+            "passed": true
+          },
+          {
+            "name": "small_030",
+            "passed": true
+          },
+          {
+            "name": "small_031",
+            "passed": true
+          },
+          {
+            "name": "small_032",
+            "passed": true
+          },
+          {
+            "name": "small_033",
+            "passed": true
+          },
+          {
+            "name": "small_034",
+            "passed": true
+          },
+          {
+            "name": "small_035",
+            "passed": true
+          },
+          {
+            "name": "small_036",
+            "passed": true
+          },
+          {
+            "name": "small_037",
+            "passed": true
+          },
+          {
+            "name": "small_038",
+            "passed": true
+          },
+          {
+            "name": "small_039",
+            "passed": true
+          },
+          {
+            "name": "small_040",
+            "passed": true
+          },
+          {
+            "name": "small_041",
+            "passed": true
+          },
+          {
+            "name": "small_042",
+            "passed": true
+          },
+          {
+            "name": "small_043",
+            "passed": true
+          },
+          {
+            "name": "small_044",
+            "passed": true
+          },
+          {
+            "name": "small_045",
+            "passed": true
+          },
+          {
+            "name": "small_046",
+            "passed": true
+          },
+          {
+            "name": "small_047",
+            "passed": true
+          },
+          {
+            "name": "small_048",
+            "passed": true
+          },
+          {
+            "name": "small_049",
+            "passed": true
+          },
+          {
+            "name": "small_050",
+            "passed": true
+          },
+          {
+            "name": "small_051",
+            "passed": true
+          },
+          {
+            "name": "small_052",
+            "passed": true
+          },
+          {
+            "name": "small_053",
+            "passed": true
+          },
+          {
+            "name": "small_054",
+            "passed": true
+          },
+          {
+            "name": "small_055",
+            "passed": true
+          },
+          {
+            "name": "small_056",
+            "passed": true
+          },
+          {
+            "name": "small_057",
+            "passed": true
+          },
+          {
+            "name": "small_058",
+            "passed": true
+          },
+          {
+            "name": "small_059",
+            "passed": true
+          },
+          {
+            "name": "small_060",
+            "passed": true
+          },
+          {
+            "name": "small_061",
+            "passed": true
+          },
+          {
+            "name": "small_062",
+            "passed": true
+          },
+          {
+            "name": "small_063",
+            "passed": true
+          },
+          {
+            "name": "small_064",
+            "passed": true
+          },
+          {
+            "name": "small_065",
+            "passed": true
+          },
+          {
+            "name": "small_066",
+            "passed": true
+          },
+          {
+            "name": "small_067",
+            "passed": true
+          },
+          {
+            "name": "small_068",
+            "passed": true
+          },
+          {
+            "name": "small_069",
+            "passed": true
+          },
+          {
+            "name": "small_070",
+            "passed": true
+          },
+          {
+            "name": "small_071",
+            "passed": true
+          },
+          {
+            "name": "small_072",
+            "passed": true
+          },
+          {
+            "name": "small_073",
+            "passed": true
+          },
+          {
+            "name": "small_074",
+            "passed": true
+          },
+          {
+            "name": "small_075",
+            "passed": true
+          },
+          {
+            "name": "small_076",
+            "passed": true
+          },
+          {
+            "name": "small_077",
+            "passed": true
+          },
+          {
+            "name": "small_078",
+            "passed": true
+          },
+          {
+            "name": "small_079",
+            "passed": true
+          },
+          {
+            "name": "small_080",
+            "passed": true
+          },
+          {
+            "name": "small_081",
+            "passed": true
+          },
+          {
+            "name": "small_082",
+            "passed": true
+          },
+          {
+            "name": "small_083",
+            "passed": true
+          },
+          {
+            "name": "small_084",
+            "passed": true
+          },
+          {
+            "name": "small_085",
+            "passed": true
+          },
+          {
+            "name": "small_086",
+            "passed": true
+          },
+          {
+            "name": "small_087",
+            "passed": true
+          },
+          {
+            "name": "small_088",
+            "passed": true
+          },
+          {
+            "name": "small_089",
+            "passed": true
+          },
+          {
+            "name": "small_090",
+            "passed": true
+          },
+          {
+            "name": "small_091",
+            "passed": true
+          },
+          {
+            "name": "small_092",
+            "passed": true
+          },
+          {
+            "name": "small_093",
+            "passed": true
+          },
+          {
+            "name": "small_094",
+            "passed": true
+          },
+          {
+            "name": "small_095",
+            "passed": true
+          },
+          {
+            "name": "small_096",
+            "passed": true
+          },
+          {
+            "name": "small_097",
+            "passed": true
+          },
+          {
+            "name": "small_098",
+            "passed": true
+          },
+          {
+            "name": "small_099",
+            "passed": true
+          },
+          {
+            "name": "small_100",
+            "passed": true
+          },
+          {
+            "name": "small_101",
+            "passed": true
+          },
+          {
+            "name": "small_102",
+            "passed": true
+          },
+          {
+            "name": "small_103",
+            "passed": true
+          },
+          {
+            "name": "small_104",
+            "passed": true
+          },
+          {
+            "name": "small_105",
+            "passed": true
+          },
+          {
+            "name": "small_106",
+            "passed": true
+          },
+          {
+            "name": "small_107",
+            "passed": true
+          },
+          {
+            "name": "small_108",
+            "passed": true
+          },
+          {
+            "name": "small_109",
+            "passed": true
+          },
+          {
+            "name": "small_110",
+            "passed": true
+          },
+          {
+            "name": "small_111",
+            "passed": true
+          },
+          {
+            "name": "small_112",
+            "passed": true
+          },
+          {
+            "name": "small_113",
+            "passed": true
+          },
+          {
+            "name": "small_114",
+            "passed": true
+          },
+          {
+            "name": "small_115",
+            "passed": true
+          },
+          {
+            "name": "small_116",
+            "passed": true
+          },
+          {
+            "name": "small_117",
+            "passed": true
+          },
+          {
+            "name": "small_118",
+            "passed": true
+          },
+          {
+            "name": "small_119",
+            "passed": true
+          },
+          {
+            "name": "small_120",
+            "passed": true
+          },
+          {
+            "name": "small_121",
+            "passed": true
+          },
+          {
+            "name": "small_122",
+            "passed": true
+          },
+          {
+            "name": "small_123",
+            "passed": true
+          },
+          {
+            "name": "small_124",
+            "passed": true
+          },
+          {
+            "name": "small_125",
+            "passed": true
+          },
+          {
+            "name": "small_126",
+            "passed": true
+          },
+          {
+            "name": "small_127",
+            "passed": true
+          },
+          {
+            "name": "small_128",
+            "passed": true
+          },
+          {
+            "name": "small_129",
+            "passed": true
+          },
+          {
+            "name": "small_130",
+            "passed": true
+          },
+          {
+            "name": "small_131",
+            "passed": true
+          },
+          {
+            "name": "small_132",
+            "passed": true
+          },
+          {
+            "name": "small_133",
+            "passed": true
+          },
+          {
+            "name": "small_134",
+            "passed": true
+          },
+          {
+            "name": "small_135",
+            "passed": true
+          },
+          {
+            "name": "small_136",
+            "passed": true
+          },
+          {
+            "name": "small_137",
+            "passed": true
+          },
+          {
+            "name": "small_138",
+            "passed": true
+          },
+          {
+            "name": "small_139",
+            "passed": true
+          },
+          {
+            "name": "small_140",
+            "passed": true
+          },
+          {
+            "name": "small_141",
+            "passed": true
+          },
+          {
+            "name": "small_142",
+            "passed": true
+          },
+          {
+            "name": "small_143",
+            "passed": true
+          },
+          {
+            "name": "small_144",
+            "passed": true
+          },
+          {
+            "name": "small_145",
+            "passed": true
+          },
+          {
+            "name": "small_146",
+            "passed": true
+          },
+          {
+            "name": "small_147",
+            "passed": true
+          },
+          {
+            "name": "small_148",
+            "passed": true
+          },
+          {
+            "name": "small_149",
+            "passed": true
+          },
+          {
+            "name": "small_150",
+            "passed": true
+          },
+          {
+            "name": "small_151",
+            "passed": true
+          },
+          {
+            "name": "small_152",
+            "passed": true
+          },
+          {
+            "name": "small_153",
+            "passed": true
+          },
+          {
+            "name": "small_154",
+            "passed": true
+          },
+          {
+            "name": "small_155",
+            "passed": true
+          },
+          {
+            "name": "small_156",
+            "passed": true
+          },
+          {
+            "name": "small_157",
+            "passed": true
+          },
+          {
+            "name": "small_158",
+            "passed": true
+          },
+          {
+            "name": "small_159",
+            "passed": true
+          },
+          {
+            "name": "small_160",
+            "passed": true
+          },
+          {
+            "name": "small_161",
+            "passed": true
+          },
+          {
+            "name": "small_162",
+            "passed": true
+          },
+          {
+            "name": "small_163",
+            "passed": true
+          },
+          {
+            "name": "small_164",
+            "passed": true
+          },
+          {
+            "name": "small_165",
+            "passed": true
+          },
+          {
+            "name": "small_166",
+            "passed": true
+          },
+          {
+            "name": "small_167",
+            "passed": true
+          },
+          {
+            "name": "small_168",
+            "passed": true
+          },
+          {
+            "name": "small_169",
+            "passed": true
+          },
+          {
+            "name": "small_170",
+            "passed": true
+          },
+          {
+            "name": "small_171",
+            "passed": true
+          },
+          {
+            "name": "small_172",
+            "passed": true
+          },
+          {
+            "name": "small_173",
+            "passed": true
+          },
+          {
+            "name": "small_174",
+            "passed": true
+          },
+          {
+            "name": "small_175",
+            "passed": true
+          },
+          {
+            "name": "small_176",
+            "passed": true
+          },
+          {
+            "name": "small_177",
+            "passed": true
+          },
+          {
+            "name": "small_178",
+            "passed": true
+          },
+          {
+            "name": "small_179",
+            "passed": true
+          },
+          {
+            "name": "small_180",
+            "passed": true
+          },
+          {
+            "name": "small_181",
+            "passed": true
+          },
+          {
+            "name": "small_182",
+            "passed": true
+          },
+          {
+            "name": "small_183",
+            "passed": true
+          },
+          {
+            "name": "small_184",
+            "passed": true
+          },
+          {
+            "name": "small_185",
+            "passed": true
+          },
+          {
+            "name": "small_186",
+            "passed": true
+          },
+          {
+            "name": "small_187",
+            "passed": true
+          },
+          {
+            "name": "small_188",
+            "passed": true
+          },
+          {
+            "name": "small_189",
+            "passed": true
+          },
+          {
+            "name": "small_190",
+            "passed": true
+          },
+          {
+            "name": "small_191",
+            "passed": true
+          },
+          {
+            "name": "small_192",
+            "passed": true
+          },
+          {
+            "name": "small_193",
+            "passed": true
+          },
+          {
+            "name": "small_194",
+            "passed": true
+          },
+          {
+            "name": "small_195",
+            "passed": true
+          },
+          {
+            "name": "small_196",
+            "passed": true
+          },
+          {
+            "name": "small_197",
+            "passed": true
+          },
+          {
+            "name": "small_198",
+            "passed": true
+          },
+          {
+            "name": "small_199",
+            "passed": true
+          },
+          {
+            "name": "maximum_dense",
+            "passed": true
+          },
+          {
+            "name": "maximum_sparse",
+            "passed": true
+          },
+          {
+            "name": "maximum_chain",
+            "passed": true
+          },
+          {
+            "name": "maximum_star",
+            "passed": true
+          },
+          {
+            "name": "maximum_none",
+            "passed": true
+          },
+          {
+            "name": "maximum_positive",
+            "passed": true
+          },
+          {
+            "name": "maximum_negative",
+            "passed": true
+          },
+          {
+            "name": "maximum_zero",
+            "passed": true
+          },
+          {
+            "name": "maximum_alternating",
+            "passed": true
+          },
+          {
+            "name": "maximum_blocks",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "entry": "project_selection",
+        "configuration": "clang_skip",
+        "passed": true,
+        "source_sha256": "72128d9da61abb1082b2370faf3fafe5915851781d344e4e03301505d45f986b",
+        "libraries_sha256": {
+          "Graph/Project_Selection.cpp": "b7e9db9be3437bbaf2ca93c0f481093f785ec8373388d671e91814885becaa6f"
+        },
+        "cases": [
+          {
+            "name": "sample_00",
+            "passed": true
+          },
+          {
+            "name": "sample_01",
+            "passed": true
+          },
+          {
+            "name": "small_000",
+            "passed": true
+          },
+          {
+            "name": "small_001",
+            "passed": true
+          },
+          {
+            "name": "small_002",
+            "passed": true
+          },
+          {
+            "name": "small_003",
+            "passed": true
+          },
+          {
+            "name": "small_004",
+            "passed": true
+          },
+          {
+            "name": "small_005",
+            "passed": true
+          },
+          {
+            "name": "small_006",
+            "passed": true
+          },
+          {
+            "name": "small_007",
+            "passed": true
+          },
+          {
+            "name": "small_008",
+            "passed": true
+          },
+          {
+            "name": "small_009",
+            "passed": true
+          },
+          {
+            "name": "small_010",
+            "passed": true
+          },
+          {
+            "name": "small_011",
+            "passed": true
+          },
+          {
+            "name": "small_012",
+            "passed": true
+          },
+          {
+            "name": "small_013",
+            "passed": true
+          },
+          {
+            "name": "small_014",
+            "passed": true
+          },
+          {
+            "name": "small_015",
+            "passed": true
+          },
+          {
+            "name": "small_016",
+            "passed": true
+          },
+          {
+            "name": "small_017",
+            "passed": true
+          },
+          {
+            "name": "small_018",
+            "passed": true
+          },
+          {
+            "name": "small_019",
+            "passed": true
+          },
+          {
+            "name": "small_020",
+            "passed": true
+          },
+          {
+            "name": "small_021",
+            "passed": true
+          },
+          {
+            "name": "small_022",
+            "passed": true
+          },
+          {
+            "name": "small_023",
+            "passed": true
+          },
+          {
+            "name": "small_024",
+            "passed": true
+          },
+          {
+            "name": "small_025",
+            "passed": true
+          },
+          {
+            "name": "small_026",
+            "passed": true
+          },
+          {
+            "name": "small_027",
+            "passed": true
+          },
+          {
+            "name": "small_028",
+            "passed": true
+          },
+          {
+            "name": "small_029",
+            "passed": true
+          },
+          {
+            "name": "small_030",
+            "passed": true
+          },
+          {
+            "name": "small_031",
+            "passed": true
+          },
+          {
+            "name": "small_032",
+            "passed": true
+          },
+          {
+            "name": "small_033",
+            "passed": true
+          },
+          {
+            "name": "small_034",
+            "passed": true
+          },
+          {
+            "name": "small_035",
+            "passed": true
+          },
+          {
+            "name": "small_036",
+            "passed": true
+          },
+          {
+            "name": "small_037",
+            "passed": true
+          },
+          {
+            "name": "small_038",
+            "passed": true
+          },
+          {
+            "name": "small_039",
+            "passed": true
+          },
+          {
+            "name": "small_040",
+            "passed": true
+          },
+          {
+            "name": "small_041",
+            "passed": true
+          },
+          {
+            "name": "small_042",
+            "passed": true
+          },
+          {
+            "name": "small_043",
+            "passed": true
+          },
+          {
+            "name": "small_044",
+            "passed": true
+          },
+          {
+            "name": "small_045",
+            "passed": true
+          },
+          {
+            "name": "small_046",
+            "passed": true
+          },
+          {
+            "name": "small_047",
+            "passed": true
+          },
+          {
+            "name": "small_048",
+            "passed": true
+          },
+          {
+            "name": "small_049",
+            "passed": true
+          },
+          {
+            "name": "small_050",
+            "passed": true
+          },
+          {
+            "name": "small_051",
+            "passed": true
+          },
+          {
+            "name": "small_052",
+            "passed": true
+          },
+          {
+            "name": "small_053",
+            "passed": true
+          },
+          {
+            "name": "small_054",
+            "passed": true
+          },
+          {
+            "name": "small_055",
+            "passed": true
+          },
+          {
+            "name": "small_056",
+            "passed": true
+          },
+          {
+            "name": "small_057",
+            "passed": true
+          },
+          {
+            "name": "small_058",
+            "passed": true
+          },
+          {
+            "name": "small_059",
+            "passed": true
+          },
+          {
+            "name": "small_060",
+            "passed": true
+          },
+          {
+            "name": "small_061",
+            "passed": true
+          },
+          {
+            "name": "small_062",
+            "passed": true
+          },
+          {
+            "name": "small_063",
+            "passed": true
+          },
+          {
+            "name": "small_064",
+            "passed": true
+          },
+          {
+            "name": "small_065",
+            "passed": true
+          },
+          {
+            "name": "small_066",
+            "passed": true
+          },
+          {
+            "name": "small_067",
+            "passed": true
+          },
+          {
+            "name": "small_068",
+            "passed": true
+          },
+          {
+            "name": "small_069",
+            "passed": true
+          },
+          {
+            "name": "small_070",
+            "passed": true
+          },
+          {
+            "name": "small_071",
+            "passed": true
+          },
+          {
+            "name": "small_072",
+            "passed": true
+          },
+          {
+            "name": "small_073",
+            "passed": true
+          },
+          {
+            "name": "small_074",
+            "passed": true
+          },
+          {
+            "name": "small_075",
+            "passed": true
+          },
+          {
+            "name": "small_076",
+            "passed": true
+          },
+          {
+            "name": "small_077",
+            "passed": true
+          },
+          {
+            "name": "small_078",
+            "passed": true
+          },
+          {
+            "name": "small_079",
+            "passed": true
+          },
+          {
+            "name": "small_080",
+            "passed": true
+          },
+          {
+            "name": "small_081",
+            "passed": true
+          },
+          {
+            "name": "small_082",
+            "passed": true
+          },
+          {
+            "name": "small_083",
+            "passed": true
+          },
+          {
+            "name": "small_084",
+            "passed": true
+          },
+          {
+            "name": "small_085",
+            "passed": true
+          },
+          {
+            "name": "small_086",
+            "passed": true
+          },
+          {
+            "name": "small_087",
+            "passed": true
+          },
+          {
+            "name": "small_088",
+            "passed": true
+          },
+          {
+            "name": "small_089",
+            "passed": true
+          },
+          {
+            "name": "small_090",
+            "passed": true
+          },
+          {
+            "name": "small_091",
+            "passed": true
+          },
+          {
+            "name": "small_092",
+            "passed": true
+          },
+          {
+            "name": "small_093",
+            "passed": true
+          },
+          {
+            "name": "small_094",
+            "passed": true
+          },
+          {
+            "name": "small_095",
+            "passed": true
+          },
+          {
+            "name": "small_096",
+            "passed": true
+          },
+          {
+            "name": "small_097",
+            "passed": true
+          },
+          {
+            "name": "small_098",
+            "passed": true
+          },
+          {
+            "name": "small_099",
+            "passed": true
+          },
+          {
+            "name": "small_100",
+            "passed": true
+          },
+          {
+            "name": "small_101",
+            "passed": true
+          },
+          {
+            "name": "small_102",
+            "passed": true
+          },
+          {
+            "name": "small_103",
+            "passed": true
+          },
+          {
+            "name": "small_104",
+            "passed": true
+          },
+          {
+            "name": "small_105",
+            "passed": true
+          },
+          {
+            "name": "small_106",
+            "passed": true
+          },
+          {
+            "name": "small_107",
+            "passed": true
+          },
+          {
+            "name": "small_108",
+            "passed": true
+          },
+          {
+            "name": "small_109",
+            "passed": true
+          },
+          {
+            "name": "small_110",
+            "passed": true
+          },
+          {
+            "name": "small_111",
+            "passed": true
+          },
+          {
+            "name": "small_112",
+            "passed": true
+          },
+          {
+            "name": "small_113",
+            "passed": true
+          },
+          {
+            "name": "small_114",
+            "passed": true
+          },
+          {
+            "name": "small_115",
+            "passed": true
+          },
+          {
+            "name": "small_116",
+            "passed": true
+          },
+          {
+            "name": "small_117",
+            "passed": true
+          },
+          {
+            "name": "small_118",
+            "passed": true
+          },
+          {
+            "name": "small_119",
+            "passed": true
+          },
+          {
+            "name": "small_120",
+            "passed": true
+          },
+          {
+            "name": "small_121",
+            "passed": true
+          },
+          {
+            "name": "small_122",
+            "passed": true
+          },
+          {
+            "name": "small_123",
+            "passed": true
+          },
+          {
+            "name": "small_124",
+            "passed": true
+          },
+          {
+            "name": "small_125",
+            "passed": true
+          },
+          {
+            "name": "small_126",
+            "passed": true
+          },
+          {
+            "name": "small_127",
+            "passed": true
+          },
+          {
+            "name": "small_128",
+            "passed": true
+          },
+          {
+            "name": "small_129",
+            "passed": true
+          },
+          {
+            "name": "small_130",
+            "passed": true
+          },
+          {
+            "name": "small_131",
+            "passed": true
+          },
+          {
+            "name": "small_132",
+            "passed": true
+          },
+          {
+            "name": "small_133",
+            "passed": true
+          },
+          {
+            "name": "small_134",
+            "passed": true
+          },
+          {
+            "name": "small_135",
+            "passed": true
+          },
+          {
+            "name": "small_136",
+            "passed": true
+          },
+          {
+            "name": "small_137",
+            "passed": true
+          },
+          {
+            "name": "small_138",
+            "passed": true
+          },
+          {
+            "name": "small_139",
+            "passed": true
+          },
+          {
+            "name": "small_140",
+            "passed": true
+          },
+          {
+            "name": "small_141",
+            "passed": true
+          },
+          {
+            "name": "small_142",
+            "passed": true
+          },
+          {
+            "name": "small_143",
+            "passed": true
+          },
+          {
+            "name": "small_144",
+            "passed": true
+          },
+          {
+            "name": "small_145",
+            "passed": true
+          },
+          {
+            "name": "small_146",
+            "passed": true
+          },
+          {
+            "name": "small_147",
+            "passed": true
+          },
+          {
+            "name": "small_148",
+            "passed": true
+          },
+          {
+            "name": "small_149",
+            "passed": true
+          },
+          {
+            "name": "small_150",
+            "passed": true
+          },
+          {
+            "name": "small_151",
+            "passed": true
+          },
+          {
+            "name": "small_152",
+            "passed": true
+          },
+          {
+            "name": "small_153",
+            "passed": true
+          },
+          {
+            "name": "small_154",
+            "passed": true
+          },
+          {
+            "name": "small_155",
+            "passed": true
+          },
+          {
+            "name": "small_156",
+            "passed": true
+          },
+          {
+            "name": "small_157",
+            "passed": true
+          },
+          {
+            "name": "small_158",
+            "passed": true
+          },
+          {
+            "name": "small_159",
+            "passed": true
+          },
+          {
+            "name": "small_160",
+            "passed": true
+          },
+          {
+            "name": "small_161",
+            "passed": true
+          },
+          {
+            "name": "small_162",
+            "passed": true
+          },
+          {
+            "name": "small_163",
+            "passed": true
+          },
+          {
+            "name": "small_164",
+            "passed": true
+          },
+          {
+            "name": "small_165",
+            "passed": true
+          },
+          {
+            "name": "small_166",
+            "passed": true
+          },
+          {
+            "name": "small_167",
+            "passed": true
+          },
+          {
+            "name": "small_168",
+            "passed": true
+          },
+          {
+            "name": "small_169",
+            "passed": true
+          },
+          {
+            "name": "small_170",
+            "passed": true
+          },
+          {
+            "name": "small_171",
+            "passed": true
+          },
+          {
+            "name": "small_172",
+            "passed": true
+          },
+          {
+            "name": "small_173",
+            "passed": true
+          },
+          {
+            "name": "small_174",
+            "passed": true
+          },
+          {
+            "name": "small_175",
+            "passed": true
+          },
+          {
+            "name": "small_176",
+            "passed": true
+          },
+          {
+            "name": "small_177",
+            "passed": true
+          },
+          {
+            "name": "small_178",
+            "passed": true
+          },
+          {
+            "name": "small_179",
+            "passed": true
+          },
+          {
+            "name": "small_180",
+            "passed": true
+          },
+          {
+            "name": "small_181",
+            "passed": true
+          },
+          {
+            "name": "small_182",
+            "passed": true
+          },
+          {
+            "name": "small_183",
+            "passed": true
+          },
+          {
+            "name": "small_184",
+            "passed": true
+          },
+          {
+            "name": "small_185",
+            "passed": true
+          },
+          {
+            "name": "small_186",
+            "passed": true
+          },
+          {
+            "name": "small_187",
+            "passed": true
+          },
+          {
+            "name": "small_188",
+            "passed": true
+          },
+          {
+            "name": "small_189",
+            "passed": true
+          },
+          {
+            "name": "small_190",
+            "passed": true
+          },
+          {
+            "name": "small_191",
+            "passed": true
+          },
+          {
+            "name": "small_192",
+            "passed": true
+          },
+          {
+            "name": "small_193",
+            "passed": true
+          },
+          {
+            "name": "small_194",
+            "passed": true
+          },
+          {
+            "name": "small_195",
+            "passed": true
+          },
+          {
+            "name": "small_196",
+            "passed": true
+          },
+          {
+            "name": "small_197",
+            "passed": true
+          },
+          {
+            "name": "small_198",
+            "passed": true
+          },
+          {
+            "name": "small_199",
+            "passed": true
+          },
+          {
+            "name": "maximum_dense",
+            "passed": true
+          },
+          {
+            "name": "maximum_sparse",
+            "passed": true
+          },
+          {
+            "name": "maximum_chain",
+            "passed": true
+          },
+          {
+            "name": "maximum_star",
+            "passed": true
+          },
+          {
+            "name": "maximum_none",
+            "passed": true
+          },
+          {
+            "name": "maximum_positive",
+            "passed": true
+          },
+          {
+            "name": "maximum_negative",
+            "passed": true
+          },
+          {
+            "name": "maximum_zero",
+            "passed": true
+          },
+          {
+            "name": "maximum_alternating",
+            "passed": true
+          },
+          {
+            "name": "maximum_blocks",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "entry": "project_selection_reference",
+        "configuration": "gcc_checked",
+        "passed": true,
+        "source_sha256": "b524c9d8d733551d5bfb552b6d56b2f964a016ba4023b8df4f6db1429d271a47",
+        "libraries_sha256": {
+          "Graph/Project_Selection.cpp": "b7e9db9be3437bbaf2ca93c0f481093f785ec8373388d671e91814885becaa6f"
+        },
+        "cases": [
+          {
+            "name": "local_reference",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "entry": "project_selection_reference",
+        "configuration": "gcc_skip",
+        "passed": true,
+        "source_sha256": "8ed1e5b850afde328ec72f89d55b09def54ae7db0a1419daf838c78cfc51992b",
+        "libraries_sha256": {
+          "Graph/Project_Selection.cpp": "b7e9db9be3437bbaf2ca93c0f481093f785ec8373388d671e91814885becaa6f"
+        },
+        "cases": [
+          {
+            "name": "local_reference",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "entry": "project_selection_reference",
+        "configuration": "clang_checked",
+        "passed": true,
+        "source_sha256": "b524c9d8d733551d5bfb552b6d56b2f964a016ba4023b8df4f6db1429d271a47",
+        "libraries_sha256": {
+          "Graph/Project_Selection.cpp": "b7e9db9be3437bbaf2ca93c0f481093f785ec8373388d671e91814885becaa6f"
+        },
+        "cases": [
+          {
+            "name": "local_reference",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "entry": "project_selection_reference",
+        "configuration": "clang_skip",
+        "passed": true,
+        "source_sha256": "8ed1e5b850afde328ec72f89d55b09def54ae7db0a1419daf838c78cfc51992b",
+        "libraries_sha256": {
+          "Graph/Project_Selection.cpp": "b7e9db9be3437bbaf2ca93c0f481093f785ec8373388d671e91814885becaa6f"
+        },
+        "cases": [
+          {
+            "name": "local_reference",
+            "passed": true
+          }
+        ]
+      }
+    ],
+    "baseline": [
+      {
+        "compiler": "gcc",
+        "test": "project_selection_reference_test",
+        "passed": true,
+        "source_sha256": "4ced4d493342284d73583868e2a6528112aac21fa7ffedda40af279ddb173c25",
+        "output": "212391 independent project selection checks passed",
+        "strong_guarantee_required": false
+      },
+      {
+        "compiler": "gcc",
+        "test": "project_selection_exception_test",
+        "passed": true,
+        "source_sha256": "8dae426a480a33c79acac3d33ed0a0a118ef4b5b7e182c8082c801f666261020",
+        "output": "68 injected failures, 6 partial additions, ownership/exception checks passed",
+        "strong_guarantee_required": false
+      },
+      {
+        "compiler": "clang",
+        "test": "project_selection_reference_test",
+        "passed": true,
+        "source_sha256": "4ced4d493342284d73583868e2a6528112aac21fa7ffedda40af279ddb173c25",
+        "output": "212371 independent project selection checks passed",
+        "strong_guarantee_required": false
+      },
+      {
+        "compiler": "clang",
+        "test": "project_selection_exception_test",
+        "passed": true,
+        "source_sha256": "8dae426a480a33c79acac3d33ed0a0a118ef4b5b7e182c8082c801f666261020",
+        "output": "68 injected failures, 6 partial additions, ownership/exception checks passed",
+        "strong_guarantee_required": false
+      }
+    ],
+    "guards": [
+      {
+        "configuration": "gcc_checked",
+        "passed": true
+      },
+      {
+        "configuration": "gcc_skip",
+        "passed": true
+      },
+      {
+        "configuration": "clang_checked",
+        "passed": true
+      },
+      {
+        "configuration": "clang_skip",
+        "passed": true
+      }
+    ],
+    "preprocessing": {
+      "standard_disable_simd_identical": true,
+      "normal_sha256": "ad7632433bc97d21c76bd70a95367f7f62d4374130bc125e3a88a461bdfe6dfc",
+      "forced_sha256": "ad7632433bc97d21c76bd70a95367f7f62d4374130bc125e3a88a461bdfe6dfc",
+      "skip_removes_input_checks_retains_capacity_arithmetic": true
+    },
+    "all_passed": true
+  }
+}

@@ -1,0 +1,3780 @@
+{
+  "date": "2026-10-22",
+  "scope": "Geometry remaining circle relation, point location, orientation, point-segment distance, segment intersection, triangle area full/split",
+  "baseline_sources_sha256": {
+    "Geometry/geometory.cpp": "e2f60dc8d00597a47b0623de5900fa3778661919c04c7883c08e43b6056c7719",
+    "Geometry/Point.cpp": "3dbbae5610bfec439a5c47112436e5c239c96fc3446e9eb86b8ff4896462e038",
+    "Geometry/Line_Segment.cpp": "977985e1932b215c2a631e13755c71696928d1a099531e6fb03992cbdcbc3862",
+    "Geometry/Polygon.cpp": "aa49bbe00a8360f4649a778d02b1d95475065bb3d2f1309533e360f429553a63",
+    "Geometry/Circle.cpp": "f0a6d5b90fbb584fc97d6e866a484c1055a119e9d2011b010060d67b9825167d"
+  },
+  "final_sources_sha256": {
+    "Geometry/geometory.cpp": "61c7ba32d9a4283fe6b47dd02a53d5aeca3d7f0e4adbf06f8f06e43f330abfc6",
+    "Geometry/Point.cpp": "3dbbae5610bfec439a5c47112436e5c239c96fc3446e9eb86b8ff4896462e038",
+    "Geometry/Line_Segment.cpp": "634121072cafc063ce3f57f02d6e61d10774094e8aac44214b73747d9a3e15e7",
+    "Geometry/Polygon.cpp": "b3f5a79ef5e9f182c19071e00747224c0da85245b9d993a70ab4695657652168",
+    "Geometry/Circle.cpp": "b48eae3f438c0fbadba437a858a1b0367c81ea00b51ff419b476299329aa6131"
+  },
+  "supporting_files_sha256": {
+    "Geometry/components/circle_functions.inc": "d973e4a7a2734e3fd6207bd6ac7fd9132bf08db79258d243b61fca993637b8b3",
+    "Geometry/components/linear_functions.inc": "8910abc634a7ea82551359c1832176baeb091f271858463b4543f2dab28128bb",
+    "Geometry/components/segment_predicates.inc": "6ac718aa55d6aa74963800aae6b2bd27a913936a64d2a732724439022a624c45",
+    "Geometry/components/polygon.inc": "d4ce5700cf76a0e9117dc74f3c0b88c7d51853ca7028aba47c654c6207cdc67f",
+    "Examples/geometry_example.cpp": "1accbca2415633158cefc6cf916b2ed50eeac4a4c1609d3fee153b21674c4375",
+    "Verify/current/tests/geometry_performance_reference_test.cpp": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+    "Verify/current/tests/geometry_allocation_test.cpp": "1c66347e7a652b9ab309f5bdcd5f641d50375a9694533ee6632ba7a95e273353",
+    "Verify/current/tests/geometry_performance_benchmark.cpp": "623aa7bfb5f4b6b5f9a344f6411dddf1980a83a05f2a17c99942406e2a22dcc5",
+    "Scripts/generate_geometry.py": "afb7435c04b1feb04ff6f6786e71b11b179c8bb3e9a9266f79501a6bc9f96f56"
+  },
+  "configuration": {
+    "compilers": [
+      "GCC 15.3.0",
+      "Clang 21.1.8, GCC 15.3.0 libstdc++"
+    ],
+    "language": "C++23",
+    "normal_flags": [
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors"
+    ],
+    "arithmetic": [
+      "native __int128_t extension where available",
+      "SIRKIT_FORCE_STANDARD_ARITHMETIC: standard std::int64_t"
+    ],
+    "checks": [
+      "enabled",
+      "SKIP_RUNTIME_CHECKS"
+    ],
+    "normal_configurations": 8,
+    "sanitizer": "Clang -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer, checked/skip x native/standard = 4; ASAN_OPTIONS=detect_leaks=0",
+    "compile_and_correctness_cpu_affinity": 10
+  },
+  "results": {
+    "normal_reference_builds": 8,
+    "allocation_builds": 8,
+    "sanitizer_reference_builds": 4,
+    "example_builds": 8,
+    "shared_guard_builds": 48,
+    "actual_main_builds": 136,
+    "official_sample_runs": 336,
+    "independent_known_sample_runs": 48,
+    "local_reference_runs": 40,
+    "total_actual_main_runs": 424,
+    "all_passed": true
+  },
+  "independent_reference": "Boost cpp_int determinants, segment incidence and intersections; rational ray crossing parity for simple monotone/concave polygons; independent shoelace area; Boost cpp_dec_float_100 clamped-projection point-segment distance and circle squared-distance classification. Product implementation does not appear in the oracle.",
+  "boundary_cases": [
+    "all 9^4 endpoint combinations on a 3x3 grid, integer and floating eps=0 intersections, returned intersection point incidence",
+    "native-128 10,000 random wide int64 four-point sets within documented arithmetic limits",
+    "empty/1/2/repeated/concave polygons, clockwise/counterclockwise, boundary and outside points",
+    "zero-length closed segment, endpoint/interior distances; scales 1e-200 through 1e200; representable coordinates whose unscaled direction norm overflows",
+    "zero radius, coincident positive circles, tangent/two intersections/nonintersection, almost concentric and epsilon boundary; residuals to both circles",
+    "invalid circle radius and nonfinite center in checked mode; direct validate remains active with SKIP_RUNTIME_CHECKS",
+    "allocation-free circle_intersection_kind and triangle area scalar APIs; result vectors retain ownership"
+  ],
+  "new_apis": [
+    "global circle_intersection_kind(a,b,eps): same classification as geo::intersection, no intersection-vector allocation",
+    "global signed_triangle_area2(a,b,c) and triangle_area(a,b,c): scalar triangle area, no vector construction"
+  ],
+  "frozen_main_and_io": [
+    {
+      "path": "Verify/current/common/fast_io.hpp",
+      "sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_area_main.cpp",
+      "sha256": "651ddc99ca84a746105ce2d23c9fcf2514be02561dd7ca2955ec7a0e7b68eda7",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_circle_circle_main.cpp",
+      "sha256": "1ce5698f90e35e2d90579cf1e6c917526b4cefba1046a06028574c97c57456dd",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_circle_line_main.cpp",
+      "sha256": "4d5a7f0a44632e398971e5db07365e047e4a4a997468bbb8a7d8d16918e523d7",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_circle_relation_main.cpp",
+      "sha256": "22d1ca151e6c7759c786b25d9081372b2e33523904227fa073bb69fb5d92b97e",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_contains_atcoder_main.cpp",
+      "sha256": "5581c87cd09ecdbd12093e79c23abfbcd3722f683cc1ece1e592f01685924dc2",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_contains_main.cpp",
+      "sha256": "fc09e1a01165da093d274efc1b6d0e95b4136bc940601dc93d26c8b51eede966",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_convex_cut_main.cpp",
+      "sha256": "85ebb8431cc52bf0af48ee1fe6691b79b4e552d3304ea99b13580b5da4f45b05",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_convex_hull_main.cpp",
+      "sha256": "138537e3e1c8fac7c923493e502d36379a675f6321773a2e19397a3015821d56",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_orientation_main.cpp",
+      "sha256": "6a74f38f1da298a8db8788b4c43e666234e368272c946f4b4012c45c6ec7d395",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_point_segment_distance_main.cpp",
+      "sha256": "235ff1769178c61b7f04af45abfa39f88f7e89c18f3824a8fdcb91f1905e44b3",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_projection_main.cpp",
+      "sha256": "74c9cdcd1bbc42552eee48f862ece624f574da04d8633685e95ae8b2cd3102dc",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_quadrilateral_main.cpp",
+      "sha256": "1c559face6966ad79caa46f44a5897e060afb1f22f2820251de724f4ff9138ad",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_reference_main.cpp",
+      "sha256": "4997d049e06d3b0d2a17e5583205e5c63ab4202ef8e028124d4f131dca726897",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_reflection_main.cpp",
+      "sha256": "2ec2a2dcc770fdf238002a54db8fd39fb67c4f88d88b5e1da5262c8eb8903287",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_segment_distance_main.cpp",
+      "sha256": "86775d2ab9bf9d15990fc9a7e7d4818c15a0cb72059a4c3a3b81b72b9e0eef73",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_segment_intersection_atcoder_main.cpp",
+      "sha256": "cc36d71985e776480a6a0a6bcd2b002dff33836e2ca87bb0244a87c5b9720e58",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_segment_intersection_main.cpp",
+      "sha256": "7ad62f86ef478c4ff44e97aa172c43c066d77e02bcc67911411d36151f6e5e0b",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Verify/current/drivers/geometry_triangle_area_main.cpp",
+      "sha256": "3e910af24a1efb5e2b6648369de9e02d3f31a81555e16ab9aa7356afe4faac3c",
+      "unchanged_from_baseline": true
+    }
+  ],
+  "preserved_previous_work": [
+    {
+      "path": "Geometry/components/point.inc",
+      "sha256": "050268715d921851ca193c7ef3df068555ace55b1bf872d7e7918d02b1865e6e",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Geometry/components/point_functions.inc",
+      "sha256": "0118d7433e4cf2799abc2f188a6a4feaf20dd7ef07ac66bad2932493137e0c9d",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Geometry/Nearest_Two_points.cpp",
+      "sha256": "3cd3a1977b6b77a8d95b449f4c60142bcc22f6cea85656c7013c4f4f80694ce0",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Geometry/偏角ソート.cpp",
+      "sha256": "0a813627eb9aa3a77b4ec0727310b74de9ec17eda1f3a604c140e3725fad05d4",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "Geometry/components/polygon.inc",
+      "region": "convex_hull_impl/convex_hull/convex_hull_sorted",
+      "sha256": "8c385aa0dbcc73e0f7c4a95f968ddc08cac49c0cb256e4bd7731d5c63d7f5423",
+      "unchanged_from_baseline": true
+    }
+  ],
+  "baseline_reference": [
+    {
+      "compiler": "gcc",
+      "standard": false,
+      "skip_checks": false,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_GEOMETRY_TEST_HEADER=\"/tmp/sirkit_four_hours_20261022/geometry/baseline/Geometry/geometory.cpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_performance_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/geometry/baseline_test_gcc_False"
+      ],
+      "passed": true,
+      "output": "327801 independent geometry checks passed"
+    },
+    {
+      "compiler": "gcc",
+      "standard": true,
+      "skip_checks": false,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_GEOMETRY_TEST_HEADER=\"/tmp/sirkit_four_hours_20261022/geometry/baseline/Geometry/geometory.cpp\"",
+        "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_performance_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/geometry/baseline_test_gcc_True"
+      ],
+      "passed": true,
+      "output": "307931 independent geometry checks passed"
+    },
+    {
+      "compiler": "clang",
+      "standard": false,
+      "skip_checks": true,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_GEOMETRY_TEST_HEADER=\"/tmp/sirkit_four_hours_20261022/geometry/baseline/Geometry/geometory.cpp\"",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_performance_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/geometry/baseline_test_clang_False"
+      ],
+      "passed": true,
+      "output": "327799 independent geometry checks passed"
+    },
+    {
+      "compiler": "clang",
+      "standard": true,
+      "skip_checks": true,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_GEOMETRY_TEST_HEADER=\"/tmp/sirkit_four_hours_20261022/geometry/baseline/Geometry/geometory.cpp\"",
+        "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/geometry_performance_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/geometry/baseline_test_clang_True"
+      ],
+      "passed": true,
+      "output": "307929 independent geometry checks passed"
+    }
+  ],
+  "raw_results": {
+    "source_sha256": {
+      "Geometry/geometory.cpp": "61c7ba32d9a4283fe6b47dd02a53d5aeca3d7f0e4adbf06f8f06e43f330abfc6",
+      "Geometry/Point.cpp": "3dbbae5610bfec439a5c47112436e5c239c96fc3446e9eb86b8ff4896462e038",
+      "Geometry/Line_Segment.cpp": "634121072cafc063ce3f57f02d6e61d10774094e8aac44214b73747d9a3e15e7",
+      "Geometry/Polygon.cpp": "b3f5a79ef5e9f182c19071e00747224c0da85245b9d993a70ab4695657652168",
+      "Geometry/Circle.cpp": "b48eae3f438c0fbadba437a858a1b0367c81ea00b51ff419b476299329aa6131"
+    },
+    "tests": [
+      {
+        "test": "geometry_performance_reference_test",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+        "passed": true,
+        "output": "474801 independent geometry checks passed"
+      },
+      {
+        "test": "geometry_allocation_test",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "1c66347e7a652b9ab309f5bdcd5f641d50375a9694533ee6632ba7a95e273353",
+        "passed": true,
+        "output": "allocation-free convenience APIs passed"
+      },
+      {
+        "test": "geometry_performance_reference_test",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+        "passed": true,
+        "output": "474799 independent geometry checks passed"
+      },
+      {
+        "test": "geometry_allocation_test",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "1c66347e7a652b9ab309f5bdcd5f641d50375a9694533ee6632ba7a95e273353",
+        "passed": true,
+        "output": "allocation-free convenience APIs passed"
+      },
+      {
+        "test": "geometry_performance_reference_test",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+        "passed": true,
+        "output": "454931 independent geometry checks passed"
+      },
+      {
+        "test": "geometry_allocation_test",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "1c66347e7a652b9ab309f5bdcd5f641d50375a9694533ee6632ba7a95e273353",
+        "passed": true,
+        "output": "allocation-free convenience APIs passed"
+      },
+      {
+        "test": "geometry_performance_reference_test",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+        "passed": true,
+        "output": "454929 independent geometry checks passed"
+      },
+      {
+        "test": "geometry_allocation_test",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "1c66347e7a652b9ab309f5bdcd5f641d50375a9694533ee6632ba7a95e273353",
+        "passed": true,
+        "output": "allocation-free convenience APIs passed"
+      },
+      {
+        "test": "geometry_performance_reference_test",
+        "configuration": "clang_native_checked",
+        "source_sha256": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+        "passed": true,
+        "output": "474801 independent geometry checks passed"
+      },
+      {
+        "test": "geometry_allocation_test",
+        "configuration": "clang_native_checked",
+        "source_sha256": "1c66347e7a652b9ab309f5bdcd5f641d50375a9694533ee6632ba7a95e273353",
+        "passed": true,
+        "output": "allocation-free convenience APIs passed"
+      },
+      {
+        "test": "geometry_performance_reference_test",
+        "configuration": "clang_native_skip",
+        "source_sha256": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+        "passed": true,
+        "output": "474799 independent geometry checks passed"
+      },
+      {
+        "test": "geometry_allocation_test",
+        "configuration": "clang_native_skip",
+        "source_sha256": "1c66347e7a652b9ab309f5bdcd5f641d50375a9694533ee6632ba7a95e273353",
+        "passed": true,
+        "output": "allocation-free convenience APIs passed"
+      },
+      {
+        "test": "geometry_performance_reference_test",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+        "passed": true,
+        "output": "454931 independent geometry checks passed"
+      },
+      {
+        "test": "geometry_allocation_test",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "1c66347e7a652b9ab309f5bdcd5f641d50375a9694533ee6632ba7a95e273353",
+        "passed": true,
+        "output": "allocation-free convenience APIs passed"
+      },
+      {
+        "test": "geometry_performance_reference_test",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+        "passed": true,
+        "output": "454929 independent geometry checks passed"
+      },
+      {
+        "test": "geometry_allocation_test",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "1c66347e7a652b9ab309f5bdcd5f641d50375a9694533ee6632ba7a95e273353",
+        "passed": true,
+        "output": "allocation-free convenience APIs passed"
+      },
+      {
+        "test": "geometry_performance_reference_test",
+        "configuration": "clang_sanitizer_native_checked",
+        "source_sha256": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+        "passed": true,
+        "output": "474801 independent geometry checks passed"
+      },
+      {
+        "test": "geometry_performance_reference_test",
+        "configuration": "clang_sanitizer_native_skip",
+        "source_sha256": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+        "passed": true,
+        "output": "474799 independent geometry checks passed"
+      },
+      {
+        "test": "geometry_performance_reference_test",
+        "configuration": "clang_sanitizer_standard_checked",
+        "source_sha256": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+        "passed": true,
+        "output": "454931 independent geometry checks passed"
+      },
+      {
+        "test": "geometry_performance_reference_test",
+        "configuration": "clang_sanitizer_standard_skip",
+        "source_sha256": "d37f53d484f706ff2208cef66050caa748aca7b01b312b9ffdc6ad94c59c47cd",
+        "passed": true,
+        "output": "454929 independent geometry checks passed"
+      }
+    ],
+    "actual_main_samples": [
+      {
+        "entry": "geometry_reference_full",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "749847d0f243f034da13e4b05c46e28a763c8a3ad9e196e55c504dd25ffb9d2b",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_full",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "6d9629e0e8bae8c7868aeaa1da08349ae7fa4f0055679d44533083cbe4d2a473",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_full",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "749847d0f243f034da13e4b05c46e28a763c8a3ad9e196e55c504dd25ffb9d2b",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_full",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "6d9629e0e8bae8c7868aeaa1da08349ae7fa4f0055679d44533083cbe4d2a473",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_full",
+        "configuration": "clang_native_checked",
+        "source_sha256": "749847d0f243f034da13e4b05c46e28a763c8a3ad9e196e55c504dd25ffb9d2b",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_full",
+        "configuration": "clang_native_skip",
+        "source_sha256": "6d9629e0e8bae8c7868aeaa1da08349ae7fa4f0055679d44533083cbe4d2a473",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_full",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "749847d0f243f034da13e4b05c46e28a763c8a3ad9e196e55c504dd25ffb9d2b",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_full",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "6d9629e0e8bae8c7868aeaa1da08349ae7fa4f0055679d44533083cbe4d2a473",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_point",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "f255586536e5564b3d67126f8a1c8e6a4f83d9a1a847ea5afd0ea97771e7029d",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_point",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "67b55e4b327cff3ef3e53324adca46810e05817d8aaa821a8684ad75c53fa751",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_point",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "f255586536e5564b3d67126f8a1c8e6a4f83d9a1a847ea5afd0ea97771e7029d",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_point",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "67b55e4b327cff3ef3e53324adca46810e05817d8aaa821a8684ad75c53fa751",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_point",
+        "configuration": "clang_native_checked",
+        "source_sha256": "f255586536e5564b3d67126f8a1c8e6a4f83d9a1a847ea5afd0ea97771e7029d",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_point",
+        "configuration": "clang_native_skip",
+        "source_sha256": "67b55e4b327cff3ef3e53324adca46810e05817d8aaa821a8684ad75c53fa751",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_point",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "f255586536e5564b3d67126f8a1c8e6a4f83d9a1a847ea5afd0ea97771e7029d",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_point",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "67b55e4b327cff3ef3e53324adca46810e05817d8aaa821a8684ad75c53fa751",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_line",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "818354bb6cecedb485a91e13c5ff464c4ce2d9d6f363556fa13da91a0db780bb",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_line",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "2abd158a112fa04b26b02d79e1579cb971a8f52948543d403e6aec6e8a45c35a",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_line",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "818354bb6cecedb485a91e13c5ff464c4ce2d9d6f363556fa13da91a0db780bb",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_line",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "2abd158a112fa04b26b02d79e1579cb971a8f52948543d403e6aec6e8a45c35a",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_line",
+        "configuration": "clang_native_checked",
+        "source_sha256": "818354bb6cecedb485a91e13c5ff464c4ce2d9d6f363556fa13da91a0db780bb",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_line",
+        "configuration": "clang_native_skip",
+        "source_sha256": "2abd158a112fa04b26b02d79e1579cb971a8f52948543d403e6aec6e8a45c35a",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_line",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "818354bb6cecedb485a91e13c5ff464c4ce2d9d6f363556fa13da91a0db780bb",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_line",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "2abd158a112fa04b26b02d79e1579cb971a8f52948543d403e6aec6e8a45c35a",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_polygon",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "39a8fbed7aa6825579a44526feae3ee0340e54700a40ed3e106416059fb7ccb3",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_polygon",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "d4fad225fa1b20cf6f9ed7857bb35069e325690c6d9448f3dfc5c97a20dd94ad",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_polygon",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "39a8fbed7aa6825579a44526feae3ee0340e54700a40ed3e106416059fb7ccb3",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_polygon",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "d4fad225fa1b20cf6f9ed7857bb35069e325690c6d9448f3dfc5c97a20dd94ad",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_polygon",
+        "configuration": "clang_native_checked",
+        "source_sha256": "39a8fbed7aa6825579a44526feae3ee0340e54700a40ed3e106416059fb7ccb3",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_polygon",
+        "configuration": "clang_native_skip",
+        "source_sha256": "d4fad225fa1b20cf6f9ed7857bb35069e325690c6d9448f3dfc5c97a20dd94ad",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_polygon",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "39a8fbed7aa6825579a44526feae3ee0340e54700a40ed3e106416059fb7ccb3",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_polygon",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "d4fad225fa1b20cf6f9ed7857bb35069e325690c6d9448f3dfc5c97a20dd94ad",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_circle",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "3071af911b1892909601dd689bcb4c244cb34f377704256a6fdde56a7eea83e0",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_circle",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "af3bdd975e83438f920104a17af73512f84600efd7911d92f4ae2ec94e638a8e",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_circle",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "3071af911b1892909601dd689bcb4c244cb34f377704256a6fdde56a7eea83e0",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_circle",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "af3bdd975e83438f920104a17af73512f84600efd7911d92f4ae2ec94e638a8e",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_circle",
+        "configuration": "clang_native_checked",
+        "source_sha256": "3071af911b1892909601dd689bcb4c244cb34f377704256a6fdde56a7eea83e0",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_circle",
+        "configuration": "clang_native_skip",
+        "source_sha256": "af3bdd975e83438f920104a17af73512f84600efd7911d92f4ae2ec94e638a8e",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_circle",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "3071af911b1892909601dd689bcb4c244cb34f377704256a6fdde56a7eea83e0",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_reference_circle",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "af3bdd975e83438f920104a17af73512f84600efd7911d92f4ae2ec94e638a8e",
+        "cases": [
+          {
+            "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_full",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "9490e4d02eea7feddcc02aa2ff0c163498951292224643079476913efd42bac6",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_full",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "11efa956ca63e87d70a4e1fa8a63574355354b940f572bb3e8d48e9f870fdea8",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_full",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "9490e4d02eea7feddcc02aa2ff0c163498951292224643079476913efd42bac6",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_full",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "11efa956ca63e87d70a4e1fa8a63574355354b940f572bb3e8d48e9f870fdea8",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_full",
+        "configuration": "clang_native_checked",
+        "source_sha256": "9490e4d02eea7feddcc02aa2ff0c163498951292224643079476913efd42bac6",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_full",
+        "configuration": "clang_native_skip",
+        "source_sha256": "11efa956ca63e87d70a4e1fa8a63574355354b940f572bb3e8d48e9f870fdea8",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_full",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "9490e4d02eea7feddcc02aa2ff0c163498951292224643079476913efd42bac6",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_full",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "11efa956ca63e87d70a4e1fa8a63574355354b940f572bb3e8d48e9f870fdea8",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_split",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "d4a15671e703b1e23070f08f874e26f506244c4d31c5e82ea9c94b57c0a40193",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_split",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "c81cf1b40cd7d7e8a673e377140f326443142c1075540d34c2c720a3e995fe31",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_split",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "d4a15671e703b1e23070f08f874e26f506244c4d31c5e82ea9c94b57c0a40193",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_split",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "c81cf1b40cd7d7e8a673e377140f326443142c1075540d34c2c720a3e995fe31",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_split",
+        "configuration": "clang_native_checked",
+        "source_sha256": "d4a15671e703b1e23070f08f874e26f506244c4d31c5e82ea9c94b57c0a40193",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_split",
+        "configuration": "clang_native_skip",
+        "source_sha256": "c81cf1b40cd7d7e8a673e377140f326443142c1075540d34c2c720a3e995fe31",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_split",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "d4a15671e703b1e23070f08f874e26f506244c4d31c5e82ea9c94b57c0a40193",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_orientation_atcoder_split",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "c81cf1b40cd7d7e8a673e377140f326443142c1075540d34c2c720a3e995fe31",
+        "cases": [
+          {
+            "input_sha256": "31a32fcad2e65192fcf5759d9028fa9bf8a6d09f7c6a7499afd027c9d1fb8664",
+            "passed": true
+          },
+          {
+            "input_sha256": "b7afbe5d81985dc371cf36db55bcec07f595df6d89ab4ca7816c81b43ba359c3",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_full",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "be2db86b6b0e00e6ef6fd2d5d6e2b4afad057923274807319445c28c70f9f487",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_full",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "dafa339aeb691c71ee70649746d9ec80284f7d339fc503afd4eaee2b30b183ab",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_full",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "be2db86b6b0e00e6ef6fd2d5d6e2b4afad057923274807319445c28c70f9f487",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_full",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "dafa339aeb691c71ee70649746d9ec80284f7d339fc503afd4eaee2b30b183ab",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_full",
+        "configuration": "clang_native_checked",
+        "source_sha256": "be2db86b6b0e00e6ef6fd2d5d6e2b4afad057923274807319445c28c70f9f487",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_full",
+        "configuration": "clang_native_skip",
+        "source_sha256": "dafa339aeb691c71ee70649746d9ec80284f7d339fc503afd4eaee2b30b183ab",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_full",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "be2db86b6b0e00e6ef6fd2d5d6e2b4afad057923274807319445c28c70f9f487",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_full",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "dafa339aeb691c71ee70649746d9ec80284f7d339fc503afd4eaee2b30b183ab",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_split",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "5abc6f1ec0fb96bdde61422bd457318d8475a47965a2ff2c29f8fd68ae32d26d",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_split",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "cfac0c47bd0f8144d437c187188d4d0cfe8b69a075b5cde665577efb009845df",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_split",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "5abc6f1ec0fb96bdde61422bd457318d8475a47965a2ff2c29f8fd68ae32d26d",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_split",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "cfac0c47bd0f8144d437c187188d4d0cfe8b69a075b5cde665577efb009845df",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_split",
+        "configuration": "clang_native_checked",
+        "source_sha256": "5abc6f1ec0fb96bdde61422bd457318d8475a47965a2ff2c29f8fd68ae32d26d",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_split",
+        "configuration": "clang_native_skip",
+        "source_sha256": "cfac0c47bd0f8144d437c187188d4d0cfe8b69a075b5cde665577efb009845df",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_split",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "5abc6f1ec0fb96bdde61422bd457318d8475a47965a2ff2c29f8fd68ae32d26d",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_segment_intersection_atcoder_split",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "cfac0c47bd0f8144d437c187188d4d0cfe8b69a075b5cde665577efb009845df",
+        "cases": [
+          {
+            "input_sha256": "4845094330145c7b315ff4b51b02689bf7f6a4b66154eb0f3864d289e6185eba",
+            "passed": true
+          },
+          {
+            "input_sha256": "1b366a3f0c5b77f61310dcb9144c43787d845c04d24f086287329d57925640ab",
+            "passed": true
+          },
+          {
+            "input_sha256": "0ded0ba56f4defcbabba3cca22c24f442f344b5b32b988dba7e5e48768a299df",
+            "passed": true
+          },
+          {
+            "input_sha256": "37db1df90be9be126dec19c66c3305c407eaba02d4bbc4591fe040d8c804c1a1",
+            "passed": true
+          },
+          {
+            "input_sha256": "21ea74223914a6d6de48a09cb842f421341fb370cddaf7c5394f43a8bc2841bc",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_full",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "ca80c69556b7543c81735f948018d85e3dea5bc25f0f58d3e030566708cb865b",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_full",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "ad5da7ea43f7ef03428753baefc747c3be8ef92b4b52a0dc5d0d6446b4695924",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_full",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "ca80c69556b7543c81735f948018d85e3dea5bc25f0f58d3e030566708cb865b",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_full",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "ad5da7ea43f7ef03428753baefc747c3be8ef92b4b52a0dc5d0d6446b4695924",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_full",
+        "configuration": "clang_native_checked",
+        "source_sha256": "ca80c69556b7543c81735f948018d85e3dea5bc25f0f58d3e030566708cb865b",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_full",
+        "configuration": "clang_native_skip",
+        "source_sha256": "ad5da7ea43f7ef03428753baefc747c3be8ef92b4b52a0dc5d0d6446b4695924",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_full",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "ca80c69556b7543c81735f948018d85e3dea5bc25f0f58d3e030566708cb865b",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_full",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "ad5da7ea43f7ef03428753baefc747c3be8ef92b4b52a0dc5d0d6446b4695924",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_split",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "469bb4d03d3db4ca6608ef6504b543d488036ee8717920b562132d192445ca38",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_split",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "1b7718fd410b34210a9cb81da9957331ef593b50540969d519dab66aa9a1f876",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_split",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "469bb4d03d3db4ca6608ef6504b543d488036ee8717920b562132d192445ca38",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_split",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "1b7718fd410b34210a9cb81da9957331ef593b50540969d519dab66aa9a1f876",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_split",
+        "configuration": "clang_native_checked",
+        "source_sha256": "469bb4d03d3db4ca6608ef6504b543d488036ee8717920b562132d192445ca38",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_split",
+        "configuration": "clang_native_skip",
+        "source_sha256": "1b7718fd410b34210a9cb81da9957331ef593b50540969d519dab66aa9a1f876",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_split",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "469bb4d03d3db4ca6608ef6504b543d488036ee8717920b562132d192445ca38",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_triangle_area_split",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "1b7718fd410b34210a9cb81da9957331ef593b50540969d519dab66aa9a1f876",
+        "cases": [
+          {
+            "input_sha256": "beff04b9eb2528052c578fb2c20b951dfc9ba101e696fbefdd9282e89fbcee43",
+            "passed": true
+          },
+          {
+            "input_sha256": "8729a7541654fbfff383642b123264e0d9bfbf61b95955c0a612dd10f40c27f4",
+            "passed": true
+          },
+          {
+            "input_sha256": "c1d6c95df7d0ab4253e72f0f6de76d1e8cf0ccea1df49846782dd78188b6594a",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_full",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "2589f69f405aa1fbe05ec0e87d8bc98ed5e85d1bb6f43b1680ecb4927484e883",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_full",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "3a9e1baa49c418df3d37bc5d4a5fe98bc5522a674625cf430130b6372542e45d",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_full",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "2589f69f405aa1fbe05ec0e87d8bc98ed5e85d1bb6f43b1680ecb4927484e883",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_full",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "3a9e1baa49c418df3d37bc5d4a5fe98bc5522a674625cf430130b6372542e45d",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_full",
+        "configuration": "clang_native_checked",
+        "source_sha256": "2589f69f405aa1fbe05ec0e87d8bc98ed5e85d1bb6f43b1680ecb4927484e883",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_full",
+        "configuration": "clang_native_skip",
+        "source_sha256": "3a9e1baa49c418df3d37bc5d4a5fe98bc5522a674625cf430130b6372542e45d",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_full",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "2589f69f405aa1fbe05ec0e87d8bc98ed5e85d1bb6f43b1680ecb4927484e883",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_full",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "3a9e1baa49c418df3d37bc5d4a5fe98bc5522a674625cf430130b6372542e45d",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_split",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "ea7b82b0c52d4b6eefcf62cefe7e18bb9cfc95bd2f545108537f756ca7154064",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_split",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "baa65761ca311697ce3769cb718e1292e53ba7e62fc54da35c15eeb48fa11282",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_split",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "ea7b82b0c52d4b6eefcf62cefe7e18bb9cfc95bd2f545108537f756ca7154064",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_split",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "baa65761ca311697ce3769cb718e1292e53ba7e62fc54da35c15eeb48fa11282",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_split",
+        "configuration": "clang_native_checked",
+        "source_sha256": "ea7b82b0c52d4b6eefcf62cefe7e18bb9cfc95bd2f545108537f756ca7154064",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_split",
+        "configuration": "clang_native_skip",
+        "source_sha256": "baa65761ca311697ce3769cb718e1292e53ba7e62fc54da35c15eeb48fa11282",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_split",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "ea7b82b0c52d4b6eefcf62cefe7e18bb9cfc95bd2f545108537f756ca7154064",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_contains_atcoder_split",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "baa65761ca311697ce3769cb718e1292e53ba7e62fc54da35c15eeb48fa11282",
+        "cases": [
+          {
+            "input_sha256": "0fe273d9857c24deca4deb4f52bf4f8727c521e3b16ad161e4a9d87e75f6569c",
+            "passed": true
+          },
+          {
+            "input_sha256": "e4be1a57b7567bdb6190bbd75f933dbbeb7913d72104dd59b27c382ba1a75149",
+            "passed": true
+          },
+          {
+            "input_sha256": "01ddac337e9417c174d606bef9823ca58800346871b0185703376678d9c750f3",
+            "passed": true
+          },
+          {
+            "input_sha256": "22082018e3b2e0aa0095f9ae55ca4e7a1f04c6d244afd47cd4936c4eefbd8c6e",
+            "passed": true
+          },
+          {
+            "input_sha256": "af912da9bf92d7a747460f4dbe4cbebf0a9e6c862712af7bade744079c29c8b9",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_full",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "3512e4ca1e1a5637addac106031a8af236190e6a5502f2fc28d871bac6c34ef4",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_full",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "869a9600ed706cbffa461af3ed83cb9ea3d155d360eb16c1d55b084b34d6398c",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_full",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "3512e4ca1e1a5637addac106031a8af236190e6a5502f2fc28d871bac6c34ef4",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_full",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "869a9600ed706cbffa461af3ed83cb9ea3d155d360eb16c1d55b084b34d6398c",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_full",
+        "configuration": "clang_native_checked",
+        "source_sha256": "3512e4ca1e1a5637addac106031a8af236190e6a5502f2fc28d871bac6c34ef4",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_full",
+        "configuration": "clang_native_skip",
+        "source_sha256": "869a9600ed706cbffa461af3ed83cb9ea3d155d360eb16c1d55b084b34d6398c",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_full",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "3512e4ca1e1a5637addac106031a8af236190e6a5502f2fc28d871bac6c34ef4",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_full",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "869a9600ed706cbffa461af3ed83cb9ea3d155d360eb16c1d55b084b34d6398c",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_split",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "7b6a624664180093783463a591388a3f2057f0eea5774ee4d2c7fe8a6dabe31b",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_split",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "341e7cda9df1be9690f15c7ea82b707ecce203b1ff0c5eff38ded7f34bc4f9ac",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_split",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "7b6a624664180093783463a591388a3f2057f0eea5774ee4d2c7fe8a6dabe31b",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_split",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "341e7cda9df1be9690f15c7ea82b707ecce203b1ff0c5eff38ded7f34bc4f9ac",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_split",
+        "configuration": "clang_native_checked",
+        "source_sha256": "7b6a624664180093783463a591388a3f2057f0eea5774ee4d2c7fe8a6dabe31b",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_split",
+        "configuration": "clang_native_skip",
+        "source_sha256": "341e7cda9df1be9690f15c7ea82b707ecce203b1ff0c5eff38ded7f34bc4f9ac",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_split",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "7b6a624664180093783463a591388a3f2057f0eea5774ee4d2c7fe8a6dabe31b",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_circle_relation_split",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "341e7cda9df1be9690f15c7ea82b707ecce203b1ff0c5eff38ded7f34bc4f9ac",
+        "cases": [
+          {
+            "input_sha256": "b0fb76fafeb805ee10381cc997078cac246ff6c9a63e095d2258407240a76e3b",
+            "passed": true
+          },
+          {
+            "input_sha256": "892fe979e28f7b921efba3177b17c09b1127f900089c73a37a161ef4aa862851",
+            "passed": true
+          },
+          {
+            "input_sha256": "24a00708f9853f546c2cbe607a8cdbc0cea86a62134647cab593feb02d4871b8",
+            "passed": true
+          },
+          {
+            "input_sha256": "097bae4540619c6bf4f070ffa2f5d9df3c8190bda3d535b64fe971f9b4a165d5",
+            "passed": true
+          },
+          {
+            "input_sha256": "c4856e6d13e99732cbf1fa5d0f63b17ba1d09be13fe83bc88bca3773eca97990",
+            "passed": true
+          },
+          {
+            "input_sha256": "8b761908b181b4b551a5c6096938429415f468872a09d712980b4a6f84a72e62",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_full",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "2b11be2876b6364bdcec8adcabea0e35f3558feba97c40f9739bc052deb8cf5f",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_full",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "78cc6a3a16b0826d7c5ae95e5d7e9259499ede44df11efebd24f8d6ddb574bf1",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_full",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "2b11be2876b6364bdcec8adcabea0e35f3558feba97c40f9739bc052deb8cf5f",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_full",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "78cc6a3a16b0826d7c5ae95e5d7e9259499ede44df11efebd24f8d6ddb574bf1",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_full",
+        "configuration": "clang_native_checked",
+        "source_sha256": "2b11be2876b6364bdcec8adcabea0e35f3558feba97c40f9739bc052deb8cf5f",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_full",
+        "configuration": "clang_native_skip",
+        "source_sha256": "78cc6a3a16b0826d7c5ae95e5d7e9259499ede44df11efebd24f8d6ddb574bf1",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_full",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "2b11be2876b6364bdcec8adcabea0e35f3558feba97c40f9739bc052deb8cf5f",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_full",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "78cc6a3a16b0826d7c5ae95e5d7e9259499ede44df11efebd24f8d6ddb574bf1",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_split",
+        "configuration": "gcc_native_checked",
+        "source_sha256": "70f7084f1b9f88a72cd40f8f7340a2645af18f266db587507813ebc2218a041e",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_split",
+        "configuration": "gcc_native_skip",
+        "source_sha256": "55ca852c7540e42b55c1077920c3a9a90d664f72757180dbceb3d587b8423313",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_split",
+        "configuration": "gcc_standard_checked",
+        "source_sha256": "70f7084f1b9f88a72cd40f8f7340a2645af18f266db587507813ebc2218a041e",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_split",
+        "configuration": "gcc_standard_skip",
+        "source_sha256": "55ca852c7540e42b55c1077920c3a9a90d664f72757180dbceb3d587b8423313",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_split",
+        "configuration": "clang_native_checked",
+        "source_sha256": "70f7084f1b9f88a72cd40f8f7340a2645af18f266db587507813ebc2218a041e",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_split",
+        "configuration": "clang_native_skip",
+        "source_sha256": "55ca852c7540e42b55c1077920c3a9a90d664f72757180dbceb3d587b8423313",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_split",
+        "configuration": "clang_standard_checked",
+        "source_sha256": "70f7084f1b9f88a72cd40f8f7340a2645af18f266db587507813ebc2218a041e",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "entry": "geometry_point_segment_distance_split",
+        "configuration": "clang_standard_skip",
+        "source_sha256": "55ca852c7540e42b55c1077920c3a9a90d664f72757180dbceb3d587b8423313",
+        "cases": [
+          {
+            "input_sha256": "333ccaec6a0b96fb9a8090b34cb135b07cc208b8de83c9502c6728480f3387d9",
+            "passed": true
+          },
+          {
+            "input_sha256": "63aadbfd79d4514b81e89aaa8861ff66aff4295b1b2e35ef3aaeec6f5eab469a",
+            "passed": true
+          },
+          {
+            "input_sha256": "918cd9d1f6745654a28cc3c0a7ed660f9aa5d047cf8d771856d2953aa9dfe2fd",
+            "passed": true
+          }
+        ],
+        "passed": true
+      }
+    ],
+    "shared_guards": [
+      {
+        "compiler": "gcc",
+        "order": [
+          "Point.cpp",
+          "Line_Segment.cpp",
+          "Polygon.cpp",
+          "Circle.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Point.cpp",
+          "Line_Segment.cpp",
+          "Circle.cpp",
+          "Polygon.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Point.cpp",
+          "Polygon.cpp",
+          "Line_Segment.cpp",
+          "Circle.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Point.cpp",
+          "Polygon.cpp",
+          "Circle.cpp",
+          "Line_Segment.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Point.cpp",
+          "Circle.cpp",
+          "Line_Segment.cpp",
+          "Polygon.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Point.cpp",
+          "Circle.cpp",
+          "Polygon.cpp",
+          "Line_Segment.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Line_Segment.cpp",
+          "Point.cpp",
+          "Polygon.cpp",
+          "Circle.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Line_Segment.cpp",
+          "Point.cpp",
+          "Circle.cpp",
+          "Polygon.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Line_Segment.cpp",
+          "Polygon.cpp",
+          "Point.cpp",
+          "Circle.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Line_Segment.cpp",
+          "Polygon.cpp",
+          "Circle.cpp",
+          "Point.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Line_Segment.cpp",
+          "Circle.cpp",
+          "Point.cpp",
+          "Polygon.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Line_Segment.cpp",
+          "Circle.cpp",
+          "Polygon.cpp",
+          "Point.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Polygon.cpp",
+          "Point.cpp",
+          "Line_Segment.cpp",
+          "Circle.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Polygon.cpp",
+          "Point.cpp",
+          "Circle.cpp",
+          "Line_Segment.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Polygon.cpp",
+          "Line_Segment.cpp",
+          "Point.cpp",
+          "Circle.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Polygon.cpp",
+          "Line_Segment.cpp",
+          "Circle.cpp",
+          "Point.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Polygon.cpp",
+          "Circle.cpp",
+          "Point.cpp",
+          "Line_Segment.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Polygon.cpp",
+          "Circle.cpp",
+          "Line_Segment.cpp",
+          "Point.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Circle.cpp",
+          "Point.cpp",
+          "Line_Segment.cpp",
+          "Polygon.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Circle.cpp",
+          "Point.cpp",
+          "Polygon.cpp",
+          "Line_Segment.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Circle.cpp",
+          "Line_Segment.cpp",
+          "Point.cpp",
+          "Polygon.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Circle.cpp",
+          "Line_Segment.cpp",
+          "Polygon.cpp",
+          "Point.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Circle.cpp",
+          "Polygon.cpp",
+          "Point.cpp",
+          "Line_Segment.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "gcc",
+        "order": [
+          "Circle.cpp",
+          "Polygon.cpp",
+          "Line_Segment.cpp",
+          "Point.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Point.cpp",
+          "Line_Segment.cpp",
+          "Polygon.cpp",
+          "Circle.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Point.cpp",
+          "Line_Segment.cpp",
+          "Circle.cpp",
+          "Polygon.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Point.cpp",
+          "Polygon.cpp",
+          "Line_Segment.cpp",
+          "Circle.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Point.cpp",
+          "Polygon.cpp",
+          "Circle.cpp",
+          "Line_Segment.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Point.cpp",
+          "Circle.cpp",
+          "Line_Segment.cpp",
+          "Polygon.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Point.cpp",
+          "Circle.cpp",
+          "Polygon.cpp",
+          "Line_Segment.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Line_Segment.cpp",
+          "Point.cpp",
+          "Polygon.cpp",
+          "Circle.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Line_Segment.cpp",
+          "Point.cpp",
+          "Circle.cpp",
+          "Polygon.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Line_Segment.cpp",
+          "Polygon.cpp",
+          "Point.cpp",
+          "Circle.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Line_Segment.cpp",
+          "Polygon.cpp",
+          "Circle.cpp",
+          "Point.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Line_Segment.cpp",
+          "Circle.cpp",
+          "Point.cpp",
+          "Polygon.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Line_Segment.cpp",
+          "Circle.cpp",
+          "Polygon.cpp",
+          "Point.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Polygon.cpp",
+          "Point.cpp",
+          "Line_Segment.cpp",
+          "Circle.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Polygon.cpp",
+          "Point.cpp",
+          "Circle.cpp",
+          "Line_Segment.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Polygon.cpp",
+          "Line_Segment.cpp",
+          "Point.cpp",
+          "Circle.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Polygon.cpp",
+          "Line_Segment.cpp",
+          "Circle.cpp",
+          "Point.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Polygon.cpp",
+          "Circle.cpp",
+          "Point.cpp",
+          "Line_Segment.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Polygon.cpp",
+          "Circle.cpp",
+          "Line_Segment.cpp",
+          "Point.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Circle.cpp",
+          "Point.cpp",
+          "Line_Segment.cpp",
+          "Polygon.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Circle.cpp",
+          "Point.cpp",
+          "Polygon.cpp",
+          "Line_Segment.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Circle.cpp",
+          "Line_Segment.cpp",
+          "Point.cpp",
+          "Polygon.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Circle.cpp",
+          "Line_Segment.cpp",
+          "Polygon.cpp",
+          "Point.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Circle.cpp",
+          "Polygon.cpp",
+          "Point.cpp",
+          "Line_Segment.cpp"
+        ],
+        "passed": true
+      },
+      {
+        "compiler": "clang",
+        "order": [
+          "Circle.cpp",
+          "Polygon.cpp",
+          "Line_Segment.cpp",
+          "Point.cpp"
+        ],
+        "passed": true
+      }
+    ],
+    "examples": [
+      {
+        "configuration": "gcc_native_checked",
+        "passed": true,
+        "output": ""
+      },
+      {
+        "configuration": "gcc_native_skip",
+        "passed": true,
+        "output": ""
+      },
+      {
+        "configuration": "gcc_standard_checked",
+        "passed": true,
+        "output": ""
+      },
+      {
+        "configuration": "gcc_standard_skip",
+        "passed": true,
+        "output": ""
+      },
+      {
+        "configuration": "clang_native_checked",
+        "passed": true,
+        "output": ""
+      },
+      {
+        "configuration": "clang_native_skip",
+        "passed": true,
+        "output": ""
+      },
+      {
+        "configuration": "clang_standard_checked",
+        "passed": true,
+        "output": ""
+      },
+      {
+        "configuration": "clang_standard_skip",
+        "passed": true,
+        "output": ""
+      }
+    ],
+    "all_passed": true
+  },
+  "actual_submit_code": "Final library expanded using Scripts/prepare_verify.py render into temporary files. Shared main and common fast I/O unchanged. Repository submission/manifest synchronization and distribution ZIP are handled by the parent task.",
+  "submission_status": "オンライン未提出。今回のローカル照合をACと表記しない。過去の判定記録を変更しない。",
+  "standard_fallback_limit": "Fallback coordinates and cumulative values must fit std::int64_t. Native-only wide cases are excluded in this configuration rather than invoking signed overflow.",
+  "exception_limit": "Existing low-cost validation scope is retained. Finite coordinates and representable intermediate arithmetic remain preconditions. Not all unreferenced invalid input is inspected.",
+  "reproduce": {
+    "reference": "g++ -std=c++23 -O2 -Wall -Wextra -Werror -pedantic-errors Verify/current/tests/geometry_performance_reference_test.cpp -o /tmp/geometry_reference && /tmp/geometry_reference",
+    "allocation": "g++ -std=c++23 -O2 -Wall -Wextra -Werror -pedantic-errors Verify/current/tests/geometry_allocation_test.cpp -o /tmp/geometry_allocation && /tmp/geometry_allocation",
+    "axes": "Repeat with clang++, -DSKIP_RUNTIME_CHECKS, -DSIRKIT_FORCE_STANDARD_ARITHMETIC. The Boost development headers are needed only by the reference test.",
+    "generator_check": "PYTHONDONTWRITEBYTECODE=1 python3 Scripts/generate_geometry.py --check",
+    "runner_artifact": "/tmp/sirkit_four_hours_20261022/geometry/verify.py",
+    "runner_sha256": "4670dfc474f1dc8c78e2b8644adb233f61dcd69d8cdf45c1eb115279e27a4b64"
+  }
+}

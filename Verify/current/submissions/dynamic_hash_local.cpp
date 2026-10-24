@@ -3,6 +3,31 @@
 // Library: DataStructure/dynamic-binary-indexed-tree.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://nyaannyaan.github.io/library/data-structure/dynamic-binary-indexed-tree.hpp
+// Original Source (InternalHashMap): https://nyaannyaan.github.io/library/data-structure/hash-map-variable-length.hpp.html
+// Original Source (mix): https://prng.di.unimi.it/splitmix64.c
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/dynamic_fenwick.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/internal_hash_map.md
+//
+// API一覧
+// [DynamicFenwickTree<S,T>]
+// Sはbool以外の64bit以下の整数型。Tは加減算・零初期化に対応し、演算結果が表現範囲内であること。
+// 構築O(1)。通常操作は期待償却O(log n)。整数の少数点は点列、多数点はB+木、密な領域は配列を使う。
+// 配列への変換はO(n)、n<=100万・16MiB以内。浮動型・独自型は従来のFenwickセル順で集計する。
+// 読み取りは領域を増やさない。stored_nodesは保持形式によらず更新経路のFenwickセル数を返す。
+// DynamicFenwickTree(n=0): 長さn>=0の零配列を作る。
+// add(k,x): 0<=k<size()の位置へxを加算する。
+// sum(k)/sum(l,r): [0,k)／[l,r)の和。0<=l<=r<=size()。
+// get(k)/operator[](k): 位置kの値を返す。0<=k<size()。
+// set(k,x): 位置kの値をxへ変更する。
+// sum_all(): 全要素の和を返す。
+// lower_bound(w)/upper_bound(w): 前方累積和がw以上／より大きくなる最初の位置。なければsize()。
+// 検索は全要素非負が前提。lower_bound(w<=0)とupper_bound(w<0)は0。
+// size()/empty(): 配列の長さ／長さが0かを返す（全要素0とは区別）。
+// clear(): 長さと再利用できる容量を保ち、全要素を0へ戻す。
+// reset(n): 長さn>=0の零配列へ変更する。保持形式が対応するとき容量を再利用する。
+// reserve(nodes): 内部Fenwickセル数を目安に容量を準備するヒント。
+// stored_nodes(): 値0や相殺済みも含む登録セル数。読み取りやreserveでは変わらない。
+
 #include <bit>
 #include <cstddef>
 #include <cstdint>
@@ -26,24 +51,8 @@
 #ifndef SIRKIT_INTERNAL_HASH_MAP_DEFINED
 #define SIRKIT_INTERNAL_HASH_MAP_DEFINED
 namespace reinsirk::detail {
-// dynamic系で共有する内部用の整数ハッシュ表。参照・ポインタは再確保で無効。
-// Packedは占有フラグのbit化、Denominatorは空き容量の比率1/Denominatorを指定する。
 template <class Key, class Val, bool Packed = false, unsigned Denominator = 5>
 class InternalHashMap {
-    // InternalHashMap(): 空の表を構築する。初期配列は確保しない。
-    // operator[](key): 未登録なら設定済みの初期値で追加し、値の参照を返す。
-    // find(key): 値へのポインタを返す。未登録はnullptrで、追加はしない。
-    // find_nonempty(key): 容量確保済みの表でfindと同じ結果を返す。内部ループ用。
-    // contains(key)/contain(key): キーが登録済みならtrueを返す。
-    // count(key): 登録済みなら1、未登録なら0を返す。
-    // for_each(f): 各登録キーと値のconst参照にfを適用する。fは表を変更しないこと。
-    // size()/empty(): 登録件数・空かどうかを返す。
-    // reserve(n): n件まで再確保せず追加できる容量を準備する。
-    // reallocate(): 容量を2倍にする。空なら初期容量を確保する。
-    // clear(): 登録を全て削除する。確保済みの領域は再利用する。
-    // set_default(value): 今後追加する要素の初期値を設定する。
-    // enumerate(): 登録済みの{キー, 値}を順序不定で列挙する。
-    // swap(other): 表の内容・初期値を交換する。
     static_assert(std::is_integral_v<Key> &&
                   std::is_same_v<Key, std::remove_cv_t<Key>> &&
                   !std::is_same_v<Key, bool> &&
@@ -88,13 +97,15 @@ class InternalHashMap {
         std::vector<Key> keys(capacity);
         std::vector<Value> values(capacity);
         std::vector<Flag> used(capacity, 0);
-        for (std::size_t i = 0; i < used_.size(); ++i) {
-            if (!used_[i]) continue;
-            std::size_t p = static_cast<std::size_t>((static_cast<std::uint64_t>(keys_[i]) * salt_) >> next_shift);
-            while (used[p]) p = (p + 1) & (capacity - 1);
-            keys[p] = keys_[i];
-            values[p].value = values_[i].value;
-            used[p] = 1;
+        if (size_ != 0) {
+            for (std::size_t i = 0; i < used_.size(); ++i) {
+                if (!used_[i]) continue;
+                std::size_t p = static_cast<std::size_t>((static_cast<std::uint64_t>(keys_[i]) * salt_) >> next_shift);
+                while (used[p]) p = (p + 1) & (capacity - 1);
+                keys[p] = keys_[i];
+                values[p].value = values_[i].value;
+                used[p] = 1;
+            }
         }
         keys_.swap(keys);
         values_.swap(values);
@@ -103,7 +114,6 @@ class InternalHashMap {
     }
 
 public:
-    // 空の状態では配列を確保しない。
     InternalHashMap() noexcept(std::is_nothrow_default_constructible_v<Val>) = default;
     InternalHashMap(const InternalHashMap&) = default;
     InternalHashMap(InternalHashMap&& other) noexcept(std::is_nothrow_default_constructible_v<Val> &&
@@ -124,7 +134,6 @@ public:
         swap(shift_, other.shift_);
     }
 
-    // n要素まで再確保せずに格納できる容量を確保する。
     void reserve(std::size_t n) {
         if (n <= keys_.size() - keys_.size() / Denominator) return;
         std::size_t capacity = std::max(std::size_t{8}, keys_.size());
@@ -136,7 +145,6 @@ public:
         rehash(capacity);
     }
 
-    // 容量を2倍にする。空なら初期容量を確保する。
     void reallocate() {
         if (keys_.empty()) {
             rehash(8);
@@ -147,7 +155,6 @@ public:
         }
     }
 
-    // 未登録なら設定済みの初期値で追加する。
     Val& operator[](Key key) {
         if (keys_.empty()) reallocate();
         std::size_t p = hash(key);
@@ -167,7 +174,25 @@ public:
         return values_[p].value;
     }
 
-    // 未登録ならnullptrを返す。読取では要素を追加しない。
+    template <class F> Val& find_or_emplace(Key key, F&& factory) {
+        if (keys_.empty()) reallocate();
+        std::size_t p = hash(key);
+        while (used_[p]) {
+            if (keys_[p] == key) return values_[p].value;
+            p = (p + 1) & (keys_.size() - 1);
+        }
+        if (size_ == keys_.size() - keys_.size() / Denominator) {
+            reallocate();
+            p = hash(key);
+            while (used_[p]) p = (p + 1) & (keys_.size() - 1);
+        }
+        values_[p].value = std::forward<F>(factory)();
+        keys_[p] = key;
+        used_[p] = 1;
+        ++size_;
+        return values_[p].value;
+    }
+
     const Val* find(const Key& key) const noexcept {
         if (keys_.empty()) return nullptr;
         return find_nonempty(key);
@@ -184,9 +209,9 @@ public:
         return const_cast<Val*>(static_cast<const InternalHashMap&>(*this).find(key));
     }
 
-    // 登録済みのキーと値を列挙する。順序は不定。
     std::vector<std::pair<Key, Val>> enumerate() const {
         std::vector<std::pair<Key, Val>> result;
+        if (empty()) return result;
         result.reserve(size_);
         for (std::size_t i = 0; i < used_.size(); ++i)
             if (used_[i]) result.emplace_back(keys_[i], values_[i].value);
@@ -194,6 +219,7 @@ public:
     }
 
     template <class F> void for_each(F&& f) const {
+        if (empty()) return;
         for (std::size_t i = 0; i < used_.size(); ++i)
             if (used_[i]) f(keys_[i], values_[i].value);
     }
@@ -202,12 +228,23 @@ public:
     [[nodiscard]] bool contain(Key key) const noexcept { return contains(key); }
     [[nodiscard]] int count(Key key) const noexcept { return contains(key) ? 1 : 0; }
     void clear() noexcept {
+        if (empty()) return;
         std::fill(used_.begin(), used_.end(), Flag{0});
         size_ = 0;
     }
+    void release() noexcept {
+        decltype(keys_){}.swap(keys_);
+        decltype(values_){}.swap(values_);
+        decltype(used_){}.swap(used_);
+        size_ = 0;
+        shift_ = 61;
+    }
+    std::size_t capacity() const noexcept { return keys_.size(); }
+    double load_factor() const noexcept {
+        return capacity() == 0 ? 0.0 : static_cast<double>(size_) / capacity();
+    }
     std::size_t size() const noexcept { return size_; }
     bool empty() const noexcept { return size_ == 0; }
-    // 今後追加する要素の初期値を設定する。
     void set_default(const Val& value) { default_value_ = value; }
 };
 
@@ -1880,23 +1917,6 @@ template<class S,class T>class FenwickBase<S,T,true>:public CompactFenwick<S,T>{
 };
 
 } // namespace reinsirk::detail
-// Sはbool以外の64bit以下の整数型。Tは加減算・零初期化に対応し、演算結果が表現範囲内であること。
-// 構築O(1)。通常操作は期待償却O(log n)。整数の少数点は点列、多数点はB+木、密な領域は配列を使う。
-// 配列への変換はO(n)、n<=100万・16MiB以内。浮動型・独自型は従来のFenwickセル順で集計する。
-// 読み取りは領域を増やさない。stored_nodesは保持形式によらず更新経路のFenwickセル数を返す。
-// DynamicFenwickTree(n=0): 長さn>=0の零配列を作る。
-// add(k,x): 0<=k<size()の位置へxを加算する。
-// sum(k)/sum(l,r): [0,k)／[l,r)の和。0<=l<=r<=size()。
-// get(k)/operator[](k): 位置kの値を返す。0<=k<size()。
-// set(k,x): 位置kの値をxへ変更する。
-// sum_all(): 全要素の和を返す。
-// lower_bound(w)/upper_bound(w): 前方累積和がw以上／より大きくなる最初の位置。なければsize()。
-// 検索は全要素非負が前提。lower_bound(w<=0)とupper_bound(w<0)は0。
-// size()/empty(): 配列の長さ／長さが0かを返す（全要素0とは区別）。
-// clear(): 長さと再利用できる容量を保ち、全要素を0へ戻す。
-// reset(n): 長さn>=0の零配列へ変更する。保持形式が対応するとき容量を再利用する。
-// reserve(nodes): 内部Fenwickセル数を目安に容量を準備するヒント。
-// stored_nodes(): 値0や相殺済みも含む登録セル数。読み取りやreserveでは変わらない。
 template<typename S,typename T>
 class DynamicFenwickTree : public reinsirk::detail::FenwickBase<S,T> {
  using Base=reinsirk::detail::FenwickBase<S,T>;
@@ -1908,6 +1928,53 @@ class DynamicFenwickTree : public reinsirk::detail::FenwickBase<S,T> {
 // Library: DataStructure/dynamic-binary-indexed-tree-2d.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://nyaannyaan.github.io/library/data-structure-2d/dynamic-binary-indexed-tree-2d.hpp
+// Original Source (InternalHashMap): https://nyaannyaan.github.io/library/data-structure/hash-map-variable-length.hpp.html
+// Original Source (mix): https://prng.di.unimi.it/splitmix64.c
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/dynamic_fenwick_2d.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/dynamic_fenwick.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/internal_hash_map.md
+//
+// API一覧
+// [DynamicFenwickTree2D<T>]
+// 0始まり・半開区間。Tの加減算の表現範囲は利用側の責任。
+// 構築O(1)。通常の更新・矩形和は期待O(log n log m)、読み取りは領域を増やさない。
+// 初回更新の索引準備はn<=100万でO(n)、新しいdense行の準備はO(m)。
+// m<=64、またはm<=2048かつn*m<=2^22では必要行をdense化する。
+// 整数型は32列まで点列（4列まで行内）。m<8192は以後セル表、m>=8192は128列まで点列、以後B+木。
+// B+木はm<=100万かつ更新セルがm/5以上になるとO(m)で直接配列へ移す。
+// DynamicFenwickTree2D(n=0,m=0): n行m列の零配列を作る。n,m>=0。
+// add(i,j,x): 位置(i,j)へxを加算する。0<=i<rows(), 0<=j<cols()。
+// sum(n,m): [0,n)×[0,m)の和。各端点は0以上、行数・列数以下。
+// sum(nl,ml,nr,mr): [nl,nr)×[ml,mr)の和。各軸で左端<=右端。
+// get(i,j): 位置(i,j)の値を返す。読み取りではノードを増やさない。
+// set(i,j,x): 位置(i,j)の値をxへ変更する。
+// sum_all(): 配列全体の和を返す。
+// rows()/cols()/empty(): 行数／列数／いずれかの次元が0かを返す。
+// clear(): 行数・列数と確保済み容量を維持して、全要素を0にする。
+// reset(n,m): n行m列の零配列へ変更する。確保済み容量を再利用する。
+// reserve(nodes): 内部セル数の目安から行pool・疎索引を予約するヒント。行内容量は必要時確保。
+// stored_nodes(): 更新が到達したFenwickセル数。保持形式によらず、値が0になったセルも含む。
+// swap(other): 寸法・値・確保済み領域を交換する。
+//
+// [同梱: DynamicFenwickTree<S,T>]
+// Sはbool以外の64bit以下の整数型。Tは加減算・零初期化に対応し、演算結果が表現範囲内であること。
+// 構築O(1)。通常操作は期待償却O(log n)。整数の少数点は点列、多数点はB+木、密な領域は配列を使う。
+// 配列への変換はO(n)、n<=100万・16MiB以内。浮動型・独自型は従来のFenwickセル順で集計する。
+// 読み取りは領域を増やさない。stored_nodesは保持形式によらず更新経路のFenwickセル数を返す。
+// DynamicFenwickTree(n=0): 長さn>=0の零配列を作る。
+// add(k,x): 0<=k<size()の位置へxを加算する。
+// sum(k)/sum(l,r): [0,k)／[l,r)の和。0<=l<=r<=size()。
+// get(k)/operator[](k): 位置kの値を返す。0<=k<size()。
+// set(k,x): 位置kの値をxへ変更する。
+// sum_all(): 全要素の和を返す。
+// lower_bound(w)/upper_bound(w): 前方累積和がw以上／より大きくなる最初の位置。なければsize()。
+// 検索は全要素非負が前提。lower_bound(w<=0)とupper_bound(w<0)は0。
+// size()/empty(): 配列の長さ／長さが0かを返す（全要素0とは区別）。
+// clear(): 長さと再利用できる容量を保ち、全要素を0へ戻す。
+// reset(n): 長さn>=0の零配列へ変更する。保持形式が対応するとき容量を再利用する。
+// reserve(nodes): 内部Fenwickセル数を目安に容量を準備するヒント。
+// stored_nodes(): 値0や相殺済みも含む登録セル数。読み取りやreserveでは変わらない。
+
 #include <bit>
 #include <cstddef>
 #include <cstdint>
@@ -1931,24 +1998,8 @@ class DynamicFenwickTree : public reinsirk::detail::FenwickBase<S,T> {
 #ifndef SIRKIT_INTERNAL_HASH_MAP_DEFINED
 #define SIRKIT_INTERNAL_HASH_MAP_DEFINED
 namespace reinsirk::detail {
-// dynamic系で共有する内部用の整数ハッシュ表。参照・ポインタは再確保で無効。
-// Packedは占有フラグのbit化、Denominatorは空き容量の比率1/Denominatorを指定する。
 template <class Key, class Val, bool Packed = false, unsigned Denominator = 5>
 class InternalHashMap {
-    // InternalHashMap(): 空の表を構築する。初期配列は確保しない。
-    // operator[](key): 未登録なら設定済みの初期値で追加し、値の参照を返す。
-    // find(key): 値へのポインタを返す。未登録はnullptrで、追加はしない。
-    // find_nonempty(key): 容量確保済みの表でfindと同じ結果を返す。内部ループ用。
-    // contains(key)/contain(key): キーが登録済みならtrueを返す。
-    // count(key): 登録済みなら1、未登録なら0を返す。
-    // for_each(f): 各登録キーと値のconst参照にfを適用する。fは表を変更しないこと。
-    // size()/empty(): 登録件数・空かどうかを返す。
-    // reserve(n): n件まで再確保せず追加できる容量を準備する。
-    // reallocate(): 容量を2倍にする。空なら初期容量を確保する。
-    // clear(): 登録を全て削除する。確保済みの領域は再利用する。
-    // set_default(value): 今後追加する要素の初期値を設定する。
-    // enumerate(): 登録済みの{キー, 値}を順序不定で列挙する。
-    // swap(other): 表の内容・初期値を交換する。
     static_assert(std::is_integral_v<Key> &&
                   std::is_same_v<Key, std::remove_cv_t<Key>> &&
                   !std::is_same_v<Key, bool> &&
@@ -1993,13 +2044,15 @@ class InternalHashMap {
         std::vector<Key> keys(capacity);
         std::vector<Value> values(capacity);
         std::vector<Flag> used(capacity, 0);
-        for (std::size_t i = 0; i < used_.size(); ++i) {
-            if (!used_[i]) continue;
-            std::size_t p = static_cast<std::size_t>((static_cast<std::uint64_t>(keys_[i]) * salt_) >> next_shift);
-            while (used[p]) p = (p + 1) & (capacity - 1);
-            keys[p] = keys_[i];
-            values[p].value = values_[i].value;
-            used[p] = 1;
+        if (size_ != 0) {
+            for (std::size_t i = 0; i < used_.size(); ++i) {
+                if (!used_[i]) continue;
+                std::size_t p = static_cast<std::size_t>((static_cast<std::uint64_t>(keys_[i]) * salt_) >> next_shift);
+                while (used[p]) p = (p + 1) & (capacity - 1);
+                keys[p] = keys_[i];
+                values[p].value = values_[i].value;
+                used[p] = 1;
+            }
         }
         keys_.swap(keys);
         values_.swap(values);
@@ -2008,7 +2061,6 @@ class InternalHashMap {
     }
 
 public:
-    // 空の状態では配列を確保しない。
     InternalHashMap() noexcept(std::is_nothrow_default_constructible_v<Val>) = default;
     InternalHashMap(const InternalHashMap&) = default;
     InternalHashMap(InternalHashMap&& other) noexcept(std::is_nothrow_default_constructible_v<Val> &&
@@ -2029,7 +2081,6 @@ public:
         swap(shift_, other.shift_);
     }
 
-    // n要素まで再確保せずに格納できる容量を確保する。
     void reserve(std::size_t n) {
         if (n <= keys_.size() - keys_.size() / Denominator) return;
         std::size_t capacity = std::max(std::size_t{8}, keys_.size());
@@ -2041,7 +2092,6 @@ public:
         rehash(capacity);
     }
 
-    // 容量を2倍にする。空なら初期容量を確保する。
     void reallocate() {
         if (keys_.empty()) {
             rehash(8);
@@ -2052,7 +2102,6 @@ public:
         }
     }
 
-    // 未登録なら設定済みの初期値で追加する。
     Val& operator[](Key key) {
         if (keys_.empty()) reallocate();
         std::size_t p = hash(key);
@@ -2072,7 +2121,25 @@ public:
         return values_[p].value;
     }
 
-    // 未登録ならnullptrを返す。読取では要素を追加しない。
+    template <class F> Val& find_or_emplace(Key key, F&& factory) {
+        if (keys_.empty()) reallocate();
+        std::size_t p = hash(key);
+        while (used_[p]) {
+            if (keys_[p] == key) return values_[p].value;
+            p = (p + 1) & (keys_.size() - 1);
+        }
+        if (size_ == keys_.size() - keys_.size() / Denominator) {
+            reallocate();
+            p = hash(key);
+            while (used_[p]) p = (p + 1) & (keys_.size() - 1);
+        }
+        values_[p].value = std::forward<F>(factory)();
+        keys_[p] = key;
+        used_[p] = 1;
+        ++size_;
+        return values_[p].value;
+    }
+
     const Val* find(const Key& key) const noexcept {
         if (keys_.empty()) return nullptr;
         return find_nonempty(key);
@@ -2089,9 +2156,9 @@ public:
         return const_cast<Val*>(static_cast<const InternalHashMap&>(*this).find(key));
     }
 
-    // 登録済みのキーと値を列挙する。順序は不定。
     std::vector<std::pair<Key, Val>> enumerate() const {
         std::vector<std::pair<Key, Val>> result;
+        if (empty()) return result;
         result.reserve(size_);
         for (std::size_t i = 0; i < used_.size(); ++i)
             if (used_[i]) result.emplace_back(keys_[i], values_[i].value);
@@ -2099,6 +2166,7 @@ public:
     }
 
     template <class F> void for_each(F&& f) const {
+        if (empty()) return;
         for (std::size_t i = 0; i < used_.size(); ++i)
             if (used_[i]) f(keys_[i], values_[i].value);
     }
@@ -2107,12 +2175,23 @@ public:
     [[nodiscard]] bool contain(Key key) const noexcept { return contains(key); }
     [[nodiscard]] int count(Key key) const noexcept { return contains(key) ? 1 : 0; }
     void clear() noexcept {
+        if (empty()) return;
         std::fill(used_.begin(), used_.end(), Flag{0});
         size_ = 0;
     }
+    void release() noexcept {
+        decltype(keys_){}.swap(keys_);
+        decltype(values_){}.swap(values_);
+        decltype(used_){}.swap(used_);
+        size_ = 0;
+        shift_ = 61;
+    }
+    std::size_t capacity() const noexcept { return keys_.size(); }
+    double load_factor() const noexcept {
+        return capacity() == 0 ? 0.0 : static_cast<double>(size_) / capacity();
+    }
     std::size_t size() const noexcept { return size_; }
     bool empty() const noexcept { return size_ == 0; }
-    // 今後追加する要素の初期値を設定する。
     void set_default(const Val& value) { default_value_ = value; }
 };
 
@@ -3785,23 +3864,6 @@ template<class S,class T>class FenwickBase<S,T,true>:public CompactFenwick<S,T>{
 };
 
 } // namespace reinsirk::detail
-// Sはbool以外の64bit以下の整数型。Tは加減算・零初期化に対応し、演算結果が表現範囲内であること。
-// 構築O(1)。通常操作は期待償却O(log n)。整数の少数点は点列、多数点はB+木、密な領域は配列を使う。
-// 配列への変換はO(n)、n<=100万・16MiB以内。浮動型・独自型は従来のFenwickセル順で集計する。
-// 読み取りは領域を増やさない。stored_nodesは保持形式によらず更新経路のFenwickセル数を返す。
-// DynamicFenwickTree(n=0): 長さn>=0の零配列を作る。
-// add(k,x): 0<=k<size()の位置へxを加算する。
-// sum(k)/sum(l,r): [0,k)／[l,r)の和。0<=l<=r<=size()。
-// get(k)/operator[](k): 位置kの値を返す。0<=k<size()。
-// set(k,x): 位置kの値をxへ変更する。
-// sum_all(): 全要素の和を返す。
-// lower_bound(w)/upper_bound(w): 前方累積和がw以上／より大きくなる最初の位置。なければsize()。
-// 検索は全要素非負が前提。lower_bound(w<=0)とupper_bound(w<0)は0。
-// size()/empty(): 配列の長さ／長さが0かを返す（全要素0とは区別）。
-// clear(): 長さと再利用できる容量を保ち、全要素を0へ戻す。
-// reset(n): 長さn>=0の零配列へ変更する。保持形式が対応するとき容量を再利用する。
-// reserve(nodes): 内部Fenwickセル数を目安に容量を準備するヒント。
-// stored_nodes(): 値0や相殺済みも含む登録セル数。読み取りやreserveでは変わらない。
 template<typename S,typename T>
 class DynamicFenwickTree : public reinsirk::detail::FenwickBase<S,T> {
  using Base=reinsirk::detail::FenwickBase<S,T>;
@@ -3811,27 +3873,8 @@ class DynamicFenwickTree : public reinsirk::detail::FenwickBase<S,T> {
 
 #ifndef SIRKIT_DYNAMIC_FENWICK_TREE_2D_DEFINED
 #define SIRKIT_DYNAMIC_FENWICK_TREE_2D_DEFINED
-// 0始まり・半開区間。Tの加減算の表現範囲は利用側の責任。
-// 構築O(1)。通常の更新・矩形和は期待O(log n log m)、読み取りは領域を増やさない。
-// 初回更新の索引準備はn<=100万でO(n)、新しいdense行の準備はO(m)。
-// m<=64、またはm<=2048かつn*m<=2^22では必要行をdense化する。
-// 整数型は32列まで点列（4列まで行内）。m<8192は以後セル表、m>=8192は128列まで点列、以後B+木。
-// B+木はm<=100万かつ更新セルがm/5以上になるとO(m)で直接配列へ移す。
 template <typename T>
 class DynamicFenwickTree2D {
-  // DynamicFenwickTree2D(n=0,m=0): n行m列の零配列を作る。n,m>=0。
-  // add(i,j,x): 位置(i,j)へxを加算する。0<=i<rows(), 0<=j<cols()。
-  // sum(n,m): [0,n)×[0,m)の和。各端点は0以上、行数・列数以下。
-  // sum(nl,ml,nr,mr): [nl,nr)×[ml,mr)の和。各軸で左端<=右端。
-  // get(i,j): 位置(i,j)の値を返す。読み取りではノードを増やさない。
-  // set(i,j,x): 位置(i,j)の値をxへ変更する。
-  // sum_all(): 配列全体の和を返す。
-  // rows()/cols()/empty(): 行数／列数／いずれかの次元が0かを返す。
-  // clear(): 行数・列数と確保済み容量を維持して、全要素を0にする。
-  // reset(n,m): n行m列の零配列へ変更する。確保済み容量を再利用する。
-  // reserve(nodes): 内部セル数の目安から行pool・疎索引を予約するヒント。行内容量は必要時確保。
-  // stored_nodes(): 更新が到達したFenwickセル数。保持形式によらず、値が0になったセルも含む。
-  // swap(other): 寸法・値・確保済み領域を交換する。
   static_assert(std::numeric_limits<int>::digits <= 31,
                 "DynamicFenwickTree2D: int must have at most 31 value bits");
   using U = std::uint32_t;
@@ -4110,12 +4153,39 @@ class DynamicFenwickTree2D {
 // Library: DataStructure/dynamic-li-chao-tree.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://nyaannyaan.github.io/library/segment-tree/dynamic-li-chao-tree.hpp
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/dynamic_li_chao.md
+//
+// API一覧
+// [DynamicLiChaoTree<T,INF>]
+// 整数座標の閉区間で直線・線分の最小値を管理する。Tは符号付き64ビット以下の整数。
+// 追加する線の対象区間では、数学的なa*x+bがTの範囲内かつINF未満であること。
+// Wを座標数とすると直線追加・取得はO(log W)、線分追加はO(log² W)。
+// queryは読み取り専用。SKIP_RUNTIME_CHECKSで座標・端点値の検査を除く。
+// DynamicLiChaoTree(xmin, xmax): 整数の閉区間[xmin, xmax]で空の木を作る。
+// コピーは独立した木を作る。コピー代入の確保失敗時は元の木を維持する。
+// update(a, b) / add_line(a, b): 定義域全体にy=a*x+bを追加する。
+// update_line_segment(a, b, left, right) / add_segment(...): 閉区間[left, right]に線分を追加。left>rightは無操作。
+// query(x): xでの最小値を返す。被覆する線がなければINF。
+// query_line(x): 最小値を与えるLineを返す。同値時は任意、非被覆ならnullopt。
+// empty(): 追加した直線・空でない線分がなければtrue。O(1)。
+// clear(): 全ての線を消し、確保した容量を再利用する。O(格納ノード数)。
+// reserve(n): nノード分を事前確保する。直線本数とは異なる。
+// stored_nodes(): 現在の格納ノード数を返す。取得操作では増えない。O(1)。
+// domain_min() / domain_max(): 定義域の左端・右端を返す。O(1)。
+//
+// [DynamicLiChaoTree<T,INF>::Line]
+// Line(a, b): y=a*x+b。既定値は空を表す定数INF。
+// get(x): a*x+bを返す。値がTで表現可能であること。
+// over(other, x): xでotherより小さい値を与えるときtrue。
 
 #include <bit>
 #include <cstddef>
 #include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <memory>
+#include <new>
 #include <limits>
-#include <numeric>
 #include <optional>
 #include <stdexcept>
 #include <type_traits>
@@ -4124,27 +4194,10 @@ class DynamicFenwickTree2D {
 
 #ifndef SIRKIT_DYNAMIC_LI_CHAO_TREE_DEFINED
 #define SIRKIT_DYNAMIC_LI_CHAO_TREE_DEFINED
-// 整数座標の閉区間で直線・線分の最小値を管理する。Tは符号付き64ビット以下の整数。
-// 追加する線の対象区間では、数学的なa*x+bがTの範囲内かつINF未満であること。
-// Wを座標数とすると直線追加・取得はO(log W)、線分追加はO(log² W)。
-// queryは読み取り専用。SKIP_RUNTIME_CHECKSで座標・端点値の検査を除く。
 template <typename T, T INF>
 class DynamicLiChaoTree {
-  // DynamicLiChaoTree(xmin, xmax): 整数の閉区間[xmin, xmax]で空の木を作る。
-  // update(a, b) / add_line(a, b): 定義域全体にy=a*x+bを追加する。
-  // update_line_segment(a, b, left, right) / add_segment(...): 閉区間[left, right]に線分を追加。left>rightは無操作。
-  // query(x): xでの最小値を返す。被覆する線がなければINF。
-  // query_line(x): 最小値を与えるLineを返す。同値時は任意、非被覆ならnullopt。
-  // empty(): 追加した直線・空でない線分がなければtrue。O(1)。
-  // clear(): 全ての線を消し、確保した容量を再利用する。O(格納ノード数)。
-  // reserve(n): nノード分を事前確保する。直線本数とは異なる。
-  // stored_nodes(): 現在の格納ノード数を返す。取得操作では増えない。O(1)。
-  // domain_min() / domain_max(): 定義域の左端・右端を返す。O(1)。
  public:
   struct Line {
-    // Line(a, b): y=a*x+b。既定値は空を表す定数INF。
-    // get(x): a*x+bを返す。値がTで表現可能であること。
-    // over(other, x): xでotherより小さい値を与えるときtrue。
     T slope = 0;
     T intercept = INF;
     Line() = default;
@@ -4173,7 +4226,90 @@ class DynamicLiChaoTree {
     Index right = no_child;
   };
   T xmin_, xmax_;
+#if defined(__GNUC__) && !defined(__clang__)
+  class NodeStorage {
+    static_assert(std::is_trivially_copyable_v<Node> &&
+                  std::is_trivially_destructible_v<Node>);
+    static_assert(alignof(Node) <= alignof(std::max_align_t));
+    struct Release {
+      void operator()(Node* pointer) const noexcept { std::free(pointer); }
+    };
+    std::unique_ptr<Node, Release> owner_;
+    std::size_t size_ = 0, capacity_ = 0;
+
+   public:
+    NodeStorage() noexcept = default;
+    NodeStorage(const NodeStorage& other) { *this = other; }
+    NodeStorage& operator=(const NodeStorage& other) {
+      if (this != &other) {
+        if (other.size_ > capacity_) {
+          void* next = std::realloc(nullptr, other.size_ * sizeof(Node));
+          if (!next) throw std::bad_alloc();
+          std::memcpy(next, other.owner_.get(), other.size_ * sizeof(Node));
+          owner_.reset(static_cast<Node*>(next));
+          capacity_ = other.size_;
+        } else if (other.size_) {
+          std::memcpy(owner_.get(), other.owner_.get(), other.size_ * sizeof(Node));
+        }
+        size_ = other.size_;
+      }
+      return *this;
+    }
+    NodeStorage(NodeStorage&& other) noexcept
+        : owner_(std::move(other.owner_)), size_(std::exchange(other.size_, 0)),
+          capacity_(std::exchange(other.capacity_, 0)) {}
+    NodeStorage& operator=(NodeStorage&& other) noexcept {
+      if (this != &other) {
+        owner_ = std::move(other.owner_);
+        size_ = std::exchange(other.size_, 0);
+        capacity_ = std::exchange(other.capacity_, 0);
+      }
+      return *this;
+    }
+    std::size_t size() const noexcept { return size_; }
+    bool empty() const noexcept { return size_ == 0; }
+    std::size_t max_size() const noexcept { return std::vector<Node>{}.max_size(); }
+    Node& operator[](std::size_t index) noexcept { return owner_.get()[index]; }
+    const Node& operator[](std::size_t index) const noexcept { return owner_.get()[index]; }
+    void clear() noexcept { size_ = 0; }
+    void reserve(std::size_t count) {
+      if (count <= capacity_) return;
+      if (count > max_size()) throw std::length_error("Li Chao node limit");
+      if (size_ != capacity_) {
+        // 未使用容量をコピーせず、有効なノードだけを移す。
+        void* next = std::realloc(nullptr, count * sizeof(Node));
+        if (!next) throw std::bad_alloc();
+        if (size_) std::memcpy(next, owner_.get(), size_ * sizeof(Node));
+        owner_.reset(static_cast<Node*>(next));
+      } else {
+        // 満杯なら、その場で拡張できる場合に全体コピーを避ける。
+        Node* previous = owner_.release();
+        void* next = std::realloc(previous, count * sizeof(Node));
+        if (!next) {
+          owner_.reset(previous);
+          throw std::bad_alloc();
+        }
+        owner_.reset(static_cast<Node*>(next));
+      }
+      capacity_ = count;
+    }
+    void push_back(Node value) {
+      if (size_ == capacity_) {
+        const std::size_t limit = max_size();
+        if (size_ == limit) throw std::length_error("Li Chao node limit");
+        const std::size_t next = capacity_ == 0 ? 1 :
+            capacity_ > limit - capacity_ ? limit : capacity_ * 2;
+        reserve(next);
+      }
+      std::construct_at(owner_.get() + size_, value);
+      ++size_;
+    }
+    void emplace_back() { push_back(Node{}); }
+  };
+  NodeStorage nodes_;
+#else
   std::vector<Node> nodes_;
+#endif
 
 #ifndef SKIP_RUNTIME_CHECKS
   void check_coordinate(T x) const {
@@ -4203,6 +4339,12 @@ class DynamicLiChaoTree {
   }
 #endif
 
+  static T middle_of(T left, T right) noexcept {
+    using U = std::make_unsigned_t<T>;
+    // left <= rightのため、符号なし差分で全整数幅の中点を求められる。
+    const U distance = static_cast<U>(static_cast<U>(right) - static_cast<U>(left));
+    return std::bit_cast<T>(static_cast<U>(static_cast<U>(left) + distance / 2));
+  }
   Index make_node() {
     if (nodes_.size() >= no_child || nodes_.size() == nodes_.max_size())
       throw std::length_error("Li Chao node limit");
@@ -4232,7 +4374,7 @@ class DynamicLiChaoTree {
         if (better_left) node.line = line;
         return;
       }
-      const T middle = std::midpoint(left, right);
+      const T middle = middle_of(left, right);
       const bool better_middle = line.over(node.line, middle);
       if (better_middle) std::swap(node.line, line);
       if (better_left != better_middle) {
@@ -4246,32 +4388,49 @@ class DynamicLiChaoTree {
   }
   void insert_segment(Index index, T left, T right, T qleft, T qright,
                       const Line& line) {
-    if (qleft <= left && right <= qright) {
-      insert_line(index, left, right, line);
-      return;
-    }
-    const T middle = std::midpoint(left, right);
-    if (qleft <= middle)
-      insert_segment(child(index, false), left, middle, qleft, qright, line);
-    if (middle < qright)
-      insert_segment(child(index, true), static_cast<T>(middle + 1), right,
-                     qleft, qright, line);
-  }
-  Line best_line(T x) const noexcept {
-    Line best;
-    if (nodes_.empty()) return best;
-    T left = xmin_, right = xmax_;
-    Index index = 0;
-    T value = INF;
     for (;;) {
+      if (qleft <= left && right <= qright) {
+        insert_line(index, left, right, line);
+        return;
+      }
+      const Line& current = nodes_[index].line;
+      // 切片INFは空ノードを含むので枝刈りを省き、通常の探索を続ける。
+      if (current.intercept != INF) {
+        // 差が最小になる重なり区間の端でも勝てなければ追加不要。
+        const T endpoint = line.slope < current.slope
+            ? (qright < right ? qright : right)
+            : (qleft > left ? qleft : left);
+        if (!line.over(current, endpoint)) return;
+      }
+      const T middle = middle_of(left, right);
+      if (qright <= middle) {
+        index = child(index, false);
+        right = middle;
+      } else if (middle < qleft) {
+        index = child(index, true);
+        left = static_cast<T>(middle + 1);
+      } else {
+        insert_segment(child(index, false), left, middle, qleft, qright, line);
+        index = child(index, true);
+        left = static_cast<T>(middle + 1);
+      }
+    }
+  }
+  template <bool ReturnLine>
+  auto find_best(T x) const noexcept {
+    Line best;
+    T value = INF;
+    T left = xmin_, right = xmax_;
+    Index index = nodes_.empty() ? no_child : Index{0};
+    while (index != no_child) {
       const Node& node = nodes_[index];
       const T candidate = node.line.get(x);
       if (candidate < value) {
         value = candidate;
-        best = node.line;
+        if constexpr (ReturnLine) best = node.line;
       }
-      if (left == right) return best;
-      const T middle = std::midpoint(left, right);
+      if (left == right) break;
+      const T middle = middle_of(left, right);
       if (x <= middle) {
         index = node.left;
         right = middle;
@@ -4279,8 +4438,9 @@ class DynamicLiChaoTree {
         index = node.right;
         left = static_cast<T>(middle + 1);
       }
-      if (index == no_child) return best;
     }
+    if constexpr (ReturnLine) return best;
+    else return value;
   }
 
  public:
@@ -4289,6 +4449,15 @@ class DynamicLiChaoTree {
     if (xmax < xmin) throw std::invalid_argument("Li Chao domain");
 #endif
   }
+  DynamicLiChaoTree(const DynamicLiChaoTree&) = default;
+  DynamicLiChaoTree(DynamicLiChaoTree&&) noexcept = default;
+  DynamicLiChaoTree& operator=(const DynamicLiChaoTree& other) {
+    nodes_ = other.nodes_;
+    xmin_ = other.xmin_;
+    xmax_ = other.xmax_;
+    return *this;
+  }
+  DynamicLiChaoTree& operator=(DynamicLiChaoTree&&) noexcept = default;
   void update(T a, T b) {
     const Line line(a, b);
 #ifndef SKIP_RUNTIME_CHECKS
@@ -4316,13 +4485,13 @@ class DynamicLiChaoTree {
 #ifndef SKIP_RUNTIME_CHECKS
     check_coordinate(x);
 #endif
-    return best_line(x).get(x);
+    return find_best<false>(x);
   }
   std::optional<Line> query_line(T x) const {
 #ifndef SKIP_RUNTIME_CHECKS
     check_coordinate(x);
 #endif
-    Line result = best_line(x);
+    Line result = find_best<true>(x);
     if (result.slope == 0 && result.intercept == INF) return std::nullopt;
     return result;
   }
@@ -4343,9 +4512,39 @@ class DynamicLiChaoTree {
 // Library: DataStructure/dynamic-union-find.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://nyaannyaan.github.io/library/data-structure/dynamic-union-find.hpp
+// Original Source (InternalHashMap): https://nyaannyaan.github.io/library/data-structure/hash-map-variable-length.hpp.html
+// Original Source (mix): https://prng.di.unimi.it/splitmix64.c
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/dynamic_union_find.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/internal_hash_map.md
+//
+// API一覧
+// [DynamicUnionFind]
+// intの全域をキーにできる。要素は問い合わせ時に自動登録する。
+// ハッシュ表の検索は期待O(1)、併合・探索は償却O(α(N))、空間O(N)。
+// DynamicUnionFind(): 空で構築する。登録数はINT_MAXまで。
+// DynamicUnionFind(n): n要素分の容量を予約して空で構築する。
+// コピーは独立した複製。ムーブ元は空になり、再利用できる。
+// data(k): 自動登録し、根なら負の要素数、非根なら親のキーを返す。
+// find(k): 自動登録し、所属する連結成分の代表キーを返す。
+// unite(x, y): 自動登録してサイズで併合し、併合したときtrueを返す。
+// unite(x, y, f): 併合後にf(新しい代表キー, 吸収した代表キー)を1回呼ぶ。
+// size(k): 自動登録し、kが所属する連結成分の要素数を返す。
+// same(x, y): 自動登録し、同じ連結成分ならtrueを返す。
+// add(k): 未登録のキーを単独の成分として追加し、追加したときtrueを返す。
+// contains(k): キーが登録済みならtrueを返す。自動登録しない。
+// node_count(): 登録済みのキーの個数をO(1)で返す。
+// component_count(): 登録済みの連結成分数をO(1)で返す。
+// empty(): 登録済みのキーがなければtrueを返す。
+// reserve(n): n要素分を予約する。成分や登録状態は変えない。
+// groups(): 全成分のキー一覧をO(N α(N))で返す。成分間の順序は未規定。
+// clear(): 全登録を消去する。確保済みの容量は再利用する。
+// dataの負の返値は、負の親キーとの区別を保証しない。判定にはfindを使う。
+
 #include <algorithm>
+#include <array>
 #include <cstddef>
 #include <limits>
+#include <memory>
 #include <stdexcept>
 #include <utility>
 #include <vector>
@@ -4364,24 +4563,8 @@ class DynamicLiChaoTree {
 #ifndef SIRKIT_INTERNAL_HASH_MAP_DEFINED
 #define SIRKIT_INTERNAL_HASH_MAP_DEFINED
 namespace reinsirk::detail {
-// dynamic系で共有する内部用の整数ハッシュ表。参照・ポインタは再確保で無効。
-// Packedは占有フラグのbit化、Denominatorは空き容量の比率1/Denominatorを指定する。
 template <class Key, class Val, bool Packed = false, unsigned Denominator = 5>
 class InternalHashMap {
-    // InternalHashMap(): 空の表を構築する。初期配列は確保しない。
-    // operator[](key): 未登録なら設定済みの初期値で追加し、値の参照を返す。
-    // find(key): 値へのポインタを返す。未登録はnullptrで、追加はしない。
-    // find_nonempty(key): 容量確保済みの表でfindと同じ結果を返す。内部ループ用。
-    // contains(key)/contain(key): キーが登録済みならtrueを返す。
-    // count(key): 登録済みなら1、未登録なら0を返す。
-    // for_each(f): 各登録キーと値のconst参照にfを適用する。fは表を変更しないこと。
-    // size()/empty(): 登録件数・空かどうかを返す。
-    // reserve(n): n件まで再確保せず追加できる容量を準備する。
-    // reallocate(): 容量を2倍にする。空なら初期容量を確保する。
-    // clear(): 登録を全て削除する。確保済みの領域は再利用する。
-    // set_default(value): 今後追加する要素の初期値を設定する。
-    // enumerate(): 登録済みの{キー, 値}を順序不定で列挙する。
-    // swap(other): 表の内容・初期値を交換する。
     static_assert(std::is_integral_v<Key> &&
                   std::is_same_v<Key, std::remove_cv_t<Key>> &&
                   !std::is_same_v<Key, bool> &&
@@ -4426,13 +4609,15 @@ class InternalHashMap {
         std::vector<Key> keys(capacity);
         std::vector<Value> values(capacity);
         std::vector<Flag> used(capacity, 0);
-        for (std::size_t i = 0; i < used_.size(); ++i) {
-            if (!used_[i]) continue;
-            std::size_t p = static_cast<std::size_t>((static_cast<std::uint64_t>(keys_[i]) * salt_) >> next_shift);
-            while (used[p]) p = (p + 1) & (capacity - 1);
-            keys[p] = keys_[i];
-            values[p].value = values_[i].value;
-            used[p] = 1;
+        if (size_ != 0) {
+            for (std::size_t i = 0; i < used_.size(); ++i) {
+                if (!used_[i]) continue;
+                std::size_t p = static_cast<std::size_t>((static_cast<std::uint64_t>(keys_[i]) * salt_) >> next_shift);
+                while (used[p]) p = (p + 1) & (capacity - 1);
+                keys[p] = keys_[i];
+                values[p].value = values_[i].value;
+                used[p] = 1;
+            }
         }
         keys_.swap(keys);
         values_.swap(values);
@@ -4441,7 +4626,6 @@ class InternalHashMap {
     }
 
 public:
-    // 空の状態では配列を確保しない。
     InternalHashMap() noexcept(std::is_nothrow_default_constructible_v<Val>) = default;
     InternalHashMap(const InternalHashMap&) = default;
     InternalHashMap(InternalHashMap&& other) noexcept(std::is_nothrow_default_constructible_v<Val> &&
@@ -4462,7 +4646,6 @@ public:
         swap(shift_, other.shift_);
     }
 
-    // n要素まで再確保せずに格納できる容量を確保する。
     void reserve(std::size_t n) {
         if (n <= keys_.size() - keys_.size() / Denominator) return;
         std::size_t capacity = std::max(std::size_t{8}, keys_.size());
@@ -4474,7 +4657,6 @@ public:
         rehash(capacity);
     }
 
-    // 容量を2倍にする。空なら初期容量を確保する。
     void reallocate() {
         if (keys_.empty()) {
             rehash(8);
@@ -4485,7 +4667,6 @@ public:
         }
     }
 
-    // 未登録なら設定済みの初期値で追加する。
     Val& operator[](Key key) {
         if (keys_.empty()) reallocate();
         std::size_t p = hash(key);
@@ -4505,7 +4686,25 @@ public:
         return values_[p].value;
     }
 
-    // 未登録ならnullptrを返す。読取では要素を追加しない。
+    template <class F> Val& find_or_emplace(Key key, F&& factory) {
+        if (keys_.empty()) reallocate();
+        std::size_t p = hash(key);
+        while (used_[p]) {
+            if (keys_[p] == key) return values_[p].value;
+            p = (p + 1) & (keys_.size() - 1);
+        }
+        if (size_ == keys_.size() - keys_.size() / Denominator) {
+            reallocate();
+            p = hash(key);
+            while (used_[p]) p = (p + 1) & (keys_.size() - 1);
+        }
+        values_[p].value = std::forward<F>(factory)();
+        keys_[p] = key;
+        used_[p] = 1;
+        ++size_;
+        return values_[p].value;
+    }
+
     const Val* find(const Key& key) const noexcept {
         if (keys_.empty()) return nullptr;
         return find_nonempty(key);
@@ -4522,9 +4721,9 @@ public:
         return const_cast<Val*>(static_cast<const InternalHashMap&>(*this).find(key));
     }
 
-    // 登録済みのキーと値を列挙する。順序は不定。
     std::vector<std::pair<Key, Val>> enumerate() const {
         std::vector<std::pair<Key, Val>> result;
+        if (empty()) return result;
         result.reserve(size_);
         for (std::size_t i = 0; i < used_.size(); ++i)
             if (used_[i]) result.emplace_back(keys_[i], values_[i].value);
@@ -4532,6 +4731,7 @@ public:
     }
 
     template <class F> void for_each(F&& f) const {
+        if (empty()) return;
         for (std::size_t i = 0; i < used_.size(); ++i)
             if (used_[i]) f(keys_[i], values_[i].value);
     }
@@ -4540,12 +4740,23 @@ public:
     [[nodiscard]] bool contain(Key key) const noexcept { return contains(key); }
     [[nodiscard]] int count(Key key) const noexcept { return contains(key) ? 1 : 0; }
     void clear() noexcept {
+        if (empty()) return;
         std::fill(used_.begin(), used_.end(), Flag{0});
         size_ = 0;
     }
+    void release() noexcept {
+        decltype(keys_){}.swap(keys_);
+        decltype(values_){}.swap(values_);
+        decltype(used_){}.swap(used_);
+        size_ = 0;
+        shift_ = 61;
+    }
+    std::size_t capacity() const noexcept { return keys_.size(); }
+    double load_factor() const noexcept {
+        return capacity() == 0 ? 0.0 : static_cast<double>(size_) / capacity();
+    }
     std::size_t size() const noexcept { return size_; }
     bool empty() const noexcept { return size_ == 0; }
-    // 今後追加する要素の初期値を設定する。
     void set_default(const Val& value) { default_value_ = value; }
 };
 
@@ -4555,27 +4766,7 @@ public:
 
 #ifndef SIRKIT_DYNAMIC_UNION_FIND_DEFINED
 #define SIRKIT_DYNAMIC_UNION_FIND_DEFINED
-// intの全域をキーにできる。要素は問い合わせ時に自動登録する。
-// ハッシュ表の検索は期待O(1)、併合・探索は償却O(α(N))、空間O(N)。
 class DynamicUnionFind {
-    // DynamicUnionFind(): 空で構築する。登録数はINT_MAXまで。
-    // DynamicUnionFind(n): n要素分の容量を予約して空で構築する。
-    // コピーは独立した複製。ムーブ元は空になり、再利用できる。
-    // data(k): 自動登録し、根なら負の要素数、非根なら親のキーを返す。
-    // find(k): 自動登録し、所属する連結成分の代表キーを返す。
-    // unite(x, y): 自動登録してサイズで併合し、併合したときtrueを返す。
-    // unite(x, y, f): 併合後にf(新しい代表キー, 吸収した代表キー)を1回呼ぶ。
-    // size(k): 自動登録し、kが所属する連結成分の要素数を返す。
-    // same(x, y): 自動登録し、同じ連結成分ならtrueを返す。
-    // add(k): 未登録のキーを単独の成分として追加し、追加したときtrueを返す。
-    // contains(k): キーが登録済みならtrueを返す。自動登録しない。
-    // node_count(): 登録済みのキーの個数をO(1)で返す。
-    // component_count(): 登録済みの連結成分数をO(1)で返す。
-    // empty(): 登録済みのキーがなければtrueを返す。
-    // reserve(n): n要素分を予約する。成分や登録状態は変えない。
-    // groups(): 全成分のキー一覧をO(N α(N))で返す。成分間の順序は未規定。
-    // clear(): 全登録を消去する。確保済みの容量は再利用する。
-    // dataの負の返値は、負の親キーとの区別を保証しない。判定にはfindを使う。
     struct Node {
         int key;
         // 根なら負のサイズ、非根なら親の添字。キーの符号とは独立。
@@ -4590,6 +4781,17 @@ class DynamicUnionFind {
             throw std::length_error("DynamicUnionFind: too many nodes");
     }
 
+#if defined(__GNUC__) && !defined(__clang__)
+    int index_for(int key) {
+        return indices_.find_or_emplace(key, [&] {
+            check_capacity(nodes_.size() + 1);
+            const int index = static_cast<int>(nodes_.size());
+            nodes_.push_back(Node{key, -1});
+            ++components_;
+            return index;
+        });
+    }
+#else
     int index_for(int key) {
         if (const auto* index = indices_.find(key)) return *index;
         check_capacity(nodes_.size() + 1);
@@ -4604,6 +4806,7 @@ class DynamicUnionFind {
         ++components_;
         return index;
     }
+#endif
 
     int root_index(int index) noexcept {
         while (nodes_[index].parent >= 0) {
@@ -4616,8 +4819,15 @@ class DynamicUnionFind {
     }
 
     std::pair<int, int> merge_roots(int x, int y) {
+#if defined(__GNUC__) && !defined(__clang__)
+        const int ix = index_for(x);
+        const int iy = index_for(y);
+        int a = root_index(ix);
+        int b = root_index(iy);
+#else
         int a = root_index(index_for(x));
         int b = root_index(index_for(y));
+#endif
         if (a == b) return {-1, -1};
         if (nodes_[a].parent > nodes_[b].parent) std::swap(a, b);
         // 各成分のサイズの合計は、上限検査済みの登録数以下。
@@ -4625,6 +4835,22 @@ class DynamicUnionFind {
         nodes_[b].parent = a;
         --components_;
         return {a, b};
+    }
+
+    std::vector<std::vector<int>> trivial_groups() {
+        std::vector<std::vector<int>> result;
+        result.reserve(components_);
+        if (components_ == nodes_.size()) {
+            for (const auto& node : nodes_) result.emplace_back(std::size_t{1}, node.key);
+        } else {
+            result.emplace_back(); result.back().reserve(nodes_.size());
+            const int root = root_index(0);
+            for (std::size_t i = 0; i < nodes_.size(); ++i) {
+                result[0].push_back(nodes_[i].key);
+                if (static_cast<int>(i) != root) nodes_[i].parent = root;
+            }
+        }
+        return result;
     }
 
 public:
@@ -4672,7 +4898,16 @@ public:
     }
 
     int size(int key) { return -nodes_[root_index(index_for(key))].parent; }
+#if defined(__GNUC__) && !defined(__clang__)
+    int same(int x, int y) {
+        const int ix = index_for(x);
+        const int iy = index_for(y);
+        return root_index(ix) == root_index(iy);
+    }
+#else
     int same(int x, int y) { return find(x) == find(y); }
+
+#endif
 
     bool add(int key) {
         const auto before = nodes_.size();
@@ -4694,12 +4929,32 @@ public:
     }
 
     std::vector<std::vector<int>> groups() {
+#if defined(__GNUC__) && !defined(__clang__)
+        if (nodes_.empty()) return {};
+#endif
+        if (components_ == nodes_.size() || components_ == 1) return trivial_groups();
         std::vector<std::vector<int>> result;
         result.reserve(components_);
+#if defined(__GNUC__) && !defined(__clang__)
+        using GroupIndex = std::make_unsigned_t<int>;
+        // 根の添字だけを読み、全て直後の走査で代入する。
+        std::array<GroupIndex, 32> local_indices;
+        std::unique_ptr<GroupIndex[]> large_indices;
+        GroupIndex* group_index = local_indices.data();
+        if (nodes_.size() > local_indices.size()) {
+            large_indices = std::make_unique_for_overwrite<GroupIndex[]>(nodes_.size());
+            group_index = large_indices.get();
+        }
+#else
         std::vector<std::size_t> group_index(nodes_.size());
+#endif
         for (std::size_t i = 0; i < nodes_.size(); ++i) {
             if (nodes_[i].parent >= 0) continue;
+#if defined(__GNUC__) && !defined(__clang__)
+            group_index[i] = static_cast<GroupIndex>(result.size());
+#else
             group_index[i] = result.size();
+#endif
             result.emplace_back();
             result.back().reserve(static_cast<std::size_t>(-nodes_[i].parent));
         }
@@ -4720,6 +4975,46 @@ public:
 // Library: DataStructure/Hash_map.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://nyaannyaan.github.io/library/hashmap/hashmap.hpp
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/hash_map.md
+//
+// API一覧
+// [HashMap<Key,Val,Hasher,KeyEqual>]
+// Flat table。検索・追加と次要素を探さない削除は期待償却O(1)。列キーのハッシュ計算は列長に比例する。
+// 次iteratorを返す削除は空きバケットを走査し、最悪O(capacity)。返却iteratorを順に使う全削除はO(capacity)。
+// 再配置・clear・swap・ムーブでiterator/参照は無効。eraseは対象だけを無効にする。
+// Key/Valはコピー可能、またはvalue_typeのムーブ構築がnoexceptであること。
+// Hasher/KeyEqualは同値なキーに同じハッシュ値を返し、格納中に規則を変えないこと。
+// 再配置を伴う新規追加の引数には、本表の要素への参照を渡さず先にコピーする。
+// HashMap(): 空の表を構築する。必要になるまで配列は確保しない。
+// HashMap(n, hash, equal): n要素分を予約し、指定したハッシュ・同値判定で構築する。
+// operator[](key): 未登録ならVal{}で追加し、値の参照を返す。
+// find(key): 対応するiteratorを返す。未登録はend()。const版は変更できない。
+// contain(key)/contains(key): 登録済みならtrueを返す。追加はしない。
+// count(key): 登録済みなら1、未登録なら0を返す。
+// at(key): 値の参照を返す。未登録はout_of_range。const版は変更できない。
+// insert({key, value})/emplace(key, value): 未登録なら追加し、対応するiteratorを返す。
+// try_emplace(key, args...): 未登録時だけ値を構築し、{iterator, 追加の有無}を返す。
+// insert_or_assign(key, value): 追加または上書きし、{iterator, 追加の有無}を返す。
+// get_or_default(key, fallback): 登録値またはfallbackのコピーを返す。追加はしない。
+// erase(it, next=true): 対象を削除し次のiteratorを返す。false指定ならend()。
+// erase(key): キーを削除し、次のiteratorを返す。未登録・erase(end())はend()。
+// erase(key, next): falseなら次要素を探さず削除してend()、trueならerase(key)と同じ。
+// begin()/end()/cbegin()/cend(): 格納要素を順序不定で列挙する。キーは変更できない。
+// 空表のbeginはO(1)、それ以外は先頭要素までのバケットを走査する。
+// size()/empty(): 登録数・空かどうかをO(1)で返す。
+// clear(): 全要素を破棄し、確保済みの容量を再利用する。
+// reserve(n): n要素分の容量を予約する。縮小しない。
+// rehash(n): nバケット以上・現登録数に必要な容量へ再配置し、墓石を除く。
+// capacity()/load_factor(): バケット数・使用率をO(1)で返す。
+// swap(other): 内容とハッシュ・同値判定を交換する。コピーは独立した複製。
+// swapはHasher/KeyEqualのswapが例外を送出しないことを要求する。
+//
+// [GenericHash]
+// GenericHash(): 実行時に選んだ種で構築する。同じオブジェクトでは結果は一定。
+// GenericHash(seed): 指定した種で構築する。std::hash対応型の結果はその実装にも依存する。
+// operator()(x): 整数・列挙・浮動小数・tuple・range・std::hash対応型を再帰的にハッシュ化する。
+// unorderedコンテナの要素順は無視する。独自の同値関係には対応するHasherも用意する。
+
 #include <algorithm>
 #include <bit>
 #include <chrono>
@@ -4736,14 +5031,13 @@ public:
 #include <type_traits>
 #include <utility>
 #include <vector>
+#if !defined(SIRKIT_DISABLE_SIMD) && defined(__SSE2__) && (defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__)
+#include <emmintrin.h>
+#endif
 
 #ifndef SIRKIT_GENERIC_HASH_DEFINED
 #define SIRKIT_GENERIC_HASH_DEFINED
 struct GenericHash {
-    // GenericHash(): 実行時に選んだ種で構築する。同じオブジェクトでは結果は一定。
-    // GenericHash(seed): 指定した種で構築する。std::hash対応型の結果はその実装にも依存する。
-    // operator()(x): 整数・列挙・浮動小数・tuple・range・std::hash対応型を再帰的にハッシュ化する。
-    // unorderedコンテナの要素順は無視する。独自の同値関係には対応するHasherも用意する。
 private:
     std::uint64_t seed_;
     static constexpr std::uint64_t mix(std::uint64_t x) noexcept {
@@ -4815,33 +5109,8 @@ public:
 
 #ifndef SIRKIT_HASH_MAP_DEFINED
 #define SIRKIT_HASH_MAP_DEFINED
-// Flat table。検索・追加・削除は期待償却O(1)、列キーのハッシュ計算は列長に比例する。
-// 再配置・clear・swap・ムーブでiterator/参照は無効。eraseは対象だけを無効にする。
-// Key/Valはコピー可能、またはvalue_typeのムーブ構築がnoexceptであること。
-// Hasher/KeyEqualは同値なキーに同じハッシュ値を返し、格納中に規則を変えないこと。
-// 再配置を伴う新規追加の引数には、本表の要素への参照を渡さず先にコピーする。
 template <class Key, class Val, class Hasher = GenericHash, class KeyEqual = std::equal_to<Key>>
 class HashMap {
-    // HashMap(): 空の表を構築する。必要になるまで配列は確保しない。
-    // HashMap(n, hash, equal): n要素分を予約し、指定したハッシュ・同値判定で構築する。
-    // operator[](key): 未登録ならVal{}で追加し、値の参照を返す。
-    // find(key): 対応するiteratorを返す。未登録はend()。const版は変更できない。
-    // contain(key)/contains(key): 登録済みならtrueを返す。追加はしない。
-    // count(key): 登録済みなら1、未登録なら0を返す。
-    // at(key): 値の参照を返す。未登録はout_of_range。const版は変更できない。
-    // insert({key, value})/emplace(key, value): 未登録なら追加し、対応するiteratorを返す。
-    // try_emplace(key, args...): 未登録時だけ値を構築し、{iterator, 追加の有無}を返す。
-    // insert_or_assign(key, value): 追加または上書きし、{iterator, 追加の有無}を返す。
-    // get_or_default(key, fallback): 登録値またはfallbackのコピーを返す。追加はしない。
-    // erase(it, next=true): 対象を削除し次のiteratorを返す。false指定ならend()。
-    // erase(key): キーを削除し、次のiteratorを返す。未登録・erase(end())はend()。
-    // begin()/end()/cbegin()/cend(): 格納要素を順序不定で列挙する。キーは変更できない。
-    // size()/empty(): 登録数・空かどうかをO(1)で返す。
-    // clear(): 全要素を破棄し、確保済みの容量を再利用する。
-    // reserve(n): n要素分の容量を予約する。縮小しない。
-    // rehash(n): nバケット以上・現登録数に必要な容量へ再配置し、墓石を除く。
-    // capacity()/load_factor(): バケット数・使用率をO(1)で返す。
-    // swap(other): 内容とハッシュ・同値判定を交換する。コピーは独立した複製。
 public:
     using key_type = Key;
     using mapped_type = Val;
@@ -4849,8 +5118,23 @@ public:
     using Data = value_type;
     using size_type = std::size_t;
 private:
-    // 単純な型では全スロットを有効な値オブジェクトにし、optionalの状態領域を省く。
+    // 自明にコピー・破棄できる型は、GCCのx86では登録時に構築する。
     // 構築に失敗しうる型はoptionalで未構築状態を管理する。
+#if defined(__GNUC__) && !defined(__clang__) && (defined(__x86_64__) || defined(__i386__))
+    union CompactSlot {
+        value_type value;
+        CompactSlot() noexcept {}
+        value_type& operator*() noexcept { return value; }
+        const value_type& operator*() const noexcept { return value; }
+        value_type* operator->() noexcept { return std::addressof(value); }
+        const value_type* operator->() const noexcept { return std::addressof(value); }
+        template <class... Args> void emplace(Args&&... args) {
+            value_type next(std::forward<Args>(args)...);
+            std::construct_at(std::addressof(value), std::move(next));
+        }
+        void reset() noexcept {} // 自明な破棄なので、削除状態だけをstate_で変更する。
+    };
+#else
     struct CompactSlot {
         value_type value{};
         value_type& operator*() noexcept { return value; }
@@ -4864,6 +5148,7 @@ private:
         }
         void reset() noexcept {} // 自明な破棄なので、削除状態だけをstate_で変更する。
     };
+#endif
     using Slot = std::conditional_t<
         std::is_nothrow_default_constructible_v<value_type> &&
         std::is_nothrow_move_constructible_v<value_type> &&
@@ -4915,9 +5200,60 @@ private:
         }
         return slots_.size();
     }
+#if !defined(SIRKIT_DISABLE_SIMD) && defined(__SSE2__) && (defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__)
+    // 単純な型の再配置で、登録状態を16バケットずつ判定する。
+    void rebuild_simd(size_type capacity) {
+        std::vector<Slot> next(capacity);
+#if defined(__GNUC__) && !defined(__clang__) && (defined(__x86_64__) || defined(__i386__))
+        // 値の構築前に領域を一定間隔で書き、ランダムな初回書き込みの負担を抑える。
+        if constexpr (std::is_same_v<Slot, CompactSlot>) {
+            if (capacity >= 256) {
+                constexpr size_type stride = std::max(size_type{1}, size_type{4096} / sizeof(Slot));
+                for (size_type i = 0; i < capacity; i += stride)
+                    *reinterpret_cast<volatile unsigned char*>(std::addressof(next[i])) = 0;
+            }
+        }
+#endif
+        std::vector<std::uint8_t> state(capacity, 0);
+        const auto shift = static_cast<unsigned>(64 - std::countr_zero(capacity));
+        const auto live = _mm_set1_epi8(1);
+        for (size_type base = 0; base < slots_.size(); base += 16) {
+            const auto states = _mm_loadu_si128(reinterpret_cast<const __m128i*>(state_.data() + base));
+            unsigned mask = static_cast<unsigned>(_mm_movemask_epi8(_mm_cmpeq_epi8(states, live)));
+            while (mask) {
+                const size_type i = base + std::countr_zero(mask);
+                size_type p = bucket(slots_[i]->first, shift);
+                while (state[p]) p = (p + 1) & (capacity - 1);
+                next[p].emplace(*slots_[i]); // 自明なコピーなので、hashが投げても元の値を保つ。
+                state[p] = 1;
+                mask &= mask - 1;
+            }
+        }
+        slots_.swap(next);
+        state_.swap(state);
+        occupied_ = size_;
+        shift_ = shift;
+        invalidate();
+    }
+#endif
     void rebuild(size_type capacity) {
         if (capacity > max_capacity()) throw std::length_error("HashMap: capacity overflow");
+#if !defined(SIRKIT_DISABLE_SIMD) && defined(__SSE2__) && (defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__)
+        if constexpr (std::is_same_v<Slot, CompactSlot>) {
+            if (slots_.size() >= 64) { rebuild_simd(capacity); return; }
+        }
+#endif
         std::vector<Slot> next(capacity);
+#if defined(__GNUC__) && !defined(__clang__) && (defined(__x86_64__) || defined(__i386__))
+        // 値の構築前に領域を一定間隔で書き、ランダムな初回書き込みの負担を抑える。
+        if constexpr (std::is_same_v<Slot, CompactSlot>) {
+            if (capacity >= 256) {
+                constexpr size_type stride = std::max(size_type{1}, size_type{4096} / sizeof(Slot));
+                for (size_type i = 0; i < capacity; i += stride)
+                    *reinterpret_cast<volatile unsigned char*>(std::addressof(next[i])) = 0;
+            }
+        }
+#endif
         std::vector<std::uint8_t> state(capacity, 0);
         const auto shift = static_cast<unsigned>(64 - std::countr_zero(capacity));
         if constexpr (std::is_nothrow_move_constructible_v<value_type> &&
@@ -5062,7 +5398,6 @@ public:
         : hash_(other.hash_), equal_(other.equal_) { swap(other); }
     HashMap& operator=(HashMap other) { swap(other); return *this; }
     void swap(HashMap& other) noexcept(std::is_nothrow_swappable_v<Hasher> && std::is_nothrow_swappable_v<KeyEqual>) {
-        // 関数オブジェクトのswapが例外を送出しないことを要求する。
         static_assert(std::is_nothrow_swappable_v<Hasher> && std::is_nothrow_swappable_v<KeyEqual>,
                       "HashMap: Hasher and KeyEqual must be nothrow swappable");
         using std::swap;
@@ -5072,10 +5407,12 @@ public:
         invalidate(); other.invalidate();
     }
     iterator begin() noexcept {
+        if (size_ == 0) return end();
         size_type p = 0; while (p < slots_.size() && state_[p] != 1) ++p;
         return iterator(this, p);
     }
     const_iterator begin() const noexcept {
+        if (size_ == 0) return end();
         size_type p = 0; while (p < slots_.size() && state_[p] != 1) ++p;
         return const_iterator(this, p);
     }
@@ -5144,7 +5481,9 @@ public:
     }
     iterator erase(iterator it, bool get_next = true) { return erase(const_iterator(it), get_next); }
     iterator erase(const Key& key) { return erase(find(key)); }
+    iterator erase(const Key& key, bool get_next) { return erase(find(key), get_next); }
     void clear() noexcept {
+        if (occupied_ == 0) { invalidate(); return; }
         for (size_type i = 0; i < slots_.size(); ++i) if (state_[i] == 1) slots_[i].reset();
         std::fill(state_.begin(), state_.end(), std::uint8_t{0});
         size_ = occupied_ = 0; invalidate();
@@ -5171,7 +5510,35 @@ public:
 
 // Library: Internal/Nyaan_hash_map_min.cpp
 // SPDX-License-Identifier: CC0-1.0
-// 参考: https://nyaannyaan.github.io/library/data-structure/hash-map-variable-length.hpp
+// Original Source: https://nyaannyaan.github.io/library/data-structure/hash-map-variable-length.hpp.html
+// Original Source (mix): https://prng.di.unimi.it/splitmix64.c
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/internal_hash_map.md
+//
+// API一覧
+// [reinsirk::detail::InternalHashMap<Key,Val,Packed=false,Denominator=5>]
+// Keyはbool・const・volatileを除く64bit以下の整数型。Denominatorは2〜8。
+// dynamic系で共有する内部用の整数ハッシュ表。再確保・release・代入で参照は無効。
+// 検索は期待O(1)、追加は期待償却O(1)。値は既定構築・コピー代入可能であること。
+// Packedは占有フラグのbit化、Denominatorは空き容量の比率1/Denominatorを指定する。
+// InternalHashMap(): 空の表を構築する。初期配列は確保しない。
+// コピー構築は値と配列をコピーし、ムーブ構築は所有権を移す。
+// operator=(other): 値渡しの表と交換し、自身への参照を返す。
+// operator[](key): 未登録なら設定済みの初期値で追加し、値の参照を返す。
+// find_or_emplace(key, f): 未登録ならf()で追加し、値の参照を返す。fは表を変更せず、表内の参照を使わない。
+// find(key): 可変表はVal*、const表はconst Val*を返す。未登録はnullptr、追加しない。
+// find_nonempty(key): 容量確保済みの表でfindと同じ結果を返す。内部ループ用。
+// contains(key)/contain(key): キーが登録済みならtrueを返す。
+// count(key): 登録済みなら1、未登録なら0を返す。
+// for_each(f): 各キーと値のconst参照にfを適用する。fは表を変更しない。非空O(容量)、空O(1)。
+// size()/empty()/capacity()/load_factor(): 件数・空判定・スロット数・使用率をO(1)で返す。
+// reserve(n): n件まで再確保せず追加できる容量を準備する。
+// reallocate(): 容量を2倍にする。空なら初期容量を確保する。
+// clear(): 登録を全て削除する。領域と値の資源を保持。非空はO(容量)、空はO(1)。
+// release(): 領域と登録値をO(容量)で破棄する。設定済み初期値を保持。
+// set_default(value): 今後追加する要素の初期値を設定する。
+// enumerate(): 登録済みの{キー, 値}を順序不定でコピーする。非空O(容量)、空O(1)。
+// swap(other): 表の内容・初期値を交換する。
+
 #include <algorithm>
 #include <bit>
 #include <chrono>
@@ -5186,24 +5553,8 @@ public:
 #ifndef SIRKIT_INTERNAL_HASH_MAP_DEFINED
 #define SIRKIT_INTERNAL_HASH_MAP_DEFINED
 namespace reinsirk::detail {
-// dynamic系で共有する内部用の整数ハッシュ表。参照・ポインタは再確保で無効。
-// Packedは占有フラグのbit化、Denominatorは空き容量の比率1/Denominatorを指定する。
 template <class Key, class Val, bool Packed = false, unsigned Denominator = 5>
 class InternalHashMap {
-    // InternalHashMap(): 空の表を構築する。初期配列は確保しない。
-    // operator[](key): 未登録なら設定済みの初期値で追加し、値の参照を返す。
-    // find(key): 値へのポインタを返す。未登録はnullptrで、追加はしない。
-    // find_nonempty(key): 容量確保済みの表でfindと同じ結果を返す。内部ループ用。
-    // contains(key)/contain(key): キーが登録済みならtrueを返す。
-    // count(key): 登録済みなら1、未登録なら0を返す。
-    // for_each(f): 各登録キーと値のconst参照にfを適用する。fは表を変更しないこと。
-    // size()/empty(): 登録件数・空かどうかを返す。
-    // reserve(n): n件まで再確保せず追加できる容量を準備する。
-    // reallocate(): 容量を2倍にする。空なら初期容量を確保する。
-    // clear(): 登録を全て削除する。確保済みの領域は再利用する。
-    // set_default(value): 今後追加する要素の初期値を設定する。
-    // enumerate(): 登録済みの{キー, 値}を順序不定で列挙する。
-    // swap(other): 表の内容・初期値を交換する。
     static_assert(std::is_integral_v<Key> &&
                   std::is_same_v<Key, std::remove_cv_t<Key>> &&
                   !std::is_same_v<Key, bool> &&
@@ -5248,13 +5599,15 @@ class InternalHashMap {
         std::vector<Key> keys(capacity);
         std::vector<Value> values(capacity);
         std::vector<Flag> used(capacity, 0);
-        for (std::size_t i = 0; i < used_.size(); ++i) {
-            if (!used_[i]) continue;
-            std::size_t p = static_cast<std::size_t>((static_cast<std::uint64_t>(keys_[i]) * salt_) >> next_shift);
-            while (used[p]) p = (p + 1) & (capacity - 1);
-            keys[p] = keys_[i];
-            values[p].value = values_[i].value;
-            used[p] = 1;
+        if (size_ != 0) {
+            for (std::size_t i = 0; i < used_.size(); ++i) {
+                if (!used_[i]) continue;
+                std::size_t p = static_cast<std::size_t>((static_cast<std::uint64_t>(keys_[i]) * salt_) >> next_shift);
+                while (used[p]) p = (p + 1) & (capacity - 1);
+                keys[p] = keys_[i];
+                values[p].value = values_[i].value;
+                used[p] = 1;
+            }
         }
         keys_.swap(keys);
         values_.swap(values);
@@ -5263,7 +5616,6 @@ class InternalHashMap {
     }
 
 public:
-    // 空の状態では配列を確保しない。
     InternalHashMap() noexcept(std::is_nothrow_default_constructible_v<Val>) = default;
     InternalHashMap(const InternalHashMap&) = default;
     InternalHashMap(InternalHashMap&& other) noexcept(std::is_nothrow_default_constructible_v<Val> &&
@@ -5284,7 +5636,6 @@ public:
         swap(shift_, other.shift_);
     }
 
-    // n要素まで再確保せずに格納できる容量を確保する。
     void reserve(std::size_t n) {
         if (n <= keys_.size() - keys_.size() / Denominator) return;
         std::size_t capacity = std::max(std::size_t{8}, keys_.size());
@@ -5296,7 +5647,6 @@ public:
         rehash(capacity);
     }
 
-    // 容量を2倍にする。空なら初期容量を確保する。
     void reallocate() {
         if (keys_.empty()) {
             rehash(8);
@@ -5307,7 +5657,6 @@ public:
         }
     }
 
-    // 未登録なら設定済みの初期値で追加する。
     Val& operator[](Key key) {
         if (keys_.empty()) reallocate();
         std::size_t p = hash(key);
@@ -5327,7 +5676,25 @@ public:
         return values_[p].value;
     }
 
-    // 未登録ならnullptrを返す。読取では要素を追加しない。
+    template <class F> Val& find_or_emplace(Key key, F&& factory) {
+        if (keys_.empty()) reallocate();
+        std::size_t p = hash(key);
+        while (used_[p]) {
+            if (keys_[p] == key) return values_[p].value;
+            p = (p + 1) & (keys_.size() - 1);
+        }
+        if (size_ == keys_.size() - keys_.size() / Denominator) {
+            reallocate();
+            p = hash(key);
+            while (used_[p]) p = (p + 1) & (keys_.size() - 1);
+        }
+        values_[p].value = std::forward<F>(factory)();
+        keys_[p] = key;
+        used_[p] = 1;
+        ++size_;
+        return values_[p].value;
+    }
+
     const Val* find(const Key& key) const noexcept {
         if (keys_.empty()) return nullptr;
         return find_nonempty(key);
@@ -5344,9 +5711,9 @@ public:
         return const_cast<Val*>(static_cast<const InternalHashMap&>(*this).find(key));
     }
 
-    // 登録済みのキーと値を列挙する。順序は不定。
     std::vector<std::pair<Key, Val>> enumerate() const {
         std::vector<std::pair<Key, Val>> result;
+        if (empty()) return result;
         result.reserve(size_);
         for (std::size_t i = 0; i < used_.size(); ++i)
             if (used_[i]) result.emplace_back(keys_[i], values_[i].value);
@@ -5354,6 +5721,7 @@ public:
     }
 
     template <class F> void for_each(F&& f) const {
+        if (empty()) return;
         for (std::size_t i = 0; i < used_.size(); ++i)
             if (used_[i]) f(keys_[i], values_[i].value);
     }
@@ -5362,12 +5730,23 @@ public:
     [[nodiscard]] bool contain(Key key) const noexcept { return contains(key); }
     [[nodiscard]] int count(Key key) const noexcept { return contains(key) ? 1 : 0; }
     void clear() noexcept {
+        if (empty()) return;
         std::fill(used_.begin(), used_.end(), Flag{0});
         size_ = 0;
     }
+    void release() noexcept {
+        decltype(keys_){}.swap(keys_);
+        decltype(values_){}.swap(values_);
+        decltype(used_){}.swap(used_);
+        size_ = 0;
+        shift_ = 61;
+    }
+    std::size_t capacity() const noexcept { return keys_.size(); }
+    double load_factor() const noexcept {
+        return capacity() == 0 ? 0.0 : static_cast<double>(size_) / capacity();
+    }
     std::size_t size() const noexcept { return size_; }
     bool empty() const noexcept { return size_ == 0; }
-    // 今後追加する要素の初期値を設定する。
     void set_default(const Val& value) { default_value_ = value; }
 };
 
@@ -5379,6 +5758,28 @@ public:
 // SPDX-License-Identifier: CC0-1.0
 // Original Source: https://nyaannyaan.github.io/library/data-structure/line-container.hpp.html
 // Original Source: https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/LineContainer.h
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/line_container.md
+//
+// API一覧
+// [LineContainer<T,objective>・MinLineContainer<T>・MaxLineContainer<T>]
+// add(k,m): y=k*x+mを追加、償却O(log h)。整数は符号付き64bit以下、浮動係数は有限値。
+// query(x): 最適値をO(log h)で返す。空は検査時例外、省略時は非空が前提。整数範囲外は常に例外。
+// query_optional(x): 空ならnullopt、それ以外はqueryと同じ。xは浮動小数点なら有限値。
+// query_line(x): 選択した元の(k,m)をO(log h)で返す。同点の係数は未規定。
+// query_line_optional(x): 空ならnullopt、それ以外はquery_lineと同じ。
+// query_with_line(x): 1回の探索でResult{最適値,k,m}を返す。queryと同じ前提・O(log h)。
+// query_with_line_optional(x): 空ならnullopt、それ以外はquery_with_lineと同じ。
+// size()/empty()/clear(): 有効な包絡直線の本数・空判定・全削除、O(1)/O(1)/O(h)。
+// begin()/end()/lower_bound(x): 元係数と交点を参照。最小化の傾き順は降順。直接変更は不変条件を壊す。
+// insect(x,y): 旧互換の内部交点更新。正しい包絡iterator以外では呼び出さない。
+// コピーは独立した包絡。hは有効直線数。浮動小数点版の交点・最適値には丸め誤差がある。
+// objectiveはMINIMIZE/MAXIMIZE。MinLineContainer<T>/MaxLineContainer<T>は最小化/最大化の別名。
+//
+// [Line<T>・補助関数]
+// Line<T>のk,m: 元の係数。p: この直線が選ばれる右端(整数は型の範囲に制限)。
+// lc_inf<T>(): 整数では最大値、浮動小数点では正の無限大を返す。
+// lc_div(a,b): 整数は床除算、浮動小数点は通常除算。0除算・整数結果の範囲外は例外。
+
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
@@ -5396,7 +5797,6 @@ public:
 
 enum Objective { MAXIMIZE = +1, MINIMIZE = -1 };
 
-// k,m: 元の係数。p: この直線が選ばれる右端(整数は型の範囲に制限)。
 template <typename T>
 struct Line {
   mutable T k, m, p;
@@ -5404,14 +5804,12 @@ struct Line {
   bool operator<(T x) const { return p < x; }
 };
 
-// lc_inf<T>(): 整数では最大値、浮動小数点では正の無限大を返す。
 template <typename T>
 constexpr T lc_inf() {
   if constexpr (std::is_floating_point_v<T>) return std::numeric_limits<T>::infinity();
   else return std::numeric_limits<T>::max();
 }
 
-// lc_div(a,b): 整数は床除算、浮動小数点は通常除算。0除算・整数結果の範囲外は例外。
 template <typename T>
 T lc_div(T a, T b) {
   if (b == 0) throw std::domain_error("lc_div: division by zero");
@@ -5436,15 +5834,6 @@ struct LineComparator {
 };
 }  // namespace reinsirk::detail
 
-// add(k,m): y=k*x+mを追加、償却O(log h)。整数は符号付き64bit以下、浮動係数は有限値。
-// query(x): 最適値をO(log h)で返す。空は検査時例外、省略時は非空が前提。整数範囲外は常に例外。
-// query_optional(x): 空ならnullopt、それ以外はqueryと同じ。xは浮動小数点なら有限値。
-// query_line(x): 選択した元の(k,m)をO(log h)で返す。同点の係数は未規定。
-// query_line_optional(x): 空ならnullopt、それ以外はquery_lineと同じ。
-// size()/empty()/clear(): 有効な包絡直線の本数・空判定・全削除、O(1)/O(1)/O(h)。
-// begin()/end()/lower_bound(x): 元係数と交点を参照。最小化の傾き順は降順。直接変更は不変条件を壊す。
-// insect(x,y): 旧互換の内部交点更新。正しい包絡iterator以外では呼び出さない。
-// コピーは独立した包絡。hは有効直線数。浮動小数点版の交点・最適値には丸め誤差がある。
 template <typename T, Objective objective>
 struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T, objective>> {
   static_assert((std::is_integral_v<T> && std::is_signed_v<T> && sizeof(T) <= 8) ||
@@ -5454,6 +5843,7 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
   using super::begin, super::end, super::insert, super::erase;
   using super::empty, super::lower_bound;
   static constexpr T inf = lc_inf<T>();
+  struct Result { T value, k, m; };
 
  private:
   static bool boundary_less(const Line<T>& a, const Line<T>& b) {
@@ -5593,6 +5983,52 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
  private:
   friend struct LineContainer2D;
   void add_unchecked(T k, T m) {
+    if constexpr (std::is_integral_v<T>) {
+      // 小さい包絡では、確保前に不要な直線を除く。
+      if (super::size() <= 256) {
+        Line<T> candidate{k, m, inf};
+        auto z = lower_bound(candidate);
+        if (z != end() && z->k == k) {
+          const bool better = objective == MAXIMIZE ? m > z->m : m < z->m;
+          if (!better) return;
+        } else if (z != end() && intersection(candidate, *z)) return;
+        auto x = z;
+        const bool has_previous = z != begin();
+        Line<T> previous{};
+        // 下端だけで選ばれる直線と、選択域が型の範囲外の直線を区別する。
+        bool previous_below = false;
+        if (has_previous) {
+          --x;
+          previous = *x;
+          previous_below = intersection(previous, candidate);
+          if (!previous_below && previous.p >= candidate.p &&
+              (z == end() || candidate.p < z->p)) return;
+        }
+        auto y = insert(z, candidate);
+        while (z != end() && !boundary_less(*y, *z)) {
+          z = erase(z);
+          insect(y, z);
+        }
+        if (has_previous) {
+          x->p = previous.p;
+          if (!previous_below && !boundary_less(*x, *y)) insect(x, y = erase(y));
+        } else x = y;
+        while ((y = x) != begin() && !boundary_less(*--x, *y)) insect(x, erase(y));
+        // floorが最小値の直線はその点で最適になり得る。真の域外だけ除く。
+        if constexpr (std::is_integral_v<T>) {
+          const auto first = begin();
+          if (first->p == std::numeric_limits<T>::min()) [[unlikely]] {
+            const auto next = std::next(first);
+            if (next != end()) {
+              bool first_below;
+              insect_impl(first, next, first_below);
+              if (first_below) erase(first);
+            }
+          }
+        }
+        return;
+      }
+    }
     auto z = insert({k, m, 0}), y = z++, x = y;
     bool below;
     while (insect_impl(y, z, below)) z = erase(z);
@@ -5646,6 +6082,22 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
     if (empty()) return std::nullopt;
     const auto line = lower_bound(x);
     return std::pair<T,T>{line->k, line->m};
+  }
+#if defined(__GNUC__) || defined(__clang__)
+  __attribute__((always_inline))
+#endif
+  Result query_with_line(T x) const {
+    const auto line = selected(x);
+    return {evaluate(line->k, line->m, x), line->k, line->m};
+  }
+#if defined(__GNUC__) || defined(__clang__)
+  __attribute__((always_inline))
+#endif
+  std::optional<Result> query_with_line_optional(T x) const {
+    check_x(x);
+    if (empty()) return std::nullopt;
+    const auto line = lower_bound(x);
+    return Result{evaluate(line->k, line->m, x), line->k, line->m};
   }
 };
 template <typename T> using MinLineContainer = LineContainer<T, MINIMIZE>;
@@ -5657,6 +6109,46 @@ template <typename T> using MaxLineContainer = LineContainer<T, MAXIMIZE>;
 // SPDX-License-Identifier: CC0-1.0
 // Original Source: https://nyaannyaan.github.io/library/data-structure/line-container-2d.hpp.html
 // Original Source: https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/LineContainer.h
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/line_container_2d.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/line_container.md
+//
+// API一覧
+// [LineContainer2D]
+// add(x,y): 有限の点を追加、償却O(log h)。確保失敗時は空に戻して例外を伝える。
+// max_ld(a,b)/min_ld(a,b): ax+byの最大/最小をO(log h)で返す。有限係数・非空が前提。
+// max_ld/min_ld(整数,整数): 値域がint64_t内の整数型は、型から保証できる有限性・比の検査を省く。
+// b/aが浮動型の範囲を超える問い合わせは常にoverflow_error。
+// max_ll(a,b)/min_ll(a,b): 浮動計算を±4.1e18に制限し、0方向へ切り捨てる(旧挙動)。
+// max_rounded_ll(a,b)/min_rounded_ll(a,b): 同じ範囲制限後、半整数は0から遠い方へ丸める。
+// max_optional(a,b)/min_optional(a,b): 空ならnullopt、それ以外はld版と同じ。
+// argmax(a,b)/argmin(a,b): 最適な元の点(x,y)をO(log h)で返す。同点の点は未規定。
+// max_with_point(a,b)/min_with_point(a,b): 1回の探索でResult{内積値,x,y}を返す。ld係数・非空、O(log h)。
+// argmax_optional(a,b)/argmin_optional(a,b): 空ならnullopt、それ以外はarg版と同じ。
+// size()/empty()/clear(): 登録点数(重複込み)・空判定・全削除、O(1)/O(1)/O(h)。
+// swap(other): 2コンテナの全状態をO(1)で交換する。コピーは独立、move後の元は空。
+// 公開のminlc/maxlc・座標範囲は参照用。外からの変更は不変条件を壊す。
+// long doubleの丸め誤差があり、ll版も厳密な整数内積ではない。hは包絡に残る点数。
+// 既定の丸めモード・型本来の精度が前提。ゼロの符号は未規定。
+//
+// [同梱: LineContainer<T,objective>]
+// add(k,m): y=k*x+mを追加、償却O(log h)。整数は符号付き64bit以下、浮動係数は有限値。
+// query(x): 最適値をO(log h)で返す。空は検査時例外、省略時は非空が前提。整数範囲外は常に例外。
+// query_optional(x): 空ならnullopt、それ以外はqueryと同じ。xは浮動小数点なら有限値。
+// query_line(x): 選択した元の(k,m)をO(log h)で返す。同点の係数は未規定。
+// query_line_optional(x): 空ならnullopt、それ以外はquery_lineと同じ。
+// query_with_line(x): 1回の探索でResult{最適値,k,m}を返す。queryと同じ前提・O(log h)。
+// query_with_line_optional(x): 空ならnullopt、それ以外はquery_with_lineと同じ。
+// size()/empty()/clear(): 有効な包絡直線の本数・空判定・全削除、O(1)/O(1)/O(h)。
+// begin()/end()/lower_bound(x): 元係数と交点を参照。最小化の傾き順は降順。直接変更は不変条件を壊す。
+// insect(x,y): 旧互換の内部交点更新。正しい包絡iterator以外では呼び出さない。
+// コピーは独立した包絡。hは有効直線数。浮動小数点版の交点・最適値には丸め誤差がある。
+// objectiveはMINIMIZE/MAXIMIZE。MinLineContainer<T>/MaxLineContainer<T>は最小化/最大化の別名。
+//
+// [Line<T>・補助関数]
+// Line<T>のk,m: 元の係数。p: この直線が選ばれる右端(整数は型の範囲に制限)。
+// lc_inf<T>(): 整数では最大値、浮動小数点では正の無限大を返す。
+// lc_div(a,b): 整数は床除算、浮動小数点は通常除算。0除算・整数結果の範囲外は例外。
+
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
@@ -5674,7 +6166,6 @@ template <typename T> using MaxLineContainer = LineContainer<T, MAXIMIZE>;
 
 enum Objective { MAXIMIZE = +1, MINIMIZE = -1 };
 
-// k,m: 元の係数。p: この直線が選ばれる右端(整数は型の範囲に制限)。
 template <typename T>
 struct Line {
   mutable T k, m, p;
@@ -5682,14 +6173,12 @@ struct Line {
   bool operator<(T x) const { return p < x; }
 };
 
-// lc_inf<T>(): 整数では最大値、浮動小数点では正の無限大を返す。
 template <typename T>
 constexpr T lc_inf() {
   if constexpr (std::is_floating_point_v<T>) return std::numeric_limits<T>::infinity();
   else return std::numeric_limits<T>::max();
 }
 
-// lc_div(a,b): 整数は床除算、浮動小数点は通常除算。0除算・整数結果の範囲外は例外。
 template <typename T>
 T lc_div(T a, T b) {
   if (b == 0) throw std::domain_error("lc_div: division by zero");
@@ -5714,15 +6203,6 @@ struct LineComparator {
 };
 }  // namespace reinsirk::detail
 
-// add(k,m): y=k*x+mを追加、償却O(log h)。整数は符号付き64bit以下、浮動係数は有限値。
-// query(x): 最適値をO(log h)で返す。空は検査時例外、省略時は非空が前提。整数範囲外は常に例外。
-// query_optional(x): 空ならnullopt、それ以外はqueryと同じ。xは浮動小数点なら有限値。
-// query_line(x): 選択した元の(k,m)をO(log h)で返す。同点の係数は未規定。
-// query_line_optional(x): 空ならnullopt、それ以外はquery_lineと同じ。
-// size()/empty()/clear(): 有効な包絡直線の本数・空判定・全削除、O(1)/O(1)/O(h)。
-// begin()/end()/lower_bound(x): 元係数と交点を参照。最小化の傾き順は降順。直接変更は不変条件を壊す。
-// insect(x,y): 旧互換の内部交点更新。正しい包絡iterator以外では呼び出さない。
-// コピーは独立した包絡。hは有効直線数。浮動小数点版の交点・最適値には丸め誤差がある。
 template <typename T, Objective objective>
 struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T, objective>> {
   static_assert((std::is_integral_v<T> && std::is_signed_v<T> && sizeof(T) <= 8) ||
@@ -5732,6 +6212,7 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
   using super::begin, super::end, super::insert, super::erase;
   using super::empty, super::lower_bound;
   static constexpr T inf = lc_inf<T>();
+  struct Result { T value, k, m; };
 
  private:
   static bool boundary_less(const Line<T>& a, const Line<T>& b) {
@@ -5871,6 +6352,52 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
  private:
   friend struct LineContainer2D;
   void add_unchecked(T k, T m) {
+    if constexpr (std::is_integral_v<T>) {
+      // 小さい包絡では、確保前に不要な直線を除く。
+      if (super::size() <= 256) {
+        Line<T> candidate{k, m, inf};
+        auto z = lower_bound(candidate);
+        if (z != end() && z->k == k) {
+          const bool better = objective == MAXIMIZE ? m > z->m : m < z->m;
+          if (!better) return;
+        } else if (z != end() && intersection(candidate, *z)) return;
+        auto x = z;
+        const bool has_previous = z != begin();
+        Line<T> previous{};
+        // 下端だけで選ばれる直線と、選択域が型の範囲外の直線を区別する。
+        bool previous_below = false;
+        if (has_previous) {
+          --x;
+          previous = *x;
+          previous_below = intersection(previous, candidate);
+          if (!previous_below && previous.p >= candidate.p &&
+              (z == end() || candidate.p < z->p)) return;
+        }
+        auto y = insert(z, candidate);
+        while (z != end() && !boundary_less(*y, *z)) {
+          z = erase(z);
+          insect(y, z);
+        }
+        if (has_previous) {
+          x->p = previous.p;
+          if (!previous_below && !boundary_less(*x, *y)) insect(x, y = erase(y));
+        } else x = y;
+        while ((y = x) != begin() && !boundary_less(*--x, *y)) insect(x, erase(y));
+        // floorが最小値の直線はその点で最適になり得る。真の域外だけ除く。
+        if constexpr (std::is_integral_v<T>) {
+          const auto first = begin();
+          if (first->p == std::numeric_limits<T>::min()) [[unlikely]] {
+            const auto next = std::next(first);
+            if (next != end()) {
+              bool first_below;
+              insect_impl(first, next, first_below);
+              if (first_below) erase(first);
+            }
+          }
+        }
+        return;
+      }
+    }
     auto z = insert({k, m, 0}), y = z++, x = y;
     bool below;
     while (insect_impl(y, z, below)) z = erase(z);
@@ -5925,6 +6452,22 @@ struct LineContainer : std::multiset<Line<T>, reinsirk::detail::LineComparator<T
     const auto line = lower_bound(x);
     return std::pair<T,T>{line->k, line->m};
   }
+#if defined(__GNUC__) || defined(__clang__)
+  __attribute__((always_inline))
+#endif
+  Result query_with_line(T x) const {
+    const auto line = selected(x);
+    return {evaluate(line->k, line->m, x), line->k, line->m};
+  }
+#if defined(__GNUC__) || defined(__clang__)
+  __attribute__((always_inline))
+#endif
+  std::optional<Result> query_with_line_optional(T x) const {
+    check_x(x);
+    if (empty()) return std::nullopt;
+    const auto line = lower_bound(x);
+    return Result{evaluate(line->k, line->m, x), line->k, line->m};
+  }
 };
 template <typename T> using MinLineContainer = LineContainer<T, MINIMIZE>;
 template <typename T> using MaxLineContainer = LineContainer<T, MAXIMIZE>;
@@ -5933,23 +6476,10 @@ template <typename T> using MaxLineContainer = LineContainer<T, MAXIMIZE>;
 #ifndef SIRKIT_LINE_CONTAINER_2D_DEFINED
 #define SIRKIT_LINE_CONTAINER_2D_DEFINED
 
-// add(x,y): 有限の点を追加、償却O(log h)。確保失敗時は空に戻して例外を伝える。
-// max_ld(a,b)/min_ld(a,b): ax+byの最大/最小をO(log h)で返す。有限係数・非空が前提。
-// max_ld/min_ld(整数,整数): 値域がint64_t内の整数型は、型から保証できる有限性・比の検査を省く。
-// b/aが浮動型の範囲を超える問い合わせは常にoverflow_error。
-// max_ll(a,b)/min_ll(a,b): 浮動計算を±4.1e18に制限し、0方向へ切り捨てる(旧挙動)。
-// max_rounded_ll(a,b)/min_rounded_ll(a,b): 同じ範囲制限後、半整数は0から遠い方へ丸める。
-// max_optional(a,b)/min_optional(a,b): 空ならnullopt、それ以外はld版と同じ。
-// argmax(a,b)/argmin(a,b): 最適な元の点(x,y)をO(log h)で返す。同点の点は未規定。
-// argmax_optional(a,b)/argmin_optional(a,b): 空ならnullopt、それ以外はarg版と同じ。
-// size()/empty()/clear(): 登録点数(重複込み)・空判定・全削除、O(1)/O(1)/O(h)。
-// swap(other): 2コンテナの全状態をO(1)で交換する。コピーは独立、move後の元は空。
-// 公開のminlc/maxlc・座標範囲は参照用。外からの変更は不変条件を壊す。
-// long doubleの丸め誤差があり、ll版も厳密な整数内積ではない。hは包絡に残る点数。
-// 既定の丸めモード・型本来の精度が前提。ゼロの符号は未規定。
 struct LineContainer2D {
   using ld = long double;
   using ll = std::int64_t;
+  struct Result { ld value, x, y; };
   static constexpr ld INF = 4.1e18L;
   static constexpr ll INTEGER_LIMIT = 4'100'000'000'000'000'000;
   ld Xmax = -std::numeric_limits<ld>::infinity();
@@ -6416,6 +6946,20 @@ struct LineContainer2D {
   ll min_ll(ll a, ll b) const { return static_cast<ll>(std::clamp(integer_value<true>(a, b), -INF, INF)); }
   ll max_rounded_ll(ll a, ll b) const { return to_rounded_integer(integer_value<false>(a, b)); }
   ll min_rounded_ll(ll a, ll b) const { return to_rounded_integer(integer_value<true>(a, b)); }
+  Result max_with_point(ld a, ld b) const {
+    check_empty();
+    const auto [x, y] = select(a, b);
+    ld result = a * x + b * y;
+    if (std::isnan(result)) [[unlikely]] {
+      const Line<ld> line{y, x, 0};
+      result = recover_line_dot(a, b, &line);
+    }
+    return {result, x, y};
+  }
+  Result min_with_point(ld a, ld b) const {
+    const auto result = max_with_point(-a, -b);
+    return {-result.value, result.x, result.y};
+  }
   std::pair<ld, ld> argmax(ld a, ld b) const { check_empty(); return select(a, b); }
   std::pair<ld, ld> argmin(ld a, ld b) const { return argmax(-a, -b); }
 #if (defined(__clang__) || defined(__GNUC__))
@@ -6457,6 +7001,20 @@ struct LineContainer2D {
 
 // Library: DataStructure/heap.cpp
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/heap.md
+//
+// API一覧
+// [Heap]
+// int の最小ヒープ。値を所有し、コピー・ムーブ可能。
+// Heap(): 空を構築。Heap(vector<int>): 値を受け取り O(N) で構築。
+// Heap({値...}), Heap(first,last): 値をコピーし O(N) で構築。
+// empty(), size(): 空判定・要素数を O(1) で返す。
+// top(): 最小値、空なら -1 を O(1) で返す。top_or(fallback): 空なら fallback。
+// push(value): 値を追加、償却 O(log N)。pop(): 最小値を削除、空なら何もしない、O(log N)。
+// pop_value(): 最小値を削除して返す、O(log N)。空なら out_of_range、検査省略時は非空が前提。
+// replace_top(value): 最小値を置換して旧値を返す、O(log N)。空の扱いは pop_value() と同じ。
+// push_pop(value): 値を追加した後の最小値を返して削除、O(log N)、空なら value を返す。
+// clear(): 全要素を削除、容量を保持。reserve(n): n 要素分の容量を確保、再確保時 O(N)。
 
 #include <algorithm>
 #include <cstddef>
@@ -6470,16 +7028,6 @@ struct LineContainer2D {
 #ifndef SIRKIT_HEAP_DEFINED
 #define SIRKIT_HEAP_DEFINED
 
-// int の最小ヒープ。値を所有し、コピー・ムーブ可能。
-// Heap(): 空を構築。Heap(vector<int>): 値を受け取り O(N) で構築。
-// Heap({値...}), Heap(first,last): 値をコピーし O(N) で構築。
-// empty(), size(): 空判定・要素数を O(1) で返す。
-// top(): 最小値、空なら -1 を O(1) で返す。top_or(fallback): 空なら fallback。
-// push(value): 値を追加、償却 O(log N)。pop(): 最小値を削除、空なら何もしない、O(log N)。
-// pop_value(): 最小値を削除して返す、O(log N)。空なら out_of_range、検査省略時は非空が前提。
-// replace_top(value): 最小値を置換して旧値を返す、O(log N)。空の扱いは pop_value() と同じ。
-// push_pop(value): 値を追加した後の最小値を返して削除、O(log N)、空なら value を返す。
-// clear(): 全要素を削除、容量を保持。reserve(n): n 要素分の容量を確保、再確保時 O(N)。
 class Heap {
     std::vector<int> values_;
 
@@ -6604,60 +7152,18 @@ public:
 
 // Library: DataStructure/implicit_treap.cpp
 // SPDX-License-Identifier: CC0-1.0
-#include <algorithm>
-#include <chrono>
-#include <cstddef>
-#include <cstdint>
-#include <limits>
-#include <stdexcept>
-#include <type_traits>
-#include <utility>
-#include <vector>
-
-#ifndef SIRKIT_RANGE_ADD_MIN_DEFINED
-#define SIRKIT_RANGE_ADD_MIN_DEFINED
-// 区間加算・最小値。値と加算後の値は INF 以下、各演算は int64_t に収まること。
-// op(a,b)/e(): 最小値/単位元。mapping(f,x): 加算。composition(f,g)/id(): 加算の合成/0。
-struct RangeAddMin {
-    using S = std::int64_t;
-    using F = std::int64_t;
-    static constexpr S INF = INT64_C(8000000000000000000);
-    static S op(S a, S b) { return std::min(a, b); }
-    static S e() { return INF; }
-    static S mapping(F f, S x) { return x + f; }
-    static F composition(F f, F g) { return f + g; }
-    static F id() { return 0; }
-};
-#endif
-
-#ifndef SIRKIT_RANGE_ADD_SUM_DEFINED
-#define SIRKIT_RANGE_ADD_SUM_DEFINED
-// 区間加算・和。各要素は S{値, 1} とし、演算結果は int64_t に収まること。
-// op(a,b)/e(): 和と個数の合計/空。mapping(f,x): 各要素へ加算。composition(f,g)/id(): 合成/0。
-struct RangeAddSum {
-    struct S {
-        std::int64_t sum, size;
-        friend bool operator<(S a, S b) { return a.sum < b.sum; }
-        friend bool operator==(S a, S b) { return a.sum == b.sum; }
-    };
-    using F = std::int64_t;
-    static S op(S a, S b) { return {a.sum + b.sum, a.size + b.size}; }
-    static S e() { return {0, 0}; }
-    static S mapping(F f, S x) { return {x.sum + f * x.size, x.size}; }
-    static F composition(F f, F g) { return f + g; }
-    static F id() { return 0; }
-};
-#endif
-
-#ifndef SIRKIT_IMPLICIT_TREAP_DEFINED
-#define SIRKIT_IMPLICIT_TREAP_DEFINED
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/implicit_treap.md
+//
+// API一覧
+// [lazy_implicit_treap]
 // 可変長列。通常操作は期待 O(log N)、erase は O(削除数 + log N)、領域 O(最大要素数)。
 // op は結合的、e は単位元。mapping は集約に分配し、composition(f,g) は g の後に f。
 // op・mapping等の計算時間をO(1)として記す。
 // 非可換 op では順方向・逆方向を保持する。添字と区間は 0 始まり・半開区間。
 // 第8引数 Commutative=true は op の可換性を指定する。既知の既定 op は自動認識する。
 // lazy_implicit_treap() は空列、(vector<S>) は O(N) で列を構築する。
-// コピーは O(スロット数) で独立した所有。ムーブ元は空列、swap は O(1)。
+// コピーは O(スロット数) で独立した所有。コピー代入失敗時は元の列を保持する。
+// ムーブ元は空列、swap は O(1)。
 // size() / empty() は要素数・空判定を O(1) で返す。
 // clear() は O(スロット数) で要素を破棄し、確保済み容量を保持する。
 // reserve(n) は容量を確保する。int の範囲を超える要求は例外。
@@ -6680,6 +7186,58 @@ struct RangeAddSum {
 // max_right(l,g) / max_right<g>(l) は g(prod(l,r)) が真となる最大 r。
 // min_left(r,g) / min_left<g>(r) は g(prod(l,r)) が真となる最小 l。
 // 境界探索は g(e()) が真で区間伸長に単調であること。検査省略時の不正入力は未定義。
+//
+// [既定の作用: RangeAddMin]
+// 区間加算・最小値。値と加算後の値は INF 以下、各演算は int64_t に収まること。
+// op(a,b)/e(): 最小値/単位元。mapping(f,x): 加算。composition(f,g)/id(): 加算の合成/0。
+//
+// [既定の作用: RangeAddSum]
+// 区間加算・和。各要素は S{値, 1} とし、演算結果は int64_t に収まること。
+// op(a,b)/e(): 和と個数の合計/空。mapping(f,x): 各要素へ加算。composition(f,g)/id(): 合成/0。
+
+#include <algorithm>
+#include <chrono>
+#include <cstddef>
+#include <cstdint>
+#include <limits>
+#include <stdexcept>
+#include <type_traits>
+#include <utility>
+#include <vector>
+
+#ifndef SIRKIT_RANGE_ADD_MIN_DEFINED
+#define SIRKIT_RANGE_ADD_MIN_DEFINED
+struct RangeAddMin {
+    using S = std::int64_t;
+    using F = std::int64_t;
+    static constexpr S INF = INT64_C(8000000000000000000);
+    static S op(S a, S b) { return std::min(a, b); }
+    static S e() { return INF; }
+    static S mapping(F f, S x) { return x + f; }
+    static F composition(F f, F g) { return f + g; }
+    static F id() { return 0; }
+};
+#endif
+
+#ifndef SIRKIT_RANGE_ADD_SUM_DEFINED
+#define SIRKIT_RANGE_ADD_SUM_DEFINED
+struct RangeAddSum {
+    struct S {
+        std::int64_t sum, size;
+        friend bool operator<(S a, S b) { return a.sum < b.sum; }
+        friend bool operator==(S a, S b) { return a.sum == b.sum; }
+    };
+    using F = std::int64_t;
+    static S op(S a, S b) { return {a.sum + b.sum, a.size + b.size}; }
+    static S e() { return {0, 0}; }
+    static S mapping(F f, S x) { return {x.sum + f * x.size, x.size}; }
+    static F composition(F f, F g) { return f + g; }
+    static F id() { return 0; }
+};
+#endif
+
+#ifndef SIRKIT_IMPLICIT_TREAP_DEFINED
+#define SIRKIT_IMPLICIT_TREAP_DEFINED
 template<class S = RangeAddMin::S,
          S (*op)(S, S) = RangeAddMin::op,
          S (*e)() = RangeAddMin::e,
@@ -6822,6 +7380,22 @@ class lazy_implicit_treap {
         pull(p);
         return p;
     }
+    int insert_node(int p, int fresh, int position) {
+        if (p < 0) return fresh;
+        if (nodes_[fresh].priority > nodes_[p].priority) {
+            auto [left, right] = split(p, position);
+            nodes_[fresh].left = left;
+            nodes_[fresh].right = right;
+            pull(fresh);
+            return fresh;
+        }
+        push(p);
+        const int left_size = length(nodes_[p].left);
+        if (position <= left_size) nodes_[p].left = insert_node(nodes_[p].left, fresh, position);
+        else nodes_[p].right = insert_node(nodes_[p].right, fresh, position - left_size - 1);
+        pull(p);
+        return p;
+    }
     int allocate(S value) {
         if (free_ >= 0) {
             int p = free_;
@@ -6834,14 +7408,30 @@ class lazy_implicit_treap {
         nodes_.emplace_back(std::move(value), priority());
         return static_cast<int>(nodes_.size()) - 1;
     }
+    void recycle(int p) {
+        nodes_[p] = Node(e(), 0);
+        nodes_[p].left = free_;
+        free_ = p;
+    }
+    int erase_node(int p, int position, int& removed) {
+        push(p);
+        const int left_size = length(nodes_[p].left);
+        if (position < left_size) nodes_[p].left = erase_node(nodes_[p].left, position, removed);
+        else if (position > left_size) nodes_[p].right = erase_node(nodes_[p].right, position - left_size - 1, removed);
+        else {
+            const int result = merge(nodes_[p].left, nodes_[p].right);
+            removed = p;
+            return result;
+        }
+        pull(p);
+        return p;
+    }
     void release(int p) {
         if (p < 0) return;
         release(nodes_[p].left);
         release(nodes_[p].right);
         // 値と遅延作用を単位元へ戻して、スロットを再利用する。
-        nodes_[p] = Node(e(), 0);
-        nodes_[p].left = free_;
-        free_ = p;
+        recycle(p);
     }
     void check_position(int p, bool end_allowed = false) const {
 #ifndef SKIP_RUNTIME_CHECKS
@@ -6958,7 +7548,21 @@ public:
         while (!stack.empty()) { pull(stack.back()); stack.pop_back(); }
     }
     lazy_implicit_treap(const lazy_implicit_treap&) = default;
-    lazy_implicit_treap& operator=(const lazy_implicit_treap&) = default;
+    lazy_implicit_treap& operator=(const lazy_implicit_treap& other) {
+        if (this == &other) return *this;
+        if constexpr (std::is_nothrow_copy_constructible_v<Node> && std::is_nothrow_copy_assignable_v<Node>) {
+            if (other.nodes_.size() <= nodes_.capacity()) {
+                nodes_ = other.nodes_;
+                root_ = other.root_;
+                free_ = other.free_;
+                random_ = other.random_;
+                return *this;
+            }
+        }
+        lazy_implicit_treap temporary(other);
+        swap(temporary);
+        return *this;
+    }
     lazy_implicit_treap(lazy_implicit_treap&& other) noexcept
         : nodes_(std::move(other.nodes_)), root_(std::exchange(other.root_, -1)),
           free_(std::exchange(other.free_, -1)), random_(other.random_) { other.nodes_.clear(); }
@@ -7011,10 +7615,7 @@ public:
         int p = allocate(std::move(value));
         if (pos == size()) root_ = merge(root_, p);
         else if (pos == 0) root_ = merge(p, root_);
-        else {
-            auto [a, b] = split(root_, pos);
-            root_ = merge(merge(a, p), b);
-        }
+        else root_ = insert_node(root_, p, pos);
     }
     void push_back(S value) { insert_at(size(), std::move(value)); }
     void push_front(S value) { insert_at(0, std::move(value)); }
@@ -7028,9 +7629,14 @@ public:
         root_ = merge(a, c);
         release(b);
     }
-    void erase_at(int pos) { check_position(pos); erase(pos, pos + 1); }
-    void pop_back() { if (!empty()) erase(size() - 1, size()); }
-    void pop_front() { if (!empty()) erase(0, 1); }
+    void erase_at(int pos) {
+        check_position(pos);
+        int removed = -1;
+        root_ = erase_node(root_, pos, removed);
+        recycle(removed);
+    }
+    void pop_back() { if (!empty()) erase_at(size() - 1); }
+    void pop_front() { if (!empty()) erase_at(0); }
     void apply(int l, int r, F f) {
         check_range(l, r);
         if (l != r) apply_range(root_, l, r, f);

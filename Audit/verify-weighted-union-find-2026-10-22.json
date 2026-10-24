@@ -1,0 +1,2611 @@
+{
+  "date": "2026-10-22",
+  "scope": "weighted_union_find現在版の独立ローカル検証。オンライン未提出。",
+  "source_sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+  "baseline_source_sha256": "9b732b7570f8b3e1fd41ab2d70e92f3f479ada0bd4cfc24e193cffc1a583b52c",
+  "submission_sha256": "99b51a20c13d8ccbd763ae61ab1ae680bda87b031ccb063c1e64de2eca63cba1",
+  "online_submission_performed": false,
+  "online_status": "未提出",
+  "problem_url": "https://judge.yosupo.jp/problem/unionfind_with_potential",
+  "official_sources": [
+    {
+      "source": "common/random.h",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/common/random.h",
+      "sha256": "d0ae9470c3a04425e1ab8c39f376a0e707507659b8f5aa3ca06c5b47f193613c",
+      "bytes": 3742
+    },
+    {
+      "source": "common/testlib.h",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/common/testlib.h",
+      "sha256": "8d6d68c9708ff3f8d094488506a8171802496bd1ae04942b31f2a47057564497",
+      "bytes": 194404
+    },
+    {
+      "source": "data_structure/unionfind_with_potential/task.md",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind_with_potential/task.md",
+      "sha256": "20c5c1375acfb960615d12447298474c021287254e20f5f516683c86666b04e0",
+      "bytes": 1514
+    },
+    {
+      "source": "data_structure/unionfind_with_potential/gen/example_00.in",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind_with_potential/gen/example_00.in",
+      "sha256": "f4fa01a168d9b818f8dbd66f10d4d1c6f4b7f1001fd6bf382c30d23f75298913",
+      "bytes": 81
+    },
+    {
+      "source": "data_structure/unionfind_with_potential/gen/random.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind_with_potential/gen/random.cpp",
+      "sha256": "f16543a132dc6cb5788517876d30ce8a96a5694302db26977c4414b3558e0f17",
+      "bytes": 1066
+    },
+    {
+      "source": "data_structure/unionfind_with_potential/gen/max_random.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind_with_potential/gen/max_random.cpp",
+      "sha256": "183e7f397d4fc89aa5d1090b6543a78f81c9a087915c6532a1adda0e85b8d803",
+      "bytes": 1045
+    },
+    {
+      "source": "data_structure/unionfind_with_potential/gen/path.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind_with_potential/gen/path.cpp",
+      "sha256": "ed7d79c0f5e8e94be75a9adc88653e0220bc723c7808309a7b9a825ca5b510eb",
+      "bytes": 2332
+    },
+    {
+      "source": "data_structure/unionfind_with_potential/sol/correct.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind_with_potential/sol/correct.cpp",
+      "sha256": "5aa28df9b382087a852e4cb46c8bf71baa77451ba64e0c26c7516c4dfe1a7f1d",
+      "bytes": 1597
+    },
+    {
+      "source": "data_structure/unionfind_with_potential/sol/naive.cpp",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind_with_potential/sol/naive.cpp",
+      "sha256": "e163e01307c6b90deb76e1be098662455fc4b67eabd8e058852556e9a34f864f",
+      "bytes": 1495
+    },
+    {
+      "source": "data_structure/unionfind_with_potential/sol/acl.h",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind_with_potential/sol/acl.h",
+      "sha256": "1fdb059e9a5c5b636a483702ff5e5db40c198f7c28c84b0d668e5241540e4aca",
+      "bytes": 16309
+    },
+    {
+      "source": "data_structure/unionfind_with_potential/info.toml",
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind_with_potential/info.toml",
+      "sha256": "9afe1564279801e5312ac3862be6bbe7df9bea73d7e05f99517cb7222f6659a9",
+      "bytes": 451
+    }
+  ],
+  "official_inputs": [
+    {
+      "name": "example_00.in",
+      "bytes": 81,
+      "sha256": "f4fa01a168d9b818f8dbd66f10d4d1c6f4b7f1001fd6bf382c30d23f75298913"
+    },
+    {
+      "name": "random_00.in",
+      "bytes": 2856377,
+      "sha256": "175ad842afcc62e2629aa8d0495a0df45d58a594f740a7d0c6e748e87f9ec669"
+    },
+    {
+      "name": "random_01.in",
+      "bytes": 2897368,
+      "sha256": "b95be4cea990478ce62affff56b126daec318c3a27689b125a055212f7ebb09b"
+    },
+    {
+      "name": "random_02.in",
+      "bytes": 2229761,
+      "sha256": "4118a5833803e881f3ca886aa0553915b68f834f47523c8ec67105967250b317"
+    },
+    {
+      "name": "random_03.in",
+      "bytes": 506856,
+      "sha256": "8da25241ad57a7af4f72686de801c31bb2052a3b5aa270db09a29268554a931c"
+    },
+    {
+      "name": "random_04.in",
+      "bytes": 1730097,
+      "sha256": "39bafe10abbf229c763c039951034263e94c27cfdfc433b234eaa32bc1b7140e"
+    },
+    {
+      "name": "random_05.in",
+      "bytes": 2604662,
+      "sha256": "d74b0c6aa235cedb84333ed7b7a3b008c372ef564e553b57dfaeeb252372d9d8"
+    },
+    {
+      "name": "random_06.in",
+      "bytes": 2152272,
+      "sha256": "1eaddcacca38125bb5064001424c10be2a3132c19718f009b1d106791bd7545c"
+    },
+    {
+      "name": "random_07.in",
+      "bytes": 214630,
+      "sha256": "2601d39a88ad5a834177b917b1f2af9e60dce6d4ec47827d24193fbca62d244f"
+    },
+    {
+      "name": "random_08.in",
+      "bytes": 818669,
+      "sha256": "25cf75eea57af237a8ef21b8bccbfa99107681dd619f24eeda8b02315ef45d7a"
+    },
+    {
+      "name": "random_09.in",
+      "bytes": 3689045,
+      "sha256": "be1b0ba4002df6acccc9bdad202642e93f7d9beec0bb2ecf7beb0f5e3b75d341"
+    },
+    {
+      "name": "max_random_00.in",
+      "bytes": 3838262,
+      "sha256": "4e44a642c69d8912601aca34d12dc87d7b32827b65808236400ee9de59b50fb1"
+    },
+    {
+      "name": "max_random_01.in",
+      "bytes": 3896568,
+      "sha256": "40006c09d78339e11e97c542b3ff49fedaabeb4a87750a846b1fd8feb2cf45ed"
+    },
+    {
+      "name": "max_random_02.in",
+      "bytes": 3708858,
+      "sha256": "95bc849d1702d520baf348117740ad9ecee47d0d8db464332222edea19fa72ee"
+    },
+    {
+      "name": "path_00.in",
+      "bytes": 4444213,
+      "sha256": "e00302d2af330494a4580aeea6334d0b299d02343e91ecfaf0b445339d03877a"
+    },
+    {
+      "name": "path_01.in",
+      "bytes": 4444740,
+      "sha256": "ddf9f1d5e8adf791b88a005e436623b46ceb326764d0a11fabee90380a12d653"
+    },
+    {
+      "name": "path_02.in",
+      "bytes": 4955655,
+      "sha256": "0362f1bc1f24ddaa06901ed849146e58645267d5c469f0cac09e5b830d80a9a9"
+    },
+    {
+      "name": "path_03.in",
+      "bytes": 4955648,
+      "sha256": "95209543e3d7621237e88575f4f6559e397856c6f215b1b4a8e4e038de1de253"
+    }
+  ],
+  "custom_inputs": [
+    {
+      "name": "balanced.in",
+      "bytes": 4497449,
+      "sha256": "5fb2c8af1a87fa8b417b80e0a2aa8ab306c4183a375b7b352766c658e279a2be",
+      "n": 131072,
+      "q": 200000
+    },
+    {
+      "name": "star_same_component.in",
+      "bytes": 3794249,
+      "sha256": "2f24603dea4376fa464adc350e5bcd17e7d075aa18ab2207f6db8f2b2e1aaa10",
+      "n": 65536,
+      "q": 200000
+    },
+    {
+      "name": "tiny_random.in",
+      "bytes": 2464930,
+      "sha256": "b324be235f81b6bb1ccd102a23b9fb866395cf0ca6100ab172b2edd2d38efe13",
+      "n": 32,
+      "q": 200000
+    },
+    {
+      "name": "disconnected_pairs.in",
+      "bytes": 3566684,
+      "sha256": "d3a7196347c4bdc67d127bbd556c7a5257286985b8a30cf8cb671ac24e844dfd",
+      "n": 200000,
+      "q": 200000
+    }
+  ],
+  "fixture_reuse": {
+    "date": "2026-10-22",
+    "source": "/tmp/sirkit_rwuf_20261022",
+    "official_files": 18,
+    "custom_files": 4,
+    "all_input_sha256_match": true,
+    "note": "同日の同一Library Checker問題用の固定取得/生成snapshotを再利用。参照実装は親の木を使わず小成分IDと絶対potentialを全頂点更新する独立実装。新しい作業フォルダで参照を再ビルドし全期待値と小入力BFS照合も再実行する。"
+  },
+  "fixture_note": "同日取得したLibrary Checker公式info.tomlと生成器の固定snapshotを再利用し、全18公式入力・4補助入力のSHAを照合。独立参照と公式correct.cppは新作業領域で再ビルド・全期待値を再確認。通常stack設定。master取得物をSHAで固定し、現在HEADと同一という意味ではない。",
+  "reference_method": "親の木と経路圧縮を使わず、成分ごとの頂点一覧・成分ID・絶対重みを保持し、小さい成分の全頂点IDと重みを書き直す独立実装。参照自身を200個の小入力で独立無向グラフBFSと照合。全入力の出力を完全比較。",
+  "reference_selfcheck": {
+    "status": "PASS",
+    "cases": 200,
+    "seed": 61022,
+    "method": "独立グラフBFSで差を計算し、矛盾辺を採用しない参照と照合",
+    "build_command": [
+      "taskset",
+      "-c",
+      "6",
+      "g++",
+      "-std=c++23",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "/tmp/sirkit_wuf_20261022/reference.cpp",
+      "-o",
+      "/tmp/sirkit_wuf_20261022/reference"
+    ]
+  },
+  "expected_official_answers": [
+    {
+      "case": "example_00.in",
+      "scope": "official",
+      "input_sha256": "f4fa01a168d9b818f8dbd66f10d4d1c6f4b7f1001fd6bf382c30d23f75298913",
+      "output_sha256": "ec6959b4802b196473186e786f118528fa08d8eb4c73e3dffcc7404f20330f1f",
+      "answers": 10
+    },
+    {
+      "case": "random_00.in",
+      "scope": "official",
+      "input_sha256": "175ad842afcc62e2629aa8d0495a0df45d58a594f740a7d0c6e748e87f9ec669",
+      "output_sha256": "169a46fea9da106bc0ec378539db06ae10c74e28befa80d476bc3d7d9fbe5a11",
+      "answers": 148779
+    },
+    {
+      "case": "random_01.in",
+      "scope": "official",
+      "input_sha256": "b95be4cea990478ce62affff56b126daec318c3a27689b125a055212f7ebb09b",
+      "output_sha256": "befac958d7564504f25830b7849582dea7c48ebb581a3b2eb90ecc2dd5a9a7d9",
+      "answers": 148757
+    },
+    {
+      "case": "random_02.in",
+      "scope": "official",
+      "input_sha256": "4118a5833803e881f3ca886aa0553915b68f834f47523c8ec67105967250b317",
+      "output_sha256": "cc16708c76770b88ad2e8c0e980bce2fc2eea5f18f0a3aeec04e2ba830679181",
+      "answers": 120203
+    },
+    {
+      "case": "random_03.in",
+      "scope": "official",
+      "input_sha256": "8da25241ad57a7af4f72686de801c31bb2052a3b5aa270db09a29268554a931c",
+      "output_sha256": "c8cab222e36c7a03628fa438b7ae60ecafd86500d0ab1fece4b9f240a177a6d8",
+      "answers": 25839
+    },
+    {
+      "case": "random_04.in",
+      "scope": "official",
+      "input_sha256": "39bafe10abbf229c763c039951034263e94c27cfdfc433b234eaa32bc1b7140e",
+      "output_sha256": "4b135c466053ff03409af8ebf982e3ec1b719407ec070028c0d4c743f2429d92",
+      "answers": 99117
+    },
+    {
+      "case": "random_05.in",
+      "scope": "official",
+      "input_sha256": "d74b0c6aa235cedb84333ed7b7a3b008c372ef564e553b57dfaeeb252372d9d8",
+      "output_sha256": "d2eb98a13222c0b02a3530bd92571c471e17ca9508a14b85a7ae5d6e6e825d1f",
+      "answers": 140509
+    },
+    {
+      "case": "random_06.in",
+      "scope": "official",
+      "input_sha256": "1eaddcacca38125bb5064001424c10be2a3132c19718f009b1d106791bd7545c",
+      "output_sha256": "d84d66c6dd7d120eab47ab4a4ca9fed949abe24a18bd17847b84675c05ac75d0",
+      "answers": 108617
+    },
+    {
+      "case": "random_07.in",
+      "scope": "official",
+      "input_sha256": "2601d39a88ad5a834177b917b1f2af9e60dce6d4ec47827d24193fbca62d244f",
+      "output_sha256": "6c52b9ecd7c50f42c4e7508d1c29336cac0b8695e1b2101e0cf2582ad92da4f8",
+      "answers": 11475
+    },
+    {
+      "case": "random_08.in",
+      "scope": "official",
+      "input_sha256": "25cf75eea57af237a8ef21b8bccbfa99107681dd619f24eeda8b02315ef45d7a",
+      "output_sha256": "9916adfa8710a76a826a02a3f1b816e5d6db134745d729af87a32b41f79e2d20",
+      "answers": 49455
+    },
+    {
+      "case": "random_09.in",
+      "scope": "official",
+      "input_sha256": "be1b0ba4002df6acccc9bdad202642e93f7d9beec0bb2ecf7beb0f5e3b75d341",
+      "output_sha256": "ef049e35e660d9dc6c526b4d59998b0b0dba4ade71e58cbcad80007f0f277ffd",
+      "answers": 195578
+    },
+    {
+      "case": "max_random_00.in",
+      "scope": "official",
+      "input_sha256": "4e44a642c69d8912601aca34d12dc87d7b32827b65808236400ee9de59b50fb1",
+      "output_sha256": "c5997dec97b8b313b64627605f7aa870f5d1aa241cb1c690fda04040d299f31e",
+      "answers": 200000
+    },
+    {
+      "case": "max_random_01.in",
+      "scope": "official",
+      "input_sha256": "40006c09d78339e11e97c542b3ff49fedaabeb4a87750a846b1fd8feb2cf45ed",
+      "output_sha256": "3a6f693e0ca0ce15d47019806d92989c691cdbc2ac3da425d518eeec069ad521",
+      "answers": 200000
+    },
+    {
+      "case": "max_random_02.in",
+      "scope": "official",
+      "input_sha256": "95bc849d1702d520baf348117740ad9ecee47d0d8db464332222edea19fa72ee",
+      "output_sha256": "8639d7edfe0796281f6437e15ccd79ecc28317f52773f3b93ea4ff194e17d784",
+      "answers": 200000
+    },
+    {
+      "case": "path_00.in",
+      "scope": "official",
+      "input_sha256": "e00302d2af330494a4580aeea6334d0b299d02343e91ecfaf0b445339d03877a",
+      "output_sha256": "5f700d24f95cfa31974d55e9845491aaad07efa4461acd438d40bbe7cc68dbd3",
+      "answers": 200000
+    },
+    {
+      "case": "path_01.in",
+      "scope": "official",
+      "input_sha256": "ddf9f1d5e8adf791b88a005e436623b46ceb326764d0a11fabee90380a12d653",
+      "output_sha256": "17bffd4c31bf4fce60d543dbed7b13b2502291282582145574d30280f1096cec",
+      "answers": 200000
+    },
+    {
+      "case": "path_02.in",
+      "scope": "official",
+      "input_sha256": "0362f1bc1f24ddaa06901ed849146e58645267d5c469f0cac09e5b830d80a9a9",
+      "output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+      "answers": 200000
+    },
+    {
+      "case": "path_03.in",
+      "scope": "official",
+      "input_sha256": "95209543e3d7621237e88575f4f6559e397856c6f215b1b4a8e4e038de1de253",
+      "output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+      "answers": 200000
+    },
+    {
+      "case": "balanced.in",
+      "scope": "custom",
+      "input_sha256": "5fb2c8af1a87fa8b417b80e0a2aa8ab306c4183a375b7b352766c658e279a2be",
+      "output_sha256": "b54ec7bab038ae52733eee7bbf02a2f30386306d74be0b39d924ed68f420439a",
+      "answers": 200000
+    },
+    {
+      "case": "star_same_component.in",
+      "scope": "custom",
+      "input_sha256": "2f24603dea4376fa464adc350e5bcd17e7d075aa18ab2207f6db8f2b2e1aaa10",
+      "output_sha256": "10bbc62f1f9d71dcdf940b001701181803fe018f536dd7041dfb218bd5ea1ec2",
+      "answers": 200000
+    },
+    {
+      "case": "tiny_random.in",
+      "scope": "custom",
+      "input_sha256": "b324be235f81b6bb1ccd102a23b9fb866395cf0ca6100ab172b2edd2d38efe13",
+      "output_sha256": "4efcf2160d3763a2c2ad7ce543983b64f5ef1f1464bf30915cbec04f7753edc3",
+      "answers": 200000
+    },
+    {
+      "case": "disconnected_pairs.in",
+      "scope": "custom",
+      "input_sha256": "d3a7196347c4bdc67d127bbd556c7a5257286985b8a30cf8cb671ac24e844dfd",
+      "output_sha256": "b7de90467b5ff4ac06aebfd1cc916cd96f4ccd2c9a2b5c62fd987b049d648021",
+      "answers": 200000
+    }
+  ],
+  "official_reference_crosscheck": {
+    "status": "PASS",
+    "command": [
+      "taskset",
+      "-c",
+      "6",
+      "g++",
+      "-std=c++23",
+      "-O2",
+      "-I/tmp/sirkit_wuf_20261022/sol",
+      "/tmp/sirkit_wuf_20261022/official/correct.cpp",
+      "-o",
+      "/tmp/sirkit_wuf_20261022/official/correct"
+    ],
+    "source_sha256": "5aa28df9b382087a852e4cb46c8bf71baa77451ba64e0c26c7516c4dfe1a7f1d",
+    "records": [
+      {
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "f4fa01a168d9b818f8dbd66f10d4d1c6f4b7f1001fd6bf382c30d23f75298913",
+        "official_output_sha256": "ec6959b4802b196473186e786f118528fa08d8eb4c73e3dffcc7404f20330f1f",
+        "reference_output_sha256": "ec6959b4802b196473186e786f118528fa08d8eb4c73e3dffcc7404f20330f1f"
+      },
+      {
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "175ad842afcc62e2629aa8d0495a0df45d58a594f740a7d0c6e748e87f9ec669",
+        "official_output_sha256": "169a46fea9da106bc0ec378539db06ae10c74e28befa80d476bc3d7d9fbe5a11",
+        "reference_output_sha256": "169a46fea9da106bc0ec378539db06ae10c74e28befa80d476bc3d7d9fbe5a11"
+      },
+      {
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "b95be4cea990478ce62affff56b126daec318c3a27689b125a055212f7ebb09b",
+        "official_output_sha256": "befac958d7564504f25830b7849582dea7c48ebb581a3b2eb90ecc2dd5a9a7d9",
+        "reference_output_sha256": "befac958d7564504f25830b7849582dea7c48ebb581a3b2eb90ecc2dd5a9a7d9"
+      },
+      {
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "4118a5833803e881f3ca886aa0553915b68f834f47523c8ec67105967250b317",
+        "official_output_sha256": "cc16708c76770b88ad2e8c0e980bce2fc2eea5f18f0a3aeec04e2ba830679181",
+        "reference_output_sha256": "cc16708c76770b88ad2e8c0e980bce2fc2eea5f18f0a3aeec04e2ba830679181"
+      },
+      {
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "8da25241ad57a7af4f72686de801c31bb2052a3b5aa270db09a29268554a931c",
+        "official_output_sha256": "c8cab222e36c7a03628fa438b7ae60ecafd86500d0ab1fece4b9f240a177a6d8",
+        "reference_output_sha256": "c8cab222e36c7a03628fa438b7ae60ecafd86500d0ab1fece4b9f240a177a6d8"
+      },
+      {
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "39bafe10abbf229c763c039951034263e94c27cfdfc433b234eaa32bc1b7140e",
+        "official_output_sha256": "4b135c466053ff03409af8ebf982e3ec1b719407ec070028c0d4c743f2429d92",
+        "reference_output_sha256": "4b135c466053ff03409af8ebf982e3ec1b719407ec070028c0d4c743f2429d92"
+      },
+      {
+        "case": "random_05.in",
+        "scope": "official",
+        "input_sha256": "d74b0c6aa235cedb84333ed7b7a3b008c372ef564e553b57dfaeeb252372d9d8",
+        "official_output_sha256": "d2eb98a13222c0b02a3530bd92571c471e17ca9508a14b85a7ae5d6e6e825d1f",
+        "reference_output_sha256": "d2eb98a13222c0b02a3530bd92571c471e17ca9508a14b85a7ae5d6e6e825d1f"
+      },
+      {
+        "case": "random_06.in",
+        "scope": "official",
+        "input_sha256": "1eaddcacca38125bb5064001424c10be2a3132c19718f009b1d106791bd7545c",
+        "official_output_sha256": "d84d66c6dd7d120eab47ab4a4ca9fed949abe24a18bd17847b84675c05ac75d0",
+        "reference_output_sha256": "d84d66c6dd7d120eab47ab4a4ca9fed949abe24a18bd17847b84675c05ac75d0"
+      },
+      {
+        "case": "random_07.in",
+        "scope": "official",
+        "input_sha256": "2601d39a88ad5a834177b917b1f2af9e60dce6d4ec47827d24193fbca62d244f",
+        "official_output_sha256": "6c52b9ecd7c50f42c4e7508d1c29336cac0b8695e1b2101e0cf2582ad92da4f8",
+        "reference_output_sha256": "6c52b9ecd7c50f42c4e7508d1c29336cac0b8695e1b2101e0cf2582ad92da4f8"
+      },
+      {
+        "case": "random_08.in",
+        "scope": "official",
+        "input_sha256": "25cf75eea57af237a8ef21b8bccbfa99107681dd619f24eeda8b02315ef45d7a",
+        "official_output_sha256": "9916adfa8710a76a826a02a3f1b816e5d6db134745d729af87a32b41f79e2d20",
+        "reference_output_sha256": "9916adfa8710a76a826a02a3f1b816e5d6db134745d729af87a32b41f79e2d20"
+      },
+      {
+        "case": "random_09.in",
+        "scope": "official",
+        "input_sha256": "be1b0ba4002df6acccc9bdad202642e93f7d9beec0bb2ecf7beb0f5e3b75d341",
+        "official_output_sha256": "ef049e35e660d9dc6c526b4d59998b0b0dba4ade71e58cbcad80007f0f277ffd",
+        "reference_output_sha256": "ef049e35e660d9dc6c526b4d59998b0b0dba4ade71e58cbcad80007f0f277ffd"
+      },
+      {
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "4e44a642c69d8912601aca34d12dc87d7b32827b65808236400ee9de59b50fb1",
+        "official_output_sha256": "c5997dec97b8b313b64627605f7aa870f5d1aa241cb1c690fda04040d299f31e",
+        "reference_output_sha256": "c5997dec97b8b313b64627605f7aa870f5d1aa241cb1c690fda04040d299f31e"
+      },
+      {
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "40006c09d78339e11e97c542b3ff49fedaabeb4a87750a846b1fd8feb2cf45ed",
+        "official_output_sha256": "3a6f693e0ca0ce15d47019806d92989c691cdbc2ac3da425d518eeec069ad521",
+        "reference_output_sha256": "3a6f693e0ca0ce15d47019806d92989c691cdbc2ac3da425d518eeec069ad521"
+      },
+      {
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "95bc849d1702d520baf348117740ad9ecee47d0d8db464332222edea19fa72ee",
+        "official_output_sha256": "8639d7edfe0796281f6437e15ccd79ecc28317f52773f3b93ea4ff194e17d784",
+        "reference_output_sha256": "8639d7edfe0796281f6437e15ccd79ecc28317f52773f3b93ea4ff194e17d784"
+      },
+      {
+        "case": "path_00.in",
+        "scope": "official",
+        "input_sha256": "e00302d2af330494a4580aeea6334d0b299d02343e91ecfaf0b445339d03877a",
+        "official_output_sha256": "5f700d24f95cfa31974d55e9845491aaad07efa4461acd438d40bbe7cc68dbd3",
+        "reference_output_sha256": "5f700d24f95cfa31974d55e9845491aaad07efa4461acd438d40bbe7cc68dbd3"
+      },
+      {
+        "case": "path_01.in",
+        "scope": "official",
+        "input_sha256": "ddf9f1d5e8adf791b88a005e436623b46ceb326764d0a11fabee90380a12d653",
+        "official_output_sha256": "17bffd4c31bf4fce60d543dbed7b13b2502291282582145574d30280f1096cec",
+        "reference_output_sha256": "17bffd4c31bf4fce60d543dbed7b13b2502291282582145574d30280f1096cec"
+      },
+      {
+        "case": "path_02.in",
+        "scope": "official",
+        "input_sha256": "0362f1bc1f24ddaa06901ed849146e58645267d5c469f0cac09e5b830d80a9a9",
+        "official_output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "reference_output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2"
+      },
+      {
+        "case": "path_03.in",
+        "scope": "official",
+        "input_sha256": "95209543e3d7621237e88575f4f6559e397856c6f215b1b4a8e4e038de1de253",
+        "official_output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "reference_output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2"
+      },
+      {
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "5fb2c8af1a87fa8b417b80e0a2aa8ab306c4183a375b7b352766c658e279a2be",
+        "official_output_sha256": "b54ec7bab038ae52733eee7bbf02a2f30386306d74be0b39d924ed68f420439a",
+        "reference_output_sha256": "b54ec7bab038ae52733eee7bbf02a2f30386306d74be0b39d924ed68f420439a"
+      },
+      {
+        "case": "star_same_component.in",
+        "scope": "custom",
+        "input_sha256": "2f24603dea4376fa464adc350e5bcd17e7d075aa18ab2207f6db8f2b2e1aaa10",
+        "official_output_sha256": "10bbc62f1f9d71dcdf940b001701181803fe018f536dd7041dfb218bd5ea1ec2",
+        "reference_output_sha256": "10bbc62f1f9d71dcdf940b001701181803fe018f536dd7041dfb218bd5ea1ec2"
+      },
+      {
+        "case": "tiny_random.in",
+        "scope": "custom",
+        "input_sha256": "b324be235f81b6bb1ccd102a23b9fb866395cf0ca6100ab172b2edd2d38efe13",
+        "official_output_sha256": "4efcf2160d3763a2c2ad7ce543983b64f5ef1f1464bf30915cbec04f7753edc3",
+        "reference_output_sha256": "4efcf2160d3763a2c2ad7ce543983b64f5ef1f1464bf30915cbec04f7753edc3"
+      },
+      {
+        "case": "disconnected_pairs.in",
+        "scope": "custom",
+        "input_sha256": "d3a7196347c4bdc67d127bbd556c7a5257286985b8a30cf8cb671ac24e844dfd",
+        "official_output_sha256": "b7de90467b5ff4ac06aebfd1cc916cd96f4ccd2c9a2b5c62fd987b049d648021",
+        "reference_output_sha256": "b7de90467b5ff4ac06aebfd1cc916cd96f4ccd2c9a2b5c62fd987b049d648021"
+      }
+    ]
+  },
+  "final_official_and_custom_verification": {
+    "status": "PASS",
+    "source_sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+    "submission_sha256": "99b51a20c13d8ccbd763ae61ab1ae680bda87b031ccb063c1e64de2eca63cba1",
+    "official_runs": 72,
+    "custom_runs": 16,
+    "builds": [
+      {
+        "name": "gcc_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/tmp/sirkit_wuf_20261022/official_final/gcc_checked.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/official_final/gcc_checked"
+        ],
+        "sha256": "b3f086505bf165bbde6bdd193cd9f3dba40421051314cf36d24b3838b8719b43",
+        "build_returncode": 0,
+        "stderr": ""
+      },
+      {
+        "name": "gcc_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/tmp/sirkit_wuf_20261022/official_final/gcc_skip.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/official_final/gcc_skip"
+        ],
+        "sha256": "99b51a20c13d8ccbd763ae61ab1ae680bda87b031ccb063c1e64de2eca63cba1",
+        "build_returncode": 0,
+        "stderr": ""
+      },
+      {
+        "name": "clang_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/tmp/sirkit_wuf_20261022/official_final/clang_checked.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/official_final/clang_checked"
+        ],
+        "sha256": "b3f086505bf165bbde6bdd193cd9f3dba40421051314cf36d24b3838b8719b43",
+        "build_returncode": 0,
+        "stderr": ""
+      },
+      {
+        "name": "clang_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/tmp/sirkit_wuf_20261022/official_final/clang_skip.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/official_final/clang_skip"
+        ],
+        "sha256": "99b51a20c13d8ccbd763ae61ab1ae680bda87b031ccb063c1e64de2eca63cba1",
+        "build_returncode": 0,
+        "stderr": ""
+      }
+    ],
+    "records": [
+      {
+        "build": "gcc_checked",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "f4fa01a168d9b818f8dbd66f10d4d1c6f4b7f1001fd6bf382c30d23f75298913",
+        "output_sha256": "ec6959b4802b196473186e786f118528fa08d8eb4c73e3dffcc7404f20330f1f",
+        "reference_output_sha256": "ec6959b4802b196473186e786f118528fa08d8eb4c73e3dffcc7404f20330f1f",
+        "answers": 10,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "175ad842afcc62e2629aa8d0495a0df45d58a594f740a7d0c6e748e87f9ec669",
+        "output_sha256": "169a46fea9da106bc0ec378539db06ae10c74e28befa80d476bc3d7d9fbe5a11",
+        "reference_output_sha256": "169a46fea9da106bc0ec378539db06ae10c74e28befa80d476bc3d7d9fbe5a11",
+        "answers": 148779,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "b95be4cea990478ce62affff56b126daec318c3a27689b125a055212f7ebb09b",
+        "output_sha256": "befac958d7564504f25830b7849582dea7c48ebb581a3b2eb90ecc2dd5a9a7d9",
+        "reference_output_sha256": "befac958d7564504f25830b7849582dea7c48ebb581a3b2eb90ecc2dd5a9a7d9",
+        "answers": 148757,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "4118a5833803e881f3ca886aa0553915b68f834f47523c8ec67105967250b317",
+        "output_sha256": "cc16708c76770b88ad2e8c0e980bce2fc2eea5f18f0a3aeec04e2ba830679181",
+        "reference_output_sha256": "cc16708c76770b88ad2e8c0e980bce2fc2eea5f18f0a3aeec04e2ba830679181",
+        "answers": 120203,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "8da25241ad57a7af4f72686de801c31bb2052a3b5aa270db09a29268554a931c",
+        "output_sha256": "c8cab222e36c7a03628fa438b7ae60ecafd86500d0ab1fece4b9f240a177a6d8",
+        "reference_output_sha256": "c8cab222e36c7a03628fa438b7ae60ecafd86500d0ab1fece4b9f240a177a6d8",
+        "answers": 25839,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "39bafe10abbf229c763c039951034263e94c27cfdfc433b234eaa32bc1b7140e",
+        "output_sha256": "4b135c466053ff03409af8ebf982e3ec1b719407ec070028c0d4c743f2429d92",
+        "reference_output_sha256": "4b135c466053ff03409af8ebf982e3ec1b719407ec070028c0d4c743f2429d92",
+        "answers": 99117,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_05.in",
+        "scope": "official",
+        "input_sha256": "d74b0c6aa235cedb84333ed7b7a3b008c372ef564e553b57dfaeeb252372d9d8",
+        "output_sha256": "d2eb98a13222c0b02a3530bd92571c471e17ca9508a14b85a7ae5d6e6e825d1f",
+        "reference_output_sha256": "d2eb98a13222c0b02a3530bd92571c471e17ca9508a14b85a7ae5d6e6e825d1f",
+        "answers": 140509,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_06.in",
+        "scope": "official",
+        "input_sha256": "1eaddcacca38125bb5064001424c10be2a3132c19718f009b1d106791bd7545c",
+        "output_sha256": "d84d66c6dd7d120eab47ab4a4ca9fed949abe24a18bd17847b84675c05ac75d0",
+        "reference_output_sha256": "d84d66c6dd7d120eab47ab4a4ca9fed949abe24a18bd17847b84675c05ac75d0",
+        "answers": 108617,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_07.in",
+        "scope": "official",
+        "input_sha256": "2601d39a88ad5a834177b917b1f2af9e60dce6d4ec47827d24193fbca62d244f",
+        "output_sha256": "6c52b9ecd7c50f42c4e7508d1c29336cac0b8695e1b2101e0cf2582ad92da4f8",
+        "reference_output_sha256": "6c52b9ecd7c50f42c4e7508d1c29336cac0b8695e1b2101e0cf2582ad92da4f8",
+        "answers": 11475,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_08.in",
+        "scope": "official",
+        "input_sha256": "25cf75eea57af237a8ef21b8bccbfa99107681dd619f24eeda8b02315ef45d7a",
+        "output_sha256": "9916adfa8710a76a826a02a3f1b816e5d6db134745d729af87a32b41f79e2d20",
+        "reference_output_sha256": "9916adfa8710a76a826a02a3f1b816e5d6db134745d729af87a32b41f79e2d20",
+        "answers": 49455,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_09.in",
+        "scope": "official",
+        "input_sha256": "be1b0ba4002df6acccc9bdad202642e93f7d9beec0bb2ecf7beb0f5e3b75d341",
+        "output_sha256": "ef049e35e660d9dc6c526b4d59998b0b0dba4ade71e58cbcad80007f0f277ffd",
+        "reference_output_sha256": "ef049e35e660d9dc6c526b4d59998b0b0dba4ade71e58cbcad80007f0f277ffd",
+        "answers": 195578,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "4e44a642c69d8912601aca34d12dc87d7b32827b65808236400ee9de59b50fb1",
+        "output_sha256": "c5997dec97b8b313b64627605f7aa870f5d1aa241cb1c690fda04040d299f31e",
+        "reference_output_sha256": "c5997dec97b8b313b64627605f7aa870f5d1aa241cb1c690fda04040d299f31e",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "40006c09d78339e11e97c542b3ff49fedaabeb4a87750a846b1fd8feb2cf45ed",
+        "output_sha256": "3a6f693e0ca0ce15d47019806d92989c691cdbc2ac3da425d518eeec069ad521",
+        "reference_output_sha256": "3a6f693e0ca0ce15d47019806d92989c691cdbc2ac3da425d518eeec069ad521",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "95bc849d1702d520baf348117740ad9ecee47d0d8db464332222edea19fa72ee",
+        "output_sha256": "8639d7edfe0796281f6437e15ccd79ecc28317f52773f3b93ea4ff194e17d784",
+        "reference_output_sha256": "8639d7edfe0796281f6437e15ccd79ecc28317f52773f3b93ea4ff194e17d784",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "path_00.in",
+        "scope": "official",
+        "input_sha256": "e00302d2af330494a4580aeea6334d0b299d02343e91ecfaf0b445339d03877a",
+        "output_sha256": "5f700d24f95cfa31974d55e9845491aaad07efa4461acd438d40bbe7cc68dbd3",
+        "reference_output_sha256": "5f700d24f95cfa31974d55e9845491aaad07efa4461acd438d40bbe7cc68dbd3",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "path_01.in",
+        "scope": "official",
+        "input_sha256": "ddf9f1d5e8adf791b88a005e436623b46ceb326764d0a11fabee90380a12d653",
+        "output_sha256": "17bffd4c31bf4fce60d543dbed7b13b2502291282582145574d30280f1096cec",
+        "reference_output_sha256": "17bffd4c31bf4fce60d543dbed7b13b2502291282582145574d30280f1096cec",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "path_02.in",
+        "scope": "official",
+        "input_sha256": "0362f1bc1f24ddaa06901ed849146e58645267d5c469f0cac09e5b830d80a9a9",
+        "output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "reference_output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "path_03.in",
+        "scope": "official",
+        "input_sha256": "95209543e3d7621237e88575f4f6559e397856c6f215b1b4a8e4e038de1de253",
+        "output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "reference_output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "5fb2c8af1a87fa8b417b80e0a2aa8ab306c4183a375b7b352766c658e279a2be",
+        "output_sha256": "b54ec7bab038ae52733eee7bbf02a2f30386306d74be0b39d924ed68f420439a",
+        "reference_output_sha256": "b54ec7bab038ae52733eee7bbf02a2f30386306d74be0b39d924ed68f420439a",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "star_same_component.in",
+        "scope": "custom",
+        "input_sha256": "2f24603dea4376fa464adc350e5bcd17e7d075aa18ab2207f6db8f2b2e1aaa10",
+        "output_sha256": "10bbc62f1f9d71dcdf940b001701181803fe018f536dd7041dfb218bd5ea1ec2",
+        "reference_output_sha256": "10bbc62f1f9d71dcdf940b001701181803fe018f536dd7041dfb218bd5ea1ec2",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "tiny_random.in",
+        "scope": "custom",
+        "input_sha256": "b324be235f81b6bb1ccd102a23b9fb866395cf0ca6100ab172b2edd2d38efe13",
+        "output_sha256": "4efcf2160d3763a2c2ad7ce543983b64f5ef1f1464bf30915cbec04f7753edc3",
+        "reference_output_sha256": "4efcf2160d3763a2c2ad7ce543983b64f5ef1f1464bf30915cbec04f7753edc3",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "disconnected_pairs.in",
+        "scope": "custom",
+        "input_sha256": "d3a7196347c4bdc67d127bbd556c7a5257286985b8a30cf8cb671ac24e844dfd",
+        "output_sha256": "b7de90467b5ff4ac06aebfd1cc916cd96f4ccd2c9a2b5c62fd987b049d648021",
+        "reference_output_sha256": "b7de90467b5ff4ac06aebfd1cc916cd96f4ccd2c9a2b5c62fd987b049d648021",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "f4fa01a168d9b818f8dbd66f10d4d1c6f4b7f1001fd6bf382c30d23f75298913",
+        "output_sha256": "ec6959b4802b196473186e786f118528fa08d8eb4c73e3dffcc7404f20330f1f",
+        "reference_output_sha256": "ec6959b4802b196473186e786f118528fa08d8eb4c73e3dffcc7404f20330f1f",
+        "answers": 10,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "175ad842afcc62e2629aa8d0495a0df45d58a594f740a7d0c6e748e87f9ec669",
+        "output_sha256": "169a46fea9da106bc0ec378539db06ae10c74e28befa80d476bc3d7d9fbe5a11",
+        "reference_output_sha256": "169a46fea9da106bc0ec378539db06ae10c74e28befa80d476bc3d7d9fbe5a11",
+        "answers": 148779,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "b95be4cea990478ce62affff56b126daec318c3a27689b125a055212f7ebb09b",
+        "output_sha256": "befac958d7564504f25830b7849582dea7c48ebb581a3b2eb90ecc2dd5a9a7d9",
+        "reference_output_sha256": "befac958d7564504f25830b7849582dea7c48ebb581a3b2eb90ecc2dd5a9a7d9",
+        "answers": 148757,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "4118a5833803e881f3ca886aa0553915b68f834f47523c8ec67105967250b317",
+        "output_sha256": "cc16708c76770b88ad2e8c0e980bce2fc2eea5f18f0a3aeec04e2ba830679181",
+        "reference_output_sha256": "cc16708c76770b88ad2e8c0e980bce2fc2eea5f18f0a3aeec04e2ba830679181",
+        "answers": 120203,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "8da25241ad57a7af4f72686de801c31bb2052a3b5aa270db09a29268554a931c",
+        "output_sha256": "c8cab222e36c7a03628fa438b7ae60ecafd86500d0ab1fece4b9f240a177a6d8",
+        "reference_output_sha256": "c8cab222e36c7a03628fa438b7ae60ecafd86500d0ab1fece4b9f240a177a6d8",
+        "answers": 25839,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "39bafe10abbf229c763c039951034263e94c27cfdfc433b234eaa32bc1b7140e",
+        "output_sha256": "4b135c466053ff03409af8ebf982e3ec1b719407ec070028c0d4c743f2429d92",
+        "reference_output_sha256": "4b135c466053ff03409af8ebf982e3ec1b719407ec070028c0d4c743f2429d92",
+        "answers": 99117,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_05.in",
+        "scope": "official",
+        "input_sha256": "d74b0c6aa235cedb84333ed7b7a3b008c372ef564e553b57dfaeeb252372d9d8",
+        "output_sha256": "d2eb98a13222c0b02a3530bd92571c471e17ca9508a14b85a7ae5d6e6e825d1f",
+        "reference_output_sha256": "d2eb98a13222c0b02a3530bd92571c471e17ca9508a14b85a7ae5d6e6e825d1f",
+        "answers": 140509,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_06.in",
+        "scope": "official",
+        "input_sha256": "1eaddcacca38125bb5064001424c10be2a3132c19718f009b1d106791bd7545c",
+        "output_sha256": "d84d66c6dd7d120eab47ab4a4ca9fed949abe24a18bd17847b84675c05ac75d0",
+        "reference_output_sha256": "d84d66c6dd7d120eab47ab4a4ca9fed949abe24a18bd17847b84675c05ac75d0",
+        "answers": 108617,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_07.in",
+        "scope": "official",
+        "input_sha256": "2601d39a88ad5a834177b917b1f2af9e60dce6d4ec47827d24193fbca62d244f",
+        "output_sha256": "6c52b9ecd7c50f42c4e7508d1c29336cac0b8695e1b2101e0cf2582ad92da4f8",
+        "reference_output_sha256": "6c52b9ecd7c50f42c4e7508d1c29336cac0b8695e1b2101e0cf2582ad92da4f8",
+        "answers": 11475,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_08.in",
+        "scope": "official",
+        "input_sha256": "25cf75eea57af237a8ef21b8bccbfa99107681dd619f24eeda8b02315ef45d7a",
+        "output_sha256": "9916adfa8710a76a826a02a3f1b816e5d6db134745d729af87a32b41f79e2d20",
+        "reference_output_sha256": "9916adfa8710a76a826a02a3f1b816e5d6db134745d729af87a32b41f79e2d20",
+        "answers": 49455,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_09.in",
+        "scope": "official",
+        "input_sha256": "be1b0ba4002df6acccc9bdad202642e93f7d9beec0bb2ecf7beb0f5e3b75d341",
+        "output_sha256": "ef049e35e660d9dc6c526b4d59998b0b0dba4ade71e58cbcad80007f0f277ffd",
+        "reference_output_sha256": "ef049e35e660d9dc6c526b4d59998b0b0dba4ade71e58cbcad80007f0f277ffd",
+        "answers": 195578,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "4e44a642c69d8912601aca34d12dc87d7b32827b65808236400ee9de59b50fb1",
+        "output_sha256": "c5997dec97b8b313b64627605f7aa870f5d1aa241cb1c690fda04040d299f31e",
+        "reference_output_sha256": "c5997dec97b8b313b64627605f7aa870f5d1aa241cb1c690fda04040d299f31e",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "40006c09d78339e11e97c542b3ff49fedaabeb4a87750a846b1fd8feb2cf45ed",
+        "output_sha256": "3a6f693e0ca0ce15d47019806d92989c691cdbc2ac3da425d518eeec069ad521",
+        "reference_output_sha256": "3a6f693e0ca0ce15d47019806d92989c691cdbc2ac3da425d518eeec069ad521",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "95bc849d1702d520baf348117740ad9ecee47d0d8db464332222edea19fa72ee",
+        "output_sha256": "8639d7edfe0796281f6437e15ccd79ecc28317f52773f3b93ea4ff194e17d784",
+        "reference_output_sha256": "8639d7edfe0796281f6437e15ccd79ecc28317f52773f3b93ea4ff194e17d784",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "path_00.in",
+        "scope": "official",
+        "input_sha256": "e00302d2af330494a4580aeea6334d0b299d02343e91ecfaf0b445339d03877a",
+        "output_sha256": "5f700d24f95cfa31974d55e9845491aaad07efa4461acd438d40bbe7cc68dbd3",
+        "reference_output_sha256": "5f700d24f95cfa31974d55e9845491aaad07efa4461acd438d40bbe7cc68dbd3",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "path_01.in",
+        "scope": "official",
+        "input_sha256": "ddf9f1d5e8adf791b88a005e436623b46ceb326764d0a11fabee90380a12d653",
+        "output_sha256": "17bffd4c31bf4fce60d543dbed7b13b2502291282582145574d30280f1096cec",
+        "reference_output_sha256": "17bffd4c31bf4fce60d543dbed7b13b2502291282582145574d30280f1096cec",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "path_02.in",
+        "scope": "official",
+        "input_sha256": "0362f1bc1f24ddaa06901ed849146e58645267d5c469f0cac09e5b830d80a9a9",
+        "output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "reference_output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "path_03.in",
+        "scope": "official",
+        "input_sha256": "95209543e3d7621237e88575f4f6559e397856c6f215b1b4a8e4e038de1de253",
+        "output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "reference_output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "5fb2c8af1a87fa8b417b80e0a2aa8ab306c4183a375b7b352766c658e279a2be",
+        "output_sha256": "b54ec7bab038ae52733eee7bbf02a2f30386306d74be0b39d924ed68f420439a",
+        "reference_output_sha256": "b54ec7bab038ae52733eee7bbf02a2f30386306d74be0b39d924ed68f420439a",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "star_same_component.in",
+        "scope": "custom",
+        "input_sha256": "2f24603dea4376fa464adc350e5bcd17e7d075aa18ab2207f6db8f2b2e1aaa10",
+        "output_sha256": "10bbc62f1f9d71dcdf940b001701181803fe018f536dd7041dfb218bd5ea1ec2",
+        "reference_output_sha256": "10bbc62f1f9d71dcdf940b001701181803fe018f536dd7041dfb218bd5ea1ec2",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "tiny_random.in",
+        "scope": "custom",
+        "input_sha256": "b324be235f81b6bb1ccd102a23b9fb866395cf0ca6100ab172b2edd2d38efe13",
+        "output_sha256": "4efcf2160d3763a2c2ad7ce543983b64f5ef1f1464bf30915cbec04f7753edc3",
+        "reference_output_sha256": "4efcf2160d3763a2c2ad7ce543983b64f5ef1f1464bf30915cbec04f7753edc3",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "disconnected_pairs.in",
+        "scope": "custom",
+        "input_sha256": "d3a7196347c4bdc67d127bbd556c7a5257286985b8a30cf8cb671ac24e844dfd",
+        "output_sha256": "b7de90467b5ff4ac06aebfd1cc916cd96f4ccd2c9a2b5c62fd987b049d648021",
+        "reference_output_sha256": "b7de90467b5ff4ac06aebfd1cc916cd96f4ccd2c9a2b5c62fd987b049d648021",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "f4fa01a168d9b818f8dbd66f10d4d1c6f4b7f1001fd6bf382c30d23f75298913",
+        "output_sha256": "ec6959b4802b196473186e786f118528fa08d8eb4c73e3dffcc7404f20330f1f",
+        "reference_output_sha256": "ec6959b4802b196473186e786f118528fa08d8eb4c73e3dffcc7404f20330f1f",
+        "answers": 10,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "175ad842afcc62e2629aa8d0495a0df45d58a594f740a7d0c6e748e87f9ec669",
+        "output_sha256": "169a46fea9da106bc0ec378539db06ae10c74e28befa80d476bc3d7d9fbe5a11",
+        "reference_output_sha256": "169a46fea9da106bc0ec378539db06ae10c74e28befa80d476bc3d7d9fbe5a11",
+        "answers": 148779,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "b95be4cea990478ce62affff56b126daec318c3a27689b125a055212f7ebb09b",
+        "output_sha256": "befac958d7564504f25830b7849582dea7c48ebb581a3b2eb90ecc2dd5a9a7d9",
+        "reference_output_sha256": "befac958d7564504f25830b7849582dea7c48ebb581a3b2eb90ecc2dd5a9a7d9",
+        "answers": 148757,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "4118a5833803e881f3ca886aa0553915b68f834f47523c8ec67105967250b317",
+        "output_sha256": "cc16708c76770b88ad2e8c0e980bce2fc2eea5f18f0a3aeec04e2ba830679181",
+        "reference_output_sha256": "cc16708c76770b88ad2e8c0e980bce2fc2eea5f18f0a3aeec04e2ba830679181",
+        "answers": 120203,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "8da25241ad57a7af4f72686de801c31bb2052a3b5aa270db09a29268554a931c",
+        "output_sha256": "c8cab222e36c7a03628fa438b7ae60ecafd86500d0ab1fece4b9f240a177a6d8",
+        "reference_output_sha256": "c8cab222e36c7a03628fa438b7ae60ecafd86500d0ab1fece4b9f240a177a6d8",
+        "answers": 25839,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "39bafe10abbf229c763c039951034263e94c27cfdfc433b234eaa32bc1b7140e",
+        "output_sha256": "4b135c466053ff03409af8ebf982e3ec1b719407ec070028c0d4c743f2429d92",
+        "reference_output_sha256": "4b135c466053ff03409af8ebf982e3ec1b719407ec070028c0d4c743f2429d92",
+        "answers": 99117,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_05.in",
+        "scope": "official",
+        "input_sha256": "d74b0c6aa235cedb84333ed7b7a3b008c372ef564e553b57dfaeeb252372d9d8",
+        "output_sha256": "d2eb98a13222c0b02a3530bd92571c471e17ca9508a14b85a7ae5d6e6e825d1f",
+        "reference_output_sha256": "d2eb98a13222c0b02a3530bd92571c471e17ca9508a14b85a7ae5d6e6e825d1f",
+        "answers": 140509,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_06.in",
+        "scope": "official",
+        "input_sha256": "1eaddcacca38125bb5064001424c10be2a3132c19718f009b1d106791bd7545c",
+        "output_sha256": "d84d66c6dd7d120eab47ab4a4ca9fed949abe24a18bd17847b84675c05ac75d0",
+        "reference_output_sha256": "d84d66c6dd7d120eab47ab4a4ca9fed949abe24a18bd17847b84675c05ac75d0",
+        "answers": 108617,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_07.in",
+        "scope": "official",
+        "input_sha256": "2601d39a88ad5a834177b917b1f2af9e60dce6d4ec47827d24193fbca62d244f",
+        "output_sha256": "6c52b9ecd7c50f42c4e7508d1c29336cac0b8695e1b2101e0cf2582ad92da4f8",
+        "reference_output_sha256": "6c52b9ecd7c50f42c4e7508d1c29336cac0b8695e1b2101e0cf2582ad92da4f8",
+        "answers": 11475,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_08.in",
+        "scope": "official",
+        "input_sha256": "25cf75eea57af237a8ef21b8bccbfa99107681dd619f24eeda8b02315ef45d7a",
+        "output_sha256": "9916adfa8710a76a826a02a3f1b816e5d6db134745d729af87a32b41f79e2d20",
+        "reference_output_sha256": "9916adfa8710a76a826a02a3f1b816e5d6db134745d729af87a32b41f79e2d20",
+        "answers": 49455,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_09.in",
+        "scope": "official",
+        "input_sha256": "be1b0ba4002df6acccc9bdad202642e93f7d9beec0bb2ecf7beb0f5e3b75d341",
+        "output_sha256": "ef049e35e660d9dc6c526b4d59998b0b0dba4ade71e58cbcad80007f0f277ffd",
+        "reference_output_sha256": "ef049e35e660d9dc6c526b4d59998b0b0dba4ade71e58cbcad80007f0f277ffd",
+        "answers": 195578,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "4e44a642c69d8912601aca34d12dc87d7b32827b65808236400ee9de59b50fb1",
+        "output_sha256": "c5997dec97b8b313b64627605f7aa870f5d1aa241cb1c690fda04040d299f31e",
+        "reference_output_sha256": "c5997dec97b8b313b64627605f7aa870f5d1aa241cb1c690fda04040d299f31e",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "40006c09d78339e11e97c542b3ff49fedaabeb4a87750a846b1fd8feb2cf45ed",
+        "output_sha256": "3a6f693e0ca0ce15d47019806d92989c691cdbc2ac3da425d518eeec069ad521",
+        "reference_output_sha256": "3a6f693e0ca0ce15d47019806d92989c691cdbc2ac3da425d518eeec069ad521",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "95bc849d1702d520baf348117740ad9ecee47d0d8db464332222edea19fa72ee",
+        "output_sha256": "8639d7edfe0796281f6437e15ccd79ecc28317f52773f3b93ea4ff194e17d784",
+        "reference_output_sha256": "8639d7edfe0796281f6437e15ccd79ecc28317f52773f3b93ea4ff194e17d784",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "path_00.in",
+        "scope": "official",
+        "input_sha256": "e00302d2af330494a4580aeea6334d0b299d02343e91ecfaf0b445339d03877a",
+        "output_sha256": "5f700d24f95cfa31974d55e9845491aaad07efa4461acd438d40bbe7cc68dbd3",
+        "reference_output_sha256": "5f700d24f95cfa31974d55e9845491aaad07efa4461acd438d40bbe7cc68dbd3",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "path_01.in",
+        "scope": "official",
+        "input_sha256": "ddf9f1d5e8adf791b88a005e436623b46ceb326764d0a11fabee90380a12d653",
+        "output_sha256": "17bffd4c31bf4fce60d543dbed7b13b2502291282582145574d30280f1096cec",
+        "reference_output_sha256": "17bffd4c31bf4fce60d543dbed7b13b2502291282582145574d30280f1096cec",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "path_02.in",
+        "scope": "official",
+        "input_sha256": "0362f1bc1f24ddaa06901ed849146e58645267d5c469f0cac09e5b830d80a9a9",
+        "output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "reference_output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "path_03.in",
+        "scope": "official",
+        "input_sha256": "95209543e3d7621237e88575f4f6559e397856c6f215b1b4a8e4e038de1de253",
+        "output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "reference_output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "5fb2c8af1a87fa8b417b80e0a2aa8ab306c4183a375b7b352766c658e279a2be",
+        "output_sha256": "b54ec7bab038ae52733eee7bbf02a2f30386306d74be0b39d924ed68f420439a",
+        "reference_output_sha256": "b54ec7bab038ae52733eee7bbf02a2f30386306d74be0b39d924ed68f420439a",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "star_same_component.in",
+        "scope": "custom",
+        "input_sha256": "2f24603dea4376fa464adc350e5bcd17e7d075aa18ab2207f6db8f2b2e1aaa10",
+        "output_sha256": "10bbc62f1f9d71dcdf940b001701181803fe018f536dd7041dfb218bd5ea1ec2",
+        "reference_output_sha256": "10bbc62f1f9d71dcdf940b001701181803fe018f536dd7041dfb218bd5ea1ec2",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "tiny_random.in",
+        "scope": "custom",
+        "input_sha256": "b324be235f81b6bb1ccd102a23b9fb866395cf0ca6100ab172b2edd2d38efe13",
+        "output_sha256": "4efcf2160d3763a2c2ad7ce543983b64f5ef1f1464bf30915cbec04f7753edc3",
+        "reference_output_sha256": "4efcf2160d3763a2c2ad7ce543983b64f5ef1f1464bf30915cbec04f7753edc3",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "disconnected_pairs.in",
+        "scope": "custom",
+        "input_sha256": "d3a7196347c4bdc67d127bbd556c7a5257286985b8a30cf8cb671ac24e844dfd",
+        "output_sha256": "b7de90467b5ff4ac06aebfd1cc916cd96f4ccd2c9a2b5c62fd987b049d648021",
+        "reference_output_sha256": "b7de90467b5ff4ac06aebfd1cc916cd96f4ccd2c9a2b5c62fd987b049d648021",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "f4fa01a168d9b818f8dbd66f10d4d1c6f4b7f1001fd6bf382c30d23f75298913",
+        "output_sha256": "ec6959b4802b196473186e786f118528fa08d8eb4c73e3dffcc7404f20330f1f",
+        "reference_output_sha256": "ec6959b4802b196473186e786f118528fa08d8eb4c73e3dffcc7404f20330f1f",
+        "answers": 10,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "175ad842afcc62e2629aa8d0495a0df45d58a594f740a7d0c6e748e87f9ec669",
+        "output_sha256": "169a46fea9da106bc0ec378539db06ae10c74e28befa80d476bc3d7d9fbe5a11",
+        "reference_output_sha256": "169a46fea9da106bc0ec378539db06ae10c74e28befa80d476bc3d7d9fbe5a11",
+        "answers": 148779,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "b95be4cea990478ce62affff56b126daec318c3a27689b125a055212f7ebb09b",
+        "output_sha256": "befac958d7564504f25830b7849582dea7c48ebb581a3b2eb90ecc2dd5a9a7d9",
+        "reference_output_sha256": "befac958d7564504f25830b7849582dea7c48ebb581a3b2eb90ecc2dd5a9a7d9",
+        "answers": 148757,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "4118a5833803e881f3ca886aa0553915b68f834f47523c8ec67105967250b317",
+        "output_sha256": "cc16708c76770b88ad2e8c0e980bce2fc2eea5f18f0a3aeec04e2ba830679181",
+        "reference_output_sha256": "cc16708c76770b88ad2e8c0e980bce2fc2eea5f18f0a3aeec04e2ba830679181",
+        "answers": 120203,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "8da25241ad57a7af4f72686de801c31bb2052a3b5aa270db09a29268554a931c",
+        "output_sha256": "c8cab222e36c7a03628fa438b7ae60ecafd86500d0ab1fece4b9f240a177a6d8",
+        "reference_output_sha256": "c8cab222e36c7a03628fa438b7ae60ecafd86500d0ab1fece4b9f240a177a6d8",
+        "answers": 25839,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "39bafe10abbf229c763c039951034263e94c27cfdfc433b234eaa32bc1b7140e",
+        "output_sha256": "4b135c466053ff03409af8ebf982e3ec1b719407ec070028c0d4c743f2429d92",
+        "reference_output_sha256": "4b135c466053ff03409af8ebf982e3ec1b719407ec070028c0d4c743f2429d92",
+        "answers": 99117,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_05.in",
+        "scope": "official",
+        "input_sha256": "d74b0c6aa235cedb84333ed7b7a3b008c372ef564e553b57dfaeeb252372d9d8",
+        "output_sha256": "d2eb98a13222c0b02a3530bd92571c471e17ca9508a14b85a7ae5d6e6e825d1f",
+        "reference_output_sha256": "d2eb98a13222c0b02a3530bd92571c471e17ca9508a14b85a7ae5d6e6e825d1f",
+        "answers": 140509,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_06.in",
+        "scope": "official",
+        "input_sha256": "1eaddcacca38125bb5064001424c10be2a3132c19718f009b1d106791bd7545c",
+        "output_sha256": "d84d66c6dd7d120eab47ab4a4ca9fed949abe24a18bd17847b84675c05ac75d0",
+        "reference_output_sha256": "d84d66c6dd7d120eab47ab4a4ca9fed949abe24a18bd17847b84675c05ac75d0",
+        "answers": 108617,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_07.in",
+        "scope": "official",
+        "input_sha256": "2601d39a88ad5a834177b917b1f2af9e60dce6d4ec47827d24193fbca62d244f",
+        "output_sha256": "6c52b9ecd7c50f42c4e7508d1c29336cac0b8695e1b2101e0cf2582ad92da4f8",
+        "reference_output_sha256": "6c52b9ecd7c50f42c4e7508d1c29336cac0b8695e1b2101e0cf2582ad92da4f8",
+        "answers": 11475,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_08.in",
+        "scope": "official",
+        "input_sha256": "25cf75eea57af237a8ef21b8bccbfa99107681dd619f24eeda8b02315ef45d7a",
+        "output_sha256": "9916adfa8710a76a826a02a3f1b816e5d6db134745d729af87a32b41f79e2d20",
+        "reference_output_sha256": "9916adfa8710a76a826a02a3f1b816e5d6db134745d729af87a32b41f79e2d20",
+        "answers": 49455,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_09.in",
+        "scope": "official",
+        "input_sha256": "be1b0ba4002df6acccc9bdad202642e93f7d9beec0bb2ecf7beb0f5e3b75d341",
+        "output_sha256": "ef049e35e660d9dc6c526b4d59998b0b0dba4ade71e58cbcad80007f0f277ffd",
+        "reference_output_sha256": "ef049e35e660d9dc6c526b4d59998b0b0dba4ade71e58cbcad80007f0f277ffd",
+        "answers": 195578,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "4e44a642c69d8912601aca34d12dc87d7b32827b65808236400ee9de59b50fb1",
+        "output_sha256": "c5997dec97b8b313b64627605f7aa870f5d1aa241cb1c690fda04040d299f31e",
+        "reference_output_sha256": "c5997dec97b8b313b64627605f7aa870f5d1aa241cb1c690fda04040d299f31e",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "40006c09d78339e11e97c542b3ff49fedaabeb4a87750a846b1fd8feb2cf45ed",
+        "output_sha256": "3a6f693e0ca0ce15d47019806d92989c691cdbc2ac3da425d518eeec069ad521",
+        "reference_output_sha256": "3a6f693e0ca0ce15d47019806d92989c691cdbc2ac3da425d518eeec069ad521",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "95bc849d1702d520baf348117740ad9ecee47d0d8db464332222edea19fa72ee",
+        "output_sha256": "8639d7edfe0796281f6437e15ccd79ecc28317f52773f3b93ea4ff194e17d784",
+        "reference_output_sha256": "8639d7edfe0796281f6437e15ccd79ecc28317f52773f3b93ea4ff194e17d784",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "path_00.in",
+        "scope": "official",
+        "input_sha256": "e00302d2af330494a4580aeea6334d0b299d02343e91ecfaf0b445339d03877a",
+        "output_sha256": "5f700d24f95cfa31974d55e9845491aaad07efa4461acd438d40bbe7cc68dbd3",
+        "reference_output_sha256": "5f700d24f95cfa31974d55e9845491aaad07efa4461acd438d40bbe7cc68dbd3",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "path_01.in",
+        "scope": "official",
+        "input_sha256": "ddf9f1d5e8adf791b88a005e436623b46ceb326764d0a11fabee90380a12d653",
+        "output_sha256": "17bffd4c31bf4fce60d543dbed7b13b2502291282582145574d30280f1096cec",
+        "reference_output_sha256": "17bffd4c31bf4fce60d543dbed7b13b2502291282582145574d30280f1096cec",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "path_02.in",
+        "scope": "official",
+        "input_sha256": "0362f1bc1f24ddaa06901ed849146e58645267d5c469f0cac09e5b830d80a9a9",
+        "output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "reference_output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "path_03.in",
+        "scope": "official",
+        "input_sha256": "95209543e3d7621237e88575f4f6559e397856c6f215b1b4a8e4e038de1de253",
+        "output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "reference_output_sha256": "92e0ea193ae02c22dcf47b2c3e0b5e48f5a79e773a15eef190898b861773aaf2",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "5fb2c8af1a87fa8b417b80e0a2aa8ab306c4183a375b7b352766c658e279a2be",
+        "output_sha256": "b54ec7bab038ae52733eee7bbf02a2f30386306d74be0b39d924ed68f420439a",
+        "reference_output_sha256": "b54ec7bab038ae52733eee7bbf02a2f30386306d74be0b39d924ed68f420439a",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "star_same_component.in",
+        "scope": "custom",
+        "input_sha256": "2f24603dea4376fa464adc350e5bcd17e7d075aa18ab2207f6db8f2b2e1aaa10",
+        "output_sha256": "10bbc62f1f9d71dcdf940b001701181803fe018f536dd7041dfb218bd5ea1ec2",
+        "reference_output_sha256": "10bbc62f1f9d71dcdf940b001701181803fe018f536dd7041dfb218bd5ea1ec2",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "tiny_random.in",
+        "scope": "custom",
+        "input_sha256": "b324be235f81b6bb1ccd102a23b9fb866395cf0ca6100ab172b2edd2d38efe13",
+        "output_sha256": "4efcf2160d3763a2c2ad7ce543983b64f5ef1f1464bf30915cbec04f7753edc3",
+        "reference_output_sha256": "4efcf2160d3763a2c2ad7ce543983b64f5ef1f1464bf30915cbec04f7753edc3",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "disconnected_pairs.in",
+        "scope": "custom",
+        "input_sha256": "d3a7196347c4bdc67d127bbd556c7a5257286985b8a30cf8cb671ac24e844dfd",
+        "output_sha256": "b7de90467b5ff4ac06aebfd1cc916cd96f4ccd2c9a2b5c62fd987b049d648021",
+        "reference_output_sha256": "b7de90467b5ff4ac06aebfd1cc916cd96f4ccd2c9a2b5c62fd987b049d648021",
+        "answers": 200000,
+        "returncode": 0,
+        "stderr_bytes": 0
+      }
+    ],
+    "note": "全出力を成分ID・絶対重み書換え方式の独立参照と完全一致で確認。標準C++23の単一実装、本体は専用SIMD/拡張整数分岐なし。外部ACL展開のみGCC/Clang拡張を含む。"
+  },
+  "independent_suite": {
+    "status": "PASS",
+    "suite": "final",
+    "source_sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+    "expected_runs": 12,
+    "results": [
+      {
+        "name": "wuf_reference_test_gcc_checked_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_reference_test_gcc_checked_native",
+          "-pedantic-errors",
+          "-DSIRKIT_WUF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f447c40046e07ca0301d4fc75fbfa9b7b5aaac37298d3d391a774720e97e7bc5",
+        "returncode": 0,
+        "stdout": "PASS checks=28124703 states=14956 operations=163301\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_reference_test_gcc_skip_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_reference_test_gcc_skip_native",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors",
+          "-DSIRKIT_WUF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f447c40046e07ca0301d4fc75fbfa9b7b5aaac37298d3d391a774720e97e7bc5",
+        "returncode": 0,
+        "stdout": "PASS checks=28124657 states=14956 operations=163301\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_reference_test_clang_checked_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_reference_test_clang_checked_native",
+          "-pedantic-errors",
+          "-DSIRKIT_WUF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f447c40046e07ca0301d4fc75fbfa9b7b5aaac37298d3d391a774720e97e7bc5",
+        "returncode": 0,
+        "stdout": "PASS checks=28124703 states=14956 operations=163301\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_reference_test_clang_skip_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_reference_test_clang_skip_native",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors",
+          "-DSIRKIT_WUF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f447c40046e07ca0301d4fc75fbfa9b7b5aaac37298d3d391a774720e97e7bc5",
+        "returncode": 0,
+        "stdout": "PASS checks=28124657 states=14956 operations=163301\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_reference_test_clang_checked_native_san",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_reference_test_clang_checked_native_san",
+          "-pedantic-errors",
+          "-DSIRKIT_WUF_REQUIRE_EXTRA",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f447c40046e07ca0301d4fc75fbfa9b7b5aaac37298d3d391a774720e97e7bc5",
+        "returncode": 0,
+        "stdout": "PASS checks=28124703 states=14956 operations=163301\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_reference_test_clang_skip_native_san",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_reference_test_clang_skip_native_san",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors",
+          "-DSIRKIT_WUF_REQUIRE_EXTRA",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f447c40046e07ca0301d4fc75fbfa9b7b5aaac37298d3d391a774720e97e7bc5",
+        "returncode": 0,
+        "stdout": "PASS checks=28124657 states=14956 operations=163301\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_exception_test_gcc_checked_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_exception_test_gcc_checked_native",
+          "-pedantic-errors",
+          "-DSIRKIT_WUF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "dd0eaae4400786ca4c908c81742ed72c6b1415ca4e39d22862c0fcea1bcd1006",
+        "returncode": 0,
+        "stdout": "PASS checks=179423 allocation_failures=28 value_failures=74 live_delta=0 value_live=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_exception_test_gcc_skip_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_exception_test_gcc_skip_native",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors",
+          "-DSIRKIT_WUF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "dd0eaae4400786ca4c908c81742ed72c6b1415ca4e39d22862c0fcea1bcd1006",
+        "returncode": 0,
+        "stdout": "PASS checks=179423 allocation_failures=28 value_failures=74 live_delta=0 value_live=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_exception_test_clang_checked_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_exception_test_clang_checked_native",
+          "-pedantic-errors",
+          "-DSIRKIT_WUF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "dd0eaae4400786ca4c908c81742ed72c6b1415ca4e39d22862c0fcea1bcd1006",
+        "returncode": 0,
+        "stdout": "PASS checks=179423 allocation_failures=28 value_failures=74 live_delta=0 value_live=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_exception_test_clang_skip_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_exception_test_clang_skip_native",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors",
+          "-DSIRKIT_WUF_REQUIRE_EXTRA"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "dd0eaae4400786ca4c908c81742ed72c6b1415ca4e39d22862c0fcea1bcd1006",
+        "returncode": 0,
+        "stdout": "PASS checks=179423 allocation_failures=28 value_failures=74 live_delta=0 value_live=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_exception_test_clang_checked_native_san",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_exception_test_clang_checked_native_san",
+          "-pedantic-errors",
+          "-DSIRKIT_WUF_REQUIRE_EXTRA",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "dd0eaae4400786ca4c908c81742ed72c6b1415ca4e39d22862c0fcea1bcd1006",
+        "returncode": 0,
+        "stdout": "PASS checks=179423 allocation_failures=28 value_failures=74 live_delta=0 value_live=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_exception_test_clang_skip_native_san",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/final/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/final/wuf_exception_test_clang_skip_native_san",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors",
+          "-DSIRKIT_WUF_REQUIRE_EXTRA",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "dd0eaae4400786ca4c908c81742ed72c6b1415ca4e39d22862c0fcea1bcd1006",
+        "returncode": 0,
+        "stdout": "PASS checks=179423 allocation_failures=28 value_failures=74 live_delta=0 value_live=0\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "summary": {
+    "status": "PASS",
+    "runs": 12,
+    "source_sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+    "source_unchanged": true,
+    "all_build_and_run_returncodes_zero": true,
+    "all_stderr_empty": true,
+    "all_child_processes_waited": true,
+    "results_sha256": "175658439d098012c24d36dc3bdc17d85d99d5b857dbad7cb2685dae20b9a514",
+    "test_sha256": {
+      "wuf_reference_test.cpp": "f447c40046e07ca0301d4fc75fbfa9b7b5aaac37298d3d391a774720e97e7bc5",
+      "wuf_exception_test.cpp": "dd0eaae4400786ca4c908c81742ed72c6b1415ca4e39d22862c0fcea1bcd1006"
+    },
+    "extra_api_required": true,
+    "leak_sanitizer": false
+  },
+  "aggregate": {
+    "status": "PASS",
+    "source_sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+    "runs": 16,
+    "core_runs": 12,
+    "repository_runs": 4,
+    "all_build_and_run_returncodes_zero": true,
+    "all_diagnostics_empty": true,
+    "all_child_processes_waited": true,
+    "core_summary": {
+      "status": "PASS",
+      "runs": 12,
+      "source_sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+      "source_unchanged": true,
+      "all_build_and_run_returncodes_zero": true,
+      "all_stderr_empty": true,
+      "all_child_processes_waited": true,
+      "results_sha256": "175658439d098012c24d36dc3bdc17d85d99d5b857dbad7cb2685dae20b9a514",
+      "test_sha256": {
+        "wuf_reference_test.cpp": "f447c40046e07ca0301d4fc75fbfa9b7b5aaac37298d3d391a774720e97e7bc5",
+        "wuf_exception_test.cpp": "dd0eaae4400786ca4c908c81742ed72c6b1415ca4e39d22862c0fcea1bcd1006"
+      },
+      "extra_api_required": true,
+      "leak_sanitizer": false
+    },
+    "repository_test_sha256": {
+      "Verify/current/tests/wuf_reference_test.cpp": "7d0db44663e78f5bfbf32e3442a52a92887e30fe39e5a6fcac3bc6ac959aca7e",
+      "Verify/current/tests/wuf_exception_test.cpp": "38121b56c00461299e77512da35b61f5e54af10db8e311582639273b7a2d9e81"
+    },
+    "preprocessor_status": "PASS",
+    "records": {
+      "final/results.json": {
+        "sha256": "175658439d098012c24d36dc3bdc17d85d99d5b857dbad7cb2685dae20b9a514",
+        "path": "/tmp/sirkit_wuf_20261022/verify/final/results.json"
+      },
+      "final/summary.json": {
+        "sha256": "6d625da1db3c839a626684cfc68c491ae62936edd7f2dc362875442afc8daf00",
+        "path": "/tmp/sirkit_wuf_20261022/verify/final/summary.json"
+      },
+      "repo_copy.json": {
+        "sha256": "b501d5331f12231924517431d9c46f16e63b4b4ac4f4fb7af18a2bc74f1e8664",
+        "path": "/tmp/sirkit_wuf_20261022/verify/repo_copy.json"
+      },
+      "preprocessor.json": {
+        "sha256": "c0b1b96144d6bdb3a42f2cd34bf4e77fbb08e83a7827dfc805dfb101743505a5",
+        "path": "/tmp/sirkit_wuf_20261022/verify/preprocessor.json"
+      },
+      "baseline/results.json": {
+        "sha256": "5133db064974058d22f6d2055eb4d074ac2092821470d2e199042f1c7390eb76",
+        "path": "/tmp/sirkit_wuf_20261022/verify/baseline/results.json"
+      },
+      "diagnostic_baseline.json": {
+        "sha256": "57e421ae1849b47dadaf1b81e2b8f7caf64510248123f9475f283ff43fb80683",
+        "path": "/tmp/sirkit_wuf_20261022/verify/diagnostic_baseline.json"
+      },
+      "diagnostic_final.json": {
+        "sha256": "33e7c65465ae790dd8575744a3adeebadaa821d610e2fe69fcef5a4b1b6a3a22",
+        "path": "/tmp/sirkit_wuf_20261022/verify/diagnostic_final.json"
+      }
+    },
+    "limits": [
+      "INT_MAX件の頂点を実際には確保せず、constructor/reset(INT_MAX+1)拒否と常時上限guard保持で確認。",
+      "ASan/UBSan checked/skipは通過、LSanは無効。確保収支は別の失敗注入で確認。",
+      "baseline正式参照のuint8/uint16は既知の整数昇格不具合のため対象外。独立診断に再現し、finalでは両型の回帰とランダム照合を必須化。",
+      "符号付き重みは既存契約に従い途中演算も表現範囲内。破壊的に送出する一般Typeの演算は別診断で記録し、通常操作の強い例外保証とはしない。",
+      "resetは置換オブジェクト作成により例外時の状態を維持。clearの確保保持を確認するが、resetの容量再利用は要件に含めない。",
+      "参照は親木を用いない全ラベル更新。サイズ併合の同サイズ時に第一引数側を代表にする既存挙動も照合。groups前後の圧縮量は公開契約ではなく、同一成分・代表・サイズ・頂点一覧を確認。"
+    ]
+  },
+  "repository_test_copy": {
+    "status": "PASS",
+    "source_sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+    "core_summary": {
+      "status": "PASS",
+      "runs": 12,
+      "source_sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+      "source_unchanged": true,
+      "all_build_and_run_returncodes_zero": true,
+      "all_stderr_empty": true,
+      "all_child_processes_waited": true,
+      "results_sha256": "175658439d098012c24d36dc3bdc17d85d99d5b857dbad7cb2685dae20b9a514",
+      "test_sha256": {
+        "wuf_reference_test.cpp": "f447c40046e07ca0301d4fc75fbfa9b7b5aaac37298d3d391a774720e97e7bc5",
+        "wuf_exception_test.cpp": "dd0eaae4400786ca4c908c81742ed72c6b1415ca4e39d22862c0fcea1bcd1006"
+      },
+      "extra_api_required": true,
+      "leak_sanitizer": false
+    },
+    "repository_test_sources": {
+      "Verify/current/tests/wuf_reference_test.cpp": {
+        "sha256": "7d0db44663e78f5bfbf32e3442a52a92887e30fe39e5a6fcac3bc6ac959aca7e",
+        "suite_sha256": "f447c40046e07ca0301d4fc75fbfa9b7b5aaac37298d3d391a774720e97e7bc5",
+        "only_difference": "extra API required macro defaults on (3 lines)",
+        "reverse_identical": true
+      },
+      "Verify/current/tests/wuf_exception_test.cpp": {
+        "sha256": "38121b56c00461299e77512da35b61f5e54af10db8e311582639273b7a2d9e81",
+        "suite_sha256": "dd0eaae4400786ca4c908c81742ed72c6b1415ca4e39d22862c0fcea1bcd1006",
+        "only_difference": "extra API required macro defaults on (3 lines)",
+        "reverse_identical": true
+      }
+    },
+    "repository_default_checks": [
+      {
+        "name": "wuf_reference_test.cpp",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/wuf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/wuf_reference_test_repo_gcc"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "stdout": "PASS checks=28124703 states=14956 operations=163301\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_reference_test.cpp",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/wuf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/wuf_reference_test_repo_clang",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "stdout": "PASS checks=28124657 states=14956 operations=163301\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_exception_test.cpp",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/wuf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/wuf_exception_test_repo_gcc"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "stdout": "PASS checks=179423 allocation_failures=28 value_failures=74 live_delta=0 value_live=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_exception_test.cpp",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/wuf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/wuf_exception_test_repo_clang",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "stdout": "PASS checks=179423 allocation_failures=28 value_failures=74 live_delta=0 value_live=0\n",
+        "stderr": ""
+      }
+    ],
+    "all_processes_waited": true,
+    "note": "repoコピーの差はextra API必須を既定化する3行だけ。suite側の-Dと同等。既定includeでGCC checked/Clang skipを再実行。"
+  },
+  "examples": {
+    "status": "PASS",
+    "source_sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+    "example_sha256": "356f9c3dcfa665f298802ec233d2a4b5cfe22285bf18aafdea7ebbed2b6bacf0",
+    "runs": 4,
+    "results": [
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/union_find_w_example.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/samples/gccFalse"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "output": "3 2 3\n"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/union_find_w_example.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/samples/gccTrue",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "output": "3 2 3\n"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/union_find_w_example.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/samples/clangFalse"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "output": "3 2 3\n"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/union_find_w_example.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/samples/clangTrue",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "output": "3 2 3\n"
+      }
+    ]
+  },
+  "preprocessor": {
+    "status": "PASS",
+    "source_sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+    "records": {
+      "checked": {
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "-x",
+          "c++",
+          "/home/reinsirk/Atcoder_Env/DataStructure/union_find_w.cpp"
+        ],
+        "source_part_sha256": "6d60b1842626783b0fba3d03f516e3856bc5a1dd3704e37c5887176b2bc5c441",
+        "messages": {
+          "UnionFindW: vertex": true,
+          "UnionFindW: disconnected": true,
+          "UnionFindW: too many vertices": true
+        }
+      },
+      "skip": {
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "-x",
+          "c++",
+          "/home/reinsirk/Atcoder_Env/DataStructure/union_find_w.cpp",
+          "-DSKIP_RUNTIME_CHECKS"
+        ],
+        "source_part_sha256": "9cf8d0045334b567e8d0f61a3ceea70ef0a0e8726ee8a4f596f5373b3e7292c8",
+        "messages": {
+          "UnionFindW: vertex": false,
+          "UnionFindW: disconnected": false,
+          "UnionFindW: too many vertices": true
+        }
+      },
+      "standard": {
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "-x",
+          "c++",
+          "/home/reinsirk/Atcoder_Env/DataStructure/union_find_w.cpp",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-U__SIZEOF_INT128__"
+        ],
+        "source_part_sha256": "6d60b1842626783b0fba3d03f516e3856bc5a1dd3704e37c5887176b2bc5c441",
+        "messages": {
+          "UnionFindW: vertex": true,
+          "UnionFindW: disconnected": true,
+          "UnionFindW: too many vertices": true
+        }
+      },
+      "no_simd": {
+        "command": [
+          "g++",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "-x",
+          "c++",
+          "/home/reinsirk/Atcoder_Env/DataStructure/union_find_w.cpp",
+          "-DSIRKIT_DISABLE_SIMD"
+        ],
+        "source_part_sha256": "6d60b1842626783b0fba3d03f516e3856bc5a1dd3704e37c5887176b2bc5c441",
+        "messages": {
+          "UnionFindW: vertex": true,
+          "UnionFindW: disconnected": true,
+          "UnionFindW: too many vertices": true
+        }
+      }
+    },
+    "note": "SKIPで頂点入力検査を前処理除外し、頂点数上限保護は維持。単一の標準C++23実装で新しいSIMD/拡張整数経路はなく、対応除外macroで本文は同一。"
+  },
+  "baseline_suite": {
+    "status": "PASS",
+    "suite": "baseline",
+    "source_sha256": "9b732b7570f8b3e1fd41ab2d70e92f3f479ada0bd4cfc24e193cffc1a583b52c",
+    "expected_runs": 4,
+    "results": [
+      {
+        "name": "wuf_reference_test_gcc_checked_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/baseline/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/baseline/wuf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/baseline/wuf_reference_test_gcc_checked_native",
+          "-pedantic-errors"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f447c40046e07ca0301d4fc75fbfa9b7b5aaac37298d3d391a774720e97e7bc5",
+        "returncode": 0,
+        "stdout": "PASS checks=16982183 states=8751 operations=104534\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_reference_test_clang_skip_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/baseline/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/baseline/wuf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/baseline/wuf_reference_test_clang_skip_native",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "f447c40046e07ca0301d4fc75fbfa9b7b5aaac37298d3d391a774720e97e7bc5",
+        "returncode": 0,
+        "stdout": "PASS checks=16982137 states=8751 operations=104534\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_exception_test_gcc_checked_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/baseline/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/baseline/wuf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/baseline/wuf_exception_test_gcc_checked_native",
+          "-pedantic-errors"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "dd0eaae4400786ca4c908c81742ed72c6b1415ca4e39d22862c0fcea1bcd1006",
+        "returncode": 0,
+        "stdout": "PASS checks=165199 allocation_failures=27 value_failures=51 live_delta=0 value_live=0\n",
+        "stderr": ""
+      },
+      {
+        "name": "wuf_exception_test_clang_skip_native",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DSIRKIT_WUF_SOURCE=\"/tmp/sirkit_wuf_20261022/verify/baseline/header.hpp\"",
+          "/tmp/sirkit_wuf_20261022/verify/baseline/wuf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/verify/baseline/wuf_exception_test_clang_skip_native",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-pedantic-errors"
+        ],
+        "build_returncode": 0,
+        "build_stderr": "",
+        "test_sha256": "dd0eaae4400786ca4c908c81742ed72c6b1415ca4e39d22862c0fcea1bcd1006",
+        "returncode": 0,
+        "stdout": "PASS checks=165199 allocation_failures=27 value_failures=51 live_delta=0 value_live=0\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "diagnostics": {
+    "baseline": {
+      "source_sha256": "9b732b7570f8b3e1fd41ab2d70e92f3f479ada0bd4cfc24e193cffc1a583b52c",
+      "test_sha256": "7445cd0064acb5ce1e5eaa5443809a2c89bf7f5e537900b0d91c323343b58263",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSOURCE=\"/tmp/sirkit_wuf_20261022/baseline/DataStructure/union_find_w.cpp\"",
+        "/tmp/sirkit_wuf_20261022/verify/diagnostic.cpp",
+        "-o",
+        "/tmp/sirkit_wuf_20261022/verify/diagnostic_baseline"
+      ],
+      "returncode": 0,
+      "stdout": "small_unsigned expected_consistent=1 observed=0 diff=11\ndestructive_link threw=1 connected02=0 root_weight2=8 components=2\ndestructive_compression threw=1 expected_diff03=12 observed_diff03=19 components=1\n",
+      "stderr": "",
+      "note": "small unsignedの昇格不具合と、契約範囲外の破壊的値代入/加算例外を観察する診断。正式参照の通過として数えない。"
+    },
+    "final": {
+      "source_sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+      "test_sha256": "7445cd0064acb5ce1e5eaa5443809a2c89bf7f5e537900b0d91c323343b58263",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSOURCE=\"/home/reinsirk/Atcoder_Env/DataStructure/union_find_w.cpp\"",
+        "/tmp/sirkit_wuf_20261022/verify/diagnostic.cpp",
+        "-o",
+        "/tmp/sirkit_wuf_20261022/verify/diagnostic_final"
+      ],
+      "returncode": 0,
+      "stdout": "small_unsigned expected_consistent=1 observed=1 diff=11\ndestructive_link threw=1 connected02=0 root_weight2=8 components=2\ndestructive_compression threw=1 expected_diff03=12 observed_diff03=19 components=1\n",
+      "stderr": "",
+      "note": "small unsignedの昇格不具合と、契約範囲外の破壊的値代入/加算例外を観察する診断。正式参照の通過として数えない。"
+    }
+  },
+  "reproduction": {
+    "install_final.py": {
+      "sha256": "495a1713e2c4d9f4a71f272dedf847221079fdbada67161fed793f8a17cfdd05",
+      "source": "from pathlib import Path\nimport sys,hashlib\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');s=Path(sys.argv[1]).read_text();start=s.index('// UnionFindW<T>');end=s.index('template<class Type>',start)\ncomments='''// UnionFindW<T>(n=0): n要素を構築、O(n+1)時間・領域、n<=INT_MAX。T{}は零、可換加法群の+/-/+=/符号反転が必要。\n// Tはコピー・ムーブ可能。圧縮・結合中のTの算術と代入は非送出、符号付き整数の全途中結果は表現範囲内が前提。\n// root(i)/leader(i): 代表、issame(a,b)/same(a,b): 同一成分か、size(i): 成分サイズ。償却O(α(n+1))。\n// unite(a,b,w): weight(b)-weight(a)=wで未接続なら結合、戻り値なし。既接続の矛盾は無視する。\n// merge(a,b,w): 同じ制約で新規結合ならtrue、既接続なら整合性によらずfalse。償却O(α(n+1))。\n// constrain(a,b,w): 未接続なら結合しtrue、既接続なら整合するときtrue。==が必要、償却O(α(n+1))。\n// weight(i): 根を零とした重み、diff(a,b): b-aの差。diffは接続が前提（既定の検査で未接続なら例外）。償却O(α(n+1))。\n// try_diff(a,b): 接続済みなら差、未接続ならnullopt。償却O(α(n+1))。符号なし整数は型の幅の剰余演算。\n// size()/empty()/component_count(): 全要素数/空か/成分数、O(1)。groups(): 頂点昇順の成分一覧、O(1+n α(n+1))償却。\n// reset(n): 一時構築後に交換、O(旧n+n+1)上界、失敗時は元を保持。clear(): 空へ戻し容量保持、O(旧n+1)上界、noexcept。\n// swap(other)/swap(a,b): 内容交換、O(1)、noexcept。コピーはO(n+1)で独立、コピー代入は強い例外保証。移動元は空。\n'''\ns=s[:start]+comments+s[end:]\nold='return diff_w[b] - diff_w[a] == w;';fixed='return static_cast<Type>(diff_w[b] - diff_w[a]) == w;'\nif old in s:s=s.replace(old,fixed)\nassert s.count(fixed)==1\nneedle='    int root(int i)';assert s.count(needle)==1\nextra='''    void reset(std::size_t n) { UnionFindW replacement(n); swap(replacement); }\n    void clear() noexcept { param.clear(); diff_w.clear(); components_ = 0; }\n    bool empty() const noexcept { return param.empty(); }\n    friend void swap(UnionFindW& left, UnionFindW& right) noexcept { left.swap(right); }\n'''\ns=s.replace(needle,extra+needle);(p/'final.hpp').write_text(s);(r/'DataStructure/union_find_w.cpp').write_text(s);print('installed',hashlib.sha256(s.encode()).hexdigest())\n"
+    },
+    "fetch_official.py": {
+      "sha256": "d8b8249feb830d5531722c950d295502f09bd1d287ec8bd0379a239aff3e48ce",
+      "source": "from pathlib import Path\nimport urllib.request,tomllib,json,hashlib,concurrent.futures\np=Path(__file__).parent;o=p/'official';o.mkdir(exist_ok=True);base='https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/';prefix='data_structure/unionfind_with_potential/';ip=prefix+'info.toml';info=urllib.request.urlopen(base+ip,timeout=30).read();(o/'info.toml').write_bytes(info)\nd=tomllib.loads(info.decode())\nfiles=['common/random.h','common/testlib.h',prefix+'task.md',prefix+'gen/example_00.in']+[prefix+'gen/'+t['name']for t in d['tests']if t['name'].endswith('.cpp')]+[prefix+'sol/correct.cpp',prefix+'sol/naive.cpp',prefix+'sol/acl.h']\ndef get(n):\n data=urllib.request.urlopen(base+n,timeout=30).read();f=(p/'common'/Path(n).name)if n.startswith('common/')else(p/'sol'/'acl.h')if n.endswith('/sol/acl.h')else(o/Path(n).name);f.parent.mkdir(exist_ok=True);f.write_bytes(data);return {'source':n,'url':base+n,'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data)}\nwith concurrent.futures.ThreadPoolExecutor(max_workers=6)as pool:rows=list(pool.map(get,files))\nrows.append({'source':ip,'url':base+ip,'sha256':hashlib.sha256(info).hexdigest(),'bytes':len(info)});(p/'official_sources.json').write_text(json.dumps(rows,indent=2)+'\\n');print('fetched',len(rows),'official files')\n"
+    },
+    "prepare_official.py": {
+      "sha256": "1f95b55140ec4dde9bd1884cfb7411e2dcef67f3a465edec9dc076287c4b523c",
+      "source": "from pathlib import Path\nimport subprocess,tomllib,json,hashlib\np=Path(__file__).parent;o=p/'official';d=tomllib.loads((o/'info.toml').read_text());(p/'params.h').write_text(''.join(f'constexpr int {k} = {v};\\n'for k,v in d['params'].items()));rows=[]\nfor t in d['tests']:\n f=o/t['name']\n if f.suffix=='.cpp':subprocess.run(['taskset','-c','6','g++','-std=c++23','-O2','-I'+str(p/'common'),str(f),'-o',str(o/f.stem)],capture_output=True,check=True)\n for seed in range(t['number']):\n  target=o/f'{f.stem}_{seed:02}.in'\n  if f.suffix=='.cpp':\n   with target.open('wb')as out:subprocess.run([str(o/f.stem),str(seed)],stdout=out,check=True)\n  else:target=o/f'{f.stem}_{seed:02}.in'\n  rows.append({'name':target.name,'bytes':target.stat().st_size,'sha256':hashlib.sha256(target.read_bytes()).hexdigest()})\n(p/'official_cases.json').write_text(json.dumps(rows,indent=2)+'\\n');print('generated',len(rows),'official cases')\n"
+    },
+    "make_custom.py": {
+      "sha256": "87b5c3537bdc1f3dab54036ec638f220ded05ccf3383188180df6e736c0a2b8f",
+      "source": "from pathlib import Path\nimport random,json,hashlib\np=Path(__file__).parent;o=p/'custom';o.mkdir(exist_ok=True);mod=998244353;rng=random.Random(61022);rows=[]\ndef write(name,n,ops):\n assert len(ops)==200000\n f=o/(name+'.in');f.write_text(f'{n} {len(ops)}\\n'+'\\n'.join(' '.join(map(str,x))for x in ops)+'\\n');rows.append(dict(name=f.name,bytes=f.stat().st_size,sha256=hashlib.sha256(f.read_bytes()).hexdigest(),n=n,q=len(ops)))\nn=131072;potential=[rng.randrange(mod)for _ in range(n)];ops=[]\nfor step in [1<<k for k in range(17)]:\n for i in range(0,n,step*2):ops.append((0,i+step,i,(potential[i+step]-potential[i])%mod))\nwhile len(ops)<200000:\n u=rng.randrange(n);v=rng.randrange(n);k=len(ops)%4\n ops.append((1,u,v)if k<2 else(0,u,v,(potential[u]-potential[v]+(k==3))%mod))\nwrite('balanced',n,ops)\nn=65536;potential=[rng.randrange(mod)for _ in range(n)];ops=[(0,i,0,(potential[i]-potential[0])%mod)for i in range(1,n)]\nwhile len(ops)<200000:\n u=rng.randrange(n);v=rng.randrange(n);k=len(ops)%4\n ops.append((1,u,v)if k<2 else(0,u,v,(potential[u]-potential[v]+(k==3))%mod))\nwrite('star_same_component',n,ops)\nn=32;ops=[]\nwhile len(ops)<200000:\n u=rng.randrange(n);v=rng.randrange(n)\n ops.append((1,u,v)if rng.randrange(2)else(0,u,v,rng.randrange(mod)))\nwrite('tiny_random',n,ops)\nn=200000;ops=[]\nfor i in range(n//2):\n ops.append((0,2*i+1,2*i,i));ops.append((1,2*i,(2*i+4)%n))\nwrite('disconnected_pairs',n,ops)\n(p/'custom_cases.json').write_text(json.dumps(rows,indent=2)+'\\n');print('custom',len(rows))\n"
+    },
+    "reference.cpp": {
+      "sha256": "2fd1b56525dcf4a6263b7d7bc5aa5fb7c169785a73ce6cd5de5f32ed6124f476",
+      "source": "#include <cstdint>\n#include <iostream>\n#include <numeric>\n#include <vector>\n// 各成分の全頂点を小さい側から移し、絶対ポテンシャルを一括でずらす独立参照。\nint main() {\n    std::ios::sync_with_stdio(false); std::cin.tie(nullptr);\n    constexpr int mod = 998244353;\n    int n,q; if (!(std::cin>>n>>q)) return 0;\n    std::vector<int> owner(n), value(n,0);\n    std::iota(owner.begin(),owner.end(),0);\n    std::vector<std::vector<int>> members(n);\n    for (int i=0;i<n;++i) members[i].push_back(i);\n    const auto norm = [](std::int64_t v) { v %= mod; if (v<0) v += mod; return static_cast<int>(v); };\n    while (q--) {\n        int type,u,v; std::cin>>type>>u>>v;\n        int a=owner[u], b=owner[v];\n        if (type==1) { std::cout<<(a==b ? norm(value[u]-value[v]) : -1)<<'\\n'; continue; }\n        int x; std::cin>>x;\n        if (a==b) { std::cout<<(norm(value[u]-value[v])==x)<<'\\n'; continue; }\n        int shift=norm(static_cast<std::int64_t>(x)+value[v]-value[u]);\n        if (members[a].size()>members[b].size()) { std::swap(a,b); shift=norm(-shift); }\n        for (const int w:members[a]) { value[w]=norm(value[w]+shift); owner[w]=b; members[b].push_back(w); }\n        std::vector<int>{}.swap(members[a]);\n        std::cout<<1<<'\\n';\n    }\n}\n"
+    },
+    "build_reference.py": {
+      "sha256": "72d27672fa12fa5d536836af665796fc96b379d4b3d111ef4dcbe226d780a666",
+      "source": "from pathlib import Path\nimport subprocess,random,json,hashlib,collections\np=Path(__file__).parent;sha=lambda b:hashlib.sha256(b).hexdigest();cmd=['taskset','-c','6','g++','-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',str(p/'reference.cpp'),'-o',str(p/'reference')];subprocess.run(cmd,capture_output=True,check=True);rng=random.Random(61022);mod=998244353\nfor case in range(200):\n n=rng.randrange(1,31);q=rng.randrange(1,401);graph=[[]for _ in range(n)];ops=[];expected=[]\n for _ in range(q):\n  t=rng.randrange(2);u=rng.randrange(n);v=rng.randrange(n);seen={v:0};todo=collections.deque([v])\n  while todo:\n   a=todo.popleft()\n   for b,w in graph[a]:\n    if b not in seen:seen[b]=(seen[a]+w)%mod;todo.append(b)\n  if t:ops.append((1,u,v));expected.append(seen.get(u,-1))\n  else:\n   x=rng.randrange(mod);ops.append((0,u,v,x));valid=u not in seen or seen[u]==x;expected.append(int(valid))\n   if valid and u not in seen:graph[v].append((u,x));graph[u].append((v,-x))\n data=(f'{n} {q}\\n'+'\\n'.join(' '.join(map(str,x))for x in ops)+'\\n').encode();out=subprocess.check_output([str(p/'reference')],input=data);assert list(map(int,out.split()))==expected,case\n(p/'reference_selfcheck.json').write_text(json.dumps(dict(status='PASS',cases=200,seed=61022,method='独立グラフBFSで差を計算し、矛盾辺を採用しない参照と照合',build_command=cmd),ensure_ascii=False,indent=2)+'\\n')\no=p/'reference_outputs';o.mkdir(exist_ok=True);rows=[]\nfor scope in ['official','custom']:\n for case in json.loads((p/(scope+'_cases.json')).read_text()):\n  f=p/scope/case['name'];out=subprocess.check_output([str(p/'reference')],input=f.read_bytes());(o/(f.name+'.out')).write_bytes(out);rows.append(dict(case=f.name,scope=scope,input_sha256=sha(f.read_bytes()),output_sha256=sha(out),answers=len(out.split())))\n(p/'official_reference.json').write_text(json.dumps(rows,indent=2)+'\\n');print('reference PASS selfcheck200+inputs',len(rows))\n"
+    },
+    "check_official_reference.py": {
+      "sha256": "a63ec5d4f1e764700bf088e517cff6fae1003fe5b79c7ba101337a3edae55467",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib\np=Path(__file__).parent;sha=lambda b:hashlib.sha256(b).hexdigest();cmd=['taskset','-c','6','g++','-std=c++23','-O2','-I'+str(p/'sol'),str(p/'official/correct.cpp'),'-o',str(p/'official/correct')];a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0,a.stderr;rows=[]\nfor scope in ['official','custom']:\n for case in json.loads((p/(scope+'_cases.json')).read_text()):\n  f=p/scope/case['name'];b=subprocess.run([str(p/'official/correct')],input=f.read_bytes(),capture_output=True);assert b.returncode==0 and not b.stderr;ref=(p/'reference_outputs'/(f.name+'.out')).read_bytes();assert b.stdout.split()==ref.split(),f.name;rows.append(dict(case=f.name,scope=scope,input_sha256=sha(f.read_bytes()),official_output_sha256=sha(b.stdout),reference_output_sha256=sha(ref)))\n(p/'official_reference_crosscheck.json').write_text(json.dumps(dict(status='PASS',command=cmd,source_sha256=sha((p/'official/correct.cpp').read_bytes()),records=rows),indent=2)+'\\n');print('official reference crosscheck',len(rows),'PASS')\n"
+    },
+    "verify_official.py": {
+      "sha256": "d0d42d3b3aeb58db29c4fddf475d085ba74723cd59fd624e87ffb71fdca831af",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');o=p/'official_final';o.mkdir(exist_ok=True);sha=lambda b:hashlib.sha256(b).hexdigest();submission=(r/'Verify/current/submissions/weighted_union_find.cpp').read_bytes();source=(r/'DataStructure/union_find_w.cpp').read_bytes();assert source==(p/'final.hpp').read_bytes();builds=[];records=[]\ncases=[(p/'official'/x['name'],'official')for x in json.loads((p/'official_cases.json').read_text())]+[(p/'custom'/x['name'],'custom')for x in json.loads((p/'custom_cases.json').read_text())]\nfor mode,cc in {'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']}.items():\n for skip in [False,True]:\n  name=mode+('_skip'if skip else'_checked');data=submission if skip else submission.replace(b'#define SKIP_RUNTIME_CHECKS\\n',b'',1);cpp=o/(name+'.cpp');cpp.write_bytes(data);exe=o/name;cmd=['taskset','-c','6',*cc,'-std=c++23','-O2','-Wall','-Wextra','-Werror',str(cpp),'-o',str(exe)];built=subprocess.run(cmd,capture_output=True,text=True);assert built.returncode==0,built.stderr;assert not built.stderr;builds.append(dict(name=name,command=cmd,sha256=sha(data),build_returncode=built.returncode,stderr=built.stderr))\n  for f,scope in cases:\n   data=f.read_bytes();ref=(p/'reference_outputs'/(f.name+'.out')).read_bytes();run=subprocess.run([str(exe)],input=data,capture_output=True);assert run.returncode==0 and not run.stderr,(name,f.name,run.stderr);assert run.stdout.split()==ref.split(),(name,f.name);records.append(dict(build=name,case=f.name,scope=scope,input_sha256=sha(data),output_sha256=sha(run.stdout),reference_output_sha256=sha(ref),answers=len(ref.split()),returncode=run.returncode,stderr_bytes=len(run.stderr)))\n  print(name,'PASS',len(cases),flush=True)\nassert (r/'DataStructure/union_find_w.cpp').read_bytes()==source and (r/'Verify/current/submissions/weighted_union_find.cpp').read_bytes()==submission\nresult=dict(status='PASS',source_sha256=sha(source),submission_sha256=sha(submission),official_runs=sum(x['scope']=='official'for x in records),custom_runs=sum(x['scope']=='custom'for x in records),builds=builds,records=records,note='全出力を成分ID・絶対重み書換え方式の独立参照と完全一致で確認。標準C++23の単一実装、本体は専用SIMD/拡張整数分岐なし。外部ACL展開のみGCC/Clang拡張を含む。')\n(o/'results.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n');print('official/custom PASS',len(records))\n"
+    },
+    "verify_samples.py": {
+      "sha256": "5ed78a91a0a261edfb43289bdc0883e96ef19b6016f55501702c2412e0a91951",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');o=p/'samples';o.mkdir(exist_ok=True);rows=[]\nfor mode,cc in {'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']}.items():\n for skip in [False,True]:\n  exe=o/(mode+str(skip));cmd=['taskset','-c','6',*cc,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',str(r/'Examples/union_find_w_example.cpp'),'-o',str(exe)]+(['-DSKIP_RUNTIME_CHECKS']if skip else[]);a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0,a.stderr;b=subprocess.run([str(exe)],capture_output=True,text=True);assert b.returncode==0 and not b.stderr and b.stdout=='3 2 3\\n',(b.stdout,b.stderr);rows.append(dict(command=cmd,build_returncode=a.returncode,returncode=b.returncode,output=b.stdout))\n(o/'results.json').write_text(json.dumps(dict(status='PASS',source_sha256=hashlib.sha256((r/'DataStructure/union_find_w.cpp').read_bytes()).hexdigest(),example_sha256=hashlib.sha256((r/'Examples/union_find_w_example.cpp').read_bytes()).hexdigest(),runs=len(rows),results=rows),indent=2)+'\\n');print('examples4 PASS')\n"
+    },
+    "verify/run.py": {
+      "sha256": "ec10d338b7856f048429e4f01ffa0c626bc7569b20dbc7c8cf742212d88a7d4e",
+      "source": "from pathlib import Path\nimport sys,subprocess,json,hashlib,os\np=Path(__file__).parent;suite=sys.argv[1];source=Path(sys.argv[2])if len(sys.argv)>2 else p.parent/'baseline/DataStructure/union_find_w.cpp';o=p/suite;o.mkdir(exist_ok=True);header=source.read_bytes();sha=lambda b:hashlib.sha256(b).hexdigest();resume=len(sys.argv)>3 and sys.argv[3]=='--resume';rows=[]\nif resume:\n previous=json.loads((o/'results.json').read_text());assert previous['source_sha256']==sha(header);assert(o/'header.hpp').read_bytes()==header;rows=previous['results']\n(o/'header.hpp').write_bytes(header)\ncompilers={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']}\nconfigs=[('gcc',False,False,False),('clang',True,False,False)]if suite=='baseline'else[(c,skip,False,False)for c in compilers for skip in [False,True]]+[('clang',skip,False,True)for skip in [False,True]]\nfor test in ['wuf_reference_test.cpp','wuf_exception_test.cpp']:\n (o/test).write_bytes((p/test).read_bytes())\n for cc,skip,standard,san in configs:\n  name=Path(test).stem+'_'+cc+('_skip'if skip else'_checked')+('_standard'if standard else'_native')+('_san'if san else'');cmd=['taskset','-c','10',*compilers[cc],'-std=c++23','-O1'if san else'-O2','-Wall','-Wextra','-Werror','-DSIRKIT_WUF_SOURCE=\"'+str(o/'header.hpp')+'\"',str(o/test),'-o',str(o/name)]\n  if skip:cmd+=['-DSKIP_RUNTIME_CHECKS']\n  if standard:cmd+=['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-U__SIZEOF_INT128__']\n  cmd+=['-pedantic-errors']\n  if suite!='baseline':cmd+=['-DSIRKIT_WUF_REQUIRE_EXTRA']\n  if san:cmd+=['-fsanitize=address,undefined','-fno-omit-frame-pointer']\n  old=next((row for row in rows if row['name']==name),None)\n  if old is not None:\n   assert resume and old['test_sha256']==sha((o/test).read_bytes())and old['returncode']==0 and old['build_returncode']==0 and not old['stderr']and not old['build_stderr'];print(name,'REUSED matching source/test SHA',flush=True);continue\n  build=subprocess.run(cmd,capture_output=True,text=True);assert build.returncode==0,build.stderr;assert not build.stderr\n  env=dict(os.environ,ASAN_OPTIONS='detect_leaks=0',UBSAN_OPTIONS='halt_on_error=1:print_stacktrace=1');run=subprocess.run(['taskset','-c','10',str(o/name)],capture_output=True,text=True,env=env);assert run.returncode==0,(name,run.stdout,run.stderr);assert not run.stderr\n  row=dict(name=name,command=cmd,build_returncode=build.returncode,build_stderr=build.stderr,test_sha256=sha((o/test).read_bytes()),returncode=run.returncode,stdout=run.stdout,stderr=run.stderr);rows.append(row);print(name,run.stdout.strip(),flush=True)\n  (o/'results.json').write_text(json.dumps(dict(status='RUNNING',suite=suite,source_sha256=sha(header),expected_runs=len(configs)*2,results=rows),indent=2)+'\\n')\nassert source.read_bytes()==header\nresult=dict(status='PASS',suite=suite,source_sha256=sha(header),expected_runs=len(configs)*2,results=rows);(o/'results.json').write_text(json.dumps(result,indent=2)+'\\n');summary=dict(status='PASS',runs=len(rows),source_sha256=sha(header),source_unchanged=True,all_build_and_run_returncodes_zero=True,all_stderr_empty=True,all_child_processes_waited=True,results_sha256=sha((o/'results.json').read_bytes()),test_sha256={test:sha((o/test).read_bytes())for test in ['wuf_reference_test.cpp','wuf_exception_test.cpp']},extra_api_required=suite!='baseline',leak_sanitizer=False);(o/'summary.json').write_text(json.dumps(summary,indent=2)+'\\n');print('SUITE PASS',suite,len(rows),flush=True)\n"
+    },
+    "verify/finalize_repo.py": {
+      "sha256": "019bc91e16017a27f508ffdc4c8702ada4356ed530c9236ea08edef105b0eae1",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib,os\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');sha=lambda b:hashlib.sha256(b).hexdigest();header=(r/'DataStructure/union_find_w.cpp').read_bytes();summary=json.loads((p/'final/summary.json').read_text());assert summary['status']=='PASS'and summary['source_sha256']==sha(header);extra=b'#ifndef SIRKIT_WUF_REQUIRE_EXTRA\\n#define SIRKIT_WUF_REQUIRE_EXTRA\\n#endif\\n';tests={};rows=[]\nfor name in ['wuf_reference_test.cpp','wuf_exception_test.cpp']:\n original=(p/name).read_bytes();assert original.startswith(b'// SPDX-License-Identifier: CC0-1.0\\n');marker=b'// SPDX-License-Identifier: CC0-1.0\\n';data=original.replace(marker,marker+extra,1);assert data.replace(extra,b'',1)==original;target=r/'Verify/current/tests'/name;target.write_bytes(data);tests[str(target.relative_to(r))]=dict(sha256=sha(data),suite_sha256=sha(original),only_difference='extra API required macro defaults on (3 lines)',reverse_identical=True)\n for cc,compiler,skip,standard in [('gcc',['g++'],False,False),('clang',['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0'],True,False)]:\n  exe=p/(Path(name).stem+'_repo_'+cc);cmd=['taskset','-c','10',*compiler,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',str(target),'-o',str(exe)]+(['-DSKIP_RUNTIME_CHECKS']if skip else[])+(['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-U__SIZEOF_INT128__']if standard else[]);a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0 and not a.stderr,a.stderr;b=subprocess.run(['taskset','-c','10',str(exe)],capture_output=True,text=True);assert b.returncode==0 and not b.stderr,(b.stdout,b.stderr);rows.append(dict(name=name,command=cmd,build_returncode=a.returncode,returncode=b.returncode,stdout=b.stdout,stderr=b.stderr));print(name,cc,b.stdout.strip(),flush=True)\nassert (r/'DataStructure/union_find_w.cpp').read_bytes()==header\nresult=dict(status='PASS',source_sha256=sha(header),core_summary=summary,repository_test_sources=tests,repository_default_checks=rows,all_processes_waited=True,note='repoコピーの差はextra API必須を既定化する3行だけ。suite側の-Dと同等。既定includeでGCC checked/Clang skipを再実行。');(p/'repo_copy.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n');print('REPO PASS',len(rows),flush=True)\n"
+    },
+    "verify/check_preprocessor.py": {
+      "sha256": "d0ce19303d95e13c21543c7f41def6f4dcd7a4e3d21080e307336580387bb50a",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');source=r/'DataStructure/union_find_w.cpp';sha=lambda b:hashlib.sha256(b).hexdigest();records={};parts={};messages=['UnionFindW: vertex','UnionFindW: disconnected','UnionFindW: too many vertices']\nfor name,flags in [('checked',[]),('skip',['-DSKIP_RUNTIME_CHECKS']),('standard',['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-U__SIZEOF_INT128__']),('no_simd',['-DSIRKIT_DISABLE_SIMD'])]:\n cmd=['g++','-std=c++23','-E','-P','-x','c++',str(source),*flags];a=subprocess.run(cmd,capture_output=True,text=True,check=True);part=a.stdout[a.stdout.index('class UnionFindW {'):];parts[name]=part;records[name]=dict(command=cmd,source_part_sha256=sha(part.encode()),messages={x:x in part for x in messages})\nassert all(records['checked']['messages'].values());assert not records['skip']['messages'][messages[0]] and not records['skip']['messages'][messages[1]];assert records['skip']['messages'][messages[2]];assert parts['checked']==parts['standard']==parts['no_simd'];result=dict(status='PASS',source_sha256=sha(source.read_bytes()),records=records,note='SKIPで頂点入力検査を前処理除外し、頂点数上限保護は維持。単一の標準C++23実装で新しいSIMD/拡張整数経路はなく、対応除外macroで本文は同一。');(p/'preprocessor.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n');print('preprocessor PASS',result['source_sha256'])\n"
+    },
+    "verify/diagnostic.cpp": {
+      "sha256": "7445cd0064acb5ce1e5eaa5443809a2c89bf7f5e537900b0d91c323343b58263",
+      "source": "#ifndef SOURCE\n#error SOURCE required\n#endif\n#include SOURCE\n#include <cstdint>\n#include <cstdio>\nstruct Destructive {\n    static inline bool throw_assign=false,throw_add=false;\n    std::int64_t value=0;\n    Destructive()=default; explicit Destructive(std::int64_t v):value(v){}\n    Destructive(const Destructive&)=default;\n    Destructive& operator=(const Destructive& other) { value=other.value; if(throw_assign)throw 1; return *this; }\n    Destructive& operator+=(const Destructive& other) { value+=other.value; if(throw_add)throw 2; return *this; }\n    friend Destructive operator+(const Destructive&a,const Destructive&b){return Destructive(a.value+b.value);}\n    friend Destructive operator-(const Destructive&a,const Destructive&b){return Destructive(a.value-b.value);}\n    friend Destructive operator-(const Destructive&a){return Destructive(-a.value);}\n    friend bool operator==(const Destructive&a,const Destructive&b){return a.value==b.value;}\n};\nint main(){\n    UnionFindW<std::uint8_t> small(3);small.unite(0,1,250);small.unite(0,2,5);\n    std::printf(\"small_unsigned expected_consistent=1 observed=%d diff=%u\\n\",small.constrain(1,2,11),static_cast<unsigned>(*small.try_diff(1,2)));\n    UnionFindW<Destructive> linked(3);linked.unite(0,1,Destructive(3));bool threw=false;Destructive::throw_assign=true;try{linked.unite(0,2,Destructive(8));}catch(int){threw=true;}Destructive::throw_assign=false;\n    std::printf(\"destructive_link threw=%d connected02=%d root_weight2=%jd components=%d\\n\",threw,linked.same(0,2),static_cast<std::intmax_t>(linked.weight(2).value),linked.component_count());\n    UnionFindW<Destructive> compressed(4);compressed.unite(0,1,Destructive(3));compressed.unite(2,3,Destructive(5));compressed.unite(0,2,Destructive(7));threw=false;Destructive::throw_add=true;try{(void)compressed.root(3);}catch(int){threw=true;}Destructive::throw_add=false;\n    std::printf(\"destructive_compression threw=%d expected_diff03=12 observed_diff03=%jd components=%d\\n\",threw,static_cast<std::intmax_t>(compressed.diff(0,3).value),compressed.component_count());\n}\n"
+    },
+    "verify/diagnose.py": {
+      "sha256": "2f61c39889c67c47dfb18977e510fe569e2cdae8970e40a37e5ed34f61c88671",
+      "source": "from pathlib import Path\nimport sys,subprocess,json,hashlib\np=Path(__file__).parent;source=Path(sys.argv[1])if len(sys.argv)>1 else p.parent/'baseline/DataStructure/union_find_w.cpp';label=sys.argv[2]if len(sys.argv)>2 else'baseline';exe=p/('diagnostic_'+label);cmd=['taskset','-c','10','g++','-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors','-DSOURCE=\"'+str(source)+'\"',str(p/'diagnostic.cpp'),'-o',str(exe)];build=subprocess.run(cmd,capture_output=True,text=True,check=True);assert not build.stderr;run=subprocess.run([str(exe)],capture_output=True,text=True,check=True);assert not run.stderr\nd=dict(source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),test_sha256=hashlib.sha256((p/'diagnostic.cpp').read_bytes()).hexdigest(),command=cmd,returncode=run.returncode,stdout=run.stdout,stderr=run.stderr,note='small unsignedの昇格不具合と、契約範囲外の破壊的値代入/加算例外を観察する診断。正式参照の通過として数えない。');(p/('diagnostic_'+label+'.json')).write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\\n');print(run.stdout,end='')\n"
+    },
+    "verify/aggregate.py": {
+      "sha256": "0614d70a3811275b8671f910147172bfb6a99d1f9a397e5f866b6ed3259d6446",
+      "source": "from pathlib import Path\nimport json,hashlib\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');sha=lambda b:hashlib.sha256(b).hexdigest();h=sha((r/'DataStructure/union_find_w.cpp').read_bytes());load=lambda f:json.loads((p/f).read_text());s=load('final/summary.json');copy=load('repo_copy.json');pre=load('preprocessor.json');assert all(d['status']=='PASS'and d['source_sha256']==h for d in [s,copy,pre]);assert s['runs']==12 and len(copy['repository_default_checks'])==4\nnames=['final/results.json','final/summary.json','repo_copy.json','preprocessor.json','baseline/results.json','diagnostic_baseline.json','diagnostic_final.json'];result=dict(status='PASS',source_sha256=h,runs=16,core_runs=12,repository_runs=4,all_build_and_run_returncodes_zero=True,all_diagnostics_empty=True,all_child_processes_waited=True,core_summary=s,repository_test_sha256={n:v['sha256']for n,v in copy['repository_test_sources'].items()},preprocessor_status=pre['status'],records={n:dict(sha256=sha((p/n).read_bytes()),path=str(p/n))for n in names},limits=['INT_MAX件の頂点を実際には確保せず、constructor/reset(INT_MAX+1)拒否と常時上限guard保持で確認。','ASan/UBSan checked/skipは通過、LSanは無効。確保収支は別の失敗注入で確認。','baseline正式参照のuint8/uint16は既知の整数昇格不具合のため対象外。独立診断に再現し、finalでは両型の回帰とランダム照合を必須化。','符号付き重みは既存契約に従い途中演算も表現範囲内。破壊的に送出する一般Typeの演算は別診断で記録し、通常操作の強い例外保証とはしない。','resetは置換オブジェクト作成により例外時の状態を維持。clearの確保保持を確認するが、resetの容量再利用は要件に含めない。','参照は親木を用いない全ラベル更新。サイズ併合の同サイズ時に第一引数側を代表にする既存挙動も照合。groups前後の圧縮量は公開契約ではなく、同一成分・代表・サイズ・頂点一覧を確認。']);(p/'aggregate.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n');print('aggregate PASS',h,16)\n"
+    },
+    "sync_verify.py": {
+      "sha256": "3f1b0c67c5bf130960e6d2a9e79913059c8e7e848ea54c1399519ce807dffe85",
+      "source": "from pathlib import Path\nimport sys,json,hashlib,time,os\nr=Path('/home/reinsirk/Atcoder_Env');sys.path.insert(0,str(r/'Scripts'));import prepare_verify as v\nlibs={'DataStructure/union_find_w.cpp'}\n# 他workの記録を再生成せず、変更した本体を含む行だけ同期する。\nselected=[e for e in v.collect() if libs.intersection(e['libraries'])]\nfor retry in range(10):\n mp=r/'Verify/current/manifest.json';jp=r/'Verify/current/judgements.json';before=mp.read_bytes();journal_before=jp.read_bytes();manifest=json.loads(before);journal={e['id']:e for e in json.loads(journal_before)['entries']};updates={}\n for original in selected:\n  e=dict(original);data,hashes=v.render(e);output=r/'Verify/current/submissions'/(e['id']+'.cpp');output.write_bytes(data)\n  record=journal.get(e['id']);status='未提出'\n  if record:\n   if record.get('submission_sha256') is None:status=record['status']+'（提出ソース未照合）'\n   else:status=record['status'] if record['submission_sha256']==v.digest(data) else '要再提出（ソース変更）'\n   e['judge_record']=record\n  e.update(source_hashes=hashes,submission_sha256=v.digest(data),submission=str(output.relative_to(r)),bytes=len(data),judge_status=status,acl_external_dependency=False,skip_runtime_checks=bool(e.get('problem_url')))\n  driver=(r/e['driver']).read_bytes();fast=v.FAST_IO_INCLUDE in driver.decode().splitlines();e.update(driver_sha256=v.digest(driver),io_mode='shared_fast_io'if fast else'local_driver',io_source_hashes={v.FAST_IO:v.digest((r/v.FAST_IO).read_bytes())}if fast else{})\n  updates[e['id']]=e\n if mp.read_bytes()!=before or jp.read_bytes()!=journal_before:continue\n manifest['entries']=[updates.get(e['id'],e)for e in manifest['entries']]\n temp=mp.with_suffix('.wuf_sync.tmp');temp.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\\n');os.replace(temp,mp)\n print('synchronized',len(updates),'entries');break\nelse:raise SystemExit('manifest changed concurrently; retry later')\n"
+    }
+  },
+  "source_consistency": {
+    "driver_io_hashes": {
+      "Verify/current/drivers/weighted_union_find_potential_main.cpp": "918239c6779de3889687d870b8558bd5b954e9a50c1807edcfda02fbf1f94f55",
+      "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+    },
+    "final_equals_frozen_source": true,
+    "submission_sha256": "99b51a20c13d8ccbd763ae61ab1ae680bda87b031ccb063c1e64de2eca63cba1",
+    "judge_status": "未提出",
+    "repository_tests": {
+      "Verify/current/tests/wuf_reference_test.cpp": "7d0db44663e78f5bfbf32e3442a52a92887e30fe39e5a6fcac3bc6ac959aca7e",
+      "Verify/current/tests/wuf_exception_test.cpp": "38121b56c00461299e77512da35b61f5e54af10db8e311582639273b7a2d9e81"
+    }
+  },
+  "limits": [
+    "公式問題はconstrain/try_diffを対象とする。既存mainと共通fastIO・ACL展開を固定し、各操作を入力順に直接呼ぶ。照会のバッチ化・並べ替え・入力分布によるmain切替なし。他APIは独立BFS・絶対重み参照で補足する。",
+    "最終core12実行はGCC/Clang×checked/skipの4構成とClang ASan/UBSan×checked/skipの2構成、それぞれ2test。repo既定includeで4実行を再確認。本体は標準C++23単一実装で新規SIMD/拡張整数分岐なし。standalone/testはpedantic-errors、公式提出は外部ACL展開にGCC/Clang拡張があるためpedantic-errorsを付けない。LSanは無効、確保収支は別の失敗注入で確認。",
+    "符号付き整数はw+weight(a)-weight(b)・根の交換時の符号反転・経路圧縮の加算を含む全途中結果が表現範囲内という前提。最終的な差だけが収まればよい契約ではなく、符号付きオーバーフロー自体の検出も追加していない。",
+    "圧縮・結合中のType算術と代入は非送出が前提。破壊的な代入/加算が例外を投げる型の診断を保存するが、この契約外の失敗後の状態復元は保証しない。確保・構築・コピー失敗の強保証とは区別する。",
+    "小型符号なし整数の差をTypeへ明示変換してから比較し、uint8/uint16の整数昇格による整合制約の誤判定を修復。正式final testで剰余演算の回帰照合。baselineの正式成功数にはこの既知不具合の反例を含めず別診断で明記する。",
+    "root/weight/差・同サイズtie・代表・groups順序と返却所有・コピー/移動/自己代入/自己ムーブ・空/1頂点・不正入力を補足。groups全1成分も各頂点の重みを正しく圧縮し既存代表を保つ。",
+    "resetは一時構築後swapで失敗時の状態保持を保証し、既存容量の再利用を保証しない。clearは2配列の容量を保持。構築/コピー/reset/groupsの失敗注入で所有者解放後の収支を確認。groups失敗時は重み付き経路圧縮だけ進む可能性がある。",
+    "INT_MAXの実確保は行わずINT_MAX+1/SIZE_MAX拒否と常時容量guard保持を確認。SKIP時は頂点入力検査を除外し容量上限を維持。有限ローカル照合であり全入力の証明やオンラインACではない。過去の提出判定を現在版の検証済みへ書き換えていない。"
+  ],
+  "package_preparation": {
+    "note": "配布専用コピーで生成元・manifest・提出注記の整合を再確認。コピー作成時には別workの提出URL同期が完了していたため、追加の同期変更はなかった。共有作業フォルダの他ライブラリ・提出記録は変更していない。",
+    "source_workspace": "/home/reinsirk/Atcoder_Env",
+    "snapshot": "/tmp/sirkit_wuf_20261022/package_snapshot",
+    "changed_only_in_snapshot": [],
+    "preparation_command": [
+      "python3",
+      "/tmp/sirkit_wuf_20261022/package_snapshot/Scripts/prepare_verify.py"
+    ],
+    "stdout": "141件の提出・補助コードを生成しました。\n"
+  }
+}

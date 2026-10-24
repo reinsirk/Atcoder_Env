@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: CC0-1.0
-#include "Verify/current/common/fast_io.hpp"
 #include <cstdint>
 #include <iterator>
 #include <random>
@@ -43,5 +42,4 @@ int main() {
         require(moved.empty() && !moved.try_top());
     };
     test.template operator()<true>(); test.template operator()<false>();
-    std::int64_t a, b; if (verify_in >> a >> b) verify_out << a + b << '\n';
 }

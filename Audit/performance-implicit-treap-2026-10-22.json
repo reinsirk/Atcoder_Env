@@ -1,0 +1,2450 @@
+{
+  "date": "2026-10-22",
+  "selected": "direct_both",
+  "baseline": {
+    "baseline_sha256": "9a6c881208b407e0d4978696d12e4ebcca376c6e0804353602f73fb5fd189c83",
+    "driver_sha256": "164e8597c277d90da07e3f627141c3864d53311fb8cc4425b2f644b473a8f28b",
+    "io_sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+    "measurement_seed": "0x185f91e4a30c721b",
+    "candidate_origin": "現行本体からの独自改善。外部実装は読んでいない。"
+  },
+  "final_sha256": "b05a2b120c0e99675a736f9057c3025592748a2f277a83f7509a71236762dd1f",
+  "scope": [
+    "中間insert_atを優先度で直接下降し、必要な位置だけsplitする。",
+    "erase_atを直接下降し、左右部分木だけmergeする。root確定後に対象slotをrecycleする。",
+    "copy代入は自己代入を短絡。Nodeのcopy構築/代入がnothrowかつ既存capacity内なら容量再利用し、それ以外はcopy-and-swap。"
+  ],
+  "unchanged": [
+    "64bit priorityと本来のsteady_clock seed",
+    "reverse/rotate/apply/prod等のAPIと手順",
+    "固定main・共通入出力",
+    "標準C++23。追加のSIMD/拡張整数経路なし。"
+  ],
+  "rejected": [
+    "reverseのprefix/suffix/full-range追加分岐はClangの固定seedで退行し、今回は採用しない。"
+  ],
+  "performance_policy": {
+    "flags": "-std=c++23 -O2 -DSKIP_RUNTIME_CHECKS (source prefix)",
+    "cpu_affinity": 14,
+    "serialization": "/tmp/atcoder_full_performance_20261018/benchmark.lock",
+    "unit": "milliseconds",
+    "measurement": "process startup + frozen main and I/O; captured identical stdout; medians of 3 alternating runs",
+    "fixed_seed_note": "局所比較だけ比較用ヘッダーseed()を同一固定値へ変更。実際の最終ヘッダーはtime seedを維持。",
+    "limit": "time seedでは木形と時間にばらつきがある。全入力での非退行・最大全体時間の改善は主張しない。オンライン未提出。"
+  },
+  "official_input_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/common/random.h",
+      "sha256": "d0ae9470c3a04425e1ab8c39f376a0e707507659b8f5aa3ca06c5b47f193613c",
+      "file": "/tmp/sirkit_treap_20261022/official/random.h"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/dynamic_sequence_range_affine_range_sum/gen/example_00.in",
+      "sha256": "b6362e43d6b6222ea2b8351c78280d2479fa34b591c7adc2f01aacecf0d6d41f",
+      "file": "/tmp/sirkit_treap_20261022/official/example_00.in"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/dynamic_sequence_range_affine_range_sum/gen/random.cpp",
+      "sha256": "ea909a645ac668ce01b1912131a9b91306a6f0a8d8a3993dae0a081012044804",
+      "file": "/tmp/sirkit_treap_20261022/official/random.cpp"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/dynamic_sequence_range_affine_range_sum/gen/max_random.cpp",
+      "sha256": "c5f0eebd8cd284d58708a0df7753b40db1df7593b3774c042edd79ce5bc59be3",
+      "file": "/tmp/sirkit_treap_20261022/official/max_random.cpp"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/dynamic_sequence_range_affine_range_sum/gen/max.cpp",
+      "sha256": "8a665acccb50442b8989b295163b92dcf60527c8b817faa00fcb72ed4a06d1e5",
+      "file": "/tmp/sirkit_treap_20261022/official/max.cpp"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/dynamic_sequence_range_affine_range_sum/gen/extreme_insertion.cpp",
+      "sha256": "78ef53f1a129e4da4bfb2044282d7d0dbf52ed3237b0b1ddbf59edff62af6f69",
+      "file": "/tmp/sirkit_treap_20261022/official/extreme_insertion.cpp"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/dynamic_sequence_range_affine_range_sum/gen/small.cpp",
+      "sha256": "7b40acb7c2bb12058bfed95a986e60aca9fc00efdaf49d4d429bbc8dd7d4ab59",
+      "file": "/tmp/sirkit_treap_20261022/official/small.cpp"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/dynamic_sequence_range_affine_range_sum/gen/wrong_avl_killer.cpp",
+      "sha256": "458c2b44f6ebe7400e5a86c45d29334b2806da6a0bfc9e82cbaff0fb28b56c7b",
+      "file": "/tmp/sirkit_treap_20261022/official/wrong_avl_killer.cpp"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/dynamic_sequence_range_affine_range_sum/gen/wrong_splay_killer.cpp",
+      "sha256": "34fd0d5447fab17be6bfbb21f22e1a423111e9a25dba5ee7b93ddfc427258403",
+      "file": "/tmp/sirkit_treap_20261022/official/wrong_splay_killer.cpp"
+    }
+  ],
+  "official_cases": [
+    {
+      "name": "random_00.in",
+      "sha256": "c476856b69b580d3638c67cb0ae0294be0725b21beb29424d3b836bda14bca27",
+      "bytes": 11418033,
+      "nq": "389813 410923"
+    },
+    {
+      "name": "random_01.in",
+      "sha256": "bac4c9a1583db366cc94677afa003cde527fe1deb2b75bc85818c3d2c769e890",
+      "bytes": 12214883,
+      "nq": "463046 412907"
+    },
+    {
+      "name": "random_02.in",
+      "sha256": "0ea940f396bade76fe8d488fd17e43e7edfd959161d6ae8d0dabf91942c126d1",
+      "bytes": 7024825,
+      "nq": "53336 382347"
+    },
+    {
+      "name": "random_03.in",
+      "sha256": "a0433ea1afd1c0da52d4b7be9dd642e924396a8d05da3065848d1341cbc68eef",
+      "bytes": 4720930,
+      "nq": "429249 25839"
+    },
+    {
+      "name": "random_04.in",
+      "sha256": "51703820f6a31b6a3e185834c5332637336faeead09a7f61fd84119fc9b7ec62",
+      "bytes": 4548168,
+      "nq": "277012 99117"
+    },
+    {
+      "name": "max_random_00.in",
+      "sha256": "14d09eeddfcd31199d9a7bf8c352dea988518d49b31625561afc40b309fb8994",
+      "bytes": 14177280,
+      "nq": "499692 499298"
+    },
+    {
+      "name": "max_random_01.in",
+      "sha256": "5e670ee41297aa3c540f22db2a49012d0f18cac5814c3401ba9a955f74b5f20e",
+      "bytes": 14186643,
+      "nq": "499197 499234"
+    },
+    {
+      "name": "max_random_02.in",
+      "sha256": "ed0bdcb35bfa58167a61a0f4f5c322c2eb62c2365533bd2ad8980077df39e4b8",
+      "bytes": 14179739,
+      "nq": "499087 499394"
+    },
+    {
+      "name": "max_00.in",
+      "sha256": "5ccc98dc7eb207b38221e08fac606702555c9ae3e8e580599e6d58945f4ebbd3",
+      "bytes": 14312136,
+      "nq": "500000 500000"
+    },
+    {
+      "name": "max_01.in",
+      "sha256": "db699c472f0216bb7027a013235f35642375b4e33cb9f9e55efd162e9d73083b",
+      "bytes": 9126331,
+      "nq": "500000 500000"
+    },
+    {
+      "name": "max_02.in",
+      "sha256": "7baeb36f5e31b3c99890e6599593b0871294182f7931625c45c8f9fd11939883",
+      "bytes": 12721139,
+      "nq": "500000 500000"
+    },
+    {
+      "name": "max_03.in",
+      "sha256": "b1a28dad128efcfc2ba5bb512b30c453949a6ad98f4381e4b9ec36ed384b7c5b",
+      "bytes": 22611346,
+      "nq": "500000 500000"
+    },
+    {
+      "name": "max_04.in",
+      "sha256": "e8dff67eb0b66e133ad67413f4706013c49085962a5b7bf988bad917049d83ef",
+      "bytes": 12721663,
+      "nq": "500000 500000"
+    },
+    {
+      "name": "extreme_insertion_00.in",
+      "sha256": "c4df76fa128f7fd7470cd731763d9ebe1f82cf6f43fb11ed35de6d98f186a4fc",
+      "bytes": 6944854,
+      "nq": "1 500000"
+    },
+    {
+      "name": "extreme_insertion_01.in",
+      "sha256": "189a283bd6d2ee44e71fb9f7c6aad0d0e3732979fada1c85e4bf4a2226356950",
+      "bytes": 6944686,
+      "nq": "1 500000"
+    },
+    {
+      "name": "extreme_insertion_02.in",
+      "sha256": "a6f501a6de5ccbfec87d0e225373cfef6f2133aa1fe8ae6cde0eb86d3c3e2477",
+      "bytes": 6944228,
+      "nq": "1 500000"
+    },
+    {
+      "name": "small_00.in",
+      "sha256": "f815e2aedd48250720f7e8ce2c84cb8266881ba105cd70f57212ff0964641cbd",
+      "bytes": 11106,
+      "nq": "693 299"
+    },
+    {
+      "name": "small_01.in",
+      "sha256": "0129e34493ce064072c854118a02c2ff5f4d97a4ec53f2b0e4d3277a82b1c7a4",
+      "bytes": 5056,
+      "nq": "198 235"
+    },
+    {
+      "name": "small_02.in",
+      "sha256": "8820542763024f56e4330c5382717de678a6851c743ca571ae33f746a3971855",
+      "bytes": 5756,
+      "nq": "88 395"
+    },
+    {
+      "name": "small_03.in",
+      "sha256": "8d75f7b96289b6cfde3a13579a6c3b554b3c61a2d966ba2fb784368fbe81a1ca",
+      "bytes": 5297,
+      "nq": "193 239"
+    },
+    {
+      "name": "small_04.in",
+      "sha256": "7bb67e8740c0eb5dfaf261d29f0d0535ee322e1091e4f64afb4a1f1edaa76bd8",
+      "bytes": 16690,
+      "nq": "532 813"
+    },
+    {
+      "name": "small_05.in",
+      "sha256": "7f16177dac7b8810fb4c974939bc07970d5e12386b458143ea2a74126217482c",
+      "bytes": 11842,
+      "nq": "874 221"
+    },
+    {
+      "name": "small_06.in",
+      "sha256": "b0f5b2941102cf7e7bac430b0e88d49a706b4efc4adfcec78488eaa522a0ca79",
+      "bytes": 12285,
+      "nq": "902 252"
+    },
+    {
+      "name": "small_07.in",
+      "sha256": "10a4ef1cc2e657e73484db7ef6828f93564b3d12ff0d3065edbfc7116dc32bf9",
+      "bytes": 8816,
+      "nq": "603 211"
+    },
+    {
+      "name": "small_08.in",
+      "sha256": "258a606a12051e884d7eff303ece3497feb56672a4d2d3a3a4cc5499cd5a894c",
+      "bytes": 11225,
+      "nq": "704 303"
+    },
+    {
+      "name": "small_09.in",
+      "sha256": "f91a2fe44a66f9c32349ceb9417ca3ac1da8bdba5f48c61e4ee50950172ed6b2",
+      "bytes": 10815,
+      "nq": "97 792"
+    },
+    {
+      "name": "wrong_avl_killer_00.in",
+      "sha256": "250fb4e7da163a37e0571e44785b72907ad72236537ccb85bb02afc5d6e7d100",
+      "bytes": 8134144,
+      "nq": "1 500000"
+    },
+    {
+      "name": "wrong_avl_killer_01.in",
+      "sha256": "ec9493f2cdb24b217f5bc45bbd091684568faca1197df0a6759405402357d7f8",
+      "bytes": 9222475,
+      "nq": "1 500000"
+    },
+    {
+      "name": "wrong_splay_killer_00.in",
+      "sha256": "26eb28a74cfdcb600bc5cea8f821e5d0381b5c7ae1acdb8696ec41e4f13366ee",
+      "bytes": 4972534,
+      "nq": "10 500000"
+    },
+    {
+      "name": "wrong_splay_killer_01.in",
+      "sha256": "d0dafda64c7260cb1fad57c5cad40a8208c4309d1d89186300823efc7e3ba24a",
+      "bytes": 6111432,
+      "nq": "10 500000"
+    },
+    {
+      "name": "wrong_splay_killer_02.in",
+      "sha256": "bac431269666609fdaab90720dea50206c344dacb175f3c599f6a95dd828b823",
+      "bytes": 7250084,
+      "nq": "10 500000"
+    },
+    {
+      "name": "wrong_splay_killer_03.in",
+      "sha256": "68e59e92e279089efeafea3b4e88c394e97c2fe52a5fbf2eb5381b4e29b2b47c",
+      "bytes": 8389100,
+      "nq": "10 500000"
+    },
+    {
+      "name": "example_00.in",
+      "sha256": "b6362e43d6b6222ea2b8351c78280d2479fa34b591c7adc2f01aacecf0d6d41f",
+      "bytes": 63,
+      "nq": "5 6"
+    }
+  ],
+  "fixed_seed_measurement": {
+    "time_unit": "ms",
+    "cases": [
+      "max_00.in",
+      "max_01.in",
+      "max_02.in",
+      "max_random_00.in",
+      "small_00.in"
+    ],
+    "repetitions": 3,
+    "cpu_affinity": 14,
+    "seed": "0x185f91e4a30c721b",
+    "output_sha256": {
+      "max_00.in": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "max_01.in": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "max_02.in": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "max_random_00.in": "8bf967f8b39dc73a91a00fdeb5f37e60af38f7e4accd94fb2949422bc73feb14",
+      "small_00.in": "d00b05b6c30299824153426718f420a5f2778c132663deb68b9ed70f89d8abfc"
+    },
+    "raw": {
+      "gcc": {
+        "baseline": {
+          "max_00.in": [
+            1190.07174,
+            521.325095,
+            593.604009
+          ],
+          "max_01.in": [
+            801.550335,
+            360.500687,
+            419.711922
+          ],
+          "max_02.in": [
+            1963.721108,
+            867.21517,
+            944.6656
+          ],
+          "max_random_00.in": [
+            806.211851,
+            600.847014,
+            598.467229
+          ],
+          "small_00.in": [
+            1.647839,
+            1.53775,
+            1.175203
+          ]
+        },
+        "direct_insert": {
+          "max_00.in": [
+            921.839037,
+            391.50421,
+            436.004694
+          ],
+          "max_01.in": [
+            793.684518,
+            365.277961,
+            405.076709
+          ],
+          "max_02.in": [
+            1608.606404,
+            850.720877,
+            849.037536
+          ],
+          "max_random_00.in": [
+            686.883287,
+            577.633646,
+            581.040358
+          ],
+          "small_00.in": [
+            1.462163,
+            2.403669,
+            1.19837
+          ]
+        },
+        "direct_erase": {
+          "max_00.in": [
+            1166.908205,
+            531.231888,
+            569.250875
+          ],
+          "max_01.in": [
+            502.747737,
+            233.880414,
+            239.22684
+          ],
+          "max_02.in": [
+            1479.012166,
+            888.154632,
+            914.294727
+          ],
+          "max_random_00.in": [
+            649.100163,
+            580.462639,
+            562.289818
+          ],
+          "small_00.in": [
+            1.476648,
+            1.774376,
+            1.844765
+          ]
+        },
+        "direct_both": {
+          "max_00.in": [
+            880.457722,
+            381.340881,
+            440.208487
+          ],
+          "max_01.in": [
+            492.598044,
+            211.551463,
+            236.141993
+          ],
+          "max_02.in": [
+            1331.646858,
+            884.27127,
+            858.147074
+          ],
+          "max_random_00.in": [
+            619.021489,
+            541.370662,
+            564.25455
+          ],
+          "small_00.in": [
+            1.244392,
+            1.537786,
+            1.268502
+          ]
+        },
+        "direct_all": {
+          "max_00.in": [
+            863.855083,
+            411.436476,
+            461.713636
+          ],
+          "max_01.in": [
+            495.145053,
+            211.299874,
+            231.0821
+          ],
+          "max_02.in": [
+            1539.199822,
+            880.222858,
+            850.988401
+          ],
+          "max_random_00.in": [
+            643.22231,
+            559.614231,
+            535.812423
+          ],
+          "small_00.in": [
+            1.683131,
+            1.398222,
+            1.155766
+          ]
+        }
+      },
+      "clang": {
+        "baseline": {
+          "max_00.in": [
+            648.968769,
+            551.725186,
+            577.189736
+          ],
+          "max_01.in": [
+            409.66898,
+            371.485403,
+            379.512707
+          ],
+          "max_02.in": [
+            892.591257,
+            970.317032,
+            919.225869
+          ],
+          "max_random_00.in": [
+            613.54736,
+            682.339652,
+            658.44188
+          ],
+          "small_00.in": [
+            2.300179,
+            1.428332,
+            1.337953
+          ]
+        },
+        "direct_insert": {
+          "max_00.in": [
+            452.087356,
+            409.193472,
+            412.432221
+          ],
+          "max_01.in": [
+            444.895164,
+            370.077399,
+            409.433398
+          ],
+          "max_02.in": [
+            882.665706,
+            952.00783,
+            1022.775008
+          ],
+          "max_random_00.in": [
+            593.630456,
+            665.950001,
+            649.739148
+          ],
+          "small_00.in": [
+            1.575027,
+            2.206389,
+            1.479361
+          ]
+        },
+        "direct_erase": {
+          "max_00.in": [
+            583.060168,
+            540.921467,
+            546.722393
+          ],
+          "max_01.in": [
+            265.573678,
+            235.397819,
+            234.684753
+          ],
+          "max_02.in": [
+            963.205479,
+            922.681771,
+            980.500725
+          ],
+          "max_random_00.in": [
+            599.932824,
+            629.866954,
+            672.129051
+          ],
+          "small_00.in": [
+            1.308351,
+            1.444385,
+            2.195707
+          ]
+        },
+        "direct_both": {
+          "max_00.in": [
+            484.307743,
+            398.598771,
+            405.734194
+          ],
+          "max_01.in": [
+            268.648489,
+            235.235232,
+            237.961646
+          ],
+          "max_02.in": [
+            880.184976,
+            891.293956,
+            1005.312412
+          ],
+          "max_random_00.in": [
+            550.068919,
+            606.192593,
+            609.909068
+          ],
+          "small_00.in": [
+            1.244647,
+            1.509165,
+            1.532619
+          ]
+        },
+        "direct_all": {
+          "max_00.in": [
+            495.354244,
+            405.580949,
+            399.090008
+          ],
+          "max_01.in": [
+            274.135172,
+            234.63958,
+            264.992764
+          ],
+          "max_02.in": [
+            880.845311,
+            1014.238297,
+            968.199761
+          ],
+          "max_random_00.in": [
+            586.490322,
+            630.973486,
+            720.343699
+          ],
+          "small_00.in": [
+            1.306574,
+            1.30971,
+            1.525656
+          ]
+        }
+      }
+    }
+  },
+  "time_seed_measurement": {
+    "time_unit": "ms",
+    "cases": [
+      "random_00.in",
+      "random_01.in",
+      "random_02.in",
+      "random_03.in",
+      "random_04.in",
+      "max_random_00.in",
+      "max_random_01.in",
+      "max_random_02.in",
+      "max_00.in",
+      "max_01.in",
+      "max_02.in",
+      "max_03.in",
+      "max_04.in",
+      "extreme_insertion_00.in",
+      "extreme_insertion_01.in",
+      "extreme_insertion_02.in",
+      "small_00.in",
+      "small_01.in",
+      "small_02.in",
+      "small_03.in",
+      "small_04.in",
+      "small_05.in",
+      "small_06.in",
+      "small_07.in",
+      "small_08.in",
+      "small_09.in",
+      "wrong_avl_killer_00.in",
+      "wrong_avl_killer_01.in",
+      "wrong_splay_killer_00.in",
+      "wrong_splay_killer_01.in",
+      "wrong_splay_killer_02.in",
+      "wrong_splay_killer_03.in",
+      "example_00.in"
+    ],
+    "repetitions": 3,
+    "cpu_affinity": 14,
+    "seed": "unmodified steady_clock",
+    "output_sha256": {
+      "random_00.in": "f03b617a965fa580d5b26add6395aafde2854aa6f2c1b585709553d05b5e7ac0",
+      "random_01.in": "35df2934aab87ca801f220457e67382a5405b93811fef69fe182c54a656b9de0",
+      "random_02.in": "6e3b35d1d4a2f067bee1562b6bfe90d33f705a2c2cd0c1a61d72f8f23c758773",
+      "random_03.in": "fb6a20f5d1e9fc424d73bcf3e4cbf0c29b12a2283953298bb5164b2044d4ceed",
+      "random_04.in": "32efaebbd29ffab9c47d14353ea560cd2b7d47bc43695c15e54fafea6051a7b5",
+      "max_random_00.in": "8bf967f8b39dc73a91a00fdeb5f37e60af38f7e4accd94fb2949422bc73feb14",
+      "max_random_01.in": "76a0224fb0dcbfdd5bc0bf220f03635c57d25af582b90b1be6d25d6f34bb2fb7",
+      "max_random_02.in": "c6eb748530e55e9236a3909e40ab758d33a3ab7b422964a9706e77bd3215cd70",
+      "max_00.in": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "max_01.in": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "max_02.in": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "max_03.in": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "max_04.in": "aa8841767ae85109a044458b7de58f4a35e12ebf5d3919fee35fa59078dfc966",
+      "extreme_insertion_00.in": "25a40d59b04f96d79535200c66d8f3a3609e1ccb402afffe7d21dfb94b319681",
+      "extreme_insertion_01.in": "7e6d42e3a77c2d80f2a05fd9e601e1c1a15271717eb454400e510b5ec92ca4fe",
+      "extreme_insertion_02.in": "a5d8d7b1c517d42a5d32e73da1aaef1cf97bd9fee62ad36feedbdabb0561b1a5",
+      "small_00.in": "d00b05b6c30299824153426718f420a5f2778c132663deb68b9ed70f89d8abfc",
+      "small_01.in": "a92593b76318e1d76e347b010676355745520902afb7dd1793f0501f936f8776",
+      "small_02.in": "3990d15564551e83a493a03848d5cb3d8f4b04c8d3d246b6702c843472fa5c07",
+      "small_03.in": "af289651e83d044feb6d1b95b0d7956f928c57ac74cd306811a9c47d1035a896",
+      "small_04.in": "a1c186583861535203208bd8ebd5fd99555e46ba7ad33f837a4e48a229317c85",
+      "small_05.in": "9b33125e52451bfc5e11634d4c9968ffd7cc49fae8c9fe446371c4a5951d20d0",
+      "small_06.in": "ed099c6643fbe4dcbc058e1fe5baa9386d23dacb36176cb12a103415dc74809e",
+      "small_07.in": "3a32358618e6494c47222180b496e07e68083065562ecf88aaaa86ca87d27b39",
+      "small_08.in": "8acf8111a1ffa6f67107ad144bd55d45dcb3e38cdebac986f6455a9d9c8b3e4f",
+      "small_09.in": "63809b7840233bd53cc4f92af22f94813608088e3146827024a1ddea97d4d95c",
+      "wrong_avl_killer_00.in": "063b0194b760f30e8c0ad09437471983cc5e9455c3b6a081696e74fea9ff624f",
+      "wrong_avl_killer_01.in": "d5a6e91d9350200520d669eaaac84d92a25fe20fad83398f90daf57ef7f8979d",
+      "wrong_splay_killer_00.in": "04f3047dd89f72df6f51ee77399e3ecdd9a2b4b9ab5e28d01a12197f9e3e9007",
+      "wrong_splay_killer_01.in": "7f564cab5434fd2033754514b58dc37d88f789bdb418df0019139a6924bdadca",
+      "wrong_splay_killer_02.in": "69d8c46a6d845365b6f6416129d5b9344373b30b08795da4db744ec1f022406c",
+      "wrong_splay_killer_03.in": "effea7c002da8f771d0c9ae878bad1dacc8f55f2e88b66777163236dd9b122ba",
+      "example_00.in": "1898ca4b042cb2fca03b584848f16a8bcd5daa13dc4e6091706e7ff8d651f8a5"
+    },
+    "raw": {
+      "gcc": {
+        "baseline": {
+          "random_00.in": [
+            496.17716,
+            456.107404,
+            501.414009
+          ],
+          "random_01.in": [
+            482.127164,
+            502.86226,
+            618.298802
+          ],
+          "random_02.in": [
+            278.001945,
+            280.142421,
+            279.273438
+          ],
+          "random_03.in": [
+            54.946371,
+            58.36883,
+            56.970307
+          ],
+          "random_04.in": [
+            109.402332,
+            123.650267,
+            120.263182
+          ],
+          "max_random_00.in": [
+            644.467033,
+            738.386858,
+            722.119896
+          ],
+          "max_random_01.in": [
+            607.262663,
+            723.147769,
+            671.441028
+          ],
+          "max_random_02.in": [
+            649.401265,
+            678.537135,
+            656.571295
+          ],
+          "max_00.in": [
+            510.130447,
+            539.378259,
+            589.974972
+          ],
+          "max_01.in": [
+            384.65055,
+            436.817397,
+            363.72407
+          ],
+          "max_02.in": [
+            937.009333,
+            1102.548979,
+            926.114548
+          ],
+          "max_03.in": [
+            619.05875,
+            661.793609,
+            642.573318
+          ],
+          "max_04.in": [
+            383.37602,
+            444.057957,
+            435.157544
+          ],
+          "extreme_insertion_00.in": [
+            63.04193,
+            55.82249,
+            58.204053
+          ],
+          "extreme_insertion_01.in": [
+            93.850064,
+            99.891554,
+            101.67118
+          ],
+          "extreme_insertion_02.in": [
+            85.590086,
+            78.421984,
+            78.162802
+          ],
+          "small_00.in": [
+            2.011166,
+            1.421677,
+            1.4988
+          ],
+          "small_01.in": [
+            1.352203,
+            1.155805,
+            1.234164
+          ],
+          "small_02.in": [
+            1.051854,
+            1.047846,
+            1.063105
+          ],
+          "small_03.in": [
+            1.11144,
+            1.021787,
+            1.063806
+          ],
+          "small_04.in": [
+            1.24649,
+            1.544304,
+            1.248591
+          ],
+          "small_05.in": [
+            1.07523,
+            1.093566,
+            1.097456
+          ],
+          "small_06.in": [
+            1.246872,
+            1.090782,
+            1.320129
+          ],
+          "small_07.in": [
+            1.163954,
+            1.050412,
+            1.063342
+          ],
+          "small_08.in": [
+            1.086064,
+            1.074326,
+            1.117035
+          ],
+          "small_09.in": [
+            1.227569,
+            1.13443,
+            1.212349
+          ],
+          "wrong_avl_killer_00.in": [
+            113.787097,
+            115.486086,
+            107.816811
+          ],
+          "wrong_avl_killer_01.in": [
+            91.329188,
+            118.62903,
+            108.248124
+          ],
+          "wrong_splay_killer_00.in": [
+            71.311693,
+            69.38845,
+            74.617944
+          ],
+          "wrong_splay_killer_01.in": [
+            76.246393,
+            83.420977,
+            77.786074
+          ],
+          "wrong_splay_killer_02.in": [
+            86.599167,
+            87.607854,
+            84.189566
+          ],
+          "wrong_splay_killer_03.in": [
+            95.199872,
+            92.30149,
+            90.531985
+          ],
+          "example_00.in": [
+            1.637259,
+            1.255719,
+            1.343463
+          ]
+        },
+        "direct_both": {
+          "random_00.in": [
+            425.163608,
+            405.360201,
+            464.839148
+          ],
+          "random_01.in": [
+            431.46205,
+            462.723922,
+            508.739088
+          ],
+          "random_02.in": [
+            245.513449,
+            246.412408,
+            247.073761
+          ],
+          "random_03.in": [
+            50.375523,
+            57.244678,
+            54.947884
+          ],
+          "random_04.in": [
+            102.833689,
+            107.579277,
+            111.993621
+          ],
+          "max_random_00.in": [
+            575.138631,
+            670.127178,
+            599.586973
+          ],
+          "max_random_01.in": [
+            588.776056,
+            670.943446,
+            609.550623
+          ],
+          "max_random_02.in": [
+            588.006205,
+            674.474878,
+            550.508542
+          ],
+          "max_00.in": [
+            394.488968,
+            382.794471,
+            426.526418
+          ],
+          "max_01.in": [
+            237.621726,
+            235.932555,
+            212.487205
+          ],
+          "max_02.in": [
+            1002.562077,
+            1029.167664,
+            905.035589
+          ],
+          "max_03.in": [
+            592.894086,
+            662.982999,
+            606.665828
+          ],
+          "max_04.in": [
+            398.973067,
+            397.424449,
+            466.789971
+          ],
+          "extreme_insertion_00.in": [
+            61.985701,
+            55.386549,
+            60.400887
+          ],
+          "extreme_insertion_01.in": [
+            64.334692,
+            63.10106,
+            66.195042
+          ],
+          "extreme_insertion_02.in": [
+            60.528287,
+            64.736005,
+            68.956349
+          ],
+          "small_00.in": [
+            1.689201,
+            1.88126,
+            1.380015
+          ],
+          "small_01.in": [
+            1.227812,
+            1.344013,
+            1.073578
+          ],
+          "small_02.in": [
+            1.041015,
+            1.080341,
+            1.060502
+          ],
+          "small_03.in": [
+            1.073505,
+            1.032298,
+            1.03484
+          ],
+          "small_04.in": [
+            1.202419,
+            1.206538,
+            1.205978
+          ],
+          "small_05.in": [
+            1.374102,
+            1.317417,
+            1.080096
+          ],
+          "small_06.in": [
+            1.212707,
+            1.090459,
+            1.1607
+          ],
+          "small_07.in": [
+            1.173675,
+            1.052233,
+            1.054864
+          ],
+          "small_08.in": [
+            1.069394,
+            1.075027,
+            1.08711
+          ],
+          "small_09.in": [
+            1.111917,
+            1.136152,
+            1.092102
+          ],
+          "wrong_avl_killer_00.in": [
+            76.775712,
+            89.015208,
+            84.163171
+          ],
+          "wrong_avl_killer_01.in": [
+            75.354091,
+            75.442474,
+            81.475139
+          ],
+          "wrong_splay_killer_00.in": [
+            60.522069,
+            57.896338,
+            57.036689
+          ],
+          "wrong_splay_killer_01.in": [
+            52.651911,
+            49.684133,
+            56.813997
+          ],
+          "wrong_splay_killer_02.in": [
+            65.946137,
+            70.465533,
+            69.154809
+          ],
+          "wrong_splay_killer_03.in": [
+            67.098205,
+            65.830692,
+            66.725358
+          ],
+          "example_00.in": [
+            1.285808,
+            1.770999,
+            1.226695
+          ]
+        },
+        "direct_all": {
+          "random_00.in": [
+            406.806428,
+            423.687251,
+            476.502535
+          ],
+          "random_01.in": [
+            431.257137,
+            474.190974,
+            517.917283
+          ],
+          "random_02.in": [
+            243.859339,
+            245.830065,
+            246.084824
+          ],
+          "random_03.in": [
+            50.654726,
+            53.343369,
+            53.314975
+          ],
+          "random_04.in": [
+            100.921926,
+            109.817354,
+            110.951758
+          ],
+          "max_random_00.in": [
+            580.30927,
+            662.647803,
+            653.431854
+          ],
+          "max_random_01.in": [
+            579.038925,
+            662.436763,
+            573.651652
+          ],
+          "max_random_02.in": [
+            556.29509,
+            657.966882,
+            562.98864
+          ],
+          "max_00.in": [
+            410.166782,
+            384.062928,
+            438.827381
+          ],
+          "max_01.in": [
+            228.235071,
+            275.447449,
+            212.13497
+          ],
+          "max_02.in": [
+            911.632485,
+            965.86672,
+            916.976501
+          ],
+          "max_03.in": [
+            570.646153,
+            703.79843,
+            632.384304
+          ],
+          "max_04.in": [
+            396.918915,
+            461.456015,
+            467.072975
+          ],
+          "extreme_insertion_00.in": [
+            56.696217,
+            59.152373,
+            60.479759
+          ],
+          "extreme_insertion_01.in": [
+            67.988426,
+            67.246514,
+            67.83092
+          ],
+          "extreme_insertion_02.in": [
+            60.384856,
+            62.319576,
+            62.781568
+          ],
+          "small_00.in": [
+            1.406115,
+            1.530463,
+            1.934702
+          ],
+          "small_01.in": [
+            1.276072,
+            1.292001,
+            1.34854
+          ],
+          "small_02.in": [
+            1.141569,
+            1.050141,
+            1.088109
+          ],
+          "small_03.in": [
+            1.020037,
+            1.029679,
+            1.058144
+          ],
+          "small_04.in": [
+            1.203612,
+            1.257809,
+            1.219243
+          ],
+          "small_05.in": [
+            1.194592,
+            1.112447,
+            1.074264
+          ],
+          "small_06.in": [
+            1.069326,
+            1.101946,
+            1.097162
+          ],
+          "small_07.in": [
+            1.044949,
+            1.050396,
+            1.055849
+          ],
+          "small_08.in": [
+            1.052284,
+            1.079535,
+            1.100424
+          ],
+          "small_09.in": [
+            1.144808,
+            1.105961,
+            1.114898
+          ],
+          "wrong_avl_killer_00.in": [
+            78.605462,
+            74.52165,
+            79.592002
+          ],
+          "wrong_avl_killer_01.in": [
+            80.287271,
+            78.739371,
+            72.257499
+          ],
+          "wrong_splay_killer_00.in": [
+            57.331957,
+            61.454249,
+            52.668327
+          ],
+          "wrong_splay_killer_01.in": [
+            49.665127,
+            54.809057,
+            54.84581
+          ],
+          "wrong_splay_killer_02.in": [
+            65.36972,
+            71.087971,
+            67.659604
+          ],
+          "wrong_splay_killer_03.in": [
+            64.840574,
+            65.113891,
+            63.152559
+          ],
+          "example_00.in": [
+            1.19141,
+            1.408302,
+            1.833492
+          ]
+        }
+      },
+      "clang": {
+        "baseline": {
+          "random_00.in": [
+            474.585845,
+            521.640534,
+            539.943903
+          ],
+          "random_01.in": [
+            516.105712,
+            515.785586,
+            569.959934
+          ],
+          "random_02.in": [
+            281.920883,
+            285.251684,
+            283.26081
+          ],
+          "random_03.in": [
+            56.414521,
+            58.01972,
+            55.240289
+          ],
+          "random_04.in": [
+            112.464748,
+            130.967357,
+            114.104914
+          ],
+          "max_random_00.in": [
+            686.881193,
+            704.181151,
+            733.843203
+          ],
+          "max_random_01.in": [
+            624.38902,
+            674.262209,
+            693.002999
+          ],
+          "max_random_02.in": [
+            605.425923,
+            682.771236,
+            755.739554
+          ],
+          "max_00.in": [
+            585.767501,
+            611.037038,
+            644.989115
+          ],
+          "max_01.in": [
+            369.544241,
+            382.732698,
+            455.384473
+          ],
+          "max_02.in": [
+            1031.467626,
+            1125.724751,
+            1136.185779
+          ],
+          "max_03.in": [
+            566.655968,
+            690.061648,
+            662.861308
+          ],
+          "max_04.in": [
+            400.26552,
+            469.64953,
+            493.016897
+          ],
+          "extreme_insertion_00.in": [
+            61.004353,
+            66.393188,
+            61.542389
+          ],
+          "extreme_insertion_01.in": [
+            98.854097,
+            98.525344,
+            107.761036
+          ],
+          "extreme_insertion_02.in": [
+            83.068516,
+            86.304475,
+            83.496794
+          ],
+          "small_00.in": [
+            1.939968,
+            1.462065,
+            1.516865
+          ],
+          "small_01.in": [
+            1.400116,
+            1.257876,
+            1.247805
+          ],
+          "small_02.in": [
+            1.2545,
+            1.07716,
+            1.088924
+          ],
+          "small_03.in": [
+            1.208053,
+            1.171535,
+            1.071906
+          ],
+          "small_04.in": [
+            1.259648,
+            1.319755,
+            1.237441
+          ],
+          "small_05.in": [
+            1.094725,
+            1.081016,
+            1.084003
+          ],
+          "small_06.in": [
+            1.118499,
+            1.202757,
+            1.099373
+          ],
+          "small_07.in": [
+            1.055823,
+            1.048532,
+            1.051682
+          ],
+          "small_08.in": [
+            1.097387,
+            1.087501,
+            1.116474
+          ],
+          "small_09.in": [
+            1.139913,
+            1.127275,
+            1.204403
+          ],
+          "wrong_avl_killer_00.in": [
+            107.875948,
+            131.39412,
+            107.333836
+          ],
+          "wrong_avl_killer_01.in": [
+            109.894136,
+            109.046722,
+            100.457259
+          ],
+          "wrong_splay_killer_00.in": [
+            76.361137,
+            75.329787,
+            73.950665
+          ],
+          "wrong_splay_killer_01.in": [
+            96.8261,
+            95.263883,
+            91.838178
+          ],
+          "wrong_splay_killer_02.in": [
+            89.456401,
+            91.208842,
+            96.987465
+          ],
+          "wrong_splay_killer_03.in": [
+            105.840668,
+            101.108496,
+            99.746995
+          ],
+          "example_00.in": [
+            1.66003,
+            1.173336,
+            1.096088
+          ]
+        },
+        "direct_both": {
+          "random_00.in": [
+            425.64734,
+            453.836016,
+            499.209253
+          ],
+          "random_01.in": [
+            511.976949,
+            510.605281,
+            505.299969
+          ],
+          "random_02.in": [
+            249.699693,
+            254.737102,
+            249.81679
+          ],
+          "random_03.in": [
+            51.791271,
+            54.431611,
+            52.305772
+          ],
+          "random_04.in": [
+            103.811064,
+            114.132922,
+            104.34854
+          ],
+          "max_random_00.in": [
+            552.46808,
+            700.932457,
+            634.482874
+          ],
+          "max_random_01.in": [
+            574.515548,
+            621.232428,
+            626.806125
+          ],
+          "max_random_02.in": [
+            569.344893,
+            617.800468,
+            668.557745
+          ],
+          "max_00.in": [
+            400.406157,
+            487.944192,
+            480.414794
+          ],
+          "max_01.in": [
+            248.125234,
+            251.208866,
+            274.474835
+          ],
+          "max_02.in": [
+            971.127497,
+            1122.590531,
+            1074.104982
+          ],
+          "max_03.in": [
+            554.263818,
+            658.684218,
+            656.053039
+          ],
+          "max_04.in": [
+            422.243266,
+            503.254455,
+            491.894641
+          ],
+          "extreme_insertion_00.in": [
+            59.57521,
+            64.573516,
+            58.233807
+          ],
+          "extreme_insertion_01.in": [
+            70.438554,
+            70.60553,
+            75.132184
+          ],
+          "extreme_insertion_02.in": [
+            69.511626,
+            68.806946,
+            66.867747
+          ],
+          "small_00.in": [
+            1.714131,
+            1.794466,
+            1.456415
+          ],
+          "small_01.in": [
+            1.272689,
+            1.220745,
+            1.237921
+          ],
+          "small_02.in": [
+            1.276421,
+            1.212141,
+            1.058935
+          ],
+          "small_03.in": [
+            1.172181,
+            1.059174,
+            1.074658
+          ],
+          "small_04.in": [
+            1.299259,
+            1.359987,
+            1.218107
+          ],
+          "small_05.in": [
+            1.093396,
+            1.130587,
+            1.053965
+          ],
+          "small_06.in": [
+            1.103562,
+            1.092374,
+            1.105174
+          ],
+          "small_07.in": [
+            1.039789,
+            1.0553,
+            1.063463
+          ],
+          "small_08.in": [
+            1.093771,
+            1.087391,
+            1.089643
+          ],
+          "small_09.in": [
+            1.113462,
+            1.090866,
+            1.097295
+          ],
+          "wrong_avl_killer_00.in": [
+            78.364046,
+            74.388543,
+            85.53949
+          ],
+          "wrong_avl_killer_01.in": [
+            81.054025,
+            82.863368,
+            77.308294
+          ],
+          "wrong_splay_killer_00.in": [
+            59.470652,
+            59.731688,
+            59.724218
+          ],
+          "wrong_splay_killer_01.in": [
+            54.207689,
+            60.431431,
+            55.670093
+          ],
+          "wrong_splay_killer_02.in": [
+            68.695601,
+            74.0673,
+            74.873093
+          ],
+          "wrong_splay_killer_03.in": [
+            70.330148,
+            72.086571,
+            71.471703
+          ],
+          "example_00.in": [
+            1.240591,
+            1.725918,
+            1.060766
+          ]
+        },
+        "direct_all": {
+          "random_00.in": [
+            428.024921,
+            452.918741,
+            477.456772
+          ],
+          "random_01.in": [
+            462.847271,
+            462.791183,
+            525.025385
+          ],
+          "random_02.in": [
+            248.274989,
+            249.003663,
+            248.314796
+          ],
+          "random_03.in": [
+            52.333244,
+            54.837721,
+            52.498909
+          ],
+          "random_04.in": [
+            103.217266,
+            114.619409,
+            102.573829
+          ],
+          "max_random_00.in": [
+            539.781078,
+            683.647581,
+            645.055232
+          ],
+          "max_random_01.in": [
+            552.506785,
+            604.927268,
+            611.224506
+          ],
+          "max_random_02.in": [
+            554.546615,
+            597.194909,
+            630.675677
+          ],
+          "max_00.in": [
+            410.367464,
+            508.931515,
+            475.862326
+          ],
+          "max_01.in": [
+            239.680165,
+            258.001004,
+            284.20635
+          ],
+          "max_02.in": [
+            887.846321,
+            1141.206239,
+            1125.932511
+          ],
+          "max_03.in": [
+            578.041969,
+            659.88657,
+            659.957743
+          ],
+          "max_04.in": [
+            405.253028,
+            507.482917,
+            490.273296
+          ],
+          "extreme_insertion_00.in": [
+            59.071216,
+            60.140762,
+            60.747502
+          ],
+          "extreme_insertion_01.in": [
+            73.557403,
+            71.679172,
+            75.301039
+          ],
+          "extreme_insertion_02.in": [
+            63.73492,
+            72.979402,
+            66.06917
+          ],
+          "small_00.in": [
+            1.395484,
+            1.480963,
+            1.967899
+          ],
+          "small_01.in": [
+            1.213112,
+            1.429204,
+            1.258812
+          ],
+          "small_02.in": [
+            1.177411,
+            1.071531,
+            1.072744
+          ],
+          "small_03.in": [
+            1.034825,
+            1.261868,
+            1.057147
+          ],
+          "small_04.in": [
+            1.214148,
+            1.234395,
+            1.212945
+          ],
+          "small_05.in": [
+            1.156946,
+            1.109553,
+            1.062097
+          ],
+          "small_06.in": [
+            1.114015,
+            1.09503,
+            1.089581
+          ],
+          "small_07.in": [
+            1.036251,
+            1.095303,
+            1.061097
+          ],
+          "small_08.in": [
+            1.108778,
+            1.104244,
+            1.139421
+          ],
+          "small_09.in": [
+            1.137754,
+            1.0978,
+            1.114229
+          ],
+          "wrong_avl_killer_00.in": [
+            79.87172,
+            83.515386,
+            79.466327
+          ],
+          "wrong_avl_killer_01.in": [
+            68.291483,
+            78.345324,
+            81.759518
+          ],
+          "wrong_splay_killer_00.in": [
+            58.457233,
+            55.871281,
+            57.852733
+          ],
+          "wrong_splay_killer_01.in": [
+            57.687792,
+            65.60971,
+            57.278646
+          ],
+          "wrong_splay_killer_02.in": [
+            72.267669,
+            74.541253,
+            70.857036
+          ],
+          "wrong_splay_killer_03.in": [
+            69.075585,
+            72.60172,
+            72.811438
+          ],
+          "example_00.in": [
+            1.312498,
+            1.307949,
+            1.61718
+          ]
+        }
+      }
+    }
+  },
+  "reverse_fixed_seeds": {
+    "case": "max_02.in",
+    "time_unit": "ms",
+    "repetitions": 3,
+    "cpu_affinity": 14,
+    "builds": [
+      {
+        "compiler": "gcc",
+        "variant": "baseline",
+        "seed": "0x614a90d237fec815",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "/tmp/sirkit_treap_20261022/gcc_baseline_0x614a90d237fec815.cpp",
+          "-o",
+          "/tmp/sirkit_treap_20261022/gcc_baseline_0x614a90d237fec815"
+        ],
+        "source_sha256": "f668da7e5e85828a269ceb74aba0122e1f320fd2cbb7295b5de2cffcb9714bac"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "baseline",
+        "seed": "0xb1739f8064a25dc7",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "/tmp/sirkit_treap_20261022/gcc_baseline_0xb1739f8064a25dc7.cpp",
+          "-o",
+          "/tmp/sirkit_treap_20261022/gcc_baseline_0xb1739f8064a25dc7"
+        ],
+        "source_sha256": "d1e8a01bda6427a1f5c039811ee8737583999dcf01d4ff260f427ca44b34e50d"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "direct_both",
+        "seed": "0x614a90d237fec815",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "/tmp/sirkit_treap_20261022/gcc_direct_both_0x614a90d237fec815.cpp",
+          "-o",
+          "/tmp/sirkit_treap_20261022/gcc_direct_both_0x614a90d237fec815"
+        ],
+        "source_sha256": "c78dec9c67612ccfe2d58a9ccba9c4abaf1f4bb147dfd80c8015ed58a185ce52"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "direct_both",
+        "seed": "0xb1739f8064a25dc7",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "/tmp/sirkit_treap_20261022/gcc_direct_both_0xb1739f8064a25dc7.cpp",
+          "-o",
+          "/tmp/sirkit_treap_20261022/gcc_direct_both_0xb1739f8064a25dc7"
+        ],
+        "source_sha256": "f0b7871d4bb2c7c9ba9f6fa497b5d452ea8bc2a4e754fdbef610b72d5e0bc040"
+      },
+      {
+        "compiler": "clang",
+        "variant": "baseline",
+        "seed": "0x614a90d237fec815",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-std=c++23",
+          "/tmp/sirkit_treap_20261022/clang_baseline_0x614a90d237fec815.cpp",
+          "-o",
+          "/tmp/sirkit_treap_20261022/clang_baseline_0x614a90d237fec815"
+        ],
+        "source_sha256": "f668da7e5e85828a269ceb74aba0122e1f320fd2cbb7295b5de2cffcb9714bac"
+      },
+      {
+        "compiler": "clang",
+        "variant": "baseline",
+        "seed": "0xb1739f8064a25dc7",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-std=c++23",
+          "/tmp/sirkit_treap_20261022/clang_baseline_0xb1739f8064a25dc7.cpp",
+          "-o",
+          "/tmp/sirkit_treap_20261022/clang_baseline_0xb1739f8064a25dc7"
+        ],
+        "source_sha256": "d1e8a01bda6427a1f5c039811ee8737583999dcf01d4ff260f427ca44b34e50d"
+      },
+      {
+        "compiler": "clang",
+        "variant": "direct_both",
+        "seed": "0x614a90d237fec815",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-std=c++23",
+          "/tmp/sirkit_treap_20261022/clang_direct_both_0x614a90d237fec815.cpp",
+          "-o",
+          "/tmp/sirkit_treap_20261022/clang_direct_both_0x614a90d237fec815"
+        ],
+        "source_sha256": "c78dec9c67612ccfe2d58a9ccba9c4abaf1f4bb147dfd80c8015ed58a185ce52"
+      },
+      {
+        "compiler": "clang",
+        "variant": "direct_both",
+        "seed": "0xb1739f8064a25dc7",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-std=c++23",
+          "/tmp/sirkit_treap_20261022/clang_direct_both_0xb1739f8064a25dc7.cpp",
+          "-o",
+          "/tmp/sirkit_treap_20261022/clang_direct_both_0xb1739f8064a25dc7"
+        ],
+        "source_sha256": "f0b7871d4bb2c7c9ba9f6fa497b5d452ea8bc2a4e754fdbef610b72d5e0bc040"
+      }
+    ],
+    "output_sha256": [
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    ],
+    "raw": {
+      "gcc": {
+        "0x614a90d237fec815": {
+          "baseline": [
+            1023.147934,
+            1052.658158,
+            1085.828951
+          ],
+          "direct_both": [
+            1052.990733,
+            1012.962963,
+            1182.387752
+          ]
+        },
+        "0xb1739f8064a25dc7": {
+          "baseline": [
+            1010.303385,
+            1133.517313,
+            1162.099812
+          ],
+          "direct_both": [
+            1058.919045,
+            1144.000175,
+            1206.549541
+          ]
+        },
+        "0x185f91e4a30c721b": {
+          "baseline": [
+            1963.721108,
+            867.21517,
+            944.6656
+          ],
+          "direct_both": [
+            1331.646858,
+            884.27127,
+            858.147074
+          ]
+        }
+      },
+      "clang": {
+        "0x614a90d237fec815": {
+          "baseline": [
+            1031.991517,
+            1151.745986,
+            1166.541703
+          ],
+          "direct_both": [
+            1042.097263,
+            1094.848057,
+            1140.899577
+          ]
+        },
+        "0xb1739f8064a25dc7": {
+          "baseline": [
+            1057.733807,
+            1146.254526,
+            1167.118632
+          ],
+          "direct_both": [
+            1060.549653,
+            1187.173411,
+            1129.441774
+          ]
+        },
+        "0x185f91e4a30c721b": {
+          "baseline": [
+            892.591257,
+            970.317032,
+            919.225869
+          ],
+          "direct_both": [
+            880.184976,
+            891.293956,
+            1005.312412
+          ]
+        }
+      }
+    }
+  },
+  "verification": {
+    "checked_skip": {
+      "header_sha256": "b05a2b120c0e99675a736f9057c3025592748a2f277a83f7509a71236762dd1f",
+      "results": [
+        {
+          "test": "check",
+          "compiler": "gcc",
+          "skip_runtime_checks": false,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "/tmp/sirkit_treap_20261022/check.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/check_gcc_checked"
+          ],
+          "output": "100000 independent noncommutative/lazy/reverse/insert/erase mixed operations passed",
+          "source_sha256": "f3e1f5ae00e4050248d79e026f499e07966e87634a47c3f1901c3f3bd5e2dd6d"
+        },
+        {
+          "test": "check",
+          "compiler": "gcc",
+          "skip_runtime_checks": true,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_treap_20261022/check.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/check_gcc_skip"
+          ],
+          "output": "100000 independent noncommutative/lazy/reverse/insert/erase mixed operations passed",
+          "source_sha256": "f3e1f5ae00e4050248d79e026f499e07966e87634a47c3f1901c3f3bd5e2dd6d"
+        },
+        {
+          "test": "check",
+          "compiler": "clang",
+          "skip_runtime_checks": false,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "/tmp/sirkit_treap_20261022/check.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/check_clang_checked"
+          ],
+          "output": "100000 independent noncommutative/lazy/reverse/insert/erase mixed operations passed",
+          "source_sha256": "f3e1f5ae00e4050248d79e026f499e07966e87634a47c3f1901c3f3bd5e2dd6d"
+        },
+        {
+          "test": "check",
+          "compiler": "clang",
+          "skip_runtime_checks": true,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_treap_20261022/check.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/check_clang_skip"
+          ],
+          "output": "100000 independent noncommutative/lazy/reverse/insert/erase mixed operations passed",
+          "source_sha256": "f3e1f5ae00e4050248d79e026f499e07966e87634a47c3f1901c3f3bd5e2dd6d"
+        },
+        {
+          "test": "affine_check",
+          "compiler": "gcc",
+          "skip_runtime_checks": false,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "/tmp/sirkit_treap_20261022/affine_check.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/affine_check_gcc_checked"
+          ],
+          "output": "50000 affine-sum operations against an independent vector passed",
+          "source_sha256": "a5c388cb846e811f03060560dc43cbb069765e43e782f8d55aed611f9f77c119"
+        },
+        {
+          "test": "affine_check",
+          "compiler": "gcc",
+          "skip_runtime_checks": true,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_treap_20261022/affine_check.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/affine_check_gcc_skip"
+          ],
+          "output": "50000 affine-sum operations against an independent vector passed",
+          "source_sha256": "a5c388cb846e811f03060560dc43cbb069765e43e782f8d55aed611f9f77c119"
+        },
+        {
+          "test": "affine_check",
+          "compiler": "clang",
+          "skip_runtime_checks": false,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "/tmp/sirkit_treap_20261022/affine_check.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/affine_check_clang_checked"
+          ],
+          "output": "50000 affine-sum operations against an independent vector passed",
+          "source_sha256": "a5c388cb846e811f03060560dc43cbb069765e43e782f8d55aed611f9f77c119"
+        },
+        {
+          "test": "affine_check",
+          "compiler": "clang",
+          "skip_runtime_checks": true,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_treap_20261022/affine_check.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/affine_check_clang_skip"
+          ],
+          "output": "50000 affine-sum operations against an independent vector passed",
+          "source_sha256": "a5c388cb846e811f03060560dc43cbb069765e43e782f8d55aed611f9f77c119"
+        },
+        {
+          "test": "copy_exception",
+          "compiler": "gcc",
+          "skip_runtime_checks": false,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "/tmp/sirkit_treap_20261022/copy_exception.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/copy_exception_gcc_checked"
+          ],
+          "output": "450 injected failures preserved the destination; 20 successful copies and self-assignment passed",
+          "source_sha256": "fdaeaa48118e8d06800e3a1cf535f5cd8fe1d58fd092c6d26800aac5af361d36"
+        },
+        {
+          "test": "copy_exception",
+          "compiler": "gcc",
+          "skip_runtime_checks": true,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_treap_20261022/copy_exception.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/copy_exception_gcc_skip"
+          ],
+          "output": "450 injected failures preserved the destination; 20 successful copies and self-assignment passed",
+          "source_sha256": "fdaeaa48118e8d06800e3a1cf535f5cd8fe1d58fd092c6d26800aac5af361d36"
+        },
+        {
+          "test": "copy_exception",
+          "compiler": "clang",
+          "skip_runtime_checks": false,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "/tmp/sirkit_treap_20261022/copy_exception.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/copy_exception_clang_checked"
+          ],
+          "output": "450 injected failures preserved the destination; 20 successful copies and self-assignment passed",
+          "source_sha256": "fdaeaa48118e8d06800e3a1cf535f5cd8fe1d58fd092c6d26800aac5af361d36"
+        },
+        {
+          "test": "copy_exception",
+          "compiler": "clang",
+          "skip_runtime_checks": true,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_treap_20261022/copy_exception.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/copy_exception_clang_skip"
+          ],
+          "output": "450 injected failures preserved the destination; 20 successful copies and self-assignment passed",
+          "source_sha256": "fdaeaa48118e8d06800e3a1cf535f5cd8fe1d58fd092c6d26800aac5af361d36"
+        }
+      ]
+    },
+    "capacity": {
+      "header_sha256": "b05a2b120c0e99675a736f9057c3025592748a2f277a83f7509a71236762dd1f",
+      "results": [
+        {
+          "test": "copy_capacity",
+          "compiler": "gcc",
+          "skip_runtime_checks": false,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "/tmp/sirkit_treap_20261022/copy_capacity.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/copy_capacity_gcc_checked"
+          ],
+          "output": "nothrow existing-capacity copy used no allocation; growing-copy allocation failure preserved the destination",
+          "source_sha256": "0e074fdda4373e5fb61cd0b4a1d9b94ffb4219a226ee00e92e62612326491d83"
+        },
+        {
+          "test": "copy_capacity",
+          "compiler": "gcc",
+          "skip_runtime_checks": true,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_treap_20261022/copy_capacity.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/copy_capacity_gcc_skip"
+          ],
+          "output": "nothrow existing-capacity copy used no allocation; growing-copy allocation failure preserved the destination",
+          "source_sha256": "0e074fdda4373e5fb61cd0b4a1d9b94ffb4219a226ee00e92e62612326491d83"
+        },
+        {
+          "test": "copy_capacity",
+          "compiler": "clang",
+          "skip_runtime_checks": false,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "/tmp/sirkit_treap_20261022/copy_capacity.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/copy_capacity_clang_checked"
+          ],
+          "output": "nothrow existing-capacity copy used no allocation; growing-copy allocation failure preserved the destination",
+          "source_sha256": "0e074fdda4373e5fb61cd0b4a1d9b94ffb4219a226ee00e92e62612326491d83"
+        },
+        {
+          "test": "copy_capacity",
+          "compiler": "clang",
+          "skip_runtime_checks": true,
+          "command": [
+            "taskset",
+            "-c",
+            "6",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DHEADER=\"final.hpp\"",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_treap_20261022/copy_capacity.cpp",
+            "-o",
+            "/tmp/sirkit_treap_20261022/copy_capacity_clang_skip"
+          ],
+          "output": "nothrow existing-capacity copy used no allocation; growing-copy allocation failure preserved the destination",
+          "source_sha256": "0e074fdda4373e5fb61cd0b4a1d9b94ffb4219a226ee00e92e62612326491d83"
+        }
+      ]
+    },
+    "sanitizers": [
+      {
+        "test": "check",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-DHEADER=\"final.hpp\"",
+          "/tmp/sirkit_treap_20261022/check.cpp",
+          "-o",
+          "/tmp/sirkit_treap_20261022/check_sanitized"
+        ],
+        "output": "100000 independent noncommutative/lazy/reverse/insert/erase mixed operations passed",
+        "leak_sanitizer": false
+      },
+      {
+        "test": "affine_check",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-DHEADER=\"final.hpp\"",
+          "/tmp/sirkit_treap_20261022/affine_check.cpp",
+          "-o",
+          "/tmp/sirkit_treap_20261022/affine_check_sanitized"
+        ],
+        "output": "50000 affine-sum operations against an independent vector passed",
+        "leak_sanitizer": false
+      },
+      {
+        "test": "copy_exception",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-DHEADER=\"final.hpp\"",
+          "/tmp/sirkit_treap_20261022/copy_exception.cpp",
+          "-o",
+          "/tmp/sirkit_treap_20261022/copy_exception_sanitized"
+        ],
+        "output": "450 injected failures preserved the destination; 20 successful copies and self-assignment passed",
+        "leak_sanitizer": false
+      }
+    ]
+  },
+  "representative_medians": {
+    "gcc": {
+      "fixed_seed": {
+        "max_00.in": {
+          "before_ms": 593.604009,
+          "after_ms": 440.208487,
+          "ratio": 0.7415861084590485
+        },
+        "max_01.in": {
+          "before_ms": 419.711922,
+          "after_ms": 236.141993,
+          "ratio": 0.5626287475341242
+        },
+        "max_02.in": {
+          "before_ms": 944.6656,
+          "after_ms": 884.27127,
+          "ratio": 0.9360680329631987
+        },
+        "max_random_00.in": {
+          "before_ms": 600.847014,
+          "after_ms": 564.25455,
+          "ratio": 0.939098533990551
+        }
+      },
+      "time_seed": {
+        "max_00.in": {
+          "before_ms": 539.378259,
+          "after_ms": 394.488968,
+          "ratio": 0.7313772133333243
+        },
+        "max_01.in": {
+          "before_ms": 384.65055,
+          "after_ms": 235.932555,
+          "ratio": 0.6133685627123112
+        },
+        "max_02.in": {
+          "before_ms": 937.009333,
+          "after_ms": 1002.562077,
+          "ratio": 1.0699595422279535
+        },
+        "max_random_00.in": {
+          "before_ms": 722.119896,
+          "after_ms": 599.586973,
+          "ratio": 0.830314988302164
+        }
+      }
+    },
+    "clang": {
+      "fixed_seed": {
+        "max_00.in": {
+          "before_ms": 577.189736,
+          "after_ms": 405.734194,
+          "ratio": 0.7029476941357113
+        },
+        "max_01.in": {
+          "before_ms": 379.512707,
+          "after_ms": 237.961646,
+          "ratio": 0.6270189156011581
+        },
+        "max_02.in": {
+          "before_ms": 919.225869,
+          "after_ms": 891.293956,
+          "ratio": 0.9696136565103566
+        },
+        "max_random_00.in": {
+          "before_ms": 658.44188,
+          "after_ms": 606.192593,
+          "ratio": 0.9206470782204802
+        }
+      },
+      "time_seed": {
+        "max_00.in": {
+          "before_ms": 611.037038,
+          "after_ms": 480.414794,
+          "ratio": 0.7862285984699997
+        },
+        "max_01.in": {
+          "before_ms": 382.732698,
+          "after_ms": 251.208866,
+          "ratio": 0.6563559040361897
+        },
+        "max_02.in": {
+          "before_ms": 1125.724751,
+          "after_ms": 1074.104982,
+          "ratio": 0.9541453015453865
+        },
+        "max_random_00.in": {
+          "before_ms": 704.181151,
+          "after_ms": 634.482874,
+          "ratio": 0.9010222342631264
+        }
+      }
+    }
+  },
+  "repository_source": "DataStructure/implicit_treap.cpp",
+  "repository_source_sha256": "d5905edc86aade66958b91982d7fbdf29d0ab7223fc2636a25281c64cb7bbd24",
+  "measured_candidate_matches_final_code_ignoring_comment_lines": true,
+  "online_submitted": false
+}

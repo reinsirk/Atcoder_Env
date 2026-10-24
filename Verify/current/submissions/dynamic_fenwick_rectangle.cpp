@@ -5,6 +5,31 @@
 // Library: DataStructure/dynamic-binary-indexed-tree.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://nyaannyaan.github.io/library/data-structure/dynamic-binary-indexed-tree.hpp
+// Original Source (InternalHashMap): https://nyaannyaan.github.io/library/data-structure/hash-map-variable-length.hpp.html
+// Original Source (mix): https://prng.di.unimi.it/splitmix64.c
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/dynamic_fenwick.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/internal_hash_map.md
+//
+// API一覧
+// [DynamicFenwickTree<S,T>]
+// Sはbool以外の64bit以下の整数型。Tは加減算・零初期化に対応し、演算結果が表現範囲内であること。
+// 構築O(1)。通常操作は期待償却O(log n)。整数の少数点は点列、多数点はB+木、密な領域は配列を使う。
+// 配列への変換はO(n)、n<=100万・16MiB以内。浮動型・独自型は従来のFenwickセル順で集計する。
+// 読み取りは領域を増やさない。stored_nodesは保持形式によらず更新経路のFenwickセル数を返す。
+// DynamicFenwickTree(n=0): 長さn>=0の零配列を作る。
+// add(k,x): 0<=k<size()の位置へxを加算する。
+// sum(k)/sum(l,r): [0,k)／[l,r)の和。0<=l<=r<=size()。
+// get(k)/operator[](k): 位置kの値を返す。0<=k<size()。
+// set(k,x): 位置kの値をxへ変更する。
+// sum_all(): 全要素の和を返す。
+// lower_bound(w)/upper_bound(w): 前方累積和がw以上／より大きくなる最初の位置。なければsize()。
+// 検索は全要素非負が前提。lower_bound(w<=0)とupper_bound(w<0)は0。
+// size()/empty(): 配列の長さ／長さが0かを返す（全要素0とは区別）。
+// clear(): 長さと再利用できる容量を保ち、全要素を0へ戻す。
+// reset(n): 長さn>=0の零配列へ変更する。保持形式が対応するとき容量を再利用する。
+// reserve(nodes): 内部Fenwickセル数を目安に容量を準備するヒント。
+// stored_nodes(): 値0や相殺済みも含む登録セル数。読み取りやreserveでは変わらない。
+
 #include <bit>
 #include <cstddef>
 #include <cstdint>
@@ -28,24 +53,8 @@
 #ifndef SIRKIT_INTERNAL_HASH_MAP_DEFINED
 #define SIRKIT_INTERNAL_HASH_MAP_DEFINED
 namespace reinsirk::detail {
-// dynamic系で共有する内部用の整数ハッシュ表。参照・ポインタは再確保で無効。
-// Packedは占有フラグのbit化、Denominatorは空き容量の比率1/Denominatorを指定する。
 template <class Key, class Val, bool Packed = false, unsigned Denominator = 5>
 class InternalHashMap {
-    // InternalHashMap(): 空の表を構築する。初期配列は確保しない。
-    // operator[](key): 未登録なら設定済みの初期値で追加し、値の参照を返す。
-    // find(key): 値へのポインタを返す。未登録はnullptrで、追加はしない。
-    // find_nonempty(key): 容量確保済みの表でfindと同じ結果を返す。内部ループ用。
-    // contains(key)/contain(key): キーが登録済みならtrueを返す。
-    // count(key): 登録済みなら1、未登録なら0を返す。
-    // for_each(f): 各登録キーと値のconst参照にfを適用する。fは表を変更しないこと。
-    // size()/empty(): 登録件数・空かどうかを返す。
-    // reserve(n): n件まで再確保せず追加できる容量を準備する。
-    // reallocate(): 容量を2倍にする。空なら初期容量を確保する。
-    // clear(): 登録を全て削除する。確保済みの領域は再利用する。
-    // set_default(value): 今後追加する要素の初期値を設定する。
-    // enumerate(): 登録済みの{キー, 値}を順序不定で列挙する。
-    // swap(other): 表の内容・初期値を交換する。
     static_assert(std::is_integral_v<Key> &&
                   std::is_same_v<Key, std::remove_cv_t<Key>> &&
                   !std::is_same_v<Key, bool> &&
@@ -90,13 +99,15 @@ class InternalHashMap {
         std::vector<Key> keys(capacity);
         std::vector<Value> values(capacity);
         std::vector<Flag> used(capacity, 0);
-        for (std::size_t i = 0; i < used_.size(); ++i) {
-            if (!used_[i]) continue;
-            std::size_t p = static_cast<std::size_t>((static_cast<std::uint64_t>(keys_[i]) * salt_) >> next_shift);
-            while (used[p]) p = (p + 1) & (capacity - 1);
-            keys[p] = keys_[i];
-            values[p].value = values_[i].value;
-            used[p] = 1;
+        if (size_ != 0) {
+            for (std::size_t i = 0; i < used_.size(); ++i) {
+                if (!used_[i]) continue;
+                std::size_t p = static_cast<std::size_t>((static_cast<std::uint64_t>(keys_[i]) * salt_) >> next_shift);
+                while (used[p]) p = (p + 1) & (capacity - 1);
+                keys[p] = keys_[i];
+                values[p].value = values_[i].value;
+                used[p] = 1;
+            }
         }
         keys_.swap(keys);
         values_.swap(values);
@@ -105,7 +116,6 @@ class InternalHashMap {
     }
 
 public:
-    // 空の状態では配列を確保しない。
     InternalHashMap() noexcept(std::is_nothrow_default_constructible_v<Val>) = default;
     InternalHashMap(const InternalHashMap&) = default;
     InternalHashMap(InternalHashMap&& other) noexcept(std::is_nothrow_default_constructible_v<Val> &&
@@ -126,7 +136,6 @@ public:
         swap(shift_, other.shift_);
     }
 
-    // n要素まで再確保せずに格納できる容量を確保する。
     void reserve(std::size_t n) {
         if (n <= keys_.size() - keys_.size() / Denominator) return;
         std::size_t capacity = std::max(std::size_t{8}, keys_.size());
@@ -138,7 +147,6 @@ public:
         rehash(capacity);
     }
 
-    // 容量を2倍にする。空なら初期容量を確保する。
     void reallocate() {
         if (keys_.empty()) {
             rehash(8);
@@ -149,7 +157,6 @@ public:
         }
     }
 
-    // 未登録なら設定済みの初期値で追加する。
     Val& operator[](Key key) {
         if (keys_.empty()) reallocate();
         std::size_t p = hash(key);
@@ -169,7 +176,25 @@ public:
         return values_[p].value;
     }
 
-    // 未登録ならnullptrを返す。読取では要素を追加しない。
+    template <class F> Val& find_or_emplace(Key key, F&& factory) {
+        if (keys_.empty()) reallocate();
+        std::size_t p = hash(key);
+        while (used_[p]) {
+            if (keys_[p] == key) return values_[p].value;
+            p = (p + 1) & (keys_.size() - 1);
+        }
+        if (size_ == keys_.size() - keys_.size() / Denominator) {
+            reallocate();
+            p = hash(key);
+            while (used_[p]) p = (p + 1) & (keys_.size() - 1);
+        }
+        values_[p].value = std::forward<F>(factory)();
+        keys_[p] = key;
+        used_[p] = 1;
+        ++size_;
+        return values_[p].value;
+    }
+
     const Val* find(const Key& key) const noexcept {
         if (keys_.empty()) return nullptr;
         return find_nonempty(key);
@@ -186,9 +211,9 @@ public:
         return const_cast<Val*>(static_cast<const InternalHashMap&>(*this).find(key));
     }
 
-    // 登録済みのキーと値を列挙する。順序は不定。
     std::vector<std::pair<Key, Val>> enumerate() const {
         std::vector<std::pair<Key, Val>> result;
+        if (empty()) return result;
         result.reserve(size_);
         for (std::size_t i = 0; i < used_.size(); ++i)
             if (used_[i]) result.emplace_back(keys_[i], values_[i].value);
@@ -196,6 +221,7 @@ public:
     }
 
     template <class F> void for_each(F&& f) const {
+        if (empty()) return;
         for (std::size_t i = 0; i < used_.size(); ++i)
             if (used_[i]) f(keys_[i], values_[i].value);
     }
@@ -204,12 +230,23 @@ public:
     [[nodiscard]] bool contain(Key key) const noexcept { return contains(key); }
     [[nodiscard]] int count(Key key) const noexcept { return contains(key) ? 1 : 0; }
     void clear() noexcept {
+        if (empty()) return;
         std::fill(used_.begin(), used_.end(), Flag{0});
         size_ = 0;
     }
+    void release() noexcept {
+        decltype(keys_){}.swap(keys_);
+        decltype(values_){}.swap(values_);
+        decltype(used_){}.swap(used_);
+        size_ = 0;
+        shift_ = 61;
+    }
+    std::size_t capacity() const noexcept { return keys_.size(); }
+    double load_factor() const noexcept {
+        return capacity() == 0 ? 0.0 : static_cast<double>(size_) / capacity();
+    }
     std::size_t size() const noexcept { return size_; }
     bool empty() const noexcept { return size_ == 0; }
-    // 今後追加する要素の初期値を設定する。
     void set_default(const Val& value) { default_value_ = value; }
 };
 
@@ -1882,23 +1919,6 @@ template<class S,class T>class FenwickBase<S,T,true>:public CompactFenwick<S,T>{
 };
 
 } // namespace reinsirk::detail
-// Sはbool以外の64bit以下の整数型。Tは加減算・零初期化に対応し、演算結果が表現範囲内であること。
-// 構築O(1)。通常操作は期待償却O(log n)。整数の少数点は点列、多数点はB+木、密な領域は配列を使う。
-// 配列への変換はO(n)、n<=100万・16MiB以内。浮動型・独自型は従来のFenwickセル順で集計する。
-// 読み取りは領域を増やさない。stored_nodesは保持形式によらず更新経路のFenwickセル数を返す。
-// DynamicFenwickTree(n=0): 長さn>=0の零配列を作る。
-// add(k,x): 0<=k<size()の位置へxを加算する。
-// sum(k)/sum(l,r): [0,k)／[l,r)の和。0<=l<=r<=size()。
-// get(k)/operator[](k): 位置kの値を返す。0<=k<size()。
-// set(k,x): 位置kの値をxへ変更する。
-// sum_all(): 全要素の和を返す。
-// lower_bound(w)/upper_bound(w): 前方累積和がw以上／より大きくなる最初の位置。なければsize()。
-// 検索は全要素非負が前提。lower_bound(w<=0)とupper_bound(w<0)は0。
-// size()/empty(): 配列の長さ／長さが0かを返す（全要素0とは区別）。
-// clear(): 長さと再利用できる容量を保ち、全要素を0へ戻す。
-// reset(n): 長さn>=0の零配列へ変更する。保持形式が対応するとき容量を再利用する。
-// reserve(nodes): 内部Fenwickセル数を目安に容量を準備するヒント。
-// stored_nodes(): 値0や相殺済みも含む登録セル数。読み取りやreserveでは変わらない。
 template<typename S,typename T>
 class DynamicFenwickTree : public reinsirk::detail::FenwickBase<S,T> {
  using Base=reinsirk::detail::FenwickBase<S,T>;

@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-22",
+  "scope": "LCAの改修開始時本体の由来、独立実装の記録、先頭出典ラベルの必要性。リポジトリ編集なし。",
+  "baseline_source": {
+    "path": "Graph/LCA.cpp",
+    "sha256": "5b063b5316c02255ffba8daaac77297a0a99e6c60debd16346a18fbbb3ddc574"
+  },
+  "history_bundle": {
+    "path": "/tmp/Atcoder_Env_before_initial_20261021T163122Z/history.bundle",
+    "sha256": "4201f74738404c4d6f7f5ce672f3a782327fa4613daf48b3e73f2918dccc9020"
+  },
+  "snapshots": {
+    "30c83f0:LCA.cpp": "20933e3ceb055a290bcad27c1c4aaa70ac1ee7a61147e873555e09179552213e",
+    "32fb166:LCA.cpp": "4a01d43c23a5bfb4f299cabe4282cd4b28af15e8fdb2e9a94bcf05dd642b0f33",
+    "b76e70f:Graph/LCA.cpp": "ced4f66fdd1ab0859c51a90c4cd9c0a964eb81cd92c2cee9455e073e2442e631",
+    "current:Graph/LCA.cpp": "5b063b5316c02255ffba8daaac77297a0a99e6c60debd16346a18fbbb3ddc574"
+  },
+  "local_evidence_sha256": {
+    "Audit/rewrite-lca-rollinghash-2026-10-17.json": "9ee827ad85cf62a053c15a2b7fd23543cf29629311c94887b3fd1944d10190ff",
+    "Audit/license-audit-2026-10-17.json": "d411536c0d25f4cf2ee0f87cb83aab23a480f054c59cfa9f6486ca22b0927a8c",
+    "Audit/performance-all-libraries-2026-10-18.json": "fab3f94ae65789c709da858dd3cc7e3a7ebfbfcb215057da9ee1735137bd6f17",
+    "Audit/review-size-license-2026-10-19.json": "670f8bdca2d372dc6af35478ebac91a29e57d0792b462cb6c7b9fa2153a2f472",
+    "Audit/library-layout-2026-10-19.json": "a55f8b1d946039fc50d3a1f649ca13290f127ab27e38543b3a65f1307d061943",
+    "Audit/symbol-names-2026-10-20.json": "2b7dc18ebb1c3c69405465072c4c888825dd6bd18e28cd4a472ee437af2fc4d2"
+  },
+  "lineage": [
+    {
+      "stage": "旧ブログ由来の実装",
+      "snapshots": [
+        "30c83f0:LCA.cpp",
+        "32fb166:LCA.cpp"
+      ],
+      "source_url": "https://pione.hatenablog.com/entry/2021/01/24/042113",
+      "finding": "旧30c83f0は再帰DFS、二次元祖先表、nibekiによる段数決定と日本語コメントが記事の実装に対応。32fb166はこれを改修した段階。",
+      "license_status": "旧コードに適用される明確な利用条件は今回も記事中で確認できず、未確認の扱いを維持。"
+    },
+    {
+      "stage": "2026-10-17の独立新規作成",
+      "record": "Audit/rewrite-lca-rollinghash-2026-10-17.json",
+      "source_sha256": "24844caa92944c6096da78e948ca548834a1fa6a9b87225983502246900710c8",
+      "finding": "公開API・入力前提・計算量だけを独立担当へ提示し、旧コードと外部原典を渡さず新規作成した旨の当時記録。レビュー担当のみ旧版を互換性と速度の比較基準に使用したと記録。現在の新規寄与にCC0を付した記録で、旧コードの再許諾とは扱っていない。"
+    },
+    {
+      "stage": "2026-10-18の後続改修",
+      "record": "Audit/performance-all-libraries-2026-10-18.json",
+      "before_sha256": "24844caa92944c6096da78e948ca548834a1fa6a9b87225983502246900710c8",
+      "after_sha256": "ced4f66fdd1ab0859c51a90c4cd9c0a964eb81cd92c2cee9455e073e2442e631",
+      "finding": "改修前後のSHAと、climbのビット列をuint64_tへ変更した旨の記録が対応。"
+    },
+    {
+      "stage": "移動とガード統一",
+      "records": [
+        "Audit/library-layout-2026-10-19.json",
+        "Audit/symbol-names-2026-10-20.json"
+      ],
+      "finding": "LCA.cppをGraph/LCA.cppへ移動。b76e70fの書き直し後本体と現在版を直接比較すると、REINSIRK_LCA_DEFINEDからSIRKIT_LCA_DEFINEDへのガード2行の置換だけで完全一致。",
+      "guard_replacement_byte_identity": true
+    }
+  ],
+  "primary_sources": [
+    {
+      "url": "https://pione.hatenablog.com/entry/2021/01/24/042113",
+      "access": "web open; 2026-10-22",
+      "role": "旧実装の由来確認。現在の独立実装の実装元とは扱わない。",
+      "observations": [
+        "2021-01-24の記事本文にLCAクラスの実装がある。",
+        "旧30c83f0の構造とコメントの対応を確認。",
+        "記事中にこのコードのCC0等の明確な利用条件は見つけていない。"
+      ]
+    }
+  ],
+  "mathematical_references": {
+    "consulted_for_current_implementation": [],
+    "finding": "現在版の記録は二分累乗・反復DFS・部分木区間という要件からの新規実装。数学上の一般的な祖先表の再帰式と、第三者コードを継承するという実装の来歴を区別する。今回の調査で新たな数学的参考文献を実装元として追加しない。"
+  },
+  "recommended_header": [
+    "// SPDX-License-Identifier: CC0-1.0"
+  ],
+  "recommended_header_decision": "現状を維持。現在版が旧ブログ実装を継承しているという根拠より、参照制限下の新規実装記録とその後のSHA連鎖がある。旧ブログをOriginal Sourceや現在実装の参考として先頭に追記すると、旧履歴と現実装の区別が曖昧になる。旧出典URLと利用条件の未確認はAuditに保持する。",
+  "upcoming_optimization": "今回新規に組み直した候補を採用する場合、その候補を旧ブログまたは別の公開実装から移したと誤認させないよう、今回の実装担当の参照範囲を改修記録に追記する。",
+  "limits": [
+    "独立作成は当時の記録に基づく。第三者の全コードとの非一致を保証するものではない。",
+    "現行版へのCC0表示は旧配布物やgit履歴の利用条件を変更しない。",
+    "記事と全関連リンクの利用条件を網羅的に再監査したわけではない。"
+  ],
+  "optimizer_received_external_implementation": false,
+  "final_source_sha256": "13873f0fd94df0e2b821ee73bc1f39e9ef611b2e3ab257cb1c08a2af0afedefa",
+  "current_revision": "既存の独立実装を基に、root担当がDFS区間順の片側祖先探索を作成。独立のopt担当がHLD・根sentinel・深さ-1上限等を作成・測定。root担当が深さ1以下の根変更短絡を追加。外部実装コードは参照せず、公式生成器は検証入力の作成にだけ使用。"
+}

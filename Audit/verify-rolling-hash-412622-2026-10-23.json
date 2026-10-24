@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-23",
+  "status": "PASS",
+  "source": "String/RollingHash.cpp",
+  "source_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276",
+  "production_unchanged": true,
+  "frozen_sources": {
+    "String/RollingHash.cpp": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276",
+    "Verify/current/drivers/rolling_hash_zalgorithm_main.cpp": "7a607fffa2d5726c705ca3b487e95c6063f298e48922dc968935616ac9a5c528",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+    "Verify/current/submissions/rolling_hash.cpp": "01aeebd6a8bbd991a1624e6dec79336f5b1f78945613a2d519dd29b88f30c09f"
+  },
+  "online_audit": "Audit/online-rolling-hash-412622-2026-10-23.json",
+  "online_result": {
+    "status": "AC",
+    "time_ms": 44,
+    "cases": 29,
+    "memory_bytes": 12869632
+  },
+  "prior_full_verification": "Audit/verify-rolling-hash-second-pass-2026-10-22.json",
+  "prior_artifact_hash_match": {
+    "String/RollingHash.cpp": true,
+    "Document/rolling_hash.md": true,
+    "Examples/rolling_hash_example.cpp": true,
+    "Verify/current/tests/rh_reuse_test.cpp": true,
+    "Verify/current/drivers/rolling_hash_zalgorithm_main.cpp": true,
+    "Verify/current/common/fast_io.hpp": true
+  },
+  "reference_exception_test_hash_match": {
+    "Verify/current/tests/rh_reference_test.cpp": true,
+    "Verify/current/tests/rh_exception_test.cpp": true
+  },
+  "prior_full_verification_scope": "現在のdc79dd84本体を検証した3試験×8構成=24実行の記録を引き継ぐ。rh_reference_test/rh_exception_testのSHAは第一巡監査のrepository_tests記録とも一致。今回これらの全試験を再実行したとは扱わない。",
+  "current_scope": "オンライン29ケースを確認し、アップロードされたコードと現行の本体/main/I/Oを注記等の正規化後に照合。コードを採用変更していないため追加の全API・標準演算代替ビルドは行わない。",
+  "performance_audit": "Audit/performance-rolling-hash-412622-2026-10-23.json",
+  "candidate_search_equivalence": {
+    "status": "PASS",
+    "paths": 43707,
+    "limits": "0..255 plus 2^16-1, 2^32-1, 2^63-1, 2^64-1; exhaustive branch outcomes for small limits and representative outcome sequences for large limits",
+    "scope": "same middle order, return and overflow-safe remaining arithmetic even with nonmonotonic hash equality; not full library regression suite"
+  },
+  "candidate_scope": "不採用2案は性能測定のchecksum照合と、非単調な判定を含む抽象二分探索の同じ中点・結果を確認した。候補の標準演算経路を含む全API検証や固定mainの追加性能測定まで完了したとは扱わない。",
+  "measurement_note": "初回の小規模同字列約5%退行は追試で再現せず、不採用理由から除外。大規模の退行は同文controlが安定した再測定で再現。",
+  "main_policy": "各接尾辞へlcpを呼ぶ既存main/共通fastIOを維持。線形Z Algorithmの参照は正解照合専用。",
+  "generation_check": "python3 Scripts/prepare_verify.py --check:142件一致。"
+}

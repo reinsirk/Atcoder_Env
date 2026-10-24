@@ -1,0 +1,191 @@
+{
+  "date": "2026-10-22",
+  "language": "C++23",
+  "test_sources": {
+    "Verify/current/tests/hash_map_test.cpp": "a7c23051bf2906c8e07827803baef7a6b6316adaa397a09caf9abcb44ac4c9c6",
+    "Verify/current/tests/hash_set_test.cpp": "f0960e703b307bee5ef9f3a55c164737fc9ce8c91cf739a2fd5e7d63d86f91c2"
+  },
+  "checks": [
+    {
+      "library": "DataStructure/Hash_map.cpp",
+      "source_sha256": "612832ca0199ddb6eeee6e0c8117c10b62257a0f76e637c3e408f61367e047fd",
+      "name": "Hash_map_gcc_checked",
+      "command": [
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/hash_map_test.cpp",
+        "-o",
+        "/tmp/sirkit_hash_set_20261022/actual_Hash_map_gcc_checked"
+      ],
+      "output": "PASS randomized integer/string/collision, copy/move/erase/tombstones, throwing copy/hash"
+    },
+    {
+      "library": "DataStructure/Hash_map.cpp",
+      "source_sha256": "612832ca0199ddb6eeee6e0c8117c10b62257a0f76e637c3e408f61367e047fd",
+      "name": "Hash_map_gcc_skip",
+      "command": [
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/hash_map_test.cpp",
+        "-o",
+        "/tmp/sirkit_hash_set_20261022/actual_Hash_map_gcc_skip",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "output": "PASS randomized integer/string/collision, copy/move/erase/tombstones, throwing copy/hash"
+    },
+    {
+      "library": "DataStructure/Hash_map.cpp",
+      "source_sha256": "612832ca0199ddb6eeee6e0c8117c10b62257a0f76e637c3e408f61367e047fd",
+      "name": "Hash_map_clang_checked",
+      "command": [
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/hash_map_test.cpp",
+        "-o",
+        "/tmp/sirkit_hash_set_20261022/actual_Hash_map_clang_checked"
+      ],
+      "output": "PASS randomized integer/string/collision, copy/move/erase/tombstones, throwing copy/hash"
+    },
+    {
+      "library": "DataStructure/Hash_map.cpp",
+      "source_sha256": "612832ca0199ddb6eeee6e0c8117c10b62257a0f76e637c3e408f61367e047fd",
+      "name": "Hash_map_clang_skip",
+      "command": [
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/hash_map_test.cpp",
+        "-o",
+        "/tmp/sirkit_hash_set_20261022/actual_Hash_map_clang_skip",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "output": "PASS randomized integer/string/collision, copy/move/erase/tombstones, throwing copy/hash"
+    },
+    {
+      "library": "DataStructure/Hash_map.cpp",
+      "name": "ASan_UBSan",
+      "command": [
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-sanitize-recover=all",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/hash_map_test.cpp",
+        "-o",
+        "/tmp/sirkit_hash_set_20261022/Hash_map_san"
+      ],
+      "stdout": "PASS randomized integer/string/collision, copy/move/erase/tombstones, throwing copy/hash\n",
+      "stderr": "",
+      "leak_detection": false
+    },
+    {
+      "library": "DataStructure/Hash_set.cpp",
+      "source_sha256": "c78687199198de3739e29a4dd12745e2e0d72261eaad58cb3ea5b45a392070b5",
+      "name": "Hash_set_gcc_checked",
+      "command": [
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/hash_set_test.cpp",
+        "-o",
+        "/tmp/sirkit_hash_set_20261022/actual_Hash_set_gcc_checked"
+      ],
+      "output": "PASS 300000 independent HashSet operations; empty/reserved/tombstones/copy/move/throwing keys"
+    },
+    {
+      "library": "DataStructure/Hash_set.cpp",
+      "source_sha256": "c78687199198de3739e29a4dd12745e2e0d72261eaad58cb3ea5b45a392070b5",
+      "name": "Hash_set_gcc_skip",
+      "command": [
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/hash_set_test.cpp",
+        "-o",
+        "/tmp/sirkit_hash_set_20261022/actual_Hash_set_gcc_skip",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "output": "PASS 300000 independent HashSet operations; empty/reserved/tombstones/copy/move/throwing keys"
+    },
+    {
+      "library": "DataStructure/Hash_set.cpp",
+      "source_sha256": "c78687199198de3739e29a4dd12745e2e0d72261eaad58cb3ea5b45a392070b5",
+      "name": "Hash_set_clang_checked",
+      "command": [
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/hash_set_test.cpp",
+        "-o",
+        "/tmp/sirkit_hash_set_20261022/actual_Hash_set_clang_checked"
+      ],
+      "output": "PASS 300000 independent HashSet operations; empty/reserved/tombstones/copy/move/throwing keys"
+    },
+    {
+      "library": "DataStructure/Hash_set.cpp",
+      "source_sha256": "c78687199198de3739e29a4dd12745e2e0d72261eaad58cb3ea5b45a392070b5",
+      "name": "Hash_set_clang_skip",
+      "command": [
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/hash_set_test.cpp",
+        "-o",
+        "/tmp/sirkit_hash_set_20261022/actual_Hash_set_clang_skip",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "output": "PASS 300000 independent HashSet operations; empty/reserved/tombstones/copy/move/throwing keys"
+    },
+    {
+      "library": "DataStructure/Hash_set.cpp",
+      "name": "ASan_UBSan",
+      "command": [
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-sanitize-recover=all",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/hash_set_test.cpp",
+        "-o",
+        "/tmp/sirkit_hash_set_20261022/Hash_set_san"
+      ],
+      "stdout": "PASS 300000 independent HashSet operations; empty/reserved/tombstones/copy/move/throwing keys\n",
+      "stderr": "",
+      "leak_detection": false
+    }
+  ],
+  "coverage": [
+    "各表で整数・文字列・定数ハッシュ衝突の計30万ランダム操作をstd::map/std::setと照合。",
+    "コピー・移動・墓石再利用・空表・大容量予約・投げるコピーとハッシュ。",
+    "HashMapはerase(key,false)の削除数と残存参照、HashSetはmove-only所有キーとconst intキー。"
+  ],
+  "sanitizer_note": "ASan/UBSanは最終本体で実行。ptrace環境の制約でLeakSanitizerはdetect_leaks=0。",
+  "online_submitted": false
+}

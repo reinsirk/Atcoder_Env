@@ -122,7 +122,11 @@
           "output": "0\n1\n-1\n-3\n-10\n-10\n-3\n"
         }
       ],
-      "acl_dependency": false
+      "acl_dependency": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412304",
+        "https://judge.yosupo.jp/submission/412310"
+      ]
     },
     {
       "id": "dynamic_lichao_line",
@@ -149,7 +153,11 @@
           "output": "0\n1\n-1\n-3\n-10\n-10\n-10\n"
         }
       ],
-      "acl_dependency": false
+      "acl_dependency": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412303",
+        "https://judge.yosupo.jp/submission/412309"
+      ]
     },
     {
       "id": "dynamic_union_find",
@@ -167,7 +175,7 @@
         "same",
         "未登録要素の自動登録"
       ],
-      "limitations": "移行先のオンライン判定は未実施。キーは[0,N)。負のキー・size/groups/併合コールバック等はdynamic_hash_localで補足。",
+      "limitations": "キーは[0,N)。負のキー・int端・size/groups/data/併合コールバック・所有権は独立参照のローカル補足で確認する。",
       "samples": [
         {
           "input": "4 7\n1 0 1\n0 0 1\n0 2 3\n1 0 1\n1 1 2\n0 0 2\n1 1 3\n",
@@ -200,6 +208,10 @@
           ],
           "status": "historical（旧提出先・旧ドライバー。移行後の検証とは別）"
         }
+      ],
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412311",
+        "https://judge.yosupo.jp/submission/412312"
       ]
     },
     {
@@ -219,7 +231,7 @@
         "未登録時の零初期値"
       ],
       "limitations": [
-        "削除・反復子・複合キー等はローカル補足。"
+        "オンライン問題は追加・上書き・未登録キーの零初期値を検証。削除・反復子・複合キー・例外・所有権・格納領域のコピーはhash_map_test.cpp、hash_map_boundary_test.cpp、hash_map_storage_test.cppで独立参照に照合。"
       ],
       "samples": [
         {
@@ -227,7 +239,11 @@
           "output": "2\n0\n2\n3\n1\n"
         }
       ],
-      "acl_dependency": false
+      "acl_dependency": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412356",
+        "https://judge.yosupo.jp/submission/412360"
+      ]
     },
     {
       "id": "internal_hash_map",
@@ -246,7 +262,7 @@
         "未登録時の零初期値"
       ],
       "limitations": [
-        "削除・反復子・複合キー等はローカル補足。内部表は利用者向けAPIではない。"
+        "内部用の整数キー表。find/factory/初期値/列挙/clear/release/容量/所有権/例外/Packedと負荷率は独立ローカル照合で補足。削除・反復子・複合キーは非対応。"
       ],
       "samples": [
         {
@@ -334,7 +350,8 @@
         "整数query"
       ],
       "limitations": [
-        "最大化・全64bit境界・query_line等はローカル補足。"
+        "最大化・符号付き8/16/32/64bitの端・浮動係数・query_line・query_with_line・optional・コピー/移動・確保失敗は独立ローカル検査で補う。",
+        "整数の最適値が型に収まらない場合は検査省略時も例外。交点を問い合わせ型の範囲へ制限するが、厳密な整数照会を維持する。"
       ],
       "samples": [
         {
@@ -342,7 +359,10 @@
           "output": "0\n1\n-1\n-3\n-10\n-10\n-10\n"
         }
       ],
-      "acl_dependency": false
+      "acl_dependency": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412421"
+      ]
     },
     {
       "id": "erasable_priority_queue_double",
@@ -352,7 +372,7 @@
       "driver": "Verify/current/drivers/erasable_priority_queue_double_main.cpp",
       "problem_url": "https://judge.yosupo.jp/problem/double_ended_priority_queue",
       "title": "Double-Ended Priority Queue",
-      "selection_reason": "補助: 原典はA+B付きunit testのため、最小/最大の2表を同期し遅延削除を実クエリで検証。",
+      "selection_reason": "最小値・最大値優先の2表を同期し、問題の実入力で追加・先頭取得・削除・遅延削除を検証する。",
       "reference_url": "https://nyaannyaan.github.io/library/data-structure/erasable-priority-queue.hpp",
       "evidence_url": "https://nyaannyaan.github.io/library/data-structure/erasable-priority-queue.hpp",
       "coverage": [
@@ -364,7 +384,7 @@
         "最小化/最大化"
       ],
       "limitations": [
-        "eraseは存在する値だけ渡す。便利API・所有権操作は原典同様のunit testで補足。"
+        "eraseには存在する値だけ渡す。便利API・所有権操作・int64_t端の値は独立参照のローカルテストで補足する。"
       ],
       "samples": [
         {
@@ -372,7 +392,12 @@
           "output": "3\n3\n-3\n-2\n1\n0\n1\n"
         }
       ],
-      "acl_dependency": false
+      "acl_dependency": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412313",
+        "https://judge.yosupo.jp/submission/412314",
+        "https://judge.yosupo.jp/submission/412316"
+      ]
     },
     {
       "id": "heap_priority_queue",
@@ -391,7 +416,7 @@
         "top",
         "最大50万要素"
       ],
-      "limitations": "移行先のオンライン判定は未実施。入力は順列でint範囲内。重複・負値・replace_top/push_pop・所有権等はdynamic_hash_localで補足。",
+      "limitations": "入力は順列でint範囲内。重複・負値・replace_top/push_pop・所有権・空の扱いはheap_testおよびdynamic_hash_localで補足。",
       "samples": [
         {
           "input": "3 2\n1 2 3\n",
@@ -430,6 +455,9 @@
           ],
           "status": "historical（旧提出先・旧ドライバー。移行後の検証とは別）"
         }
+      ],
+      "submission_urls": [
+        "https://atcoder.jp/contests/abc234/submissions/80247844"
       ]
     },
     {
@@ -461,7 +489,50 @@
           "output": "1110\n111000\n11011\n"
         }
       ],
-      "acl_dependency": false
+      "acl_dependency": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412367"
+      ]
+    },
+    {
+      "id": "implicit_treap_deque",
+      "libraries": [
+        "DataStructure/implicit_treap.cpp"
+      ],
+      "driver": "Verify/current/drivers/implicit_treap_deque_main.cpp",
+      "problem_url": "https://judge.yosupo.jp/problem/deque_operate_all_composite",
+      "title": "Deque Operate All Composite",
+      "selection_reason": "両端の追加削除と非可換な全体集約を直接利用するLibrary Checker問題。",
+      "reference_url": null,
+      "evidence_url": "https://github.com/yosupo06/library-checker-problems/blob/master/data_structure/deque_operate_all_composite/task.md",
+      "coverage": [
+        "push_front/push_back",
+        "pop_front/pop_back",
+        "非可換な関数合成",
+        "all_prod/空列の単位元",
+        "削除スロットの再利用"
+      ],
+      "limitations": [
+        "区間作用・反転・任意位置操作はimplicit_treap_affine、境界探索・順序集合・所有権はローカル補足。"
+      ],
+      "samples": [
+        {
+          "input": "6\n1 4 5\n4 3\n0 2 1\n4 2\n3\n4 3\n",
+          "output": "17\n25\n7\n",
+          "source": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/deque_operate_all_composite/gen/example_00.in",
+          "origin": "公式入力例。出力は問題定義から独立計算。"
+        },
+        {
+          "input": "1\n4 1333\n",
+          "output": "1333\n",
+          "source": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/deque_operate_all_composite/gen/example_01.in",
+          "origin": "公式入力例。出力は空列の単位元から独立計算。"
+        }
+      ],
+      "acl_dependency": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412370"
+      ]
     },
     {
       "id": "hash_set_unit",
@@ -469,9 +540,9 @@
         "DataStructure/Hash_set.cpp"
       ],
       "driver": "Verify/current/drivers/hash_set_unit_main.cpp",
-      "problem_url": "https://judge.yosupo.jp/problem/aplusb",
-      "title": "A + B + HashSet independent unit test",
-      "selection_reason": "原典のVerifyは自動unit testを行ってからA+Bを解く形式。今回も現在APIを独立参照と照合した後にA+Bを出力する。",
+      "problem_url": null,
+      "title": "HashSet local independent checks",
+      "selection_reason": "固定種の独立照合はローカルで実行する。A+Bの入力・出力はHashSetの操作を検証しないため、提出先・速度比較先には採用しない。",
       "reference_url": "https://github.com/NyaanNyaan/library/blob/master/verify/verify-unit-test/hashset.test.cpp",
       "evidence_url": "https://github.com/NyaanNyaan/library/blob/master/verify/verify-unit-test/hashset.test.cpp",
       "coverage": [
@@ -481,12 +552,12 @@
         "整数・pair・string・vectorキー"
       ],
       "limitations": [
-        "A+Bのジャッジ入力はデータ構造の入力ではない。データ構造はドライバに内蔵した固定種の照合を通過することだけを検証し、オンライン問題自体が全操作を網羅するとは扱わない。"
+        "固定種ローカル照合。オンライン判定・速度比較は別のHashSet使用問題で行う。"
       ],
       "samples": [
         {
-          "input": "1234 5678\n",
-          "output": "6912\n"
+          "input": "",
+          "output": ""
         }
       ],
       "acl_dependency": false
@@ -497,9 +568,9 @@
         "DataStructure/erasable-priority-queue.cpp"
       ],
       "driver": "Verify/current/drivers/erasable_priority_queue_unit_main.cpp",
-      "problem_url": "https://judge.yosupo.jp/problem/aplusb",
-      "title": "A + B + ErasablePriorityQueue independent unit test",
-      "selection_reason": "原典のVerifyは自動unit testを行ってからA+Bを解く形式。今回も現在APIを独立参照と照合した後にA+Bを出力する。",
+      "problem_url": null,
+      "title": "ErasablePriorityQueue local independent checks",
+      "selection_reason": "オンライン問題では網羅できない補助APIと所有権操作を、ローカルでstd::multisetと照合する。",
       "reference_url": "https://github.com/NyaanNyaan/library/blob/master/verify/verify-unit-test/erasable-priority-queue.test.cpp",
       "evidence_url": "https://github.com/NyaanNyaan/library/blob/master/verify/verify-unit-test/erasable-priority-queue.test.cpp",
       "coverage": [
@@ -509,12 +580,12 @@
         "copy/move/clear"
       ],
       "limitations": [
-        "A+Bのジャッジ入力はデータ構造の入力ではない。データ構造はドライバに内蔵した固定種の照合を通過することだけを検証し、オンライン問題自体が全操作を網羅するとは扱わない。"
+        "固定種のローカル照合。Double-Ended Priority Queueのオンライン判定とは別に記録する。"
       ],
       "samples": [
         {
-          "input": "1234 5678\n",
-          "output": "6912\n"
+          "input": "",
+          "output": ""
         }
       ],
       "acl_dependency": false
@@ -571,15 +642,15 @@
       "problem_url": "https://judge.yosupo.jp/problem/line_add_get_min",
       "title": "Line Add Get Min",
       "selection_reason": "LCを優先し、ax+bを点(a,b)と方向(x,1)の最小内積として直接照会する。",
-      "reference_url": "https://nyaannyaan.github.io/library/data-structure/line-container.hpp.html",
+      "reference_url": "https://nyaannyaan.github.io/library/data-structure/line-container-2d.hpp.html",
       "evidence_url": null,
       "coverage": [
         "点追加",
         "整数方向(x,1)のmin_rounded_ll"
       ],
       "limitations": [
-        "方向の第2係数は1。その他の方向・浮動照会・argminはローカル補足で確認する。",
-        "長倍精度による近似を含む。LCの整数係数範囲での丸め戻り値を確認する。"
+        "方向の第2係数は1。全方向・浮動照会・最適点・値と点の同時取得・所有権・例外は独立ローカル検査で補う。",
+        "long doubleによる近似を含む。LC整数係数範囲の出力は64bit仮数精度の環境で独立整数参照と照合。一般の厳密整数内積は保証しない。"
       ],
       "samples": [
         {
@@ -587,7 +658,118 @@
           "output": "0\n1\n-1\n-3\n-10\n-10\n-10\n"
         }
       ],
-      "acl_dependency": false
+      "acl_dependency": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412409"
+      ]
+    },
+    {
+      "id": "hash_set_membership",
+      "libraries": [
+        "DataStructure/Hash_set.cpp"
+      ],
+      "driver": "Verify/current/drivers/hash_set_membership_main.cpp",
+      "problem_url": "https://atcoder.jp/contests/abc344/tasks/abc344_c",
+      "title": "ABC344 C - A+B+C",
+      "selection_reason": "Library Checkerの候補は順序・XOR最小値等のHashSetにない操作を必要とするため、集合の基本操作が出力に直接反映されるAtCoder問題を選ぶ。",
+      "reference_url": "https://github.com/NyaanNyaan/library/blob/master/verify/verify-unit-test/hashset.test.cpp",
+      "evidence_url": "https://atcoder.jp/contests/abc344/tasks/abc344_c",
+      "coverage": [
+        "insert",
+        "contains",
+        "整数キー・重複・未登録照会"
+      ],
+      "limitations": [
+        "この問題で使わないAPI・複合キー・衝突・例外・所有権・容量境界はローカル独立試験で補足。実際のAtCoder公式テストは公開されていないため提出後に判定を確認する。"
+      ],
+      "samples": [
+        {
+          "input": "3\n1 2 3\n2\n2 4\n6\n1 2 4 8 16 32\n4\n1 5 10 50\n",
+          "output": "No\nYes\nYes\nNo\n"
+        }
+      ],
+      "acl_dependency": false,
+      "submission_urls": [
+        "https://atcoder.jp/contests/abc344/submissions/80247672"
+      ]
+    },
+    {
+      "id": "hash_set_toggle",
+      "libraries": [
+        "DataStructure/Hash_set.cpp"
+      ],
+      "driver": "Verify/current/drivers/hash_set_toggle_main.cpp",
+      "problem_url": "https://atcoder.jp/contests/abc073/tasks/abc073_c",
+      "title": "ABC073 C - Write and Erase",
+      "selection_reason": "Library Checkerの候補は順序・XOR最小値等のHashSetにない操作を必要とするため、集合の基本操作が出力に直接反映されるAtCoder問題を選ぶ。",
+      "reference_url": "https://github.com/NyaanNyaan/library/blob/master/verify/verify-unit-test/hashset.test.cpp",
+      "evidence_url": "https://atcoder.jp/contests/abc073/tasks/abc073_c",
+      "coverage": [
+        "insert",
+        "find",
+        "erase(iterator,false)",
+        "size",
+        "削除後の再登録"
+      ],
+      "limitations": [
+        "この問題で使わないAPI・複合キー・衝突・例外・所有権・容量境界はローカル独立試験で補足。実際のAtCoder公式テストは公開されていないため提出後に判定を確認する。"
+      ],
+      "samples": [
+        {
+          "input": "3\n6\n2\n6\n",
+          "output": "1\n"
+        },
+        {
+          "input": "4\n2\n5\n5\n2\n",
+          "output": "0\n"
+        },
+        {
+          "input": "6\n12\n22\n16\n22\n18\n12\n",
+          "output": "2\n"
+        }
+      ],
+      "acl_dependency": false,
+      "submission_urls": [
+        "https://atcoder.jp/contests/abc073/submissions/80247682"
+      ]
+    },
+    {
+      "id": "hash_set_strings",
+      "libraries": [
+        "DataStructure/Hash_set.cpp"
+      ],
+      "driver": "Verify/current/drivers/hash_set_strings_main.cpp",
+      "problem_url": "https://atcoder.jp/contests/abc164/tasks/abc164_c",
+      "title": "ABC164 C - gacha",
+      "selection_reason": "Library Checkerの候補は順序・XOR最小値等のHashSetにない操作を必要とするため、集合の基本操作が出力に直接反映されるAtCoder問題を選ぶ。",
+      "reference_url": "https://github.com/NyaanNyaan/library/blob/master/verify/verify-unit-test/hashset.test.cpp",
+      "evidence_url": "https://atcoder.jp/contests/abc164/tasks/abc164_c",
+      "coverage": [
+        "insert",
+        "size",
+        "文字列キー・重複"
+      ],
+      "limitations": [
+        "この問題で使わないAPI・複合キー・衝突・例外・所有権・容量境界はローカル独立試験で補足。実際のAtCoder公式テストは公開されていないため提出後に判定を確認する。"
+      ],
+      "samples": [
+        {
+          "input": "3\napple\norange\napple\n",
+          "output": "2\n"
+        },
+        {
+          "input": "5\ngrape\ngrape\ngrape\ngrape\ngrape\n",
+          "output": "1\n"
+        },
+        {
+          "input": "4\naaaa\na\naaa\naa\n",
+          "output": "4\n"
+        }
+      ],
+      "acl_dependency": false,
+      "submission_urls": [
+        "https://atcoder.jp/contests/abc164/submissions/80247677"
+      ]
     }
   ]
 }

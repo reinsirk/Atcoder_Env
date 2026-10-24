@@ -1,0 +1,3665 @@
+{
+  "date": "2026-10-22",
+  "library": "Math/Eratosthenes.cpp",
+  "baseline_source_sha256": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d",
+  "final_source_sha256": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8",
+  "main_sha256": "3a64febf817b342de8c892a7abbff079d5aaccdd959bd472a5f95843ca523581",
+  "io_sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+  "environment": {
+    "cpu": "Intel Core i9-14900K",
+    "performance_cpu": 14,
+    "lock": "/tmp/atcoder_full_performance_20261018/benchmark.lock",
+    "gcc": "g++ (GCC) 15.3.0",
+    "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+    "note": "同一run内のbaseline/control/candidateを順序交代し中央値を比較。別run・別CPUの絶対時間は比較しない。オンラインGCC15.2とローカルGCC15.3を区別。"
+  },
+  "online_comparison": [
+    {
+      "case": "example_00",
+      "previous_ms": 1.0,
+      "current_ms": 1.0
+    },
+    {
+      "case": "1_00",
+      "previous_ms": 1.0,
+      "current_ms": 1.0
+    },
+    {
+      "case": "2_00",
+      "previous_ms": 1.0,
+      "current_ms": 0
+    },
+    {
+      "case": "499477801_00",
+      "previous_ms": 382.0,
+      "current_ms": 326.0
+    },
+    {
+      "case": "499999993_00",
+      "previous_ms": 380.0,
+      "current_ms": 326.0
+    },
+    {
+      "case": "max_00",
+      "previous_ms": 392.0,
+      "current_ms": 340.0
+    },
+    {
+      "case": "max_01",
+      "previous_ms": 392.0,
+      "current_ms": 338.0
+    },
+    {
+      "case": "ten_00",
+      "previous_ms": 90.0,
+      "current_ms": 78.0
+    },
+    {
+      "case": "ten_01",
+      "previous_ms": 18.0,
+      "current_ms": 17.0
+    },
+    {
+      "case": "ten_02",
+      "previous_ms": 2.0,
+      "current_ms": 14.0
+    }
+  ],
+  "online_short_case": {
+    "case": "ten_02",
+    "online_ms": [
+      2,
+      14
+    ],
+    "local_same_main": {
+      "flags": [
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "-DEVAL",
+        "-DONLINE_JUDGE",
+        "-march=native"
+      ],
+      "builds": [
+        {
+          "variant": "current",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-march=native",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/main_current"
+          ],
+          "warnings": ""
+        },
+        {
+          "variant": "control",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-march=native",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/main_control"
+          ],
+          "warnings": ""
+        },
+        {
+          "variant": "previous",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-march=native",
+            "-DHEADER=\"/tmp/sirkit_sieve_412324_20261022/baseline.cpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/main_previous"
+          ],
+          "warnings": ""
+        }
+      ],
+      "source_hashes": {
+        "current": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d",
+        "control": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d",
+        "previous": "0ce794d7b0b38350d894f06c179fa4fe72ec344c8a21e9df8c8c73296ad78e96"
+      },
+      "frozen": {
+        "Math/Eratosthenes.cpp": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d",
+        "Verify/current/drivers/eratosthenes_main.cpp": "3a64febf817b342de8c892a7abbff079d5aaccdd959bd472a5f95843ca523581",
+        "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+      },
+      "method": "rotated independent processes, same main/I/O, CPU14 shared lock, median ms",
+      "summary": {
+        "ten_02": {
+          "current": 2.563628,
+          "control": 2.530432,
+          "previous": 2.673486
+        },
+        "ten_01": {
+          "current": 14.611793,
+          "control": 14.789863,
+          "previous": 16.014211
+        },
+        "ten_00": {
+          "current": 76.729988,
+          "control": 78.067198,
+          "previous": 89.930436
+        },
+        "max_00": {
+          "current": 344.459614,
+          "control": 352.216545,
+          "previous": 410.827685
+        }
+      }
+    },
+    "local_raw": {
+      "ten_02": {
+        "current": [
+          3.716387,
+          2.789807,
+          2.865917,
+          3.5458,
+          3.023344,
+          2.864657,
+          2.563628,
+          2.452289,
+          2.528689,
+          2.533159,
+          2.4832,
+          2.428014,
+          2.465076,
+          2.558925,
+          2.579983
+        ],
+        "control": [
+          3.161554,
+          3.40409,
+          2.810541,
+          2.949567,
+          3.48126,
+          2.793189,
+          2.417963,
+          2.516956,
+          2.642362,
+          2.413524,
+          2.442196,
+          2.48741,
+          2.525587,
+          2.530432,
+          2.520743
+        ],
+        "previous": [
+          2.980142,
+          2.977308,
+          3.606229,
+          3.010046,
+          3.077462,
+          3.637431,
+          2.608321,
+          2.613027,
+          2.735408,
+          2.590239,
+          2.572387,
+          2.566683,
+          2.634451,
+          2.673486,
+          2.628145
+        ]
+      },
+      "ten_01": {
+        "current": [
+          14.962523,
+          14.611793,
+          15.452812,
+          15.072664,
+          14.794971,
+          14.29557,
+          14.173241,
+          14.268486,
+          14.372139
+        ],
+        "control": [
+          15.531041,
+          16.015692,
+          14.789863,
+          15.318948,
+          17.324919,
+          14.372715,
+          14.075397,
+          14.366968,
+          14.278192
+        ],
+        "previous": [
+          16.440224,
+          16.393286,
+          16.014211,
+          16.396315,
+          16.437656,
+          15.343339,
+          15.430162,
+          15.420482,
+          15.650834
+        ]
+      },
+      "ten_00": {
+        "current": [
+          77.886282,
+          75.440309,
+          74.304175,
+          78.076792,
+          76.729988
+        ],
+        "control": [
+          78.067198,
+          74.369971,
+          75.074482,
+          78.330084,
+          78.418495
+        ],
+        "previous": [
+          89.930436,
+          87.125404,
+          87.247336,
+          90.119291,
+          90.001387
+        ]
+      },
+      "max_00": {
+        "current": [
+          357.295564,
+          344.459614,
+          343.387909,
+          354.5861,
+          342.163613
+        ],
+        "control": [
+          353.979894,
+          343.793633,
+          348.617892,
+          352.216545,
+          353.731512
+        ],
+        "previous": [
+          410.827685,
+          408.514816,
+          412.050293,
+          416.861715,
+          410.141273
+        ]
+      }
+    },
+    "conclusion": "同じmainで15回のローカル反復では増加は再現せず、5f6411fe版2.56ms対0ce794d7版2.67ms。オンライン単発差の原因は断定しない。"
+  },
+  "accepted": {
+    "change": "最低ブロックを16KiBから32KiBへ拡大し、ブロックごとの素数走査と関数呼出しを減らす。実際の幅は平方根以上も維持する。",
+    "source_diff": "std::uint64_t{131072} → std::uint64_t{262144}",
+    "complexity": "構築O(limit log log limit)、全flags保持と単点判定O(1)は不変。追加確保なし。"
+  },
+  "construction": {
+    "first": {
+      "headers": {
+        "baseline": {
+          "path": "/tmp/sirkit_sieve_412335_20261022/baseline.hpp",
+          "sha256": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d"
+        },
+        "control": {
+          "path": "/tmp/sirkit_sieve_412335_20261022/baseline.hpp",
+          "sha256": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d"
+        },
+        "block64": {
+          "path": "/tmp/sirkit_sieve_412335_20261022/kernel/block64.hpp",
+          "sha256": "50997cc0f2cc5725668e95cf0a6759347a7d66494a560ba68ca816aa0cf2792b"
+        },
+        "block256": {
+          "path": "/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp",
+          "sha256": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8"
+        },
+        "localized": {
+          "path": "/tmp/sirkit_sieve_412335_20261022/kernel/localized.hpp",
+          "sha256": "b9527d843e903a1167295059c29f4b60d84c08356b79da8611b631a73ef62e8d"
+        }
+      },
+      "builds": [
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/gcc_plain_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/gcc_plain_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/block64.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/gcc_plain_block64"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/gcc_plain_block256"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/localized.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/gcc_plain_localized"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/gcc_native_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/gcc_native_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/block64.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/gcc_native_block64"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/gcc_native_block256"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/localized.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/gcc_native_localized"
+        ]
+      ],
+      "results": {
+        "gcc_plain": {
+          "262144": {
+            "median_ns": {
+              "baseline": 56081.81,
+              "control": 55400.744999999995,
+              "block64": 55605.825,
+              "block256": 55386.08,
+              "localized": 56479.56
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9878558662782103,
+              "block64": 0.9915126669413844,
+              "block256": 0.987594373291447,
+              "localized": 1.0070923174555173
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 265998.735,
+              "control": 266161.325,
+              "block64": 266671.58999999997,
+              "block256": 264602.53500000003,
+              "localized": 264847.74
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0006112435083574,
+              "block64": 1.0025295421047773,
+              "block256": 0.9947511028576885,
+              "localized": 0.995672930549839
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 3483006.2,
+              "control": 3457145.4,
+              "block64": 3528075.6,
+              "block256": 3451115.25,
+              "localized": 3427093.2
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9925751495934747,
+              "block64": 1.012939798958727,
+              "block256": 0.9908438434591359,
+              "localized": 0.9839469134450579
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 42554201.5,
+              "control": 42219914.0,
+              "block64": 42955313.25,
+              "block256": 41881306.75,
+              "localized": 41829741.75
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.992144430203913,
+              "block64": 1.00942590239885,
+              "block256": 0.9841873486922319,
+              "localized": 0.9829755999533912
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 240019346.5,
+              "control": 241166260.0,
+              "block64": 245115229.0,
+              "block256": 235573456.5,
+              "localized": 236944631.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0047784210594874,
+              "block64": 1.021231132299579,
+              "block256": 0.9814769514839922,
+              "localized": 0.9871897180588316
+            }
+          }
+        },
+        "gcc_native": {
+          "262144": {
+            "median_ns": {
+              "baseline": 50055.86,
+              "control": 50168.935,
+              "block64": 50648.520000000004,
+              "block256": 49950.425,
+              "localized": 51468.45
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0022589762717091,
+              "block64": 1.011839972382854,
+              "block256": 0.9978936532106332,
+              "localized": 1.0282202723117733
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 237858.59,
+              "control": 239097.95500000002,
+              "block64": 240752.26,
+              "block256": 236572.865,
+              "localized": 240867.965
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0052105118423516,
+              "block64": 1.012165505563621,
+              "block256": 0.9945945824365645,
+              "localized": 1.012651950051499
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 3169300.5999999996,
+              "control": 3184303.2,
+              "block64": 3216935.8,
+              "block256": 3140482.25,
+              "localized": 3068293.25
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0047337257942652,
+              "block64": 1.015030193096862,
+              "block256": 0.9909070316649674,
+              "localized": 0.9681294510214652
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 39861439.0,
+              "control": 39231848.25,
+              "block64": 39553846.5,
+              "block256": 38598340.25,
+              "localized": 38886399.25
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9842055187721648,
+              "block64": 0.9922834572028371,
+              "block256": 0.9683127658788234,
+              "localized": 0.9755392736825181
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 222130194.5,
+              "control": 220624323.0,
+              "block64": 226203562.5,
+              "block256": 219332419.5,
+              "localized": 215541443.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9932207708034038,
+              "block64": 1.0183377501161823,
+              "block256": 0.9874047965145054,
+              "localized": 0.97033833462024
+            }
+          }
+        }
+      }
+    },
+    "confirmation": {
+      "headers": {
+        "baseline": {
+          "path": "/tmp/sirkit_sieve_412335_20261022/baseline.hpp",
+          "sha256": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d"
+        },
+        "control": {
+          "path": "/tmp/sirkit_sieve_412335_20261022/baseline.hpp",
+          "sha256": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d"
+        },
+        "block256": {
+          "path": "/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp",
+          "sha256": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8"
+        }
+      },
+      "builds": [
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/confirm_gcc_plain_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/confirm_gcc_plain_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/confirm_gcc_plain_block256"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/confirm_gcc_native_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/confirm_gcc_native_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/confirm_gcc_native_block256"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/confirm_clang_plain_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/confirm_clang_plain_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/confirm_clang_plain_block256"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/confirm_clang_native_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/confirm_clang_native_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp\"",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412335_20261022/kernel/confirm_clang_native_block256"
+        ]
+      ],
+      "results": {
+        "gcc_plain": {
+          "262143": {
+            "median_ns": {
+              "baseline": 36066.23,
+              "control": 36086.79,
+              "block256": 36070.7
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.000570062354729,
+              "block256": 1.0001239386539706
+            }
+          },
+          "262144": {
+            "median_ns": {
+              "baseline": 23410.08,
+              "control": 23367.38,
+              "block256": 23422.66
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9981759993985496,
+              "block256": 1.0005373753528395
+            }
+          },
+          "524287": {
+            "median_ns": {
+              "baseline": 51944.25,
+              "control": 52053.98,
+              "block256": 51359.59
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0021124571054545,
+              "block256": 0.9887444712359885
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 52005.36,
+              "control": 52056.42,
+              "block256": 51407.29
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0009818218737452,
+              "block256": 0.9884998392473391
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 109212.22,
+              "control": 109214.11,
+              "block256": 107831.5
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0000173057557111,
+              "block256": 0.9873574587166162
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 18483390.0,
+              "control": 18458022.0,
+              "block256": 18001616.5
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9986275244963181,
+              "block256": 0.9739347868545759
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 110256382.0,
+              "control": 110115383.0,
+              "block256": 105581630.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9987211715327281,
+              "block256": 0.957601075645671
+            }
+          }
+        },
+        "gcc_native": {
+          "262143": {
+            "median_ns": {
+              "baseline": 35814.9,
+              "control": 35806.26,
+              "block256": 35814.12
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9997587596223918,
+              "block256": 0.9999782213547993
+            }
+          },
+          "262144": {
+            "median_ns": {
+              "baseline": 22989.08,
+              "control": 22912.69,
+              "block256": 22885.43
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9966771180055921,
+              "block256": 0.995491337626386
+            }
+          },
+          "524287": {
+            "median_ns": {
+              "baseline": 51019.55,
+              "control": 51045.98,
+              "block256": 50699.72
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0005180367133775,
+              "block256": 0.9937312265592307
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 50900.82,
+              "control": 50914.83,
+              "block256": 50380.03
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0002752411454277,
+              "block256": 0.9897685341807853
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 107147.58,
+              "control": 107229.08,
+              "block256": 105912.37
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.000760633137958,
+              "block256": 0.9884718814927971
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 18072482.5,
+              "control": 18213442.0,
+              "block256": 17605223.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.007799675556471,
+              "block256": 0.9741452509360571
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 107590292.0,
+              "control": 107433377.0,
+              "block256": 104184853.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9985415505703804,
+              "block256": 0.9683480829292666
+            }
+          }
+        },
+        "clang_plain": {
+          "262143": {
+            "median_ns": {
+              "baseline": 44405.52,
+              "control": 44433.06,
+              "block256": 44548.2
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0006201931651741,
+              "block256": 1.003213114045281
+            }
+          },
+          "262144": {
+            "median_ns": {
+              "baseline": 28034.27,
+              "control": 28068.98,
+              "block256": 28011.13
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.001238127477548,
+              "block256": 0.9991745816816346
+            }
+          },
+          "524287": {
+            "median_ns": {
+              "baseline": 62423.41,
+              "control": 62491.24,
+              "block256": 62098.28
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0010866115772912,
+              "block256": 0.9947915373415197
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 62505.39,
+              "control": 62473.13,
+              "block256": 62138.6
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9994838845097999,
+              "block256": 0.9941318660678703
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 131408.32,
+              "control": 131540.72,
+              "block256": 130718.39
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.00100754655413,
+              "block256": 0.9947497236095857
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 21801239.5,
+              "control": 21757993.5,
+              "block256": 21262450.5
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9980163513180065,
+              "block256": 0.975286313422684
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 127599522.0,
+              "control": 128026270.0,
+              "block256": 123715332.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.003344432591213,
+              "block256": 0.9695595254659339
+            }
+          }
+        },
+        "clang_native": {
+          "262143": {
+            "median_ns": {
+              "baseline": 44247.72,
+              "control": 44248.5,
+              "block256": 44365.82
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0000176280269355,
+              "block256": 1.0026690640783298
+            }
+          },
+          "262144": {
+            "median_ns": {
+              "baseline": 28065.62,
+              "control": 28028.09,
+              "block256": 27945.38
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9986627767353795,
+              "block256": 0.9957157547205443
+            }
+          },
+          "524287": {
+            "median_ns": {
+              "baseline": 62476.02,
+              "control": 62450.83,
+              "block256": 62179.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9995968053022585,
+              "block256": 0.9952458559300033
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 62505.16,
+              "control": 62388.67,
+              "block256": 61912.98
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9981363138659272,
+              "block256": 0.9905259021815159
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 130731.02,
+              "control": 131243.78,
+              "block256": 130231.41
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.003922251964377,
+              "block256": 0.996178336251029
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 21699021.5,
+              "control": 21592590.5,
+              "block256": 21116707.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9950951244506578,
+              "block256": 0.9731640203222989
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 125828368.0,
+              "control": 124079551.0,
+              "block256": 122379053.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9861015681296923,
+              "block256": 0.9725871434651365
+            }
+          }
+        }
+      }
+    },
+    "supplement": {
+      "headers": {
+        "baseline": {
+          "path": "/tmp/sirkit_sieve_412335_20261022/baseline.hpp",
+          "sha256": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d"
+        },
+        "control": {
+          "path": "/tmp/sirkit_sieve_412335_20261022/baseline.hpp",
+          "sha256": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d"
+        },
+        "block256": {
+          "path": "/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp",
+          "sha256": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8"
+        }
+      },
+      "builds": [],
+      "results": {
+        "gcc_plain": {
+          "262145": {
+            "median_ns": {
+              "baseline": 23389.23,
+              "control": 23402.57,
+              "block256": 23532.64
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0005703479763977,
+              "block256": 1.0061314545198794
+            }
+          },
+          "524289": {
+            "median_ns": {
+              "baseline": 52180.52,
+              "control": 52171.41,
+              "block256": 51553.95
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9998254137751024,
+              "block256": 0.9879922622465241
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1441396.1,
+              "control": 1445043.7,
+              "block256": 1410098.6
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0025306021016707,
+              "block256": 0.9782866763688344
+            }
+          }
+        },
+        "gcc_native": {
+          "262145": {
+            "median_ns": {
+              "baseline": 22911.71,
+              "control": 22902.53,
+              "block256": 22903.23
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9995993315208686,
+              "block256": 0.9996298835835474
+            }
+          },
+          "524289": {
+            "median_ns": {
+              "baseline": 50985.19,
+              "control": 50977.76,
+              "block256": 50544.25
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9998542714070497,
+              "block256": 0.991351606221336
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1416802.9,
+              "control": 1416668.7,
+              "block256": 1387842.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9999052796969854,
+              "block256": 0.9795589774696255
+            }
+          }
+        },
+        "clang_plain": {
+          "262145": {
+            "median_ns": {
+              "baseline": 28047.95,
+              "control": 28114.04,
+              "block256": 28019.83
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0023563219415323,
+              "block256": 0.9989974311848103
+            }
+          },
+          "524289": {
+            "median_ns": {
+              "baseline": 62573.23,
+              "control": 62549.92,
+              "block256": 62214.05
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9996274764783598,
+              "block256": 0.9942598456240792
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1727140.3,
+              "control": 1729074.3,
+              "block256": 1702558.6
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0011197700615289,
+              "block256": 0.9857673982825831
+            }
+          }
+        },
+        "clang_native": {
+          "262145": {
+            "median_ns": {
+              "baseline": 27989.05,
+              "control": 27954.14,
+              "block256": 27944.67
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9987527265126898,
+              "block256": 0.9984143799092859
+            }
+          },
+          "524289": {
+            "median_ns": {
+              "baseline": 62420.0,
+              "control": 62548.29,
+              "block256": 62027.93
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0020552707465555,
+              "block256": 0.9937188401153476
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1714450.9,
+              "control": 1712353.6,
+              "block256": 1694334.1
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9987766928758357,
+              "block256": 0.9882663306368238
+            }
+          }
+        }
+      }
+    },
+    "raw": {
+      "results.json": {
+        "gcc_plain": {
+          "baseline": {
+            "262144": [
+              56035.75,
+              56335.79,
+              55324.81,
+              56127.87
+            ],
+            "1000000": [
+              266385.87,
+              272018.59,
+              265224.03,
+              265611.6
+            ],
+            "10000000": [
+              3491645.2,
+              3460437.7,
+              3489982.1,
+              3476030.3
+            ],
+            "100000000": [
+              42759376.5,
+              42642906.5,
+              42424683.5,
+              42465496.5
+            ],
+            "500000000": [
+              239531692.0,
+              240507001.0,
+              245440546.0,
+              238587579.0
+            ]
+          },
+          "control": {
+            "262144": [
+              56783.72,
+              54194.91,
+              55344.7,
+              55456.79
+            ],
+            "1000000": [
+              263447.54,
+              267739.03,
+              268121.69,
+              264583.62
+            ],
+            "10000000": [
+              3444195.4,
+              3491963.3,
+              3415851.3,
+              3470095.4
+            ],
+            "100000000": [
+              43096767.0,
+              42327801.5,
+              42112026.5,
+              42088147.0
+            ],
+            "500000000": [
+              243612183.0,
+              238720337.0,
+              281199490.0,
+              237008592.0
+            ]
+          },
+          "block64": {
+            "262144": [
+              56214.59,
+              54997.06,
+              53598.39,
+              56407.64
+            ],
+            "1000000": [
+              268675.29,
+              266140.92,
+              267202.26,
+              265302.73
+            ],
+            "10000000": [
+              3537237.6,
+              3521252.6,
+              3524854.1,
+              3531297.1
+            ],
+            "100000000": [
+              42889799.5,
+              42529978.0,
+              43020827.0,
+              44178154.0
+            ],
+            "500000000": [
+              248179773.0,
+              242050685.0,
+              248395946.0,
+              241508551.0
+            ]
+          },
+          "block256": {
+            "262144": [
+              56266.59,
+              55915.41,
+              54856.75,
+              53200.47
+            ],
+            "1000000": [
+              266266.21,
+              265386.77,
+              262389.19,
+              263818.3
+            ],
+            "10000000": [
+              3481427.0,
+              3430636.1,
+              3465491.8,
+              3436738.7
+            ],
+            "100000000": [
+              41616319.5,
+              42549706.5,
+              41611404.5,
+              42146294.0
+            ],
+            "500000000": [
+              235391909.0,
+              234137351.0,
+              235755004.0,
+              237679631.0
+            ]
+          },
+          "localized": {
+            "262144": [
+              57423.43,
+              55752.81,
+              56894.98,
+              56064.14
+            ],
+            "1000000": [
+              267219.64,
+              264789.49,
+              264905.99,
+              264463.28
+            ],
+            "10000000": [
+              3457514.3,
+              3424031.1,
+              3430155.3,
+              3370587.9
+            ],
+            "100000000": [
+              41708304.5,
+              42649131.0,
+              41518011.0,
+              41951179.0
+            ],
+            "500000000": [
+              234666168.0,
+              236168018.0,
+              239384373.0,
+              237721244.0
+            ]
+          }
+        },
+        "gcc_native": {
+          "baseline": {
+            "262144": [
+              49705.45,
+              50035.55,
+              50076.17,
+              50186.0
+            ],
+            "1000000": [
+              237890.38,
+              241087.01,
+              237684.43,
+              237826.8
+            ],
+            "10000000": [
+              3173974.2,
+              3166622.4,
+              3171978.8,
+              3164628.6
+            ],
+            "100000000": [
+              40865651.0,
+              40702223.5,
+              38543349.5,
+              39020654.5
+            ],
+            "500000000": [
+              223689912.0,
+              220985879.0,
+              220783590.0,
+              223274510.0
+            ]
+          },
+          "control": {
+            "262144": [
+              50085.68,
+              48365.82,
+              50262.53,
+              50252.19
+            ],
+            "1000000": [
+              238862.29,
+              240186.97,
+              237816.95,
+              239333.62
+            ],
+            "10000000": [
+              3192629.0,
+              3164878.8,
+              3212157.7,
+              3175977.4
+            ],
+            "100000000": [
+              39858283.5,
+              39475624.0,
+              38988072.5,
+              38931218.0
+            ],
+            "500000000": [
+              220720944.0,
+              222508403.0,
+              220527702.0,
+              220210628.0
+            ]
+          },
+          "block64": {
+            "262144": [
+              50735.13,
+              48572.22,
+              50773.41,
+              50561.91
+            ],
+            "1000000": [
+              240479.27,
+              241025.25,
+              241171.44,
+              239233.48
+            ],
+            "10000000": [
+              3211580.9,
+              3234615.8,
+              3222290.7,
+              3194397.0
+            ],
+            "100000000": [
+              39710059.0,
+              39390196.5,
+              40066774.5,
+              39397634.0
+            ],
+            "500000000": [
+              224960287.0,
+              226092117.0,
+              229363897.0,
+              226315008.0
+            ]
+          },
+          "block256": {
+            "262144": [
+              54766.05,
+              49627.18,
+              50273.67,
+              48411.85
+            ],
+            "1000000": [
+              236406.84,
+              236065.9,
+              236738.89,
+              237609.99
+            ],
+            "10000000": [
+              3165942.2,
+              3128358.1,
+              3134066.6,
+              3146897.9
+            ],
+            "100000000": [
+              38597102.5,
+              38599578.0,
+              38136753.0,
+              38896156.5
+            ],
+            "500000000": [
+              219191304.0,
+              219473535.0,
+              222456938.0,
+              217907235.0
+            ]
+          },
+          "localized": {
+            "262144": [
+              51107.06,
+              51829.84,
+              50654.62,
+              51846.03
+            ],
+            "1000000": [
+              240803.59,
+              240932.34,
+              239031.06,
+              241015.81
+            ],
+            "10000000": [
+              3138112.3,
+              3048283.1,
+              3059239.8,
+              3077346.7
+            ],
+            "100000000": [
+              38919797.5,
+              39050442.5,
+              38042314.5,
+              38853001.0
+            ],
+            "500000000": [
+              215941500.0,
+              215141386.0,
+              216318891.0,
+              214940764.0
+            ]
+          }
+        }
+      },
+      "confirm_results.json": {
+        "gcc_plain": {
+          "baseline": {
+            "262143": [
+              36066.23,
+              36083.32,
+              36277.42,
+              36018.06,
+              36026.11
+            ],
+            "262144": [
+              23364.07,
+              23349.48,
+              23483.77,
+              23410.08,
+              23477.74
+            ],
+            "524287": [
+              51944.25,
+              51934.69,
+              52040.87,
+              52051.21,
+              51839.43
+            ],
+            "524288": [
+              52004.04,
+              51951.35,
+              52005.36,
+              53180.62,
+              52144.36
+            ],
+            "1000000": [
+              109566.62,
+              108936.74,
+              109951.56,
+              109212.22,
+              109044.57
+            ],
+            "100000000": [
+              18694183.0,
+              18570632.5,
+              18364655.0,
+              18483390.0,
+              18322621.0
+            ],
+            "500000000": [
+              111607360.0,
+              110380542.0,
+              109896511.0,
+              109339415.0,
+              110256382.0
+            ]
+          },
+          "control": {
+            "262143": [
+              36158.73,
+              36086.79,
+              36148.92,
+              36064.58,
+              35978.83
+            ],
+            "262144": [
+              23351.26,
+              23367.38,
+              23487.6,
+              23305.45,
+              23636.29
+            ],
+            "524287": [
+              52088.18,
+              51940.79,
+              52053.98,
+              52113.71,
+              52012.82
+            ],
+            "524288": [
+              52023.75,
+              52056.42,
+              52220.14,
+              52102.22,
+              51920.85
+            ],
+            "1000000": [
+              109098.92,
+              109333.78,
+              109666.61,
+              109214.11,
+              108949.09
+            ],
+            "100000000": [
+              18677483.5,
+              18922123.0,
+              18337367.0,
+              18321581.5,
+              18458022.0
+            ],
+            "500000000": [
+              111274168.0,
+              110115383.0,
+              110225341.0,
+              109155172.0,
+              109316100.0
+            ]
+          },
+          "block256": {
+            "262143": [
+              36034.16,
+              36070.15,
+              36097.73,
+              36076.5,
+              36070.7
+            ],
+            "262144": [
+              23347.09,
+              23619.88,
+              23479.71,
+              23385.44,
+              23422.66
+            ],
+            "524287": [
+              51359.59,
+              51284.92,
+              51302.25,
+              51402.91,
+              51560.44
+            ],
+            "524288": [
+              51359.65,
+              51407.29,
+              51460.5,
+              51424.58,
+              51233.07
+            ],
+            "1000000": [
+              107781.62,
+              107725.62,
+              107897.52,
+              108000.96,
+              107831.5
+            ],
+            "100000000": [
+              18001616.5,
+              18161736.0,
+              18597747.5,
+              17944107.5,
+              17912076.0
+            ],
+            "500000000": [
+              107059202.0,
+              105581630.0,
+              106373675.0,
+              105008627.0,
+              105103652.0
+            ]
+          }
+        },
+        "gcc_native": {
+          "baseline": {
+            "262143": [
+              35812.53,
+              35980.92,
+              35795.31,
+              35814.9,
+              36003.35
+            ],
+            "262144": [
+              23111.81,
+              22774.79,
+              22989.08,
+              22996.08,
+              22810.35
+            ],
+            "524287": [
+              50559.87,
+              51019.55,
+              50873.68,
+              51106.36,
+              51423.03
+            ],
+            "524288": [
+              50900.82,
+              51109.43,
+              50895.3,
+              50985.18,
+              50771.27
+            ],
+            "1000000": [
+              107082.67,
+              107105.46,
+              107553.54,
+              107412.52,
+              107147.58
+            ],
+            "100000000": [
+              18321821.0,
+              18072482.5,
+              18020550.0,
+              18061486.0,
+              18132491.5
+            ],
+            "500000000": [
+              107590292.0,
+              107644274.0,
+              106259348.0,
+              108003565.0,
+              105958857.0
+            ]
+          },
+          "control": {
+            "262143": [
+              35984.96,
+              35818.98,
+              35761.12,
+              35802.12,
+              35806.26
+            ],
+            "262144": [
+              22912.69,
+              23027.26,
+              22908.69,
+              22766.83,
+              23227.15
+            ],
+            "524287": [
+              50696.28,
+              51192.48,
+              51085.67,
+              50741.89,
+              51045.98
+            ],
+            "524288": [
+              50877.31,
+              51270.14,
+              50949.25,
+              50893.08,
+              50914.83
+            ],
+            "1000000": [
+              107229.08,
+              107667.52,
+              107498.24,
+              107054.43,
+              106896.2
+            ],
+            "100000000": [
+              17995474.5,
+              18288986.5,
+              18213442.0,
+              17915718.0,
+              18321843.0
+            ],
+            "500000000": [
+              107235386.0,
+              107598460.0,
+              106652550.0,
+              108817897.0,
+              107433377.0
+            ]
+          },
+          "block256": {
+            "262143": [
+              35894.63,
+              35795.53,
+              35845.22,
+              35814.12,
+              35767.2
+            ],
+            "262144": [
+              22924.54,
+              22830.78,
+              23030.94,
+              22885.41,
+              22885.43
+            ],
+            "524287": [
+              50437.71,
+              50735.94,
+              50737.85,
+              50699.72,
+              50399.29
+            ],
+            "524288": [
+              50380.03,
+              50555.74,
+              50347.66,
+              50295.4,
+              51978.98
+            ],
+            "1000000": [
+              105964.89,
+              105922.95,
+              105912.37,
+              105860.34,
+              105803.44
+            ],
+            "100000000": [
+              17718341.0,
+              17583479.5,
+              17958608.0,
+              17563988.5,
+              17605223.0
+            ],
+            "500000000": [
+              104275999.0,
+              104184853.0,
+              105232541.0,
+              104179365.0,
+              102792335.0
+            ]
+          }
+        },
+        "clang_plain": {
+          "baseline": {
+            "262143": [
+              44435.29,
+              44405.52,
+              60673.73,
+              44375.0,
+              44395.53
+            ],
+            "262144": [
+              28143.83,
+              28012.85,
+              28119.39,
+              28034.27,
+              27998.79
+            ],
+            "524287": [
+              62423.41,
+              62385.25,
+              62464.36,
+              62407.09,
+              62555.43
+            ],
+            "524288": [
+              63238.56,
+              62546.53,
+              62490.6,
+              62505.39,
+              62352.53
+            ],
+            "1000000": [
+              131556.99,
+              131321.22,
+              132278.11,
+              131201.65,
+              131408.32
+            ],
+            "100000000": [
+              22088809.0,
+              22360229.0,
+              21661446.5,
+              21801239.5,
+              21653305.5
+            ],
+            "500000000": [
+              127926400.0,
+              127715958.0,
+              126279604.0,
+              127221774.0,
+              127599522.0
+            ]
+          },
+          "control": {
+            "262143": [
+              44403.55,
+              44433.06,
+              44495.79,
+              44482.7,
+              44344.77
+            ],
+            "262144": [
+              28051.0,
+              28072.67,
+              28068.98,
+              28147.16,
+              27912.65
+            ],
+            "524287": [
+              62621.1,
+              62474.19,
+              62491.24,
+              62541.66,
+              62489.45
+            ],
+            "524288": [
+              63772.86,
+              62515.14,
+              62465.83,
+              62473.13,
+              62412.42
+            ],
+            "1000000": [
+              131928.7,
+              131735.67,
+              131408.59,
+              131197.76,
+              131540.72
+            ],
+            "100000000": [
+              21792747.5,
+              21989871.0,
+              21666302.5,
+              21651470.0,
+              21757993.5
+            ],
+            "500000000": [
+              128414492.0,
+              129024042.0,
+              126939422.0,
+              126065018.0,
+              128026270.0
+            ]
+          },
+          "block256": {
+            "262143": [
+              44580.5,
+              44548.2,
+              63200.97,
+              44402.17,
+              44496.17
+            ],
+            "262144": [
+              28261.1,
+              28055.97,
+              27980.44,
+              28011.13,
+              27939.64
+            ],
+            "524287": [
+              62281.27,
+              62025.07,
+              62098.28,
+              62131.24,
+              61961.02
+            ],
+            "524288": [
+              62207.49,
+              62138.6,
+              62063.53,
+              62095.91,
+              62140.14
+            ],
+            "1000000": [
+              130718.39,
+              130682.83,
+              130952.82,
+              130439.95,
+              130915.07
+            ],
+            "100000000": [
+              21382603.5,
+              21262450.5,
+              21516661.0,
+              21226895.0,
+              21195639.0
+            ],
+            "500000000": [
+              123849233.0,
+              123338116.0,
+              123715332.0,
+              122645029.0,
+              125519056.0
+            ]
+          }
+        },
+        "clang_native": {
+          "baseline": {
+            "262143": [
+              44278.16,
+              44204.04,
+              44266.02,
+              44247.72,
+              44243.82
+            ],
+            "262144": [
+              27971.61,
+              28065.62,
+              28080.52,
+              27895.84,
+              28166.25
+            ],
+            "524287": [
+              62766.56,
+              62095.41,
+              62346.65,
+              62755.66,
+              62476.02
+            ],
+            "524288": [
+              62505.16,
+              62607.47,
+              62411.29,
+              62560.26,
+              62216.17
+            ],
+            "1000000": [
+              130731.02,
+              131307.62,
+              130715.93,
+              131306.28,
+              130497.55
+            ],
+            "100000000": [
+              21860058.0,
+              21668425.5,
+              21699021.5,
+              21797102.0,
+              21485362.0
+            ],
+            "500000000": [
+              125828368.0,
+              126087698.0,
+              124136218.0,
+              126169943.0,
+              123240241.0
+            ]
+          },
+          "control": {
+            "262143": [
+              44238.89,
+              44337.8,
+              44419.29,
+              44245.13,
+              44248.5
+            ],
+            "262144": [
+              28028.09,
+              28224.95,
+              27916.11,
+              28147.41,
+              27979.35
+            ],
+            "524287": [
+              62450.83,
+              62661.96,
+              62527.51,
+              62308.77,
+              62213.71
+            ],
+            "524288": [
+              62525.33,
+              62353.71,
+              62664.6,
+              62388.67,
+              62286.35
+            ],
+            "1000000": [
+              131169.64,
+              132151.13,
+              131427.89,
+              131243.78,
+              130920.99
+            ],
+            "100000000": [
+              21565205.5,
+              21840876.5,
+              21774501.0,
+              21521710.5,
+              21592590.5
+            ],
+            "500000000": [
+              126612499.0,
+              126376433.0,
+              123561567.0,
+              124025289.0,
+              124079551.0
+            ]
+          },
+          "block256": {
+            "262143": [
+              44496.16,
+              44365.82,
+              44269.87,
+              44447.33,
+              44323.86
+            ],
+            "262144": [
+              28092.75,
+              27896.14,
+              27997.83,
+              27846.63,
+              27945.38
+            ],
+            "524287": [
+              61933.69,
+              61940.29,
+              62485.37,
+              62179.0,
+              63661.88
+            ],
+            "524288": [
+              61832.46,
+              62278.73,
+              62041.13,
+              61912.98,
+              61853.29
+            ],
+            "1000000": [
+              130231.41,
+              129904.27,
+              130481.61,
+              129954.14,
+              130429.32
+            ],
+            "100000000": [
+              21061495.0,
+              21225528.5,
+              21279335.0,
+              21116707.0,
+              21088410.5
+            ],
+            "500000000": [
+              122954343.0,
+              122379053.0,
+              124330822.0,
+              120504516.0,
+              120020424.0
+            ]
+          }
+        }
+      },
+      "supplement_results.json": {
+        "gcc_plain": {
+          "baseline": {
+            "262145": [
+              23389.23,
+              23359.56,
+              23418.78,
+              23399.02,
+              23377.31
+            ],
+            "524289": [
+              51970.98,
+              52180.52,
+              52161.25,
+              52370.7,
+              52201.13
+            ],
+            "10000000": [
+              1440853.8,
+              1443140.8,
+              1441396.1,
+              1448215.8,
+              1441109.6
+            ]
+          },
+          "control": {
+            "262145": [
+              23441.08,
+              23369.48,
+              23358.36,
+              23415.43,
+              23402.57
+            ],
+            "524289": [
+              52171.41,
+              52287.8,
+              52051.68,
+              52222.13,
+              52002.94
+            ],
+            "10000000": [
+              1452975.8,
+              1439801.2,
+              1445043.7,
+              1444031.6,
+              1447692.5
+            ]
+          },
+          "block256": {
+            "262145": [
+              23558.95,
+              23394.97,
+              23540.53,
+              23532.64,
+              23451.41
+            ],
+            "524289": [
+              51553.95,
+              51553.64,
+              51556.49,
+              51378.86,
+              51773.48
+            ],
+            "10000000": [
+              1409390.5,
+              1405820.9,
+              1427725.1,
+              1411687.4,
+              1410098.6
+            ]
+          }
+        },
+        "gcc_native": {
+          "baseline": {
+            "262145": [
+              23006.24,
+              22850.96,
+              22866.41,
+              22911.71,
+              23046.21
+            ],
+            "524289": [
+              50725.53,
+              50790.33,
+              51230.17,
+              51009.64,
+              50985.19
+            ],
+            "10000000": [
+              1414535.1,
+              1417627.4,
+              1416384.4,
+              1418854.2,
+              1416802.9
+            ]
+          },
+          "control": {
+            "262145": [
+              22872.21,
+              22808.7,
+              23109.81,
+              22902.53,
+              22961.29
+            ],
+            "524289": [
+              50940.52,
+              50905.28,
+              50977.76,
+              51218.16,
+              51005.68
+            ],
+            "10000000": [
+              1416668.7,
+              1409997.8,
+              1407791.9,
+              1419654.4,
+              1423239.3
+            ]
+          },
+          "block256": {
+            "262145": [
+              22770.38,
+              23165.15,
+              22903.23,
+              22945.24,
+              22806.56
+            ],
+            "524289": [
+              50601.11,
+              50487.71,
+              50476.27,
+              50632.38,
+              50544.25
+            ],
+            "10000000": [
+              1386595.7,
+              1388804.6,
+              1387842.0,
+              1390816.0,
+              1385942.4
+            ]
+          }
+        },
+        "clang_plain": {
+          "baseline": {
+            "262145": [
+              28245.83,
+              28126.36,
+              28041.56,
+              28030.56,
+              28047.95
+            ],
+            "524289": [
+              62573.23,
+              62551.77,
+              62451.16,
+              62644.5,
+              62629.73
+            ],
+            "10000000": [
+              1725371.2,
+              1723702.1,
+              1727140.3,
+              1734172.0,
+              1728169.0
+            ]
+          },
+          "control": {
+            "262145": [
+              28092.87,
+              28153.33,
+              28114.04,
+              28062.56,
+              28224.84
+            ],
+            "524289": [
+              62604.33,
+              62540.13,
+              62507.72,
+              62549.92,
+              62704.35
+            ],
+            "10000000": [
+              1724421.3,
+              1725594.8,
+              1729369.7,
+              1730452.2,
+              1729074.3
+            ]
+          },
+          "block256": {
+            "262145": [
+              27980.17,
+              27937.82,
+              28071.24,
+              28019.83,
+              28081.18
+            ],
+            "524289": [
+              62214.05,
+              62174.14,
+              62188.44,
+              62230.03,
+              62244.33
+            ],
+            "10000000": [
+              1702558.6,
+              1699155.3,
+              1704774.8,
+              1703516.0,
+              1702532.6
+            ]
+          }
+        },
+        "clang_native": {
+          "baseline": {
+            "262145": [
+              27989.05,
+              27344.96,
+              28231.06,
+              27908.61,
+              28111.81
+            ],
+            "524289": [
+              62113.88,
+              62373.02,
+              62420.0,
+              62638.72,
+              62873.72
+            ],
+            "10000000": [
+              1714450.9,
+              1721132.7,
+              1712713.4,
+              1714354.7,
+              1740358.2
+            ]
+          },
+          "control": {
+            "262145": [
+              28080.91,
+              27899.87,
+              27939.84,
+              28313.88,
+              27954.14
+            ],
+            "524289": [
+              62548.29,
+              59630.46,
+              62539.51,
+              62699.86,
+              63092.06
+            ],
+            "10000000": [
+              1716585.7,
+              1712212.1,
+              1710970.0,
+              1712353.6,
+              1734499.8
+            ]
+          },
+          "block256": {
+            "262145": [
+              28339.52,
+              27944.67,
+              27885.84,
+              27906.82,
+              28001.37
+            ],
+            "524289": [
+              61924.2,
+              59260.75,
+              62027.93,
+              62173.71,
+              62128.23
+            ],
+            "10000000": [
+              1690381.6,
+              1693057.4,
+              1694334.1,
+              1695762.9,
+              1720185.7
+            ]
+          }
+        }
+      }
+    }
+  },
+  "full_main": {
+    "summary": {
+      "builds": [
+        {
+          "mode": "gcc_plain",
+          "variant": "baseline",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/gcc_plain_baseline"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_plain",
+          "variant": "control",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/gcc_plain_control"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_plain",
+          "variant": "candidate",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/gcc_plain_candidate"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_native",
+          "variant": "baseline",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/gcc_native_baseline"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_native",
+          "variant": "control",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/gcc_native_control"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_native",
+          "variant": "candidate",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/gcc_native_candidate"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "clang_plain",
+          "variant": "baseline",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/clang_plain_baseline"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "clang_plain",
+          "variant": "control",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/clang_plain_control"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "clang_plain",
+          "variant": "candidate",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/clang_plain_candidate"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "clang_native",
+          "variant": "baseline",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/clang_native_baseline"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "clang_native",
+          "variant": "control",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/clang_native_control"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "clang_native",
+          "variant": "candidate",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412335_20261022/kernel/block256.hpp\"",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412335_20261022/candidate_main/clang_native_candidate"
+          ],
+          "warnings": ""
+        }
+      ],
+      "source_hashes": {
+        "baseline": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d",
+        "control": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d",
+        "candidate": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8"
+      },
+      "frozen": {
+        "Math/Eratosthenes.cpp": "5f6411fe61dba8e1070230bb87e7de1d4929f789fba4616ef94f4dff66359f9d",
+        "Verify/current/drivers/eratosthenes_main.cpp": "3a64febf817b342de8c892a7abbff079d5aaccdd959bd472a5f95843ca523581",
+        "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+      },
+      "method": "5 rotated independent processes, same main/I/O, CPU14 shared lock, median ms",
+      "summary": {
+        "gcc_plain": {
+          "ten_02": {
+            "baseline": 2.259351,
+            "control": 2.580405,
+            "candidate": 2.361907
+          },
+          "ten_01": {
+            "baseline": 8.97686,
+            "control": 9.152578,
+            "candidate": 9.171251
+          },
+          "ten_00": {
+            "baseline": 44.696851,
+            "control": 44.302164,
+            "candidate": 43.911524
+          },
+          "max_00": {
+            "baseline": 216.929898,
+            "control": 216.453319,
+            "candidate": 213.801629
+          }
+        },
+        "gcc_native": {
+          "ten_02": {
+            "baseline": 2.675383,
+            "control": 2.586258,
+            "candidate": 2.387176
+          },
+          "ten_01": {
+            "baseline": 9.076407,
+            "control": 9.224527,
+            "candidate": 9.042791
+          },
+          "ten_00": {
+            "baseline": 43.761261,
+            "control": 43.580933,
+            "candidate": 43.112259
+          },
+          "max_00": {
+            "baseline": 216.472437,
+            "control": 216.175902,
+            "candidate": 213.939085
+          }
+        },
+        "clang_plain": {
+          "ten_02": {
+            "baseline": 2.352491,
+            "control": 2.371768,
+            "candidate": 2.421362
+          },
+          "ten_01": {
+            "baseline": 8.687329,
+            "control": 8.448924,
+            "candidate": 8.857354
+          },
+          "ten_00": {
+            "baseline": 45.64337,
+            "control": 45.958369,
+            "candidate": 45.877112
+          },
+          "max_00": {
+            "baseline": 234.20246,
+            "control": 233.474565,
+            "candidate": 229.291104
+          }
+        },
+        "clang_native": {
+          "ten_02": {
+            "baseline": 2.405803,
+            "control": 2.489101,
+            "candidate": 2.2909
+          },
+          "ten_01": {
+            "baseline": 8.781718,
+            "control": 8.728761,
+            "candidate": 8.664898
+          },
+          "ten_00": {
+            "baseline": 45.955411,
+            "control": 45.984521,
+            "candidate": 45.71591
+          },
+          "max_00": {
+            "baseline": 234.031309,
+            "control": 234.844391,
+            "candidate": 230.402426
+          }
+        }
+      }
+    },
+    "raw": {
+      "gcc_plain": {
+        "ten_02": {
+          "baseline": [
+            4.954285,
+            2.061676,
+            2.259351,
+            3.068243,
+            2.200609
+          ],
+          "control": [
+            2.800042,
+            2.580405,
+            2.017458,
+            2.413429,
+            2.760951
+          ],
+          "candidate": [
+            2.393528,
+            2.152469,
+            2.932792,
+            2.361907,
+            2.339692
+          ]
+        },
+        "ten_01": {
+          "baseline": [
+            8.815493,
+            8.97686,
+            9.134754,
+            8.849473,
+            9.31263
+          ],
+          "control": [
+            9.549897,
+            8.880547,
+            8.785725,
+            9.207266,
+            9.152578
+          ],
+          "candidate": [
+            9.296435,
+            9.171251,
+            8.769359,
+            9.153878,
+            9.34053
+          ]
+        },
+        "ten_00": {
+          "baseline": [
+            44.696851,
+            45.18259,
+            43.744874,
+            44.457106,
+            45.288587
+          ],
+          "control": [
+            44.321606,
+            44.828672,
+            43.927174,
+            44.302164,
+            44.139479
+          ],
+          "candidate": [
+            44.884301,
+            43.911524,
+            43.767195,
+            45.114378,
+            43.881441
+          ]
+        },
+        "max_00": {
+          "baseline": [
+            208.189693,
+            218.052428,
+            216.929898,
+            216.369942,
+            217.835398
+          ],
+          "control": [
+            216.022368,
+            217.260985,
+            216.453319,
+            216.837754,
+            215.006297
+          ],
+          "candidate": [
+            212.960903,
+            215.234622,
+            213.741841,
+            213.801629,
+            214.627201
+          ]
+        }
+      },
+      "gcc_native": {
+        "ten_02": {
+          "baseline": [
+            2.766152,
+            2.202186,
+            2.422217,
+            2.675383,
+            3.551481
+          ],
+          "control": [
+            2.457702,
+            2.680361,
+            2.343109,
+            2.586258,
+            2.765367
+          ],
+          "candidate": [
+            2.215376,
+            2.384773,
+            3.001399,
+            2.423185,
+            2.387176
+          ]
+        },
+        "ten_01": {
+          "baseline": [
+            12.076785,
+            8.859457,
+            9.21425,
+            9.076407,
+            8.869957
+          ],
+          "control": [
+            9.40323,
+            8.522834,
+            9.332473,
+            9.224527,
+            8.621118
+          ],
+          "candidate": [
+            8.959519,
+            9.417784,
+            9.042791,
+            8.831427,
+            9.252172
+          ]
+        },
+        "ten_00": {
+          "baseline": [
+            45.343726,
+            43.141964,
+            43.848979,
+            43.078821,
+            43.761261
+          ],
+          "control": [
+            45.688368,
+            42.991916,
+            43.238075,
+            43.580933,
+            43.836951
+          ],
+          "candidate": [
+            44.303695,
+            46.173273,
+            42.465506,
+            42.882283,
+            43.112259
+          ]
+        },
+        "max_00": {
+          "baseline": [
+            217.593372,
+            216.472437,
+            219.771188,
+            215.278971,
+            216.353292
+          ],
+          "control": [
+            217.481012,
+            216.175902,
+            204.741043,
+            215.918781,
+            216.537237
+          ],
+          "candidate": [
+            214.164344,
+            213.284872,
+            214.73726,
+            212.521663,
+            213.939085
+          ]
+        }
+      },
+      "clang_plain": {
+        "ten_02": {
+          "baseline": [
+            2.450439,
+            2.306084,
+            2.285876,
+            2.865376,
+            2.352491
+          ],
+          "control": [
+            1.85725,
+            2.870528,
+            2.127226,
+            2.371768,
+            2.673381
+          ],
+          "candidate": [
+            2.182545,
+            2.260352,
+            2.920607,
+            2.421362,
+            2.511885
+          ]
+        },
+        "ten_01": {
+          "baseline": [
+            8.431273,
+            8.599255,
+            8.687329,
+            9.061654,
+            8.825685
+          ],
+          "control": [
+            8.995301,
+            8.328862,
+            8.448924,
+            8.938442,
+            8.322186
+          ],
+          "candidate": [
+            8.696928,
+            8.857354,
+            8.260071,
+            8.88454,
+            8.876243
+          ]
+        },
+        "ten_00": {
+          "baseline": [
+            45.410922,
+            45.64337,
+            45.842198,
+            47.867165,
+            45.537185
+          ],
+          "control": [
+            45.952364,
+            45.97959,
+            45.518228,
+            45.958369,
+            46.096206
+          ],
+          "candidate": [
+            46.591294,
+            45.5377,
+            44.993583,
+            46.262591,
+            45.877112
+          ]
+        },
+        "max_00": {
+          "baseline": [
+            234.20246,
+            235.088693,
+            222.146808,
+            236.051082,
+            234.071307
+          ],
+          "control": [
+            233.825511,
+            233.474565,
+            237.718279,
+            219.123764,
+            232.659242
+          ],
+          "candidate": [
+            234.802483,
+            229.291104,
+            228.303299,
+            228.308401,
+            230.061152
+          ]
+        }
+      },
+      "clang_native": {
+        "ten_02": {
+          "baseline": [
+            2.727651,
+            2.231918,
+            2.110155,
+            2.771609,
+            2.405803
+          ],
+          "control": [
+            2.268092,
+            2.652858,
+            2.016275,
+            2.489101,
+            2.885183
+          ],
+          "candidate": [
+            2.191486,
+            2.2909,
+            2.297726,
+            2.224387,
+            2.49029
+          ]
+        },
+        "ten_01": {
+          "baseline": [
+            8.433365,
+            8.922971,
+            8.98656,
+            8.386887,
+            8.781718
+          ],
+          "control": [
+            8.817936,
+            8.515204,
+            8.914531,
+            8.728761,
+            8.346806
+          ],
+          "candidate": [
+            8.499793,
+            9.047809,
+            8.664898,
+            8.555465,
+            9.109602
+          ]
+        },
+        "ten_00": {
+          "baseline": [
+            45.640583,
+            48.043605,
+            45.939119,
+            45.982995,
+            45.955411
+          ],
+          "control": [
+            45.984521,
+            46.503839,
+            55.693996,
+            45.81693,
+            45.960661
+          ],
+          "candidate": [
+            45.415061,
+            45.71591,
+            47.874649,
+            45.054909,
+            47.375538
+          ]
+        },
+        "max_00": {
+          "baseline": [
+            233.853114,
+            234.031309,
+            234.829054,
+            234.751727,
+            233.676382
+          ],
+          "control": [
+            235.454296,
+            234.844391,
+            236.861683,
+            234.797994,
+            222.80016
+          ],
+          "candidate": [
+            231.970141,
+            230.414951,
+            216.209871,
+            229.457111,
+            230.402426
+          ]
+        }
+      }
+    },
+    "short_confirmation": {
+      "method": "same previously compiled binaries;21 rotated processes per variant per case;CPU14/sharedlock;medianms",
+      "summary": {
+        "gcc_plain": {
+          "ten_02": {
+            "baseline": 1.884943,
+            "control": 1.914986,
+            "candidate": 1.904872
+          },
+          "ten_01": {
+            "baseline": 8.818596,
+            "control": 8.831068,
+            "candidate": 8.722505
+          }
+        },
+        "clang_plain": {
+          "ten_02": {
+            "baseline": 1.840971,
+            "control": 1.833267,
+            "candidate": 1.824782
+          },
+          "ten_01": {
+            "baseline": 8.284856,
+            "control": 8.323928,
+            "candidate": 8.315952
+          }
+        }
+      },
+      "raw": {
+        "gcc_plain": {
+          "ten_02": {
+            "baseline": [
+              2.347276,
+              1.920315,
+              1.867166,
+              1.755301,
+              4.10227,
+              1.938709,
+              2.08184,
+              1.843467,
+              1.957864,
+              1.884833,
+              1.890045,
+              1.855431,
+              1.915333,
+              1.745454,
+              1.884943,
+              1.877414,
+              1.867578,
+              1.806187,
+              1.964091,
+              2.10334,
+              1.877181
+            ],
+            "control": [
+              1.928033,
+              1.903461,
+              1.865089,
+              2.189786,
+              2.160622,
+              1.901925,
+              1.914986,
+              1.764994,
+              1.971523,
+              1.857688,
+              1.914373,
+              1.896124,
+              1.841568,
+              1.911067,
+              1.945626,
+              1.980903,
+              2.065648,
+              1.976629,
+              1.857644,
+              2.076525,
+              2.119173
+            ],
+            "candidate": [
+              1.850896,
+              1.869623,
+              1.852423,
+              2.040991,
+              2.125519,
+              1.954861,
+              1.939762,
+              1.774544,
+              2.105562,
+              1.911561,
+              1.90665,
+              1.954547,
+              1.850789,
+              1.689032,
+              1.860953,
+              1.904872,
+              1.860414,
+              1.804634,
+              1.903281,
+              2.122638,
+              1.982088
+            ]
+          },
+          "ten_01": {
+            "baseline": [
+              9.191049,
+              8.918475,
+              8.884976,
+              8.884919,
+              12.089964,
+              8.760308,
+              8.856342,
+              9.037069,
+              8.747561,
+              8.692318,
+              8.700407,
+              8.92923,
+              8.753833,
+              8.685461,
+              8.644169,
+              8.921024,
+              8.687932,
+              8.678177,
+              8.86671,
+              8.799471,
+              8.818596
+            ],
+            "control": [
+              8.808897,
+              8.814924,
+              8.625886,
+              9.143678,
+              11.493653,
+              8.860805,
+              8.733039,
+              9.109046,
+              9.032031,
+              8.884495,
+              8.681946,
+              8.845825,
+              8.888137,
+              8.750797,
+              8.48345,
+              8.831068,
+              8.812296,
+              8.725445,
+              8.653225,
+              9.030817,
+              9.250026
+            ],
+            "candidate": [
+              8.924032,
+              8.911509,
+              8.753891,
+              8.728737,
+              9.006203,
+              8.721804,
+              8.535779,
+              8.59045,
+              8.905803,
+              8.663408,
+              8.722505,
+              8.986205,
+              8.703865,
+              8.655973,
+              8.666775,
+              8.676485,
+              8.742272,
+              8.608279,
+              8.955781,
+              8.708309,
+              8.810199
+            ]
+          }
+        },
+        "clang_plain": {
+          "ten_02": {
+            "baseline": [
+              1.986344,
+              1.870279,
+              1.816583,
+              1.699488,
+              1.854103,
+              1.857212,
+              1.842262,
+              1.810632,
+              1.846859,
+              1.844927,
+              1.864769,
+              1.706853,
+              1.64468,
+              1.788659,
+              1.814465,
+              1.741205,
+              1.840971,
+              1.821186,
+              1.899883,
+              1.776973,
+              1.855428
+            ],
+            "control": [
+              1.859177,
+              1.873128,
+              1.854419,
+              1.908581,
+              1.871704,
+              1.853014,
+              1.805845,
+              1.608864,
+              1.822579,
+              1.778703,
+              1.858679,
+              1.814162,
+              1.74279,
+              1.769821,
+              1.782158,
+              1.805351,
+              2.009646,
+              1.984029,
+              1.837804,
+              1.832552,
+              1.833267
+            ],
+            "candidate": [
+              1.97297,
+              1.821946,
+              1.780758,
+              1.802054,
+              1.873755,
+              2.030835,
+              1.836554,
+              1.769337,
+              1.901667,
+              1.742421,
+              1.749382,
+              1.760619,
+              1.798099,
+              1.828165,
+              1.834454,
+              1.824782,
+              1.832368,
+              1.827827,
+              1.760866,
+              1.722523,
+              1.836758
+            ]
+          },
+          "ten_01": {
+            "baseline": [
+              8.454791,
+              8.236659,
+              8.262704,
+              8.269013,
+              8.303119,
+              8.244252,
+              8.363217,
+              8.589146,
+              8.395683,
+              8.376797,
+              8.331334,
+              8.169187,
+              8.249436,
+              8.203824,
+              8.254807,
+              8.254716,
+              8.214624,
+              8.788101,
+              8.296949,
+              8.284856,
+              8.308988
+            ],
+            "control": [
+              8.422357,
+              8.230175,
+              8.190785,
+              8.290294,
+              8.322394,
+              8.162452,
+              8.311974,
+              8.485559,
+              8.355329,
+              8.540978,
+              8.341344,
+              8.20563,
+              8.238347,
+              8.401824,
+              8.581976,
+              8.203654,
+              8.323928,
+              8.580461,
+              8.484633,
+              8.499317,
+              8.195836
+            ],
+            "candidate": [
+              8.361953,
+              8.380404,
+              8.333783,
+              8.377248,
+              8.276487,
+              8.28181,
+              8.193218,
+              8.699711,
+              8.325295,
+              8.409143,
+              8.174447,
+              8.264162,
+              8.240559,
+              8.1333,
+              8.315952,
+              8.149686,
+              8.246019,
+              8.823209,
+              8.45674,
+              8.198046,
+              8.385625
+            ]
+          }
+        }
+      }
+    },
+    "note": "main、共有入出力、SKIP_RUNTIME_CHECKS、コンパイラ設定を揃えたプロセス全体。出力と起動終了を含み、本体単独測定と区別。"
+  },
+  "limits": "境界の構築+countに0.3〜0.6%程度の小差あり。全条件で非退行とは主張しない。追加の個数集計・列挙・単点判定・追記処理は加えていない。",
+  "rejected": {
+    "block64": "1〜2%遅い。",
+    "localized": "大規模1〜3%短縮だが262144 GCC native +2.8%、1M +1.3%。追加コードを伴うため不採用。"
+  },
+  "reproduction": {
+    "baseline": "// SPDX-License-Identifier: CC0-1.0\n\n#include <algorithm>\n#include <array>\n#include <bit>\n#include <cstddef>\n#include <cstdint>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n#include <immintrin.h>\n#endif\n\n#ifndef SIRKIT_PRIME_SIEVE_POPCOUNT_DEFINED\n#define SIRKIT_PRIME_SIEVE_POPCOUNT_DEFINED\nnamespace reinsirk::detail {\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n// 内部用。32語単位で集計し、残りを4語・1語ずつ処理する。\n[[gnu::target(\"avx2\"), gnu::noinline]] inline std::uint64_t popcount_words_avx2(\n    const std::uint64_t* words, std::size_t count) noexcept {\n    const auto table = _mm256_setr_epi8(\n        0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4,\n        0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4);\n    const auto mask = _mm256_set1_epi8(15);\n    const auto zero = _mm256_setzero_si256();\n    auto sum = zero;\n    std::size_t i = 0;\n    for (; count - i >= 32; i += 32) {\n        auto bytes = zero;\n        for (std::size_t j = 0; j < 32; j += 4) {\n            const auto value = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(words + i + j));\n            const auto low = _mm256_and_si256(value, mask);\n            const auto high = _mm256_and_si256(_mm256_srli_epi16(value, 4), mask);\n            const auto bits = _mm256_add_epi8(_mm256_shuffle_epi8(table, low),\n                                             _mm256_shuffle_epi8(table, high));\n            bytes = _mm256_add_epi8(bytes, bits);\n        }\n        sum = _mm256_add_epi64(sum, _mm256_sad_epu8(bytes, zero));\n    }\n    for (; count - i >= 4; i += 4) {\n        const auto value = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(words + i));\n        const auto low = _mm256_and_si256(value, mask);\n        const auto high = _mm256_and_si256(_mm256_srli_epi16(value, 4), mask);\n        const auto bits = _mm256_add_epi8(_mm256_shuffle_epi8(table, low),\n                                         _mm256_shuffle_epi8(table, high));\n        sum = _mm256_add_epi64(sum, _mm256_sad_epu8(bits, zero));\n    }\n    alignas(32) std::uint64_t lanes[4];\n    _mm256_store_si256(reinterpret_cast<__m256i*>(lanes), sum);\n    std::uint64_t result = lanes[0] + lanes[1] + lanes[2] + lanes[3];\n    for (; i < count; ++i) result += std::popcount(words[i]);\n    return result;\n}\n#endif\n} // namespace reinsirk::detail\n#endif\n\n\n#ifndef SIRKIT_PRIME_SIEVE_PATTERN_DEFINED\n#define SIRKIT_PRIME_SIEVE_PATTERN_DEFINED\nnamespace reinsirk::detail {\ninline constexpr auto sieve_pattern = [] {\n    std::array<std::uint64_t, 1155> values{};\n    for (std::size_t word = 0; word < values.size(); ++word)\n        for (unsigned bit = 0; bit < 64; ++bit) {\n            const auto n = (word * 64 + bit) * 2 + 1;\n            if (n % 3 != 0 && n % 5 != 0 && n % 7 != 0 && n % 11 != 0)\n                values[word] |= std::uint64_t{1} << bit;\n        }\n    return values;\n}();\ninline void fill_sieve_pattern(std::uint64_t* dest, std::size_t count) noexcept {\n    constexpr std::size_t period = sieve_pattern.size();\n    while (count >= period) {\n        std::copy(sieve_pattern.begin(), sieve_pattern.end(), dest);\n        dest += period; count -= period;\n    }\n    std::copy_n(sieve_pattern.begin(), count, dest);\n}\n}\n#endif\n#ifndef SIRKIT_PRIME_SIEVE_DEFINED\n#define SIRKIT_PRIME_SIEVE_DEFINED\n\n// PrimeSieve(limit=0): [0,limit]の素数表を構築する。O(limit log log limit)、奇数1個につき1bit。\n// コピーは独立した表を持ち、移動元はlimit=0の空の素数表として再利用できる。\n// is_prime(n): 0<=n<=limitの素数判定をO(1)で返す。\n// limit(): 構築時の上限を返す。O(1)。\n// prime_count(): 上限以下の素数の個数を返す。O(limit/64)。\n// primes(): 上限以下の素数を昇順のvectorで返す。O(limit/64+素数数)。\n// append_to(ans): 上限以下の素数を昇順でansの末尾に追加する。O(limit/64+素数数)、償却。\n// for_each_prime(f): 昇順にf(uint64_tの素数)を呼ぶ。O(limit/64+素数数)、呼出し中に表を変更しない。\nclass PrimeSieve {\npublic:\n    explicit PrimeSieve(std::uint64_t limit = 0) : limit_(limit) {\n        if (limit < 128) {\n            if (limit != 0) {\n                // 127以下の奇合成数は3・5・7・11のいずれかの倍数。\n                constexpr auto primes = (reinsirk::detail::sieve_pattern[0] |\n                    (std::uint64_t{1} << 1) | (std::uint64_t{1} << 2) |\n                    (std::uint64_t{1} << 3) | (std::uint64_t{1} << 5)) & ~std::uint64_t{1};\n                const auto bits = static_cast<unsigned>((limit + 1) / 2);\n                flags_.push_back(primes & (~std::uint64_t{0} >> (64 - bits)));\n            }\n            return;\n        }\n        const std::uint64_t odds = limit / 2 + limit % 2;\n        const std::uint64_t words = odds / 64 + (odds % 64 != 0);\n        if (words > flags_.max_size())\n            throw std::length_error(\"PrimeSieve: limit exceeds capacity\");\n        flags_.assign(static_cast<std::size_t>(words), ~std::uint64_t{0});\n        build_large(odds);\n    }\n\n    PrimeSieve(const PrimeSieve&) = default;\n    PrimeSieve& operator=(const PrimeSieve& other) {\n        flags_ = other.flags_;\n        limit_ = other.limit_;\n        return *this;\n    }\n    PrimeSieve(PrimeSieve&& other) noexcept : limit_(std::exchange(other.limit_, 0)) {\n        flags_.swap(other.flags_);\n    }\n    PrimeSieve& operator=(PrimeSieve&& other) noexcept {\n        if (this != &other) {\n            PrimeSieve next(std::move(other));\n            std::swap(limit_, next.limit_);\n            flags_.swap(next.flags_);\n        }\n        return *this;\n    }\n\n    bool is_prime(std::uint64_t n) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (n > limit_) [[unlikely]]\n            throw std::out_of_range(\"PrimeSieve::is_prime: beyond limit\");\n#endif\n        if ((n & 1) == 0) return n == 2;\n        const std::uint64_t index = n / 2;\n        return (flags_[static_cast<std::size_t>(index / 64)] >> (index % 64) & 1) != 0;\n    }\n    std::uint64_t limit() const noexcept { return limit_; }\n    std::uint64_t prime_count() const noexcept {\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n#if !(defined(__clang__) && defined(__AVX2__))\n        if (limit_ >= 3969 && __builtin_cpu_supports(\"avx2\")) [[unlikely]]\n            return static_cast<std::uint64_t>(limit_ >= 2) +\n                   reinsirk::detail::popcount_words_avx2(flags_.data(), flags_.size());\n#endif\n#endif\n        std::uint64_t count = limit_ >= 2;\n        for (std::uint64_t word : flags_) count += std::popcount(word);\n        return count;\n    }\n#if defined(__clang__) && !defined(__AVX2__)\n    std::vector<std::uint64_t> primes() const {\n        std::vector<std::uint64_t> result;\n        if (limit_ < 2) return result;\n        if (limit_ >= 16) {\n            const auto count = prime_count();\n            if (count > result.max_size())\n                throw std::length_error(\"PrimeSieve::primes: capacity exceeded\");\n            result.reserve(static_cast<std::size_t>(count));\n        }\n        append_to(result);\n        return result;\n    }\n#else\n    std::vector<std::uint64_t> primes() const {\n        std::vector<std::uint64_t> result;\n        if (limit_ < 2) return result;\n        if (limit_ >= 16384) {\n            const auto count = prime_count();\n            if (count > result.max_size())\n                throw std::length_error(\"PrimeSieve::primes: capacity exceeded\");\n            result.reserve(static_cast<std::size_t>(count));\n        } else if (limit_ >= 16) {\n            return small_primes();\n        }\n        append_to(result);\n        return result;\n    }\n#endif\n#if defined(__clang__)\n    [[gnu::always_inline]]\n#endif\n    void append_to(std::vector<std::uint64_t>& ans) const {\n        if (limit_ >= 2) ans.push_back(2);\n        for (std::size_t i = 0; i < flags_.size(); ++i) {\n            std::uint64_t word = flags_[i];\n            while (word != 0) {\n                const unsigned bit = std::countr_zero(word);\n                ans.push_back((static_cast<std::uint64_t>(i) * 64 + bit) * 2 + 1);\n                word &= word - 1;\n            }\n        }\n    }\n\n    template <class Function>\n    void for_each_prime(Function&& function) const {\n        if (limit_ >= 2) function(std::uint64_t{2});\n        for (std::size_t i = 0; i < flags_.size(); ++i) {\n            std::uint64_t word = flags_[i];\n            while (word != 0) {\n                const unsigned bit = std::countr_zero(word);\n                function((static_cast<std::uint64_t>(i) * 64 + bit) * 2 + 1);\n                word &= word - 1;\n            }\n        }\n    }\n\nprivate:\n#if !defined(__clang__) || defined(__AVX2__)\n#if defined(__GNUC__) || defined(__clang__)\n    [[gnu::noinline]]\n#endif\n    std::vector<std::uint64_t> small_primes() const {\n        std::vector<std::uint64_t> result;\n        const auto count = prime_count();\n        if (count > result.max_size())\n            throw std::length_error(\"PrimeSieve::primes: capacity exceeded\");\n        result.reserve(static_cast<std::size_t>(count));\n        append_to(result);\n        return result;\n    }\n#endif\n\n    void build_large(std::uint64_t odds) {\n        reinsirk::detail::fill_sieve_pattern(flags_.data(), flags_.size());\n        flags_[0] |= (std::uint64_t{1} << 1) | (std::uint64_t{1} << 2) |\n                     (std::uint64_t{1} << 3) | (std::uint64_t{1} << 5);\n        flags_[0] &= ~std::uint64_t{1};\n        if (odds % 64 != 0)\n            flags_.back() &= (std::uint64_t{1} << (odds % 64)) - 1;\n        if (limit_ >= 262144) {\n            build_blocked(odds);\n            return;\n        }\n        for (std::uint64_t p = 13; p <= limit_ / p; p += 2) {\n            const auto index = p / 2;\n            if (((flags_[index / 64] >> (index % 64)) & 1) == 0) continue;\n            for (auto k = p * p / 2; k < odds; k += p)\n                flags_[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n        }\n    }\n\n    // 小素数の倍数をp語周期のANDで消す。素数自身は呼出側で復元する。\n    template <unsigned Prime>\n#if defined(__GNUC__) || defined(__clang__)\n    [[gnu::noinline]]\n#endif\n    static void mask_multiples(std::uint64_t* flags, std::uint64_t first_word,\n                               std::uint64_t word_count) noexcept {\n        static constexpr auto pattern = [] {\n            std::array<std::uint64_t, Prime> result{};\n            for (unsigned w = 0; w < Prime; ++w)\n                for (unsigned bit = 0; bit < 64; ++bit)\n                    if ((w * 128 + bit * 2 + 1) % Prime != 0)\n                        result[w] |= std::uint64_t{1} << bit;\n            return result;\n        }();\n        auto* dest = flags + first_word;\n        auto phase = first_word % Prime;\n        while (phase != 0 && word_count != 0) {\n            *dest++ &= pattern[phase];\n            --word_count;\n            if (++phase == Prime) phase = 0;\n        }\n        while (word_count >= Prime) {\n            for (unsigned j = 0; j < Prime; ++j) dest[j] &= pattern[j];\n            dest += Prime;\n            word_count -= Prime;\n        }\n        for (unsigned j = 0; j < word_count; ++j) dest[j] &= pattern[j];\n    }\n\n    void build_blocked(std::uint64_t odds) {\n        std::uint64_t root = std::uint64_t{1} << ((std::bit_width(limit_) + 1) / 2);\n        for (;;) {\n            const auto next = (root + limit_ / root) / 2;\n            if (next >= root) break;\n            root = next;\n        }\n        const std::uint64_t base_odds = root / 2 + root % 2;\n        auto* const flags = flags_.data();\n        for (std::uint64_t p = 13; p <= root / p; p += 2) {\n            const auto index = p / 2;\n            if (((flags[index / 64] >> (index % 64)) & 1) == 0) continue;\n            for (auto k = p * p / 2; k < base_odds; k += p)\n                flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n        }\n        struct Strike { std::uint64_t prime, next; };\n        std::vector<Strike> strikes;\n        for (std::uint64_t p = 37; p <= root; p += 2) {\n            const auto index = p / 2;\n            if ((flags[index / 64] >> (index % 64)) & 1)\n                strikes.push_back({p, p * p / 2});\n        }\n        const std::uint64_t block_bits = std::max(std::uint64_t{131072},\n            (root + 63) & ~std::uint64_t{63});\n        std::size_t active = 0;\n        for (std::uint64_t begin = 0; begin < odds; begin += block_bits) {\n            const auto end = std::min(odds, begin + block_bits);\n            const auto first_word = begin / 64;\n            const auto word_count = (end + 63) / 64 - first_word;\n            mask_multiples<13>(flags, first_word, word_count);\n            mask_multiples<17>(flags, first_word, word_count);\n            mask_multiples<19>(flags, first_word, word_count);\n            mask_multiples<23>(flags, first_word, word_count);\n            mask_multiples<29>(flags, first_word, word_count);\n            mask_multiples<31>(flags, first_word, word_count);\n            while (active < strikes.size() && strikes[active].next < end) ++active;\n            for (std::size_t i = 0; i < active; ++i) {\n                auto k = strikes[i].next;\n                const auto step = strikes[i].prime;\n                for (; k < end; k += step)\n                    flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n                strikes[i].next = k;\n            }\n        }\n        flags[0] |= (std::uint64_t{1} << 6) | (std::uint64_t{1} << 8) |\n                    (std::uint64_t{1} << 9) | (std::uint64_t{1} << 11) |\n                    (std::uint64_t{1} << 14) | (std::uint64_t{1} << 15);\n    }\n\n    std::uint64_t limit_;\n    std::vector<std::uint64_t> flags_;\n};\n#endif\n\n#ifndef SIRKIT_ERATOSTHENES_DEFINED\n#define SIRKIT_ERATOSTHENES_DEFINED\n// eratosthenes(limit, ans): limit以下の素数を昇順でansの末尾へ追加する。O(limit log log limit)。\n// eratosthenes(limit): limit以下の素数を昇順のvectorで返す。同じ計算量。\ninline void eratosthenes(std::uint64_t limit, std::vector<std::uint64_t>& ans) {\n    PrimeSieve(limit).append_to(ans);\n}\ninline std::vector<std::uint64_t> eratosthenes(std::uint64_t limit) {\n    return PrimeSieve(limit).primes();\n}\n#endif\n",
+    "scripts": {
+      "main_probe.py": "from pathlib import Path\nimport json,subprocess,concurrent.futures,fcntl,time,statistics,hashlib\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');f=json.loads((p/'frozen.json').read_text());sha=lambda b:hashlib.sha256(b).hexdigest()\nfor n,h in f.items():assert sha((r/n).read_bytes())==h\nmain=(r/'Verify/current/drivers/eratosthenes_main.cpp').read_text().replace('#include \"Verify/current/common/fast_io.hpp\"',(r/'Verify/current/common/fast_io.hpp').read_text());(p/'main.cpp').write_text('#define SKIP_RUNTIME_CHECKS\\n#include HEADER\\n'+main)\nheaders={'current':p/'baseline.hpp','control':p/'baseline.hpp','previous':Path('/tmp/sirkit_sieve_412324_20261022/baseline.cpp')};flags=['g++','-O2','-std=c++23','-DEVAL','-DONLINE_JUDGE','-march=native'];commands=[]\nfor v,h in headers.items():\n cmd=['taskset','-c','8',*flags,'-DHEADER=\"'+str(h)+'\"',str(p/'main.cpp'),'-o',str(p/('main_'+v))];a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0,a.stderr;commands.append(dict(variant=v,command=cmd,warnings=a.stderr))\nfiles=Path('/tmp/sirkit_sieve_20261022/official/in');cases=['ten_02','ten_01','ten_00','max_00'];variants=list(headers);data={c:{v:[]for v in variants}for c in cases};reps={'ten_02':15,'ten_01':9,'ten_00':5,'max_00':5}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(15):\n  for ci,c in enumerate(cases):\n   if rep>=reps[c]:continue\n   shift=(rep+ci)%len(variants)\n   for v in variants[shift:]+variants[:shift]:\n    with (files/(c+'.in')).open('rb')as inp:\n     start=time.perf_counter_ns();subprocess.run(['taskset','-c','14',str(p/('main_'+v))],stdin=inp,stdout=subprocess.DEVNULL,check=True);data[c][v].append((time.perf_counter_ns()-start)/1e6)\n  (p/'main_results.json').write_text(json.dumps(data,indent=2))\nsummary={c:{v:statistics.median(values)for v,values in rows.items()}for c,rows in data.items()}\n(p/'main_summary.json').write_text(json.dumps(dict(flags=flags,builds=commands,source_hashes={v:sha(h.read_bytes())for v,h in headers.items()},frozen=f,method='rotated independent processes, same main/I/O, CPU14 shared lock, median ms',summary=summary),indent=2));print(json.dumps(summary,indent=2))\n",
+      "candidate_main_probe.py": "from pathlib import Path\nimport json,subprocess,concurrent.futures,fcntl,time,statistics,hashlib\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');out=p/'candidate_main';out.mkdir(exist_ok=True);f=json.loads((p/'frozen.json').read_text());sha=lambda b:hashlib.sha256(b).hexdigest()\nfor n,h in f.items():assert sha((r/n).read_bytes())==h\nmain=(r/'Verify/current/drivers/eratosthenes_main.cpp').read_text().replace('#include \"Verify/current/common/fast_io.hpp\"',(r/'Verify/current/common/fast_io.hpp').read_text());(out/'main.cpp').write_text('#define SKIP_RUNTIME_CHECKS\\n#include HEADER\\n'+main)\nheaders={'baseline':p/'baseline.hpp','control':p/'baseline.hpp','candidate':p/'kernel/block256.hpp'};modes={'gcc_plain':['g++'],'gcc_native':['g++','-march=native'],'clang_plain':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0'],'clang_native':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0','-march=native']}\ndef build(cv):\n c,v=cv;cmd=['taskset','-c','8',*modes[c],'-O2','-std=c++23','-DEVAL','-DONLINE_JUDGE','-DHEADER=\"'+str(headers[v])+'\"',str(out/'main.cpp'),'-o',str(out/(c+'_'+v))];a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0,a.stderr;return dict(mode=c,variant=v,command=cmd,warnings=a.stderr)\nwith concurrent.futures.ThreadPoolExecutor(2)as pool:commands=list(pool.map(build,[(c,v)for c in modes for v in headers]))\nfiles=Path('/tmp/sirkit_sieve_20261022/official/in');cases=['ten_02','ten_01','ten_00','max_00'];variants=list(headers);data={m:{c:{v:[]for v in variants}for c in cases}for m in modes}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(5):\n  for m in modes:\n   for ci,c in enumerate(cases):\n    shift=(rep+ci)%len(variants)\n    for v in variants[shift:]+variants[:shift]:\n     with (files/(c+'.in')).open('rb')as inp:\n      start=time.perf_counter_ns();subprocess.run(['taskset','-c','14',str(out/(m+'_'+v))],stdin=inp,stdout=subprocess.DEVNULL,check=True);data[m][c][v].append((time.perf_counter_ns()-start)/1e6)\n  (out/'results.json').write_text(json.dumps(data,indent=2));print('round',rep,flush=True)\nsummary={m:{c:{v:statistics.median(values)for v,values in rows.items()}for c,rows in casesdata.items()}for m,casesdata in data.items()}\n(out/'summary.json').write_text(json.dumps(dict(builds=commands,source_hashes={v:sha(h.read_bytes())for v,h in headers.items()},frozen=f,method='5 rotated independent processes, same main/I/O, CPU14 shared lock, median ms',summary=summary),indent=2));print(json.dumps(summary,indent=2))\n",
+      "short_main_confirm.py": "from pathlib import Path\nimport subprocess,json,statistics,time,fcntl\np=Path(__file__).parent;out=p/'candidate_main';data={m:{c:{v:[]for v in ['baseline','control','candidate']}for c in ['ten_02','ten_01']}for m in ['gcc_plain','clang_plain']}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(21):\n  for m,cases in data.items():\n   for c,variants in cases.items():\n    keys=list(variants);shift=rep%3\n    for v in keys[shift:]+keys[:shift]:\n     with (Path('/tmp/sirkit_sieve_20261022/official/in')/(c+'.in')).open('rb')as inp:\n      start=time.perf_counter_ns();subprocess.run(['taskset','-c','14',str(out/(m+'_'+v))],stdin=inp,stdout=subprocess.DEVNULL,check=True);variants[v].append((time.perf_counter_ns()-start)/1e6)\nsummary={m:{c:{v:statistics.median(values)for v,values in variants.items()}for c,variants in cases.items()}for m,cases in data.items()};(p/'short_main_confirm.json').write_text(json.dumps(dict(method='same previously compiled binaries;21 rotated processes per variant per case;CPU14/sharedlock;medianms',summary=summary,raw=data),indent=2));print(json.dumps(summary,indent=2))\n",
+      "kernel/probe.py": "from pathlib import Path\nimport subprocess,json,fcntl,statistics,hashlib\np=Path(__file__).parent;headers={v:p/(v+'.hpp')for v in ['block64','block256','localized']};headers={'baseline':p.parent/'baseline.hpp','control':p.parent/'baseline.hpp',**headers};variants=list(headers);configs={'gcc_plain':['g++','-O2'],'gcc_native':['g++','-O2','-DEVAL','-DONLINE_JUDGE','-march=native']};builds=[]\nfor c,flags in configs.items():\n for v,h in headers.items():\n  cmd=['taskset','-c','6',*flags,'-std=c++23','-DSKIP_RUNTIME_CHECKS','-DHEADER=\"'+str(h)+'\"',str(p/'bench.cpp'),'-o',str(p/(c+'_'+v))];r=subprocess.run(cmd,capture_output=True,text=True);assert r.returncode==0,r.stderr;builds.append(cmd)\nprint('compiled',flush=True)\ncases=[(262144,100),(1000000,100),(10000000,10),(100000000,2),(500000000,1)];data={c:{v:{str(n):[]for n,r in cases}for v in variants}for c in configs}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(4):\n  for c in configs:\n   for n,reps in cases:\n    shift=rep%len(variants);counts=[]\n    for v in variants[shift:]+variants[:shift]:\n     out=subprocess.check_output(['taskset','-c','14',str(p/(c+'_'+v)),str(n),'0',str(reps)],text=True).split();data[c][v][str(n)].append(float(out[0]));counts.append(out[1])\n    assert len(set(counts))==1,(c,n,counts)\n  print('round',rep,flush=True)\nsummary={c:{str(n):{'median_ns':{v:statistics.median(data[c][v][str(n)])for v in variants}}for n,r in cases}for c in configs}\nfor c in configs:\n for n,r in cases:\n  m=summary[c][str(n)]['median_ns'];summary[c][str(n)]['ratio']={v:m[v]/m['baseline']for v in variants}\n(p/'results.json').write_text(json.dumps(data,indent=2));(p/'summary.json').write_text(json.dumps({'headers':{v:{'path':str(h),'sha256':hashlib.sha256(h.read_bytes()).hexdigest()}for v,h in headers.items()},'builds':builds,'results':summary},indent=2));print(json.dumps(summary,indent=2))\n",
+      "kernel/confirm.py": "from pathlib import Path\nimport subprocess,json,fcntl,statistics,hashlib\np=Path(__file__).parent;headers={'baseline':p.parent/'baseline.hpp','control':p.parent/'baseline.hpp','block256':p/'block256.hpp'};configs={'gcc_plain':['g++','-O2'],'gcc_native':['g++','-O2','-DEVAL','-DONLINE_JUDGE','-march=native'],'clang_plain':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0','-O2'],'clang_native':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0','-O2','-march=native']};variants=list(headers);builds=[]\nfor c,flags in configs.items():\n for v,h in headers.items():\n  cmd=['taskset','-c','6',*flags,'-std=c++23','-DSKIP_RUNTIME_CHECKS','-DHEADER=\"'+str(h)+'\"',str(p/'bench.cpp'),'-o',str(p/('confirm_'+c+'_'+v))];r=subprocess.run(cmd,capture_output=True,text=True);assert r.returncode==0,r.stderr;builds.append(cmd)\nprint('compiled',flush=True)\ncases=[(262143,100),(262144,100),(524287,100),(524288,100),(1000000,100),(100000000,2),(500000000,1)];data={c:{v:{str(n):[]for n,r in cases}for v in variants}for c in configs}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(5):\n  for c in configs:\n   for n,reps in cases:\n    shift=rep%len(variants);counts=[]\n    for v in variants[shift:]+variants[:shift]:\n     out=subprocess.check_output(['taskset','-c','14',str(p/('confirm_'+c+'_'+v)),str(n),'0',str(reps)],text=True).split();data[c][v][str(n)].append(float(out[0]));counts.append(out[1])\n    assert len(set(counts))==1,(c,n,counts)\n  print('round',rep,flush=True)\nsummary={c:{str(n):{'median_ns':{v:statistics.median(data[c][v][str(n)])for v in variants}}for n,r in cases}for c in configs}\nfor c in configs:\n for n,r in cases:\n  m=summary[c][str(n)]['median_ns'];summary[c][str(n)]['ratio']={v:m[v]/m['baseline']for v in variants}\n(p/'confirm_results.json').write_text(json.dumps(data,indent=2));(p/'confirm_summary.json').write_text(json.dumps({'headers':{v:{'path':str(h),'sha256':hashlib.sha256(h.read_bytes()).hexdigest()}for v,h in headers.items()},'builds':builds,'results':summary},indent=2));print(json.dumps(summary,indent=2))\n",
+      "kernel/supplement.py": "from pathlib import Path\nimport subprocess,json,fcntl,statistics,hashlib\np=Path(__file__).parent;headers={'baseline':p.parent/'baseline.hpp','control':p.parent/'baseline.hpp','block256':p/'block256.hpp'};configs={'gcc_plain':['g++','-O2'],'gcc_native':['g++','-O2','-DEVAL','-DONLINE_JUDGE','-march=native'],'clang_plain':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0','-O2'],'clang_native':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0','-O2','-march=native']};variants=list(headers);builds=[]\nprint('compiled',flush=True)\ncases=[(262145,100),(524289,100),(10000000,10)];data={c:{v:{str(n):[]for n,r in cases}for v in variants}for c in configs}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(5):\n  for c in configs:\n   for n,reps in cases:\n    shift=rep%len(variants);counts=[]\n    for v in variants[shift:]+variants[:shift]:\n     out=subprocess.check_output(['taskset','-c','14',str(p/('confirm_'+c+'_'+v)),str(n),'0',str(reps)],text=True).split();data[c][v][str(n)].append(float(out[0]));counts.append(out[1])\n    assert len(set(counts))==1,(c,n,counts)\n  print('round',rep,flush=True)\nsummary={c:{str(n):{'median_ns':{v:statistics.median(data[c][v][str(n)])for v in variants}}for n,r in cases}for c in configs}\nfor c in configs:\n for n,r in cases:\n  m=summary[c][str(n)]['median_ns'];summary[c][str(n)]['ratio']={v:m[v]/m['baseline']for v in variants}\n(p/'supplement_results.json').write_text(json.dumps(data,indent=2));(p/'supplement_summary.json').write_text(json.dumps({'headers':{v:{'path':str(h),'sha256':hashlib.sha256(h.read_bytes()).hexdigest()}for v,h in headers.items()},'builds':builds,'results':summary},indent=2));print(json.dumps(summary,indent=2))\n",
+      "kernel/bench.cpp": "#include HEADER\n#include <chrono>\n#include <cstdio>\n#include <cstdint>\n#include <cstdlib>\nint main(int argc,char**argv){\n const std::uint64_t n=std::strtoull(argv[1],nullptr,10);const int mode=std::atoi(argv[2]);const int reps=std::atoi(argv[3]);\n std::uint64_t sum=0;const auto start=std::chrono::steady_clock::now();\n for(int r=0;r<reps;++r){PrimeSieve sieve(n);if(mode==0)sum+=sieve.prime_count();else{const auto p=sieve.primes();sum+=p.size()+(p.empty()?0:p.back());}}\n const auto ns=std::chrono::duration<double,std::nano>(std::chrono::steady_clock::now()-start).count()/reps;\n std::printf(\"%.6f %llu\\n\",ns,static_cast<unsigned long long>(sum));\n}\n"
+    }
+  }
+}

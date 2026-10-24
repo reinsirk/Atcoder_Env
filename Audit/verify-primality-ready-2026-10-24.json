@@ -1,0 +1,918 @@
+{
+  "date": "2026-10-24",
+  "status": "PASS",
+  "scope": "Miller–Rabin素数判定のPrimality Test提出準備。",
+  "problem_url": "https://judge.yosupo.jp/problem/primality_test",
+  "online_submission_performed": false,
+  "body_changed": false,
+  "main_changed": false,
+  "io_changed": false,
+  "source_hashes": {
+    "Math/prime_judge(Miller-Rabin).cpp": "a1b7255d59306e28dbab44eb1d73ca4b39bdf828f6feee9a296c5959436249a2",
+    "Verify/current/drivers/primality_main.cpp": "13f4c095d1f35e996ea75e16597fdfe6339c78dbe4028cf8d6a8d03e54f59082",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+    "Verify/current/submissions/primality.cpp": "ca4baeb68cda1e2f45151e1fc634603293d148a8136ab499354c11b2fa4192f6"
+  },
+  "problem_info": {
+    "url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/number_theory/primality_test/info.toml",
+    "sha256": "16e765394c1a6f5e9d5a1719bed206be16ff98ef656a598761600faae97330a4",
+    "text": "title = 'Primality Test'\ntimelimit = 5.0\nforum = \"https://github.com/yosupo06/library-checker-problems/issues/880\"\n\n[[tests]]\n    name = \"example.in\"\n    number = 1\n[[tests]]\n    name = \"small.cpp\"\n    number = 1\n[[tests]]\n    name = \"less_1000000000.cpp\"\n    number = 1\n[[tests]]\n    name = \"carmichael.in\"\n    number = 1\n[[tests]]\n    name = \"all_prime.cpp\"\n    number = 1\n[[tests]]\n    name = \"prod_two_prime.cpp\"\n    number = 1\n[[tests]]\n    name = \"random.cpp\"\n    number = 3\n[[tests]]\n    name = \"hack_issue996.cpp\"\n    number = 1\n[[tests]]\n    name = \"hack_issue1325.in\"\n    number = 1\n[[tests]]\n    name = \"pseudoprimes.in\"\n    number = 1\n[[tests]]\n    name = \"many_liars.cpp\"\n    number = 1\n\n[[solutions]]\n    name = 'insufficient_random_bases.cpp'\n    expect = \"WA\"\n\n[params]\n    MIN_Q = 1\n    MAX_Q = 100_000\n    MIN_N = 1\n    MAX_N = 1_000_000_000_000_000_000\n",
+    "Q_MAX": 100000,
+    "N_MAX": 1000000000000000000,
+    "time_limit_seconds": 5.0,
+    "note": "現在の公式infoはキャッシュした公式13入力の構成と一致。"
+  },
+  "driver_review": [
+    "mainはQ件のuint64_t入力、is_primeの呼び出し、Yes/Noの出力のみ。",
+    "共通FastIOを使い、先頭でSKIP_RUNTIME_CHECKSを定義。ACLへの依存なし。",
+    "照会のバッチ化/並べ替え/入力分布による切り替えなし。"
+  ],
+  "verification": {
+    "status": "PASS",
+    "fixtures": [
+      {
+        "name": "all_prime_00.in",
+        "input": "/tmp/sirkit_primality_20261022/official/all_prime_00.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/all_prime_00.in.out",
+        "official": true,
+        "input_sha256": "a71491064fc1102668e11da3379179da581f0cf3771d2201a7d7563b2f7d9da3",
+        "output_sha256": "54b56a549fb93647d23bfdd2810f2f611547045bacdd2458ed3e5c7a7fafac84"
+      },
+      {
+        "name": "carmichael_00.in",
+        "input": "/tmp/sirkit_primality_20261022/official/carmichael_00.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/carmichael_00.in.out",
+        "official": true,
+        "input_sha256": "8c1c5ca9b7298c8b755114e205283fc2c33ee5ffc02477f2b1bc458c6734cdd3",
+        "output_sha256": "99b24a411bb25ab68d9aa302818514379b8a37eeb7797d829116f9f6822e3001"
+      },
+      {
+        "name": "example_00.in",
+        "input": "/tmp/sirkit_primality_20261022/official/example_00.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/example_00.in.out",
+        "official": true,
+        "input_sha256": "005ef3508cd42f70df691ff61749f8747d594bb56bf9c1cbd6318629f192e5c7",
+        "output_sha256": "8db687b1e76ad60e42fbb4e07156900b9cb1f54a38f7d03eef7b2c18c29cf5fd"
+      },
+      {
+        "name": "hack_issue1325_00.in",
+        "input": "/tmp/sirkit_primality_20261022/official/hack_issue1325_00.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/hack_issue1325_00.in.out",
+        "official": true,
+        "input_sha256": "8b14afa394078eb5c32a718c69cb3f01516fc93e312dc77efbba034403a6f894",
+        "output_sha256": "cc05ad5f218aa8c0b891cb5bcc5a991933e0ab7baff4d7e8d933426ec867e882"
+      },
+      {
+        "name": "hack_issue996_00.in",
+        "input": "/tmp/sirkit_primality_20261022/official/hack_issue996_00.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/hack_issue996_00.in.out",
+        "official": true,
+        "input_sha256": "b00d16ab35086a14edae5dcabcea8d2229ac69966e43f4534a129e7372fa4338",
+        "output_sha256": "e17e6a6e750d8585402de5983fe0b5539318050578b7764acd5c777162c4c41f"
+      },
+      {
+        "name": "less_1000000000_00.in",
+        "input": "/tmp/sirkit_primality_20261022/official/less_1000000000_00.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/less_1000000000_00.in.out",
+        "official": true,
+        "input_sha256": "734e545c79eee16fac232d91e347e234d03964b1b5f0f635ccdccb1ad092f446",
+        "output_sha256": "ce8e5ede3249f9c0c8f4bf84080d367f166cc44f0dfe982dec9632f19fcfff2c"
+      },
+      {
+        "name": "many_liars_00.in",
+        "input": "/tmp/sirkit_primality_20261022/official/many_liars_00.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/many_liars_00.in.out",
+        "official": true,
+        "input_sha256": "b61bca67bf615f81ad5c20dc4be02185c637eb935b551255e661d272eae85f93",
+        "output_sha256": "65ef8393a161495bfef12dc6b481bacd00e7bdbede837da3cffb12da9f933dab"
+      },
+      {
+        "name": "prod_two_prime_00.in",
+        "input": "/tmp/sirkit_primality_20261022/official/prod_two_prime_00.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/prod_two_prime_00.in.out",
+        "official": true,
+        "input_sha256": "21f2a003bf58e2e3ec1794e6d976a0336096e85edf015b6a87ac747701764671",
+        "output_sha256": "65ef8393a161495bfef12dc6b481bacd00e7bdbede837da3cffb12da9f933dab"
+      },
+      {
+        "name": "pseudoprimes_00.in",
+        "input": "/tmp/sirkit_primality_20261022/official/pseudoprimes_00.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/pseudoprimes_00.in.out",
+        "official": true,
+        "input_sha256": "11429cd60bf9598a7eb7f819c425628a7c9bdc973dee2e1f7e7f5af05867e99c",
+        "output_sha256": "a084ac2028c170a9b1f838131e99c787dd3ea6c45b61009a048877bd57a15775"
+      },
+      {
+        "name": "random_00.in",
+        "input": "/tmp/sirkit_primality_20261022/official/random_00.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/random_00.in.out",
+        "official": true,
+        "input_sha256": "daa273f71ac0969c90aaa248d135ae190af7011b5c5d0e47ddeade9ba115b035",
+        "output_sha256": "ab8e4326e35940a11cf3a478faf8142aaaa0feef085ff47d9f63cbd9c4aa5867"
+      },
+      {
+        "name": "random_01.in",
+        "input": "/tmp/sirkit_primality_20261022/official/random_01.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/random_01.in.out",
+        "official": true,
+        "input_sha256": "b5fdad5d6bf55dc05a1ed4ea59721cc56e34170870e9232fe3b09179e13ee175",
+        "output_sha256": "65e10882ab243c1d8c25defe2835367196d3e5bfacd449a2ba263c61042dfdd3"
+      },
+      {
+        "name": "random_02.in",
+        "input": "/tmp/sirkit_primality_20261022/official/random_02.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/random_02.in.out",
+        "official": true,
+        "input_sha256": "72706e56da8bcc6911d28e4da7ebfc374a08105d0130a6c254df0e45130cfe21",
+        "output_sha256": "7b8ea9abef546903dba8569b0e7606c600ed05753cc8f5cf1759fd755a67a19e"
+      },
+      {
+        "name": "small_00.in",
+        "input": "/tmp/sirkit_primality_20261022/official/small_00.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/small_00.in.out",
+        "official": true,
+        "input_sha256": "9fae5079b1f004d49e3eccea3359ec4a286d10e09a5a754d06a2e936a3a38353",
+        "output_sha256": "1ced250ff60d7565ae42a304f92f215113d363f022157a2c5af866449df287a8"
+      },
+      {
+        "name": "boundaries.in",
+        "input": "/tmp/sirkit_primality_20261022/custom/boundaries.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/boundaries.in.out",
+        "official": false,
+        "input_sha256": "133f8f8c911735902dee51e1d78b1e884fa0c91cdbbb8335ca947c505a1024c5",
+        "output_sha256": "879111ee18ef9cc675df96d7cbd44c43d828600a2c37418be04e4808efdc4aa0"
+      },
+      {
+        "name": "high_primes.in",
+        "input": "/tmp/sirkit_primality_20261022/custom/high_primes.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/high_primes.in.out",
+        "official": false,
+        "input_sha256": "a7f23c9b1e66edbf3da111f739d8a84da71b631ac185044477ef79f1e2106dec",
+        "output_sha256": "54b56a549fb93647d23bfdd2810f2f611547045bacdd2458ed3e5c7a7fafac84"
+      },
+      {
+        "name": "high_random.in",
+        "input": "/tmp/sirkit_primality_20261022/custom/high_random.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/high_random.in.out",
+        "official": false,
+        "input_sha256": "46e35ea5acee9d94cd686724de0e4074dc4caa1cd16dc579c4692ca62e47a24a",
+        "output_sha256": "d3b3955cc068da4d1ea8e282051bd94882f5728a7fe34e4244816ad629f562a5"
+      },
+      {
+        "name": "tiny_repeat.in",
+        "input": "/tmp/sirkit_primality_20261022/custom/tiny_repeat.in",
+        "output": "/tmp/sirkit_primality_20261022/reference_outputs/tiny_repeat.in.out",
+        "official": false,
+        "input_sha256": "dd507aecd148441246d2de9bb7cd5908d51fa34aad14d75af3cef87cd8b4ff74",
+        "output_sha256": "24b611fdb025b19afe8210bd16f68739e035cb831f653a8faab57a8fe2cda68a"
+      }
+    ],
+    "builds": [
+      {
+        "name": "gcc_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_primality_ready_20261024/gcc_skip.cpp",
+          "-o",
+          "/tmp/sirkit_primality_ready_20261024/gcc_skip"
+        ],
+        "source_sha256": "ca4baeb68cda1e2f45151e1fc634603293d148a8136ab499354c11b2fa4192f6"
+      },
+      {
+        "name": "gcc_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_primality_ready_20261024/gcc_checked.cpp",
+          "-o",
+          "/tmp/sirkit_primality_ready_20261024/gcc_checked"
+        ],
+        "source_sha256": "967deb568aab78dfeaca70ba30f8ca7ac7efbd45d7b61a8997df6dbfd7202dd9"
+      },
+      {
+        "name": "gcc_standard",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_DISABLE_SIMD",
+          "/tmp/sirkit_primality_ready_20261024/gcc_standard.cpp",
+          "-o",
+          "/tmp/sirkit_primality_ready_20261024/gcc_standard"
+        ],
+        "source_sha256": "ca4baeb68cda1e2f45151e1fc634603293d148a8136ab499354c11b2fa4192f6"
+      },
+      {
+        "name": "clang_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_primality_ready_20261024/clang_skip.cpp",
+          "-o",
+          "/tmp/sirkit_primality_ready_20261024/clang_skip"
+        ],
+        "source_sha256": "ca4baeb68cda1e2f45151e1fc634603293d148a8136ab499354c11b2fa4192f6"
+      }
+    ],
+    "runs": [
+      {
+        "build": "gcc_skip",
+        "case": "all_prime_00.in",
+        "official": true,
+        "output_sha256": "54b56a549fb93647d23bfdd2810f2f611547045bacdd2458ed3e5c7a7fafac84"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "carmichael_00.in",
+        "official": true,
+        "output_sha256": "99b24a411bb25ab68d9aa302818514379b8a37eeb7797d829116f9f6822e3001"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "example_00.in",
+        "official": true,
+        "output_sha256": "8db687b1e76ad60e42fbb4e07156900b9cb1f54a38f7d03eef7b2c18c29cf5fd"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "hack_issue1325_00.in",
+        "official": true,
+        "output_sha256": "cc05ad5f218aa8c0b891cb5bcc5a991933e0ab7baff4d7e8d933426ec867e882"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "hack_issue996_00.in",
+        "official": true,
+        "output_sha256": "e17e6a6e750d8585402de5983fe0b5539318050578b7764acd5c777162c4c41f"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "less_1000000000_00.in",
+        "official": true,
+        "output_sha256": "ce8e5ede3249f9c0c8f4bf84080d367f166cc44f0dfe982dec9632f19fcfff2c"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "many_liars_00.in",
+        "official": true,
+        "output_sha256": "65ef8393a161495bfef12dc6b481bacd00e7bdbede837da3cffb12da9f933dab"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "prod_two_prime_00.in",
+        "official": true,
+        "output_sha256": "65ef8393a161495bfef12dc6b481bacd00e7bdbede837da3cffb12da9f933dab"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "pseudoprimes_00.in",
+        "official": true,
+        "output_sha256": "a084ac2028c170a9b1f838131e99c787dd3ea6c45b61009a048877bd57a15775"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_00.in",
+        "official": true,
+        "output_sha256": "ab8e4326e35940a11cf3a478faf8142aaaa0feef085ff47d9f63cbd9c4aa5867"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_01.in",
+        "official": true,
+        "output_sha256": "65e10882ab243c1d8c25defe2835367196d3e5bfacd449a2ba263c61042dfdd3"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_02.in",
+        "official": true,
+        "output_sha256": "7b8ea9abef546903dba8569b0e7606c600ed05753cc8f5cf1759fd755a67a19e"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "small_00.in",
+        "official": true,
+        "output_sha256": "1ced250ff60d7565ae42a304f92f215113d363f022157a2c5af866449df287a8"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "boundaries.in",
+        "official": false,
+        "output_sha256": "879111ee18ef9cc675df96d7cbd44c43d828600a2c37418be04e4808efdc4aa0"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "high_primes.in",
+        "official": false,
+        "output_sha256": "54b56a549fb93647d23bfdd2810f2f611547045bacdd2458ed3e5c7a7fafac84"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "high_random.in",
+        "official": false,
+        "output_sha256": "d3b3955cc068da4d1ea8e282051bd94882f5728a7fe34e4244816ad629f562a5"
+      },
+      {
+        "build": "gcc_skip",
+        "case": "tiny_repeat.in",
+        "official": false,
+        "output_sha256": "24b611fdb025b19afe8210bd16f68739e035cb831f653a8faab57a8fe2cda68a"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "all_prime_00.in",
+        "official": true,
+        "output_sha256": "54b56a549fb93647d23bfdd2810f2f611547045bacdd2458ed3e5c7a7fafac84"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "carmichael_00.in",
+        "official": true,
+        "output_sha256": "99b24a411bb25ab68d9aa302818514379b8a37eeb7797d829116f9f6822e3001"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "example_00.in",
+        "official": true,
+        "output_sha256": "8db687b1e76ad60e42fbb4e07156900b9cb1f54a38f7d03eef7b2c18c29cf5fd"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "hack_issue1325_00.in",
+        "official": true,
+        "output_sha256": "cc05ad5f218aa8c0b891cb5bcc5a991933e0ab7baff4d7e8d933426ec867e882"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "hack_issue996_00.in",
+        "official": true,
+        "output_sha256": "e17e6a6e750d8585402de5983fe0b5539318050578b7764acd5c777162c4c41f"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "less_1000000000_00.in",
+        "official": true,
+        "output_sha256": "ce8e5ede3249f9c0c8f4bf84080d367f166cc44f0dfe982dec9632f19fcfff2c"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "many_liars_00.in",
+        "official": true,
+        "output_sha256": "65ef8393a161495bfef12dc6b481bacd00e7bdbede837da3cffb12da9f933dab"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "prod_two_prime_00.in",
+        "official": true,
+        "output_sha256": "65ef8393a161495bfef12dc6b481bacd00e7bdbede837da3cffb12da9f933dab"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "pseudoprimes_00.in",
+        "official": true,
+        "output_sha256": "a084ac2028c170a9b1f838131e99c787dd3ea6c45b61009a048877bd57a15775"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_00.in",
+        "official": true,
+        "output_sha256": "ab8e4326e35940a11cf3a478faf8142aaaa0feef085ff47d9f63cbd9c4aa5867"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_01.in",
+        "official": true,
+        "output_sha256": "65e10882ab243c1d8c25defe2835367196d3e5bfacd449a2ba263c61042dfdd3"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_02.in",
+        "official": true,
+        "output_sha256": "7b8ea9abef546903dba8569b0e7606c600ed05753cc8f5cf1759fd755a67a19e"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "small_00.in",
+        "official": true,
+        "output_sha256": "1ced250ff60d7565ae42a304f92f215113d363f022157a2c5af866449df287a8"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "boundaries.in",
+        "official": false,
+        "output_sha256": "879111ee18ef9cc675df96d7cbd44c43d828600a2c37418be04e4808efdc4aa0"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "high_primes.in",
+        "official": false,
+        "output_sha256": "54b56a549fb93647d23bfdd2810f2f611547045bacdd2458ed3e5c7a7fafac84"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "high_random.in",
+        "official": false,
+        "output_sha256": "d3b3955cc068da4d1ea8e282051bd94882f5728a7fe34e4244816ad629f562a5"
+      },
+      {
+        "build": "gcc_checked",
+        "case": "tiny_repeat.in",
+        "official": false,
+        "output_sha256": "24b611fdb025b19afe8210bd16f68739e035cb831f653a8faab57a8fe2cda68a"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "all_prime_00.in",
+        "official": true,
+        "output_sha256": "54b56a549fb93647d23bfdd2810f2f611547045bacdd2458ed3e5c7a7fafac84"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "carmichael_00.in",
+        "official": true,
+        "output_sha256": "99b24a411bb25ab68d9aa302818514379b8a37eeb7797d829116f9f6822e3001"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "example_00.in",
+        "official": true,
+        "output_sha256": "8db687b1e76ad60e42fbb4e07156900b9cb1f54a38f7d03eef7b2c18c29cf5fd"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "hack_issue1325_00.in",
+        "official": true,
+        "output_sha256": "cc05ad5f218aa8c0b891cb5bcc5a991933e0ab7baff4d7e8d933426ec867e882"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "hack_issue996_00.in",
+        "official": true,
+        "output_sha256": "e17e6a6e750d8585402de5983fe0b5539318050578b7764acd5c777162c4c41f"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "less_1000000000_00.in",
+        "official": true,
+        "output_sha256": "ce8e5ede3249f9c0c8f4bf84080d367f166cc44f0dfe982dec9632f19fcfff2c"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "many_liars_00.in",
+        "official": true,
+        "output_sha256": "65ef8393a161495bfef12dc6b481bacd00e7bdbede837da3cffb12da9f933dab"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "prod_two_prime_00.in",
+        "official": true,
+        "output_sha256": "65ef8393a161495bfef12dc6b481bacd00e7bdbede837da3cffb12da9f933dab"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "pseudoprimes_00.in",
+        "official": true,
+        "output_sha256": "a084ac2028c170a9b1f838131e99c787dd3ea6c45b61009a048877bd57a15775"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "random_00.in",
+        "official": true,
+        "output_sha256": "ab8e4326e35940a11cf3a478faf8142aaaa0feef085ff47d9f63cbd9c4aa5867"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "random_01.in",
+        "official": true,
+        "output_sha256": "65e10882ab243c1d8c25defe2835367196d3e5bfacd449a2ba263c61042dfdd3"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "random_02.in",
+        "official": true,
+        "output_sha256": "7b8ea9abef546903dba8569b0e7606c600ed05753cc8f5cf1759fd755a67a19e"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "small_00.in",
+        "official": true,
+        "output_sha256": "1ced250ff60d7565ae42a304f92f215113d363f022157a2c5af866449df287a8"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "boundaries.in",
+        "official": false,
+        "output_sha256": "879111ee18ef9cc675df96d7cbd44c43d828600a2c37418be04e4808efdc4aa0"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "high_primes.in",
+        "official": false,
+        "output_sha256": "54b56a549fb93647d23bfdd2810f2f611547045bacdd2458ed3e5c7a7fafac84"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "high_random.in",
+        "official": false,
+        "output_sha256": "d3b3955cc068da4d1ea8e282051bd94882f5728a7fe34e4244816ad629f562a5"
+      },
+      {
+        "build": "gcc_standard",
+        "case": "tiny_repeat.in",
+        "official": false,
+        "output_sha256": "24b611fdb025b19afe8210bd16f68739e035cb831f653a8faab57a8fe2cda68a"
+      },
+      {
+        "build": "clang_skip",
+        "case": "all_prime_00.in",
+        "official": true,
+        "output_sha256": "54b56a549fb93647d23bfdd2810f2f611547045bacdd2458ed3e5c7a7fafac84"
+      },
+      {
+        "build": "clang_skip",
+        "case": "carmichael_00.in",
+        "official": true,
+        "output_sha256": "99b24a411bb25ab68d9aa302818514379b8a37eeb7797d829116f9f6822e3001"
+      },
+      {
+        "build": "clang_skip",
+        "case": "example_00.in",
+        "official": true,
+        "output_sha256": "8db687b1e76ad60e42fbb4e07156900b9cb1f54a38f7d03eef7b2c18c29cf5fd"
+      },
+      {
+        "build": "clang_skip",
+        "case": "hack_issue1325_00.in",
+        "official": true,
+        "output_sha256": "cc05ad5f218aa8c0b891cb5bcc5a991933e0ab7baff4d7e8d933426ec867e882"
+      },
+      {
+        "build": "clang_skip",
+        "case": "hack_issue996_00.in",
+        "official": true,
+        "output_sha256": "e17e6a6e750d8585402de5983fe0b5539318050578b7764acd5c777162c4c41f"
+      },
+      {
+        "build": "clang_skip",
+        "case": "less_1000000000_00.in",
+        "official": true,
+        "output_sha256": "ce8e5ede3249f9c0c8f4bf84080d367f166cc44f0dfe982dec9632f19fcfff2c"
+      },
+      {
+        "build": "clang_skip",
+        "case": "many_liars_00.in",
+        "official": true,
+        "output_sha256": "65ef8393a161495bfef12dc6b481bacd00e7bdbede837da3cffb12da9f933dab"
+      },
+      {
+        "build": "clang_skip",
+        "case": "prod_two_prime_00.in",
+        "official": true,
+        "output_sha256": "65ef8393a161495bfef12dc6b481bacd00e7bdbede837da3cffb12da9f933dab"
+      },
+      {
+        "build": "clang_skip",
+        "case": "pseudoprimes_00.in",
+        "official": true,
+        "output_sha256": "a084ac2028c170a9b1f838131e99c787dd3ea6c45b61009a048877bd57a15775"
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_00.in",
+        "official": true,
+        "output_sha256": "ab8e4326e35940a11cf3a478faf8142aaaa0feef085ff47d9f63cbd9c4aa5867"
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_01.in",
+        "official": true,
+        "output_sha256": "65e10882ab243c1d8c25defe2835367196d3e5bfacd449a2ba263c61042dfdd3"
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_02.in",
+        "official": true,
+        "output_sha256": "7b8ea9abef546903dba8569b0e7606c600ed05753cc8f5cf1759fd755a67a19e"
+      },
+      {
+        "build": "clang_skip",
+        "case": "small_00.in",
+        "official": true,
+        "output_sha256": "1ced250ff60d7565ae42a304f92f215113d363f022157a2c5af866449df287a8"
+      },
+      {
+        "build": "clang_skip",
+        "case": "boundaries.in",
+        "official": false,
+        "output_sha256": "879111ee18ef9cc675df96d7cbd44c43d828600a2c37418be04e4808efdc4aa0"
+      },
+      {
+        "build": "clang_skip",
+        "case": "high_primes.in",
+        "official": false,
+        "output_sha256": "54b56a549fb93647d23bfdd2810f2f611547045bacdd2458ed3e5c7a7fafac84"
+      },
+      {
+        "build": "clang_skip",
+        "case": "high_random.in",
+        "official": false,
+        "output_sha256": "d3b3955cc068da4d1ea8e282051bd94882f5728a7fe34e4244816ad629f562a5"
+      },
+      {
+        "build": "clang_skip",
+        "case": "tiny_repeat.in",
+        "official": false,
+        "output_sha256": "24b611fdb025b19afe8210bd16f68739e035cb831f653a8faab57a8fe2cda68a"
+      }
+    ],
+    "baseline": {
+      "all_prime_00.in": {
+        "raw": [
+          {
+            "cpu_ms": 58.833,
+            "wall_ms": 59.009276
+          },
+          {
+            "cpu_ms": 58.52900000000005,
+            "wall_ms": 58.711564
+          },
+          {
+            "cpu_ms": 58.52200000000052,
+            "wall_ms": 58.775899
+          },
+          {
+            "cpu_ms": 58.79200000000018,
+            "wall_ms": 59.055193
+          },
+          {
+            "cpu_ms": 58.83800000000031,
+            "wall_ms": 59.089808
+          },
+          {
+            "cpu_ms": 58.72099999999955,
+            "wall_ms": 58.979918
+          },
+          {
+            "cpu_ms": 58.82900000000008,
+            "wall_ms": 59.099102
+          }
+        ],
+        "median_cpu_ms": 58.79200000000018
+      },
+      "many_liars_00.in": {
+        "raw": [
+          {
+            "cpu_ms": 20.78600000000011,
+            "wall_ms": 20.978771
+          },
+          {
+            "cpu_ms": 20.916999999999852,
+            "wall_ms": 21.015643
+          },
+          {
+            "cpu_ms": 20.671000000000326,
+            "wall_ms": 20.754795
+          },
+          {
+            "cpu_ms": 21.00700000000008,
+            "wall_ms": 21.251206
+          },
+          {
+            "cpu_ms": 20.598999999999783,
+            "wall_ms": 20.669706
+          },
+          {
+            "cpu_ms": 20.884000000000096,
+            "wall_ms": 20.970467
+          },
+          {
+            "cpu_ms": 20.919999999999828,
+            "wall_ms": 21.002884
+          }
+        ],
+        "median_cpu_ms": 20.884000000000096
+      },
+      "prod_two_prime_00.in": {
+        "raw": [
+          {
+            "cpu_ms": 17.656000000000034,
+            "wall_ms": 17.736413
+          },
+          {
+            "cpu_ms": 17.65499999999978,
+            "wall_ms": 17.731305
+          },
+          {
+            "cpu_ms": 17.409000000000148,
+            "wall_ms": 17.539761
+          },
+          {
+            "cpu_ms": 17.254000000000076,
+            "wall_ms": 17.318013
+          },
+          {
+            "cpu_ms": 17.359999999999985,
+            "wall_ms": 17.438465
+          },
+          {
+            "cpu_ms": 17.34500000000011,
+            "wall_ms": 17.417555
+          },
+          {
+            "cpu_ms": 17.251000000000015,
+            "wall_ms": 17.345249
+          }
+        ],
+        "median_cpu_ms": 17.359999999999985
+      },
+      "random_00.in": {
+        "raw": [
+          {
+            "cpu_ms": 6.820999999999633,
+            "wall_ms": 6.892713
+          },
+          {
+            "cpu_ms": 6.899000000000127,
+            "wall_ms": 6.97306
+          },
+          {
+            "cpu_ms": 6.790999999999853,
+            "wall_ms": 6.866863
+          },
+          {
+            "cpu_ms": 6.8209999999998825,
+            "wall_ms": 6.905473
+          },
+          {
+            "cpu_ms": 7.1250000000001865,
+            "wall_ms": 7.237063
+          },
+          {
+            "cpu_ms": 7.194000000000061,
+            "wall_ms": 7.31317
+          },
+          {
+            "cpu_ms": 6.958999999999632,
+            "wall_ms": 7.051503
+          }
+        ],
+        "median_cpu_ms": 6.899000000000127
+      },
+      "small_00.in": {
+        "raw": [
+          {
+            "cpu_ms": 3.9289999999997107,
+            "wall_ms": 4.133863
+          },
+          {
+            "cpu_ms": 3.980000000000178,
+            "wall_ms": 4.07733
+          },
+          {
+            "cpu_ms": 3.904999999999964,
+            "wall_ms": 3.998153
+          },
+          {
+            "cpu_ms": 3.8029999999999173,
+            "wall_ms": 3.8611
+          },
+          {
+            "cpu_ms": 3.763999999999962,
+            "wall_ms": 3.815686
+          },
+          {
+            "cpu_ms": 3.713000000000466,
+            "wall_ms": 3.758393
+          },
+          {
+            "cpu_ms": 3.835999999999923,
+            "wall_ms": 3.888434
+          }
+        ],
+        "median_cpu_ms": 3.835999999999923
+      }
+    }
+  },
+  "reference": {
+    "method": "最初の12個の素数2..37を底とするMiller-Rabin。Montgomeryを使わず、unsigned __int128の積と通常剰余で計算する。製品の3/7底と算術経路を分ける。",
+    "theorem": {
+      "url": "https://arxiv.org/pdf/1509.00864",
+      "authors": [
+        "Jonathan P. Sorenson",
+        "Jonathan Webster"
+      ],
+      "theorem": "Theorem1.1 (p2)",
+      "smallest_sprp_first12": "318665857834031151167461",
+      "note": "この境界がuint64_t最大値より大きいことに基づく。参照実装の独立性は算術経路・底集合の相違であり、別の素数判定アルゴリズムという意味ではない。"
+    },
+    "selfcheck": {
+      "status": "PASS",
+      "sieve_values": 100001,
+      "known_products": 2000,
+      "build_command": [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "/tmp/sirkit_primality_20261022/reference.cpp",
+        "-o",
+        "/tmp/sirkit_primality_20261022/reference"
+      ],
+      "reference_theorem": "Sorenson/Webster(2015) Theorem1.1 https://arxiv.org/pdf/1509.00864, smallest SPRP to first12primes=318665857834031151167461>2^64"
+    },
+    "source_sha256": "7eb179b45cf6f36fca6d4bc9c48bd703805ca6631174d4cc61cc6c480220d07e",
+    "source": "#include <array>\n#include <bit>\n#include <cstdint>\n#include <iostream>\nusing U=std::uint64_t;\n__extension__ using Wide=unsigned __int128;\nbool reference_prime(U n){\n if(n<2)return false;\n constexpr std::array<U,12> primes{2,3,5,7,11,13,17,19,23,29,31,37};\n for(U p:primes){if(n%p==0)return n==p;}\n const unsigned s=std::countr_zero(n-1);const U d=(n-1)>>s;\n for(U a:primes){\n  U value=1,base=a;\n  for(U e=d;e;e>>=1){if(e&1)value=static_cast<U>(Wide(value)*base%n);base=static_cast<U>(Wide(base)*base%n);}\n  if(value==1||value==n-1)continue;\n  bool pass=false;for(unsigned j=1;j<s;++j){value=static_cast<U>(Wide(value)*value%n);if(value==n-1){pass=true;break;}}\n  if(!pass)return false;\n }\n return true;\n}\nint main(){std::ios::sync_with_stdio(false);std::cin.tie(nullptr);std::size_t q;if(!(std::cin>>q))return 0;while(q--){U n;std::cin>>n;std::cout<<(reference_prime(n)?\"Yes\":\"No\")<<'\\n';}}\n",
+    "note": "異なる底集合とMontgomeryを用いない通常剰余による参照。別の素数判定アルゴリズムという意味ではない。公式/補足の入力と参照出力は保存hashと一致。"
+  },
+  "reused_verification": {
+    "evidence": [
+      "Audit/verify-primality-2026-10-22.json",
+      "Audit/performance-primality-second-round-four-hours-2026-10-22.json"
+    ],
+    "reason": "現行本体・参照テスト・共有32bit部品・説明・使用例のhashは検証済み版と一致。",
+    "hashes": {
+      "Math/prime_judge(Miller-Rabin).cpp": "a1b7255d59306e28dbab44eb1d73ca4b39bdf828f6feee9a296c5959436249a2",
+      "Document/primality.md": "e1d411dd7dfa6bbd8afb377bd9ca4019ae5e919894fc58f08a0b583e94805be2",
+      "Verify/current/tests/primality_reference_test.cpp": "571dc1d96d70f1798bdbd79c407c1a882f3106ce5a318719bd46bb98f02a69e2",
+      "Examples/primality_example.cpp": "be5e5fcc338a39553664265355db995830a9acbfa25fe368dbc35c5b237f70f5",
+      "Math/Combination/components/primality32.inc": "3f72205be89733377b7e3221094579a637b303f8cf67df21a978899df4ffd8e8"
+    },
+    "coverage": [
+      "篩との小整数照合、uint64上域/境界、符号付き負数、指定底/独自底列と例外。",
+      "next_prime/prev_prime、無確保、Montgomery算術の独立照合、共有インクルードガード。",
+      "GCC/Clang・検査有無・標準代替・ASan/UBSanの既存記録。"
+    ]
+  },
+  "existing_optimization": [
+    "32bit域は共通の確定判定helper、64bit域はMontgomery演算と固定底の処理を使用。",
+    "GCC/Clangの128bit整数拡張が使えない場合は、標準C++の算術へ切り替える。",
+    "既存の小素数による棄却と3底ずつの処理はそのまま保持。"
+  ],
+  "baseline_conditions": {
+    "cpu": "Intel Core i9-14900K",
+    "compiler": "/usr/bin/g++ 15.2.0",
+    "flags": "C++23 -O2、SKIP_RUNTIME_CHECKS、native指定なし。実コマンドはverification.builds。",
+    "cpu_for_compile": 6,
+    "cpu_for_measure": 14,
+    "locks": [
+      "/tmp/sirkit_performance_cpu14.lock",
+      "/tmp/atcoder_full_performance_20261018/benchmark.lock"
+    ],
+    "repetitions": 7,
+    "statistic": "中央値。今回は単独の基準計測であり、改修の比較結果ではない。",
+    "metric": "固定main/共通I/Oの通常ファイル入出力、子CPU(user+sys)とwall。全回答を毎回参照と照合。",
+    "note": "オンライン時間を予測するものではない。以後の候補は同条件でcontrolと交互に比較する。"
+  },
+  "source_snapshots": {
+    "Math/prime_judge(Miller-Rabin).cpp": "// SPDX-License-Identifier: CC0-1.0\n\n#include <bit>\n#include <cstdint>\n#include <initializer_list>\n#include <limits>\n#include <optional>\n#include <utility>\n#include <type_traits>\n\n#ifndef SIRKIT_PRIMALITY32_DEFINED\n#define SIRKIT_PRIMALITY32_DEFINED\nnamespace reinsirk::detail {\n// uint32_t全域の素数判定。Miller-Rabinの底2,7,61を使う。\ninline bool is_prime_u32(std::uint32_t n) noexcept\n{\n    // 競技プログラミングでよく使う素数は、累乗計算を省く。\n    switch (n)\n    {\n    case 167772161u:\n    case 469762049u:\n    case 754974721u:\n    case 998244353u:\n    case 1000000007u:\n    case 1000000009u:\n    case 1004535809u:\n    case 1224736769u:\n    case 2013265921u:\n        return true;\n    default:\n        break;\n    }\n    if (n < 2)\n        return false;\n    if (n % 2u == 0) return n == 2u;\n    if (n % 3u == 0) return n == 3u;\n    if (n % 5u == 0) return n == 5u;\n    if (n % 7u == 0) return n == 7u;\n    if (n % 11u == 0) return n == 11u;\n    std::uint32_t odd = n - 1;\n    unsigned shifts = 0;\n    while ((odd & 1u) == 0)\n    {\n        odd >>= 1;\n        ++shifts;\n    }\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n    // R=2^64。n<2^32なので、累乗中の剰余は2n未満のまま保持できる。\n    using u64 = std::uint64_t;\n    using u128 = __uint128_t; // GCC/Clangの128ビット整数拡張。\n    u64 inverse = n;\n    for (int i = 0; i < 5; ++i) inverse *= 2u - u64(n) * inverse;\n    const u64 negative_inverse = u64{0} - inverse;\n    const auto multiply = [n, negative_inverse](u64 a, u64 b) {\n        const u128 product = static_cast<u128>(a) * b;\n        const u128 correction = static_cast<u128>(static_cast<u64>(product) * negative_inverse) * n;\n        return static_cast<u64>((product + correction) >> 64);\n    };\n    const u64 one = (u64{0} - n) % n;\n    const u64 r_squared = one * one % n;\n    for (std::uint32_t base : {2u, 7u, 61u}) {\n        if (base % n == 0) continue;\n        u64 value = one, power = multiply(base % n, r_squared);\n        for (std::uint32_t exponent = odd; exponent; exponent >>= 1) {\n            if (exponent & 1u) value = multiply(value, power);\n            power = multiply(power, power);\n        }\n        if (value >= n) value -= n;\n        if (value == one || value == n - one) continue;\n        unsigned step = 1;\n        for (; step < shifts; ++step) {\n            value = multiply(value, value);\n            if (value >= n) value -= n;\n            if (value == n - one) break;\n        }\n        if (step == shifts) return false;\n    }\n#else\n    // R=2^32のMontgomery乗算。33ビットの還元結果もuint64_tで扱う。\n    std::uint32_t inverse = n;\n    for (int i = 0; i < 5; ++i)\n        inverse *= 2u - n * inverse;\n    const std::uint32_t negative_inverse = 0u - inverse;\n    const auto multiply = [n, negative_inverse](std::uint32_t a, std::uint32_t b)\n    {\n        const std::uint64_t product = static_cast<std::uint64_t>(a) * b;\n        const std::uint32_t factor = static_cast<std::uint32_t>(product) * negative_inverse;\n        const std::uint64_t correction = static_cast<std::uint64_t>(factor) * n;\n        std::uint64_t result = (product >> 32) + (correction >> 32) +\n                               (static_cast<std::uint32_t>(product) != 0);\n        if (result >= n)\n            result -= n;\n        return static_cast<std::uint32_t>(result);\n    };\n    const auto one = static_cast<std::uint32_t>((std::uint64_t{1} << 32) % n);\n    const auto r_squared = static_cast<std::uint32_t>(static_cast<std::uint64_t>(one) * one % n);\n    for (std::uint32_t base : {2u, 7u, 61u})\n    {\n        if (base % n == 0)\n            continue;\n        std::uint32_t value = one, power = multiply(base % n, r_squared);\n        for (std::uint32_t exponent = odd; ;)\n        {\n            if (exponent & 1u)\n                value = multiply(value, power);\n            exponent >>= 1;\n            if (exponent == 0) break;\n            power = multiply(power, power);\n        }\n        if (value == one || value == n - one)\n            continue;\n        unsigned step = 1;\n        for (; step < shifts; ++step)\n        {\n            value = multiply(value, value);\n            if (value == n - one)\n                break;\n        }\n        if (step == shifts)\n            return false;\n    }\n#endif\n    return true;\n}\n} // namespace reinsirk::detail\n#endif\n\n// C++20以降。64ビット整数用の内部演算。状態は判定ごとに持つ。\n#ifndef SIRKIT_MILLER_RABIN64_DEFINED\n#define SIRKIT_MILLER_RABIN64_DEFINED\nnamespace reinsirk::detail {\n// member begin/endと配列だけを判定し、ADL専用の列は保守的にfalseとする。\ntemplate<class Bases>\ninline constexpr bool miller_rabin_bases_nothrow = [] {\n    if constexpr (requires(const Bases& bases) { bases.begin(); bases.end(); }) {\n        using Begin = decltype(std::declval<const Bases&>().begin());\n        using End = decltype(std::declval<const Bases&>().end());\n        using Iterator = std::decay_t<Begin>;\n        using Sentinel = std::decay_t<End>;\n        if constexpr (requires(Iterator& it, Sentinel& end) { ++it; *it; static_cast<bool>(it != end); }) {\n            return noexcept(std::declval<const Bases&>().begin()) &&\n                   noexcept(std::declval<const Bases&>().end()) &&\n                   std::is_nothrow_constructible_v<Iterator, Begin> &&\n                   std::is_nothrow_constructible_v<Sentinel, End> &&\n                   noexcept(++std::declval<Iterator&>()) &&\n                   noexcept(*std::declval<Iterator&>()) &&\n                   noexcept(static_cast<bool>(std::declval<Iterator&>() != std::declval<Sentinel&>())) &&\n                   std::is_nothrow_destructible_v<Iterator> && std::is_nothrow_destructible_v<Sentinel>;\n        } else return false;\n    } else return std::is_array_v<Bases>;\n}();\n\ntemplate <bool Relaxed>\nclass MillerRabin64\n{\n    using u64 = std::uint64_t;\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n    using u128 = __uint128_t; // GCC/Clangの拡張。未対応環境では下の標準実装を使う。\n#else\n    struct Wide\n    {\n        u64 low, high;\n    };\n#endif\n    const u64 modulus_;\n    u64 negative_inverse_, one_, r_squared_;\n    u64 odd_;\n    unsigned shifts_ = 0;\n\n#if !((defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC))\n    // 128ビット整数のない環境では32ビットずつに分けて積を得る。\n    static Wide product(u64 a, u64 b) noexcept\n    {\n        const u64 a0 = static_cast<std::uint32_t>(a), a1 = a >> 32;\n        const u64 b0 = static_cast<std::uint32_t>(b), b1 = b >> 32;\n        const u64 low = a0 * b0;\n        const u64 middle = a1 * b0 + (low >> 32);\n        const u64 upper_middle = a0 * b1 + static_cast<std::uint32_t>(middle);\n        return {(upper_middle << 32) | static_cast<std::uint32_t>(low),\n                a1 * b1 + (middle >> 32) + (upper_middle >> 32)};\n    }\n#endif\n\n    // 通常はa,b<modulus_。Relaxedではmodulus_<2^62、a,b<2*modulus_。\n    u64 multiply(u64 a, u64 b) const noexcept\n    {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const u128 value = static_cast<u128>(a) * b;\n        const u128 correction = static_cast<u128>(static_cast<u64>(value) * negative_inverse_) * modulus_;\n        const u128 sum = value + correction;\n        const u64 result = static_cast<u64>(sum >> 64);\n        if constexpr (Relaxed)\n            return result;\n        else\n        {\n            if (sum < value || result >= modulus_)\n                return result - modulus_;\n            return result;\n        }\n#else\n        const auto value = product(a, b);\n        const auto correction = product(value.low * negative_inverse_, modulus_);\n        const u64 upper = value.high + correction.high;\n        const u64 result = upper + (value.low != 0);\n        if constexpr (Relaxed)\n            return result; // 2*modulus_未満のまま保持し、累乗中の条件分岐を省く。\n        else\n        {\n            // 129ビット目の桁上がりがある場合も、減算後はmodulus_未満。\n            if (upper < value.high || result < upper || result >= modulus_)\n                return result - modulus_;\n            return result;\n        }\n#endif\n    }\n\n    u64 power(u64 base, u64 exponent) const noexcept {\n        u64 result = one_;\n        for (;;) {\n            if (exponent & 1u) result = multiply(result, base);\n            exponent >>= 1;\n            if (!exponent) return result;\n            base = multiply(base, base);\n        }\n    }\n\n    u64 normalize(u64 value) const noexcept\n    {\n        if constexpr (Relaxed)\n            return value >= modulus_ ? value - modulus_ : value;\n        else\n            return value;\n    }\n\npublic:\n    // 内部専用。奇数n>=3についてMontgomery定数とn-1の分解を準備する。\n    explicit MillerRabin64(u64 n) noexcept : modulus_(n), odd_(n - 1)\n    {\n        u64 inverse = n;\n        for (int i = 0; i < 5; ++i)\n            inverse *= 2u - n * inverse;\n        negative_inverse_ = 0u - inverse;\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        r_squared_ = (u128{0} - n) % n; // 2^128 mod n。\n        one_ = multiply(1, r_squared_);\n#else\n        one_ = (u64{0} - n) % n; // 2^64 mod n。\n        // 16Rを4回平方するとR^2になる（R=2^64）。\n        r_squared_ = one_;\n        for (int i = 0; i < 4; ++i)\n        {\n            const u64 gap = n - r_squared_;\n            r_squared_ = r_squared_ >= gap ? r_squared_ - gap : r_squared_ + r_squared_;\n        }\n        for (int i = 0; i < 4; ++i)\n            r_squared_ = multiply(r_squared_, r_squared_);\n#endif\n        shifts_ = std::countr_zero(odd_);\n        odd_ >>= shifts_;\n    }\n\n    // 指定した底の強擬素数検査を全て通ればtrue。底は整数型とする。\n    template <class Bases>\n    bool test(const Bases &bases) const noexcept(miller_rabin_bases_nothrow<Bases>)\n    {\n        for (auto base : bases)\n        {\n            using Base = decltype(base);\n            static_assert(std::is_integral_v<Base> && sizeof(Base) <= sizeof(u64),\n                          \"MillerRabin: bases must be integers of at most 64 bits\");\n            u64 reduced;\n            if constexpr (std::is_signed_v<Base>)\n            {\n                if (base < 0)\n                {\n                    const u64 magnitude = static_cast<u64>(-(base + 1)) + 1;\n                    const u64 remainder = magnitude % modulus_;\n                    reduced = remainder ? modulus_ - remainder : 0;\n                }\n                else\n                    reduced = static_cast<u64>(base) % modulus_;\n            }\n            else\n                reduced = static_cast<u64>(base) % modulus_;\n            if (reduced == 0)\n                continue;\n            u64 value = normalize(power(multiply(reduced, r_squared_), odd_));\n            if (value == one_ || value == modulus_ - one_)\n                continue;\n            unsigned step = 1;\n            for (; step < shifts_; ++step)\n            {\n                value = normalize(multiply(value, value));\n                if (value == modulus_ - one_)\n                    break;\n            }\n            if (step == shifts_)\n                return false;\n        }\n        return true;\n    }\n    // 固定7底用。n>=4'759'123'141で、底2の通過後に残りを3個ずつ進める。\n    bool test_deterministic() const noexcept {\n        if (!test(std::initializer_list<u64>{2})) return false;\n        return test_triple(325, 9375, 28178) && test_triple(450775, 9780504, 1795265022);\n    }\nprivate:\n    bool test_triple(u64 a, u64 b, u64 c) const noexcept {\n        a = multiply(a, r_squared_); b = multiply(b, r_squared_); c = multiply(c, r_squared_);\n        u64 x = one_, y = one_, z = one_;\n        for (u64 exponent = odd_;;) {\n            if (exponent & 1u) {\n                x = multiply(x, a); y = multiply(y, b); z = multiply(z, c);\n            }\n            exponent >>= 1;\n            if (!exponent) break;\n            a = multiply(a, a); b = multiply(b, b); c = multiply(c, c);\n        }\n        x = normalize(x); y = normalize(y); z = normalize(z);\n        bool pass_a = x == one_ || x == modulus_ - one_;\n        bool pass_b = y == one_ || y == modulus_ - one_;\n        bool pass_c = z == one_ || z == modulus_ - one_;\n        // 一度通った底の結果は、ほかの底の平方を続けても保持する。\n        for (unsigned step = 1; step < shifts_ && !(pass_a && pass_b && pass_c); ++step) {\n            x = normalize(multiply(x, x)); y = normalize(multiply(y, y)); z = normalize(multiply(z, z));\n            pass_a |= x == modulus_ - one_;\n            pass_b |= y == modulus_ - one_;\n            pass_c |= z == modulus_ - one_;\n        }\n        return pass_a && pass_b && pass_c;\n    }\n\n};\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_MILLER_RABIN_DEFINED\n#define SIRKIT_MILLER_RABIN_DEFINED\n// MillerRabin(n, bases): 指定した底の強擬素数検査を通ればtrue。底の選択により合成数も通る。\n// n<2はfalse。底はnで剰余を取り、0なら省く。奇数n>=3で空の底列ならtrue。\n// k個の底にO(k log n)回の剰余乗算、追加領域O(1)。独自の底列の例外は伝える。\ntemplate <class Integer, class Bases>\ninline bool MillerRabin(Integer n, const Bases &bases) noexcept(reinsirk::detail::miller_rabin_bases_nothrow<Bases>)\n{\n    static_assert(std::is_integral_v<Integer> && sizeof(Integer) <= sizeof(std::uint64_t),\n                  \"MillerRabin: n must be an integer of at most 64 bits\");\n    if constexpr (std::is_signed_v<Integer>)\n        if (n < 0)\n            return false;\n    const auto value = static_cast<std::uint64_t>(n);\n    if (value < 2)\n        return false;\n    if ((value & 1u) == 0)\n        return value == 2;\n    if (value < (std::uint64_t{1} << 62))\n        return reinsirk::detail::MillerRabin64<true>(value).test(bases);\n    return reinsirk::detail::MillerRabin64<false>(value).test(bases);\n}\n\n// MillerRabin(n, {2, 7, 61})のような底の直接指定に対応する。\ntemplate <class Integer>\ninline bool MillerRabin(Integer n, std::initializer_list<std::uint64_t> bases) noexcept\n{\n    return MillerRabin<Integer, std::initializer_list<std::uint64_t>>(n, bases);\n}\n#endif\n\n#ifndef SIRKIT_PRIMALITY_FILTER_DEFINED\n#define SIRKIT_PRIMALITY_FILTER_DEFINED\nnamespace reinsirk::detail {\n// 105の各剰余が3・5・7のいずれでも割り切れなければ、そのbitを1にする。\ninline constexpr std::uint64_t primality_coprime_105[2] = {\n    0x6c30da65a4cb2916ULL, 0x000001a2534c9699ULL};\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_IS_PRIME_DEFINED\n#define SIRKIT_IS_PRIME_DEFINED\n// is_prime(n): 符号付きの負数はfalse、非負整数はuint64_t全域で素数かを確定する。\n// 32ビット以下は共通判定、4'759'123'141未満は3個、それ以上は7個の底。O(log n)回の剰余乗算、動的確保なし。\ntemplate <class Integer>\ninline bool is_prime(Integer n) noexcept\n{\n    static_assert(std::is_integral_v<Integer> && sizeof(Integer) <= sizeof(std::uint64_t),\n                  \"is_prime: n must be an integer of at most 64 bits\");\n    if constexpr (std::is_signed_v<Integer>)\n        if (n < 0)\n            return false;\n    const auto value = static_cast<std::uint64_t>(n);\n    if (value < 2)\n        return false;\n    if (value <= std::numeric_limits<std::uint32_t>::max())\n        return reinsirk::detail::is_prime_u32(static_cast<std::uint32_t>(value));\n    if ((value & 1u) == 0) return false;\n    // 32bitを超える値は小素数3・5・7をまとめて除外する。\n    const auto residue = value % 105u;\n    if (((reinsirk::detail::primality_coprime_105[residue >> 6] >> (residue & 63)) & 1u) == 0 ||\n        value % 11u == 0 || value % 13u == 0 || value % 17u == 0)\n        return false;\n    if (value < std::uint64_t{4'759'123'141})\n        return MillerRabin(value, {2, 7, 61});\n    if (value < (std::uint64_t{1} << 62))\n        return reinsirk::detail::MillerRabin64<true>(value).test_deterministic();\n    return reinsirk::detail::MillerRabin64<false>(value).test_deterministic();\n}\n#endif\n\n#ifndef SIRKIT_NEXT_PREV_PRIME_DEFINED\n#define SIRKIT_NEXT_PREV_PRIME_DEFINED\n// next_prime(n): n以上で最小の素数をoptional<uint64_t>で返す。負数は2、上端で存在しなければnullopt。\n// prev_prime(n): n以下で最大の素数。同じ戻り値型で、n<2はnullopt。入力は64bit以下の整数。\n// C候補の探索にO(C log(max(n,2)))回の剰余乗算、追加領域O(1)。動的確保なし。\ntemplate<class Integer>\ninline std::optional<std::uint64_t> next_prime(Integer n) noexcept {\n    static_assert(std::is_integral_v<Integer> && sizeof(Integer) <= sizeof(std::uint64_t),\n                  \"next_prime: n must be an integer of at most 64 bits\");\n    if constexpr (std::is_signed_v<Integer>) if (n <= 2) return std::uint64_t{2};\n    auto value = static_cast<std::uint64_t>(n);\n    if (value <= 2) return std::uint64_t{2};\n    if ((value & 1u) == 0) ++value;\n    for (;;) {\n        if (is_prime(value)) return value;\n        if (value > std::numeric_limits<std::uint64_t>::max() - 2) return std::nullopt;\n        value += 2;\n    }\n}\n\ntemplate<class Integer>\ninline std::optional<std::uint64_t> prev_prime(Integer n) noexcept {\n    static_assert(std::is_integral_v<Integer> && sizeof(Integer) <= sizeof(std::uint64_t),\n                  \"prev_prime: n must be an integer of at most 64 bits\");\n    if constexpr (std::is_signed_v<Integer>) if (n < 2) return std::nullopt;\n    auto value = static_cast<std::uint64_t>(n);\n    if (value < 2) return std::nullopt;\n    if (value == 2) return std::uint64_t{2};\n    if ((value & 1u) == 0) --value;\n    for (; value >= 3; value -= 2) if (is_prime(value)) return value;\n    return std::uint64_t{2};\n}\n#endif\n",
+    "Verify/current/drivers/primality_main.cpp": "// SPDX-License-Identifier: CC0-1.0\n#include \"Verify/current/common/fast_io.hpp\"\nint main() {\n    int q{};verify_in>>q;while(q--) { std::uint64_t n{};verify_in>>n;verify_out<<(is_prime(n)?\"Yes\":\"No\")<<'\\n'; }\n}\n",
+    "Verify/current/common/fast_io.hpp": "// SPDX-License-Identifier: CC0-1.0\n#include <algorithm>\n#include <array>\n#include <charconv>\n#include <cstddef>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#include <cstring>\n#include <limits>\n#include <stdexcept>\n#include <string>\n#include <string_view>\n#include <type_traits>\n#include <vector>\n\n#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED\n#define SIRKIT_VERIFY_FAST_IO_DEFINED\n\n// VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。\n// >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。\n// >> char/string: 空白を飛ばし、1文字／空白までの文字列を読む。\n// >> 浮動小数点: 十進文字列を変換する。通常のCロケールで使う。\n// bool / !: 直前までの読み取りが成功しているか／失敗したかを返す。\nclass VerifyInput {\n    static constexpr std::size_t buffer_size = 1 << 17;\n    std::FILE* file_;\n    std::array<unsigned char, buffer_size> buffer_;\n    std::size_t position_ = 0, size_ = 0;\n    bool good_ = true;\n\n    int peek() {\n        if (position_ == size_) {\n            size_ = std::fread(buffer_.data(), 1, buffer_.size(), file_);\n            position_ = 0;\n            if (size_ == 0) return EOF;\n        }\n        return buffer_[position_];\n    }\n\n    int skip_space() {\n        int c;\n        while ((c = peek()) != EOF && c <= ' ') ++position_;\n        if (c == EOF) good_ = false;\n        return c;\n    }\n\npublic:\n    explicit VerifyInput(std::FILE* file = stdin) : file_(file) {}\n    VerifyInput(const VerifyInput&) = delete;\n    VerifyInput& operator=(const VerifyInput&) = delete;\n\n    explicit operator bool() const noexcept { return good_; }\n    bool operator!() const noexcept { return !good_; }\n\n    template<class T>\n        requires (std::is_integral_v<T> && sizeof(T) <= sizeof(std::uint64_t)\n                  && !std::is_same_v<T, char>)\n    VerifyInput& operator>>(T& result) {\n        if (!good_) return *this;\n        int c = skip_space();\n        if (c == EOF) return *this;\n        bool negative = false;\n        if (c == '-' || c == '+') {\n            negative = c == '-';\n            ++position_;\n            c = peek();\n        }\n        if (c == EOF) {\n            good_ = false;\n            return *this;\n        }\n#ifndef SKIP_RUNTIME_CHECKS\n        if (c < '0' || c > '9') {\n            good_ = false;\n            return *this;\n        }\n        // 先頭の0を除けば、20桁以下の末尾直前の値はuint64_tに収まる。\n        while (c == '0') {\n            ++position_;\n            c = peek();\n        }\n        std::uint64_t previous = 0;\n        unsigned last_digit = 0;\n        std::size_t digits = 0;\n#endif\n        std::uint64_t value = 0;\n        while (c >= '0' && c <= '9') {\n#ifndef SKIP_RUNTIME_CHECKS\n            previous = value;\n            last_digit = static_cast<unsigned>(c - '0');\n            if (digits <= 20) ++digits;\n#endif\n            value = value * 10 + static_cast<unsigned>(c - '0');\n            ++position_;\n            c = peek();\n        }\n#ifndef SKIP_RUNTIME_CHECKS\n        constexpr auto maximum = std::numeric_limits<std::uint64_t>::max();\n        if ((c != EOF && c > ' ') || digits > 20\n            || (digits == 20 && (previous > maximum / 10\n                || (previous == maximum / 10 && last_digit > maximum % 10)))) {\n            good_ = false;\n            return *this;\n        }\n        std::uint64_t limit = static_cast<std::uint64_t>(std::numeric_limits<T>::max());\n        if constexpr (std::is_signed_v<T>) limit += negative;\n        else if (negative && value != 0) good_ = false;\n        if (value > limit) good_ = false;\n        if (!good_) return *this;\n#endif\n        if constexpr (std::is_signed_v<T>) {\n            constexpr std::uint64_t minimum_magnitude =\n                static_cast<std::uint64_t>(std::numeric_limits<T>::max()) + 1;\n            // -(最小値)は評価せず、絶対値が最大値+1のときだけ最小値を使う。\n            result = negative\n                ? (value == minimum_magnitude ? std::numeric_limits<T>::min()\n                                  : static_cast<T>(-static_cast<T>(value)))\n                : static_cast<T>(value);\n        } else result = static_cast<T>(value);\n        return *this;\n    }\n\n    VerifyInput& operator>>(char& result) {\n        if (!good_) return *this;\n        const int c = skip_space();\n        if (c != EOF) {\n            result = static_cast<char>(c);\n            ++position_;\n        }\n        return *this;\n    }\n\n    VerifyInput& operator>>(std::string& result) {\n        if (!good_) return *this;\n        int c = skip_space();\n        if (c == EOF) return *this;\n        result.clear();\n        do {\n            result.push_back(static_cast<char>(c));\n            ++position_;\n            c = peek();\n        } while (c != EOF && c > ' ');\n        return *this;\n    }\n\n    template<class T> requires std::is_floating_point_v<T>\n    VerifyInput& operator>>(T& result) {\n        std::string token;\n        *this >> token;\n        if (!good_) return *this;\n#ifndef SKIP_RUNTIME_CHECKS\n        char* end = nullptr;\n        const long double value = std::strtold(token.c_str(), &end);\n        if (end != token.c_str() + token.size()) good_ = false;\n        else result = static_cast<T>(value);\n#else\n        result = static_cast<T>(std::strtold(token.c_str(), nullptr));\n#endif\n        return *this;\n    }\n};\n\n// VerifyOutput(file=stdout): 非所有のFILEへ書く。破棄時にflushし、FILEは閉じない。\n// << 整数/char/文字列/浮動小数点: 値を出力する。整数は64bit以下に対応する。\n// fixed(digits): 浮動小数点を小数点以下digits桁で出力する（digits>=0）。\n// flush(): バッファの内容をFILEへ渡す。bool / !で書き込み失敗を確認できる。\nclass VerifyOutput {\n    static constexpr std::size_t buffer_size = 1 << 17;\n    std::FILE* file_;\n    std::array<char, buffer_size> buffer_;\n    std::size_t size_ = 0;\n    int precision_ = 6;\n    bool fixed_ = false, good_ = true;\n\n    void write(std::string_view text) {\n        while (!text.empty() && good_) {\n            if (size_ == buffer_.size()) flush();\n            const auto count = std::min(text.size(), buffer_.size() - size_);\n            std::memcpy(buffer_.data() + size_, text.data(), count);\n            size_ += count;\n            text.remove_prefix(count);\n        }\n    }\n\npublic:\n    explicit VerifyOutput(std::FILE* file = stdout) : file_(file) {}\n    VerifyOutput(const VerifyOutput&) = delete;\n    VerifyOutput& operator=(const VerifyOutput&) = delete;\n    ~VerifyOutput() { flush(); }\n\n    explicit operator bool() const noexcept { return good_; }\n    bool operator!() const noexcept { return !good_; }\n\n    VerifyOutput& fixed(int digits) {\n        if (digits < 0) throw std::invalid_argument(\"negative output precision\");\n        fixed_ = true;\n        precision_ = digits;\n        return *this;\n    }\n\n    void flush() noexcept {\n        std::size_t written = 0;\n        while (written < size_ && good_) {\n            const auto count = std::fwrite(buffer_.data() + written, 1, size_ - written, file_);\n            if (count == 0) good_ = false;\n            written += count;\n        }\n        size_ = 0;\n    }\n\n    template<class T>\n        requires (std::is_integral_v<T> && sizeof(T) <= sizeof(std::uint64_t)\n                  && !std::is_same_v<T, char>)\n    VerifyOutput& operator<<(T value) {\n        if constexpr (std::is_same_v<T, bool>) return *this << static_cast<char>('0' + value);\n        else {\n            char digits[std::numeric_limits<std::uint64_t>::digits10 + 3];\n            const auto end = std::to_chars(digits, digits + sizeof(digits), value).ptr;\n            write(std::string_view(digits, static_cast<std::size_t>(end - digits)));\n            return *this;\n        }\n    }\n\n    VerifyOutput& operator<<(char value) {\n        if (size_ == buffer_.size()) flush();\n        if (good_) buffer_[size_++] = value;\n        return *this;\n    }\n\n    VerifyOutput& operator<<(std::string_view value) { write(value); return *this; }\n    VerifyOutput& operator<<(const std::string& value) { write(value); return *this; }\n    VerifyOutput& operator<<(const char* value) { write(value); return *this; }\n\n    template<class T> requires std::is_floating_point_v<T>\n    VerifyOutput& operator<<(T value) {\n        char local[128];\n        const char* format = fixed_ ? \"%.*Lf\" : \"%.*Lg\";\n        const int count = std::snprintf(local, sizeof(local), format, precision_,\n                                        static_cast<long double>(value));\n        if (count < 0) good_ = false;\n        else if (static_cast<std::size_t>(count) < sizeof(local))\n            write(std::string_view(local, static_cast<std::size_t>(count)));\n        else {\n            std::vector<char> text(static_cast<std::size_t>(count) + 1);\n            std::snprintf(text.data(), text.size(), format, precision_, static_cast<long double>(value));\n            write(std::string_view(text.data(), static_cast<std::size_t>(count)));\n        }\n        return *this;\n    }\n};\n\ninline VerifyInput verify_in;\ninline VerifyOutput verify_out;\n#endif\n",
+    "Verify/current/submissions/primality.cpp": "#define SKIP_RUNTIME_CHECKS\n// Verify: https://judge.yosupo.jp/problem/primality_test\n\n// Library: Math/prime_judge(Miller-Rabin).cpp\n// SPDX-License-Identifier: CC0-1.0\n\n#include <bit>\n#include <cstdint>\n#include <initializer_list>\n#include <limits>\n#include <optional>\n#include <utility>\n#include <type_traits>\n\n#ifndef SIRKIT_PRIMALITY32_DEFINED\n#define SIRKIT_PRIMALITY32_DEFINED\nnamespace reinsirk::detail {\n// uint32_t全域の素数判定。Miller-Rabinの底2,7,61を使う。\ninline bool is_prime_u32(std::uint32_t n) noexcept\n{\n    // 競技プログラミングでよく使う素数は、累乗計算を省く。\n    switch (n)\n    {\n    case 167772161u:\n    case 469762049u:\n    case 754974721u:\n    case 998244353u:\n    case 1000000007u:\n    case 1000000009u:\n    case 1004535809u:\n    case 1224736769u:\n    case 2013265921u:\n        return true;\n    default:\n        break;\n    }\n    if (n < 2)\n        return false;\n    if (n % 2u == 0) return n == 2u;\n    if (n % 3u == 0) return n == 3u;\n    if (n % 5u == 0) return n == 5u;\n    if (n % 7u == 0) return n == 7u;\n    if (n % 11u == 0) return n == 11u;\n    std::uint32_t odd = n - 1;\n    unsigned shifts = 0;\n    while ((odd & 1u) == 0)\n    {\n        odd >>= 1;\n        ++shifts;\n    }\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n    // R=2^64。n<2^32なので、累乗中の剰余は2n未満のまま保持できる。\n    using u64 = std::uint64_t;\n    using u128 = __uint128_t; // GCC/Clangの128ビット整数拡張。\n    u64 inverse = n;\n    for (int i = 0; i < 5; ++i) inverse *= 2u - u64(n) * inverse;\n    const u64 negative_inverse = u64{0} - inverse;\n    const auto multiply = [n, negative_inverse](u64 a, u64 b) {\n        const u128 product = static_cast<u128>(a) * b;\n        const u128 correction = static_cast<u128>(static_cast<u64>(product) * negative_inverse) * n;\n        return static_cast<u64>((product + correction) >> 64);\n    };\n    const u64 one = (u64{0} - n) % n;\n    const u64 r_squared = one * one % n;\n    for (std::uint32_t base : {2u, 7u, 61u}) {\n        if (base % n == 0) continue;\n        u64 value = one, power = multiply(base % n, r_squared);\n        for (std::uint32_t exponent = odd; exponent; exponent >>= 1) {\n            if (exponent & 1u) value = multiply(value, power);\n            power = multiply(power, power);\n        }\n        if (value >= n) value -= n;\n        if (value == one || value == n - one) continue;\n        unsigned step = 1;\n        for (; step < shifts; ++step) {\n            value = multiply(value, value);\n            if (value >= n) value -= n;\n            if (value == n - one) break;\n        }\n        if (step == shifts) return false;\n    }\n#else\n    // R=2^32のMontgomery乗算。33ビットの還元結果もuint64_tで扱う。\n    std::uint32_t inverse = n;\n    for (int i = 0; i < 5; ++i)\n        inverse *= 2u - n * inverse;\n    const std::uint32_t negative_inverse = 0u - inverse;\n    const auto multiply = [n, negative_inverse](std::uint32_t a, std::uint32_t b)\n    {\n        const std::uint64_t product = static_cast<std::uint64_t>(a) * b;\n        const std::uint32_t factor = static_cast<std::uint32_t>(product) * negative_inverse;\n        const std::uint64_t correction = static_cast<std::uint64_t>(factor) * n;\n        std::uint64_t result = (product >> 32) + (correction >> 32) +\n                               (static_cast<std::uint32_t>(product) != 0);\n        if (result >= n)\n            result -= n;\n        return static_cast<std::uint32_t>(result);\n    };\n    const auto one = static_cast<std::uint32_t>((std::uint64_t{1} << 32) % n);\n    const auto r_squared = static_cast<std::uint32_t>(static_cast<std::uint64_t>(one) * one % n);\n    for (std::uint32_t base : {2u, 7u, 61u})\n    {\n        if (base % n == 0)\n            continue;\n        std::uint32_t value = one, power = multiply(base % n, r_squared);\n        for (std::uint32_t exponent = odd; ;)\n        {\n            if (exponent & 1u)\n                value = multiply(value, power);\n            exponent >>= 1;\n            if (exponent == 0) break;\n            power = multiply(power, power);\n        }\n        if (value == one || value == n - one)\n            continue;\n        unsigned step = 1;\n        for (; step < shifts; ++step)\n        {\n            value = multiply(value, value);\n            if (value == n - one)\n                break;\n        }\n        if (step == shifts)\n            return false;\n    }\n#endif\n    return true;\n}\n} // namespace reinsirk::detail\n#endif\n\n// C++20以降。64ビット整数用の内部演算。状態は判定ごとに持つ。\n#ifndef SIRKIT_MILLER_RABIN64_DEFINED\n#define SIRKIT_MILLER_RABIN64_DEFINED\nnamespace reinsirk::detail {\n// member begin/endと配列だけを判定し、ADL専用の列は保守的にfalseとする。\ntemplate<class Bases>\ninline constexpr bool miller_rabin_bases_nothrow = [] {\n    if constexpr (requires(const Bases& bases) { bases.begin(); bases.end(); }) {\n        using Begin = decltype(std::declval<const Bases&>().begin());\n        using End = decltype(std::declval<const Bases&>().end());\n        using Iterator = std::decay_t<Begin>;\n        using Sentinel = std::decay_t<End>;\n        if constexpr (requires(Iterator& it, Sentinel& end) { ++it; *it; static_cast<bool>(it != end); }) {\n            return noexcept(std::declval<const Bases&>().begin()) &&\n                   noexcept(std::declval<const Bases&>().end()) &&\n                   std::is_nothrow_constructible_v<Iterator, Begin> &&\n                   std::is_nothrow_constructible_v<Sentinel, End> &&\n                   noexcept(++std::declval<Iterator&>()) &&\n                   noexcept(*std::declval<Iterator&>()) &&\n                   noexcept(static_cast<bool>(std::declval<Iterator&>() != std::declval<Sentinel&>())) &&\n                   std::is_nothrow_destructible_v<Iterator> && std::is_nothrow_destructible_v<Sentinel>;\n        } else return false;\n    } else return std::is_array_v<Bases>;\n}();\n\ntemplate <bool Relaxed>\nclass MillerRabin64\n{\n    using u64 = std::uint64_t;\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n    using u128 = __uint128_t; // GCC/Clangの拡張。未対応環境では下の標準実装を使う。\n#else\n    struct Wide\n    {\n        u64 low, high;\n    };\n#endif\n    const u64 modulus_;\n    u64 negative_inverse_, one_, r_squared_;\n    u64 odd_;\n    unsigned shifts_ = 0;\n\n#if !((defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC))\n    // 128ビット整数のない環境では32ビットずつに分けて積を得る。\n    static Wide product(u64 a, u64 b) noexcept\n    {\n        const u64 a0 = static_cast<std::uint32_t>(a), a1 = a >> 32;\n        const u64 b0 = static_cast<std::uint32_t>(b), b1 = b >> 32;\n        const u64 low = a0 * b0;\n        const u64 middle = a1 * b0 + (low >> 32);\n        const u64 upper_middle = a0 * b1 + static_cast<std::uint32_t>(middle);\n        return {(upper_middle << 32) | static_cast<std::uint32_t>(low),\n                a1 * b1 + (middle >> 32) + (upper_middle >> 32)};\n    }\n#endif\n\n    // 通常はa,b<modulus_。Relaxedではmodulus_<2^62、a,b<2*modulus_。\n    u64 multiply(u64 a, u64 b) const noexcept\n    {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const u128 value = static_cast<u128>(a) * b;\n        const u128 correction = static_cast<u128>(static_cast<u64>(value) * negative_inverse_) * modulus_;\n        const u128 sum = value + correction;\n        const u64 result = static_cast<u64>(sum >> 64);\n        if constexpr (Relaxed)\n            return result;\n        else\n        {\n            if (sum < value || result >= modulus_)\n                return result - modulus_;\n            return result;\n        }\n#else\n        const auto value = product(a, b);\n        const auto correction = product(value.low * negative_inverse_, modulus_);\n        const u64 upper = value.high + correction.high;\n        const u64 result = upper + (value.low != 0);\n        if constexpr (Relaxed)\n            return result; // 2*modulus_未満のまま保持し、累乗中の条件分岐を省く。\n        else\n        {\n            // 129ビット目の桁上がりがある場合も、減算後はmodulus_未満。\n            if (upper < value.high || result < upper || result >= modulus_)\n                return result - modulus_;\n            return result;\n        }\n#endif\n    }\n\n    u64 power(u64 base, u64 exponent) const noexcept {\n        u64 result = one_;\n        for (;;) {\n            if (exponent & 1u) result = multiply(result, base);\n            exponent >>= 1;\n            if (!exponent) return result;\n            base = multiply(base, base);\n        }\n    }\n\n    u64 normalize(u64 value) const noexcept\n    {\n        if constexpr (Relaxed)\n            return value >= modulus_ ? value - modulus_ : value;\n        else\n            return value;\n    }\n\npublic:\n    // 内部専用。奇数n>=3についてMontgomery定数とn-1の分解を準備する。\n    explicit MillerRabin64(u64 n) noexcept : modulus_(n), odd_(n - 1)\n    {\n        u64 inverse = n;\n        for (int i = 0; i < 5; ++i)\n            inverse *= 2u - n * inverse;\n        negative_inverse_ = 0u - inverse;\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        r_squared_ = (u128{0} - n) % n; // 2^128 mod n。\n        one_ = multiply(1, r_squared_);\n#else\n        one_ = (u64{0} - n) % n; // 2^64 mod n。\n        // 16Rを4回平方するとR^2になる（R=2^64）。\n        r_squared_ = one_;\n        for (int i = 0; i < 4; ++i)\n        {\n            const u64 gap = n - r_squared_;\n            r_squared_ = r_squared_ >= gap ? r_squared_ - gap : r_squared_ + r_squared_;\n        }\n        for (int i = 0; i < 4; ++i)\n            r_squared_ = multiply(r_squared_, r_squared_);\n#endif\n        shifts_ = std::countr_zero(odd_);\n        odd_ >>= shifts_;\n    }\n\n    // 指定した底の強擬素数検査を全て通ればtrue。底は整数型とする。\n    template <class Bases>\n    bool test(const Bases &bases) const noexcept(miller_rabin_bases_nothrow<Bases>)\n    {\n        for (auto base : bases)\n        {\n            using Base = decltype(base);\n            static_assert(std::is_integral_v<Base> && sizeof(Base) <= sizeof(u64),\n                          \"MillerRabin: bases must be integers of at most 64 bits\");\n            u64 reduced;\n            if constexpr (std::is_signed_v<Base>)\n            {\n                if (base < 0)\n                {\n                    const u64 magnitude = static_cast<u64>(-(base + 1)) + 1;\n                    const u64 remainder = magnitude % modulus_;\n                    reduced = remainder ? modulus_ - remainder : 0;\n                }\n                else\n                    reduced = static_cast<u64>(base) % modulus_;\n            }\n            else\n                reduced = static_cast<u64>(base) % modulus_;\n            if (reduced == 0)\n                continue;\n            u64 value = normalize(power(multiply(reduced, r_squared_), odd_));\n            if (value == one_ || value == modulus_ - one_)\n                continue;\n            unsigned step = 1;\n            for (; step < shifts_; ++step)\n            {\n                value = normalize(multiply(value, value));\n                if (value == modulus_ - one_)\n                    break;\n            }\n            if (step == shifts_)\n                return false;\n        }\n        return true;\n    }\n    // 固定7底用。n>=4'759'123'141で、底2の通過後に残りを3個ずつ進める。\n    bool test_deterministic() const noexcept {\n        if (!test(std::initializer_list<u64>{2})) return false;\n        return test_triple(325, 9375, 28178) && test_triple(450775, 9780504, 1795265022);\n    }\nprivate:\n    bool test_triple(u64 a, u64 b, u64 c) const noexcept {\n        a = multiply(a, r_squared_); b = multiply(b, r_squared_); c = multiply(c, r_squared_);\n        u64 x = one_, y = one_, z = one_;\n        for (u64 exponent = odd_;;) {\n            if (exponent & 1u) {\n                x = multiply(x, a); y = multiply(y, b); z = multiply(z, c);\n            }\n            exponent >>= 1;\n            if (!exponent) break;\n            a = multiply(a, a); b = multiply(b, b); c = multiply(c, c);\n        }\n        x = normalize(x); y = normalize(y); z = normalize(z);\n        bool pass_a = x == one_ || x == modulus_ - one_;\n        bool pass_b = y == one_ || y == modulus_ - one_;\n        bool pass_c = z == one_ || z == modulus_ - one_;\n        // 一度通った底の結果は、ほかの底の平方を続けても保持する。\n        for (unsigned step = 1; step < shifts_ && !(pass_a && pass_b && pass_c); ++step) {\n            x = normalize(multiply(x, x)); y = normalize(multiply(y, y)); z = normalize(multiply(z, z));\n            pass_a |= x == modulus_ - one_;\n            pass_b |= y == modulus_ - one_;\n            pass_c |= z == modulus_ - one_;\n        }\n        return pass_a && pass_b && pass_c;\n    }\n\n};\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_MILLER_RABIN_DEFINED\n#define SIRKIT_MILLER_RABIN_DEFINED\n// MillerRabin(n, bases): 指定した底の強擬素数検査を通ればtrue。底の選択により合成数も通る。\n// n<2はfalse。底はnで剰余を取り、0なら省く。奇数n>=3で空の底列ならtrue。\n// k個の底にO(k log n)回の剰余乗算、追加領域O(1)。独自の底列の例外は伝える。\ntemplate <class Integer, class Bases>\ninline bool MillerRabin(Integer n, const Bases &bases) noexcept(reinsirk::detail::miller_rabin_bases_nothrow<Bases>)\n{\n    static_assert(std::is_integral_v<Integer> && sizeof(Integer) <= sizeof(std::uint64_t),\n                  \"MillerRabin: n must be an integer of at most 64 bits\");\n    if constexpr (std::is_signed_v<Integer>)\n        if (n < 0)\n            return false;\n    const auto value = static_cast<std::uint64_t>(n);\n    if (value < 2)\n        return false;\n    if ((value & 1u) == 0)\n        return value == 2;\n    if (value < (std::uint64_t{1} << 62))\n        return reinsirk::detail::MillerRabin64<true>(value).test(bases);\n    return reinsirk::detail::MillerRabin64<false>(value).test(bases);\n}\n\n// MillerRabin(n, {2, 7, 61})のような底の直接指定に対応する。\ntemplate <class Integer>\ninline bool MillerRabin(Integer n, std::initializer_list<std::uint64_t> bases) noexcept\n{\n    return MillerRabin<Integer, std::initializer_list<std::uint64_t>>(n, bases);\n}\n#endif\n\n#ifndef SIRKIT_PRIMALITY_FILTER_DEFINED\n#define SIRKIT_PRIMALITY_FILTER_DEFINED\nnamespace reinsirk::detail {\n// 105の各剰余が3・5・7のいずれでも割り切れなければ、そのbitを1にする。\ninline constexpr std::uint64_t primality_coprime_105[2] = {\n    0x6c30da65a4cb2916ULL, 0x000001a2534c9699ULL};\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_IS_PRIME_DEFINED\n#define SIRKIT_IS_PRIME_DEFINED\n// is_prime(n): 符号付きの負数はfalse、非負整数はuint64_t全域で素数かを確定する。\n// 32ビット以下は共通判定、4'759'123'141未満は3個、それ以上は7個の底。O(log n)回の剰余乗算、動的確保なし。\ntemplate <class Integer>\ninline bool is_prime(Integer n) noexcept\n{\n    static_assert(std::is_integral_v<Integer> && sizeof(Integer) <= sizeof(std::uint64_t),\n                  \"is_prime: n must be an integer of at most 64 bits\");\n    if constexpr (std::is_signed_v<Integer>)\n        if (n < 0)\n            return false;\n    const auto value = static_cast<std::uint64_t>(n);\n    if (value < 2)\n        return false;\n    if (value <= std::numeric_limits<std::uint32_t>::max())\n        return reinsirk::detail::is_prime_u32(static_cast<std::uint32_t>(value));\n    if ((value & 1u) == 0) return false;\n    // 32bitを超える値は小素数3・5・7をまとめて除外する。\n    const auto residue = value % 105u;\n    if (((reinsirk::detail::primality_coprime_105[residue >> 6] >> (residue & 63)) & 1u) == 0 ||\n        value % 11u == 0 || value % 13u == 0 || value % 17u == 0)\n        return false;\n    if (value < std::uint64_t{4'759'123'141})\n        return MillerRabin(value, {2, 7, 61});\n    if (value < (std::uint64_t{1} << 62))\n        return reinsirk::detail::MillerRabin64<true>(value).test_deterministic();\n    return reinsirk::detail::MillerRabin64<false>(value).test_deterministic();\n}\n#endif\n\n#ifndef SIRKIT_NEXT_PREV_PRIME_DEFINED\n#define SIRKIT_NEXT_PREV_PRIME_DEFINED\n// next_prime(n): n以上で最小の素数をoptional<uint64_t>で返す。負数は2、上端で存在しなければnullopt。\n// prev_prime(n): n以下で最大の素数。同じ戻り値型で、n<2はnullopt。入力は64bit以下の整数。\n// C候補の探索にO(C log(max(n,2)))回の剰余乗算、追加領域O(1)。動的確保なし。\ntemplate<class Integer>\ninline std::optional<std::uint64_t> next_prime(Integer n) noexcept {\n    static_assert(std::is_integral_v<Integer> && sizeof(Integer) <= sizeof(std::uint64_t),\n                  \"next_prime: n must be an integer of at most 64 bits\");\n    if constexpr (std::is_signed_v<Integer>) if (n <= 2) return std::uint64_t{2};\n    auto value = static_cast<std::uint64_t>(n);\n    if (value <= 2) return std::uint64_t{2};\n    if ((value & 1u) == 0) ++value;\n    for (;;) {\n        if (is_prime(value)) return value;\n        if (value > std::numeric_limits<std::uint64_t>::max() - 2) return std::nullopt;\n        value += 2;\n    }\n}\n\ntemplate<class Integer>\ninline std::optional<std::uint64_t> prev_prime(Integer n) noexcept {\n    static_assert(std::is_integral_v<Integer> && sizeof(Integer) <= sizeof(std::uint64_t),\n                  \"prev_prime: n must be an integer of at most 64 bits\");\n    if constexpr (std::is_signed_v<Integer>) if (n < 2) return std::nullopt;\n    auto value = static_cast<std::uint64_t>(n);\n    if (value < 2) return std::nullopt;\n    if (value == 2) return std::uint64_t{2};\n    if ((value & 1u) == 0) --value;\n    for (; value >= 3; value -= 2) if (is_prime(value)) return value;\n    return std::uint64_t{2};\n}\n#endif\n\n\n// SPDX-License-Identifier: CC0-1.0\n// Verify I/O: Verify/current/common/fast_io.hpp\n// SPDX-License-Identifier: CC0-1.0\n#include <algorithm>\n#include <array>\n#include <charconv>\n#include <cstddef>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#include <cstring>\n#include <limits>\n#include <stdexcept>\n#include <string>\n#include <string_view>\n#include <type_traits>\n#include <vector>\n\n#ifndef SIRKIT_VERIFY_FAST_IO_DEFINED\n#define SIRKIT_VERIFY_FAST_IO_DEFINED\n\n// VerifyInput(file=stdin): 非所有のFILEから読む。別の入力方式と混用しない。\n// >> 整数: 64bit以下の十進整数を読む。検査省略時は値域内の正しい入力を前提とする。\n// >> char/string: 空白を飛ばし、1文字／空白までの文字列を読む。\n// >> 浮動小数点: 十進文字列を変換する。通常のCロケールで使う。\n// bool / !: 直前までの読み取りが成功しているか／失敗したかを返す。\nclass VerifyInput {\n    static constexpr std::size_t buffer_size = 1 << 17;\n    std::FILE* file_;\n    std::array<unsigned char, buffer_size> buffer_;\n    std::size_t position_ = 0, size_ = 0;\n    bool good_ = true;\n\n    int peek() {\n        if (position_ == size_) {\n            size_ = std::fread(buffer_.data(), 1, buffer_.size(), file_);\n            position_ = 0;\n            if (size_ == 0) return EOF;\n        }\n        return buffer_[position_];\n    }\n\n    int skip_space() {\n        int c;\n        while ((c = peek()) != EOF && c <= ' ') ++position_;\n        if (c == EOF) good_ = false;\n        return c;\n    }\n\npublic:\n    explicit VerifyInput(std::FILE* file = stdin) : file_(file) {}\n    VerifyInput(const VerifyInput&) = delete;\n    VerifyInput& operator=(const VerifyInput&) = delete;\n\n    explicit operator bool() const noexcept { return good_; }\n    bool operator!() const noexcept { return !good_; }\n\n    template<class T>\n        requires (std::is_integral_v<T> && sizeof(T) <= sizeof(std::uint64_t)\n                  && !std::is_same_v<T, char>)\n    VerifyInput& operator>>(T& result) {\n        if (!good_) return *this;\n        int c = skip_space();\n        if (c == EOF) return *this;\n        bool negative = false;\n        if (c == '-' || c == '+') {\n            negative = c == '-';\n            ++position_;\n            c = peek();\n        }\n        if (c == EOF) {\n            good_ = false;\n            return *this;\n        }\n#ifndef SKIP_RUNTIME_CHECKS\n        if (c < '0' || c > '9') {\n            good_ = false;\n            return *this;\n        }\n        // 先頭の0を除けば、20桁以下の末尾直前の値はuint64_tに収まる。\n        while (c == '0') {\n            ++position_;\n            c = peek();\n        }\n        std::uint64_t previous = 0;\n        unsigned last_digit = 0;\n        std::size_t digits = 0;\n#endif\n        std::uint64_t value = 0;\n        while (c >= '0' && c <= '9') {\n#ifndef SKIP_RUNTIME_CHECKS\n            previous = value;\n            last_digit = static_cast<unsigned>(c - '0');\n            if (digits <= 20) ++digits;\n#endif\n            value = value * 10 + static_cast<unsigned>(c - '0');\n            ++position_;\n            c = peek();\n        }\n#ifndef SKIP_RUNTIME_CHECKS\n        constexpr auto maximum = std::numeric_limits<std::uint64_t>::max();\n        if ((c != EOF && c > ' ') || digits > 20\n            || (digits == 20 && (previous > maximum / 10\n                || (previous == maximum / 10 && last_digit > maximum % 10)))) {\n            good_ = false;\n            return *this;\n        }\n        std::uint64_t limit = static_cast<std::uint64_t>(std::numeric_limits<T>::max());\n        if constexpr (std::is_signed_v<T>) limit += negative;\n        else if (negative && value != 0) good_ = false;\n        if (value > limit) good_ = false;\n        if (!good_) return *this;\n#endif\n        if constexpr (std::is_signed_v<T>) {\n            constexpr std::uint64_t minimum_magnitude =\n                static_cast<std::uint64_t>(std::numeric_limits<T>::max()) + 1;\n            // -(最小値)は評価せず、絶対値が最大値+1のときだけ最小値を使う。\n            result = negative\n                ? (value == minimum_magnitude ? std::numeric_limits<T>::min()\n                                  : static_cast<T>(-static_cast<T>(value)))\n                : static_cast<T>(value);\n        } else result = static_cast<T>(value);\n        return *this;\n    }\n\n    VerifyInput& operator>>(char& result) {\n        if (!good_) return *this;\n        const int c = skip_space();\n        if (c != EOF) {\n            result = static_cast<char>(c);\n            ++position_;\n        }\n        return *this;\n    }\n\n    VerifyInput& operator>>(std::string& result) {\n        if (!good_) return *this;\n        int c = skip_space();\n        if (c == EOF) return *this;\n        result.clear();\n        do {\n            result.push_back(static_cast<char>(c));\n            ++position_;\n            c = peek();\n        } while (c != EOF && c > ' ');\n        return *this;\n    }\n\n    template<class T> requires std::is_floating_point_v<T>\n    VerifyInput& operator>>(T& result) {\n        std::string token;\n        *this >> token;\n        if (!good_) return *this;\n#ifndef SKIP_RUNTIME_CHECKS\n        char* end = nullptr;\n        const long double value = std::strtold(token.c_str(), &end);\n        if (end != token.c_str() + token.size()) good_ = false;\n        else result = static_cast<T>(value);\n#else\n        result = static_cast<T>(std::strtold(token.c_str(), nullptr));\n#endif\n        return *this;\n    }\n};\n\n// VerifyOutput(file=stdout): 非所有のFILEへ書く。破棄時にflushし、FILEは閉じない。\n// << 整数/char/文字列/浮動小数点: 値を出力する。整数は64bit以下に対応する。\n// fixed(digits): 浮動小数点を小数点以下digits桁で出力する（digits>=0）。\n// flush(): バッファの内容をFILEへ渡す。bool / !で書き込み失敗を確認できる。\nclass VerifyOutput {\n    static constexpr std::size_t buffer_size = 1 << 17;\n    std::FILE* file_;\n    std::array<char, buffer_size> buffer_;\n    std::size_t size_ = 0;\n    int precision_ = 6;\n    bool fixed_ = false, good_ = true;\n\n    void write(std::string_view text) {\n        while (!text.empty() && good_) {\n            if (size_ == buffer_.size()) flush();\n            const auto count = std::min(text.size(), buffer_.size() - size_);\n            std::memcpy(buffer_.data() + size_, text.data(), count);\n            size_ += count;\n            text.remove_prefix(count);\n        }\n    }\n\npublic:\n    explicit VerifyOutput(std::FILE* file = stdout) : file_(file) {}\n    VerifyOutput(const VerifyOutput&) = delete;\n    VerifyOutput& operator=(const VerifyOutput&) = delete;\n    ~VerifyOutput() { flush(); }\n\n    explicit operator bool() const noexcept { return good_; }\n    bool operator!() const noexcept { return !good_; }\n\n    VerifyOutput& fixed(int digits) {\n        if (digits < 0) throw std::invalid_argument(\"negative output precision\");\n        fixed_ = true;\n        precision_ = digits;\n        return *this;\n    }\n\n    void flush() noexcept {\n        std::size_t written = 0;\n        while (written < size_ && good_) {\n            const auto count = std::fwrite(buffer_.data() + written, 1, size_ - written, file_);\n            if (count == 0) good_ = false;\n            written += count;\n        }\n        size_ = 0;\n    }\n\n    template<class T>\n        requires (std::is_integral_v<T> && sizeof(T) <= sizeof(std::uint64_t)\n                  && !std::is_same_v<T, char>)\n    VerifyOutput& operator<<(T value) {\n        if constexpr (std::is_same_v<T, bool>) return *this << static_cast<char>('0' + value);\n        else {\n            char digits[std::numeric_limits<std::uint64_t>::digits10 + 3];\n            const auto end = std::to_chars(digits, digits + sizeof(digits), value).ptr;\n            write(std::string_view(digits, static_cast<std::size_t>(end - digits)));\n            return *this;\n        }\n    }\n\n    VerifyOutput& operator<<(char value) {\n        if (size_ == buffer_.size()) flush();\n        if (good_) buffer_[size_++] = value;\n        return *this;\n    }\n\n    VerifyOutput& operator<<(std::string_view value) { write(value); return *this; }\n    VerifyOutput& operator<<(const std::string& value) { write(value); return *this; }\n    VerifyOutput& operator<<(const char* value) { write(value); return *this; }\n\n    template<class T> requires std::is_floating_point_v<T>\n    VerifyOutput& operator<<(T value) {\n        char local[128];\n        const char* format = fixed_ ? \"%.*Lf\" : \"%.*Lg\";\n        const int count = std::snprintf(local, sizeof(local), format, precision_,\n                                        static_cast<long double>(value));\n        if (count < 0) good_ = false;\n        else if (static_cast<std::size_t>(count) < sizeof(local))\n            write(std::string_view(local, static_cast<std::size_t>(count)));\n        else {\n            std::vector<char> text(static_cast<std::size_t>(count) + 1);\n            std::snprintf(text.data(), text.size(), format, precision_, static_cast<long double>(value));\n            write(std::string_view(text.data(), static_cast<std::size_t>(count)));\n        }\n        return *this;\n    }\n};\n\ninline VerifyInput verify_in;\ninline VerifyOutput verify_out;\n#endif\n\nint main() {\n    int q{};verify_in>>q;while(q--) { std::uint64_t n{};verify_in>>n;verify_out<<(is_prime(n)?\"Yes\":\"No\")<<'\\n'; }\n}\n"
+  },
+  "reproduction_script": "from pathlib import Path\nimport hashlib,json,subprocess,fcntl,resource,time,statistics\nr=Path('/home/reinsirk/Atcoder_Env');p=Path(__file__).parent;old=Path('/tmp/sirkit_primality_20261022');sha=lambda b:hashlib.sha256(b).hexdigest();prior=json.loads((r/'Audit/verify-primality-2026-10-22.json').read_text());current=json.loads((r/'Audit/performance-primality-second-round-four-hours-2026-10-22.json').read_text());fixtures=[]\ninfo=next(e for e in prior['official_sources']if e['url'].endswith('/info.toml'));assert sha((p/'info.toml').read_bytes())==info['sha256']\nfor inp,hashes in current['frozen_fixtures'].items():\n f=Path(inp);out=old/'reference_outputs'/(f.name+'.out');assert sha(f.read_bytes())==hashes['input_sha256'];assert sha(out.read_bytes())==hashes['reference_output_sha256'];fixtures.append({'name':f.name,'input':str(f),'output':str(out),'official':f.parent.name=='official','input_sha256':hashes['input_sha256'],'output_sha256':hashes['reference_output_sha256']})\nassert len(fixtures)==17 and sum(f['official']for f in fixtures)==13\nsource=(r/'Verify/current/submissions/primality.cpp').read_text();assert source.startswith('#define SKIP_RUNTIME_CHECKS\\n')and'#include <atcoder'not in source\nassert (r/'Math/prime_judge(Miller-Rabin).cpp').read_text()in source\nd={'status':'INCOMPLETE','fixtures':fixtures,'builds':[],'runs':[],'baseline':{}}\nwith open('/tmp/sirkit_performance_cpu14.lock','a')as a,open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as b:\n fcntl.flock(a,fcntl.LOCK_EX);fcntl.flock(b,fcntl.LOCK_EX)\n for name,cc,defs in [('gcc_skip',['/usr/bin/g++'],[]),('gcc_checked',['/usr/bin/g++'],[]),('gcc_standard',['/usr/bin/g++'],['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-U__SIZEOF_INT128__','-DSIRKIT_DISABLE_SIMD']),('clang_skip',['clang++','--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15'],[])]:\n  cpp=p/(name+'.cpp');cpp.write_text(source if name!='gcc_checked'else source.replace('#define SKIP_RUNTIME_CHECKS\\n','',1));exe=p/name;cmd=['taskset','-c','6',*cc,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',*defs,str(cpp),'-o',str(exe)];q=subprocess.run(cmd,capture_output=True,text=True);assert q.returncode==0 and not q.stderr,(cmd,q.stderr);d['builds'].append({'name':name,'command':cmd,'source_sha256':sha(cpp.read_bytes())})\n  for f in fixtures:\n   with open(f['input'],'rb')as inp:q=subprocess.run(['taskset','-c','14',str(exe)],stdin=inp,capture_output=True)\n   assert q.returncode==0 and not q.stderr and sha(q.stdout)==f['output_sha256'],(name,f['name'],q.stderr);d['runs'].append({'build':name,'case':f['name'],'official':f['official'],'output_sha256':sha(q.stdout)})\n  print(name,'13 official + 4 supplemental PASS',flush=True)\n for f in fixtures:\n  if f['name']not in ['small_00.in','all_prime_00.in','prod_two_prime_00.in','random_00.in','many_liars_00.in']:continue\n  raw=[]\n  for rep in range(7):\n   with open(f['input'],'rb')as inp,(p/'answer.out').open('wb')as out:\n    before=resource.getrusage(resource.RUSAGE_CHILDREN);start=time.perf_counter_ns();q=subprocess.run(['taskset','-c','14',str(p/'gcc_skip')],stdin=inp,stdout=out,stderr=subprocess.PIPE);wall=(time.perf_counter_ns()-start)/1e6;after=resource.getrusage(resource.RUSAGE_CHILDREN)\n   assert q.returncode==0 and not q.stderr and sha((p/'answer.out').read_bytes())==f['output_sha256'];raw.append({'cpu_ms':1000*(after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime),'wall_ms':wall})\n  med=statistics.median(x['cpu_ms']for x in raw);d['baseline'][f['name']]={'raw':raw,'median_cpu_ms':med};print('baseline',f['name'],med,flush=True)\n d['status']='PASS';(p/'verification.json').write_text(json.dumps(d,indent=2));print('ALL PASS',flush=True)\n",
+  "limitations": [
+    "現在版のオンライン判定は未実施。",
+    "公式問題は1..10^18のis_primeを判定する。uint64全域や他のAPIはローカル補足で確認。有限入力の照合であり、全uint64入力を総当たりしたという意味ではない。",
+    "今回の本体/main/入出力の変更はなし。既存の高速化を含む現行版を提出の基準にする。"
+  ]
+}

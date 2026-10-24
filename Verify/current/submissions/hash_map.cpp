@@ -1,9 +1,50 @@
 #define SKIP_RUNTIME_CHECKS
 // Verify: https://judge.yosupo.jp/problem/associative_array
+// Submission: https://judge.yosupo.jp/submission/412360
 
 // Library: DataStructure/Hash_map.cpp
 // SPDX-License-Identifier: CC0-1.0
 // 参考: https://nyaannyaan.github.io/library/hashmap/hashmap.hpp
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/hash_map.md
+//
+// API一覧
+// [HashMap<Key,Val,Hasher,KeyEqual>]
+// Flat table。検索・追加と次要素を探さない削除は期待償却O(1)。列キーのハッシュ計算は列長に比例する。
+// 次iteratorを返す削除は空きバケットを走査し、最悪O(capacity)。返却iteratorを順に使う全削除はO(capacity)。
+// 再配置・clear・swap・ムーブでiterator/参照は無効。eraseは対象だけを無効にする。
+// Key/Valはコピー可能、またはvalue_typeのムーブ構築がnoexceptであること。
+// Hasher/KeyEqualは同値なキーに同じハッシュ値を返し、格納中に規則を変えないこと。
+// 再配置を伴う新規追加の引数には、本表の要素への参照を渡さず先にコピーする。
+// HashMap(): 空の表を構築する。必要になるまで配列は確保しない。
+// HashMap(n, hash, equal): n要素分を予約し、指定したハッシュ・同値判定で構築する。
+// operator[](key): 未登録ならVal{}で追加し、値の参照を返す。
+// find(key): 対応するiteratorを返す。未登録はend()。const版は変更できない。
+// contain(key)/contains(key): 登録済みならtrueを返す。追加はしない。
+// count(key): 登録済みなら1、未登録なら0を返す。
+// at(key): 値の参照を返す。未登録はout_of_range。const版は変更できない。
+// insert({key, value})/emplace(key, value): 未登録なら追加し、対応するiteratorを返す。
+// try_emplace(key, args...): 未登録時だけ値を構築し、{iterator, 追加の有無}を返す。
+// insert_or_assign(key, value): 追加または上書きし、{iterator, 追加の有無}を返す。
+// get_or_default(key, fallback): 登録値またはfallbackのコピーを返す。追加はしない。
+// erase(it, next=true): 対象を削除し次のiteratorを返す。false指定ならend()。
+// erase(key): キーを削除し、次のiteratorを返す。未登録・erase(end())はend()。
+// erase(key, next): falseなら次要素を探さず削除してend()、trueならerase(key)と同じ。
+// begin()/end()/cbegin()/cend(): 格納要素を順序不定で列挙する。キーは変更できない。
+// 空表のbeginはO(1)、それ以外は先頭要素までのバケットを走査する。
+// size()/empty(): 登録数・空かどうかをO(1)で返す。
+// clear(): 全要素を破棄し、確保済みの容量を再利用する。
+// reserve(n): n要素分の容量を予約する。縮小しない。
+// rehash(n): nバケット以上・現登録数に必要な容量へ再配置し、墓石を除く。
+// capacity()/load_factor(): バケット数・使用率をO(1)で返す。
+// swap(other): 内容とハッシュ・同値判定を交換する。コピーは独立した複製。
+// swapはHasher/KeyEqualのswapが例外を送出しないことを要求する。
+//
+// [GenericHash]
+// GenericHash(): 実行時に選んだ種で構築する。同じオブジェクトでは結果は一定。
+// GenericHash(seed): 指定した種で構築する。std::hash対応型の結果はその実装にも依存する。
+// operator()(x): 整数・列挙・浮動小数・tuple・range・std::hash対応型を再帰的にハッシュ化する。
+// unorderedコンテナの要素順は無視する。独自の同値関係には対応するHasherも用意する。
+
 #include <algorithm>
 #include <bit>
 #include <chrono>
@@ -20,14 +61,13 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
+#if !defined(SIRKIT_DISABLE_SIMD) && defined(__SSE2__) && (defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__)
+#include <emmintrin.h>
+#endif
 
 #ifndef SIRKIT_GENERIC_HASH_DEFINED
 #define SIRKIT_GENERIC_HASH_DEFINED
 struct GenericHash {
-    // GenericHash(): 実行時に選んだ種で構築する。同じオブジェクトでは結果は一定。
-    // GenericHash(seed): 指定した種で構築する。std::hash対応型の結果はその実装にも依存する。
-    // operator()(x): 整数・列挙・浮動小数・tuple・range・std::hash対応型を再帰的にハッシュ化する。
-    // unorderedコンテナの要素順は無視する。独自の同値関係には対応するHasherも用意する。
 private:
     std::uint64_t seed_;
     static constexpr std::uint64_t mix(std::uint64_t x) noexcept {
@@ -99,33 +139,8 @@ public:
 
 #ifndef SIRKIT_HASH_MAP_DEFINED
 #define SIRKIT_HASH_MAP_DEFINED
-// Flat table。検索・追加・削除は期待償却O(1)、列キーのハッシュ計算は列長に比例する。
-// 再配置・clear・swap・ムーブでiterator/参照は無効。eraseは対象だけを無効にする。
-// Key/Valはコピー可能、またはvalue_typeのムーブ構築がnoexceptであること。
-// Hasher/KeyEqualは同値なキーに同じハッシュ値を返し、格納中に規則を変えないこと。
-// 再配置を伴う新規追加の引数には、本表の要素への参照を渡さず先にコピーする。
 template <class Key, class Val, class Hasher = GenericHash, class KeyEqual = std::equal_to<Key>>
 class HashMap {
-    // HashMap(): 空の表を構築する。必要になるまで配列は確保しない。
-    // HashMap(n, hash, equal): n要素分を予約し、指定したハッシュ・同値判定で構築する。
-    // operator[](key): 未登録ならVal{}で追加し、値の参照を返す。
-    // find(key): 対応するiteratorを返す。未登録はend()。const版は変更できない。
-    // contain(key)/contains(key): 登録済みならtrueを返す。追加はしない。
-    // count(key): 登録済みなら1、未登録なら0を返す。
-    // at(key): 値の参照を返す。未登録はout_of_range。const版は変更できない。
-    // insert({key, value})/emplace(key, value): 未登録なら追加し、対応するiteratorを返す。
-    // try_emplace(key, args...): 未登録時だけ値を構築し、{iterator, 追加の有無}を返す。
-    // insert_or_assign(key, value): 追加または上書きし、{iterator, 追加の有無}を返す。
-    // get_or_default(key, fallback): 登録値またはfallbackのコピーを返す。追加はしない。
-    // erase(it, next=true): 対象を削除し次のiteratorを返す。false指定ならend()。
-    // erase(key): キーを削除し、次のiteratorを返す。未登録・erase(end())はend()。
-    // begin()/end()/cbegin()/cend(): 格納要素を順序不定で列挙する。キーは変更できない。
-    // size()/empty(): 登録数・空かどうかをO(1)で返す。
-    // clear(): 全要素を破棄し、確保済みの容量を再利用する。
-    // reserve(n): n要素分の容量を予約する。縮小しない。
-    // rehash(n): nバケット以上・現登録数に必要な容量へ再配置し、墓石を除く。
-    // capacity()/load_factor(): バケット数・使用率をO(1)で返す。
-    // swap(other): 内容とハッシュ・同値判定を交換する。コピーは独立した複製。
 public:
     using key_type = Key;
     using mapped_type = Val;
@@ -133,8 +148,23 @@ public:
     using Data = value_type;
     using size_type = std::size_t;
 private:
-    // 単純な型では全スロットを有効な値オブジェクトにし、optionalの状態領域を省く。
+    // 自明にコピー・破棄できる型は、GCCのx86では登録時に構築する。
     // 構築に失敗しうる型はoptionalで未構築状態を管理する。
+#if defined(__GNUC__) && !defined(__clang__) && (defined(__x86_64__) || defined(__i386__))
+    union CompactSlot {
+        value_type value;
+        CompactSlot() noexcept {}
+        value_type& operator*() noexcept { return value; }
+        const value_type& operator*() const noexcept { return value; }
+        value_type* operator->() noexcept { return std::addressof(value); }
+        const value_type* operator->() const noexcept { return std::addressof(value); }
+        template <class... Args> void emplace(Args&&... args) {
+            value_type next(std::forward<Args>(args)...);
+            std::construct_at(std::addressof(value), std::move(next));
+        }
+        void reset() noexcept {} // 自明な破棄なので、削除状態だけをstate_で変更する。
+    };
+#else
     struct CompactSlot {
         value_type value{};
         value_type& operator*() noexcept { return value; }
@@ -148,6 +178,7 @@ private:
         }
         void reset() noexcept {} // 自明な破棄なので、削除状態だけをstate_で変更する。
     };
+#endif
     using Slot = std::conditional_t<
         std::is_nothrow_default_constructible_v<value_type> &&
         std::is_nothrow_move_constructible_v<value_type> &&
@@ -199,9 +230,60 @@ private:
         }
         return slots_.size();
     }
+#if !defined(SIRKIT_DISABLE_SIMD) && defined(__SSE2__) && (defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__)
+    // 単純な型の再配置で、登録状態を16バケットずつ判定する。
+    void rebuild_simd(size_type capacity) {
+        std::vector<Slot> next(capacity);
+#if defined(__GNUC__) && !defined(__clang__) && (defined(__x86_64__) || defined(__i386__))
+        // 値の構築前に領域を一定間隔で書き、ランダムな初回書き込みの負担を抑える。
+        if constexpr (std::is_same_v<Slot, CompactSlot>) {
+            if (capacity >= 256) {
+                constexpr size_type stride = std::max(size_type{1}, size_type{4096} / sizeof(Slot));
+                for (size_type i = 0; i < capacity; i += stride)
+                    *reinterpret_cast<volatile unsigned char*>(std::addressof(next[i])) = 0;
+            }
+        }
+#endif
+        std::vector<std::uint8_t> state(capacity, 0);
+        const auto shift = static_cast<unsigned>(64 - std::countr_zero(capacity));
+        const auto live = _mm_set1_epi8(1);
+        for (size_type base = 0; base < slots_.size(); base += 16) {
+            const auto states = _mm_loadu_si128(reinterpret_cast<const __m128i*>(state_.data() + base));
+            unsigned mask = static_cast<unsigned>(_mm_movemask_epi8(_mm_cmpeq_epi8(states, live)));
+            while (mask) {
+                const size_type i = base + std::countr_zero(mask);
+                size_type p = bucket(slots_[i]->first, shift);
+                while (state[p]) p = (p + 1) & (capacity - 1);
+                next[p].emplace(*slots_[i]); // 自明なコピーなので、hashが投げても元の値を保つ。
+                state[p] = 1;
+                mask &= mask - 1;
+            }
+        }
+        slots_.swap(next);
+        state_.swap(state);
+        occupied_ = size_;
+        shift_ = shift;
+        invalidate();
+    }
+#endif
     void rebuild(size_type capacity) {
         if (capacity > max_capacity()) throw std::length_error("HashMap: capacity overflow");
+#if !defined(SIRKIT_DISABLE_SIMD) && defined(__SSE2__) && (defined(__x86_64__) || defined(__i386__)) && defined(__GNUC__) && !defined(__clang__)
+        if constexpr (std::is_same_v<Slot, CompactSlot>) {
+            if (slots_.size() >= 64) { rebuild_simd(capacity); return; }
+        }
+#endif
         std::vector<Slot> next(capacity);
+#if defined(__GNUC__) && !defined(__clang__) && (defined(__x86_64__) || defined(__i386__))
+        // 値の構築前に領域を一定間隔で書き、ランダムな初回書き込みの負担を抑える。
+        if constexpr (std::is_same_v<Slot, CompactSlot>) {
+            if (capacity >= 256) {
+                constexpr size_type stride = std::max(size_type{1}, size_type{4096} / sizeof(Slot));
+                for (size_type i = 0; i < capacity; i += stride)
+                    *reinterpret_cast<volatile unsigned char*>(std::addressof(next[i])) = 0;
+            }
+        }
+#endif
         std::vector<std::uint8_t> state(capacity, 0);
         const auto shift = static_cast<unsigned>(64 - std::countr_zero(capacity));
         if constexpr (std::is_nothrow_move_constructible_v<value_type> &&
@@ -346,7 +428,6 @@ public:
         : hash_(other.hash_), equal_(other.equal_) { swap(other); }
     HashMap& operator=(HashMap other) { swap(other); return *this; }
     void swap(HashMap& other) noexcept(std::is_nothrow_swappable_v<Hasher> && std::is_nothrow_swappable_v<KeyEqual>) {
-        // 関数オブジェクトのswapが例外を送出しないことを要求する。
         static_assert(std::is_nothrow_swappable_v<Hasher> && std::is_nothrow_swappable_v<KeyEqual>,
                       "HashMap: Hasher and KeyEqual must be nothrow swappable");
         using std::swap;
@@ -356,10 +437,12 @@ public:
         invalidate(); other.invalidate();
     }
     iterator begin() noexcept {
+        if (size_ == 0) return end();
         size_type p = 0; while (p < slots_.size() && state_[p] != 1) ++p;
         return iterator(this, p);
     }
     const_iterator begin() const noexcept {
+        if (size_ == 0) return end();
         size_type p = 0; while (p < slots_.size() && state_[p] != 1) ++p;
         return const_iterator(this, p);
     }
@@ -428,7 +511,9 @@ public:
     }
     iterator erase(iterator it, bool get_next = true) { return erase(const_iterator(it), get_next); }
     iterator erase(const Key& key) { return erase(find(key)); }
+    iterator erase(const Key& key, bool get_next) { return erase(find(key), get_next); }
     void clear() noexcept {
+        if (occupied_ == 0) { invalidate(); return; }
         for (size_type i = 0; i < slots_.size(); ++i) if (state_[i] == 1) slots_[i].reset();
         std::fill(state_.begin(), state_.end(), std::uint8_t{0});
         size_ = occupied_ = 0; invalidate();

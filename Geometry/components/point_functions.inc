@@ -1,11 +1,14 @@
 #ifndef SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 #define SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 namespace geo {
+// SIRKIT_API_BEGIN
+// [geo::点の関数]
 // 点の関数。座標は有限、整数の差・積は C に収まる入力を扱う。
 // predicate_sign<T,C>(value,scale,eps): 整数は厳密、実数は許容幅で -1/0/1 を返す。O(1)。
 // orientation(a,b,c,eps): 左折1、直進0、右折-1。整数では厳密。O(1)。
 // to_real(p): long double 座標へ変換する。O(1)。
 // distance(p,q): 2点間距離を Point::Real で返す。O(1)。
+// SIRKIT_API_END
 
 template<class T, class C> int predicate_sign(C value, C scale, Epsilon eps = {}) {
     if constexpr (std::is_integral_v<T>) return (value > 0) - (value < 0);

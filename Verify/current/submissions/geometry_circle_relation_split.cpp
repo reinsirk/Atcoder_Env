@@ -1,8 +1,61 @@
 #define SKIP_RUNTIME_CHECKS
 // Verify: https://atcoder.jp/contests/math-and-algorithm/tasks/math_and_algorithm_ag
+// Submission: https://atcoder.jp/contests/math-and-algorithm/submissions/80293260
 
 // Library: Geometry/Circle.cpp
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/geometry_point.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/geometry_orientation.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/geometry_segment_intersection.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/geometry_circle_intersection.md
+//
+// API一覧
+// [geo::Epsilon]
+// Epsilon{abs,rel}: 非負有限の絶対・相対許容幅（既定は各1e-12L）。
+// tolerance(scale): abs + rel * abs(scale) を返す。O(1)。
+//
+// [geo::Point]
+// Point<T,C=DefaultCalc<T>>{x,y}: 符号付き整数/浮動小数点の集成体。座標・座標演算はT、差・積・和はCに収まる有限入力。
+// DefaultCalc<T>: 整数は対応環境で128ビット拡張、標準代替はint64_t。浮動小数点はT。
+// PointI/PointD/PointLD/RealPoint: int64_t/double/long double/long doubleのPoint。Value/Calc/Realは座標/計算/距離の型。
+// 比較は座標の完全一致・辞書順。単項-, +,-,*,+=,-=,*= は座標演算、点同士の * は内積、^ は外積。O(1)。
+// dot/cross/norm2/dist2/orient は C、norm/dist は Real、ccw は符号を返す。dist2/orient の差は C で計算する。
+// rotated90(k)/rot90(k) は反時計回り90度の k 倍のコピー/更新、arg は偏角。O(1)。
+// 浮動小数点専用: /,/= は非零スカラー除算、rotated/rot はラジアン回転、normalized は非零点の単位化。
+// almost_equal は成分別の誤差比較。cast<U,D>() は座標型変換。arg_cmp は零点を先頭に偏角・距離順。O(1)。
+// 浮動 arg_cmp は丸めた偏角が等しければ距離順。ostream は (x,y) を出力する。O(1)。
+//
+// [geo::点の関数]
+// 点の関数。座標は有限、整数の差・積は C に収まる入力を扱う。
+// predicate_sign<T,C>(value,scale,eps): 整数は厳密、実数は許容幅で -1/0/1 を返す。O(1)。
+// orientation(a,b,c,eps): 左折1、直進0、右折-1。整数では厳密。O(1)。
+// to_real(p): long double 座標へ変換する。O(1)。
+// distance(p,q): 2点間距離を Point::Real で返す。O(1)。
+//
+// [geo::Line / geo::Segment]
+// Segment{a,b} は閉線分（零長可）、Line{a,b} は相異なる2点で表す直線。
+//
+// [geo::on_segment]
+// on_segment(p,s,eps): 閉線分上（端点を含む）なら true。整数では厳密。O(1)。
+//
+// [geo::Location]
+// Location: containsの戻り値。Outside/Boundary/Insideは外部/境界/内部。
+//
+// [geo::円の型]
+// CircleIntersectionKind: None/Tangent/TwoPoints/Coincident。CircleIntersection{kind,points}: 近似交点を所有。
+// 一致する正半径円には交点を格納しない。半径0同士の同一点はTangentと1交点。
+// Circle{center,radius}: 有限の中心と非負の有限半径。半径0は点。
+//
+// [円の関数]
+// 円周・円盤の関数。eps は絶対・相対許容幅、交点は RealPoint。
+// circumcircle(a,b,c,eps): 3点を通る円。一直線・重複点なら nullopt。O(1)。
+// validate(c): 中心・半径が有限かつ半径非負かを検査し、不正なら domain_error。省略設定でも有効。O(1)。
+// contains(c,p,eps): 円盤の外・円周上・内を距離で判定する。O(1)。
+// intersection(c,l,eps): 円周と非零長直線の交点を直線の向き順に0/1/2点返す。O(1)。
+// intersection(c,s,eps): 円周と閉線分の交点を線分の向き順に返す。零長線分も可。O(1)。
+// intersection(a,b,eps): 円周同士の交差種別と交点。半径0同士の同一点は Tangent。O(1)。
+// circle_intersection_kind(a,b,eps): 円周の交差種別。geo::intersection と同じ判定で交点を確保しない。O(1)。
+
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -21,7 +74,6 @@
 #ifndef SIRKIT_GEO_EPSILON_DEFINED
 #define SIRKIT_GEO_EPSILON_DEFINED
 namespace geo {
-// tolerance(scale): 非負有限の abs/rel から許容幅を返す。O(1)。
 struct Epsilon {
     long double abs = 1e-12L;
     long double rel = 1e-12L;
@@ -40,13 +92,6 @@ template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, 
 #else
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, std::int64_t, T>;
 #endif
-// Point は集成体。座標・座標演算は T、積・差・和は C に収まる有限入力を扱う。
-// 比較は座標の完全一致・辞書順。+,-,*,+=,-=,*= は座標演算、点同士の * は内積、^ は外積。O(1)。
-// dot/cross/norm2/dist2/orient は C、norm/dist は Real、ccw は符号を返す。dist2/orient の差は C で計算する。
-// rotated90(k)/rot90(k) は反時計回り90度の k 倍のコピー/更新、arg は偏角。O(1)。
-// 浮動小数点専用: /,/= は非零スカラー除算、rotated/rot はラジアン回転、normalized は非零点の単位化。
-// almost_equal は成分別の誤差比較。cast<U,D>() は座標型変換。arg_cmp は零点を先頭に偏角・距離順。O(1)。
-// 浮動 arg_cmp は丸めた偏角が等しければ距離順。ostream は (x,y) を出力する。O(1)。
 template<class T, class C = DefaultCalc<T>>
 struct Point {
     static_assert((std::is_integral_v<T> && std::is_signed_v<T>) || std::is_floating_point_v<T>);
@@ -176,11 +221,6 @@ using RealPoint = PointLD;
 #ifndef SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 #define SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 namespace geo {
-// 点の関数。座標は有限、整数の差・積は C に収まる入力を扱う。
-// predicate_sign<T,C>(value,scale,eps): 整数は厳密、実数は許容幅で -1/0/1 を返す。O(1)。
-// orientation(a,b,c,eps): 左折1、直進0、右折-1。整数では厳密。O(1)。
-// to_real(p): long double 座標へ変換する。O(1)。
-// distance(p,q): 2点間距離を Point::Real で返す。O(1)。
 
 template<class T, class C> int predicate_sign(C value, C scale, Epsilon eps = {}) {
     if constexpr (std::is_integral_v<T>) return (value > 0) - (value < 0);
@@ -206,7 +246,6 @@ template<class T, class C> typename Point<T, C>::Real distance(const Point<T, C>
 #ifndef SIRKIT_GEO_LINEAR_TYPES_DEFINED
 #define SIRKIT_GEO_LINEAR_TYPES_DEFINED
 namespace geo {
-// Segment{a,b} は閉線分（零長可）、Line{a,b} は相異なる2点で表す直線。
 template<class T, class C = DefaultCalc<T>> struct Segment { Point<T, C> a, b; };
 template<class T, class C = DefaultCalc<T>> struct Line { Point<T, C> a, b; };
 }
@@ -215,7 +254,6 @@ template<class T, class C = DefaultCalc<T>> struct Line { Point<T, C> a, b; };
 #ifndef SIRKIT_GEO_ON_SEGMENT_DEFINED
 #define SIRKIT_GEO_ON_SEGMENT_DEFINED
 namespace geo {
-// on_segment(p,s,eps): 閉線分上（端点を含む）なら true。整数では厳密。O(1)。
 template<class T, class C> bool on_segment(const Point<T, C>& p, const Segment<T, C>& s, Epsilon eps = {}) {
     if (orientation(s.a, s.b, p, eps) != 0) return false;
     C x = (C(p.x) - C(s.a.x)) * (C(p.x) - C(s.b.x));
@@ -229,7 +267,6 @@ template<class T, class C> bool on_segment(const Point<T, C>& p, const Segment<T
 #ifndef SIRKIT_GEO_LOCATION_DEFINED
 #define SIRKIT_GEO_LOCATION_DEFINED
 namespace geo {
-// contains の戻り値: 外部・境界・内部。
 enum class Location { Outside, Boundary, Inside };
 }
 #endif
@@ -237,10 +274,8 @@ enum class Location { Outside, Boundary, Inside };
 #ifndef SIRKIT_GEO_CIRCLE_TYPES_DEFINED
 #define SIRKIT_GEO_CIRCLE_TYPES_DEFINED
 namespace geo {
-// 円の交差種別と近似交点。一致する正半径円には交点を格納しない。
 enum class CircleIntersectionKind { None, Tangent, TwoPoints, Coincident };
 struct CircleIntersection { CircleIntersectionKind kind = CircleIntersectionKind::None; std::vector<RealPoint> points; };
-// Circle{center,radius}: 有限の中心と非負の有限半径。半径0は点。
 struct Circle { RealPoint center; long double radius = 0; };
 }
 #endif
@@ -248,13 +283,6 @@ struct Circle { RealPoint center; long double radius = 0; };
 #ifndef SIRKIT_GEO_CIRCLE_DEFINED
 #define SIRKIT_GEO_CIRCLE_DEFINED
 namespace geo {
-// 円周・円盤の関数。eps は絶対・相対許容幅、交点は RealPoint。
-// circumcircle(a,b,c,eps): 3点を通る円。一直線・重複点なら nullopt。O(1)。
-// validate(c): 中心・半径が有限かつ半径非負かを検査し、不正なら domain_error。省略設定でも有効。O(1)。
-// contains(c,p,eps): 円盤の外・円周上・内を距離で判定する。O(1)。
-// intersection(c,l,eps): 円周と非零長直線の交点を直線の向き順に0/1/2点返す。O(1)。
-// intersection(c,s,eps): 円周と閉線分の交点を線分の向き順に返す。零長線分も可。O(1)。
-// intersection(a,b,eps): 円周同士の交差種別と交点。半径0同士の同一点は Tangent。O(1)。
 
 template<class T, class C> std::optional<Circle> circumcircle(const Point<T, C>& a, const Point<T, C>& b, const Point<T, C>& c, Epsilon eps = {}) {
     if (orientation(a, b, c, eps) == 0) return std::nullopt;
@@ -311,24 +339,43 @@ inline std::vector<RealPoint> intersection(const Circle& c, const Segment<long d
     return points;
 }
 
-inline CircleIntersection intersection(const Circle& a, const Circle& b, Epsilon eps = {}) {
+}
+namespace reinsirk::detail {
+template<bool StorePoints>
+geo::CircleIntersection circle_intersection_impl(const geo::Circle& a, const geo::Circle& b, geo::Epsilon eps) {
+    using geo::CircleIntersectionKind;
+    using geo::RealPoint;
 #ifndef SKIP_RUNTIME_CHECKS
-    validate(a); validate(b);
+    geo::validate(a); geo::validate(b);
 #endif
     RealPoint delta = b.center - a.center;
-    long double d = delta.norm(), r = a.radius, s = b.radius;
+    // 通常の大きさは直接平方根、極端な大きさはスケーリングするhypotを使う。
+    long double ax = std::abs(delta.x), ay = std::abs(delta.y);
+    long double largest = std::max(ax, ay);
+    long double d = largest == 0 || (largest >= 1e-150L && largest <= 1e150L)
+        ? std::sqrt(delta.x * delta.x + delta.y * delta.y) : delta.norm();
+    long double r = a.radius, s = b.radius;
     long double tolerance = eps.tolerance(std::max({d, r, s}));
     if (d == 0) {
         if (std::abs(r - s) > tolerance) return {};
-        if (r == 0 || s == 0) return {CircleIntersectionKind::Tangent, {a.center}};
+        if (r == 0 || s == 0) {
+            if constexpr (!StorePoints) return {CircleIntersectionKind::Tangent, {}};
+            return {CircleIntersectionKind::Tangent, {a.center}};
+        }
         return {CircleIntersectionKind::Coincident, {}};
     }
     if (r == 0) {
-        if (std::abs(d - s) <= tolerance) return {CircleIntersectionKind::Tangent, {a.center}};
+        if (std::abs(d - s) <= tolerance) {
+            if constexpr (!StorePoints) return {CircleIntersectionKind::Tangent, {}};
+            return {CircleIntersectionKind::Tangent, {a.center}};
+        }
         return {};
     }
     if (s == 0) {
-        if (std::abs(d - r) <= tolerance) return {CircleIntersectionKind::Tangent, {b.center}};
+        if (std::abs(d - r) <= tolerance) {
+            if constexpr (!StorePoints) return {CircleIntersectionKind::Tangent, {}};
+            return {CircleIntersectionKind::Tangent, {b.center}};
+        }
         return {};
     }
     long double gap_out = (d - r) - s;
@@ -337,19 +384,41 @@ inline CircleIntersection intersection(const Circle& a, const Circle& b, Epsilon
     if (gap_out > tolerance || gap_in > tolerance) return {};
     RealPoint unit = delta / d;
     // 許容幅内の非交差・厳密接触は、一方の円周上に接点を置く。
-    if (gap_out >= 0) return {CircleIntersectionKind::Tangent, {a.center + unit * r}};
-    if (gap_in >= 0) return {CircleIntersectionKind::Tangent, {a.center + unit * (difference >= 0 ? r : -r)}};
+    if (gap_out >= 0) {
+        if constexpr (!StorePoints) return {CircleIntersectionKind::Tangent, {}};
+        return {CircleIntersectionKind::Tangent, {a.center + unit * r}};
+    }
+    if (gap_in >= 0) {
+        if constexpr (!StorePoints) return {CircleIntersectionKind::Tangent, {}};
+        return {CircleIntersectionKind::Tangent, {a.center + unit * (difference >= 0 ? r : -r)}};
+    }
     long double along = d / 2 + (difference / d) * (r / 2 + s / 2);
     along = std::clamp(along, -r, r);
     RealPoint foot = a.center + unit * along;
     // ほぼ同心でも交点の高さが大きい場合は2点を保つ。
-    if (std::abs(std::abs(along) - r) <= tolerance && std::abs(std::abs(d - along) - s) <= tolerance)
+    if (std::abs(std::abs(along) - r) <= tolerance && std::abs(std::abs(d - along) - s) <= tolerance) {
+        if constexpr (!StorePoints) return {CircleIntersectionKind::Tangent, {}};
         return {CircleIntersectionKind::Tangent, {foot}};
+    }
+    if constexpr (!StorePoints) return {CircleIntersectionKind::TwoPoints, {}};
     long double ratio = along / r;
     long double height = r * std::sqrt(std::max(0.0L, (1 - ratio) * (1 + ratio)));
     RealPoint offset{-unit.y * height, unit.x * height};
     return {CircleIntersectionKind::TwoPoints, {foot + offset, foot - offset}};
 }
+}
+namespace geo {
+inline CircleIntersection intersection(const Circle& a, const Circle& b, Epsilon eps = {}) {
+    return reinsirk::detail::circle_intersection_impl<true>(a, b, eps);
+}
+}
+#ifndef SIRKIT_CIRCLE_INTERSECTION_KIND_DEFINED
+#define SIRKIT_CIRCLE_INTERSECTION_KIND_DEFINED
+inline geo::CircleIntersectionKind circle_intersection_kind(const geo::Circle& a, const geo::Circle& b, geo::Epsilon eps = {}) {
+    return reinsirk::detail::circle_intersection_impl<false>(a, b, eps).kind;
+}
+#endif
+namespace geo {
 }
 #endif
 
@@ -618,7 +687,7 @@ int main() {
     geo::Circle a, b;
     verify_in >> a.center.x >> a.center.y >> a.radius;
     verify_in >> b.center.x >> b.center.y >> b.radius;
-    const auto result = geo::intersection(a, b);
+    const auto result = geo::intersection(a, b, geo::Epsilon{0, 0});
     const auto distance2 = a.center.dist2(b.center);
     const auto radius = std::max(a.radius, b.radius);
     int answer;

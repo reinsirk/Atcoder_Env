@@ -1,0 +1,2679 @@
+{
+  "date": "2026-10-22",
+  "library": "Math/Eratosthenes.cpp",
+  "baseline_source_sha256": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8",
+  "final_source_sha256": "de16c4a5fb868f3e54e00752de02011df5d0dfa99755b87fb7110254e6252cab",
+  "main_sha256": "3a64febf817b342de8c892a7abbff079d5aaccdd959bd472a5f95843ca523581",
+  "io_sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+  "environment": {
+    "cpu": "Intel Core i9-14900K",
+    "performance_cpu": 14,
+    "lock": "/tmp/atcoder_full_performance_20261018/benchmark.lock",
+    "gcc": "g++ (GCC) 15.3.0",
+    "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+    "note": "同一run内のbaseline/control/candidateを順序交代し中央値を比較。別run・別CPUの絶対時間は比較しない。オンラインGCC15.2とローカルGCC15.3を区別。"
+  },
+  "online_comparison": [
+    {
+      "case": "example_00",
+      "previous_ms": 1,
+      "current_ms": 1
+    },
+    {
+      "case": "1_00",
+      "previous_ms": 1,
+      "current_ms": 1
+    },
+    {
+      "case": "2_00",
+      "previous_ms": 0,
+      "current_ms": 1
+    },
+    {
+      "case": "499477801_00",
+      "previous_ms": 326,
+      "current_ms": 334
+    },
+    {
+      "case": "499999993_00",
+      "previous_ms": 326,
+      "current_ms": 325
+    },
+    {
+      "case": "max_00",
+      "previous_ms": 340,
+      "current_ms": 345
+    },
+    {
+      "case": "max_01",
+      "previous_ms": 338,
+      "current_ms": 335
+    },
+    {
+      "case": "ten_00",
+      "previous_ms": 78,
+      "current_ms": 79
+    },
+    {
+      "case": "ten_01",
+      "previous_ms": 17,
+      "current_ms": 16
+    },
+    {
+      "case": "ten_02",
+      "previous_ms": 14,
+      "current_ms": 2
+    }
+  ],
+  "online_note": "提出412339の345msは前回412335の340msより約1.5%遅い。ケースごとに増減し、前回ブロック拡大の改善はこのオンライン判定で確認できなかった。今回の展開後は未提出。",
+  "accepted": {
+    "change": "37以上の素数の内側消去loopを4個ずつ展開して分岐を減らし、独立した位置の演算を並べて処理する。末尾は1個ずつ消す。",
+    "extra_source": "                for (; k + step * 3 < end; k += step * 4) {\n                    flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n                    flags[(k + step * 1) / 64] &= ~(std::uint64_t{1} << ((k + step * 1) % 64));\n                    flags[(k + step * 2) / 64] &= ~(std::uint64_t{1} << ((k + step * 2) % 64));\n                    flags[(k + step * 3) / 64] &= ~(std::uint64_t{1} << ((k + step * 3) % 64));\n                }\n",
+    "complexity": "構築O(limit log log limit)、全flags保持と単点判定O(1)は不変。追加確保なし。"
+  },
+  "construction": {
+    "first": {
+      "headers": {
+        "baseline": {
+          "path": "/tmp/sirkit_sieve_412339_20261022/baseline.hpp",
+          "sha256": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8"
+        },
+        "control": {
+          "path": "/tmp/sirkit_sieve_412339_20261022/baseline.hpp",
+          "sha256": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8"
+        },
+        "unroll2": {
+          "path": "/tmp/sirkit_sieve_412339_20261022/strike/unroll2.hpp",
+          "sha256": "319aec711d0253cf1d84d0b7f144f4e7eadbf0aa825e268199624342b97dc2b1"
+        },
+        "unroll4": {
+          "path": "/tmp/sirkit_sieve_412339_20261022/strike/unroll4.hpp",
+          "sha256": "de16c4a5fb868f3e54e00752de02011df5d0dfa99755b87fb7110254e6252cab"
+        }
+      },
+      "builds": [
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/gcc_plain_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/gcc_plain_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/strike/unroll2.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/gcc_plain_unroll2"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/strike/unroll4.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/gcc_plain_unroll4"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/gcc_native_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/gcc_native_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/strike/unroll2.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/gcc_native_unroll2"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/strike/unroll4.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/gcc_native_unroll4"
+        ]
+      ],
+      "results": {
+        "gcc_plain": {
+          "262144": {
+            "median_ns": {
+              "baseline": 23434.25,
+              "control": 23486.85,
+              "unroll2": 28569.24,
+              "unroll4": 23306.88
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0022445779148041,
+              "unroll2": 1.2191232917631245,
+              "unroll4": 0.9945647929846273
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 51450.15,
+              "control": 51421.53,
+              "unroll2": 63077.8,
+              "unroll4": 51433.42
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9994437334001941,
+              "unroll2": 1.2259983692953276,
+              "unroll4": 0.9996748308799877
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 107846.36,
+              "control": 107739.1,
+              "unroll2": 132140.54,
+              "unroll4": 108004.07
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9990054369938866,
+              "unroll2": 1.225266573670173,
+              "unroll4": 1.0014623581176036
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1410268.6,
+              "control": 1411433.4,
+              "unroll2": 1726246.1,
+              "unroll4": 1411408.5
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.000825941951767,
+              "unroll2": 1.2240548360787442,
+              "unroll4": 1.0008082857407445
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 17932123.5,
+              "control": 18013183.0,
+              "unroll2": 21580578.5,
+              "unroll4": 17878172.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.00452035142408,
+              "unroll2": 1.203459172027228,
+              "unroll4": 0.9969913490725179
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 106876222.0,
+              "control": 106742806.0,
+              "unroll2": 125778847.0,
+              "unroll4": 106157363.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9987516774311128,
+              "unroll2": 1.1768646444108026,
+              "unroll4": 0.9932739108236817
+            }
+          }
+        },
+        "gcc_native": {
+          "262144": {
+            "median_ns": {
+              "baseline": 22917.0,
+              "control": 23080.89,
+              "unroll2": 18850.51,
+              "unroll4": 18243.39
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0071514596151327,
+              "unroll2": 0.8225557446437142,
+              "unroll4": 0.796063620892787
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 50457.83,
+              "control": 50465.52,
+              "unroll2": 41238.61,
+              "unroll4": 39701.01
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0001524044930192,
+              "unroll2": 0.817288615067275,
+              "unroll4": 0.7868156438752916
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 106159.03,
+              "control": 106100.54,
+              "unroll2": 86634.99,
+              "unroll4": 83217.86
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9994490341518757,
+              "unroll2": 0.8160868651493897,
+              "unroll4": 0.7838980819625048
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1386805.7,
+              "control": 1389393.0,
+              "unroll2": 1142656.0,
+              "unroll4": 1093017.3
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0018656542874032,
+              "unroll2": 0.823948156544208,
+              "unroll4": 0.7881546059408323
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 17722531.5,
+              "control": 18144351.5,
+              "unroll2": 14904583.5,
+              "unroll4": 14209701.5
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0238013401189328,
+              "unroll2": 0.8409963046193485,
+              "unroll4": 0.8017873462377539
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 104509061.0,
+              "control": 103870229.0,
+              "unroll2": 87681095.0,
+              "unroll4": 85204134.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.993887305139982,
+              "unroll2": 0.8389807942107527,
+              "unroll4": 0.8152798731968321
+            }
+          }
+        }
+      }
+    },
+    "confirmation": {
+      "headers": {
+        "baseline": {
+          "path": "/tmp/sirkit_sieve_412339_20261022/baseline.hpp",
+          "sha256": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8"
+        },
+        "control": {
+          "path": "/tmp/sirkit_sieve_412339_20261022/baseline.hpp",
+          "sha256": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8"
+        },
+        "unroll4": {
+          "path": "/tmp/sirkit_sieve_412339_20261022/strike/unroll4.hpp",
+          "sha256": "de16c4a5fb868f3e54e00752de02011df5d0dfa99755b87fb7110254e6252cab"
+        }
+      },
+      "builds": [
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/confirm_gcc_plain_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/confirm_gcc_plain_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/strike/unroll4.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/confirm_gcc_plain_unroll4"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/confirm_gcc_native_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/confirm_gcc_native_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/strike/unroll4.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/confirm_gcc_native_unroll4"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/confirm_clang_plain_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/confirm_clang_plain_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/strike/unroll4.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/confirm_clang_plain_unroll4"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/confirm_clang_native_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/confirm_clang_native_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/strike/unroll4.hpp\"",
+          "/tmp/sirkit_sieve_412339_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412339_20261022/strike/confirm_clang_native_unroll4"
+        ]
+      ],
+      "results": {
+        "gcc_plain": {
+          "262144": {
+            "median_ns": {
+              "baseline": 23391.97,
+              "control": 23442.31,
+              "unroll4": 23296.83
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.002152020543802,
+              "unroll4": 0.9959327923214676
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 51480.16,
+              "control": 51327.69,
+              "unroll4": 51365.74
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9970382764933131,
+              "unroll4": 0.9977773961852487
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 107750.73,
+              "control": 107770.18,
+              "unroll4": 107951.4
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0001805092178957,
+              "unroll4": 1.001862353971987
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1412969.1,
+              "control": 1407764.6,
+              "unroll4": 1415007.1
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9963166215029048,
+              "unroll4": 1.0014423528440926
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 17983621.0,
+              "control": 17961190.5,
+              "unroll4": 17937179.5
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9987527261612108,
+              "unroll4": 0.9974175667959194
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 106977845.0,
+              "control": 106722944.0,
+              "unroll4": 107163815.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9976172543015799,
+              "unroll4": 1.001738397328905
+            }
+          }
+        },
+        "gcc_native": {
+          "262144": {
+            "median_ns": {
+              "baseline": 22834.71,
+              "control": 22819.8,
+              "unroll4": 18131.97
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9993470466671134,
+              "unroll4": 0.7940530008920631
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 50449.86,
+              "control": 50287.17,
+              "unroll4": 39928.41
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9967752140442014,
+              "unroll4": 0.7914473895467699
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 106075.83,
+              "control": 105966.45,
+              "unroll4": 83410.35
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9989688508682891,
+              "unroll4": 0.7863275733972575
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1385431.6,
+              "control": 1384887.8,
+              "unroll4": 1092948.7
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9996074869376446,
+              "unroll4": 0.7888867988863542
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 17732925.0,
+              "control": 17700409.5,
+              "unroll4": 14056296.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.998166376951349,
+              "unroll4": 0.792666522866363
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 103801675.0,
+              "control": 103744030.0,
+              "unroll4": 85113768.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9994446621405676,
+              "unroll4": 0.8199652654930665
+            }
+          }
+        },
+        "clang_plain": {
+          "262144": {
+            "median_ns": {
+              "baseline": 28074.92,
+              "control": 27996.46,
+              "unroll4": 24600.49
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9972053348682739,
+              "unroll4": 0.8762443490489021
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 62149.14,
+              "control": 62056.46,
+              "unroll4": 54307.17
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9985087484718211,
+              "unroll4": 0.8738201365296446
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 130832.6,
+              "control": 130503.76,
+              "unroll4": 113865.98
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9974865591603315,
+              "unroll4": 0.8703181011460446
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1699684.5,
+              "control": 1704010.8,
+              "unroll4": 1495321.5
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0025453547408358,
+              "unroll4": 0.8797641562301709
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 21242394.0,
+              "control": 21299748.5,
+              "unroll4": 18825766.5
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0027000017041394,
+              "unroll4": 0.8862356333283339
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 122194363.0,
+              "control": 123815605.0,
+              "unroll4": 110145535.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0132677315073855,
+              "unroll4": 0.9013962043404572
+            }
+          }
+        },
+        "clang_native": {
+          "262144": {
+            "median_ns": {
+              "baseline": 27979.75,
+              "control": 28020.4,
+              "unroll4": 24745.3
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0014528364263442,
+              "unroll4": 0.8844003252352147
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 62016.76,
+              "control": 61944.5,
+              "unroll4": 54386.86
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.998834831100496,
+              "unroll4": 0.8769703544654703
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 129863.31,
+              "control": 129940.75,
+              "unroll4": 114309.81
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0005963193145162,
+              "unroll4": 0.880231760610445
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1691847.5,
+              "control": 1693311.6,
+              "unroll4": 1498431.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0008653853258052,
+              "unroll4": 0.8856773438504357
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 21158689.5,
+              "control": 21212718.0,
+              "unroll4": 18907435.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.002553489903049,
+              "unroll4": 0.8936014208252359
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 120756146.0,
+              "control": 121048936.0,
+              "unroll4": 109400043.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0024246384941766,
+              "unroll4": 0.9059583849256004
+            }
+          }
+        }
+      }
+    },
+    "raw": {
+      "results.json": {
+        "gcc_plain": {
+          "baseline": {
+            "262144": [
+              32376.79,
+              23313.75,
+              23335.5,
+              23499.78,
+              23434.25
+            ],
+            "524288": [
+              91538.3,
+              51450.15,
+              51404.53,
+              51341.3,
+              52348.39
+            ],
+            "1000000": [
+              107863.8,
+              107703.02,
+              107835.91,
+              107949.15,
+              107846.36
+            ],
+            "10000000": [
+              1410939.3,
+              1409503.8,
+              1411600.5,
+              1410268.6,
+              1407564.4
+            ],
+            "100000000": [
+              18287604.0,
+              17932123.5,
+              17892652.5,
+              17925027.0,
+              18064833.5
+            ],
+            "500000000": [
+              106876222.0,
+              105277550.0,
+              105880140.0,
+              107226949.0,
+              113824002.0
+            ]
+          },
+          "control": {
+            "262144": [
+              22470.02,
+              23486.85,
+              23456.37,
+              23544.18,
+              23533.17
+            ],
+            "524288": [
+              62254.03,
+              51529.85,
+              51380.8,
+              51421.53,
+              51198.66
+            ],
+            "1000000": [
+              107899.71,
+              107649.76,
+              107604.16,
+              107753.87,
+              107739.1
+            ],
+            "10000000": [
+              1414220.5,
+              1408525.1,
+              1411815.6,
+              1409929.5,
+              1411433.4
+            ],
+            "100000000": [
+              17935400.5,
+              18013183.0,
+              18312932.5,
+              17896377.0,
+              18013615.0
+            ],
+            "500000000": [
+              106195866.0,
+              106742806.0,
+              107861225.0,
+              106080104.0,
+              132347761.0
+            ]
+          },
+          "unroll2": {
+            "262144": [
+              28173.01,
+              28661.55,
+              28510.38,
+              28604.03,
+              28569.24
+            ],
+            "524288": [
+              63040.93,
+              63087.46,
+              63120.72,
+              63077.8,
+              63026.84
+            ],
+            "1000000": [
+              131999.03,
+              132140.54,
+              132247.16,
+              132107.98,
+              132246.63
+            ],
+            "10000000": [
+              1728695.3,
+              1726246.1,
+              1726142.3,
+              1728179.8,
+              1724551.3
+            ],
+            "100000000": [
+              21547678.0,
+              21580578.5,
+              22122022.0,
+              21556344.0,
+              21658358.0
+            ],
+            "500000000": [
+              127202296.0,
+              125778847.0,
+              126447215.0,
+              124769168.0,
+              124939810.0
+            ]
+          },
+          "unroll4": {
+            "262144": [
+              53269.02,
+              23245.95,
+              23267.39,
+              23306.88,
+              23310.09
+            ],
+            "524288": [
+              51462.09,
+              51386.53,
+              51683.29,
+              51433.42,
+              51426.43
+            ],
+            "1000000": [
+              107668.18,
+              108004.07,
+              107837.9,
+              108225.47,
+              108919.94
+            ],
+            "10000000": [
+              1411176.3,
+              1411408.5,
+              1412802.2,
+              1410140.3,
+              1415470.4
+            ],
+            "100000000": [
+              17878172.0,
+              17857382.5,
+              18075703.5,
+              18115909.5,
+              17832775.0
+            ],
+            "500000000": [
+              106568422.0,
+              105991666.0,
+              106157363.0,
+              107637354.0,
+              105767693.0
+            ]
+          }
+        },
+        "gcc_native": {
+          "baseline": {
+            "262144": [
+              22855.24,
+              22970.33,
+              23292.83,
+              22805.85,
+              22917.0
+            ],
+            "524288": [
+              50393.84,
+              50923.52,
+              52084.32,
+              50457.83,
+              50271.46
+            ],
+            "1000000": [
+              106159.03,
+              106109.46,
+              108051.14,
+              106324.97,
+              106153.66
+            ],
+            "10000000": [
+              1386805.7,
+              1384287.4,
+              1434423.7,
+              1387344.2,
+              1385241.0
+            ],
+            "100000000": [
+              17753188.5,
+              17665622.5,
+              18580912.0,
+              17722531.5,
+              17714572.0
+            ],
+            "500000000": [
+              103731696.0,
+              103348992.0,
+              104656776.0,
+              104509061.0,
+              104740154.0
+            ]
+          },
+          "control": {
+            "262144": [
+              23080.89,
+              22880.66,
+              23929.81,
+              23125.7,
+              22821.68
+            ],
+            "524288": [
+              50465.52,
+              50507.11,
+              51722.69,
+              50437.6,
+              50441.25
+            ],
+            "1000000": [
+              107594.78,
+              106100.54,
+              107939.97,
+              106009.99,
+              105781.37
+            ],
+            "10000000": [
+              1380620.6,
+              1398048.5,
+              1449702.0,
+              1385985.2,
+              1389393.0
+            ],
+            "100000000": [
+              17549269.0,
+              18144351.5,
+              18501414.5,
+              18388876.5,
+              17648676.0
+            ],
+            "500000000": [
+              102916327.0,
+              104571294.0,
+              104918349.0,
+              103870229.0,
+              103154381.0
+            ]
+          },
+          "unroll2": {
+            "262144": [
+              18850.51,
+              18760.77,
+              19598.89,
+              19084.21,
+              18766.18
+            ],
+            "524288": [
+              41224.97,
+              41319.57,
+              42331.3,
+              41171.45,
+              41238.61
+            ],
+            "1000000": [
+              86576.07,
+              86723.75,
+              89342.79,
+              86522.18,
+              86634.99
+            ],
+            "10000000": [
+              1144696.2,
+              1142438.4,
+              1174101.2,
+              1139509.1,
+              1142656.0
+            ],
+            "100000000": [
+              14716413.5,
+              14904583.5,
+              15498177.5,
+              16498346.0,
+              14857530.5
+            ],
+            "500000000": [
+              87521650.0,
+              89684429.0,
+              94867254.0,
+              87681095.0,
+              86848916.0
+            ]
+          },
+          "unroll4": {
+            "262144": [
+              18243.39,
+              18244.02,
+              18561.67,
+              18094.5,
+              18209.22
+            ],
+            "524288": [
+              39656.11,
+              39934.08,
+              41359.17,
+              39670.36,
+              39701.01
+            ],
+            "1000000": [
+              83200.94,
+              83614.81,
+              85786.02,
+              83200.04,
+              83217.86
+            ],
+            "10000000": [
+              1093017.3,
+              1093519.4,
+              1124824.8,
+              1092266.0,
+              1090717.2
+            ],
+            "100000000": [
+              14058124.5,
+              14150206.5,
+              14455071.5,
+              14417945.5,
+              14209701.5
+            ],
+            "500000000": [
+              83936978.0,
+              85204134.0,
+              87677739.0,
+              87123244.0,
+              83831163.0
+            ]
+          }
+        }
+      },
+      "confirm_results.json": {
+        "gcc_plain": {
+          "baseline": {
+            "262144": [
+              23378.75,
+              23287.34,
+              24287.01,
+              23391.97,
+              23396.7
+            ],
+            "524288": [
+              51374.3,
+              51480.16,
+              51564.5,
+              51511.86,
+              51391.8
+            ],
+            "1000000": [
+              107641.69,
+              107418.23,
+              107750.73,
+              108319.52,
+              107753.85
+            ],
+            "10000000": [
+              1415135.4,
+              1413895.8,
+              1412969.1,
+              1407118.1,
+              1408942.5
+            ],
+            "100000000": [
+              18334613.0,
+              17873266.5,
+              17906698.5,
+              18027607.5,
+              17983621.0
+            ],
+            "500000000": [
+              107228013.0,
+              106977845.0,
+              105363768.0,
+              107098824.0,
+              106401623.0
+            ]
+          },
+          "control": {
+            "262144": [
+              23442.31,
+              23482.8,
+              23443.84,
+              23413.51,
+              23401.28
+            ],
+            "524288": [
+              51327.69,
+              51367.74,
+              51266.2,
+              51217.74,
+              51442.71
+            ],
+            "1000000": [
+              107876.2,
+              107860.3,
+              107515.31,
+              107770.18,
+              107710.84
+            ],
+            "10000000": [
+              1411708.5,
+              1407764.6,
+              1406759.2,
+              1405271.7,
+              1409223.7
+            ],
+            "100000000": [
+              17961190.5,
+              18063333.0,
+              17863584.5,
+              17892087.5,
+              18064022.0
+            ],
+            "500000000": [
+              106805921.0,
+              106722944.0,
+              105332499.0,
+              105850292.0,
+              106757457.0
+            ]
+          },
+          "unroll4": {
+            "262144": [
+              23259.39,
+              23237.21,
+              23296.83,
+              23416.78,
+              23368.4
+            ],
+            "524288": [
+              51289.49,
+              51349.6,
+              51381.38,
+              51365.74,
+              51563.81
+            ],
+            "1000000": [
+              107606.61,
+              108133.19,
+              107976.27,
+              107802.81,
+              107951.4
+            ],
+            "10000000": [
+              1415123.4,
+              1413665.0,
+              1413629.9,
+              1416539.2,
+              1415007.1
+            ],
+            "100000000": [
+              17937179.5,
+              17874194.5,
+              18007625.5,
+              17950760.0,
+              17843317.0
+            ],
+            "500000000": [
+              107163815.0,
+              107363303.0,
+              106171377.0,
+              107009447.0,
+              109783981.0
+            ]
+          }
+        },
+        "gcc_native": {
+          "baseline": {
+            "262144": [
+              23134.31,
+              22824.94,
+              22815.06,
+              23095.26,
+              22834.71
+            ],
+            "524288": [
+              50543.28,
+              50474.92,
+              50439.61,
+              50263.12,
+              50449.86
+            ],
+            "1000000": [
+              105902.36,
+              106083.28,
+              106075.83,
+              106063.92,
+              106131.18
+            ],
+            "10000000": [
+              1385293.1,
+              1387765.4,
+              1381760.9,
+              1385431.6,
+              1387211.5
+            ],
+            "100000000": [
+              17818975.5,
+              17732925.0,
+              17720447.0,
+              17801447.5,
+              17565316.5
+            ],
+            "500000000": [
+              104211190.0,
+              103873401.0,
+              102632078.0,
+              103801675.0,
+              103278417.0
+            ]
+          },
+          "control": {
+            "262144": [
+              22868.23,
+              22794.01,
+              22819.8,
+              22814.53,
+              22834.5
+            ],
+            "524288": [
+              50287.17,
+              50459.63,
+              50215.99,
+              50595.72,
+              50243.7
+            ],
+            "1000000": [
+              105932.31,
+              106048.85,
+              106129.12,
+              105855.16,
+              105966.45
+            ],
+            "10000000": [
+              1379609.0,
+              1385326.1,
+              1384887.8,
+              1383023.2,
+              1402371.5
+            ],
+            "100000000": [
+              17527881.5,
+              17929231.5,
+              17700409.5,
+              17609529.5,
+              17883988.0
+            ],
+            "500000000": [
+              103744030.0,
+              105084376.0,
+              102247117.0,
+              102495797.0,
+              104272734.0
+            ]
+          },
+          "unroll4": {
+            "262144": [
+              18255.08,
+              18119.74,
+              18103.47,
+              18167.13,
+              18131.97
+            ],
+            "524288": [
+              39963.23,
+              39797.62,
+              39990.99,
+              39835.84,
+              39928.41
+            ],
+            "1000000": [
+              83410.35,
+              83592.16,
+              83277.34,
+              83286.56,
+              83437.05
+            ],
+            "10000000": [
+              1090872.7,
+              1090836.2,
+              1094932.0,
+              1092948.7,
+              1099318.0
+            ],
+            "100000000": [
+              14044485.5,
+              14177894.5,
+              14260629.5,
+              14056296.0,
+              14045520.5
+            ],
+            "500000000": [
+              85709447.0,
+              86259618.0,
+              85113768.0,
+              83094117.0,
+              84331263.0
+            ]
+          }
+        },
+        "clang_plain": {
+          "baseline": {
+            "262144": [
+              28020.27,
+              28139.86,
+              28074.92,
+              27954.83,
+              28136.79
+            ],
+            "524288": [
+              61926.83,
+              62149.21,
+              62256.89,
+              62058.18,
+              62149.14
+            ],
+            "1000000": [
+              130831.7,
+              130969.72,
+              130929.2,
+              130578.81,
+              130832.6
+            ],
+            "10000000": [
+              1719547.8,
+              1698140.1,
+              1696119.7,
+              1700560.3,
+              1699684.5
+            ],
+            "100000000": [
+              21700382.0,
+              21240248.0,
+              21242394.0,
+              21425842.0,
+              21237034.5
+            ],
+            "500000000": [
+              124665380.0,
+              121889260.0,
+              122194363.0,
+              124094018.0,
+              121498011.0
+            ]
+          },
+          "control": {
+            "262144": [
+              28025.93,
+              28004.66,
+              27982.03,
+              27996.46,
+              27992.83
+            ],
+            "524288": [
+              62083.04,
+              62056.46,
+              61929.98,
+              62180.07,
+              61934.23
+            ],
+            "1000000": [
+              130503.76,
+              130859.47,
+              130342.05,
+              131093.12,
+              130399.52
+            ],
+            "10000000": [
+              1711648.1,
+              1704010.8,
+              1703090.0,
+              1697557.8,
+              1707537.8
+            ],
+            "100000000": [
+              21299748.5,
+              21372949.0,
+              21245904.5,
+              21275816.0,
+              21529352.5
+            ],
+            "500000000": [
+              124789136.0,
+              123634039.0,
+              123974486.0,
+              123815605.0,
+              123737509.0
+            ]
+          },
+          "unroll4": {
+            "262144": [
+              24504.58,
+              24540.73,
+              24801.67,
+              24600.49,
+              24642.7
+            ],
+            "524288": [
+              54341.03,
+              54519.04,
+              54307.17,
+              54188.18,
+              54229.53
+            ],
+            "1000000": [
+              113885.32,
+              113646.25,
+              113865.98,
+              113857.38,
+              114145.36
+            ],
+            "10000000": [
+              1525302.6,
+              1492833.5,
+              1497540.2,
+              1492766.6,
+              1495321.5
+            ],
+            "100000000": [
+              18951107.0,
+              18825766.5,
+              18902456.0,
+              18761902.5,
+              18788986.5
+            ],
+            "500000000": [
+              111854367.0,
+              110145535.0,
+              109390723.0,
+              110552824.0,
+              108732199.0
+            ]
+          }
+        },
+        "clang_native": {
+          "baseline": {
+            "262144": [
+              28154.37,
+              28188.76,
+              27883.69,
+              27979.75,
+              27908.23
+            ],
+            "524288": [
+              62191.87,
+              61901.71,
+              62016.76,
+              62091.21,
+              61719.54
+            ],
+            "1000000": [
+              129863.31,
+              130402.97,
+              129724.26,
+              132794.05,
+              129632.71
+            ],
+            "10000000": [
+              1692827.0,
+              1691847.5,
+              1687468.6,
+              1695940.7,
+              1687696.4
+            ],
+            "100000000": [
+              21485764.5,
+              21098185.5,
+              21125950.0,
+              21293317.5,
+              21158689.5
+            ],
+            "500000000": [
+              123591326.0,
+              120363015.0,
+              120756146.0,
+              121469279.0,
+              120509170.0
+            ]
+          },
+          "control": {
+            "262144": [
+              28123.29,
+              28297.69,
+              28020.4,
+              27995.29,
+              27951.57
+            ],
+            "524288": [
+              61885.26,
+              62003.36,
+              61713.58,
+              61944.5,
+              61964.49
+            ],
+            "1000000": [
+              129817.93,
+              130173.42,
+              129824.37,
+              129940.75,
+              129969.7
+            ],
+            "10000000": [
+              1695183.8,
+              1695709.2,
+              1691331.3,
+              1693311.6,
+              1691528.7
+            ],
+            "100000000": [
+              21259605.5,
+              21461236.0,
+              21110982.0,
+              21157340.0,
+              21212718.0
+            ],
+            "500000000": [
+              123720281.0,
+              122132754.0,
+              119918858.0,
+              120204150.0,
+              121048936.0
+            ]
+          },
+          "unroll4": {
+            "262144": [
+              24820.25,
+              24574.81,
+              24721.84,
+              24745.3,
+              24818.31
+            ],
+            "524288": [
+              54406.33,
+              54266.79,
+              54386.86,
+              54095.78,
+              54564.75
+            ],
+            "1000000": [
+              114052.42,
+              114331.78,
+              114210.12,
+              114309.81,
+              114442.52
+            ],
+            "10000000": [
+              1501035.8,
+              1493632.7,
+              1496247.6,
+              1498431.0,
+              1498967.3
+            ],
+            "100000000": [
+              18961165.0,
+              18896625.0,
+              19123576.5,
+              18895275.0,
+              18907435.0
+            ],
+            "500000000": [
+              111299638.0,
+              109099312.0,
+              110675910.0,
+              109016670.0,
+              109400043.0
+            ]
+          }
+        }
+      }
+    }
+  },
+  "full_main": {
+    "summary": {
+      "builds": [
+        {
+          "mode": "gcc_plain",
+          "variant": "baseline",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/gcc_plain_baseline"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_plain",
+          "variant": "control",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/gcc_plain_control"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_plain",
+          "variant": "candidate",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/strike/unroll4.hpp\"",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/gcc_plain_candidate"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_native",
+          "variant": "baseline",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/gcc_native_baseline"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_native",
+          "variant": "control",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/gcc_native_control"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_native",
+          "variant": "candidate",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/strike/unroll4.hpp\"",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/gcc_native_candidate"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "clang_plain",
+          "variant": "baseline",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/clang_plain_baseline"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "clang_plain",
+          "variant": "control",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/clang_plain_control"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "clang_plain",
+          "variant": "candidate",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/strike/unroll4.hpp\"",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/clang_plain_candidate"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "clang_native",
+          "variant": "baseline",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/clang_native_baseline"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "clang_native",
+          "variant": "control",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/baseline.hpp\"",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/clang_native_control"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "clang_native",
+          "variant": "candidate",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DEVAL",
+            "-DONLINE_JUDGE",
+            "-DHEADER=\"/tmp/sirkit_sieve_412339_20261022/strike/unroll4.hpp\"",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/main.cpp",
+            "-o",
+            "/tmp/sirkit_sieve_412339_20261022/candidate_main/clang_native_candidate"
+          ],
+          "warnings": ""
+        }
+      ],
+      "source_hashes": {
+        "baseline": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8",
+        "control": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8",
+        "candidate": "de16c4a5fb868f3e54e00752de02011df5d0dfa99755b87fb7110254e6252cab"
+      },
+      "frozen": {
+        "Math/Eratosthenes.cpp": "3500132d77d3042403b50360c4d0667e56c5a814264a945ba42c55daf375f7b8",
+        "Verify/current/drivers/eratosthenes_main.cpp": "3a64febf817b342de8c892a7abbff079d5aaccdd959bd472a5f95843ca523581",
+        "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+      },
+      "method": "5 rotated independent processes, same main/I/O, CPU14 shared lock, median ms",
+      "summary": {
+        "gcc_plain": {
+          "ten_02": {
+            "baseline": 2.344436,
+            "control": 2.463274,
+            "candidate": 2.46783
+          },
+          "ten_01": {
+            "baseline": 9.074644,
+            "control": 9.11435,
+            "candidate": 9.027665
+          },
+          "ten_00": {
+            "baseline": 45.09697,
+            "control": 44.286416,
+            "candidate": 45.700499
+          },
+          "max_00": {
+            "baseline": 216.528352,
+            "control": 216.774813,
+            "candidate": 214.724627
+          }
+        },
+        "gcc_native": {
+          "ten_02": {
+            "baseline": 2.403563,
+            "control": 2.495184,
+            "candidate": 2.296487
+          },
+          "ten_01": {
+            "baseline": 8.951709,
+            "control": 9.193537,
+            "candidate": 9.039043
+          },
+          "ten_00": {
+            "baseline": 45.156036,
+            "control": 45.816311,
+            "candidate": 40.287046
+          },
+          "max_00": {
+            "baseline": 213.602337,
+            "control": 212.727631,
+            "candidate": 193.068908
+          }
+        },
+        "clang_plain": {
+          "ten_02": {
+            "baseline": 2.270863,
+            "control": 2.529431,
+            "candidate": 2.361301
+          },
+          "ten_01": {
+            "baseline": 8.754021,
+            "control": 8.916649,
+            "candidate": 8.440582
+          },
+          "ten_00": {
+            "baseline": 47.568194,
+            "control": 46.822251,
+            "candidate": 45.325009
+          },
+          "max_00": {
+            "baseline": 231.940169,
+            "control": 232.226865,
+            "candidate": 220.421518
+          }
+        },
+        "clang_native": {
+          "ten_02": {
+            "baseline": 2.537346,
+            "control": 2.634677,
+            "candidate": 2.358551
+          },
+          "ten_01": {
+            "baseline": 8.810699,
+            "control": 8.926525,
+            "candidate": 8.421722
+          },
+          "ten_00": {
+            "baseline": 48.114401,
+            "control": 48.158341,
+            "candidate": 45.298296
+          },
+          "max_00": {
+            "baseline": 230.237742,
+            "control": 232.872258,
+            "candidate": 222.038802
+          }
+        }
+      }
+    },
+    "raw": {
+      "gcc_plain": {
+        "ten_02": {
+          "baseline": [
+            6.184161,
+            2.340001,
+            2.099672,
+            2.94784,
+            2.344436
+          ],
+          "control": [
+            2.403083,
+            2.913991,
+            2.182047,
+            2.463274,
+            3.283757
+          ],
+          "candidate": [
+            2.16166,
+            2.46783,
+            2.570721,
+            2.290181,
+            2.708585
+          ]
+        },
+        "ten_01": {
+          "baseline": [
+            8.771998,
+            9.074644,
+            9.279934,
+            8.747918,
+            9.198193
+          ],
+          "control": [
+            9.281063,
+            8.818467,
+            9.003869,
+            9.229597,
+            9.11435
+          ],
+          "candidate": [
+            9.008044,
+            9.217979,
+            9.027665,
+            8.985224,
+            9.59167
+          ]
+        },
+        "ten_00": {
+          "baseline": [
+            45.09697,
+            43.350435,
+            47.786245,
+            44.70232,
+            45.946914
+          ],
+          "control": [
+            44.250843,
+            44.286416,
+            46.435967,
+            43.771938,
+            46.188082
+          ],
+          "candidate": [
+            44.112154,
+            45.700499,
+            46.579627,
+            44.33101,
+            48.283013
+          ]
+        },
+        "max_00": {
+          "baseline": [
+            216.528352,
+            223.323509,
+            217.477762,
+            212.865293,
+            214.887142
+          ],
+          "control": [
+            211.849637,
+            216.774813,
+            217.872435,
+            205.540264,
+            220.720845
+          ],
+          "candidate": [
+            212.048918,
+            216.652356,
+            214.668783,
+            215.539137,
+            214.724627
+          ]
+        }
+      },
+      "gcc_native": {
+        "ten_02": {
+          "baseline": [
+            2.336695,
+            2.403563,
+            2.547538,
+            3.193591,
+            2.349826
+          ],
+          "control": [
+            2.495184,
+            2.831111,
+            2.010062,
+            2.353416,
+            2.773116
+          ],
+          "candidate": [
+            2.296487,
+            2.370816,
+            2.273558,
+            2.277188,
+            2.944341
+          ]
+        },
+        "ten_01": {
+          "baseline": [
+            8.951709,
+            9.473912,
+            8.891403,
+            8.772878,
+            9.167072
+          ],
+          "control": [
+            9.269879,
+            9.193537,
+            8.70104,
+            9.283928,
+            9.112483
+          ],
+          "candidate": [
+            9.039043,
+            9.380344,
+            8.151151,
+            8.62092,
+            9.040123
+          ]
+        },
+        "ten_00": {
+          "baseline": [
+            49.571315,
+            45.13456,
+            43.131883,
+            45.310386,
+            45.156036
+          ],
+          "control": [
+            46.274306,
+            45.541018,
+            43.73252,
+            48.598907,
+            45.816311
+          ],
+          "candidate": [
+            39.311597,
+            40.287046,
+            39.754941,
+            41.603495,
+            46.587196
+          ]
+        },
+        "max_00": {
+          "baseline": [
+            213.602337,
+            216.397265,
+            212.004694,
+            214.82768,
+            200.584289
+          ],
+          "control": [
+            212.727631,
+            201.291963,
+            213.119468,
+            217.020602,
+            201.486931
+          ],
+          "candidate": [
+            193.068908,
+            181.159592,
+            193.311809,
+            196.513087,
+            181.608199
+          ]
+        }
+      },
+      "clang_plain": {
+        "ten_02": {
+          "baseline": [
+            2.904659,
+            2.143876,
+            2.270863,
+            2.842784,
+            2.229333
+          ],
+          "control": [
+            2.529431,
+            2.635265,
+            2.157162,
+            2.480354,
+            2.841238
+          ],
+          "candidate": [
+            2.361301,
+            2.269176,
+            2.792337,
+            2.278021,
+            2.436355
+          ]
+        },
+        "ten_01": {
+          "baseline": [
+            8.385189,
+            9.165729,
+            8.754021,
+            8.490078,
+            8.755553
+          ],
+          "control": [
+            8.916649,
+            9.259751,
+            8.500151,
+            8.988809,
+            8.600974
+          ],
+          "candidate": [
+            8.440582,
+            9.13346,
+            8.146834,
+            8.370081,
+            8.846524
+          ]
+        },
+        "ten_00": {
+          "baseline": [
+            45.396369,
+            47.84365,
+            47.607383,
+            47.083878,
+            47.568194
+          ],
+          "control": [
+            46.822251,
+            48.60306,
+            45.153569,
+            46.806573,
+            48.161994
+          ],
+          "candidate": [
+            43.689763,
+            45.867689,
+            42.818821,
+            45.448974,
+            45.325009
+          ]
+        },
+        "max_00": {
+          "baseline": [
+            231.11862,
+            233.67981,
+            228.445086,
+            232.528806,
+            231.940169
+          ],
+          "control": [
+            231.784098,
+            235.170073,
+            228.286376,
+            233.386336,
+            232.226865
+          ],
+          "candidate": [
+            217.87734,
+            221.999566,
+            218.851246,
+            220.421518,
+            220.679962
+          ]
+        }
+      },
+      "clang_native": {
+        "ten_02": {
+          "baseline": [
+            3.011882,
+            2.172496,
+            2.537346,
+            2.821341,
+            2.236066
+          ],
+          "control": [
+            2.478963,
+            2.758775,
+            2.228605,
+            2.634677,
+            2.870482
+          ],
+          "candidate": [
+            2.358551,
+            2.308438,
+            2.704144,
+            2.280802,
+            2.452994
+          ]
+        },
+        "ten_01": {
+          "baseline": [
+            8.384991,
+            9.165832,
+            8.810699,
+            8.500865,
+            8.867305
+          ],
+          "control": [
+            8.926525,
+            9.218524,
+            8.598261,
+            9.160998,
+            8.819735
+          ],
+          "candidate": [
+            8.421722,
+            9.056481,
+            8.132517,
+            8.380674,
+            8.939184
+          ]
+        },
+        "ten_00": {
+          "baseline": [
+            45.27008,
+            47.817062,
+            49.345205,
+            48.445839,
+            48.114401
+          ],
+          "control": [
+            45.81538,
+            48.158341,
+            45.347864,
+            48.606402,
+            48.983247
+          ],
+          "candidate": [
+            43.340313,
+            45.551866,
+            44.043413,
+            45.298296,
+            45.763925
+          ]
+        },
+        "max_00": {
+          "baseline": [
+            230.237742,
+            220.834388,
+            230.023287,
+            233.269767,
+            233.946989
+          ],
+          "control": [
+            232.159129,
+            235.358537,
+            231.069482,
+            235.600974,
+            232.872258
+          ],
+          "candidate": [
+            220.963791,
+            223.216034,
+            222.038802,
+            224.514219,
+            221.980814
+          ]
+        }
+      }
+    },
+    "gcc_plain_confirmation": {
+      "method": "same previously compiled binaries;21 rotated processes per variant per case;CPU14/sharedlock;medianms",
+      "summary": {
+        "gcc_plain": {
+          "ten_02": {
+            "baseline": 2.210319,
+            "control": 2.228455,
+            "candidate": 2.182289
+          },
+          "ten_00": {
+            "baseline": 42.839627,
+            "control": 42.822385,
+            "candidate": 42.609371
+          }
+        }
+      },
+      "raw": {
+        "gcc_plain": {
+          "ten_02": {
+            "baseline": [
+              2.469403,
+              2.127368,
+              2.27262,
+              2.466732,
+              2.156795,
+              2.269858,
+              2.325773,
+              1.957427,
+              2.162609,
+              2.734203,
+              2.203622,
+              2.120279,
+              2.58937,
+              2.213604,
+              2.210319,
+              2.271504,
+              2.152618,
+              2.097371,
+              2.507626,
+              2.162251,
+              2.194984
+            ],
+            "control": [
+              2.200878,
+              2.33283,
+              2.198255,
+              2.273566,
+              2.365393,
+              2.189679,
+              2.134563,
+              2.489147,
+              2.127379,
+              2.313928,
+              2.777121,
+              2.101786,
+              2.151114,
+              2.404357,
+              2.228455,
+              2.272286,
+              2.275726,
+              2.139363,
+              2.191878,
+              2.498164,
+              2.225486
+            ],
+            "candidate": [
+              2.089294,
+              2.016272,
+              2.747871,
+              2.101303,
+              2.242693,
+              2.603752,
+              2.162694,
+              1.811184,
+              2.443338,
+              2.119339,
+              2.388996,
+              2.511316,
+              2.182289,
+              2.095167,
+              2.458418,
+              2.129123,
+              2.069266,
+              2.530622,
+              2.129979,
+              2.246503,
+              2.549307
+            ]
+          },
+          "ten_00": {
+            "baseline": [
+              50.51417,
+              43.041612,
+              42.644638,
+              42.756919,
+              43.443161,
+              44.465706,
+              43.152573,
+              42.727019,
+              42.649498,
+              42.855383,
+              42.836834,
+              42.673196,
+              42.765665,
+              42.839627,
+              42.274867,
+              43.922911,
+              42.799945,
+              43.211787,
+              42.935121,
+              42.609923,
+              42.893888
+            ],
+            "control": [
+              46.603342,
+              42.601907,
+              43.198018,
+              42.807095,
+              42.821694,
+              43.15486,
+              44.889121,
+              42.715821,
+              42.441444,
+              42.912104,
+              43.134854,
+              42.822385,
+              42.636241,
+              43.399789,
+              43.097163,
+              50.531899,
+              42.551992,
+              42.931215,
+              42.738636,
+              42.568075,
+              42.475441
+            ],
+            "candidate": [
+              42.324976,
+              42.428333,
+              43.103851,
+              42.671069,
+              42.609371,
+              42.287086,
+              44.437152,
+              42.663778,
+              42.186235,
+              43.096364,
+              42.698857,
+              42.455503,
+              42.763091,
+              42.953107,
+              42.77665,
+              42.562881,
+              42.411944,
+              43.215916,
+              42.48142,
+              42.58011,
+              42.582557
+            ]
+          }
+        }
+      }
+    },
+    "note": "main、共有入出力、SKIP_RUNTIME_CHECKS、コンパイラ設定を揃えたプロセス全体。出力と起動終了を含み、本体単独測定と区別。"
+  },
+  "limits": "測定はローカルCPUのGCC15.3/Clang21。GCC plainの構築+countは±0.41%内で改善を主張しない。短時間のプロセス全体は起動終了や入出力を含み、controlの揺れもある。全条件で非退行とは断言しない。",
+  "rejected": {
+    "unroll2": "GCC plainで約18〜23%遅い。"
+  },
+  "reproduction": {
+    "baseline": "// SPDX-License-Identifier: CC0-1.0\n\n#include <algorithm>\n#include <array>\n#include <bit>\n#include <cstddef>\n#include <cstdint>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n#include <immintrin.h>\n#endif\n\n#ifndef SIRKIT_PRIME_SIEVE_POPCOUNT_DEFINED\n#define SIRKIT_PRIME_SIEVE_POPCOUNT_DEFINED\nnamespace reinsirk::detail {\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n// 内部用。32語単位で集計し、残りを4語・1語ずつ処理する。\n[[gnu::target(\"avx2\"), gnu::noinline]] inline std::uint64_t popcount_words_avx2(\n    const std::uint64_t* words, std::size_t count) noexcept {\n    const auto table = _mm256_setr_epi8(\n        0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4,\n        0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4);\n    const auto mask = _mm256_set1_epi8(15);\n    const auto zero = _mm256_setzero_si256();\n    auto sum = zero;\n    std::size_t i = 0;\n    for (; count - i >= 32; i += 32) {\n        auto bytes = zero;\n        for (std::size_t j = 0; j < 32; j += 4) {\n            const auto value = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(words + i + j));\n            const auto low = _mm256_and_si256(value, mask);\n            const auto high = _mm256_and_si256(_mm256_srli_epi16(value, 4), mask);\n            const auto bits = _mm256_add_epi8(_mm256_shuffle_epi8(table, low),\n                                             _mm256_shuffle_epi8(table, high));\n            bytes = _mm256_add_epi8(bytes, bits);\n        }\n        sum = _mm256_add_epi64(sum, _mm256_sad_epu8(bytes, zero));\n    }\n    for (; count - i >= 4; i += 4) {\n        const auto value = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(words + i));\n        const auto low = _mm256_and_si256(value, mask);\n        const auto high = _mm256_and_si256(_mm256_srli_epi16(value, 4), mask);\n        const auto bits = _mm256_add_epi8(_mm256_shuffle_epi8(table, low),\n                                         _mm256_shuffle_epi8(table, high));\n        sum = _mm256_add_epi64(sum, _mm256_sad_epu8(bits, zero));\n    }\n    alignas(32) std::uint64_t lanes[4];\n    _mm256_store_si256(reinterpret_cast<__m256i*>(lanes), sum);\n    std::uint64_t result = lanes[0] + lanes[1] + lanes[2] + lanes[3];\n    for (; i < count; ++i) result += std::popcount(words[i]);\n    return result;\n}\n#endif\n} // namespace reinsirk::detail\n#endif\n\n\n#ifndef SIRKIT_PRIME_SIEVE_PATTERN_DEFINED\n#define SIRKIT_PRIME_SIEVE_PATTERN_DEFINED\nnamespace reinsirk::detail {\ninline constexpr auto sieve_pattern = [] {\n    std::array<std::uint64_t, 1155> values{};\n    for (std::size_t word = 0; word < values.size(); ++word)\n        for (unsigned bit = 0; bit < 64; ++bit) {\n            const auto n = (word * 64 + bit) * 2 + 1;\n            if (n % 3 != 0 && n % 5 != 0 && n % 7 != 0 && n % 11 != 0)\n                values[word] |= std::uint64_t{1} << bit;\n        }\n    return values;\n}();\ninline void fill_sieve_pattern(std::uint64_t* dest, std::size_t count) noexcept {\n    constexpr std::size_t period = sieve_pattern.size();\n    while (count >= period) {\n        std::copy(sieve_pattern.begin(), sieve_pattern.end(), dest);\n        dest += period; count -= period;\n    }\n    std::copy_n(sieve_pattern.begin(), count, dest);\n}\n}\n#endif\n#ifndef SIRKIT_PRIME_SIEVE_DEFINED\n#define SIRKIT_PRIME_SIEVE_DEFINED\n\n// PrimeSieve(limit=0): [0,limit]の素数表を構築する。O(limit log log limit)、奇数1個につき1bit。\n// コピーは独立した表を持ち、移動元はlimit=0の空の素数表として再利用できる。\n// is_prime(n): 0<=n<=limitの素数判定をO(1)で返す。\n// limit(): 構築時の上限を返す。O(1)。\n// prime_count(): 上限以下の素数の個数を返す。O(limit/64)。\n// primes(): 上限以下の素数を昇順のvectorで返す。O(limit/64+素数数)。\n// append_to(ans): 上限以下の素数を昇順でansの末尾に追加する。O(limit/64+素数数)、償却。\n// for_each_prime(f): 昇順にf(uint64_tの素数)を呼ぶ。O(limit/64+素数数)、呼出し中に表を変更しない。\nclass PrimeSieve {\npublic:\n    explicit PrimeSieve(std::uint64_t limit = 0) : limit_(limit) {\n        if (limit < 128) {\n            if (limit != 0) {\n                // 127以下の奇合成数は3・5・7・11のいずれかの倍数。\n                constexpr auto primes = (reinsirk::detail::sieve_pattern[0] |\n                    (std::uint64_t{1} << 1) | (std::uint64_t{1} << 2) |\n                    (std::uint64_t{1} << 3) | (std::uint64_t{1} << 5)) & ~std::uint64_t{1};\n                const auto bits = static_cast<unsigned>((limit + 1) / 2);\n                flags_.push_back(primes & (~std::uint64_t{0} >> (64 - bits)));\n            }\n            return;\n        }\n        const std::uint64_t odds = limit / 2 + limit % 2;\n        const std::uint64_t words = odds / 64 + (odds % 64 != 0);\n        if (words > flags_.max_size())\n            throw std::length_error(\"PrimeSieve: limit exceeds capacity\");\n        flags_.assign(static_cast<std::size_t>(words), ~std::uint64_t{0});\n        build_large(odds);\n    }\n\n    PrimeSieve(const PrimeSieve&) = default;\n    PrimeSieve& operator=(const PrimeSieve& other) {\n        flags_ = other.flags_;\n        limit_ = other.limit_;\n        return *this;\n    }\n    PrimeSieve(PrimeSieve&& other) noexcept : limit_(std::exchange(other.limit_, 0)) {\n        flags_.swap(other.flags_);\n    }\n    PrimeSieve& operator=(PrimeSieve&& other) noexcept {\n        if (this != &other) {\n            PrimeSieve next(std::move(other));\n            std::swap(limit_, next.limit_);\n            flags_.swap(next.flags_);\n        }\n        return *this;\n    }\n\n    bool is_prime(std::uint64_t n) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (n > limit_) [[unlikely]]\n            throw std::out_of_range(\"PrimeSieve::is_prime: beyond limit\");\n#endif\n        if ((n & 1) == 0) return n == 2;\n        const std::uint64_t index = n / 2;\n        return (flags_[static_cast<std::size_t>(index / 64)] >> (index % 64) & 1) != 0;\n    }\n    std::uint64_t limit() const noexcept { return limit_; }\n    std::uint64_t prime_count() const noexcept {\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n#if !(defined(__clang__) && defined(__AVX2__))\n        if (limit_ >= 3969 && __builtin_cpu_supports(\"avx2\")) [[unlikely]]\n            return static_cast<std::uint64_t>(limit_ >= 2) +\n                   reinsirk::detail::popcount_words_avx2(flags_.data(), flags_.size());\n#endif\n#endif\n        std::uint64_t count = limit_ >= 2;\n        for (std::uint64_t word : flags_) count += std::popcount(word);\n        return count;\n    }\n#if defined(__clang__) && !defined(__AVX2__)\n    std::vector<std::uint64_t> primes() const {\n        std::vector<std::uint64_t> result;\n        if (limit_ < 2) return result;\n        if (limit_ >= 16) {\n            const auto count = prime_count();\n            if (count > result.max_size())\n                throw std::length_error(\"PrimeSieve::primes: capacity exceeded\");\n            result.reserve(static_cast<std::size_t>(count));\n        }\n        append_to(result);\n        return result;\n    }\n#else\n    std::vector<std::uint64_t> primes() const {\n        std::vector<std::uint64_t> result;\n        if (limit_ < 2) return result;\n        if (limit_ >= 16384) {\n            const auto count = prime_count();\n            if (count > result.max_size())\n                throw std::length_error(\"PrimeSieve::primes: capacity exceeded\");\n            result.reserve(static_cast<std::size_t>(count));\n        } else if (limit_ >= 16) {\n            return small_primes();\n        }\n        append_to(result);\n        return result;\n    }\n#endif\n#if defined(__clang__)\n    [[gnu::always_inline]]\n#endif\n    void append_to(std::vector<std::uint64_t>& ans) const {\n        if (limit_ >= 2) ans.push_back(2);\n        for (std::size_t i = 0; i < flags_.size(); ++i) {\n            std::uint64_t word = flags_[i];\n            while (word != 0) {\n                const unsigned bit = std::countr_zero(word);\n                ans.push_back((static_cast<std::uint64_t>(i) * 64 + bit) * 2 + 1);\n                word &= word - 1;\n            }\n        }\n    }\n\n    template <class Function>\n    void for_each_prime(Function&& function) const {\n        if (limit_ >= 2) function(std::uint64_t{2});\n        for (std::size_t i = 0; i < flags_.size(); ++i) {\n            std::uint64_t word = flags_[i];\n            while (word != 0) {\n                const unsigned bit = std::countr_zero(word);\n                function((static_cast<std::uint64_t>(i) * 64 + bit) * 2 + 1);\n                word &= word - 1;\n            }\n        }\n    }\n\nprivate:\n#if !defined(__clang__) || defined(__AVX2__)\n#if defined(__GNUC__) || defined(__clang__)\n    [[gnu::noinline]]\n#endif\n    std::vector<std::uint64_t> small_primes() const {\n        std::vector<std::uint64_t> result;\n        const auto count = prime_count();\n        if (count > result.max_size())\n            throw std::length_error(\"PrimeSieve::primes: capacity exceeded\");\n        result.reserve(static_cast<std::size_t>(count));\n        append_to(result);\n        return result;\n    }\n#endif\n\n    void build_large(std::uint64_t odds) {\n        reinsirk::detail::fill_sieve_pattern(flags_.data(), flags_.size());\n        flags_[0] |= (std::uint64_t{1} << 1) | (std::uint64_t{1} << 2) |\n                     (std::uint64_t{1} << 3) | (std::uint64_t{1} << 5);\n        flags_[0] &= ~std::uint64_t{1};\n        if (odds % 64 != 0)\n            flags_.back() &= (std::uint64_t{1} << (odds % 64)) - 1;\n        if (limit_ >= 262144) {\n            build_blocked(odds);\n            return;\n        }\n        for (std::uint64_t p = 13; p <= limit_ / p; p += 2) {\n            const auto index = p / 2;\n            if (((flags_[index / 64] >> (index % 64)) & 1) == 0) continue;\n            for (auto k = p * p / 2; k < odds; k += p)\n                flags_[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n        }\n    }\n\n    // 小素数の倍数をp語周期のANDで消す。素数自身は呼出側で復元する。\n    template <unsigned Prime>\n#if defined(__GNUC__) || defined(__clang__)\n    [[gnu::noinline]]\n#endif\n    static void mask_multiples(std::uint64_t* flags, std::uint64_t first_word,\n                               std::uint64_t word_count) noexcept {\n        static constexpr auto pattern = [] {\n            std::array<std::uint64_t, Prime> result{};\n            for (unsigned w = 0; w < Prime; ++w)\n                for (unsigned bit = 0; bit < 64; ++bit)\n                    if ((w * 128 + bit * 2 + 1) % Prime != 0)\n                        result[w] |= std::uint64_t{1} << bit;\n            return result;\n        }();\n        auto* dest = flags + first_word;\n        auto phase = first_word % Prime;\n        while (phase != 0 && word_count != 0) {\n            *dest++ &= pattern[phase];\n            --word_count;\n            if (++phase == Prime) phase = 0;\n        }\n        while (word_count >= Prime) {\n            for (unsigned j = 0; j < Prime; ++j) dest[j] &= pattern[j];\n            dest += Prime;\n            word_count -= Prime;\n        }\n        for (unsigned j = 0; j < word_count; ++j) dest[j] &= pattern[j];\n    }\n\n    void build_blocked(std::uint64_t odds) {\n        std::uint64_t root = std::uint64_t{1} << ((std::bit_width(limit_) + 1) / 2);\n        for (;;) {\n            const auto next = (root + limit_ / root) / 2;\n            if (next >= root) break;\n            root = next;\n        }\n        const std::uint64_t base_odds = root / 2 + root % 2;\n        auto* const flags = flags_.data();\n        for (std::uint64_t p = 13; p <= root / p; p += 2) {\n            const auto index = p / 2;\n            if (((flags[index / 64] >> (index % 64)) & 1) == 0) continue;\n            for (auto k = p * p / 2; k < base_odds; k += p)\n                flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n        }\n        struct Strike { std::uint64_t prime, next; };\n        std::vector<Strike> strikes;\n        for (std::uint64_t p = 37; p <= root; p += 2) {\n            const auto index = p / 2;\n            if ((flags[index / 64] >> (index % 64)) & 1)\n                strikes.push_back({p, p * p / 2});\n        }\n        const std::uint64_t block_bits = std::max(std::uint64_t{262144},\n            (root + 63) & ~std::uint64_t{63});\n        std::size_t active = 0;\n        for (std::uint64_t begin = 0; begin < odds; begin += block_bits) {\n            const auto end = std::min(odds, begin + block_bits);\n            const auto first_word = begin / 64;\n            const auto word_count = (end + 63) / 64 - first_word;\n            mask_multiples<13>(flags, first_word, word_count);\n            mask_multiples<17>(flags, first_word, word_count);\n            mask_multiples<19>(flags, first_word, word_count);\n            mask_multiples<23>(flags, first_word, word_count);\n            mask_multiples<29>(flags, first_word, word_count);\n            mask_multiples<31>(flags, first_word, word_count);\n            while (active < strikes.size() && strikes[active].next < end) ++active;\n            for (std::size_t i = 0; i < active; ++i) {\n                auto k = strikes[i].next;\n                const auto step = strikes[i].prime;\n                for (; k < end; k += step)\n                    flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n                strikes[i].next = k;\n            }\n        }\n        flags[0] |= (std::uint64_t{1} << 6) | (std::uint64_t{1} << 8) |\n                    (std::uint64_t{1} << 9) | (std::uint64_t{1} << 11) |\n                    (std::uint64_t{1} << 14) | (std::uint64_t{1} << 15);\n    }\n\n    std::uint64_t limit_;\n    std::vector<std::uint64_t> flags_;\n};\n#endif\n\n#ifndef SIRKIT_ERATOSTHENES_DEFINED\n#define SIRKIT_ERATOSTHENES_DEFINED\n// eratosthenes(limit, ans): limit以下の素数を昇順でansの末尾へ追加する。O(limit log log limit)。\n// eratosthenes(limit): limit以下の素数を昇順のvectorで返す。同じ計算量。\ninline void eratosthenes(std::uint64_t limit, std::vector<std::uint64_t>& ans) {\n    PrimeSieve(limit).append_to(ans);\n}\ninline std::vector<std::uint64_t> eratosthenes(std::uint64_t limit) {\n    return PrimeSieve(limit).primes();\n}\n#endif\n",
+    "scripts": {
+      "candidate_main_probe.py": "from pathlib import Path\nimport json,subprocess,concurrent.futures,fcntl,time,statistics,hashlib\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');out=p/'candidate_main';out.mkdir(exist_ok=True);f=json.loads((p/'frozen.json').read_text());sha=lambda b:hashlib.sha256(b).hexdigest()\nfor n,h in f.items():assert sha((r/n).read_bytes())==h\nmain=(r/'Verify/current/drivers/eratosthenes_main.cpp').read_text().replace('#include \"Verify/current/common/fast_io.hpp\"',(r/'Verify/current/common/fast_io.hpp').read_text());(out/'main.cpp').write_text('#define SKIP_RUNTIME_CHECKS\\n#include HEADER\\n'+main)\nheaders={'baseline':p/'baseline.hpp','control':p/'baseline.hpp','candidate':p/'strike/unroll4.hpp'};modes={'gcc_plain':['g++'],'gcc_native':['g++','-march=native'],'clang_plain':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0'],'clang_native':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0','-march=native']}\ndef build(cv):\n c,v=cv;cmd=['taskset','-c','8',*modes[c],'-O2','-std=c++23','-DEVAL','-DONLINE_JUDGE','-DHEADER=\"'+str(headers[v])+'\"',str(out/'main.cpp'),'-o',str(out/(c+'_'+v))];a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0,a.stderr;return dict(mode=c,variant=v,command=cmd,warnings=a.stderr)\nwith concurrent.futures.ThreadPoolExecutor(2)as pool:commands=list(pool.map(build,[(c,v)for c in modes for v in headers]))\nfiles=Path('/tmp/sirkit_sieve_20261022/official/in');cases=['ten_02','ten_01','ten_00','max_00'];variants=list(headers);data={m:{c:{v:[]for v in variants}for c in cases}for m in modes}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(5):\n  for m in modes:\n   for ci,c in enumerate(cases):\n    shift=(rep+ci)%len(variants)\n    for v in variants[shift:]+variants[:shift]:\n     with (files/(c+'.in')).open('rb')as inp:\n      start=time.perf_counter_ns();subprocess.run(['taskset','-c','14',str(out/(m+'_'+v))],stdin=inp,stdout=subprocess.DEVNULL,check=True);data[m][c][v].append((time.perf_counter_ns()-start)/1e6)\n  (out/'results.json').write_text(json.dumps(data,indent=2));print('round',rep,flush=True)\nsummary={m:{c:{v:statistics.median(values)for v,values in rows.items()}for c,rows in casesdata.items()}for m,casesdata in data.items()}\n(out/'summary.json').write_text(json.dumps(dict(builds=commands,source_hashes={v:sha(h.read_bytes())for v,h in headers.items()},frozen=f,method='5 rotated independent processes, same main/I/O, CPU14 shared lock, median ms',summary=summary),indent=2));print(json.dumps(summary,indent=2))\n",
+      "short_main_confirm.py": "from pathlib import Path\nimport subprocess,json,statistics,time,fcntl\np=Path(__file__).parent;out=p/'candidate_main';data={m:{c:{v:[]for v in ['baseline','control','candidate']}for c in ['ten_02','ten_00']}for m in ['gcc_plain']}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(21):\n  for m,cases in data.items():\n   for c,variants in cases.items():\n    keys=list(variants);shift=rep%3\n    for v in keys[shift:]+keys[:shift]:\n     with (Path('/tmp/sirkit_sieve_20261022/official/in')/(c+'.in')).open('rb')as inp:\n      start=time.perf_counter_ns();subprocess.run(['taskset','-c','14',str(out/(m+'_'+v))],stdin=inp,stdout=subprocess.DEVNULL,check=True);variants[v].append((time.perf_counter_ns()-start)/1e6)\nsummary={m:{c:{v:statistics.median(values)for v,values in variants.items()}for c,variants in cases.items()}for m,cases in data.items()};(p/'short_main_confirm.json').write_text(json.dumps(dict(method='same previously compiled binaries;21 rotated processes per variant per case;CPU14/sharedlock;medianms',summary=summary,raw=data),indent=2));print(json.dumps(summary,indent=2))\n",
+      "strike/probe.py": "from pathlib import Path\nimport subprocess,json,fcntl,statistics,hashlib\np=Path(__file__).parent;headers={'baseline':p.parent/'baseline.hpp','control':p.parent/'baseline.hpp','unroll2':p/'unroll2.hpp','unroll4':p/'unroll4.hpp'};configs={'gcc_plain':['g++','-O2'],'gcc_native':['g++','-O2','-DEVAL','-DONLINE_JUDGE','-march=native']};variants=list(headers);builds=[]\nfor c,flags in configs.items():\n for v,h in headers.items():\n  cmd=['taskset','-c','6',*flags,'-std=c++23','-DSKIP_RUNTIME_CHECKS','-DHEADER=\"'+str(h)+'\"',str(p/'bench.cpp'),'-o',str(p/(c+'_'+v))];r=subprocess.run(cmd,capture_output=True,text=True);assert r.returncode==0,r.stderr;builds.append(cmd)\nprint('compiled',flush=True)\ncases=[(262144,100),(524288,100),(1000000,100),(10000000,10),(100000000,2),(500000000,1)];data={c:{v:{str(n):[]for n,r in cases}for v in variants}for c in configs}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(5):\n  for c in configs:\n   for n,reps in cases:\n    shift=rep%len(variants);counts=[]\n    for v in variants[shift:]+variants[:shift]:\n     out=subprocess.check_output(['taskset','-c','14',str(p/(c+'_'+v)),str(n),'0',str(reps)],text=True).split();data[c][v][str(n)].append(float(out[0]));counts.append(out[1])\n    assert len(set(counts))==1,(c,n,counts)\n  print('round',rep,flush=True)\nsummary={c:{str(n):{'median_ns':{v:statistics.median(data[c][v][str(n)])for v in variants}}for n,r in cases}for c in configs}\nfor c in configs:\n for n,r in cases:\n  m=summary[c][str(n)]['median_ns'];summary[c][str(n)]['ratio']={v:m[v]/m['baseline']for v in variants}\n(p/'results.json').write_text(json.dumps(data,indent=2));(p/'summary.json').write_text(json.dumps({'headers':{v:{'path':str(h),'sha256':hashlib.sha256(h.read_bytes()).hexdigest()}for v,h in headers.items()},'builds':builds,'results':summary},indent=2));print(json.dumps(summary,indent=2))\n",
+      "strike/confirm.py": "from pathlib import Path\nimport subprocess,json,fcntl,statistics,hashlib\np=Path(__file__).parent;headers={'baseline':p.parent/'baseline.hpp','control':p.parent/'baseline.hpp','unroll4':p/'unroll4.hpp'};configs={'gcc_plain':['g++','-O2'],'gcc_native':['g++','-O2','-DEVAL','-DONLINE_JUDGE','-march=native'],'clang_plain':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0','-O2'],'clang_native':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0','-O2','-march=native']};variants=list(headers);builds=[]\nfor c,flags in configs.items():\n for v,h in headers.items():\n  cmd=['taskset','-c','6',*flags,'-std=c++23','-DSKIP_RUNTIME_CHECKS','-DHEADER=\"'+str(h)+'\"',str(p/'bench.cpp'),'-o',str(p/('confirm_'+c+'_'+v))];r=subprocess.run(cmd,capture_output=True,text=True);assert r.returncode==0,r.stderr;builds.append(cmd)\nprint('compiled',flush=True)\ncases=[(262144,100),(524288,100),(1000000,100),(10000000,10),(100000000,2),(500000000,1)];data={c:{v:{str(n):[]for n,r in cases}for v in variants}for c in configs}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(5):\n  for c in configs:\n   for n,reps in cases:\n    shift=rep%len(variants);counts=[]\n    for v in variants[shift:]+variants[:shift]:\n     out=subprocess.check_output(['taskset','-c','14',str(p/('confirm_'+c+'_'+v)),str(n),'0',str(reps)],text=True).split();data[c][v][str(n)].append(float(out[0]));counts.append(out[1])\n    assert len(set(counts))==1,(c,n,counts)\n  print('round',rep,flush=True)\nsummary={c:{str(n):{'median_ns':{v:statistics.median(data[c][v][str(n)])for v in variants}}for n,r in cases}for c in configs}\nfor c in configs:\n for n,r in cases:\n  m=summary[c][str(n)]['median_ns'];summary[c][str(n)]['ratio']={v:m[v]/m['baseline']for v in variants}\n(p/'confirm_results.json').write_text(json.dumps(data,indent=2));(p/'confirm_summary.json').write_text(json.dumps({'headers':{v:{'path':str(h),'sha256':hashlib.sha256(h.read_bytes()).hexdigest()}for v,h in headers.items()},'builds':builds,'results':summary},indent=2));print(json.dumps(summary,indent=2))\n",
+      "strike/bench.cpp": "#include HEADER\n#include <chrono>\n#include <cstdio>\n#include <cstdint>\n#include <cstdlib>\nint main(int argc,char**argv){\n const std::uint64_t n=std::strtoull(argv[1],nullptr,10);const int mode=std::atoi(argv[2]);const int reps=std::atoi(argv[3]);\n std::uint64_t sum=0;const auto start=std::chrono::steady_clock::now();\n for(int r=0;r<reps;++r){PrimeSieve sieve(n);if(mode==0)sum+=sieve.prime_count();else{const auto p=sieve.primes();sum+=p.size()+(p.empty()?0:p.back());}}\n const auto ns=std::chrono::duration<double,std::nano>(std::chrono::steady_clock::now()-start).count()/reps;\n std::printf(\"%.6f %llu\\n\",ns,static_cast<unsigned long long>(sum));\n}\n"
+    }
+  }
+}

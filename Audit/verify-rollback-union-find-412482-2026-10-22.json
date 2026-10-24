@@ -1,0 +1,105 @@
+{
+  "date": "2026-10-22",
+  "status": "CURRENT_SOURCE_UNCHANGED",
+  "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+  "frozen_files": {
+    "DataStructure/rollback-union-find.cpp": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+    "Verify/current/drivers/rollback_union_find_main.cpp": "8c6dad142331e1dcb3d367ff3a18a6fb138bfd193494541b5eb3bff790369417",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+    "Verify/current/submissions/rollback_union_find.cpp": "2409e334fa7515c48b2a6ab32b4c82d336c877cf74c8ec03161812c5385a7bab"
+  },
+  "online_record": "Audit/online-rollback-union-find-412482-2026-10-22.json",
+  "online_result": {
+    "url": "https://judge.yosupo.jp/submission/412482",
+    "status": "AC",
+    "time_ms": 39,
+    "cases": 14,
+    "current_source_main_io_match": true
+  },
+  "online_coverage": [
+    "unite",
+    "same",
+    "undo",
+    "版木の分岐に沿う復元"
+  ],
+  "existing_current_verification": {
+    "audit": "Audit/verify-rollback-union-find-2026-10-22.json",
+    "source_and_canonical_tests_match": true,
+    "summary": {
+      "status": "PASS",
+      "runs": 12,
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "source_unchanged": true,
+      "all_build_and_run_returncodes_zero": true,
+      "all_stderr_empty": true,
+      "all_child_processes_waited": true,
+      "results_sha256": "9f2e5323995efdc261e5c52042871e75f28a954ff39e8389dd322d3240c71cae",
+      "test_sha256": {
+        "ruf_reference_test.cpp": "71fc46ce493267fae3e84bddab9c2d5c4ef7491e6352e56c64c3ce30da21cbae",
+        "ruf_exception_test.cpp": "1d5b63aa19d7d9e951be9c632d0d993993e85d8e9a08a1fa79b3e8e637bda94f"
+      },
+      "extra_api_required": true,
+      "leak_sanitizer": false
+    },
+    "repository_test_sources": {
+      "Verify/current/tests/ruf_reference_test.cpp": {
+        "sha256": "b74314bb7c688721d2fc6393371a650fdd0e370875d60132fcc686f001a1f3a3",
+        "suite_sha256": "71fc46ce493267fae3e84bddab9c2d5c4ef7491e6352e56c64c3ce30da21cbae",
+        "only_difference": "extra API required macro defaults on (3 lines)",
+        "reverse_identical": true
+      },
+      "Verify/current/tests/ruf_exception_test.cpp": {
+        "sha256": "4fa99301f489dfa32d226b8696ca248db96fbdbc692c693d64730612781a9799",
+        "suite_sha256": "1d5b63aa19d7d9e951be9c632d0d993993e85d8e9a08a1fa79b3e8e637bda94f",
+        "only_difference": "extra API required macro defaults on (3 lines)",
+        "reverse_identical": true
+      }
+    },
+    "repo_runs": 4,
+    "note": "独立参照・境界・snapshot/rollback・所有権・確保例外・検査有効/無効の既存12構成とリポジトリ版4実行は、現在の本体/テストと一致する。以前の実行を今回の新規実行とはしない。"
+  },
+  "candidate_static_review_and_retained_baseline_correspondence": {
+    "status": "PASS_STATIC_REVIEW",
+    "checks": {
+      "production_source_matches_existing_audit": true,
+      "repository_tests_match_existing_audit": true,
+      "driver_and_io_match_existing_audit": true
+    },
+    "baseline_source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+    "existing_audit": "Audit/verify-rollback-union-find-2026-10-22.json",
+    "existing_runtime_summary": {
+      "status": "PASS",
+      "runs": 12,
+      "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "source_unchanged": true,
+      "all_build_and_run_returncodes_zero": true,
+      "all_stderr_empty": true,
+      "all_child_processes_waited": true,
+      "results_sha256": "9f2e5323995efdc261e5c52042871e75f28a954ff39e8389dd322d3240c71cae",
+      "test_sha256": {
+        "ruf_reference_test.cpp": "71fc46ce493267fae3e84bddab9c2d5c4ef7491e6352e56c64c3ce30da21cbae",
+        "ruf_exception_test.cpp": "1d5b63aa19d7d9e951be9c632d0d993993e85d8e9a08a1fa79b3e8e637bda94f"
+      },
+      "extra_api_required": true,
+      "leak_sanitizer": false
+    },
+    "candidate_static_review": {
+      "cached": {
+        "sha256": "bfdb9b8a88e2bf96acd71a487c4986708965e1871de9ea57438accc57efb6789",
+        "result": "PASS",
+        "reason": "根とその値を履歴へ保存してからサイズ順交換。成功したpush後のみ森林変更、合計サイズはINT_MAX以内。"
+      },
+      "bulk": {
+        "sha256": "9241018b08eed0abd516ca06a261642d43dcb5fb665a835266ff0bd8302cd5ac",
+        "result": "PASS",
+        "reason": "履歴を変更しない逆順復元後にtrivial Change列を縮小。安定したdata参照・noalloc・snapshot切詰めを維持。"
+      }
+    },
+    "new_runtime_tests_performed": false,
+    "note": "検証待機。既存auditの12実行およびrepo4実行の本体/test hashと一致。source変更した候補のruntimePASSを意味しない。"
+  },
+  "unadopted_candidate_runtime_scope": "固定mainの公式/補足9ケース出力は独立参照と一致。API42条件のchecksumと終了stateを照合。不採用候補の全境界/例外suiteは未実行。",
+  "performance_record": "Audit/performance-rollback-union-find-412482-2026-10-22.json",
+  "runtime_reexecution_of_existing_full_suite": false,
+  "production_source_and_tests_unchanged": true
+}

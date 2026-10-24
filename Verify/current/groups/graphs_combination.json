@@ -10,7 +10,7 @@
       "title": "E - Coins Respawn",
       "selection_reason": "Library CheckerのShortest Pathは非負辺かつ大規模で、本APIの負閉路検出に適合しないためAtCoderの対応問題を選定。",
       "coverage": "負辺を含む単一始点最短路、終点へ伝播する-INFと終点に無関係な負閉路。",
-      "limitations": "移行先のオンライン判定は未実施。始点から終点へは到達可能。未到達・全距離・負閉路検出bool・始点だけから到達する負閉路はgraph_localで補足。",
+      "limitations": "オンライン判定は未実施。問題では始点から終点へ到達可能。独立なFloyd–Warshall参照による未到達・負閉路・全距離・各APIと、確保失敗/所有権はtests/negative_shortest_paths_*_test.cppで補足。測定条件と結果はAudit/performance-bellman-ford-2026-10-22.jsonを参照。",
       "samples": [
         {
           "input": "3 3 10\n1 2 20\n2 3 30\n1 3 45\n",
@@ -79,7 +79,7 @@
       "title": "E - Coins Respawn",
       "selection_reason": "Library CheckerのShortest Pathは非負辺かつ大規模で、本APIの負閉路検出に適合しないためAtCoderの対応問題を選定。",
       "coverage": "負辺を含む単一始点最短路、終点へ伝播する-INFと終点に無関係な負閉路。",
-      "limitations": "移行先のオンライン判定は未実施。始点から終点へは到達可能。未到達・全距離・負閉路検出bool・始点だけから到達する負閉路はgraph_localで補足。",
+      "limitations": "オンライン判定は未実施。問題では始点から終点へ到達可能。独立なFloyd–Warshall参照による未到達・負閉路・全距離・各APIと、確保失敗/所有権はtests/negative_shortest_paths_*_test.cppで補足。測定条件と結果はAudit/performance-spfa-2026-10-22.jsonを参照。",
       "samples": [
         {
           "input": "3 3 10\n1 2 20\n2 3 30\n1 3 45\n",
@@ -226,7 +226,7 @@
       "title": "D - バスと避けられない運命",
       "selection_reason": "Library Checkerに全点間最短路の直接対応問題がないため、AtCoderの全点間距離を使う問題を選定。",
       "coverage": "FloydWarshallによる全点間距離、グラフの中心。",
-      "limitations": "非負・無向・連結グラフ。負辺・負閉路・未到達・経路復元はローカル補足。提出80244912の総合結果は画像で確認、提出本文は未照合。",
+      "limitations": "非負・無向・連結グラフ。負辺・負閉路・未到達・経路復元はローカル補足。提出80246981は画像でAC・6msを確認した記録で本文未照合。追加改修後はオンライン未提出。",
       "samples": [
         {
           "input": "3 2\n1 2 10\n2 3 10\n",
@@ -278,7 +278,9 @@
       ],
       "evidence_url": "https://atcoder.jp/contests/abc012/tasks/abc012_4",
       "submission_urls": [
-        "https://atcoder.jp/contests/abc012/submissions/80244912"
+        "https://atcoder.jp/contests/abc012/submissions/80244912",
+        "https://atcoder.jp/contests/abc012/submissions/80246981",
+        "https://atcoder.jp/contests/abc012/submissions/80247084"
       ]
     },
     {
@@ -291,7 +293,7 @@
       "title": "Binomial Coefficient",
       "selection_reason": "過去のVerifyと同じ問題。",
       "coverage": "任意法（素数版は素数法）のCOM。",
-      "limitations": "オンライン判定は未実施。問題の制約外・未使用APIはこの提出だけでは検証しない。",
+      "limitations": "オンライン判定は未実施。問題の制約外・未使用APIはこの提出だけでは検証しない。 二巡目の因数分解はbinomial_factor_reference_test/binomial_factor_allocation_testで補足。大きい残余素数の早期終了は法上限1e6の公式問題ではなくuint32全域のAPI補足で確認。",
       "samples": [
         {
           "input": "3 10007\n4 2\n0 0\n1000000007 998244353\n",
@@ -320,7 +322,7 @@
       "title": "Binomial Coefficient",
       "selection_reason": "過去のVerifyと同じ問題。",
       "coverage": "任意法（素数版は素数法）のCOM。",
-      "limitations": "提出411977は名称整理前の共通高速入出力版と一致しAC・41ms。問題の制約外・未使用API・全予算設定のオンライン判定は含まない。 以後本体・driver・共通入出力を変更した場合は再照合する。 内部名整理後の生成コードは要再提出。",
+      "limitations": "提出411977は名称整理前の共通高速入出力版と一致しAC・41ms。問題の制約外・未使用API・全予算設定のオンライン判定は含まない。 以後本体・driver・共通入出力を変更した場合は再照合する。 内部名整理後の生成コードは要再提出。 二巡目の因数分解はbinomial_factor_reference_test/binomial_factor_allocation_testで補足。大きい残余素数の早期終了は法上限1e6の公式問題ではなくuint32全域のAPI補足で確認。",
       "samples": [
         {
           "input": "3 10007\n4 2\n0 0\n1000000007 998244353\n",
@@ -353,7 +355,7 @@
       "title": "Binomial Coefficient",
       "selection_reason": "過去のVerifyと同じ問題。",
       "coverage": "任意法（素数版は素数法）のCOM。",
-      "limitations": "オンライン判定は未実施。問題の制約外・未使用APIはこの提出だけでは検証しない。",
+      "limitations": "オンライン判定は未実施。問題の制約外・未使用APIはこの提出だけでは検証しない。 二巡目の因数分解はbinomial_factor_reference_test/binomial_factor_allocation_testで補足。大きい残余素数の早期終了は法上限1e6の公式問題ではなくuint32全域のAPI補足で確認。",
       "samples": [
         {
           "input": "3 10007\n4 2\n0 0\n1000000007 998244353\n",
@@ -381,7 +383,7 @@
       "title": "Binomial Coefficient",
       "selection_reason": "過去のVerifyと同じ問題。",
       "coverage": "任意法（素数版は素数法）のCOM。",
-      "limitations": "提出411979は入力変数の値初期化を追加する前のmainでAC・41ms。現在の生成コードとは値初期化だけが異なるため、現行コードのACとして扱わない。問題の制約外・未使用API・全予算設定のオンライン判定は含まない。",
+      "limitations": "提出411979は入力変数の値初期化を追加する前のmainでAC・41ms。現在の生成コードとは値初期化だけが異なるため、現行コードのACとして扱わない。問題の制約外・未使用API・全予算設定のオンライン判定は含まない。 二巡目の因数分解はbinomial_factor_reference_test/binomial_factor_allocation_testで補足。大きい残余素数の早期終了は法上限1e6の公式問題ではなくuint32全域のAPI補足で確認。",
       "samples": [
         {
           "input": "3 10007\n4 2\n0 0\n1000000007 998244353\n",
@@ -413,7 +415,7 @@
       "title": "Binomial Coefficient (Prime Mod)",
       "selection_reason": "任意法の整数版を素数法の大きい前計算・多数照会でも検証する追加問題。従来の任意法問題も維持。",
       "coverage": "BinomialModの素数法COM。提出側でtable_limit=9999999、max_n=min(modulus-1,9999999)を指定。",
-      "limitations": "オンライン判定は未実施。合成数の法・n>=modulus・未使用APIはこの問題では検証しない。",
+      "limitations": "オンライン判定は未実施。合成数の法・n>=modulus・未使用APIはこの問題では検証しない。 二巡目の因数分解はbinomial_factor_reference_test/binomial_factor_allocation_testで補足。大きい残余素数の早期終了は法上限1e6の公式問題ではなくuint32全域のAPI補足で確認。",
       "samples": [
         {
           "input": "3 10007\n4 2\n5 4\n100 50\n",
@@ -443,7 +445,7 @@
       "title": "Binomial Coefficient (Prime Mod)",
       "selection_reason": "任意法の整数版を素数法の大きい前計算・多数照会でも検証する追加問題。従来の任意法問題も維持。",
       "coverage": "BinomialModの素数法COM。提出側でtable_limit=9999999、max_n=min(modulus-1,9999999)を指定。",
-      "limitations": "提出411976は名称整理前の共通高速入出力版と一致しAC・239ms。合成数・n>=modulus・未使用APIはこの問題では検証しない。 以後本体・driver・共通入出力を変更した場合は再照合する。 内部名整理後の生成コードは要再提出。",
+      "limitations": "提出411976は名称整理前の共通高速入出力版と一致しAC・239ms。合成数・n>=modulus・未使用APIはこの問題では検証しない。 以後本体・driver・共通入出力を変更した場合は再照合する。 内部名整理後の生成コードは要再提出。 二巡目の因数分解はbinomial_factor_reference_test/binomial_factor_allocation_testで補足。大きい残余素数の早期終了は法上限1e6の公式問題ではなくuint32全域のAPI補足で確認。",
       "samples": [
         {
           "input": "3 10007\n4 2\n5 4\n100 50\n",
@@ -479,7 +481,7 @@
       "title": "Binomial Coefficient (Prime Mod)",
       "selection_reason": "過去のVerifyと同じ問題。",
       "coverage": "任意法（素数版は素数法）のCOM。",
-      "limitations": "オンライン判定は未実施。問題の制約外・未使用APIはこの提出だけでは検証しない。",
+      "limitations": "オンライン判定は未実施。Lucasの法3専用経路と他の素数法・準備有無・64bit境界・移動元再準備・確保失敗はtests/lucas_*_test.cppで補足。公式生成問題とsolver・同main/入出力の比較条件はAudit/performance-binomial-lucas-four-hours-2026-10-22.jsonを参照。",
       "samples": [
         {
           "input": "3 10007\n4 2\n5 4\n100 50\n",
@@ -507,7 +509,7 @@
       "title": "Binomial Coefficient (Prime Mod)",
       "selection_reason": "過去のVerifyと同じ問題。",
       "coverage": "任意法（素数版は素数法）のCOM。",
-      "limitations": "提出411980は名称整理前の共通高速入出力版と一致しAC・233ms。n>=modulus・未使用API・素数検査そのものはこの提出では検証しない。 以後本体・driver・共通入出力を変更した場合は再照合する。 内部名整理後の生成コードは要再提出。",
+      "limitations": "オンライン判定は未実施。Lucasの法3専用経路と他の素数法・準備有無・64bit境界・移動元再準備・確保失敗はtests/lucas_*_test.cppで補足。公式生成問題とsolver・同main/入出力の比較条件はAudit/performance-binomial-lucas-four-hours-2026-10-22.jsonを参照。",
       "samples": [
         {
           "input": "3 10007\n4 2\n5 4\n100 50\n",
@@ -539,7 +541,7 @@
       "title": "C - Tricolor Pyramid",
       "selection_reason": "過去のVerifyと同じ問題（80086288）。",
       "coverage": "n>=modのLucas。",
-      "limitations": "オンライン判定は未実施。問題の制約外・未使用APIはこの提出だけでは検証しない。",
+      "limitations": "オンライン判定は未実施。Lucasの法3専用経路と他の素数法・準備有無・64bit境界・移動元再準備・確保失敗はtests/lucas_*_test.cppで補足。公式生成問題とsolver・同main/入出力の比較条件はAudit/performance-binomial-lucas-four-hours-2026-10-22.jsonを参照。",
       "samples": [
         {
           "input": "3\nBWR\n",
@@ -585,7 +587,7 @@
       "title": "C - Tricolor Pyramid",
       "selection_reason": "過去のVerifyと同じ問題（80086288）。",
       "coverage": "n>=modのLucas。",
-      "limitations": "オンライン判定は未実施。問題の制約外・未使用APIはこの提出だけでは検証しない。",
+      "limitations": "オンライン判定は未実施。Lucasの法3専用経路と他の素数法・準備有無・64bit境界・移動元再準備・確保失敗はtests/lucas_*_test.cppで補足。公式生成問題とsolver・同main/入出力の比較条件はAudit/performance-binomial-lucas-four-hours-2026-10-22.jsonを参照。",
       "samples": [
         {
           "input": "3\nBWR\n",
@@ -631,13 +633,16 @@
       "title": "Primality Test",
       "selection_reason": "実装の数学的参考文献にはVerify問題がないため標準問題を選定。",
       "coverage": "is_prime、1〜10^18。",
-      "limitations": "オンライン未提出。uint64_t上端や負の入力、指定底版は別途ローカル検査。",
+      "limitations": "Library Checker 412878でAC・88 ms。提出ソースと現行本体/main/共通I/OはCRLFとSubmissionコメントを除いて一致。追加候補は不採用で本体を維持。独立検証はAudit/performance-primality-412875-2026-10-24.json、今回の比較とAVX2評価はAudit/performance-primality-412878-2026-10-24.json。",
       "samples": [
         {
           "input": "6\n1\n2\n3\n4\n998244353\n1000000000000000000\n",
           "output": "No\nYes\nYes\nNo\nYes\nNo\n",
           "origin": "公式入力例／期待出力は独立計算"
         }
+      ],
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412878"
       ]
     },
     {
@@ -659,7 +664,11 @@
         }
       ],
       "submission_urls": [
-        "https://judge.yosupo.jp/submission/412289"
+        "https://judge.yosupo.jp/submission/412289",
+        "https://judge.yosupo.jp/submission/412324",
+        "https://judge.yosupo.jp/submission/412335",
+        "https://judge.yosupo.jp/submission/412339",
+        "https://judge.yosupo.jp/submission/412343"
       ]
     },
     {
@@ -714,7 +723,7 @@
       "title": "独立参照による補足検査",
       "selection_reason": "提出問題が使用しないAPIと制約外の有効値を補足。",
       "coverage": "Pascal三角形による法1〜160・Lucas・H・prepare・Mintラッパー照合",
-      "limitations": "オンライン判定ではない。各構成で使わないAPIまでは網羅しない。",
+      "limitations": "オンライン判定ではない。各構成で使わないAPIまでは網羅しない。 二巡目の因数分解はbinomial_factor_reference_test/binomial_factor_allocation_testで補足。大きい残余素数の早期終了は法上限1e6の公式問題ではなくuint32全域のAPI補足で確認。",
       "samples": [
         {
           "input": "",
@@ -772,7 +781,7 @@
       "title": "Binomial Coefficient (Prime Mod)",
       "selection_reason": "ModIntBinomialの素数用の大表と多数照会を検証する追加構成。任意法の従来問題も維持。",
       "coverage": "ModIntBinomial<dynamic_modint>の素数法COM。提出側でtable_limit=9999999、max_n=min(modulus-1,9999999)を指定。",
-      "limitations": "オンライン未提出。合成数の法・n>=modulus・未使用APIは従来問題とローカル参照で別途検証する。",
+      "limitations": "オンライン未提出。合成数の法・n>=modulus・未使用APIは従来問題とローカル参照で別途検証する。 二巡目の因数分解はbinomial_factor_reference_test/binomial_factor_allocation_testで補足。大きい残余素数の早期終了は法上限1e6の公式問題ではなくuint32全域のAPI補足で確認。",
       "samples": [
         {
           "input": "3 10007\n4 2\n5 4\n100 50\n",
@@ -802,7 +811,7 @@
       "title": "Binomial Coefficient (Prime Mod)",
       "selection_reason": "ModIntBinomialの素数用の大表と多数照会を検証する追加構成。任意法の従来問題も維持。",
       "coverage": "ModIntBinomial<dynamic_modint>の素数法COM。提出側でtable_limit=9999999、max_n=min(modulus-1,9999999)を指定。",
-      "limitations": "提出411978は名称整理前の共通高速入出力版と一致しAC・227ms。合成数・n>=modulus・未使用APIはこの問題では検証しない。 以後本体・driver・共通入出力を変更した場合は再照合する。 内部名整理後の生成コードは要再提出。",
+      "limitations": "提出411978は名称整理前の共通高速入出力版と一致しAC・227ms。合成数・n>=modulus・未使用APIはこの問題では検証しない。 以後本体・driver・共通入出力を変更した場合は再照合する。 内部名整理後の生成コードは要再提出。 二巡目の因数分解はbinomial_factor_reference_test/binomial_factor_allocation_testで補足。大きい残余素数の早期終了は法上限1e6の公式問題ではなくuint32全域のAPI補足で確認。",
       "samples": [
         {
           "input": "3 10007\n4 2\n5 4\n100 50\n",

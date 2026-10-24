@@ -1,0 +1,1700 @@
+{
+  "date": "2026-10-23",
+  "status": "PASS",
+  "source_sha256": "5c5d794578c4da7fa87449b0cab665772f0bf9e6b7fd1eda56e5936de5df097d",
+  "main_sha256": "bb1f6d6feef463ff6be7e1b9052c03082ed8155f9a006fb441580078dee8f3bb",
+  "io_sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+  "static_review": {
+    "status": "PASS_STATIC_REVIEW",
+    "candidate_sha256": "5c5d794578c4da7fa87449b0cab665772f0bf9e6b7fd1eda56e5936de5df097d",
+    "findings": [
+      "Only immutable RMQstorage and AncestorLadder are shared through shared_ptr<constDeepQueryData>; each LCA retains independent vertices,roots,and parenttable. Public rebuild replaces state rather thanmutating shared tables.",
+      "Pooled RMQstorage consists of dfs[N],parententrykeys[N],masks[N],sparse[B*levels]. Count guard n<=maximum_count/3 and B<=(maximum_count-3n)/levels bounds all element and byte arithmetic.",
+      "Parent-entry range minimum identity and componentroot early return proved independently; block32 monotone masks and sparse ranges preserve minima.",
+      "Copy shares immutabledeep data and deepcopies vertices,roots,up; move/swap includesdeep_,block_count_,shallow_,levels_. No self-reference or ownershipcycle.",
+      "Before scratch reuse, parentarray copied into up_; ladder receives up_ asimmutableparent, old parentbuffer asheight, stackbuffer asheavy, and disjoint final thirdbuffer asorder. All scratchwritten before read.",
+      "Ladder indices fituint32 via explicitn<=UINT32_MAX/2; 2N entries fit ptrdiffbyteguard.",
+      "Deep levels1 keeps row(v)=v andcopycountN; climb dispatchblock_countnonzero; reroot shortcut usesdedicated shallow_=(H<=1), avoiding deep1mode ambiguity.",
+      "Conditional GNU compiler attributes disappear on other compilers; no nonstandard arithmetic or SIMD dependency. Requested pedanticC++23/no-native builds validate standard fallback."
+    ],
+    "test_ownership_extension": "lca_rmq_branch_test now checks copied instances after originalclear/rebuild and independentcopyclear.",
+    "validation_report": "final_exact/validation.json"
+  },
+  "independent_api_tests": {
+    "source_sha256": "5c5d794578c4da7fa87449b0cab665772f0bf9e6b7fd1eda56e5936de5df097d",
+    "frozen_source": "/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp",
+    "tests": [
+      {
+        "compiler": "gcc15_2",
+        "skip_runtime_checks": false,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_rmq_branch_test.cpp",
+        "test_sha256": "a6840c0f420cbc32a08180c8607c6b057e1fd1aa3594538343749766b477001b",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_branch_test_gcc15_2_checked"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp: In function ‘void verify(const LCA&, const Ref&, int)’:\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:42:3: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]\n   42 |   for(std::uint64_t k=0;k<=static_cast<std::uint64_t>(r.d[v])+1;++k)need(t.kth_ancestor(v,k)==r.ancestor(v,k));need(t.kth_ancestor(v,UINT64_MAX)==-1);\n      |   ^~~\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:42:112: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’\n   42 |   for(std::uint64_t k=0;k<=static_cast<std::uint64_t>(r.d[v])+1;++k)need(t.kth_ancestor(v,k)==r.ancestor(v,k));need(t.kth_ancestor(v,UINT64_MAX)==-1);\n      |                                                                                                                ^~~~\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp: In function ‘void run(const Graph&, int, bool)’:\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:47:275: warning: moving ‘copy’ of type ‘LCA’ to itself [-Wself-move]\n   47 |  LCA copy(t);verify(copy,r,root);copy=copy;copy.swap(copy);verify(copy,r,root);LCA moved(std::move(copy));need(copy.empty()&&copy.root()==-1&&copy.component_count()==0);verify(moved,r,root);copy=std::move(moved);need(moved.empty()&&moved.root()==-1);verify(copy,r,root);copy=std::move(copy);verify(copy,r,root);LCA assigned;assigned=t;verify(assigned,r,root);LCA small(Graph(1));swap(small,assigned);verify(small,r,root);need(assigned.size()==1&&assigned.parent(0)==-1);t.clear();need(t.empty()&&t.root()==-1&&t.component_count()==0);verify(copy,r,root);verify(small,r,root);t.clear();t.build(g,root);verify(t,r,root);copy.clear();verify(small,r,root);t.build(Graph{});need(t.empty()&&t.root()==-1);t.build(g,root);verify(t,r,root);\n      |                                                                                                                                                                                                                                                                               ~~~~^~~~~~~~~~~~~~~~\n",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_branch_test_gcc15_2_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":128,\"checks\":194880589}\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "gcc15_2",
+        "skip_runtime_checks": false,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_rmq_allocation_test.cpp",
+        "test_sha256": "c13246b153c7e1ae2c2bf1c1a3c7cecfa29c7245554657833a91fdf289f7d970",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_allocation_test_gcc15_2_checked"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_allocation_test_gcc15_2_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":490,\"allocation_failure_points\":158,\"live_delta\":0}\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "gcc15_2",
+        "skip_runtime_checks": false,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_reference_test.cpp",
+        "test_sha256": "68b5b568f599464293c7f791c617a020b4054e941dbbd35cae5017382765d696",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_reference_test_gcc15_2_checked"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_reference_test_gcc15_2_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "PASS 5325661 independent LCA checks; 160 random/structured forests, exhaustive parent-choice forests up to 6 nodes, 3x300000-node shapes\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "gcc15_2",
+        "skip_runtime_checks": false,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_shallow_build_test.cpp",
+        "test_sha256": "dcaa4ac00727d2a6af7e003b540d27a21566a7452f90545ae87efdebbdce4c3d",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_shallow_build_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_shallow_build_test_gcc15_2_checked"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_shallow_build_test_gcc15_2_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "PASS 65990336 shallow construction checks; isolated, matching, block stars, root changes, copy/move/rebuild\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "gcc15_2",
+        "skip_runtime_checks": false,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_allocation_test.cpp",
+        "test_sha256": "34fad8ddbf5d0c595f8f899385fac6fa5945846861c75a22cd5b242842c91ba1",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_allocation_test_gcc15_2_checked"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_allocation_test_gcc15_2_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":237,\"allocation_failure_points\":72,\"live_delta\":0}\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "gcc15_2",
+        "skip_runtime_checks": true,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_rmq_branch_test.cpp",
+        "test_sha256": "a6840c0f420cbc32a08180c8607c6b057e1fd1aa3594538343749766b477001b",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_branch_test_gcc15_2_skip"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp: In function ‘void verify(const LCA&, const Ref&, int)’:\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:42:3: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]\n   42 |   for(std::uint64_t k=0;k<=static_cast<std::uint64_t>(r.d[v])+1;++k)need(t.kth_ancestor(v,k)==r.ancestor(v,k));need(t.kth_ancestor(v,UINT64_MAX)==-1);\n      |   ^~~\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:42:112: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’\n   42 |   for(std::uint64_t k=0;k<=static_cast<std::uint64_t>(r.d[v])+1;++k)need(t.kth_ancestor(v,k)==r.ancestor(v,k));need(t.kth_ancestor(v,UINT64_MAX)==-1);\n      |                                                                                                                ^~~~\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp: In function ‘void run(const Graph&, int, bool)’:\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:47:275: warning: moving ‘copy’ of type ‘LCA’ to itself [-Wself-move]\n   47 |  LCA copy(t);verify(copy,r,root);copy=copy;copy.swap(copy);verify(copy,r,root);LCA moved(std::move(copy));need(copy.empty()&&copy.root()==-1&&copy.component_count()==0);verify(moved,r,root);copy=std::move(moved);need(moved.empty()&&moved.root()==-1);verify(copy,r,root);copy=std::move(copy);verify(copy,r,root);LCA assigned;assigned=t;verify(assigned,r,root);LCA small(Graph(1));swap(small,assigned);verify(small,r,root);need(assigned.size()==1&&assigned.parent(0)==-1);t.clear();need(t.empty()&&t.root()==-1&&t.component_count()==0);verify(copy,r,root);verify(small,r,root);t.clear();t.build(g,root);verify(t,r,root);copy.clear();verify(small,r,root);t.build(Graph{});need(t.empty()&&t.root()==-1);t.build(g,root);verify(t,r,root);\n      |                                                                                                                                                                                                                                                                               ~~~~^~~~~~~~~~~~~~~~\n",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_branch_test_gcc15_2_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":128,\"checks\":194880589}\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "gcc15_2",
+        "skip_runtime_checks": true,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_rmq_allocation_test.cpp",
+        "test_sha256": "c13246b153c7e1ae2c2bf1c1a3c7cecfa29c7245554657833a91fdf289f7d970",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_allocation_test_gcc15_2_skip"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_allocation_test_gcc15_2_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":490,\"allocation_failure_points\":158,\"live_delta\":0}\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "gcc15_2",
+        "skip_runtime_checks": true,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_reference_test.cpp",
+        "test_sha256": "68b5b568f599464293c7f791c617a020b4054e941dbbd35cae5017382765d696",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_reference_test_gcc15_2_skip"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_reference_test_gcc15_2_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "PASS 5325589 independent LCA checks; 160 random/structured forests, exhaustive parent-choice forests up to 6 nodes, 3x300000-node shapes\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "gcc15_2",
+        "skip_runtime_checks": true,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_shallow_build_test.cpp",
+        "test_sha256": "dcaa4ac00727d2a6af7e003b540d27a21566a7452f90545ae87efdebbdce4c3d",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_shallow_build_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_shallow_build_test_gcc15_2_skip"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_shallow_build_test_gcc15_2_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "PASS 65990336 shallow construction checks; isolated, matching, block stars, root changes, copy/move/rebuild\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "gcc15_2",
+        "skip_runtime_checks": true,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_allocation_test.cpp",
+        "test_sha256": "34fad8ddbf5d0c595f8f899385fac6fa5945846861c75a22cd5b242842c91ba1",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_allocation_test_gcc15_2_skip"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_allocation_test_gcc15_2_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":237,\"allocation_failure_points\":72,\"live_delta\":0}\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "clang21",
+        "skip_runtime_checks": false,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_rmq_branch_test.cpp",
+        "test_sha256": "a6840c0f420cbc32a08180c8607c6b057e1fd1aa3594538343749766b477001b",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_branch_test_clang21_checked"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:47:38: warning: explicitly assigning value of variable of type 'LCA' to itself [-Wself-assign-overloaded]\n   47 |  LCA copy(t);verify(copy,r,root);copy=copy;copy.swap(copy);verify(copy,r,root);LCA moved(std::move(copy));need(copy.empty()&&copy.root()==-1&&copy.component_count()==0);verify(moved,r,root);copy=std::move(moved);need(moved.empty()&&moved.root()==-1);verify(copy,r,root);copy=std::move(copy);verify(copy,r,root);LCA assigned;assigned=t;verify(assigned,r,root);LCA small(Graph(1));swap(small,assigned);verify(small,r,root);need(assigned.size()==1&&assigned.parent(0)==-1);t.clear();need(t.empty()&&t.root()==-1&&t.component_count()==0);verify(copy,r,root);verify(small,r,root);t.clear();t.build(g,root);verify(t,r,root);copy.clear();verify(small,r,root);t.build(Graph{});need(t.empty()&&t.root()==-1);t.build(g,root);verify(t,r,root);\n      |                                  ~~~~^~~~~\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:47:275: warning: explicitly moving variable of type 'LCA' to itself [-Wself-move]\n   47 |  LCA copy(t);verify(copy,r,root);copy=copy;copy.swap(copy);verify(copy,r,root);LCA moved(std::move(copy));need(copy.empty()&&copy.root()==-1&&copy.component_count()==0);verify(moved,r,root);copy=std::move(moved);need(moved.empty()&&moved.root()==-1);verify(copy,r,root);copy=std::move(copy);verify(copy,r,root);LCA assigned;assigned=t;verify(assigned,r,root);LCA small(Graph(1));swap(small,assigned);verify(small,r,root);need(assigned.size()==1&&assigned.parent(0)==-1);t.clear();need(t.empty()&&t.root()==-1&&t.component_count()==0);verify(copy,r,root);verify(small,r,root);t.clear();t.build(g,root);verify(t,r,root);copy.clear();verify(small,r,root);t.build(Graph{});need(t.empty()&&t.root()==-1);t.build(g,root);verify(t,r,root);\n      |                                                                                                                                                                                                                                                                               ~~~~^          ~~~~\n2 warnings generated.\n",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_branch_test_clang21_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":128,\"checks\":194880589}\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "clang21",
+        "skip_runtime_checks": false,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_rmq_allocation_test.cpp",
+        "test_sha256": "c13246b153c7e1ae2c2bf1c1a3c7cecfa29c7245554657833a91fdf289f7d970",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_allocation_test_clang21_checked"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_allocation_test_clang21_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":490,\"allocation_failure_points\":158,\"live_delta\":0}\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "clang21",
+        "skip_runtime_checks": false,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_reference_test.cpp",
+        "test_sha256": "68b5b568f599464293c7f791c617a020b4054e941dbbd35cae5017382765d696",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_reference_test_clang21_checked"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_reference_test_clang21_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "PASS 5325661 independent LCA checks; 160 random/structured forests, exhaustive parent-choice forests up to 6 nodes, 3x300000-node shapes\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "clang21",
+        "skip_runtime_checks": false,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_shallow_build_test.cpp",
+        "test_sha256": "dcaa4ac00727d2a6af7e003b540d27a21566a7452f90545ae87efdebbdce4c3d",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_shallow_build_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_shallow_build_test_clang21_checked"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_shallow_build_test_clang21_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "PASS 65990336 shallow construction checks; isolated, matching, block stars, root changes, copy/move/rebuild\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "clang21",
+        "skip_runtime_checks": false,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_allocation_test.cpp",
+        "test_sha256": "34fad8ddbf5d0c595f8f899385fac6fa5945846861c75a22cd5b242842c91ba1",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_allocation_test_clang21_checked"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_allocation_test_clang21_checked"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":237,\"allocation_failure_points\":72,\"live_delta\":0}\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "clang21",
+        "skip_runtime_checks": true,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_rmq_branch_test.cpp",
+        "test_sha256": "a6840c0f420cbc32a08180c8607c6b057e1fd1aa3594538343749766b477001b",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_branch_test_clang21_skip"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:47:38: warning: explicitly assigning value of variable of type 'LCA' to itself [-Wself-assign-overloaded]\n   47 |  LCA copy(t);verify(copy,r,root);copy=copy;copy.swap(copy);verify(copy,r,root);LCA moved(std::move(copy));need(copy.empty()&&copy.root()==-1&&copy.component_count()==0);verify(moved,r,root);copy=std::move(moved);need(moved.empty()&&moved.root()==-1);verify(copy,r,root);copy=std::move(copy);verify(copy,r,root);LCA assigned;assigned=t;verify(assigned,r,root);LCA small(Graph(1));swap(small,assigned);verify(small,r,root);need(assigned.size()==1&&assigned.parent(0)==-1);t.clear();need(t.empty()&&t.root()==-1&&t.component_count()==0);verify(copy,r,root);verify(small,r,root);t.clear();t.build(g,root);verify(t,r,root);copy.clear();verify(small,r,root);t.build(Graph{});need(t.empty()&&t.root()==-1);t.build(g,root);verify(t,r,root);\n      |                                  ~~~~^~~~~\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:47:275: warning: explicitly moving variable of type 'LCA' to itself [-Wself-move]\n   47 |  LCA copy(t);verify(copy,r,root);copy=copy;copy.swap(copy);verify(copy,r,root);LCA moved(std::move(copy));need(copy.empty()&&copy.root()==-1&&copy.component_count()==0);verify(moved,r,root);copy=std::move(moved);need(moved.empty()&&moved.root()==-1);verify(copy,r,root);copy=std::move(copy);verify(copy,r,root);LCA assigned;assigned=t;verify(assigned,r,root);LCA small(Graph(1));swap(small,assigned);verify(small,r,root);need(assigned.size()==1&&assigned.parent(0)==-1);t.clear();need(t.empty()&&t.root()==-1&&t.component_count()==0);verify(copy,r,root);verify(small,r,root);t.clear();t.build(g,root);verify(t,r,root);copy.clear();verify(small,r,root);t.build(Graph{});need(t.empty()&&t.root()==-1);t.build(g,root);verify(t,r,root);\n      |                                                                                                                                                                                                                                                                               ~~~~^          ~~~~\n2 warnings generated.\n",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_branch_test_clang21_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":128,\"checks\":194880589}\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "clang21",
+        "skip_runtime_checks": true,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_rmq_allocation_test.cpp",
+        "test_sha256": "c13246b153c7e1ae2c2bf1c1a3c7cecfa29c7245554657833a91fdf289f7d970",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_allocation_test_clang21_skip"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_allocation_test_clang21_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":490,\"allocation_failure_points\":158,\"live_delta\":0}\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "clang21",
+        "skip_runtime_checks": true,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_reference_test.cpp",
+        "test_sha256": "68b5b568f599464293c7f791c617a020b4054e941dbbd35cae5017382765d696",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_reference_test_clang21_skip"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_reference_test_clang21_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "PASS 5325589 independent LCA checks; 160 random/structured forests, exhaustive parent-choice forests up to 6 nodes, 3x300000-node shapes\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "clang21",
+        "skip_runtime_checks": true,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_shallow_build_test.cpp",
+        "test_sha256": "dcaa4ac00727d2a6af7e003b540d27a21566a7452f90545ae87efdebbdce4c3d",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_shallow_build_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_shallow_build_test_clang21_skip"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_shallow_build_test_clang21_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "PASS 65990336 shallow construction checks; isolated, matching, block stars, root changes, copy/move/rebuild\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "clang21",
+        "skip_runtime_checks": true,
+        "sanitizer": false,
+        "test": "Verify/current/tests/lca_allocation_test.cpp",
+        "test_sha256": "34fad8ddbf5d0c595f8f899385fac6fa5945846861c75a22cd5b242842c91ba1",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O2",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_allocation_test_clang21_skip"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_allocation_test_clang21_skip"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":237,\"allocation_failure_points\":72,\"live_delta\":0}\n",
+        "stderr": "",
+        "sanitizer_env": {}
+      },
+      {
+        "compiler": "gcc15_2",
+        "skip_runtime_checks": false,
+        "sanitizer": true,
+        "test": "Verify/current/tests/lca_rmq_branch_test.cpp",
+        "test_sha256": "a6840c0f420cbc32a08180c8607c6b057e1fd1aa3594538343749766b477001b",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O1",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-no-pie",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_branch_test_gcc15_2_checked_sanitized"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp: In function ‘void verify(const LCA&, const Ref&, int)’:\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:42:3: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]\n   42 |   for(std::uint64_t k=0;k<=static_cast<std::uint64_t>(r.d[v])+1;++k)need(t.kth_ancestor(v,k)==r.ancestor(v,k));need(t.kth_ancestor(v,UINT64_MAX)==-1);\n      |   ^~~\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:42:112: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’\n   42 |   for(std::uint64_t k=0;k<=static_cast<std::uint64_t>(r.d[v])+1;++k)need(t.kth_ancestor(v,k)==r.ancestor(v,k));need(t.kth_ancestor(v,UINT64_MAX)==-1);\n      |                                                                                                                ^~~~\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp: In function ‘void run(const Graph&, int, bool)’:\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:47:275: warning: moving ‘copy’ of type ‘LCA’ to itself [-Wself-move]\n   47 |  LCA copy(t);verify(copy,r,root);copy=copy;copy.swap(copy);verify(copy,r,root);LCA moved(std::move(copy));need(copy.empty()&&copy.root()==-1&&copy.component_count()==0);verify(moved,r,root);copy=std::move(moved);need(moved.empty()&&moved.root()==-1);verify(copy,r,root);copy=std::move(copy);verify(copy,r,root);LCA assigned;assigned=t;verify(assigned,r,root);LCA small(Graph(1));swap(small,assigned);verify(small,r,root);need(assigned.size()==1&&assigned.parent(0)==-1);t.clear();need(t.empty()&&t.root()==-1&&t.component_count()==0);verify(copy,r,root);verify(small,r,root);t.clear();t.build(g,root);verify(t,r,root);copy.clear();verify(small,r,root);t.build(Graph{});need(t.empty()&&t.root()==-1);t.build(g,root);verify(t,r,root);\n      |                                                                                                                                                                                                                                                                               ~~~~^~~~~~~~~~~~~~~~\n",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_branch_test_gcc15_2_checked_sanitized"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":128,\"checks\":194880589}\n",
+        "stderr": "",
+        "sanitizer_env": {
+          "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+          "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+        }
+      },
+      {
+        "compiler": "gcc15_2",
+        "skip_runtime_checks": false,
+        "sanitizer": true,
+        "test": "Verify/current/tests/lca_rmq_allocation_test.cpp",
+        "test_sha256": "c13246b153c7e1ae2c2bf1c1a3c7cecfa29c7245554657833a91fdf289f7d970",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O1",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-no-pie",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_allocation_test_gcc15_2_checked_sanitized"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_allocation_test_gcc15_2_checked_sanitized"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":490,\"allocation_failure_points\":158,\"live_delta\":0}\n",
+        "stderr": "",
+        "sanitizer_env": {
+          "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+          "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+        }
+      },
+      {
+        "compiler": "clang21",
+        "skip_runtime_checks": false,
+        "sanitizer": true,
+        "test": "Verify/current/tests/lca_rmq_branch_test.cpp",
+        "test_sha256": "a6840c0f420cbc32a08180c8607c6b057e1fd1aa3594538343749766b477001b",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O1",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-no-pie",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_branch_test_clang21_checked_sanitized"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:47:38: warning: explicitly assigning value of variable of type 'LCA' to itself [-Wself-assign-overloaded]\n   47 |  LCA copy(t);verify(copy,r,root);copy=copy;copy.swap(copy);verify(copy,r,root);LCA moved(std::move(copy));need(copy.empty()&&copy.root()==-1&&copy.component_count()==0);verify(moved,r,root);copy=std::move(moved);need(moved.empty()&&moved.root()==-1);verify(copy,r,root);copy=std::move(copy);verify(copy,r,root);LCA assigned;assigned=t;verify(assigned,r,root);LCA small(Graph(1));swap(small,assigned);verify(small,r,root);need(assigned.size()==1&&assigned.parent(0)==-1);t.clear();need(t.empty()&&t.root()==-1&&t.component_count()==0);verify(copy,r,root);verify(small,r,root);t.clear();t.build(g,root);verify(t,r,root);copy.clear();verify(small,r,root);t.build(Graph{});need(t.empty()&&t.root()==-1);t.build(g,root);verify(t,r,root);\n      |                                  ~~~~^~~~~\n/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_branch_test.cpp:47:275: warning: explicitly moving variable of type 'LCA' to itself [-Wself-move]\n   47 |  LCA copy(t);verify(copy,r,root);copy=copy;copy.swap(copy);verify(copy,r,root);LCA moved(std::move(copy));need(copy.empty()&&copy.root()==-1&&copy.component_count()==0);verify(moved,r,root);copy=std::move(moved);need(moved.empty()&&moved.root()==-1);verify(copy,r,root);copy=std::move(copy);verify(copy,r,root);LCA assigned;assigned=t;verify(assigned,r,root);LCA small(Graph(1));swap(small,assigned);verify(small,r,root);need(assigned.size()==1&&assigned.parent(0)==-1);t.clear();need(t.empty()&&t.root()==-1&&t.component_count()==0);verify(copy,r,root);verify(small,r,root);t.clear();t.build(g,root);verify(t,r,root);copy.clear();verify(small,r,root);t.build(Graph{});need(t.empty()&&t.root()==-1);t.build(g,root);verify(t,r,root);\n      |                                                                                                                                                                                                                                                                               ~~~~^          ~~~~\n2 warnings generated.\n",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_branch_test_clang21_checked_sanitized"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"cases\":128,\"checks\":194880589}\n",
+        "stderr": "",
+        "sanitizer_env": {
+          "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+          "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+        }
+      },
+      {
+        "compiler": "clang21",
+        "skip_runtime_checks": false,
+        "sanitizer": true,
+        "test": "Verify/current/tests/lca_rmq_allocation_test.cpp",
+        "test_sha256": "c13246b153c7e1ae2c2bf1c1a3c7cecfa29c7245554657833a91fdf289f7d970",
+        "build_command": [
+          "taskset",
+          "-c",
+          "6",
+          "/usr/bin/clang++",
+          "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-pedantic-errors",
+          "-O1",
+          "-DSIRKIT_LCA_SOURCE=\"/tmp/sirkit_lca_linear_review_20261023/final_exact/candidate_frozen.hpp\"",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-no-pie",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/lca_rmq_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_allocation_test_clang21_checked_sanitized"
+        ],
+        "build_exit": 0,
+        "build_stdout": "",
+        "build_stderr": "",
+        "run_command": [
+          "taskset",
+          "-c",
+          "14",
+          "/tmp/sirkit_lca_linear_review_20261023/final_exact/lca_rmq_allocation_test_clang21_checked_sanitized"
+        ],
+        "run_exit": 0,
+        "stdout": "{\"status\":\"PASS\",\"checks\":490,\"allocation_failure_points\":158,\"live_delta\":0}\n",
+        "stderr": "",
+        "sanitizer_env": {
+          "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+          "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+        }
+      }
+    ],
+    "status": "PASS",
+    "locks": [
+      "/tmp/sirkit_performance_cpu14.lock",
+      "/tmp/atcoder_full_performance_20261018/benchmark.lock"
+    ]
+  },
+  "main_builds": [
+    {
+      "name": "gcc15_2_native_checked",
+      "cmd": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-pedantic-errors",
+        "-march=native",
+        "-DEVAL",
+        "-DONLINE_JUDGE",
+        "/tmp/sirkit_lca_final_rmq_20261023/gcc15_2_native_checked.cpp",
+        "-o",
+        "/tmp/sirkit_lca_final_rmq_20261023/gcc15_2_native_checked"
+      ],
+      "stderr": "",
+      "source_sha256": "68137615612bbe4145c7d1e94e470777e78f6558d54df134c7e1a0970f9b990c"
+    },
+    {
+      "name": "gcc15_2_native_skip",
+      "cmd": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-pedantic-errors",
+        "-march=native",
+        "-DEVAL",
+        "-DONLINE_JUDGE",
+        "/tmp/sirkit_lca_final_rmq_20261023/gcc15_2_native_skip.cpp",
+        "-o",
+        "/tmp/sirkit_lca_final_rmq_20261023/gcc15_2_native_skip"
+      ],
+      "stderr": "",
+      "source_sha256": "cd2780ab1efb7e9c9258cc5ef31f3509561d553ff3d034cce1fcaf2e3d894f48"
+    },
+    {
+      "name": "clang21_standard_checked",
+      "cmd": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-pedantic-errors",
+        "-DSIRKIT_DISABLE_SIMD",
+        "/tmp/sirkit_lca_final_rmq_20261023/clang21_standard_checked.cpp",
+        "-o",
+        "/tmp/sirkit_lca_final_rmq_20261023/clang21_standard_checked"
+      ],
+      "stderr": "",
+      "source_sha256": "68137615612bbe4145c7d1e94e470777e78f6558d54df134c7e1a0970f9b990c"
+    },
+    {
+      "name": "clang21_standard_skip",
+      "cmd": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-pedantic-errors",
+        "-DSIRKIT_DISABLE_SIMD",
+        "/tmp/sirkit_lca_final_rmq_20261023/clang21_standard_skip.cpp",
+        "-o",
+        "/tmp/sirkit_lca_final_rmq_20261023/clang21_standard_skip"
+      ],
+      "stderr": "",
+      "source_sha256": "cd2780ab1efb7e9c9258cc5ef31f3509561d553ff3d034cce1fcaf2e3d894f48"
+    }
+  ],
+  "main_cases": [
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "example_00.in",
+      "input_sha256": "0595e1703d23732058c02c3346d6e89cdfdad2ac283bef01ca0e9a3acb7e7fa8",
+      "output_sha256": "c99aa4b79322c9ab88ead7176fc1bcac693e5698f2b9db50cd15dc226742311a"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "random_00.in",
+      "input_sha256": "08e152f5cfe99a60f7fed4b613d19159027fddb718e43e6a6f809543b5ff1edb",
+      "output_sha256": "7a800c653bd5cf1fc59d230bd3dfc242d077116953bbf8ad47f05860ca26b23a"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "random_01.in",
+      "input_sha256": "2e9544f1176948b1905023b764e90537abbef38ce27f24383e789393ebf3bce1",
+      "output_sha256": "4f31791f2fce8eb1ebe92b99bcf751c335cc4a439e75887c8661e3a9e39d89ac"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "random_02.in",
+      "input_sha256": "05ac966aa1bb1e36ee50dc72b0f5cf0bd30c1968a8616567d723fae57c5266f3",
+      "output_sha256": "2e26d921a3810a362b0e2d5d464f8ac500509f5abfd72139badac6e8d780679a"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "random_03.in",
+      "input_sha256": "77b41207e3eb3ecb95b4309f9d44e8e97cf3d5e97cc738dbd0538dd712b57826",
+      "output_sha256": "5e8d21f03a2df1beb7684cb75618660f7cfae7a46b289fb655387eaf5cc67e90"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "random_04.in",
+      "input_sha256": "31d7565cfccb2c5a4634411abd2c2980e248fa9b45c9dbfcbb9b825d22f4ba8d",
+      "output_sha256": "e768fb5242c159225df616f05f1335fd45c7d0ca73e1b1fef57a023c6f2d4876"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "line_00.in",
+      "input_sha256": "4bb8d5302f3a45ae9c35d10d908e732686ca63dfcd3bb27471154ee4e51412d9",
+      "output_sha256": "3ca632e4d37cb82050bc44f7262d660f99f54c71efe5424f776063845a44c387"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "line_01.in",
+      "input_sha256": "0d72a09ebc9780664df8a0e06f2dbedb019cd160085b157bdb0ff6478e75876c",
+      "output_sha256": "56e2482cc761a139696557831cb6a68b33571a32877e038de8e206799181df24"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "line_02.in",
+      "input_sha256": "b080a812ca5cc3ac0b8068c68c531bcf1ef4fa0348395577cfbc8105327f33c2",
+      "output_sha256": "38e399ec67f2122ac515138ecc2342c7b94303ea93918ebd77fb6589fb3cd739"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "line_03.in",
+      "input_sha256": "c3056c81cbfc80e61138eaf53cc42a21569cb9eaa2bdeeb5212c11ef8f90adf5",
+      "output_sha256": "74ba3ae898ddfda70e0dc483a5f6ccd118addc4fb74b3722eab37c852491cf8e"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "line_04.in",
+      "input_sha256": "61e17a4b2b6ea4c1c3821f3e466b28fc1bb8fb2e2af0fb789474f684263bc38c",
+      "output_sha256": "78c04a9725f466101ba4966e22f47c7b06b34006e838ad2dd6c41817755823c3"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "max_line_00.in",
+      "input_sha256": "fc83acd982216580ee51ba050c070b319566c172c4c3c3c343b157756356dcae",
+      "output_sha256": "937baaf2670fe6f6f55f5df6dacfd0cda79f023fe882bfb145ab6eeed950929b"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "max_line_01.in",
+      "input_sha256": "1882abdd01a703acd4bd3e768a243bae3560cf7e5947990a983ebf2f6581092e",
+      "output_sha256": "248bc7a859f5937c8e654ebafcca9cd9248708bf919eaa736237908e4c1d3184"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "max_line_02.in",
+      "input_sha256": "140601263f2e3cd743f23b034f859b6ed0cc917a952088a8734f498cb9f4264c",
+      "output_sha256": "817a83d40041f315904d2eaa320fb52e19bc446404cce255a3bf06e176e5a2c0"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "max_random_00.in",
+      "input_sha256": "2bac06f93005ee23a224634f80a7376089b98f439b5b1d525906f27c921aaa39",
+      "output_sha256": "3b71d1a99513b7a3a38758cec5ef93b6a81a59c82c95bf395c20d36a1c4a42f2"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "max_random_01.in",
+      "input_sha256": "b570804924fa654e7629d716bac2404a13c7003ddf03c2622e7a4228b0318151",
+      "output_sha256": "9627c51677d1091a1c749edc01d02872507c48c546d3a1a663c5f4e02dfdd40c"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "max_random_02.in",
+      "input_sha256": "89338ea2520be2712639f8311cb8dafc04fc3e5e816b9e975fef8244d12f0577",
+      "output_sha256": "b08502168d844a7ef48fb642ce66eccc9b6b5496dc182e11b3d85fd6912ba7f3"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "binary_00.in",
+      "input_sha256": "6e7c16bc8af7a039b1ac60ce46b085b7950381faf413d4006f6e668ca229707a",
+      "output_sha256": "dd71c4b7b1c5dde2bade5e3510230c71b894200f39431c60e6b69454b4ec5155"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "binary_01.in",
+      "input_sha256": "20d7fb5dd98dbef4ba16e080dd80b1b729d9c0044231f2baeb4aaa6c540c41e6",
+      "output_sha256": "5f00338c354c8c9a94a8c36e9fca10b57df0b557a36f517621f943c67df871b3"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "binary_02.in",
+      "input_sha256": "ee85fcb9c3171cbf0e5b1f38e06a44107654fec2f61212c8c0ab10c4631ad753",
+      "output_sha256": "4edd5a18cde59b1ebdd11978ffc0ab1a977d0478fc4724e0babec27af7016d73"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "path_graph_root_centroid_00.in",
+      "input_sha256": "ad4b99944b6a835d81f5b94a2270cba4b93601b3246b1c1884084be0dc1678ee",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "path_graph_root_centroid_01.in",
+      "input_sha256": "2e29447fe8419d10eef6d5a50efca8fb81001fab5115d22a509e3bd36dd9b9a9",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "path_graph_root_centroid_02.in",
+      "input_sha256": "83cd0957de2a2b250ca132a0f3d46a0ab059e48f0fe91d6fa67893ad06cfddbc",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "almost_line_00.in",
+      "input_sha256": "ea3f1411571fa29bbaaa70c407c19168382c40a1ea4189823dcd394ed155fd1b",
+      "output_sha256": "bfff4a3ba6228102152ba4c039b139f42b65a78ba15d2c50e2507f565b36eda1"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "almost_line_01.in",
+      "input_sha256": "8d8360a96a0e1ffefa8c7ed04b09c86c24ffa3d181d29862128bcb45b23420e1",
+      "output_sha256": "4cbd1c40f987819aa0ef69ba778deede4471d30f935eac5af5d4f6ba78cd0b84"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "star.in",
+      "input_sha256": "feda681e0eb05dd73e43a8089c387ccf42782c63f066c2bdf1efc9120875e577",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "tiny.in",
+      "input_sha256": "47917492184b3df52c889562b530fee01cfdbd8551371a44472c88d940c723ad",
+      "output_sha256": "cda7d53bfa1bc60862e3530f0bea821d3165d1c4f4709dbea3bc97ee927cb124"
+    },
+    {
+      "configuration": "gcc15_2_native_checked",
+      "case": "broom.in",
+      "input_sha256": "02a40851715d69250036d91f27a899acc7983f84ac0c2ef9d46b2947379e5141",
+      "output_sha256": "0140f84368e52b2c773600854f98f0308937962a03635a38456801486bad045e"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "example_00.in",
+      "input_sha256": "0595e1703d23732058c02c3346d6e89cdfdad2ac283bef01ca0e9a3acb7e7fa8",
+      "output_sha256": "c99aa4b79322c9ab88ead7176fc1bcac693e5698f2b9db50cd15dc226742311a"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "random_00.in",
+      "input_sha256": "08e152f5cfe99a60f7fed4b613d19159027fddb718e43e6a6f809543b5ff1edb",
+      "output_sha256": "7a800c653bd5cf1fc59d230bd3dfc242d077116953bbf8ad47f05860ca26b23a"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "random_01.in",
+      "input_sha256": "2e9544f1176948b1905023b764e90537abbef38ce27f24383e789393ebf3bce1",
+      "output_sha256": "4f31791f2fce8eb1ebe92b99bcf751c335cc4a439e75887c8661e3a9e39d89ac"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "random_02.in",
+      "input_sha256": "05ac966aa1bb1e36ee50dc72b0f5cf0bd30c1968a8616567d723fae57c5266f3",
+      "output_sha256": "2e26d921a3810a362b0e2d5d464f8ac500509f5abfd72139badac6e8d780679a"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "random_03.in",
+      "input_sha256": "77b41207e3eb3ecb95b4309f9d44e8e97cf3d5e97cc738dbd0538dd712b57826",
+      "output_sha256": "5e8d21f03a2df1beb7684cb75618660f7cfae7a46b289fb655387eaf5cc67e90"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "random_04.in",
+      "input_sha256": "31d7565cfccb2c5a4634411abd2c2980e248fa9b45c9dbfcbb9b825d22f4ba8d",
+      "output_sha256": "e768fb5242c159225df616f05f1335fd45c7d0ca73e1b1fef57a023c6f2d4876"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "line_00.in",
+      "input_sha256": "4bb8d5302f3a45ae9c35d10d908e732686ca63dfcd3bb27471154ee4e51412d9",
+      "output_sha256": "3ca632e4d37cb82050bc44f7262d660f99f54c71efe5424f776063845a44c387"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "line_01.in",
+      "input_sha256": "0d72a09ebc9780664df8a0e06f2dbedb019cd160085b157bdb0ff6478e75876c",
+      "output_sha256": "56e2482cc761a139696557831cb6a68b33571a32877e038de8e206799181df24"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "line_02.in",
+      "input_sha256": "b080a812ca5cc3ac0b8068c68c531bcf1ef4fa0348395577cfbc8105327f33c2",
+      "output_sha256": "38e399ec67f2122ac515138ecc2342c7b94303ea93918ebd77fb6589fb3cd739"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "line_03.in",
+      "input_sha256": "c3056c81cbfc80e61138eaf53cc42a21569cb9eaa2bdeeb5212c11ef8f90adf5",
+      "output_sha256": "74ba3ae898ddfda70e0dc483a5f6ccd118addc4fb74b3722eab37c852491cf8e"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "line_04.in",
+      "input_sha256": "61e17a4b2b6ea4c1c3821f3e466b28fc1bb8fb2e2af0fb789474f684263bc38c",
+      "output_sha256": "78c04a9725f466101ba4966e22f47c7b06b34006e838ad2dd6c41817755823c3"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "max_line_00.in",
+      "input_sha256": "fc83acd982216580ee51ba050c070b319566c172c4c3c3c343b157756356dcae",
+      "output_sha256": "937baaf2670fe6f6f55f5df6dacfd0cda79f023fe882bfb145ab6eeed950929b"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "max_line_01.in",
+      "input_sha256": "1882abdd01a703acd4bd3e768a243bae3560cf7e5947990a983ebf2f6581092e",
+      "output_sha256": "248bc7a859f5937c8e654ebafcca9cd9248708bf919eaa736237908e4c1d3184"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "max_line_02.in",
+      "input_sha256": "140601263f2e3cd743f23b034f859b6ed0cc917a952088a8734f498cb9f4264c",
+      "output_sha256": "817a83d40041f315904d2eaa320fb52e19bc446404cce255a3bf06e176e5a2c0"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "max_random_00.in",
+      "input_sha256": "2bac06f93005ee23a224634f80a7376089b98f439b5b1d525906f27c921aaa39",
+      "output_sha256": "3b71d1a99513b7a3a38758cec5ef93b6a81a59c82c95bf395c20d36a1c4a42f2"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "max_random_01.in",
+      "input_sha256": "b570804924fa654e7629d716bac2404a13c7003ddf03c2622e7a4228b0318151",
+      "output_sha256": "9627c51677d1091a1c749edc01d02872507c48c546d3a1a663c5f4e02dfdd40c"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "max_random_02.in",
+      "input_sha256": "89338ea2520be2712639f8311cb8dafc04fc3e5e816b9e975fef8244d12f0577",
+      "output_sha256": "b08502168d844a7ef48fb642ce66eccc9b6b5496dc182e11b3d85fd6912ba7f3"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "binary_00.in",
+      "input_sha256": "6e7c16bc8af7a039b1ac60ce46b085b7950381faf413d4006f6e668ca229707a",
+      "output_sha256": "dd71c4b7b1c5dde2bade5e3510230c71b894200f39431c60e6b69454b4ec5155"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "binary_01.in",
+      "input_sha256": "20d7fb5dd98dbef4ba16e080dd80b1b729d9c0044231f2baeb4aaa6c540c41e6",
+      "output_sha256": "5f00338c354c8c9a94a8c36e9fca10b57df0b557a36f517621f943c67df871b3"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "binary_02.in",
+      "input_sha256": "ee85fcb9c3171cbf0e5b1f38e06a44107654fec2f61212c8c0ab10c4631ad753",
+      "output_sha256": "4edd5a18cde59b1ebdd11978ffc0ab1a977d0478fc4724e0babec27af7016d73"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "path_graph_root_centroid_00.in",
+      "input_sha256": "ad4b99944b6a835d81f5b94a2270cba4b93601b3246b1c1884084be0dc1678ee",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "path_graph_root_centroid_01.in",
+      "input_sha256": "2e29447fe8419d10eef6d5a50efca8fb81001fab5115d22a509e3bd36dd9b9a9",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "path_graph_root_centroid_02.in",
+      "input_sha256": "83cd0957de2a2b250ca132a0f3d46a0ab059e48f0fe91d6fa67893ad06cfddbc",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "almost_line_00.in",
+      "input_sha256": "ea3f1411571fa29bbaaa70c407c19168382c40a1ea4189823dcd394ed155fd1b",
+      "output_sha256": "bfff4a3ba6228102152ba4c039b139f42b65a78ba15d2c50e2507f565b36eda1"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "almost_line_01.in",
+      "input_sha256": "8d8360a96a0e1ffefa8c7ed04b09c86c24ffa3d181d29862128bcb45b23420e1",
+      "output_sha256": "4cbd1c40f987819aa0ef69ba778deede4471d30f935eac5af5d4f6ba78cd0b84"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "star.in",
+      "input_sha256": "feda681e0eb05dd73e43a8089c387ccf42782c63f066c2bdf1efc9120875e577",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "tiny.in",
+      "input_sha256": "47917492184b3df52c889562b530fee01cfdbd8551371a44472c88d940c723ad",
+      "output_sha256": "cda7d53bfa1bc60862e3530f0bea821d3165d1c4f4709dbea3bc97ee927cb124"
+    },
+    {
+      "configuration": "gcc15_2_native_skip",
+      "case": "broom.in",
+      "input_sha256": "02a40851715d69250036d91f27a899acc7983f84ac0c2ef9d46b2947379e5141",
+      "output_sha256": "0140f84368e52b2c773600854f98f0308937962a03635a38456801486bad045e"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "example_00.in",
+      "input_sha256": "0595e1703d23732058c02c3346d6e89cdfdad2ac283bef01ca0e9a3acb7e7fa8",
+      "output_sha256": "c99aa4b79322c9ab88ead7176fc1bcac693e5698f2b9db50cd15dc226742311a"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "random_00.in",
+      "input_sha256": "08e152f5cfe99a60f7fed4b613d19159027fddb718e43e6a6f809543b5ff1edb",
+      "output_sha256": "7a800c653bd5cf1fc59d230bd3dfc242d077116953bbf8ad47f05860ca26b23a"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "random_01.in",
+      "input_sha256": "2e9544f1176948b1905023b764e90537abbef38ce27f24383e789393ebf3bce1",
+      "output_sha256": "4f31791f2fce8eb1ebe92b99bcf751c335cc4a439e75887c8661e3a9e39d89ac"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "random_02.in",
+      "input_sha256": "05ac966aa1bb1e36ee50dc72b0f5cf0bd30c1968a8616567d723fae57c5266f3",
+      "output_sha256": "2e26d921a3810a362b0e2d5d464f8ac500509f5abfd72139badac6e8d780679a"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "random_03.in",
+      "input_sha256": "77b41207e3eb3ecb95b4309f9d44e8e97cf3d5e97cc738dbd0538dd712b57826",
+      "output_sha256": "5e8d21f03a2df1beb7684cb75618660f7cfae7a46b289fb655387eaf5cc67e90"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "random_04.in",
+      "input_sha256": "31d7565cfccb2c5a4634411abd2c2980e248fa9b45c9dbfcbb9b825d22f4ba8d",
+      "output_sha256": "e768fb5242c159225df616f05f1335fd45c7d0ca73e1b1fef57a023c6f2d4876"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "line_00.in",
+      "input_sha256": "4bb8d5302f3a45ae9c35d10d908e732686ca63dfcd3bb27471154ee4e51412d9",
+      "output_sha256": "3ca632e4d37cb82050bc44f7262d660f99f54c71efe5424f776063845a44c387"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "line_01.in",
+      "input_sha256": "0d72a09ebc9780664df8a0e06f2dbedb019cd160085b157bdb0ff6478e75876c",
+      "output_sha256": "56e2482cc761a139696557831cb6a68b33571a32877e038de8e206799181df24"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "line_02.in",
+      "input_sha256": "b080a812ca5cc3ac0b8068c68c531bcf1ef4fa0348395577cfbc8105327f33c2",
+      "output_sha256": "38e399ec67f2122ac515138ecc2342c7b94303ea93918ebd77fb6589fb3cd739"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "line_03.in",
+      "input_sha256": "c3056c81cbfc80e61138eaf53cc42a21569cb9eaa2bdeeb5212c11ef8f90adf5",
+      "output_sha256": "74ba3ae898ddfda70e0dc483a5f6ccd118addc4fb74b3722eab37c852491cf8e"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "line_04.in",
+      "input_sha256": "61e17a4b2b6ea4c1c3821f3e466b28fc1bb8fb2e2af0fb789474f684263bc38c",
+      "output_sha256": "78c04a9725f466101ba4966e22f47c7b06b34006e838ad2dd6c41817755823c3"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "max_line_00.in",
+      "input_sha256": "fc83acd982216580ee51ba050c070b319566c172c4c3c3c343b157756356dcae",
+      "output_sha256": "937baaf2670fe6f6f55f5df6dacfd0cda79f023fe882bfb145ab6eeed950929b"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "max_line_01.in",
+      "input_sha256": "1882abdd01a703acd4bd3e768a243bae3560cf7e5947990a983ebf2f6581092e",
+      "output_sha256": "248bc7a859f5937c8e654ebafcca9cd9248708bf919eaa736237908e4c1d3184"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "max_line_02.in",
+      "input_sha256": "140601263f2e3cd743f23b034f859b6ed0cc917a952088a8734f498cb9f4264c",
+      "output_sha256": "817a83d40041f315904d2eaa320fb52e19bc446404cce255a3bf06e176e5a2c0"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "max_random_00.in",
+      "input_sha256": "2bac06f93005ee23a224634f80a7376089b98f439b5b1d525906f27c921aaa39",
+      "output_sha256": "3b71d1a99513b7a3a38758cec5ef93b6a81a59c82c95bf395c20d36a1c4a42f2"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "max_random_01.in",
+      "input_sha256": "b570804924fa654e7629d716bac2404a13c7003ddf03c2622e7a4228b0318151",
+      "output_sha256": "9627c51677d1091a1c749edc01d02872507c48c546d3a1a663c5f4e02dfdd40c"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "max_random_02.in",
+      "input_sha256": "89338ea2520be2712639f8311cb8dafc04fc3e5e816b9e975fef8244d12f0577",
+      "output_sha256": "b08502168d844a7ef48fb642ce66eccc9b6b5496dc182e11b3d85fd6912ba7f3"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "binary_00.in",
+      "input_sha256": "6e7c16bc8af7a039b1ac60ce46b085b7950381faf413d4006f6e668ca229707a",
+      "output_sha256": "dd71c4b7b1c5dde2bade5e3510230c71b894200f39431c60e6b69454b4ec5155"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "binary_01.in",
+      "input_sha256": "20d7fb5dd98dbef4ba16e080dd80b1b729d9c0044231f2baeb4aaa6c540c41e6",
+      "output_sha256": "5f00338c354c8c9a94a8c36e9fca10b57df0b557a36f517621f943c67df871b3"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "binary_02.in",
+      "input_sha256": "ee85fcb9c3171cbf0e5b1f38e06a44107654fec2f61212c8c0ab10c4631ad753",
+      "output_sha256": "4edd5a18cde59b1ebdd11978ffc0ab1a977d0478fc4724e0babec27af7016d73"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "path_graph_root_centroid_00.in",
+      "input_sha256": "ad4b99944b6a835d81f5b94a2270cba4b93601b3246b1c1884084be0dc1678ee",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "path_graph_root_centroid_01.in",
+      "input_sha256": "2e29447fe8419d10eef6d5a50efca8fb81001fab5115d22a509e3bd36dd9b9a9",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "path_graph_root_centroid_02.in",
+      "input_sha256": "83cd0957de2a2b250ca132a0f3d46a0ab059e48f0fe91d6fa67893ad06cfddbc",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "almost_line_00.in",
+      "input_sha256": "ea3f1411571fa29bbaaa70c407c19168382c40a1ea4189823dcd394ed155fd1b",
+      "output_sha256": "bfff4a3ba6228102152ba4c039b139f42b65a78ba15d2c50e2507f565b36eda1"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "almost_line_01.in",
+      "input_sha256": "8d8360a96a0e1ffefa8c7ed04b09c86c24ffa3d181d29862128bcb45b23420e1",
+      "output_sha256": "4cbd1c40f987819aa0ef69ba778deede4471d30f935eac5af5d4f6ba78cd0b84"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "star.in",
+      "input_sha256": "feda681e0eb05dd73e43a8089c387ccf42782c63f066c2bdf1efc9120875e577",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "tiny.in",
+      "input_sha256": "47917492184b3df52c889562b530fee01cfdbd8551371a44472c88d940c723ad",
+      "output_sha256": "cda7d53bfa1bc60862e3530f0bea821d3165d1c4f4709dbea3bc97ee927cb124"
+    },
+    {
+      "configuration": "clang21_standard_checked",
+      "case": "broom.in",
+      "input_sha256": "02a40851715d69250036d91f27a899acc7983f84ac0c2ef9d46b2947379e5141",
+      "output_sha256": "0140f84368e52b2c773600854f98f0308937962a03635a38456801486bad045e"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "example_00.in",
+      "input_sha256": "0595e1703d23732058c02c3346d6e89cdfdad2ac283bef01ca0e9a3acb7e7fa8",
+      "output_sha256": "c99aa4b79322c9ab88ead7176fc1bcac693e5698f2b9db50cd15dc226742311a"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "random_00.in",
+      "input_sha256": "08e152f5cfe99a60f7fed4b613d19159027fddb718e43e6a6f809543b5ff1edb",
+      "output_sha256": "7a800c653bd5cf1fc59d230bd3dfc242d077116953bbf8ad47f05860ca26b23a"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "random_01.in",
+      "input_sha256": "2e9544f1176948b1905023b764e90537abbef38ce27f24383e789393ebf3bce1",
+      "output_sha256": "4f31791f2fce8eb1ebe92b99bcf751c335cc4a439e75887c8661e3a9e39d89ac"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "random_02.in",
+      "input_sha256": "05ac966aa1bb1e36ee50dc72b0f5cf0bd30c1968a8616567d723fae57c5266f3",
+      "output_sha256": "2e26d921a3810a362b0e2d5d464f8ac500509f5abfd72139badac6e8d780679a"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "random_03.in",
+      "input_sha256": "77b41207e3eb3ecb95b4309f9d44e8e97cf3d5e97cc738dbd0538dd712b57826",
+      "output_sha256": "5e8d21f03a2df1beb7684cb75618660f7cfae7a46b289fb655387eaf5cc67e90"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "random_04.in",
+      "input_sha256": "31d7565cfccb2c5a4634411abd2c2980e248fa9b45c9dbfcbb9b825d22f4ba8d",
+      "output_sha256": "e768fb5242c159225df616f05f1335fd45c7d0ca73e1b1fef57a023c6f2d4876"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "line_00.in",
+      "input_sha256": "4bb8d5302f3a45ae9c35d10d908e732686ca63dfcd3bb27471154ee4e51412d9",
+      "output_sha256": "3ca632e4d37cb82050bc44f7262d660f99f54c71efe5424f776063845a44c387"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "line_01.in",
+      "input_sha256": "0d72a09ebc9780664df8a0e06f2dbedb019cd160085b157bdb0ff6478e75876c",
+      "output_sha256": "56e2482cc761a139696557831cb6a68b33571a32877e038de8e206799181df24"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "line_02.in",
+      "input_sha256": "b080a812ca5cc3ac0b8068c68c531bcf1ef4fa0348395577cfbc8105327f33c2",
+      "output_sha256": "38e399ec67f2122ac515138ecc2342c7b94303ea93918ebd77fb6589fb3cd739"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "line_03.in",
+      "input_sha256": "c3056c81cbfc80e61138eaf53cc42a21569cb9eaa2bdeeb5212c11ef8f90adf5",
+      "output_sha256": "74ba3ae898ddfda70e0dc483a5f6ccd118addc4fb74b3722eab37c852491cf8e"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "line_04.in",
+      "input_sha256": "61e17a4b2b6ea4c1c3821f3e466b28fc1bb8fb2e2af0fb789474f684263bc38c",
+      "output_sha256": "78c04a9725f466101ba4966e22f47c7b06b34006e838ad2dd6c41817755823c3"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "max_line_00.in",
+      "input_sha256": "fc83acd982216580ee51ba050c070b319566c172c4c3c3c343b157756356dcae",
+      "output_sha256": "937baaf2670fe6f6f55f5df6dacfd0cda79f023fe882bfb145ab6eeed950929b"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "max_line_01.in",
+      "input_sha256": "1882abdd01a703acd4bd3e768a243bae3560cf7e5947990a983ebf2f6581092e",
+      "output_sha256": "248bc7a859f5937c8e654ebafcca9cd9248708bf919eaa736237908e4c1d3184"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "max_line_02.in",
+      "input_sha256": "140601263f2e3cd743f23b034f859b6ed0cc917a952088a8734f498cb9f4264c",
+      "output_sha256": "817a83d40041f315904d2eaa320fb52e19bc446404cce255a3bf06e176e5a2c0"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "max_random_00.in",
+      "input_sha256": "2bac06f93005ee23a224634f80a7376089b98f439b5b1d525906f27c921aaa39",
+      "output_sha256": "3b71d1a99513b7a3a38758cec5ef93b6a81a59c82c95bf395c20d36a1c4a42f2"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "max_random_01.in",
+      "input_sha256": "b570804924fa654e7629d716bac2404a13c7003ddf03c2622e7a4228b0318151",
+      "output_sha256": "9627c51677d1091a1c749edc01d02872507c48c546d3a1a663c5f4e02dfdd40c"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "max_random_02.in",
+      "input_sha256": "89338ea2520be2712639f8311cb8dafc04fc3e5e816b9e975fef8244d12f0577",
+      "output_sha256": "b08502168d844a7ef48fb642ce66eccc9b6b5496dc182e11b3d85fd6912ba7f3"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "binary_00.in",
+      "input_sha256": "6e7c16bc8af7a039b1ac60ce46b085b7950381faf413d4006f6e668ca229707a",
+      "output_sha256": "dd71c4b7b1c5dde2bade5e3510230c71b894200f39431c60e6b69454b4ec5155"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "binary_01.in",
+      "input_sha256": "20d7fb5dd98dbef4ba16e080dd80b1b729d9c0044231f2baeb4aaa6c540c41e6",
+      "output_sha256": "5f00338c354c8c9a94a8c36e9fca10b57df0b557a36f517621f943c67df871b3"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "binary_02.in",
+      "input_sha256": "ee85fcb9c3171cbf0e5b1f38e06a44107654fec2f61212c8c0ab10c4631ad753",
+      "output_sha256": "4edd5a18cde59b1ebdd11978ffc0ab1a977d0478fc4724e0babec27af7016d73"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "path_graph_root_centroid_00.in",
+      "input_sha256": "ad4b99944b6a835d81f5b94a2270cba4b93601b3246b1c1884084be0dc1678ee",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "path_graph_root_centroid_01.in",
+      "input_sha256": "2e29447fe8419d10eef6d5a50efca8fb81001fab5115d22a509e3bd36dd9b9a9",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "path_graph_root_centroid_02.in",
+      "input_sha256": "83cd0957de2a2b250ca132a0f3d46a0ab059e48f0fe91d6fa67893ad06cfddbc",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "almost_line_00.in",
+      "input_sha256": "ea3f1411571fa29bbaaa70c407c19168382c40a1ea4189823dcd394ed155fd1b",
+      "output_sha256": "bfff4a3ba6228102152ba4c039b139f42b65a78ba15d2c50e2507f565b36eda1"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "almost_line_01.in",
+      "input_sha256": "8d8360a96a0e1ffefa8c7ed04b09c86c24ffa3d181d29862128bcb45b23420e1",
+      "output_sha256": "4cbd1c40f987819aa0ef69ba778deede4471d30f935eac5af5d4f6ba78cd0b84"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "star.in",
+      "input_sha256": "feda681e0eb05dd73e43a8089c387ccf42782c63f066c2bdf1efc9120875e577",
+      "output_sha256": "5a9061de234dcdec007b25ff8fd4a4491b247fcb33d79774fe9958339ef61947"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "tiny.in",
+      "input_sha256": "47917492184b3df52c889562b530fee01cfdbd8551371a44472c88d940c723ad",
+      "output_sha256": "cda7d53bfa1bc60862e3530f0bea821d3165d1c4f4709dbea3bc97ee927cb124"
+    },
+    {
+      "configuration": "clang21_standard_skip",
+      "case": "broom.in",
+      "input_sha256": "02a40851715d69250036d91f27a899acc7983f84ac0c2ef9d46b2947379e5141",
+      "output_sha256": "0140f84368e52b2c773600854f98f0308937962a03635a38456801486bad045e"
+    }
+  ],
+  "examples": [
+    {
+      "configuration": "gcc15_2_native",
+      "stdout": "1 3\n0 0\n1 1\n-1 2\n1 2 5\n3 3\n1\n1 3\n0\n0 -1\n1\n"
+    },
+    {
+      "configuration": "clang21_standard",
+      "stdout": "1 3\n0 0\n1 1\n-1 2\n1 2 5\n3 3\n1\n1 3\n0\n0 -1\n1\n"
+    }
+  ],
+  "notes": [
+    "公式25件+補足3件をGCC15.2/Clang21・検査有効無効で112出力照合。",
+    "独立参照、任意ラベル・任意の根・森・RMQ境界、全API、共有表の寿命、確保失敗を通常20programsで検証。",
+    "新RMQ境界・確保失敗をGCC/Clang各2本ASan+UBSanでも確認。検査無効は通常構成で検証。",
+    "ASan detect_leaks=0は環境都合。確保失敗試験のlive_delta=0を別途確認。",
+    "本体には専用SIMDや128bit拡張を追加していない。GNU/Clangのinline属性は条件付きで、他コンパイラでは通常の関数になる。",
+    "mainと入出力のSHAは旧38e提出と同一。現行本体のオンラインACとは区別する。"
+  ]
+}

@@ -1,0 +1,1535 @@
+{
+  "date": "2026-10-22",
+  "scope": "最終SHAの独立参照・境界・所有権・例外・固定main検証。過去のオンライン判定は変更しない。",
+  "source": {
+    "path": "DataStructure/rollback-union-find.cpp",
+    "baseline_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+    "final_sha256": "bf0243aa6f5aa4b89a3f7833ad0b41c03d01a2920d5989fbe0a3fd6bc1fe1917",
+    "final_bytes": 8190
+  },
+  "artifacts": {
+    "DataStructure/rollback-union-find.cpp": {
+      "sha256": "bf0243aa6f5aa4b89a3f7833ad0b41c03d01a2920d5989fbe0a3fd6bc1fe1917",
+      "bytes": 8190
+    },
+    "Document/rollback_union_find.md": {
+      "sha256": "d843bd99d0b53da979fd3a0725a77c818e44c854d2288c6598d334475fc8bbe3",
+      "bytes": 6690
+    },
+    "Examples/rollback_union_find_example.cpp": {
+      "sha256": "cd48845954ec75b5c37de34f44fa09cb022797f1bfe4dc35d11c28e0500e7d2d",
+      "bytes": 1674
+    },
+    "Verify/current/tests/ruf_reference_test.cpp": {
+      "sha256": "b74314bb7c688721d2fc6393371a650fdd0e370875d60132fcc686f001a1f3a3",
+      "bytes": 9311
+    },
+    "Verify/current/tests/ruf_exception_test.cpp": {
+      "sha256": "4fa99301f489dfa32d226b8696ca248db96fbdbc692c693d64730612781a9799",
+      "bytes": 7181
+    },
+    "Verify/current/tests/rollback_reuse_test.cpp": {
+      "sha256": "0ae7e627b94935516f2e8f7bef7862b395f1456e6c7e17a48f0cef556709f90b",
+      "bytes": 11719
+    },
+    "Verify/current/tests/rollback_union_groups_performance_benchmark.cpp": {
+      "sha256": "e7d876a429226b3d2f0fbce3256c11448106de52f8d3860a593371e33a3ec152",
+      "bytes": 1155
+    },
+    "Verify/current/tests/rollback_union_copy_performance_benchmark.cpp": {
+      "sha256": "7234f1e210a618d520044e46ef5228ea6406bd6cfc50d13e6f272afaec984406",
+      "bytes": 1027
+    }
+  },
+  "previous_audits": {
+    "verify": {
+      "path": "Audit/verify-rollback-union-find-2026-10-22.json",
+      "sha256": "1fbbfb4427642c05860a65e549eec8b3e4c29521d07a906582d9160fe88efabb"
+    },
+    "performance": {
+      "path": "Audit/performance-rollback-union-find-2026-10-22.json",
+      "sha256": "4e9bdbedfa2d45561fa4e8484864070064ec1b5f5628b4f8e5cbbdd59d823567"
+    },
+    "provenance": {
+      "path": "Audit/provenance-rollback-union-find-2026-10-22.json",
+      "sha256": "d00167d68473640493d7e4a235e7b84bc886af16c4be94b467f91131d9548123"
+    }
+  },
+  "online_submission_performed": false,
+  "online_status": "未提出。既存のACは記録された旧sourceの結果として保持。",
+  "problem_url": "https://judge.yosupo.jp/problem/persistent_unionfind",
+  "reference_method": "親/負サイズ配列を永続二分木で保持し、更新した2点の経路をコピーして各版rootを保存する。問題入力の時系列で版を選び、経路圧縮なしのunion-by-sizeで処理する。対象の履歴vector、undo、版の木のオフラインDFSを使わない独立実装。参照自身を200ランダム入力で版ごとの成分ラベル配列コピーと照合。全公式/独自出力を0/1列として完全比較。",
+  "reference_fixture_reuse": {
+    "prior_audit": {
+      "path": "Audit/verify-rollback-union-find-2026-10-22.json",
+      "sha256": "1fbbfb4427642c05860a65e549eec8b3e4c29521d07a906582d9160fe88efabb"
+    },
+    "official_and_custom_inputs_checked_by_sha256": true,
+    "stored_independent_outputs_checked_by_sha256": true,
+    "same_inputs_as_previous_audit": true,
+    "note": "過去に参照自身を別の参照と照合した生成出力を再利用し、今回の最終mainの全出力と完全比較。参照の自己検証を今回再実施したという意味ではない。"
+  },
+  "independent_suite": [
+    {
+      "test": "ruf_reference_test",
+      "configuration": "gcc_checked",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/ruf_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf_reference_test_gcc_checked"
+      ],
+      "test_sha256": "b74314bb7c688721d2fc6393371a650fdd0e370875d60132fcc686f001a1f3a3",
+      "output": "PASS checks=2288495 states=17035 operations=25346",
+      "passed": true
+    },
+    {
+      "test": "ruf_exception_test",
+      "configuration": "gcc_checked",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/ruf_exception_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf_exception_test_gcc_checked"
+      ],
+      "test_sha256": "4fa99301f489dfa32d226b8696ca248db96fbdbc692c693d64730612781a9799",
+      "output": "PASS checks=297 allocation_failures=15 live_delta=0",
+      "passed": true
+    },
+    {
+      "test": "rollback_reuse_test",
+      "configuration": "gcc_checked",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/rollback_reuse_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/rollback_reuse_test_gcc_checked"
+      ],
+      "test_sha256": "0ae7e627b94935516f2e8f7bef7862b395f1456e6c7e17a48f0cef556709f90b",
+      "output": "PASS rollback reuse checks=4448 injected_failures=9 live_delta=0",
+      "passed": true
+    },
+    {
+      "test": "ruf_reference_test",
+      "configuration": "gcc_skip",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/ruf_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf_reference_test_gcc_skip",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "test_sha256": "b74314bb7c688721d2fc6393371a650fdd0e370875d60132fcc686f001a1f3a3",
+      "output": "PASS checks=2285145 states=16994 operations=25345",
+      "passed": true
+    },
+    {
+      "test": "ruf_exception_test",
+      "configuration": "gcc_skip",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/ruf_exception_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf_exception_test_gcc_skip",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "test_sha256": "4fa99301f489dfa32d226b8696ca248db96fbdbc692c693d64730612781a9799",
+      "output": "PASS checks=297 allocation_failures=15 live_delta=0",
+      "passed": true
+    },
+    {
+      "test": "rollback_reuse_test",
+      "configuration": "gcc_skip",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/rollback_reuse_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/rollback_reuse_test_gcc_skip",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "test_sha256": "0ae7e627b94935516f2e8f7bef7862b395f1456e6c7e17a48f0cef556709f90b",
+      "output": "PASS rollback reuse checks=4448 injected_failures=9 live_delta=0",
+      "passed": true
+    },
+    {
+      "test": "ruf_reference_test",
+      "configuration": "clang_checked",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/ruf_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf_reference_test_clang_checked"
+      ],
+      "test_sha256": "b74314bb7c688721d2fc6393371a650fdd0e370875d60132fcc686f001a1f3a3",
+      "output": "PASS checks=2288495 states=17035 operations=25346",
+      "passed": true
+    },
+    {
+      "test": "ruf_exception_test",
+      "configuration": "clang_checked",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/ruf_exception_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf_exception_test_clang_checked"
+      ],
+      "test_sha256": "4fa99301f489dfa32d226b8696ca248db96fbdbc692c693d64730612781a9799",
+      "output": "PASS checks=297 allocation_failures=15 live_delta=0",
+      "passed": true
+    },
+    {
+      "test": "rollback_reuse_test",
+      "configuration": "clang_checked",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/rollback_reuse_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/rollback_reuse_test_clang_checked"
+      ],
+      "test_sha256": "0ae7e627b94935516f2e8f7bef7862b395f1456e6c7e17a48f0cef556709f90b",
+      "output": "PASS rollback reuse checks=4448 injected_failures=9 live_delta=0",
+      "passed": true
+    },
+    {
+      "test": "ruf_reference_test",
+      "configuration": "clang_checked_san",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/ruf_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf_reference_test_clang_checked_san",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer"
+      ],
+      "test_sha256": "b74314bb7c688721d2fc6393371a650fdd0e370875d60132fcc686f001a1f3a3",
+      "output": "PASS checks=2288495 states=17035 operations=25346",
+      "passed": true
+    },
+    {
+      "test": "ruf_exception_test",
+      "configuration": "clang_checked_san",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/ruf_exception_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf_exception_test_clang_checked_san",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer"
+      ],
+      "test_sha256": "4fa99301f489dfa32d226b8696ca248db96fbdbc692c693d64730612781a9799",
+      "output": "PASS checks=297 allocation_failures=15 live_delta=0",
+      "passed": true
+    },
+    {
+      "test": "rollback_reuse_test",
+      "configuration": "clang_checked_san",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/rollback_reuse_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/rollback_reuse_test_clang_checked_san",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer"
+      ],
+      "test_sha256": "0ae7e627b94935516f2e8f7bef7862b395f1456e6c7e17a48f0cef556709f90b",
+      "output": "PASS rollback reuse checks=4448 injected_failures=9 live_delta=0",
+      "passed": true
+    },
+    {
+      "test": "ruf_reference_test",
+      "configuration": "clang_skip",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/ruf_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf_reference_test_clang_skip",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "test_sha256": "b74314bb7c688721d2fc6393371a650fdd0e370875d60132fcc686f001a1f3a3",
+      "output": "PASS checks=2285145 states=16994 operations=25345",
+      "passed": true
+    },
+    {
+      "test": "ruf_exception_test",
+      "configuration": "clang_skip",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/ruf_exception_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf_exception_test_clang_skip",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "test_sha256": "4fa99301f489dfa32d226b8696ca248db96fbdbc692c693d64730612781a9799",
+      "output": "PASS checks=297 allocation_failures=15 live_delta=0",
+      "passed": true
+    },
+    {
+      "test": "rollback_reuse_test",
+      "configuration": "clang_skip",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/rollback_reuse_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/rollback_reuse_test_clang_skip",
+        "-DSKIP_RUNTIME_CHECKS"
+      ],
+      "test_sha256": "0ae7e627b94935516f2e8f7bef7862b395f1456e6c7e17a48f0cef556709f90b",
+      "output": "PASS rollback reuse checks=4448 injected_failures=9 live_delta=0",
+      "passed": true
+    },
+    {
+      "test": "ruf_reference_test",
+      "configuration": "clang_skip_san",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/ruf_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf_reference_test_clang_skip_san",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer"
+      ],
+      "test_sha256": "b74314bb7c688721d2fc6393371a650fdd0e370875d60132fcc686f001a1f3a3",
+      "output": "PASS checks=2285145 states=16994 operations=25345",
+      "passed": true
+    },
+    {
+      "test": "ruf_exception_test",
+      "configuration": "clang_skip_san",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/ruf_exception_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/ruf_exception_test_clang_skip_san",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer"
+      ],
+      "test_sha256": "4fa99301f489dfa32d226b8696ca248db96fbdbc692c693d64730612781a9799",
+      "output": "PASS checks=297 allocation_failures=15 live_delta=0",
+      "passed": true
+    },
+    {
+      "test": "rollback_reuse_test",
+      "configuration": "clang_skip_san",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O1",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSIRKIT_RUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/ruf/final.hpp\"",
+        "-DSIRKIT_RWUF_SOURCE=\"/tmp/sirkit_four_hours_20261022/rollback_second/rwuf/final.hpp\"",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/rollback_reuse_test.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/rollback_reuse_test_clang_skip_san",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer"
+      ],
+      "test_sha256": "0ae7e627b94935516f2e8f7bef7862b395f1456e6c7e17a48f0cef556709f90b",
+      "output": "PASS rollback reuse checks=4448 injected_failures=9 live_delta=0",
+      "passed": true
+    }
+  ],
+  "portable_reuse": [
+    {
+      "configuration": "gcc_checked",
+      "stdout": "PASS rollback reuse checks=4448 injected_failures=9 live_delta=0",
+      "passed": true
+    },
+    {
+      "configuration": "gcc_skip",
+      "stdout": "PASS rollback reuse checks=4448 injected_failures=9 live_delta=0",
+      "passed": true
+    },
+    {
+      "configuration": "clang_checked",
+      "stdout": "PASS rollback reuse checks=4448 injected_failures=9 live_delta=0",
+      "passed": true
+    },
+    {
+      "configuration": "clang_checked_san",
+      "stdout": "PASS rollback reuse checks=4448 injected_failures=9 live_delta=0",
+      "passed": true
+    },
+    {
+      "configuration": "clang_skip",
+      "stdout": "PASS rollback reuse checks=4448 injected_failures=9 live_delta=0",
+      "passed": true
+    },
+    {
+      "configuration": "clang_skip_san",
+      "stdout": "PASS rollback reuse checks=4448 injected_failures=9 live_delta=0",
+      "passed": true
+    }
+  ],
+  "duplicate_and_combined_guards": [
+    {
+      "configuration": "gcc_checked",
+      "passed": true
+    },
+    {
+      "configuration": "gcc_checked_portable",
+      "passed": true
+    },
+    {
+      "configuration": "gcc_skip",
+      "passed": true
+    },
+    {
+      "configuration": "gcc_skip_portable",
+      "passed": true
+    },
+    {
+      "configuration": "clang_checked",
+      "passed": true
+    },
+    {
+      "configuration": "clang_checked_portable",
+      "passed": true
+    },
+    {
+      "configuration": "clang_skip",
+      "passed": true
+    },
+    {
+      "configuration": "clang_skip_portable",
+      "passed": true
+    }
+  ],
+  "official_and_custom_main": {
+    "configuration_source_identity": {
+      "baseline": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+      "final": "bf0243aa6f5aa4b89a3f7833ad0b41c03d01a2920d5989fbe0a3fd6bc1fe1917",
+      "main": "8c6dad142331e1dcb3d367ff3a18a6fb138bfd193494541b5eb3bff790369417",
+      "io": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+      "only_source_replaced": true,
+      "cases": 18,
+      "official_cases": 14
+    },
+    "runs": [
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "example_00.in",
+        "official": true,
+        "input_sha256": "69d26bf859c490cc455d2a702e04fb6f52a5454c14c0768418cf102e5c09f08d",
+        "output_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "hand_00.in",
+        "official": true,
+        "input_sha256": "ded143c4127c50bfef9f3a510b78a54de012e7b8cd981673fdf24aa70884b515",
+        "output_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "random_00.in",
+        "official": true,
+        "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+        "output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "random_01.in",
+        "official": true,
+        "input_sha256": "071c49e6c2e7e7a24acabe279648b4cc4211b58634d710c2b323b4614abf76ea",
+        "output_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "random_02.in",
+        "official": true,
+        "input_sha256": "8f93229ab776a7c5691fbb22fb037e270af7fe25b1a3a49990c140e37d42759c",
+        "output_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "random_03.in",
+        "official": true,
+        "input_sha256": "984ed94748529df4c100fc064a008fcbb5c8a461c6df9fce689e1a6cdbd825d9",
+        "output_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "random_04.in",
+        "official": true,
+        "input_sha256": "5d4a426b01bce8773c29de019fc1415fe309549c9a2ed38d31f11fab93ab3b89",
+        "output_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "max_random_00.in",
+        "official": true,
+        "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+        "output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "max_random_01.in",
+        "official": true,
+        "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+        "output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "max_random_02.in",
+        "official": true,
+        "input_sha256": "e6be06d8a4be7e00d906e86e43a093f562b125717a43f65c557e0c7ee230f374",
+        "output_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "max_random_03.in",
+        "official": true,
+        "input_sha256": "9f8158268781ed9240eea2b30f5ef5956c431eb3de0c307189afdef7aea10a14",
+        "output_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "max_random_04.in",
+        "official": true,
+        "input_sha256": "dbded379487164e8125b385915a4c14df9cb8ede0af97772e18ceb4388ad11f2",
+        "output_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "conchon_filliatre_tle_00.in",
+        "official": true,
+        "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+        "output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "conchon_filliatre_tle_01.in",
+        "official": true,
+        "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+        "output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "branch_many.in",
+        "official": false,
+        "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+        "output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "balanced.in",
+        "official": false,
+        "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "same_component.in",
+        "official": false,
+        "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+        "output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_checked",
+        "case": "small_branch.in",
+        "official": false,
+        "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+        "output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "example_00.in",
+        "official": true,
+        "input_sha256": "69d26bf859c490cc455d2a702e04fb6f52a5454c14c0768418cf102e5c09f08d",
+        "output_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "hand_00.in",
+        "official": true,
+        "input_sha256": "ded143c4127c50bfef9f3a510b78a54de012e7b8cd981673fdf24aa70884b515",
+        "output_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "random_00.in",
+        "official": true,
+        "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+        "output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "random_01.in",
+        "official": true,
+        "input_sha256": "071c49e6c2e7e7a24acabe279648b4cc4211b58634d710c2b323b4614abf76ea",
+        "output_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "random_02.in",
+        "official": true,
+        "input_sha256": "8f93229ab776a7c5691fbb22fb037e270af7fe25b1a3a49990c140e37d42759c",
+        "output_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "random_03.in",
+        "official": true,
+        "input_sha256": "984ed94748529df4c100fc064a008fcbb5c8a461c6df9fce689e1a6cdbd825d9",
+        "output_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "random_04.in",
+        "official": true,
+        "input_sha256": "5d4a426b01bce8773c29de019fc1415fe309549c9a2ed38d31f11fab93ab3b89",
+        "output_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "max_random_00.in",
+        "official": true,
+        "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+        "output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "max_random_01.in",
+        "official": true,
+        "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+        "output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "max_random_02.in",
+        "official": true,
+        "input_sha256": "e6be06d8a4be7e00d906e86e43a093f562b125717a43f65c557e0c7ee230f374",
+        "output_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "max_random_03.in",
+        "official": true,
+        "input_sha256": "9f8158268781ed9240eea2b30f5ef5956c431eb3de0c307189afdef7aea10a14",
+        "output_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "max_random_04.in",
+        "official": true,
+        "input_sha256": "dbded379487164e8125b385915a4c14df9cb8ede0af97772e18ceb4388ad11f2",
+        "output_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "conchon_filliatre_tle_00.in",
+        "official": true,
+        "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+        "output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "conchon_filliatre_tle_01.in",
+        "official": true,
+        "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+        "output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "branch_many.in",
+        "official": false,
+        "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+        "output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "balanced.in",
+        "official": false,
+        "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "same_component.in",
+        "official": false,
+        "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+        "output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "gcc_skip",
+        "case": "small_branch.in",
+        "official": false,
+        "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+        "output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "example_00.in",
+        "official": true,
+        "input_sha256": "69d26bf859c490cc455d2a702e04fb6f52a5454c14c0768418cf102e5c09f08d",
+        "output_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "hand_00.in",
+        "official": true,
+        "input_sha256": "ded143c4127c50bfef9f3a510b78a54de012e7b8cd981673fdf24aa70884b515",
+        "output_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "random_00.in",
+        "official": true,
+        "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+        "output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "random_01.in",
+        "official": true,
+        "input_sha256": "071c49e6c2e7e7a24acabe279648b4cc4211b58634d710c2b323b4614abf76ea",
+        "output_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "random_02.in",
+        "official": true,
+        "input_sha256": "8f93229ab776a7c5691fbb22fb037e270af7fe25b1a3a49990c140e37d42759c",
+        "output_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "random_03.in",
+        "official": true,
+        "input_sha256": "984ed94748529df4c100fc064a008fcbb5c8a461c6df9fce689e1a6cdbd825d9",
+        "output_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "random_04.in",
+        "official": true,
+        "input_sha256": "5d4a426b01bce8773c29de019fc1415fe309549c9a2ed38d31f11fab93ab3b89",
+        "output_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "max_random_00.in",
+        "official": true,
+        "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+        "output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "max_random_01.in",
+        "official": true,
+        "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+        "output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "max_random_02.in",
+        "official": true,
+        "input_sha256": "e6be06d8a4be7e00d906e86e43a093f562b125717a43f65c557e0c7ee230f374",
+        "output_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "max_random_03.in",
+        "official": true,
+        "input_sha256": "9f8158268781ed9240eea2b30f5ef5956c431eb3de0c307189afdef7aea10a14",
+        "output_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "max_random_04.in",
+        "official": true,
+        "input_sha256": "dbded379487164e8125b385915a4c14df9cb8ede0af97772e18ceb4388ad11f2",
+        "output_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "conchon_filliatre_tle_00.in",
+        "official": true,
+        "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+        "output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "conchon_filliatre_tle_01.in",
+        "official": true,
+        "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+        "output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "branch_many.in",
+        "official": false,
+        "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+        "output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "balanced.in",
+        "official": false,
+        "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "same_component.in",
+        "official": false,
+        "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+        "output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_checked",
+        "case": "small_branch.in",
+        "official": false,
+        "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+        "output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "example_00.in",
+        "official": true,
+        "input_sha256": "69d26bf859c490cc455d2a702e04fb6f52a5454c14c0768418cf102e5c09f08d",
+        "output_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "hand_00.in",
+        "official": true,
+        "input_sha256": "ded143c4127c50bfef9f3a510b78a54de012e7b8cd981673fdf24aa70884b515",
+        "output_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "random_00.in",
+        "official": true,
+        "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+        "output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "random_01.in",
+        "official": true,
+        "input_sha256": "071c49e6c2e7e7a24acabe279648b4cc4211b58634d710c2b323b4614abf76ea",
+        "output_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "random_02.in",
+        "official": true,
+        "input_sha256": "8f93229ab776a7c5691fbb22fb037e270af7fe25b1a3a49990c140e37d42759c",
+        "output_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "random_03.in",
+        "official": true,
+        "input_sha256": "984ed94748529df4c100fc064a008fcbb5c8a461c6df9fce689e1a6cdbd825d9",
+        "output_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "random_04.in",
+        "official": true,
+        "input_sha256": "5d4a426b01bce8773c29de019fc1415fe309549c9a2ed38d31f11fab93ab3b89",
+        "output_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "max_random_00.in",
+        "official": true,
+        "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+        "output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "max_random_01.in",
+        "official": true,
+        "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+        "output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "max_random_02.in",
+        "official": true,
+        "input_sha256": "e6be06d8a4be7e00d906e86e43a093f562b125717a43f65c557e0c7ee230f374",
+        "output_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "max_random_03.in",
+        "official": true,
+        "input_sha256": "9f8158268781ed9240eea2b30f5ef5956c431eb3de0c307189afdef7aea10a14",
+        "output_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "max_random_04.in",
+        "official": true,
+        "input_sha256": "dbded379487164e8125b385915a4c14df9cb8ede0af97772e18ceb4388ad11f2",
+        "output_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "conchon_filliatre_tle_00.in",
+        "official": true,
+        "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+        "output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "conchon_filliatre_tle_01.in",
+        "official": true,
+        "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+        "output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "branch_many.in",
+        "official": false,
+        "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+        "output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "balanced.in",
+        "official": false,
+        "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "same_component.in",
+        "official": false,
+        "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+        "output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+        "passed": true
+      },
+      {
+        "library": "ruf",
+        "configuration": "clang_skip",
+        "case": "small_branch.in",
+        "official": false,
+        "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+        "output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+        "passed": true
+      }
+    ]
+  },
+  "examples": [
+    {
+      "library": "ruf",
+      "configuration": "gcc_checked",
+      "portable": false,
+      "stdout": "4 0",
+      "passed": true
+    },
+    {
+      "library": "ruf",
+      "configuration": "gcc_skip",
+      "portable": false,
+      "stdout": "4 0",
+      "passed": true
+    },
+    {
+      "library": "ruf",
+      "configuration": "clang_checked",
+      "portable": false,
+      "stdout": "4 0",
+      "passed": true
+    },
+    {
+      "library": "ruf",
+      "configuration": "clang_skip",
+      "portable": false,
+      "stdout": "4 0",
+      "passed": true
+    }
+  ],
+  "preprocessor": [
+    {
+      "library": "ruf",
+      "configuration": "gcc_checked",
+      "portable": false,
+      "disable_simd_identical": true,
+      "checked_strings_removed": false,
+      "passed": true
+    },
+    {
+      "library": "ruf",
+      "configuration": "gcc_skip",
+      "portable": false,
+      "disable_simd_identical": true,
+      "checked_strings_removed": true,
+      "passed": true
+    },
+    {
+      "library": "ruf",
+      "configuration": "clang_checked",
+      "portable": false,
+      "disable_simd_identical": true,
+      "checked_strings_removed": false,
+      "passed": true
+    },
+    {
+      "library": "ruf",
+      "configuration": "clang_skip",
+      "portable": false,
+      "disable_simd_identical": true,
+      "checked_strings_removed": true,
+      "passed": true
+    }
+  ],
+  "unchanged_hot_methods": {
+    "methods": {
+      "static std::size_t checked_size(std::size_t n)": {
+        "byte_identical": true,
+        "sha256": "76fc210a422d2a127a3f514f54f330f588b62f7ddb64c9c524f1bc30adf4a564"
+      },
+      "void check(int i) const": {
+        "byte_identical": true,
+        "sha256": "a014aca5d1cef4fc91c763240d176e18e2898a0a3c3e30c82969b56cbce05995"
+      },
+      "int leader_unchecked(int i) const": {
+        "byte_identical": true,
+        "sha256": "b9ac740c65f3e1fc9784555df9d2f6dd7945f254f1757906bfeac10fb2a699e5"
+      },
+      "void undo_last() noexcept": {
+        "byte_identical": true,
+        "sha256": "133de7a7d716a1a9a3837bd1f51dc436c1ee8b780ebc7395ade12ed76026f66b"
+      },
+      "bool unite(int x, int y)": {
+        "byte_identical": true,
+        "sha256": "fa8bdb72799ab85f3a0218755d09388afa04ece1b18518920796c1159a1217b0"
+      },
+      "bool same(int a, int b) const": {
+        "byte_identical": true,
+        "sha256": "f1769575b25378602114857eeeb599f8696560ac16bae5f26c0e208ccb5151d5"
+      },
+      "void undo()": {
+        "byte_identical": true,
+        "sha256": "e6f007360252bda8eec8e58494ad639013d9482beacf8ef9ff617f578f0b87aa"
+      },
+      "void rollback(int state = -1)": {
+        "byte_identical": true,
+        "sha256": "83a4e4524ff1ac3079000f10306ded9493371233e3d3cfc8798e2ae761c346ae"
+      },
+      "void clear_history() noexcept": {
+        "byte_identical": true,
+        "sha256": "82c300a4a7c377fd55275217d45f59288ba32c1d62535a0efe9bde0732b4ad21"
+      },
+      "void reserve_history(std::size_t count)": {
+        "byte_identical": true,
+        "sha256": "88282c9a7d0c296a087c76b8c55e1ee3db994a91cf5cfd2177e7b65a7d87a88c"
+      }
+    },
+    "gcc_main_symbolic_instructions": {
+      "all_functions_identical_ignoring_addresses_and_nops": true,
+      "functions": 34
+    },
+    "clang_main_symbolic_instructions": {
+      "all_functions_identical_ignoring_addresses_and_nops": true,
+      "functions": 34
+    }
+  },
+  "performance_fixture_builds": [
+    {
+      "compiler": "gcc",
+      "fixture": "rollback_union_groups_performance_benchmark.cpp",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSIRKIT_VALUE_TYPE=1",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/rollback_union_groups_performance_benchmark.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/permanent_groups_gcc_1"
+      ],
+      "checksum": "96",
+      "same_benchmark_body": true,
+      "passed": true
+    },
+    {
+      "compiler": "gcc",
+      "fixture": "rollback_union_copy_performance_benchmark.cpp",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSIRKIT_VALUE_TYPE=1",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/rollback_union_copy_performance_benchmark.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/permanent_copy_gcc_1"
+      ],
+      "checksum": "64",
+      "same_benchmark_body": true,
+      "passed": true
+    },
+    {
+      "compiler": "clang",
+      "fixture": "rollback_union_groups_performance_benchmark.cpp",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSIRKIT_VALUE_TYPE=1",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/rollback_union_groups_performance_benchmark.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/permanent_groups_clang_1"
+      ],
+      "checksum": "96",
+      "same_benchmark_body": true,
+      "passed": true
+    },
+    {
+      "compiler": "clang",
+      "fixture": "rollback_union_copy_performance_benchmark.cpp",
+      "value_type": 1,
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-isystem",
+        "/tmp/sirkit_four_hours_20261022/union_second/acl",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSIRKIT_VALUE_TYPE=1",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/rollback_union_copy_performance_benchmark.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/rollback_second/permanent_copy_clang_1"
+      ],
+      "checksum": "64",
+      "same_benchmark_body": true,
+      "passed": true
+    }
+  ],
+  "new_regressions": {
+    "allocation_faults": "各予約箇所でbad_allocを注入し、連結・履歴・保存位置を比較。先行予約で容量だけが増えることは許容。破棄後の所有数は0差分。",
+    "no_allocation_reuse": "確保済み容量内のコピー代入/plain reset、weighted resetはallocation_budget=0で照合。汎用T自身が確保しない試験型に対する観測。",
+    "state_rules": "resetで履歴/snapshotを消去、全独立へ戻す。旧state無効、clear_historyの既存森林保持は維持。groups後のrollbackで経路非圧縮を確認。",
+    "weighted": "weighted共通試験は同じTUで追加検証。plainの内部履歴・保存位置を故障注入後も照合。"
+  },
+  "summary": {
+    "status": "PASS",
+    "all_build_and_run_returncodes_zero": true,
+    "all_stderr_empty": true,
+    "sanitizers": "Clang ASan+UBSan O1、ASAN_OPTIONS=detect_leaks=0。LSanを実施したとは主張しない。",
+    "ownership_checks": "確保/解放と値型liveを独自追跡しlive_delta=0。"
+  },
+  "reproduction": {
+    "verify.py": {
+      "sha256": "8c35e50522a79b5d58478c64cc00b6f878434520354ecf16e81de4acea89f316",
+      "source": "from pathlib import Path\nimport subprocess as sp,json,hashlib,os\np=Path(__file__).parent;root=Path('/home/reinsirk/Atcoder_Env');sha=lambda q:hashlib.sha256(Path(q).read_bytes()).hexdigest();ccs={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']};out={'source_sha256':{lib:sha(p/lib/'final.hpp')for lib in ['ruf','rwuf']},'tests':[],'guards':[]}\nfor cc,args in ccs.items():\n for skip in [False,True]:\n  for portable in [False,True]:\n   for san in ([False,True]if cc=='clang'else[False]):\n    name=cc+('_skip'if skip else'_checked')+('_portable'if portable else'')+('_san'if san else'')\n    names=['rwuf_reference_test','rwuf_exception_test']if portable else['ruf_reference_test','ruf_exception_test','rwuf_reference_test','rwuf_exception_test','rollback_reuse_test']\n    for test in names:\n     source=root/'Verify/current/tests'/(test+'.cpp');exe=p/(test+'_'+name);cmd=['taskset','-c','10',*args,'-std=c++23','-O1'if san else'-O2','-Wall','-Wextra','-Werror','-pedantic-errors','-DSIRKIT_RUF_SOURCE=\"'+str(p/'ruf/final.hpp')+'\"','-DSIRKIT_RWUF_SOURCE=\"'+str(p/'rwuf/final.hpp')+'\"',str(source),'-o',str(exe)]+(['-DSKIP_RUNTIME_CHECKS']if skip else[])+(['-DSIRKIT_FORCE_STANDARD_ARITHMETIC']if portable else[])+(['-fsanitize=address,undefined','-fno-omit-frame-pointer']if san else[]);r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,(test,name,r.stderr);r=sp.run(['taskset','-c','10',str(exe)],capture_output=True,text=True,env=dict(os.environ,ASAN_OPTIONS='detect_leaks=0'));assert not r.returncode and not r.stderr,(test,name,r.stdout,r.stderr);out['tests'].append({'test':test,'configuration':name,'command':cmd,'test_sha256':sha(source),'output':r.stdout.strip(),'passed':True});print(test,name,r.stdout.strip(),flush=True);(p/'verify_raw.json').write_text(json.dumps(out,indent=2)+'\\n')\nfor cc,args in ccs.items():\n for skip in [False,True]:\n  for portable in [False,True]:\n   name=cc+('_skip'if skip else'_checked')+('_portable'if portable else'');tu=p/('guard_'+name+'.cpp');tu.write_text('#include \"ruf/final.hpp\"\\n#include \"rwuf/final.hpp\"\\n#include \"ruf/final.hpp\"\\n#include \"rwuf/final.hpp\"\\nint main(){RollbackUnionFind a(2);RollbackWeightedUnionFind<int>b(2);a.reset();b.reset();return a.component_count()!=2||b.component_count()!=2;}\\n');exe=tu.with_suffix('');cmd=['taskset','-c','10',*args,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',str(tu),'-o',str(exe)]+(['-DSKIP_RUNTIME_CHECKS']if skip else[])+(['-DSIRKIT_FORCE_STANDARD_ARITHMETIC']if portable else[]);r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,r.stderr;sp.run(['taskset','-c','10',str(exe)],check=True);out['guards'].append({'configuration':name,'passed':True})\n(p/'verify_raw.json').write_text(json.dumps(out,indent=2)+'\\n');print('42 suite and8 guard executions passed',flush=True)\n"
+    },
+    "check_package.py": {
+      "sha256": "09f6f57ff9762d2c6be122e06f7782eb16fed893fe581a385641ac1dceb8e3e9",
+      "source": "from pathlib import Path\nimport subprocess as sp,json,hashlib,os,re\np=Path(__file__).parent;root=Path('/home/reinsirk/Atcoder_Env');ccs={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']};sha=lambda b:hashlib.sha256(b).hexdigest();out={'main':[],'examples':[],'portable_reuse':[],'preprocessor':[],'source_identity':{}}\nfor lib,filename in[('ruf','rollback-union-find.cpp'),('rwuf','rollback-union-findw.cpp')]:\n d=p/lib;source=(d/'final.hpp').read_bytes();assert source==(root/'DataStructure'/filename).read_bytes();base=(d/'baseline.hpp').read_bytes();main=(d/'baseline.cpp').read_bytes();assert main.count(base)==1;assert main.replace(base,source)==(d/'final.cpp').read_bytes();old=Path('/tmp/sirkit_'+lib+'_20261022');cases=[]\n official_meta={x['name']:x for x in json.loads((old/'official_cases.json').read_text())};refs=json.loads((old/'official_reference.json').read_text());custom=json.loads((old/'custom_cases.json').read_text())\n if lib=='ruf':\n  for x in refs:\n   file=old/'official'/x['case'];data=file.read_bytes();assert sha(data)==official_meta[x['case']]['sha256'];expected=(old/'reference_outputs'/(file.name+'.out')).read_bytes();assert sha(expected)==x['output_sha256'];cases.append((file.name,data,expected,True))\n  for x in custom:\n   file=old/'custom'/x['name'];data=file.read_bytes();assert sha(data)==x['sha256'];expected=(old/'reference_outputs'/(file.name+'.out')).read_bytes();assert sha(expected)==x['output_sha256'];cases.append((file.name,data,expected,False))\n else:\n  for x in refs:\n   file=old/x['scope']/x['case'];data=file.read_bytes();expected=(old/'reference_outputs'/(file.name+'.out')).read_bytes();assert sha(data)==x['input_sha256'] and sha(expected)==x['output_sha256'];cases.append((file.name,data,expected,x['scope']=='official'))\n out['source_identity'][lib]={'baseline':sha(base),'final':sha(source),'main':sha((d/'main.cpp').read_bytes()),'io':sha((d/'io.hpp').read_bytes()),'only_source_replaced':True,'cases':len(cases),'official_cases':sum(c[3]for c in cases)}\n for cc,args in ccs.items():\n  for skip in[False,True]:\n   name=cc+('_skip'if skip else'_checked');tu=d/('correct_'+name+'.cpp');src=(d/'final.cpp').read_text();assert src.startswith('#define SKIP_RUNTIME_CHECKS\\n');tu.write_text(src if skip else src.removeprefix('#define SKIP_RUNTIME_CHECKS\\n'));exe=tu.with_suffix('');cmd=['taskset','-c','10',*args,'-std=c++23','-O2','-Wall','-Wextra','-Werror',str(tu),'-o',str(exe)];r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,r.stderr\n   for case,data,expected,official in cases:\n    r=sp.run(['taskset','-c','10',str(exe)],input=data,capture_output=True);assert not r.returncode and not r.stderr and r.stdout==expected,(lib,name,case,r.stderr);out['main'].append({'library':lib,'configuration':name,'case':case,'official':official,'input_sha256':sha(data),'output_sha256':sha(r.stdout),'passed':True})\n   example=root/'Examples'/('rollback_union_find_example.cpp'if lib=='ruf'else'rollback_weighted_union_find_example.cpp');configs=[False,True]if lib=='rwuf'else[False]\n   for portable in configs:\n    e=p/(lib+'_example_'+name+('_portable'if portable else''));cmd=['taskset','-c','10',*args,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',str(example),'-o',str(e)]+(['-DSKIP_RUNTIME_CHECKS']if skip else[])+(['-DSIRKIT_FORCE_STANDARD_ARITHMETIC']if portable else[]);r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,r.stderr;r=sp.run(['taskset','-c','10',str(e)],capture_output=True,text=True);assert not r.returncode and not r.stderr and r.stdout==('4 0\\n'if lib=='ruf'else'5 0\\n'),(lib,name,portable,r.stdout,r.stderr);out['examples'].append({'library':lib,'configuration':name,'portable':portable,'stdout':r.stdout.strip(),'passed':True})\n   for portable in([False,True]if lib=='rwuf'else[False]):\n    cmd=['taskset','-c','10',*args,'-std=c++23','-E','-P','-x','c++',str(d/'final.hpp')]+(['-DSKIP_RUNTIME_CHECKS']if skip else[])+(['-DSIRKIT_FORCE_STANDARD_ARITHMETIC']if portable else[]);r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,r.stderr;normal=r.stdout;simd=sp.run(cmd+['-DSIRKIT_DISABLE_SIMD'],capture_output=True,text=True);assert simd.stdout==normal and not simd.returncode;assert ('\"RollbackUnionFind: vertex\"'not in normal if skip else'\"RollbackUnionFind: vertex\"'in normal)if lib=='ruf'else('\"weighted union find negative size\"'not in normal if skip else'\"weighted union find negative size\"'in normal)\n    if lib=='rwuf':assert ('using WideInteger = __int128'not in normal)if portable else('using WideInteger = __int128'in normal)\n    out['preprocessor'].append({'library':lib,'configuration':name,'portable':portable,'disable_simd_identical':True,'checked_strings_removed':skip,'passed':True})\n   print(lib,name,'main',len(cases),'example and PP passed',flush=True)\n(p/'package_raw.json').write_text(json.dumps(out,indent=2)+'\\n')\nfor cc,args in ccs.items():\n for skip in[False,True]:\n  for san in([False,True]if cc=='clang'else[False]):\n   name=cc+('_skip'if skip else'_checked')+('_san'if san else'');e=p/('reuse_portable_'+name);test=root/'Verify/current/tests/rollback_reuse_test.cpp';cmd=['taskset','-c','10',*args,'-std=c++23','-O1'if san else'-O2','-Wall','-Wextra','-Werror','-pedantic-errors','-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-DSIRKIT_RUF_SOURCE=\"'+str(p/'ruf/final.hpp')+'\"','-DSIRKIT_RWUF_SOURCE=\"'+str(p/'rwuf/final.hpp')+'\"',str(test),'-o',str(e)]+(['-DSKIP_RUNTIME_CHECKS']if skip else[])+(['-fsanitize=address,undefined','-fno-omit-frame-pointer']if san else[]);r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,r.stderr;r=sp.run(['taskset','-c','10',str(e)],capture_output=True,text=True,env=dict(os.environ,ASAN_OPTIONS='detect_leaks=0'));assert not r.returncode and not r.stderr,r.stderr;out['portable_reuse'].append({'configuration':name,'stdout':r.stdout.strip(),'passed':True});print('portable reuse',name,r.stdout.strip(),flush=True)\n(p/'package_raw.json').write_text(json.dumps(out,indent=2)+'\\n');print('package checks passed',flush=True)\n"
+    },
+    "value_types.py": {
+      "sha256": "1c59abe3a7b20ef533bfb8102472d46fd42023b55696bc06203fe242b7d0d3f3",
+      "source": "from pathlib import Path\nimport subprocess as sp,json,os,hashlib\np=Path(__file__).parent;root=Path('/home/reinsirk/Atcoder_Env');test=root/'Verify/current/tests/rollback_reset_value_test.cpp';out={'zero_types':[],'actual_acl':[],'performance_fixture_identity':[]};ccs={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']};acl='/tmp/sirkit_four_hours_20261022/union_second/acl'\nfor cc,args in ccs.items():\n for skip in[False,True]:\n  for san in([False,True]if cc=='clang'else[False]):\n   name=cc+('_skip'if skip else'_checked')+('_san'if san else'');exe=p/('zero_'+name);cmd=['taskset','-c','10',*args,'-std=c++23','-O1'if san else'-O2','-Wall','-Wextra','-Werror','-pedantic-errors',str(test),'-o',str(exe)]+(['-DSKIP_RUNTIME_CHECKS']if skip else[])+(['-fsanitize=address,undefined','-fno-omit-frame-pointer']if san else[]);r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,r.stderr;r=sp.run(['taskset','-c','10',str(exe)],capture_output=True,text=True,env=dict(os.environ,ASAN_OPTIONS='detect_leaks=0'));assert not r.returncode and not r.stderr,(name,r.stderr);out['zero_types'].append({'configuration':name,'command':cmd,'stdout':r.stdout.strip(),'passed':True});print(name,r.stdout.strip(),flush=True)\ntu=p/'actual_acl.cpp';tu.write_text('#include <atcoder/modint>\\n#include \"rwuf/final.hpp\"\\n#include <cassert>\\nint main(){using T=atcoder::modint998244353;RollbackWeightedUnionFind<T>u(65);for(int n:{65,8,0,129,1}){u.reset(n);for(int i=0;i<n;++i){assert(u.find(i)==i&&u.get_weight(i)==T(0));if(i)assert(u.unite(i-1,i,T(7)));}if(n)assert(u.diff(0,n-1)==T(7*(n-1)));u.snapshot();u.reset();assert(u.size()==n&&u.component_count()==n&&u.get_state()==0);for(int i=0;i<n;++i)assert(u.get_weight(i)==T(0));u.rollback();}}\\n')\nfor cc,args in ccs.items():\n for skip in[False,True]:\n  for portable in[False,True]:\n   name=cc+('_skip'if skip else'_checked')+('_portable'if portable else'');exe=p/('acl_'+name);cmd=['taskset','-c','10',*args,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors','-isystem',acl,str(tu),'-o',str(exe)]+(['-DSKIP_RUNTIME_CHECKS']if skip else[])+(['-DSIRKIT_FORCE_STANDARD_ARITHMETIC']if portable else[]);r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,r.stderr;r=sp.run(['taskset','-c','10',str(exe)],capture_output=True,text=True);assert not r.returncode and not r.stderr;out['actual_acl'].append({'configuration':name,'command':cmd,'passed':True})\n# 保存した計測ソースと、配布する再測定用ソースで本体が同じことを確認。\nfor lib,name,old,macro in [('ruf','rollback_union_groups_performance_benchmark.cpp',p/'groups_api.cpp','SIRKIT_RUF_SOURCE'),('ruf','rollback_union_copy_performance_benchmark.cpp',p/'ruf/copy_api.cpp','SIRKIT_RUF_SOURCE'),('rwuf','rollback_weighted_reuse_performance_benchmark.cpp',p/'rwuf/reset_api.cpp','SIRKIT_RWUF_SOURCE')]:\n s=(root/'Verify/current/tests'/name).read_text();prefix,body=s.split('#include '+macro+'\\n',1);original=old.read_text().split('#include HEADER\\n',1)[1];assert body.replace('SIRKIT_WEIGHTED_BENCHMARK','WEIGHTED').replace('SIRKIT_VALUE_TYPE','TYPE')==original;out['performance_fixture_identity'].append({'path':'Verify/current/tests/'+name,'same_benchmark_body':True,'sha256':hashlib.sha256(s.encode()).hexdigest(),'frozen_fixture_sha256':hashlib.sha256(old.read_bytes()).hexdigest()})\nout['permanent_fixtures']=[]\nfor cc,args in ccs.items():\n for lib,fixture,name,types,arguments in [('ruf','groups','rollback_union_groups_performance_benchmark.cpp',[1],['32','2','1']),('ruf','copy','rollback_union_copy_performance_benchmark.cpp',[1],['32','1','1']),('rwuf','reset','rollback_weighted_reuse_performance_benchmark.cpp',[0,1,2],['32','1'])]:\n  for vt in types:\n   test=root/'Verify/current/tests'/name;exe=p/('permanent_'+fixture+'_'+cc+'_'+str(vt));cmd=['taskset','-c','10',*args,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors','-isystem',acl,'-DSKIP_RUNTIME_CHECKS','-DSIRKIT_VALUE_TYPE='+str(vt),str(test),'-o',str(exe)];r=sp.run(cmd,capture_output=True,text=True);assert not r.returncode,r.stderr;r=sp.run(['taskset','-c','10',str(exe),*arguments],capture_output=True,text=True);assert not r.returncode and not r.stderr;frozen=sp.run(['taskset','-c','10',str(p/lib/f'final_{fixture}_{cc}_final_{vt}'),*arguments],capture_output=True,text=True);assert not frozen.returncode and not frozen.stderr and frozen.stdout.split()[1]==r.stdout.split()[1];out['permanent_fixtures'].append({'compiler':cc,'fixture':name,'value_type':vt,'command':cmd,'checksum':r.stdout.split()[1],'same_benchmark_body':True,'passed':True})\n(p/'value_types.json').write_text(json.dumps(out,indent=2)+'\\n');print('value-type checks passed',flush=True)\n"
+    },
+    "method_identity.py": {
+      "sha256": "abda827e4b1a1ae5506073d89b61c8d7c4bf20b739080b8f0b372f27cdea45d6",
+      "source": "from pathlib import Path\nimport hashlib,json,subprocess as sp,re\np=Path(__file__).parent;out={}\ndef method(source,signature):\n start=source.index(signature);begin=source.index('{',start);depth=1;i=begin+1\n while depth:\n  if source[i]=='{':depth+=1\n  elif source[i]=='}':depth-=1\n  i+=1\n return source[start:i]\nfor lib,signatures in{'ruf':['static std::size_t checked_size(std::size_t n)','void check(int i) const','int leader_unchecked(int i) const','void undo_last() noexcept','bool unite(int x, int y)','bool same(int a, int b) const','void undo()','void rollback(int state = -1)','void clear_history() noexcept','void reserve_history(std::size_t count)'], 'rwuf':['int find_unchecked(int v) const','static bool try_add(T a, T b, T& out)','static bool try_subtract(T a, T b, T& out)','NarrowRootWeight narrow_root_weight(int v) const','MergeResult record_merge(int parent, int child, T gap)','MergeResult unite_wide(int x, int y, const T& w)','MergeResult unite_impl(int x, int y, const T& w)','void undo_unchecked() noexcept','std::pair<int, T> root_with_weight_slow(int v) const','T diff_slow(int x, int y) const','RollbackWeightedUnionFind& operator=(RollbackWeightedUnionFind other) noexcept','void clear()','std::optional<T> try_diff(int x, int y) const','T diff(int x, int y) const','bool consistent(int x, int y, const T& w) const','void clear_history() noexcept','void reserve_history(std::size_t calls)','void undo()','void rollback(int state = -1)','std::vector<std::vector<int>> groups() const']}.items():\n base=(p/lib/'baseline.hpp').read_text();final=(p/lib/'final.hpp').read_text();rows={}\n for signature in signatures:\n  a,b=method(base,signature),method(final,signature);assert a==b,(lib,signature);rows[signature]={'byte_identical':True,'sha256':hashlib.sha256(a.encode()).hexdigest()}\n out[lib]={'methods':rows}\n if lib=='rwuf':\n  a=base[base.index('    static constexpr bool checked_integer'):base.index('    void reset(int n)')];b=final[final.index('    static constexpr bool checked_integer'):final.index('    void reset(int n)')];assert a==b;out[lib]['all_math_storage_constructor_copy_move_before_reset']={'byte_identical':True,'sha256':hashlib.sha256(a.encode()).hexdigest()}\n# GCC RUFの.text全体差は、未変更のvector破棄関数の配置順とパディングのみかを調べる。\ndef disasm(path):\n s=sp.check_output(['objdump','-d','-C','--no-show-raw-insn',str(path)],text=True);blocks={};current=None\n for line in s.splitlines():\n  m=re.match(r'^[0-9a-f]+ <(.*)>:$',line)\n  if m:current=m[1];blocks[current]=[];continue\n  if current is None or not re.match(r'^\\s*[0-9a-f]+:',line):continue\n  line=re.sub(r'^\\s*[0-9a-f]+:\\s*','',line);line=re.sub(r'\\b[0-9a-f]+\\s*(?=<)','',line)\n  if 'nop' in line:continue\n  blocks[current].append(line)\n return blocks\nfor lib in['ruf','rwuf']:\n for cc in['gcc','clang']:\n  a,b=disasm(p/lib/f'final_main_{cc}_baseline_1'),disasm(p/lib/f'final_main_{cc}_final_1');assert set(a)==set(b);differ=[name for name in a if a[name]!=b[name]];assert not differ,(lib,cc,differ);out[lib][cc+'_main_symbolic_instructions']={'all_functions_identical_ignoring_addresses_and_nops':True,'functions':len(a)}\n(p/'method_identity.json').write_text(json.dumps(out,indent=2)+'\\n');print('unchanged hot methods and symbolic main instructions passed')\n"
+    }
+  },
+  "limits": [
+    "ローカルの固定入力・独立参照・故障注入を通過。オンラインACや全てのユーザー定義型を保証するものではない。",
+    "SIRKIT_DISABLE_SIMDの有無は前処理結果が同一。追加SIMDとCPU判定はない。",
+    "weightedの任意Tの破壊的な算術/代入例外に、既存契約を超える全操作の無条件強保証は宣言しない。"
+  ],
+  "online_prior_result": {
+    "submission_url": "https://judge.yosupo.jp/submission/412482",
+    "source_sha256": "1dc84bbe8180bad5519c085d07f9786f25275240efa4173ea88f8aa472a83f66",
+    "interpretation": "当該ACは旧1dc84...版。二周目の最終SHAへの結果として書き換えない。"
+  }
+}

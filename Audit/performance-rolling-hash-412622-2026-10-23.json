@@ -1,0 +1,3524 @@
+{
+  "status": "COMPLETE_REJECTED",
+  "source_sha256": {
+    "baseline": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276",
+    "control": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276",
+    "remaining": "6cb0d8df2e0b30d5c8351dc89c38ec710aed540b89826e964e16c063dc732be8",
+    "conditional": "f6f5087298292b50f493e547ece8f928e9cc84db56ecd5ced99ad02faa207f88"
+  },
+  "sources": {
+    "baseline": "// SPDX-License-Identifier: CC0-1.0\n\n#include <algorithm>\n#include <cstddef>\n#include <cstdint>\n#include <cstring>\n#include <limits>\n#include <stdexcept>\n#include <string_view>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLING_HASH_DEFINED\n#define SIRKIT_ROLLING_HASH_DEFINED\n\n// RollingHash(s, base): 符号なしバイト列をO(|s|+1)時間・空間で構築。base<2は10、base>modulus-2はmodulus-10に補正。\n// modulus: ハッシュの法2^61-1。ハッシュ値は常に[0,modulus)。\n// get(l,r): 半開区間[l,r)のハッシュ、whole(): 全体のハッシュをO(1)で返す。空区間は0。\n// size(), empty(), base(): 長さ・空判定・補正後の底をO(1)で返す。\n// concat(left,right,right_length): 同じ底の正規化済みハッシュを連結してO(1)で返す。right_length<=size()。\n// equal(l,r,other,ol,orr): 同じ底の2区間の長さとハッシュをO(1)で比較する。\n// lcp(l,other,ol,limit): 同じ底の接尾辞の最長共通接頭辞長をlimit以下でO(log(min(残長,limit)+1))で返す。\n// compare(l,r,other,ol,orr): 同じ底の2区間を符号なしバイト辞書順で比較し-1/0/1をO(log(短い方の長さ+1))で返す。\n// 比較にはハッシュ衝突による誤判定の可能性がある。検査有効時は不正な範囲にout_of_range、底・ハッシュにinvalid_argument。\n// assign(s): 現在の底で再構築し容量・利用可能な累乗表を再利用、O(旧長+|s|+1)上界、強い例外保証。clear(): 空へ戻して底・容量を保持、O(旧長+1)上界、noexcept。\n// 元文字列は保持しない。コピーはO(n+1)で独立、代入は容量を再利用し強い例外保証。ムーブ元は空（自己ムーブ代入は保持）。swapはO(1)。\nclass RollingHash {\npublic:\n    static constexpr std::uint64_t modulus = (std::uint64_t{1} << 61) - 1;\n\n    RollingHash(std::string_view s, std::uint64_t base)\n        : base_(normalize_base(base)) {\n        if (s.size() >= data_.max_size() / 2) {\n            throw std::length_error(\"RollingHash: capacity overflow\");\n        }\n        data_.resize(s.size() + 1);\n        power_data_.resize(s.size() + 1);\n        const std::size_t offset = s.size() + 1;\n        offset_ = offset;\n        Entry* const prefixes = data_.data();\n        Entry* const powers = power_data_.data();\n        powers_ = powers;\n        const std::uint64_t factor = base_;\n        std::uint64_t hash = 0;\n        std::uint64_t power = 1;\n        prefixes[0].value = hash;\n        powers[0].value = power;\n        for (std::size_t i = 0; i < s.size(); ++i) {\n            const auto byte = static_cast<unsigned char>(s[i]);\n            hash = multiply_add_byte(hash, factor, byte);\n            power = multiply(power, factor);\n            prefixes[i + 1].value = hash;\n            powers[i + 1].value = power;\n        }\n    }\n\n    void assign(std::string_view s) {\n        if (s.size() >= data_.max_size() / 2) {\n            throw std::length_error(\"RollingHash: capacity overflow\");\n        }\n        const std::size_t count = s.size() + 1;\n        const bool reuse_powers = power_data_.size() >= count;\n        // 両方の確保を先に終え、失敗時も内容と非所有ポインタを保つ。\n        data_.reserve(count);\n        power_data_.reserve(count);\n        data_.resize(count);\n        power_data_.resize(count);\n        offset_ = count;\n        powers_ = power_data_.data();\n        Entry* const prefixes = data_.data();\n        Entry* const powers = power_data_.data();\n        const std::uint64_t factor = base_;\n        std::uint64_t hash = 0;\n        prefixes[0].value = hash;\n        powers[0].value = 1;\n        if (reuse_powers) {\n            for (std::size_t i = 0; i < s.size(); ++i) {\n                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));\n                prefixes[i + 1].value = hash;\n            }\n        } else {\n            std::uint64_t power = 1;\n            for (std::size_t i = 0; i < s.size(); ++i) {\n                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));\n                power = multiply(power, factor);\n                prefixes[i + 1].value = hash;\n                powers[i + 1].value = power;\n            }\n        }\n    }\n\n    void clear() noexcept {\n        data_.clear(); power_data_.clear();\n        offset_ = 0; powers_ = nullptr;\n    }\n\n    RollingHash(const RollingHash& other)\n        : data_(other.data_), power_data_(other.power_data_),\n          base_(other.base_), offset_(other.offset_),\n          powers_(data_.empty() ? nullptr : power_data_.data()) {}\n\n    RollingHash& operator=(const RollingHash& other) {\n        if (this != &other) {\n            data_.reserve(other.data_.size());\n            power_data_.reserve(other.power_data_.size());\n            data_.resize(other.data_.size());\n            power_data_.resize(other.power_data_.size());\n            // Entryはtrivially copyable。独立した配列間で、構築済み要素の表現を写す。\n            if (!other.data_.empty()) {\n                std::memcpy(data_.data(), other.data_.data(), other.data_.size() * sizeof(Entry));\n                std::memcpy(power_data_.data(), other.power_data_.data(), other.power_data_.size() * sizeof(Entry));\n            }\n            base_ = other.base_;\n            offset_ = other.offset_;\n            powers_ = data_.empty() ? nullptr : power_data_.data();\n        }\n        return *this;\n    }\n\n    RollingHash(RollingHash&& other) noexcept\n        : data_(std::move(other.data_)), power_data_(std::move(other.power_data_)),\n          base_(other.base_), offset_(other.offset_),\n          powers_(other.powers_) {\n        other.data_.clear();\n        other.power_data_.clear();\n        other.offset_ = 0;\n        other.powers_ = nullptr;\n    }\n\n    RollingHash& operator=(RollingHash&& other) noexcept {\n        if (this != &other) {\n            data_ = std::move(other.data_);\n            power_data_ = std::move(other.power_data_);\n            base_ = other.base_;\n            offset_ = other.offset_;\n            powers_ = other.powers_;\n            other.data_.clear();\n            other.power_data_.clear();\n            other.offset_ = 0;\n            other.powers_ = nullptr;\n        }\n        return *this;\n    }\n\n    void swap(RollingHash& other) noexcept {\n        data_.swap(other.data_);\n        power_data_.swap(other.power_data_);\n        std::swap(base_, other.base_);\n        std::swap(offset_, other.offset_);\n        std::swap(powers_, other.powers_);\n    }\n\n    friend void swap(RollingHash& left, RollingHash& right) noexcept {\n        left.swap(right);\n    }\n\n    [[nodiscard]] std::size_t size() const noexcept {\n        return offset_ == 0 ? 0 : offset_ - 1;\n    }\n\n    [[nodiscard]] bool empty() const noexcept {\n        return size() == 0;\n    }\n\n    [[nodiscard]] std::uint64_t base() const noexcept {\n        return base_;\n    }\n\n    [[nodiscard]] std::uint64_t whole() const noexcept {\n        return offset_ == 0 ? 0 : data_[offset_ - 1].value;\n    }\n\n    [[nodiscard]] std::uint64_t get(std::size_t l, std::size_t r) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n#endif\n        return get_unchecked(l, r);\n    }\n\n    [[nodiscard]] std::uint64_t concat(std::uint64_t left,\n                                     std::uint64_t right,\n                                     std::size_t right_length) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (right_length > size()) {\n            throw std::out_of_range(\"RollingHash: concatenation length\");\n        }\n        if (left >= modulus || right >= modulus) {\n            throw std::invalid_argument(\"RollingHash: noncanonical hash\");\n        }\n#endif\n        return add(right_length == 0 ? left\n                                    : multiply(left, powers_[right_length].value),\n                   right);\n    }\n\n    [[nodiscard]] bool equal(std::size_t l, std::size_t r,\n                             const RollingHash& other,\n                             std::size_t ol, std::size_t orr) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n        other.check_range(ol, orr);\n        check_base(other);\n#endif\n        return r - l == orr - ol &&\n               get_unchecked(l, r) == other.get_unchecked(ol, orr);\n    }\n\n    [[nodiscard]] std::size_t lcp(\n        std::size_t l, const RollingHash& other, std::size_t ol,\n        std::size_t limit = std::numeric_limits<std::size_t>::max()) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, l);\n        other.check_range(ol, ol);\n        check_base(other);\n#endif\n        return lcp_unchecked(l, other, ol,\n                             std::min({size() - l, other.size() - ol, limit}));\n    }\n\n    [[nodiscard]] int compare(std::size_t l, std::size_t r,\n                              const RollingHash& other,\n                              std::size_t ol, std::size_t orr) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n        other.check_range(ol, orr);\n        check_base(other);\n#endif\n        const std::size_t length = r - l;\n        const std::size_t other_length = orr - ol;\n        const std::size_t common = lcp_unchecked(\n            l, other, ol, std::min(length, other_length));\n        if (common == std::min(length, other_length)) {\n            return (length > other_length) - (length < other_length);\n        }\n        const std::uint64_t byte = get_unchecked(l + common, l + common + 1);\n        const std::uint64_t other_byte =\n            other.get_unchecked(ol + common, ol + common + 1);\n        return (byte > other_byte) - (byte < other_byte);\n    }\n\nprivate:\n    struct Entry {\n        std::uint64_t value;\n        // 構築ループで全要素を設定し、不要なゼロ初期化を避ける。\n        Entry() noexcept {}\n    };\n\n    std::vector<Entry> data_, power_data_;\n    std::uint64_t base_;\n    std::size_t offset_ = 0;\n    const Entry* powers_ = nullptr; // power_data_の累乗領域への非所有ポインタ。\n\n    static constexpr std::uint64_t normalize_base(std::uint64_t base) noexcept {\n        return base < 2 ? 10 : (base > modulus - 2 ? modulus - 10 : base);\n    }\n\n    static constexpr std::uint64_t add(std::uint64_t a,\n                                       std::uint64_t b) noexcept {\n        const std::uint64_t sum = a + b;\n        return sum >= modulus ? sum - modulus : sum;\n    }\n\n    static constexpr std::uint64_t multiply_raw(std::uint64_t a,\n                                            std::uint64_t b) noexcept {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \\\n    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const __uint128_t product = static_cast<__uint128_t>(a) * b;\n        const std::uint64_t folded =\n            (static_cast<std::uint64_t>(product) & modulus) +\n            static_cast<std::uint64_t>(product >> 61);\n#else\n        // 32bitの4積を2^61=1、2^64=8として直接折り返す。\n        const std::uint64_t a0 = static_cast<std::uint32_t>(a);\n        const std::uint64_t b0 = static_cast<std::uint32_t>(b);\n        const std::uint64_t a1 = a >> 32;\n        const std::uint64_t b1 = b >> 32;\n        const std::uint64_t low = a0 * b0;\n        const std::uint64_t cross = a0 * b1 + a1 * b0;\n        constexpr std::uint64_t mask29 = (std::uint64_t{1} << 29) - 1;\n        const std::uint64_t sum = (low & modulus) + (low >> 61) +\n                                  ((cross & mask29) << 32) + (cross >> 29) +\n                                  ((a1 * b1) << 3);\n        const std::uint64_t folded = sum;\n#endif\n        return folded;\n    }\n\n    static constexpr std::uint64_t multiply(std::uint64_t a, std::uint64_t b) noexcept {\n        std::uint64_t folded = multiply_raw(a, b);\n#if !((defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)) || defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        folded = (folded & modulus) + (folded >> 61);\n#endif\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    // byteは0..255。乗算結果への加算を正規化前にまとめる。\n    static constexpr std::uint64_t multiply_add_byte(\n        std::uint64_t a, std::uint64_t b, unsigned char byte) noexcept {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const __uint128_t product = static_cast<__uint128_t>(a) * b + byte;\n        const std::uint64_t folded =\n            (static_cast<std::uint64_t>(product) & modulus) +\n            static_cast<std::uint64_t>(product >> 61);\n#else\n        const std::uint64_t sum = multiply_raw(a, b) + byte;\n        const std::uint64_t folded = (sum & modulus) + (sum >> 61);\n#endif\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    [[nodiscard]] std::uint64_t get_unchecked(std::size_t l,\n                                             std::size_t r) const noexcept {\n        if (l == r) {\n            return 0;\n        }\n        const std::uint64_t right = data_[r].value;\n        const std::uint64_t left = multiply_raw(data_[l].value, powers_[r - l].value);\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const std::uint64_t difference = right + 2 * modulus - left;\n#else\n        // raw積は4p未満、右辺全体は5p未満で64bitに収まる。\n        const std::uint64_t difference = right + 4 * modulus - left;\n#endif\n        const std::uint64_t folded = (difference & modulus) + (difference >> 61);\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    [[nodiscard]] std::size_t lcp_unchecked(std::size_t l,\n                                           const RollingHash& other,\n                                           std::size_t ol,\n                                           std::size_t limit) const noexcept {\n        if (l == 0) {\n            std::size_t low = 0;\n            std::size_t high = limit;\n            while (low < high) {\n                const std::size_t middle = high - (high - low) / 2;\n                if (data_[middle].value == other.get_unchecked(ol, ol + middle)) low = middle;\n                else high = middle - 1;\n            }\n            return low;\n        }\n        std::size_t low = 0;\n        std::size_t high = limit;\n        while (low < high) {\n            const std::size_t middle = high - (high - low) / 2;\n            if (get_unchecked(l, l + middle) ==\n                other.get_unchecked(ol, ol + middle)) {\n                low = middle;\n            } else {\n                high = middle - 1;\n            }\n        }\n        return low;\n    }\n\n#ifndef SKIP_RUNTIME_CHECKS\n    void check_range(std::size_t l, std::size_t r) const {\n        if (l > r || r > size()) {\n            throw std::out_of_range(\"RollingHash: substring range\");\n        }\n    }\n\n    void check_base(const RollingHash& other) const {\n        if (base_ != other.base_) {\n            throw std::invalid_argument(\"RollingHash: different bases\");\n        }\n    }\n#endif\n};\n\n#endif\n",
+    "control": "// SPDX-License-Identifier: CC0-1.0\n\n#include <algorithm>\n#include <cstddef>\n#include <cstdint>\n#include <cstring>\n#include <limits>\n#include <stdexcept>\n#include <string_view>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLING_HASH_DEFINED\n#define SIRKIT_ROLLING_HASH_DEFINED\n\n// RollingHash(s, base): 符号なしバイト列をO(|s|+1)時間・空間で構築。base<2は10、base>modulus-2はmodulus-10に補正。\n// modulus: ハッシュの法2^61-1。ハッシュ値は常に[0,modulus)。\n// get(l,r): 半開区間[l,r)のハッシュ、whole(): 全体のハッシュをO(1)で返す。空区間は0。\n// size(), empty(), base(): 長さ・空判定・補正後の底をO(1)で返す。\n// concat(left,right,right_length): 同じ底の正規化済みハッシュを連結してO(1)で返す。right_length<=size()。\n// equal(l,r,other,ol,orr): 同じ底の2区間の長さとハッシュをO(1)で比較する。\n// lcp(l,other,ol,limit): 同じ底の接尾辞の最長共通接頭辞長をlimit以下でO(log(min(残長,limit)+1))で返す。\n// compare(l,r,other,ol,orr): 同じ底の2区間を符号なしバイト辞書順で比較し-1/0/1をO(log(短い方の長さ+1))で返す。\n// 比較にはハッシュ衝突による誤判定の可能性がある。検査有効時は不正な範囲にout_of_range、底・ハッシュにinvalid_argument。\n// assign(s): 現在の底で再構築し容量・利用可能な累乗表を再利用、O(旧長+|s|+1)上界、強い例外保証。clear(): 空へ戻して底・容量を保持、O(旧長+1)上界、noexcept。\n// 元文字列は保持しない。コピーはO(n+1)で独立、代入は容量を再利用し強い例外保証。ムーブ元は空（自己ムーブ代入は保持）。swapはO(1)。\nclass RollingHash {\npublic:\n    static constexpr std::uint64_t modulus = (std::uint64_t{1} << 61) - 1;\n\n    RollingHash(std::string_view s, std::uint64_t base)\n        : base_(normalize_base(base)) {\n        if (s.size() >= data_.max_size() / 2) {\n            throw std::length_error(\"RollingHash: capacity overflow\");\n        }\n        data_.resize(s.size() + 1);\n        power_data_.resize(s.size() + 1);\n        const std::size_t offset = s.size() + 1;\n        offset_ = offset;\n        Entry* const prefixes = data_.data();\n        Entry* const powers = power_data_.data();\n        powers_ = powers;\n        const std::uint64_t factor = base_;\n        std::uint64_t hash = 0;\n        std::uint64_t power = 1;\n        prefixes[0].value = hash;\n        powers[0].value = power;\n        for (std::size_t i = 0; i < s.size(); ++i) {\n            const auto byte = static_cast<unsigned char>(s[i]);\n            hash = multiply_add_byte(hash, factor, byte);\n            power = multiply(power, factor);\n            prefixes[i + 1].value = hash;\n            powers[i + 1].value = power;\n        }\n    }\n\n    void assign(std::string_view s) {\n        if (s.size() >= data_.max_size() / 2) {\n            throw std::length_error(\"RollingHash: capacity overflow\");\n        }\n        const std::size_t count = s.size() + 1;\n        const bool reuse_powers = power_data_.size() >= count;\n        // 両方の確保を先に終え、失敗時も内容と非所有ポインタを保つ。\n        data_.reserve(count);\n        power_data_.reserve(count);\n        data_.resize(count);\n        power_data_.resize(count);\n        offset_ = count;\n        powers_ = power_data_.data();\n        Entry* const prefixes = data_.data();\n        Entry* const powers = power_data_.data();\n        const std::uint64_t factor = base_;\n        std::uint64_t hash = 0;\n        prefixes[0].value = hash;\n        powers[0].value = 1;\n        if (reuse_powers) {\n            for (std::size_t i = 0; i < s.size(); ++i) {\n                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));\n                prefixes[i + 1].value = hash;\n            }\n        } else {\n            std::uint64_t power = 1;\n            for (std::size_t i = 0; i < s.size(); ++i) {\n                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));\n                power = multiply(power, factor);\n                prefixes[i + 1].value = hash;\n                powers[i + 1].value = power;\n            }\n        }\n    }\n\n    void clear() noexcept {\n        data_.clear(); power_data_.clear();\n        offset_ = 0; powers_ = nullptr;\n    }\n\n    RollingHash(const RollingHash& other)\n        : data_(other.data_), power_data_(other.power_data_),\n          base_(other.base_), offset_(other.offset_),\n          powers_(data_.empty() ? nullptr : power_data_.data()) {}\n\n    RollingHash& operator=(const RollingHash& other) {\n        if (this != &other) {\n            data_.reserve(other.data_.size());\n            power_data_.reserve(other.power_data_.size());\n            data_.resize(other.data_.size());\n            power_data_.resize(other.power_data_.size());\n            // Entryはtrivially copyable。独立した配列間で、構築済み要素の表現を写す。\n            if (!other.data_.empty()) {\n                std::memcpy(data_.data(), other.data_.data(), other.data_.size() * sizeof(Entry));\n                std::memcpy(power_data_.data(), other.power_data_.data(), other.power_data_.size() * sizeof(Entry));\n            }\n            base_ = other.base_;\n            offset_ = other.offset_;\n            powers_ = data_.empty() ? nullptr : power_data_.data();\n        }\n        return *this;\n    }\n\n    RollingHash(RollingHash&& other) noexcept\n        : data_(std::move(other.data_)), power_data_(std::move(other.power_data_)),\n          base_(other.base_), offset_(other.offset_),\n          powers_(other.powers_) {\n        other.data_.clear();\n        other.power_data_.clear();\n        other.offset_ = 0;\n        other.powers_ = nullptr;\n    }\n\n    RollingHash& operator=(RollingHash&& other) noexcept {\n        if (this != &other) {\n            data_ = std::move(other.data_);\n            power_data_ = std::move(other.power_data_);\n            base_ = other.base_;\n            offset_ = other.offset_;\n            powers_ = other.powers_;\n            other.data_.clear();\n            other.power_data_.clear();\n            other.offset_ = 0;\n            other.powers_ = nullptr;\n        }\n        return *this;\n    }\n\n    void swap(RollingHash& other) noexcept {\n        data_.swap(other.data_);\n        power_data_.swap(other.power_data_);\n        std::swap(base_, other.base_);\n        std::swap(offset_, other.offset_);\n        std::swap(powers_, other.powers_);\n    }\n\n    friend void swap(RollingHash& left, RollingHash& right) noexcept {\n        left.swap(right);\n    }\n\n    [[nodiscard]] std::size_t size() const noexcept {\n        return offset_ == 0 ? 0 : offset_ - 1;\n    }\n\n    [[nodiscard]] bool empty() const noexcept {\n        return size() == 0;\n    }\n\n    [[nodiscard]] std::uint64_t base() const noexcept {\n        return base_;\n    }\n\n    [[nodiscard]] std::uint64_t whole() const noexcept {\n        return offset_ == 0 ? 0 : data_[offset_ - 1].value;\n    }\n\n    [[nodiscard]] std::uint64_t get(std::size_t l, std::size_t r) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n#endif\n        return get_unchecked(l, r);\n    }\n\n    [[nodiscard]] std::uint64_t concat(std::uint64_t left,\n                                     std::uint64_t right,\n                                     std::size_t right_length) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (right_length > size()) {\n            throw std::out_of_range(\"RollingHash: concatenation length\");\n        }\n        if (left >= modulus || right >= modulus) {\n            throw std::invalid_argument(\"RollingHash: noncanonical hash\");\n        }\n#endif\n        return add(right_length == 0 ? left\n                                    : multiply(left, powers_[right_length].value),\n                   right);\n    }\n\n    [[nodiscard]] bool equal(std::size_t l, std::size_t r,\n                             const RollingHash& other,\n                             std::size_t ol, std::size_t orr) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n        other.check_range(ol, orr);\n        check_base(other);\n#endif\n        return r - l == orr - ol &&\n               get_unchecked(l, r) == other.get_unchecked(ol, orr);\n    }\n\n    [[nodiscard]] std::size_t lcp(\n        std::size_t l, const RollingHash& other, std::size_t ol,\n        std::size_t limit = std::numeric_limits<std::size_t>::max()) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, l);\n        other.check_range(ol, ol);\n        check_base(other);\n#endif\n        return lcp_unchecked(l, other, ol,\n                             std::min({size() - l, other.size() - ol, limit}));\n    }\n\n    [[nodiscard]] int compare(std::size_t l, std::size_t r,\n                              const RollingHash& other,\n                              std::size_t ol, std::size_t orr) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n        other.check_range(ol, orr);\n        check_base(other);\n#endif\n        const std::size_t length = r - l;\n        const std::size_t other_length = orr - ol;\n        const std::size_t common = lcp_unchecked(\n            l, other, ol, std::min(length, other_length));\n        if (common == std::min(length, other_length)) {\n            return (length > other_length) - (length < other_length);\n        }\n        const std::uint64_t byte = get_unchecked(l + common, l + common + 1);\n        const std::uint64_t other_byte =\n            other.get_unchecked(ol + common, ol + common + 1);\n        return (byte > other_byte) - (byte < other_byte);\n    }\n\nprivate:\n    struct Entry {\n        std::uint64_t value;\n        // 構築ループで全要素を設定し、不要なゼロ初期化を避ける。\n        Entry() noexcept {}\n    };\n\n    std::vector<Entry> data_, power_data_;\n    std::uint64_t base_;\n    std::size_t offset_ = 0;\n    const Entry* powers_ = nullptr; // power_data_の累乗領域への非所有ポインタ。\n\n    static constexpr std::uint64_t normalize_base(std::uint64_t base) noexcept {\n        return base < 2 ? 10 : (base > modulus - 2 ? modulus - 10 : base);\n    }\n\n    static constexpr std::uint64_t add(std::uint64_t a,\n                                       std::uint64_t b) noexcept {\n        const std::uint64_t sum = a + b;\n        return sum >= modulus ? sum - modulus : sum;\n    }\n\n    static constexpr std::uint64_t multiply_raw(std::uint64_t a,\n                                            std::uint64_t b) noexcept {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \\\n    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const __uint128_t product = static_cast<__uint128_t>(a) * b;\n        const std::uint64_t folded =\n            (static_cast<std::uint64_t>(product) & modulus) +\n            static_cast<std::uint64_t>(product >> 61);\n#else\n        // 32bitの4積を2^61=1、2^64=8として直接折り返す。\n        const std::uint64_t a0 = static_cast<std::uint32_t>(a);\n        const std::uint64_t b0 = static_cast<std::uint32_t>(b);\n        const std::uint64_t a1 = a >> 32;\n        const std::uint64_t b1 = b >> 32;\n        const std::uint64_t low = a0 * b0;\n        const std::uint64_t cross = a0 * b1 + a1 * b0;\n        constexpr std::uint64_t mask29 = (std::uint64_t{1} << 29) - 1;\n        const std::uint64_t sum = (low & modulus) + (low >> 61) +\n                                  ((cross & mask29) << 32) + (cross >> 29) +\n                                  ((a1 * b1) << 3);\n        const std::uint64_t folded = sum;\n#endif\n        return folded;\n    }\n\n    static constexpr std::uint64_t multiply(std::uint64_t a, std::uint64_t b) noexcept {\n        std::uint64_t folded = multiply_raw(a, b);\n#if !((defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)) || defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        folded = (folded & modulus) + (folded >> 61);\n#endif\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    // byteは0..255。乗算結果への加算を正規化前にまとめる。\n    static constexpr std::uint64_t multiply_add_byte(\n        std::uint64_t a, std::uint64_t b, unsigned char byte) noexcept {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const __uint128_t product = static_cast<__uint128_t>(a) * b + byte;\n        const std::uint64_t folded =\n            (static_cast<std::uint64_t>(product) & modulus) +\n            static_cast<std::uint64_t>(product >> 61);\n#else\n        const std::uint64_t sum = multiply_raw(a, b) + byte;\n        const std::uint64_t folded = (sum & modulus) + (sum >> 61);\n#endif\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    [[nodiscard]] std::uint64_t get_unchecked(std::size_t l,\n                                             std::size_t r) const noexcept {\n        if (l == r) {\n            return 0;\n        }\n        const std::uint64_t right = data_[r].value;\n        const std::uint64_t left = multiply_raw(data_[l].value, powers_[r - l].value);\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const std::uint64_t difference = right + 2 * modulus - left;\n#else\n        // raw積は4p未満、右辺全体は5p未満で64bitに収まる。\n        const std::uint64_t difference = right + 4 * modulus - left;\n#endif\n        const std::uint64_t folded = (difference & modulus) + (difference >> 61);\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    [[nodiscard]] std::size_t lcp_unchecked(std::size_t l,\n                                           const RollingHash& other,\n                                           std::size_t ol,\n                                           std::size_t limit) const noexcept {\n        if (l == 0) {\n            std::size_t low = 0;\n            std::size_t high = limit;\n            while (low < high) {\n                const std::size_t middle = high - (high - low) / 2;\n                if (data_[middle].value == other.get_unchecked(ol, ol + middle)) low = middle;\n                else high = middle - 1;\n            }\n            return low;\n        }\n        std::size_t low = 0;\n        std::size_t high = limit;\n        while (low < high) {\n            const std::size_t middle = high - (high - low) / 2;\n            if (get_unchecked(l, l + middle) ==\n                other.get_unchecked(ol, ol + middle)) {\n                low = middle;\n            } else {\n                high = middle - 1;\n            }\n        }\n        return low;\n    }\n\n#ifndef SKIP_RUNTIME_CHECKS\n    void check_range(std::size_t l, std::size_t r) const {\n        if (l > r || r > size()) {\n            throw std::out_of_range(\"RollingHash: substring range\");\n        }\n    }\n\n    void check_base(const RollingHash& other) const {\n        if (base_ != other.base_) {\n            throw std::invalid_argument(\"RollingHash: different bases\");\n        }\n    }\n#endif\n};\n\n#endif\n",
+    "remaining": "// SPDX-License-Identifier: CC0-1.0\n\n#include <algorithm>\n#include <cstddef>\n#include <cstdint>\n#include <cstring>\n#include <limits>\n#include <stdexcept>\n#include <string_view>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLING_HASH_DEFINED\n#define SIRKIT_ROLLING_HASH_DEFINED\n\n// RollingHash(s, base): 符号なしバイト列をO(|s|+1)時間・空間で構築。base<2は10、base>modulus-2はmodulus-10に補正。\n// modulus: ハッシュの法2^61-1。ハッシュ値は常に[0,modulus)。\n// get(l,r): 半開区間[l,r)のハッシュ、whole(): 全体のハッシュをO(1)で返す。空区間は0。\n// size(), empty(), base(): 長さ・空判定・補正後の底をO(1)で返す。\n// concat(left,right,right_length): 同じ底の正規化済みハッシュを連結してO(1)で返す。right_length<=size()。\n// equal(l,r,other,ol,orr): 同じ底の2区間の長さとハッシュをO(1)で比較する。\n// lcp(l,other,ol,limit): 同じ底の接尾辞の最長共通接頭辞長をlimit以下でO(log(min(残長,limit)+1))で返す。\n// compare(l,r,other,ol,orr): 同じ底の2区間を符号なしバイト辞書順で比較し-1/0/1をO(log(短い方の長さ+1))で返す。\n// 比較にはハッシュ衝突による誤判定の可能性がある。検査有効時は不正な範囲にout_of_range、底・ハッシュにinvalid_argument。\n// assign(s): 現在の底で再構築し容量・利用可能な累乗表を再利用、O(旧長+|s|+1)上界、強い例外保証。clear(): 空へ戻して底・容量を保持、O(旧長+1)上界、noexcept。\n// 元文字列は保持しない。コピーはO(n+1)で独立、代入は容量を再利用し強い例外保証。ムーブ元は空（自己ムーブ代入は保持）。swapはO(1)。\nclass RollingHash {\npublic:\n    static constexpr std::uint64_t modulus = (std::uint64_t{1} << 61) - 1;\n\n    RollingHash(std::string_view s, std::uint64_t base)\n        : base_(normalize_base(base)) {\n        if (s.size() >= data_.max_size() / 2) {\n            throw std::length_error(\"RollingHash: capacity overflow\");\n        }\n        data_.resize(s.size() + 1);\n        power_data_.resize(s.size() + 1);\n        const std::size_t offset = s.size() + 1;\n        offset_ = offset;\n        Entry* const prefixes = data_.data();\n        Entry* const powers = power_data_.data();\n        powers_ = powers;\n        const std::uint64_t factor = base_;\n        std::uint64_t hash = 0;\n        std::uint64_t power = 1;\n        prefixes[0].value = hash;\n        powers[0].value = power;\n        for (std::size_t i = 0; i < s.size(); ++i) {\n            const auto byte = static_cast<unsigned char>(s[i]);\n            hash = multiply_add_byte(hash, factor, byte);\n            power = multiply(power, factor);\n            prefixes[i + 1].value = hash;\n            powers[i + 1].value = power;\n        }\n    }\n\n    void assign(std::string_view s) {\n        if (s.size() >= data_.max_size() / 2) {\n            throw std::length_error(\"RollingHash: capacity overflow\");\n        }\n        const std::size_t count = s.size() + 1;\n        const bool reuse_powers = power_data_.size() >= count;\n        // 両方の確保を先に終え、失敗時も内容と非所有ポインタを保つ。\n        data_.reserve(count);\n        power_data_.reserve(count);\n        data_.resize(count);\n        power_data_.resize(count);\n        offset_ = count;\n        powers_ = power_data_.data();\n        Entry* const prefixes = data_.data();\n        Entry* const powers = power_data_.data();\n        const std::uint64_t factor = base_;\n        std::uint64_t hash = 0;\n        prefixes[0].value = hash;\n        powers[0].value = 1;\n        if (reuse_powers) {\n            for (std::size_t i = 0; i < s.size(); ++i) {\n                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));\n                prefixes[i + 1].value = hash;\n            }\n        } else {\n            std::uint64_t power = 1;\n            for (std::size_t i = 0; i < s.size(); ++i) {\n                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));\n                power = multiply(power, factor);\n                prefixes[i + 1].value = hash;\n                powers[i + 1].value = power;\n            }\n        }\n    }\n\n    void clear() noexcept {\n        data_.clear(); power_data_.clear();\n        offset_ = 0; powers_ = nullptr;\n    }\n\n    RollingHash(const RollingHash& other)\n        : data_(other.data_), power_data_(other.power_data_),\n          base_(other.base_), offset_(other.offset_),\n          powers_(data_.empty() ? nullptr : power_data_.data()) {}\n\n    RollingHash& operator=(const RollingHash& other) {\n        if (this != &other) {\n            data_.reserve(other.data_.size());\n            power_data_.reserve(other.power_data_.size());\n            data_.resize(other.data_.size());\n            power_data_.resize(other.power_data_.size());\n            // Entryはtrivially copyable。独立した配列間で、構築済み要素の表現を写す。\n            if (!other.data_.empty()) {\n                std::memcpy(data_.data(), other.data_.data(), other.data_.size() * sizeof(Entry));\n                std::memcpy(power_data_.data(), other.power_data_.data(), other.power_data_.size() * sizeof(Entry));\n            }\n            base_ = other.base_;\n            offset_ = other.offset_;\n            powers_ = data_.empty() ? nullptr : power_data_.data();\n        }\n        return *this;\n    }\n\n    RollingHash(RollingHash&& other) noexcept\n        : data_(std::move(other.data_)), power_data_(std::move(other.power_data_)),\n          base_(other.base_), offset_(other.offset_),\n          powers_(other.powers_) {\n        other.data_.clear();\n        other.power_data_.clear();\n        other.offset_ = 0;\n        other.powers_ = nullptr;\n    }\n\n    RollingHash& operator=(RollingHash&& other) noexcept {\n        if (this != &other) {\n            data_ = std::move(other.data_);\n            power_data_ = std::move(other.power_data_);\n            base_ = other.base_;\n            offset_ = other.offset_;\n            powers_ = other.powers_;\n            other.data_.clear();\n            other.power_data_.clear();\n            other.offset_ = 0;\n            other.powers_ = nullptr;\n        }\n        return *this;\n    }\n\n    void swap(RollingHash& other) noexcept {\n        data_.swap(other.data_);\n        power_data_.swap(other.power_data_);\n        std::swap(base_, other.base_);\n        std::swap(offset_, other.offset_);\n        std::swap(powers_, other.powers_);\n    }\n\n    friend void swap(RollingHash& left, RollingHash& right) noexcept {\n        left.swap(right);\n    }\n\n    [[nodiscard]] std::size_t size() const noexcept {\n        return offset_ == 0 ? 0 : offset_ - 1;\n    }\n\n    [[nodiscard]] bool empty() const noexcept {\n        return size() == 0;\n    }\n\n    [[nodiscard]] std::uint64_t base() const noexcept {\n        return base_;\n    }\n\n    [[nodiscard]] std::uint64_t whole() const noexcept {\n        return offset_ == 0 ? 0 : data_[offset_ - 1].value;\n    }\n\n    [[nodiscard]] std::uint64_t get(std::size_t l, std::size_t r) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n#endif\n        return get_unchecked(l, r);\n    }\n\n    [[nodiscard]] std::uint64_t concat(std::uint64_t left,\n                                     std::uint64_t right,\n                                     std::size_t right_length) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (right_length > size()) {\n            throw std::out_of_range(\"RollingHash: concatenation length\");\n        }\n        if (left >= modulus || right >= modulus) {\n            throw std::invalid_argument(\"RollingHash: noncanonical hash\");\n        }\n#endif\n        return add(right_length == 0 ? left\n                                    : multiply(left, powers_[right_length].value),\n                   right);\n    }\n\n    [[nodiscard]] bool equal(std::size_t l, std::size_t r,\n                             const RollingHash& other,\n                             std::size_t ol, std::size_t orr) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n        other.check_range(ol, orr);\n        check_base(other);\n#endif\n        return r - l == orr - ol &&\n               get_unchecked(l, r) == other.get_unchecked(ol, orr);\n    }\n\n    [[nodiscard]] std::size_t lcp(\n        std::size_t l, const RollingHash& other, std::size_t ol,\n        std::size_t limit = std::numeric_limits<std::size_t>::max()) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, l);\n        other.check_range(ol, ol);\n        check_base(other);\n#endif\n        return lcp_unchecked(l, other, ol,\n                             std::min({size() - l, other.size() - ol, limit}));\n    }\n\n    [[nodiscard]] int compare(std::size_t l, std::size_t r,\n                              const RollingHash& other,\n                              std::size_t ol, std::size_t orr) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n        other.check_range(ol, orr);\n        check_base(other);\n#endif\n        const std::size_t length = r - l;\n        const std::size_t other_length = orr - ol;\n        const std::size_t common = lcp_unchecked(\n            l, other, ol, std::min(length, other_length));\n        if (common == std::min(length, other_length)) {\n            return (length > other_length) - (length < other_length);\n        }\n        const std::uint64_t byte = get_unchecked(l + common, l + common + 1);\n        const std::uint64_t other_byte =\n            other.get_unchecked(ol + common, ol + common + 1);\n        return (byte > other_byte) - (byte < other_byte);\n    }\n\nprivate:\n    struct Entry {\n        std::uint64_t value;\n        // 構築ループで全要素を設定し、不要なゼロ初期化を避ける。\n        Entry() noexcept {}\n    };\n\n    std::vector<Entry> data_, power_data_;\n    std::uint64_t base_;\n    std::size_t offset_ = 0;\n    const Entry* powers_ = nullptr; // power_data_の累乗領域への非所有ポインタ。\n\n    static constexpr std::uint64_t normalize_base(std::uint64_t base) noexcept {\n        return base < 2 ? 10 : (base > modulus - 2 ? modulus - 10 : base);\n    }\n\n    static constexpr std::uint64_t add(std::uint64_t a,\n                                       std::uint64_t b) noexcept {\n        const std::uint64_t sum = a + b;\n        return sum >= modulus ? sum - modulus : sum;\n    }\n\n    static constexpr std::uint64_t multiply_raw(std::uint64_t a,\n                                            std::uint64_t b) noexcept {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \\\n    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const __uint128_t product = static_cast<__uint128_t>(a) * b;\n        const std::uint64_t folded =\n            (static_cast<std::uint64_t>(product) & modulus) +\n            static_cast<std::uint64_t>(product >> 61);\n#else\n        // 32bitの4積を2^61=1、2^64=8として直接折り返す。\n        const std::uint64_t a0 = static_cast<std::uint32_t>(a);\n        const std::uint64_t b0 = static_cast<std::uint32_t>(b);\n        const std::uint64_t a1 = a >> 32;\n        const std::uint64_t b1 = b >> 32;\n        const std::uint64_t low = a0 * b0;\n        const std::uint64_t cross = a0 * b1 + a1 * b0;\n        constexpr std::uint64_t mask29 = (std::uint64_t{1} << 29) - 1;\n        const std::uint64_t sum = (low & modulus) + (low >> 61) +\n                                  ((cross & mask29) << 32) + (cross >> 29) +\n                                  ((a1 * b1) << 3);\n        const std::uint64_t folded = sum;\n#endif\n        return folded;\n    }\n\n    static constexpr std::uint64_t multiply(std::uint64_t a, std::uint64_t b) noexcept {\n        std::uint64_t folded = multiply_raw(a, b);\n#if !((defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)) || defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        folded = (folded & modulus) + (folded >> 61);\n#endif\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    // byteは0..255。乗算結果への加算を正規化前にまとめる。\n    static constexpr std::uint64_t multiply_add_byte(\n        std::uint64_t a, std::uint64_t b, unsigned char byte) noexcept {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const __uint128_t product = static_cast<__uint128_t>(a) * b + byte;\n        const std::uint64_t folded =\n            (static_cast<std::uint64_t>(product) & modulus) +\n            static_cast<std::uint64_t>(product >> 61);\n#else\n        const std::uint64_t sum = multiply_raw(a, b) + byte;\n        const std::uint64_t folded = (sum & modulus) + (sum >> 61);\n#endif\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    [[nodiscard]] std::uint64_t get_unchecked(std::size_t l,\n                                             std::size_t r) const noexcept {\n        if (l == r) {\n            return 0;\n        }\n        const std::uint64_t right = data_[r].value;\n        const std::uint64_t left = multiply_raw(data_[l].value, powers_[r - l].value);\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const std::uint64_t difference = right + 2 * modulus - left;\n#else\n        // raw積は4p未満、右辺全体は5p未満で64bitに収まる。\n        const std::uint64_t difference = right + 4 * modulus - left;\n#endif\n        const std::uint64_t folded = (difference & modulus) + (difference >> 61);\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    [[nodiscard]] std::size_t lcp_unchecked(std::size_t l,\n                                           const RollingHash& other,\n                                           std::size_t ol,\n                                           std::size_t limit) const noexcept {\n        if (l == 0) {\n            std::size_t low = 0;\n            std::size_t remaining = limit;\n            while (remaining != 0) {\n                const std::size_t step = remaining - remaining / 2;\n                const std::size_t middle = low + step;\n                const bool equal = data_[middle].value == other.get_unchecked(ol, ol + middle);\n                if (equal) { low = middle; remaining -= step; }\n                else remaining = step - 1;\n            }\n            return low;\n        }\n        std::size_t low = 0;\n        std::size_t remaining = limit;\n        while (remaining != 0) {\n            const std::size_t step = remaining - remaining / 2;\n            const std::size_t middle = low + step;\n            const bool equal = get_unchecked(l, l + middle) == other.get_unchecked(ol, ol + middle);\n            if (equal) { low = middle; remaining -= step; }\n            else remaining = step - 1;\n        }\n        return low;\n    }\n\n#ifndef SKIP_RUNTIME_CHECKS\n    void check_range(std::size_t l, std::size_t r) const {\n        if (l > r || r > size()) {\n            throw std::out_of_range(\"RollingHash: substring range\");\n        }\n    }\n\n    void check_base(const RollingHash& other) const {\n        if (base_ != other.base_) {\n            throw std::invalid_argument(\"RollingHash: different bases\");\n        }\n    }\n#endif\n};\n\n#endif\n",
+    "conditional": "// SPDX-License-Identifier: CC0-1.0\n\n#include <algorithm>\n#include <cstddef>\n#include <cstdint>\n#include <cstring>\n#include <limits>\n#include <stdexcept>\n#include <string_view>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLING_HASH_DEFINED\n#define SIRKIT_ROLLING_HASH_DEFINED\n\n// RollingHash(s, base): 符号なしバイト列をO(|s|+1)時間・空間で構築。base<2は10、base>modulus-2はmodulus-10に補正。\n// modulus: ハッシュの法2^61-1。ハッシュ値は常に[0,modulus)。\n// get(l,r): 半開区間[l,r)のハッシュ、whole(): 全体のハッシュをO(1)で返す。空区間は0。\n// size(), empty(), base(): 長さ・空判定・補正後の底をO(1)で返す。\n// concat(left,right,right_length): 同じ底の正規化済みハッシュを連結してO(1)で返す。right_length<=size()。\n// equal(l,r,other,ol,orr): 同じ底の2区間の長さとハッシュをO(1)で比較する。\n// lcp(l,other,ol,limit): 同じ底の接尾辞の最長共通接頭辞長をlimit以下でO(log(min(残長,limit)+1))で返す。\n// compare(l,r,other,ol,orr): 同じ底の2区間を符号なしバイト辞書順で比較し-1/0/1をO(log(短い方の長さ+1))で返す。\n// 比較にはハッシュ衝突による誤判定の可能性がある。検査有効時は不正な範囲にout_of_range、底・ハッシュにinvalid_argument。\n// assign(s): 現在の底で再構築し容量・利用可能な累乗表を再利用、O(旧長+|s|+1)上界、強い例外保証。clear(): 空へ戻して底・容量を保持、O(旧長+1)上界、noexcept。\n// 元文字列は保持しない。コピーはO(n+1)で独立、代入は容量を再利用し強い例外保証。ムーブ元は空（自己ムーブ代入は保持）。swapはO(1)。\nclass RollingHash {\npublic:\n    static constexpr std::uint64_t modulus = (std::uint64_t{1} << 61) - 1;\n\n    RollingHash(std::string_view s, std::uint64_t base)\n        : base_(normalize_base(base)) {\n        if (s.size() >= data_.max_size() / 2) {\n            throw std::length_error(\"RollingHash: capacity overflow\");\n        }\n        data_.resize(s.size() + 1);\n        power_data_.resize(s.size() + 1);\n        const std::size_t offset = s.size() + 1;\n        offset_ = offset;\n        Entry* const prefixes = data_.data();\n        Entry* const powers = power_data_.data();\n        powers_ = powers;\n        const std::uint64_t factor = base_;\n        std::uint64_t hash = 0;\n        std::uint64_t power = 1;\n        prefixes[0].value = hash;\n        powers[0].value = power;\n        for (std::size_t i = 0; i < s.size(); ++i) {\n            const auto byte = static_cast<unsigned char>(s[i]);\n            hash = multiply_add_byte(hash, factor, byte);\n            power = multiply(power, factor);\n            prefixes[i + 1].value = hash;\n            powers[i + 1].value = power;\n        }\n    }\n\n    void assign(std::string_view s) {\n        if (s.size() >= data_.max_size() / 2) {\n            throw std::length_error(\"RollingHash: capacity overflow\");\n        }\n        const std::size_t count = s.size() + 1;\n        const bool reuse_powers = power_data_.size() >= count;\n        // 両方の確保を先に終え、失敗時も内容と非所有ポインタを保つ。\n        data_.reserve(count);\n        power_data_.reserve(count);\n        data_.resize(count);\n        power_data_.resize(count);\n        offset_ = count;\n        powers_ = power_data_.data();\n        Entry* const prefixes = data_.data();\n        Entry* const powers = power_data_.data();\n        const std::uint64_t factor = base_;\n        std::uint64_t hash = 0;\n        prefixes[0].value = hash;\n        powers[0].value = 1;\n        if (reuse_powers) {\n            for (std::size_t i = 0; i < s.size(); ++i) {\n                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));\n                prefixes[i + 1].value = hash;\n            }\n        } else {\n            std::uint64_t power = 1;\n            for (std::size_t i = 0; i < s.size(); ++i) {\n                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));\n                power = multiply(power, factor);\n                prefixes[i + 1].value = hash;\n                powers[i + 1].value = power;\n            }\n        }\n    }\n\n    void clear() noexcept {\n        data_.clear(); power_data_.clear();\n        offset_ = 0; powers_ = nullptr;\n    }\n\n    RollingHash(const RollingHash& other)\n        : data_(other.data_), power_data_(other.power_data_),\n          base_(other.base_), offset_(other.offset_),\n          powers_(data_.empty() ? nullptr : power_data_.data()) {}\n\n    RollingHash& operator=(const RollingHash& other) {\n        if (this != &other) {\n            data_.reserve(other.data_.size());\n            power_data_.reserve(other.power_data_.size());\n            data_.resize(other.data_.size());\n            power_data_.resize(other.power_data_.size());\n            // Entryはtrivially copyable。独立した配列間で、構築済み要素の表現を写す。\n            if (!other.data_.empty()) {\n                std::memcpy(data_.data(), other.data_.data(), other.data_.size() * sizeof(Entry));\n                std::memcpy(power_data_.data(), other.power_data_.data(), other.power_data_.size() * sizeof(Entry));\n            }\n            base_ = other.base_;\n            offset_ = other.offset_;\n            powers_ = data_.empty() ? nullptr : power_data_.data();\n        }\n        return *this;\n    }\n\n    RollingHash(RollingHash&& other) noexcept\n        : data_(std::move(other.data_)), power_data_(std::move(other.power_data_)),\n          base_(other.base_), offset_(other.offset_),\n          powers_(other.powers_) {\n        other.data_.clear();\n        other.power_data_.clear();\n        other.offset_ = 0;\n        other.powers_ = nullptr;\n    }\n\n    RollingHash& operator=(RollingHash&& other) noexcept {\n        if (this != &other) {\n            data_ = std::move(other.data_);\n            power_data_ = std::move(other.power_data_);\n            base_ = other.base_;\n            offset_ = other.offset_;\n            powers_ = other.powers_;\n            other.data_.clear();\n            other.power_data_.clear();\n            other.offset_ = 0;\n            other.powers_ = nullptr;\n        }\n        return *this;\n    }\n\n    void swap(RollingHash& other) noexcept {\n        data_.swap(other.data_);\n        power_data_.swap(other.power_data_);\n        std::swap(base_, other.base_);\n        std::swap(offset_, other.offset_);\n        std::swap(powers_, other.powers_);\n    }\n\n    friend void swap(RollingHash& left, RollingHash& right) noexcept {\n        left.swap(right);\n    }\n\n    [[nodiscard]] std::size_t size() const noexcept {\n        return offset_ == 0 ? 0 : offset_ - 1;\n    }\n\n    [[nodiscard]] bool empty() const noexcept {\n        return size() == 0;\n    }\n\n    [[nodiscard]] std::uint64_t base() const noexcept {\n        return base_;\n    }\n\n    [[nodiscard]] std::uint64_t whole() const noexcept {\n        return offset_ == 0 ? 0 : data_[offset_ - 1].value;\n    }\n\n    [[nodiscard]] std::uint64_t get(std::size_t l, std::size_t r) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n#endif\n        return get_unchecked(l, r);\n    }\n\n    [[nodiscard]] std::uint64_t concat(std::uint64_t left,\n                                     std::uint64_t right,\n                                     std::size_t right_length) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (right_length > size()) {\n            throw std::out_of_range(\"RollingHash: concatenation length\");\n        }\n        if (left >= modulus || right >= modulus) {\n            throw std::invalid_argument(\"RollingHash: noncanonical hash\");\n        }\n#endif\n        return add(right_length == 0 ? left\n                                    : multiply(left, powers_[right_length].value),\n                   right);\n    }\n\n    [[nodiscard]] bool equal(std::size_t l, std::size_t r,\n                             const RollingHash& other,\n                             std::size_t ol, std::size_t orr) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n        other.check_range(ol, orr);\n        check_base(other);\n#endif\n        return r - l == orr - ol &&\n               get_unchecked(l, r) == other.get_unchecked(ol, orr);\n    }\n\n    [[nodiscard]] std::size_t lcp(\n        std::size_t l, const RollingHash& other, std::size_t ol,\n        std::size_t limit = std::numeric_limits<std::size_t>::max()) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, l);\n        other.check_range(ol, ol);\n        check_base(other);\n#endif\n        return lcp_unchecked(l, other, ol,\n                             std::min({size() - l, other.size() - ol, limit}));\n    }\n\n    [[nodiscard]] int compare(std::size_t l, std::size_t r,\n                              const RollingHash& other,\n                              std::size_t ol, std::size_t orr) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n        other.check_range(ol, orr);\n        check_base(other);\n#endif\n        const std::size_t length = r - l;\n        const std::size_t other_length = orr - ol;\n        const std::size_t common = lcp_unchecked(\n            l, other, ol, std::min(length, other_length));\n        if (common == std::min(length, other_length)) {\n            return (length > other_length) - (length < other_length);\n        }\n        const std::uint64_t byte = get_unchecked(l + common, l + common + 1);\n        const std::uint64_t other_byte =\n            other.get_unchecked(ol + common, ol + common + 1);\n        return (byte > other_byte) - (byte < other_byte);\n    }\n\nprivate:\n    struct Entry {\n        std::uint64_t value;\n        // 構築ループで全要素を設定し、不要なゼロ初期化を避ける。\n        Entry() noexcept {}\n    };\n\n    std::vector<Entry> data_, power_data_;\n    std::uint64_t base_;\n    std::size_t offset_ = 0;\n    const Entry* powers_ = nullptr; // power_data_の累乗領域への非所有ポインタ。\n\n    static constexpr std::uint64_t normalize_base(std::uint64_t base) noexcept {\n        return base < 2 ? 10 : (base > modulus - 2 ? modulus - 10 : base);\n    }\n\n    static constexpr std::uint64_t add(std::uint64_t a,\n                                       std::uint64_t b) noexcept {\n        const std::uint64_t sum = a + b;\n        return sum >= modulus ? sum - modulus : sum;\n    }\n\n    static constexpr std::uint64_t multiply_raw(std::uint64_t a,\n                                            std::uint64_t b) noexcept {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \\\n    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const __uint128_t product = static_cast<__uint128_t>(a) * b;\n        const std::uint64_t folded =\n            (static_cast<std::uint64_t>(product) & modulus) +\n            static_cast<std::uint64_t>(product >> 61);\n#else\n        // 32bitの4積を2^61=1、2^64=8として直接折り返す。\n        const std::uint64_t a0 = static_cast<std::uint32_t>(a);\n        const std::uint64_t b0 = static_cast<std::uint32_t>(b);\n        const std::uint64_t a1 = a >> 32;\n        const std::uint64_t b1 = b >> 32;\n        const std::uint64_t low = a0 * b0;\n        const std::uint64_t cross = a0 * b1 + a1 * b0;\n        constexpr std::uint64_t mask29 = (std::uint64_t{1} << 29) - 1;\n        const std::uint64_t sum = (low & modulus) + (low >> 61) +\n                                  ((cross & mask29) << 32) + (cross >> 29) +\n                                  ((a1 * b1) << 3);\n        const std::uint64_t folded = sum;\n#endif\n        return folded;\n    }\n\n    static constexpr std::uint64_t multiply(std::uint64_t a, std::uint64_t b) noexcept {\n        std::uint64_t folded = multiply_raw(a, b);\n#if !((defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)) || defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        folded = (folded & modulus) + (folded >> 61);\n#endif\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    // byteは0..255。乗算結果への加算を正規化前にまとめる。\n    static constexpr std::uint64_t multiply_add_byte(\n        std::uint64_t a, std::uint64_t b, unsigned char byte) noexcept {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const __uint128_t product = static_cast<__uint128_t>(a) * b + byte;\n        const std::uint64_t folded =\n            (static_cast<std::uint64_t>(product) & modulus) +\n            static_cast<std::uint64_t>(product >> 61);\n#else\n        const std::uint64_t sum = multiply_raw(a, b) + byte;\n        const std::uint64_t folded = (sum & modulus) + (sum >> 61);\n#endif\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    [[nodiscard]] std::uint64_t get_unchecked(std::size_t l,\n                                             std::size_t r) const noexcept {\n        if (l == r) {\n            return 0;\n        }\n        const std::uint64_t right = data_[r].value;\n        const std::uint64_t left = multiply_raw(data_[l].value, powers_[r - l].value);\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const std::uint64_t difference = right + 2 * modulus - left;\n#else\n        // raw積は4p未満、右辺全体は5p未満で64bitに収まる。\n        const std::uint64_t difference = right + 4 * modulus - left;\n#endif\n        const std::uint64_t folded = (difference & modulus) + (difference >> 61);\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    [[nodiscard]] std::size_t lcp_unchecked(std::size_t l,\n                                           const RollingHash& other,\n                                           std::size_t ol,\n                                           std::size_t limit) const noexcept {\n        if (l == 0) {\n            std::size_t low = 0;\n            std::size_t remaining = limit;\n            while (remaining != 0) {\n                const std::size_t step = remaining - remaining / 2;\n                const std::size_t middle = low + step;\n                const bool equal = data_[middle].value == other.get_unchecked(ol, ol + middle);\n                low = equal ? middle : low;\n                remaining = equal ? remaining - step : step - 1;\n            }\n            return low;\n        }\n        std::size_t low = 0;\n        std::size_t remaining = limit;\n        while (remaining != 0) {\n            const std::size_t step = remaining - remaining / 2;\n            const std::size_t middle = low + step;\n            const bool equal = get_unchecked(l, l + middle) == other.get_unchecked(ol, ol + middle);\n            low = equal ? middle : low;\n            remaining = equal ? remaining - step : step - 1;\n        }\n        return low;\n    }\n\n#ifndef SKIP_RUNTIME_CHECKS\n    void check_range(std::size_t l, std::size_t r) const {\n        if (l > r || r > size()) {\n            throw std::out_of_range(\"RollingHash: substring range\");\n        }\n    }\n\n    void check_base(const RollingHash& other) const {\n        if (base_ != other.base_) {\n            throw std::invalid_argument(\"RollingHash: different bases\");\n        }\n    }\n#endif\n};\n\n#endif\n"
+  },
+  "diffs": {
+    "remaining": "--- baseline\n+++ remaining\n@@ -331,24 +331,24 @@\n                                            std::size_t limit) const noexcept {\n         if (l == 0) {\n             std::size_t low = 0;\n-            std::size_t high = limit;\n-            while (low < high) {\n-                const std::size_t middle = high - (high - low) / 2;\n-                if (data_[middle].value == other.get_unchecked(ol, ol + middle)) low = middle;\n-                else high = middle - 1;\n+            std::size_t remaining = limit;\n+            while (remaining != 0) {\n+                const std::size_t step = remaining - remaining / 2;\n+                const std::size_t middle = low + step;\n+                const bool equal = data_[middle].value == other.get_unchecked(ol, ol + middle);\n+                if (equal) { low = middle; remaining -= step; }\n+                else remaining = step - 1;\n             }\n             return low;\n         }\n         std::size_t low = 0;\n-        std::size_t high = limit;\n-        while (low < high) {\n-            const std::size_t middle = high - (high - low) / 2;\n-            if (get_unchecked(l, l + middle) ==\n-                other.get_unchecked(ol, ol + middle)) {\n-                low = middle;\n-            } else {\n-                high = middle - 1;\n-            }\n+        std::size_t remaining = limit;\n+        while (remaining != 0) {\n+            const std::size_t step = remaining - remaining / 2;\n+            const std::size_t middle = low + step;\n+            const bool equal = get_unchecked(l, l + middle) == other.get_unchecked(ol, ol + middle);\n+            if (equal) { low = middle; remaining -= step; }\n+            else remaining = step - 1;\n         }\n         return low;\n     }\n",
+    "conditional": "--- baseline\n+++ conditional\n@@ -331,24 +331,24 @@\n                                            std::size_t limit) const noexcept {\n         if (l == 0) {\n             std::size_t low = 0;\n-            std::size_t high = limit;\n-            while (low < high) {\n-                const std::size_t middle = high - (high - low) / 2;\n-                if (data_[middle].value == other.get_unchecked(ol, ol + middle)) low = middle;\n-                else high = middle - 1;\n+            std::size_t remaining = limit;\n+            while (remaining != 0) {\n+                const std::size_t step = remaining - remaining / 2;\n+                const std::size_t middle = low + step;\n+                const bool equal = data_[middle].value == other.get_unchecked(ol, ol + middle);\n+                low = equal ? middle : low;\n+                remaining = equal ? remaining - step : step - 1;\n             }\n             return low;\n         }\n         std::size_t low = 0;\n-        std::size_t high = limit;\n-        while (low < high) {\n-            const std::size_t middle = high - (high - low) / 2;\n-            if (get_unchecked(l, l + middle) ==\n-                other.get_unchecked(ol, ol + middle)) {\n-                low = middle;\n-            } else {\n-                high = middle - 1;\n-            }\n+        std::size_t remaining = limit;\n+        while (remaining != 0) {\n+            const std::size_t step = remaining - remaining / 2;\n+            const std::size_t middle = low + step;\n+            const bool equal = get_unchecked(l, l + middle) == other.get_unchecked(ol, ol + middle);\n+            low = equal ? middle : low;\n+            remaining = equal ? remaining - step : step - 1;\n         }\n         return low;\n     }\n"
+  },
+  "screen": {
+    "status": "PASS",
+    "builds": [
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=0",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/baseline.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/gcc_0_baseline"
+        ],
+        "header_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=0",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/control.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/gcc_0_control"
+        ],
+        "header_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=0",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/remaining.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/gcc_0_remaining"
+        ],
+        "header_sha256": "6cb0d8df2e0b30d5c8351dc89c38ec710aed540b89826e964e16c063dc732be8"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=0",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/conditional.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/gcc_0_conditional"
+        ],
+        "header_sha256": "f6f5087298292b50f493e547ece8f928e9cc84db56ecd5ced99ad02faa207f88"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=1",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/baseline.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/gcc_1_baseline"
+        ],
+        "header_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=1",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/control.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/gcc_1_control"
+        ],
+        "header_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=1",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/remaining.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/gcc_1_remaining"
+        ],
+        "header_sha256": "6cb0d8df2e0b30d5c8351dc89c38ec710aed540b89826e964e16c063dc732be8"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=1",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/conditional.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/gcc_1_conditional"
+        ],
+        "header_sha256": "f6f5087298292b50f493e547ece8f928e9cc84db56ecd5ced99ad02faa207f88"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=3",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/baseline.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/gcc_3_baseline"
+        ],
+        "header_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=3",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/control.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/gcc_3_control"
+        ],
+        "header_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=3",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/remaining.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/gcc_3_remaining"
+        ],
+        "header_sha256": "6cb0d8df2e0b30d5c8351dc89c38ec710aed540b89826e964e16c063dc732be8"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=3",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/conditional.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/gcc_3_conditional"
+        ],
+        "header_sha256": "f6f5087298292b50f493e547ece8f928e9cc84db56ecd5ced99ad02faa207f88"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=0",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/baseline.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/clang_0_baseline"
+        ],
+        "header_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=0",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/control.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/clang_0_control"
+        ],
+        "header_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=0",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/remaining.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/clang_0_remaining"
+        ],
+        "header_sha256": "6cb0d8df2e0b30d5c8351dc89c38ec710aed540b89826e964e16c063dc732be8"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=0",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/conditional.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/clang_0_conditional"
+        ],
+        "header_sha256": "f6f5087298292b50f493e547ece8f928e9cc84db56ecd5ced99ad02faa207f88"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=1",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/baseline.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/clang_1_baseline"
+        ],
+        "header_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=1",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/control.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/clang_1_control"
+        ],
+        "header_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=1",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/remaining.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/clang_1_remaining"
+        ],
+        "header_sha256": "6cb0d8df2e0b30d5c8351dc89c38ec710aed540b89826e964e16c063dc732be8"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=1",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/conditional.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/clang_1_conditional"
+        ],
+        "header_sha256": "f6f5087298292b50f493e547ece8f928e9cc84db56ecd5ced99ad02faa207f88"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=3",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/baseline.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/clang_3_baseline"
+        ],
+        "header_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=3",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/control.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/clang_3_control"
+        ],
+        "header_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=3",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/remaining.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/clang_3_remaining"
+        ],
+        "header_sha256": "6cb0d8df2e0b30d5c8351dc89c38ec710aed540b89826e964e16c063dc732be8"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DOP=3",
+          "-DSOURCE=\"/tmp/sirkit_rh_412622_opt/conditional.hpp\"",
+          "/tmp/sirkit_rh_412622_opt/api.cpp",
+          "-o",
+          "/tmp/sirkit_rh_412622_opt/clang_3_conditional"
+        ],
+        "header_sha256": "f6f5087298292b50f493e547ece8f928e9cc84db56ecd5ced99ad02faa207f88"
+      }
+    ],
+    "rows": [
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "op": 0,
+        "mode": 0,
+        "count": 35928,
+        "raw_ms": {
+          "baseline": [
+            14.949795,
+            15.227433,
+            15.185444,
+            15.217855,
+            15.165343,
+            15.227726,
+            15.32755
+          ],
+          "control": [
+            14.851504,
+            14.543288,
+            15.231287,
+            15.377917,
+            15.393566,
+            15.371856,
+            15.197265
+          ],
+          "remaining": [
+            14.784702,
+            14.67222,
+            15.072697,
+            15.057178,
+            14.702926,
+            14.637426,
+            14.812232
+          ],
+          "conditional": [
+            14.480187,
+            15.566602,
+            15.166466,
+            15.675457,
+            15.31555,
+            15.458705,
+            15.517222
+          ]
+        },
+        "median_ms": {
+          "baseline": 15.217855,
+          "control": 15.231287,
+          "remaining": 14.784702,
+          "conditional": 15.458705
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0008826473901873,
+          "remaining": 0.9715365273226745,
+          "conditional": 1.0158268034489748
+        },
+        "checksums": {
+          "baseline": [
+            1185624,
+            1185624,
+            1185624,
+            1185624,
+            1185624,
+            1185624,
+            1185624
+          ],
+          "control": [
+            1185624,
+            1185624,
+            1185624,
+            1185624,
+            1185624,
+            1185624,
+            1185624
+          ],
+          "remaining": [
+            1185624,
+            1185624,
+            1185624,
+            1185624,
+            1185624,
+            1185624,
+            1185624
+          ],
+          "conditional": [
+            1185624,
+            1185624,
+            1185624,
+            1185624,
+            1185624,
+            1185624,
+            1185624
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "op": 0,
+        "mode": 2,
+        "count": 31250,
+        "raw_ms": {
+          "baseline": [
+            15.60632,
+            15.068565,
+            15.357316,
+            15.476234,
+            15.072073,
+            15.334864,
+            15.088154
+          ],
+          "control": [
+            14.949375,
+            15.333548,
+            15.140836,
+            15.08246,
+            14.904861,
+            15.449093,
+            14.815367
+          ],
+          "remaining": [
+            16.100086,
+            15.989162,
+            16.063613,
+            16.298257,
+            16.432865,
+            15.803793,
+            16.25521
+          ],
+          "conditional": [
+            16.437436,
+            16.107085,
+            16.2745,
+            15.905422,
+            16.161458,
+            15.794668,
+            16.038774
+          ]
+        },
+        "median_ms": {
+          "baseline": 15.334864,
+          "control": 15.08246,
+          "remaining": 16.100086,
+          "conditional": 16.107085
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9835405126514327,
+          "remaining": 1.0499008012069753,
+          "conditional": 1.0503572121669942
+        },
+        "checksums": {
+          "baseline": [
+            16500000,
+            16500000,
+            16500000,
+            16500000,
+            16500000,
+            16500000,
+            16500000
+          ],
+          "control": [
+            16500000,
+            16500000,
+            16500000,
+            16500000,
+            16500000,
+            16500000,
+            16500000
+          ],
+          "remaining": [
+            16500000,
+            16500000,
+            16500000,
+            16500000,
+            16500000,
+            16500000,
+            16500000
+          ],
+          "conditional": [
+            16500000,
+            16500000,
+            16500000,
+            16500000,
+            16500000,
+            16500000,
+            16500000
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "op": 1,
+        "mode": 3,
+        "count": 12884,
+        "raw_ms": {
+          "baseline": [
+            10.786068,
+            10.755244,
+            11.017444,
+            10.898258,
+            11.175334,
+            11.135477,
+            10.678196
+          ],
+          "control": [
+            10.586823,
+            10.795099,
+            10.825484,
+            10.789953,
+            11.059295,
+            10.932812,
+            11.228103
+          ],
+          "remaining": [
+            11.124584,
+            11.043128,
+            11.359294,
+            11.021713,
+            11.128964,
+            11.342791,
+            11.075139
+          ],
+          "conditional": [
+            11.755878,
+            11.608242,
+            11.778381,
+            11.394804,
+            11.502912,
+            11.431035,
+            11.262641
+          ]
+        },
+        "median_ms": {
+          "baseline": 10.898258,
+          "control": 10.825484,
+          "remaining": 11.124584,
+          "conditional": 11.502912
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9933224190508244,
+          "remaining": 1.0207671721480627,
+          "conditional": 1.0554817109303156
+        },
+        "checksums": {
+          "baseline": [
+            3504448,
+            3504448,
+            3504448,
+            3504448,
+            3504448,
+            3504448,
+            3504448
+          ],
+          "control": [
+            3504448,
+            3504448,
+            3504448,
+            3504448,
+            3504448,
+            3504448,
+            3504448
+          ],
+          "remaining": [
+            3504448,
+            3504448,
+            3504448,
+            3504448,
+            3504448,
+            3504448,
+            3504448
+          ],
+          "conditional": [
+            3504448,
+            3504448,
+            3504448,
+            3504448,
+            3504448,
+            3504448,
+            3504448
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "op": 1,
+        "mode": 11,
+        "count": 18633,
+        "raw_ms": {
+          "baseline": [
+            15.967278,
+            16.463293,
+            16.362636,
+            16.645427,
+            16.665134,
+            16.226207,
+            16.697178
+          ],
+          "control": [
+            16.722125,
+            16.16507,
+            16.504835,
+            16.48924,
+            16.50836,
+            16.138211,
+            16.513982
+          ],
+          "remaining": [
+            16.909162,
+            16.952634,
+            16.608838,
+            17.00692,
+            16.647076,
+            17.202742,
+            16.589012
+          ],
+          "conditional": [
+            18.120941,
+            17.719004,
+            17.799635,
+            17.696074,
+            17.799664,
+            17.45842,
+            17.710032
+          ]
+        },
+        "median_ms": {
+          "baseline": 16.463293,
+          "control": 16.504835,
+          "remaining": 16.909162,
+          "conditional": 17.719004
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0025233104944435,
+          "remaining": 1.0270826134236934,
+          "conditional": 1.0762733798153263
+        },
+        "checksums": {
+          "baseline": [
+            14608272,
+            14608272,
+            14608272,
+            14608272,
+            14608272,
+            14608272,
+            14608272
+          ],
+          "control": [
+            14608272,
+            14608272,
+            14608272,
+            14608272,
+            14608272,
+            14608272,
+            14608272
+          ],
+          "remaining": [
+            14608272,
+            14608272,
+            14608272,
+            14608272,
+            14608272,
+            14608272,
+            14608272
+          ],
+          "conditional": [
+            14608272,
+            14608272,
+            14608272,
+            14608272,
+            14608272,
+            14608272,
+            14608272
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "op": 1,
+        "mode": 12,
+        "count": 17839,
+        "raw_ms": {
+          "baseline": [
+            15.621692,
+            16.37558,
+            6.243175,
+            6.243531,
+            6.402957,
+            6.279752,
+            6.238907
+          ],
+          "control": [
+            15.943442,
+            16.169409,
+            6.249377,
+            6.226914,
+            6.244984,
+            6.273405,
+            6.259356
+          ],
+          "remaining": [
+            16.072798,
+            15.972956,
+            7.21833,
+            5.992097,
+            6.265628,
+            5.975987,
+            6.007634
+          ],
+          "conditional": [
+            16.639811,
+            17.091511,
+            6.091086,
+            6.118613,
+            6.120204,
+            6.100985,
+            6.105485
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.279752,
+          "control": 6.259356,
+          "remaining": 6.265628,
+          "conditional": 6.118613
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.996752101038385,
+          "remaining": 0.9977508665947318,
+          "conditional": 0.9743399102384934
+        },
+        "checksums": {
+          "baseline": [
+            13414928,
+            13414928,
+            13414928,
+            13414928,
+            13414928,
+            13414928,
+            13414928
+          ],
+          "control": [
+            13414928,
+            13414928,
+            13414928,
+            13414928,
+            13414928,
+            13414928,
+            13414928
+          ],
+          "remaining": [
+            13414928,
+            13414928,
+            13414928,
+            13414928,
+            13414928,
+            13414928,
+            13414928
+          ],
+          "conditional": [
+            13414928,
+            13414928,
+            13414928,
+            13414928,
+            13414928,
+            13414928,
+            13414928
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "op": 3,
+        "mode": 5,
+        "count": 41666,
+        "raw_ms": {
+          "baseline": [
+            10.833084,
+            10.767235,
+            10.780887,
+            10.833701,
+            10.80985,
+            10.812954,
+            10.898488
+          ],
+          "control": [
+            10.82154,
+            10.821266,
+            10.781749,
+            10.759216,
+            10.753421,
+            10.746628,
+            10.772048
+          ],
+          "remaining": [
+            11.063958,
+            10.962763,
+            10.990228,
+            10.924982,
+            10.908231,
+            10.996548,
+            10.968062
+          ],
+          "conditional": [
+            11.155667,
+            11.146348,
+            11.146918,
+            11.180639,
+            11.162313,
+            11.14144,
+            11.098224
+          ]
+        },
+        "median_ms": {
+          "baseline": 10.812954,
+          "control": 10.772048,
+          "remaining": 10.968062,
+          "conditional": 11.146918
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9962169449717441,
+          "remaining": 1.0143446462456052,
+          "conditional": 1.0308855470947162
+        },
+        "checksums": {
+          "baseline": [
+            833320,
+            833320,
+            833320,
+            833320,
+            833320,
+            833320,
+            833320
+          ],
+          "control": [
+            833320,
+            833320,
+            833320,
+            833320,
+            833320,
+            833320,
+            833320
+          ],
+          "remaining": [
+            833320,
+            833320,
+            833320,
+            833320,
+            833320,
+            833320,
+            833320
+          ],
+          "conditional": [
+            833320,
+            833320,
+            833320,
+            833320,
+            833320,
+            833320,
+            833320
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "op": 3,
+        "mode": 12,
+        "count": 34951,
+        "raw_ms": {
+          "baseline": [
+            13.96387,
+            13.960061,
+            14.10969,
+            13.931629,
+            13.924512,
+            14.02042,
+            13.929543
+          ],
+          "control": [
+            13.966029,
+            13.992769,
+            13.949263,
+            13.968276,
+            14.003515,
+            14.216885,
+            13.936743
+          ],
+          "remaining": [
+            14.238665,
+            14.214023,
+            14.222937,
+            14.240102,
+            14.214463,
+            14.252466,
+            14.242612
+          ],
+          "conditional": [
+            14.546705,
+            14.557458,
+            14.552806,
+            14.528645,
+            14.568641,
+            14.516222,
+            14.50145
+          ]
+        },
+        "median_ms": {
+          "baseline": 13.960061,
+          "control": 13.968276,
+          "remaining": 14.238665,
+          "conditional": 14.546705
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.00058846447734,
+          "remaining": 1.0199572193846431,
+          "conditional": 1.042023025544086
+        },
+        "checksums": {
+          "baseline": [
+            2236864,
+            2236864,
+            2236864,
+            2236864,
+            2236864,
+            2236864,
+            2236864
+          ],
+          "control": [
+            2236864,
+            2236864,
+            2236864,
+            2236864,
+            2236864,
+            2236864,
+            2236864
+          ],
+          "remaining": [
+            2236864,
+            2236864,
+            2236864,
+            2236864,
+            2236864,
+            2236864,
+            2236864
+          ],
+          "conditional": [
+            2236864,
+            2236864,
+            2236864,
+            2236864,
+            2236864,
+            2236864,
+            2236864
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 131072,
+        "op": 0,
+        "mode": 0,
+        "count": 6,
+        "raw_ms": {
+          "baseline": [
+            16.95302,
+            17.613666,
+            17.33473,
+            17.279845,
+            17.533426,
+            17.16909,
+            17.199372
+          ],
+          "control": [
+            16.983138,
+            18.004793,
+            17.176355,
+            17.221464,
+            17.308483,
+            17.180746,
+            17.664796
+          ],
+          "remaining": [
+            18.009967,
+            18.00672,
+            18.184199,
+            17.96644,
+            18.051772,
+            18.014435,
+            18.014032
+          ],
+          "conditional": [
+            16.724482,
+            16.683677,
+            16.739754,
+            16.749492,
+            16.688544,
+            16.709453,
+            16.704006
+          ]
+        },
+        "median_ms": {
+          "baseline": 17.279845,
+          "control": 17.221464,
+          "remaining": 18.014032,
+          "conditional": 16.709453
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9966214396020334,
+          "remaining": 1.042488054725028,
+          "conditional": 0.9669909076152013
+        },
+        "checksums": {
+          "baseline": [
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022
+          ],
+          "control": [
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022
+          ],
+          "remaining": [
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022
+          ],
+          "conditional": [
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 131072,
+        "op": 0,
+        "mode": 2,
+        "count": 6,
+        "raw_ms": {
+          "baseline": [
+            17.712001,
+            17.689084,
+            17.679883,
+            17.708683,
+            17.674617,
+            17.737268,
+            17.695025
+          ],
+          "control": [
+            17.704044,
+            17.705321,
+            17.692593,
+            17.742177,
+            17.712458,
+            17.682478,
+            17.708968
+          ],
+          "remaining": [
+            16.791265,
+            16.798051,
+            16.788388,
+            16.798313,
+            16.811231,
+            16.790131,
+            16.814982
+          ],
+          "conditional": [
+            16.61929,
+            16.559162,
+            16.610042,
+            16.420638,
+            16.613016,
+            16.601001,
+            16.603733
+          ]
+        },
+        "median_ms": {
+          "baseline": 17.695025,
+          "control": 17.705321,
+          "remaining": 16.798051,
+          "conditional": 16.603733
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0005818584602169,
+          "remaining": 0.9493092550024653,
+          "conditional": 0.9383277503140005
+        },
+        "checksums": {
+          "baseline": [
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768
+          ],
+          "control": [
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768
+          ],
+          "remaining": [
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768
+          ],
+          "conditional": [
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 131072,
+        "op": 1,
+        "mode": 3,
+        "count": 2,
+        "raw_ms": {
+          "baseline": [
+            13.823721,
+            13.738178,
+            13.667586,
+            13.815451,
+            13.720374,
+            13.89955,
+            13.717119
+          ],
+          "control": [
+            13.561331,
+            13.921813,
+            13.738852,
+            13.655464,
+            13.729644,
+            13.785021,
+            13.84207
+          ],
+          "remaining": [
+            14.285196,
+            14.379579,
+            14.239595,
+            14.276372,
+            14.282447,
+            14.278461,
+            14.27677
+          ],
+          "conditional": [
+            15.724449,
+            15.788699,
+            15.452184,
+            15.587573,
+            15.479499,
+            15.758655,
+            15.703113
+          ]
+        },
+        "median_ms": {
+          "baseline": 13.738178,
+          "control": 13.738852,
+          "remaining": 14.278461,
+          "conditional": 15.703113
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0000490603630263,
+          "remaining": 1.0393271218352245,
+          "conditional": 1.1430273359393073
+        },
+        "checksums": {
+          "baseline": [
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664
+          ],
+          "control": [
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664
+          ],
+          "remaining": [
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664
+          ],
+          "conditional": [
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 131072,
+        "op": 1,
+        "mode": 11,
+        "count": 3,
+        "raw_ms": {
+          "baseline": [
+            15.300709,
+            15.851558,
+            15.791173,
+            15.816975,
+            15.454418,
+            15.188582,
+            15.630504
+          ],
+          "control": [
+            15.665045,
+            14.981917,
+            15.582664,
+            15.719308,
+            15.489868,
+            15.543788,
+            14.999858
+          ],
+          "remaining": [
+            13.339603,
+            13.588648,
+            13.398978,
+            13.354967,
+            13.341157,
+            13.184759,
+            13.541753
+          ],
+          "conditional": [
+            13.734884,
+            13.707191,
+            13.727574,
+            13.817607,
+            13.82586,
+            13.757805,
+            13.855705
+          ]
+        },
+        "median_ms": {
+          "baseline": 15.630504,
+          "control": 15.543788,
+          "remaining": 13.354967,
+          "conditional": 13.757805
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9944521302703994,
+          "remaining": 0.8544169145153605,
+          "conditional": 0.8801894679787676
+        },
+        "checksums": {
+          "baseline": [
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272
+          ],
+          "control": [
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272
+          ],
+          "remaining": [
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272
+          ],
+          "conditional": [
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 131072,
+        "op": 1,
+        "mode": 12,
+        "count": 3,
+        "raw_ms": {
+          "baseline": [
+            15.663173,
+            16.569944,
+            17.30103,
+            16.431221,
+            16.480713,
+            17.121157,
+            16.634806
+          ],
+          "control": [
+            16.750146,
+            17.530159,
+            16.414161,
+            16.854421,
+            17.420478,
+            16.774786,
+            16.615438
+          ],
+          "remaining": [
+            14.090741,
+            14.688082,
+            13.426473,
+            13.23371,
+            13.641191,
+            13.689331,
+            13.648482
+          ],
+          "conditional": [
+            13.647987,
+            13.622438,
+            13.631502,
+            13.645077,
+            13.663021,
+            13.651947,
+            13.676086
+          ]
+        },
+        "median_ms": {
+          "baseline": 16.569944,
+          "control": 16.774786,
+          "remaining": 13.648482,
+          "conditional": 13.647987
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0123622626606341,
+          "remaining": 0.8236890842841714,
+          "conditional": 0.8236592109182748
+        },
+        "checksums": {
+          "baseline": [
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056
+          ],
+          "control": [
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056
+          ],
+          "remaining": [
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056
+          ],
+          "conditional": [
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 131072,
+        "op": 3,
+        "mode": 5,
+        "count": 2,
+        "raw_ms": {
+          "baseline": [
+            13.955427,
+            14.018501,
+            13.984122,
+            14.067599,
+            14.04089,
+            14.12803,
+            13.976071
+          ],
+          "control": [
+            13.932095,
+            13.958044,
+            14.076123,
+            14.047114,
+            14.043871,
+            14.02011,
+            13.95055
+          ],
+          "remaining": [
+            13.995024,
+            14.122462,
+            13.986074,
+            14.049539,
+            13.996448,
+            14.064359,
+            14.10647
+          ],
+          "conditional": [
+            14.271808,
+            14.354274,
+            14.293113,
+            14.319921,
+            14.334528,
+            14.358054,
+            14.391897
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.018501,
+          "control": 14.02011,
+          "remaining": 14.049539,
+          "conditional": 14.334528
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0001147768937635,
+          "remaining": 1.0022140741010754,
+          "conditional": 1.0225435658206252
+        },
+        "checksums": {
+          "baseline": [
+            261456,
+            261456,
+            261456,
+            261456,
+            261456,
+            261456,
+            261456
+          ],
+          "control": [
+            261456,
+            261456,
+            261456,
+            261456,
+            261456,
+            261456,
+            261456
+          ],
+          "remaining": [
+            261456,
+            261456,
+            261456,
+            261456,
+            261456,
+            261456,
+            261456
+          ],
+          "conditional": [
+            261456,
+            261456,
+            261456,
+            261456,
+            261456,
+            261456,
+            261456
+          ]
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 131072,
+        "op": 3,
+        "mode": 12,
+        "count": 3,
+        "raw_ms": {
+          "baseline": [
+            13.846439,
+            13.854084,
+            13.816398,
+            13.826457,
+            13.897345,
+            13.841346,
+            13.828909
+          ],
+          "control": [
+            13.884212,
+            13.791512,
+            13.815731,
+            13.864197,
+            14.497157,
+            13.912637,
+            13.783051
+          ],
+          "remaining": [
+            14.498275,
+            14.514466,
+            14.488931,
+            14.635131,
+            14.792832,
+            14.56544,
+            14.557944
+          ],
+          "conditional": [
+            14.667508,
+            14.690214,
+            14.734728,
+            14.711815,
+            14.722094,
+            14.698592,
+            14.701094
+          ]
+        },
+        "median_ms": {
+          "baseline": 13.841346,
+          "control": 13.864197,
+          "remaining": 14.557944,
+          "conditional": 14.701094
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0016509232555852,
+          "remaining": 1.051772277060338,
+          "conditional": 1.0621144793288166
+        },
+        "checksums": {
+          "baseline": [
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432
+          ],
+          "control": [
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432
+          ],
+          "remaining": [
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432
+          ],
+          "conditional": [
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "op": 0,
+        "mode": 0,
+        "count": 42553,
+        "raw_ms": {
+          "baseline": [
+            6.973271,
+            7.00974,
+            6.969654,
+            6.971555,
+            7.03435,
+            6.965847,
+            6.976481
+          ],
+          "control": [
+            6.975987,
+            7.014154,
+            7.000467,
+            7.016718,
+            7.013006,
+            6.997562,
+            7.013916
+          ],
+          "remaining": [
+            7.044455,
+            7.074926,
+            7.46956,
+            7.053573,
+            7.046264,
+            7.057465,
+            7.056599
+          ],
+          "conditional": [
+            7.051848,
+            7.055181,
+            7.517244,
+            7.059082,
+            7.053084,
+            7.054555,
+            7.059115
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.973271,
+          "control": 7.013006,
+          "remaining": 7.056599,
+          "conditional": 7.055181
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.005698186690292,
+          "remaining": 1.0119496288040433,
+          "conditional": 1.0117462809060482
+        },
+        "checksums": {
+          "baseline": [
+            1404249,
+            1404249,
+            1404249,
+            1404249,
+            1404249,
+            1404249,
+            1404249
+          ],
+          "control": [
+            1404249,
+            1404249,
+            1404249,
+            1404249,
+            1404249,
+            1404249,
+            1404249
+          ],
+          "remaining": [
+            1404249,
+            1404249,
+            1404249,
+            1404249,
+            1404249,
+            1404249,
+            1404249
+          ],
+          "conditional": [
+            1404249,
+            1404249,
+            1404249,
+            1404249,
+            1404249,
+            1404249,
+            1404249
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "op": 0,
+        "mode": 2,
+        "count": 55900,
+        "raw_ms": {
+          "baseline": [
+            10.918451,
+            10.920192,
+            10.905436,
+            10.916077,
+            10.963975,
+            10.884166,
+            10.919073
+          ],
+          "control": [
+            10.94397,
+            10.930057,
+            10.890869,
+            10.978618,
+            10.861988,
+            10.919279,
+            10.897006
+          ],
+          "remaining": [
+            10.356463,
+            10.364288,
+            10.411042,
+            10.369228,
+            10.369032,
+            10.424099,
+            10.402226
+          ],
+          "conditional": [
+            10.421008,
+            10.444154,
+            10.402644,
+            10.370028,
+            10.474797,
+            10.358513,
+            10.418619
+          ]
+        },
+        "median_ms": {
+          "baseline": 10.918451,
+          "control": 10.919279,
+          "remaining": 10.369228,
+          "conditional": 10.418619
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0000758349329955,
+          "remaining": 0.9496977181103804,
+          "conditional": 0.9542213451340305
+        },
+        "checksums": {
+          "baseline": [
+            29515200,
+            29515200,
+            29515200,
+            29515200,
+            29515200,
+            29515200,
+            29515200
+          ],
+          "control": [
+            29515200,
+            29515200,
+            29515200,
+            29515200,
+            29515200,
+            29515200,
+            29515200
+          ],
+          "remaining": [
+            29515200,
+            29515200,
+            29515200,
+            29515200,
+            29515200,
+            29515200,
+            29515200
+          ],
+          "conditional": [
+            29515200,
+            29515200,
+            29515200,
+            29515200,
+            29515200,
+            29515200,
+            29515200
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "op": 1,
+        "mode": 3,
+        "count": 20293,
+        "raw_ms": {
+          "baseline": [
+            6.758441,
+            6.795358,
+            6.803153,
+            6.764051,
+            6.786135,
+            6.765261,
+            6.755174
+          ],
+          "control": [
+            6.741666,
+            6.737973,
+            6.751572,
+            6.75851,
+            6.743484,
+            6.738459,
+            6.766236
+          ],
+          "remaining": [
+            6.800633,
+            6.749888,
+            6.752039,
+            6.802715,
+            6.733147,
+            6.7558,
+            6.741072
+          ],
+          "conditional": [
+            6.774747,
+            6.754964,
+            6.769477,
+            6.768326,
+            6.74973,
+            6.755488,
+            6.746765
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.765261,
+          "control": 6.743484,
+          "remaining": 6.752039,
+          "conditional": 6.755488
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9967810554537363,
+          "remaining": 0.9980456038577078,
+          "conditional": 0.9985554141961411
+        },
+        "checksums": {
+          "baseline": [
+            5519696,
+            5519696,
+            5519696,
+            5519696,
+            5519696,
+            5519696,
+            5519696
+          ],
+          "control": [
+            5519696,
+            5519696,
+            5519696,
+            5519696,
+            5519696,
+            5519696,
+            5519696
+          ],
+          "remaining": [
+            5519696,
+            5519696,
+            5519696,
+            5519696,
+            5519696,
+            5519696,
+            5519696
+          ],
+          "conditional": [
+            5519696,
+            5519696,
+            5519696,
+            5519696,
+            5519696,
+            5519696,
+            5519696
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "op": 1,
+        "mode": 11,
+        "count": 39560,
+        "raw_ms": {
+          "baseline": [
+            13.700664,
+            13.604541,
+            13.708266,
+            13.618998,
+            13.634829,
+            13.694621,
+            13.653775
+          ],
+          "control": [
+            13.666515,
+            13.607869,
+            13.623311,
+            13.629582,
+            13.613966,
+            13.726072,
+            13.678648
+          ],
+          "remaining": [
+            13.338718,
+            13.327596,
+            13.379326,
+            13.298642,
+            13.362952,
+            13.314989,
+            13.264186
+          ],
+          "conditional": [
+            13.301078,
+            13.429975,
+            13.308813,
+            13.436822,
+            13.347488,
+            13.314048,
+            13.293551
+          ]
+        },
+        "median_ms": {
+          "baseline": 13.653775,
+          "control": 13.629582,
+          "remaining": 13.327596,
+          "conditional": 13.314048
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9982281090760614,
+          "remaining": 0.9761107093093302,
+          "conditional": 0.97511845625111
+        },
+        "checksums": {
+          "baseline": [
+            31015040,
+            31015040,
+            31015040,
+            31015040,
+            31015040,
+            31015040,
+            31015040
+          ],
+          "control": [
+            31015040,
+            31015040,
+            31015040,
+            31015040,
+            31015040,
+            31015040,
+            31015040
+          ],
+          "remaining": [
+            31015040,
+            31015040,
+            31015040,
+            31015040,
+            31015040,
+            31015040,
+            31015040
+          ],
+          "conditional": [
+            31015040,
+            31015040,
+            31015040,
+            31015040,
+            31015040,
+            31015040,
+            31015040
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "op": 1,
+        "mode": 12,
+        "count": 41095,
+        "raw_ms": {
+          "baseline": [
+            14.1912,
+            14.196435,
+            14.201385,
+            14.150387,
+            14.226666,
+            14.211174,
+            14.214662
+          ],
+          "control": [
+            14.207567,
+            14.205998,
+            14.199451,
+            14.165802,
+            14.192095,
+            14.22906,
+            14.206185
+          ],
+          "remaining": [
+            13.91052,
+            13.931295,
+            13.911598,
+            13.91156,
+            13.972709,
+            13.943749,
+            13.989919
+          ],
+          "conditional": [
+            13.877402,
+            13.947337,
+            13.993424,
+            13.923529,
+            13.87869,
+            13.899563,
+            13.93501
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.201385,
+          "control": 14.205998,
+          "remaining": 13.931295,
+          "conditional": 13.923529
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0003248274728134,
+          "remaining": 0.9809814324447933,
+          "conditional": 0.9804345843732847
+        },
+        "checksums": {
+          "baseline": [
+            30903440,
+            30903440,
+            30903440,
+            30903440,
+            30903440,
+            30903440,
+            30903440
+          ],
+          "control": [
+            30903440,
+            30903440,
+            30903440,
+            30903440,
+            30903440,
+            30903440,
+            30903440
+          ],
+          "remaining": [
+            30903440,
+            30903440,
+            30903440,
+            30903440,
+            30903440,
+            30903440,
+            30903440
+          ],
+          "conditional": [
+            30903440,
+            30903440,
+            30903440,
+            30903440,
+            30903440,
+            30903440,
+            30903440
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "op": 3,
+        "mode": 5,
+        "count": 38461,
+        "raw_ms": {
+          "baseline": [
+            10.256409,
+            10.266046,
+            10.217217,
+            10.23092,
+            10.249657,
+            10.33767,
+            10.234696
+          ],
+          "control": [
+            10.194283,
+            10.220562,
+            10.231206,
+            10.241788,
+            10.188784,
+            10.483299,
+            10.27648
+          ],
+          "remaining": [
+            10.45349,
+            10.453713,
+            10.433096,
+            10.402745,
+            10.464158,
+            10.803145,
+            10.510733
+          ],
+          "conditional": [
+            10.475261,
+            10.474127,
+            10.775789,
+            10.414134,
+            10.577107,
+            10.547803,
+            10.469547
+          ]
+        },
+        "median_ms": {
+          "baseline": 10.249657,
+          "control": 10.231206,
+          "remaining": 10.453713,
+          "conditional": 10.475261
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9981998421995976,
+          "remaining": 1.0199085686477118,
+          "conditional": 1.0220108829007644
+        },
+        "checksums": {
+          "baseline": [
+            1692284,
+            1692284,
+            1692284,
+            1692284,
+            1692284,
+            1692284,
+            1692284
+          ],
+          "control": [
+            1692284,
+            1692284,
+            1692284,
+            1692284,
+            1692284,
+            1692284,
+            1692284
+          ],
+          "remaining": [
+            1692284,
+            1692284,
+            1692284,
+            1692284,
+            1692284,
+            1692284,
+            1692284
+          ],
+          "conditional": [
+            1692284,
+            1692284,
+            1692284,
+            1692284,
+            1692284,
+            1692284,
+            1692284
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "op": 3,
+        "mode": 12,
+        "count": 35087,
+        "raw_ms": {
+          "baseline": [
+            14.32359,
+            14.33433,
+            14.296656,
+            14.295858,
+            14.308295,
+            14.294019,
+            14.32424
+          ],
+          "control": [
+            14.539438,
+            14.333166,
+            14.369064,
+            14.400252,
+            14.287124,
+            14.346798,
+            14.310241
+          ],
+          "remaining": [
+            14.038066,
+            14.007037,
+            14.006254,
+            14.002605,
+            14.002702,
+            13.99177,
+            14.072373
+          ],
+          "conditional": [
+            14.004633,
+            14.012534,
+            14.003715,
+            14.020291,
+            14.029855,
+            14.011396,
+            13.994836
+          ]
+        },
+        "median_ms": {
+          "baseline": 14.308295,
+          "control": 14.346798,
+          "remaining": 14.006254,
+          "conditional": 14.011396
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0026909565395459,
+          "remaining": 0.9788904967363338,
+          "conditional": 0.9792498686950472
+        },
+        "checksums": {
+          "baseline": [
+            2245568,
+            2245568,
+            2245568,
+            2245568,
+            2245568,
+            2245568,
+            2245568
+          ],
+          "control": [
+            2245568,
+            2245568,
+            2245568,
+            2245568,
+            2245568,
+            2245568,
+            2245568
+          ],
+          "remaining": [
+            2245568,
+            2245568,
+            2245568,
+            2245568,
+            2245568,
+            2245568,
+            2245568
+          ],
+          "conditional": [
+            2245568,
+            2245568,
+            2245568,
+            2245568,
+            2245568,
+            2245568,
+            2245568
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 131072,
+        "op": 0,
+        "mode": 0,
+        "count": 6,
+        "raw_ms": {
+          "baseline": [
+            15.625127,
+            15.64307,
+            15.663904,
+            15.656579,
+            15.762675,
+            15.68599,
+            15.683529
+          ],
+          "control": [
+            15.625947,
+            15.707085,
+            15.650822,
+            15.654108,
+            15.631438,
+            15.679675,
+            15.62067
+          ],
+          "remaining": [
+            16.249969,
+            16.251425,
+            16.284432,
+            16.266844,
+            16.257815,
+            16.232041,
+            16.284495
+          ],
+          "conditional": [
+            16.300643,
+            16.256921,
+            16.260137,
+            16.273384,
+            16.321824,
+            16.29107,
+            16.268649
+          ]
+        },
+        "median_ms": {
+          "baseline": 15.663904,
+          "control": 15.650822,
+          "remaining": 16.257815,
+          "conditional": 16.273384
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9991648314494266,
+          "remaining": 1.037915898871699,
+          "conditional": 1.038909840101165
+        },
+        "checksums": {
+          "baseline": [
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022
+          ],
+          "control": [
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022
+          ],
+          "remaining": [
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022
+          ],
+          "conditional": [
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022,
+            818022
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 131072,
+        "op": 0,
+        "mode": 2,
+        "count": 6,
+        "raw_ms": {
+          "baseline": [
+            15.651495,
+            15.669037,
+            15.608026,
+            15.556925,
+            15.677916,
+            15.579954,
+            15.554849
+          ],
+          "control": [
+            15.558131,
+            15.590179,
+            15.614811,
+            15.600294,
+            15.652673,
+            15.585879,
+            15.692597
+          ],
+          "remaining": [
+            14.362571,
+            14.445699,
+            14.319347,
+            14.390039,
+            14.431032,
+            14.367155,
+            14.431159
+          ],
+          "conditional": [
+            14.373309,
+            14.356429,
+            14.357112,
+            14.349798,
+            14.367895,
+            14.422946,
+            14.381664
+          ]
+        },
+        "median_ms": {
+          "baseline": 15.608026,
+          "control": 15.600294,
+          "remaining": 14.390039,
+          "conditional": 14.367895
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.999504613844185,
+          "remaining": 0.9219640587477237,
+          "conditional": 0.9205453015006511
+        },
+        "checksums": {
+          "baseline": [
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768
+          ],
+          "control": [
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768
+          ],
+          "remaining": [
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768
+          ],
+          "conditional": [
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768,
+            51540000768
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 131072,
+        "op": 1,
+        "mode": 3,
+        "count": 2,
+        "raw_ms": {
+          "baseline": [
+            13.978738,
+            14.010374,
+            13.931648,
+            13.915802,
+            14.092536,
+            13.743413,
+            13.983725
+          ],
+          "control": [
+            13.976424,
+            13.873449,
+            14.083385,
+            14.074422,
+            14.067378,
+            13.961985,
+            14.072076
+          ],
+          "remaining": [
+            12.901593,
+            12.878321,
+            12.95424,
+            13.01324,
+            12.968113,
+            12.913563,
+            12.959689
+          ],
+          "conditional": [
+            12.857712,
+            12.989143,
+            12.931543,
+            12.960492,
+            12.882535,
+            12.896678,
+            13.011252
+          ]
+        },
+        "median_ms": {
+          "baseline": 13.978738,
+          "control": 14.067378,
+          "remaining": 12.95424,
+          "conditional": 12.931543
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0063410588280572,
+          "remaining": 0.9267102652614277,
+          "conditional": 0.9250865850694104
+        },
+        "checksums": {
+          "baseline": [
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664
+          ],
+          "control": [
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664
+          ],
+          "remaining": [
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664
+          ],
+          "conditional": [
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664,
+            8590065664
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 131072,
+        "op": 1,
+        "mode": 11,
+        "count": 3,
+        "raw_ms": {
+          "baseline": [
+            13.465123,
+            13.599025,
+            13.494945,
+            13.507705,
+            13.523902,
+            14.147396,
+            13.525467
+          ],
+          "control": [
+            13.492853,
+            13.525515,
+            13.537938,
+            13.583165,
+            14.003235,
+            13.499508,
+            13.509585
+          ],
+          "remaining": [
+            12.979348,
+            12.936628,
+            12.991826,
+            13.01697,
+            12.994975,
+            13.034366,
+            12.96404
+          ],
+          "conditional": [
+            12.960423,
+            13.008608,
+            12.981794,
+            12.924634,
+            13.020796,
+            12.951569,
+            12.96131
+          ]
+        },
+        "median_ms": {
+          "baseline": 13.523902,
+          "control": 13.525515,
+          "remaining": 12.991826,
+          "conditional": 12.96131
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.000119270311187,
+          "remaining": 0.9606566211438089,
+          "conditional": 0.9584001717847408
+        },
+        "checksums": {
+          "baseline": [
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272
+          ],
+          "control": [
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272
+          ],
+          "remaining": [
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272
+          ],
+          "conditional": [
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272,
+            38654902272
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 131072,
+        "op": 1,
+        "mode": 12,
+        "count": 3,
+        "raw_ms": {
+          "baseline": [
+            13.629287,
+            13.509345,
+            13.578432,
+            13.574693,
+            13.527255,
+            16.569203,
+            13.581622
+          ],
+          "control": [
+            13.55364,
+            13.5705,
+            13.562101,
+            13.518127,
+            13.643743,
+            13.563169,
+            13.57339
+          ],
+          "remaining": [
+            13.024404,
+            13.043213,
+            13.010525,
+            13.011374,
+            12.989211,
+            13.04045,
+            12.9974
+          ],
+          "conditional": [
+            12.973542,
+            13.082935,
+            13.038928,
+            12.984402,
+            13.047295,
+            13.007423,
+            12.969716
+          ]
+        },
+        "median_ms": {
+          "baseline": 13.578432,
+          "control": 13.563169,
+          "remaining": 13.011374,
+          "conditional": 13.007423
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9988759379580795,
+          "remaining": 0.9582383297276151,
+          "conditional": 0.9579473535677757
+        },
+        "checksums": {
+          "baseline": [
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056
+          ],
+          "control": [
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056
+          ],
+          "remaining": [
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056
+          ],
+          "conditional": [
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056,
+            38654509056
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 131072,
+        "op": 3,
+        "mode": 5,
+        "count": 2,
+        "raw_ms": {
+          "baseline": [
+            12.670934,
+            12.531231,
+            12.667515,
+            12.657188,
+            12.761726,
+            13.564818,
+            12.962306
+          ],
+          "control": [
+            12.485628,
+            12.454081,
+            12.45521,
+            12.695896,
+            12.674872,
+            12.860121,
+            12.763252
+          ],
+          "remaining": [
+            12.581519,
+            12.429998,
+            12.500258,
+            12.767238,
+            12.845175,
+            12.766996,
+            13.576069
+          ],
+          "conditional": [
+            12.475814,
+            12.673275,
+            12.710866,
+            12.635363,
+            12.843242,
+            12.672474,
+            13.074898
+          ]
+        },
+        "median_ms": {
+          "baseline": 12.670934,
+          "control": 12.674872,
+          "remaining": 12.766996,
+          "conditional": 12.673275
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0003107900333157,
+          "remaining": 1.0075812880092343,
+          "conditional": 1.0001847535469761
+        },
+        "checksums": {
+          "baseline": [
+            262832,
+            262832,
+            262832,
+            262832,
+            262832,
+            262832,
+            262832
+          ],
+          "control": [
+            262832,
+            262832,
+            262832,
+            262832,
+            262832,
+            262832,
+            262832
+          ],
+          "remaining": [
+            262832,
+            262832,
+            262832,
+            262832,
+            262832,
+            262832,
+            262832
+          ],
+          "conditional": [
+            262832,
+            262832,
+            262832,
+            262832,
+            262832,
+            262832,
+            262832
+          ]
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 131072,
+        "op": 3,
+        "mode": 12,
+        "count": 3,
+        "raw_ms": {
+          "baseline": [
+            15.994398,
+            17.610346,
+            16.013733,
+            15.947172,
+            15.796751,
+            15.517856,
+            16.170612
+          ],
+          "control": [
+            15.667173,
+            16.939204,
+            14.973474,
+            17.222316,
+            16.369431,
+            16.409193,
+            16.495063
+          ],
+          "remaining": [
+            13.730052,
+            13.73816,
+            13.757882,
+            13.704441,
+            13.769494,
+            13.711184,
+            13.712639
+          ],
+          "conditional": [
+            13.728708,
+            13.732647,
+            13.693339,
+            13.778532,
+            13.753447,
+            13.728642,
+            13.807744
+          ]
+        },
+        "median_ms": {
+          "baseline": 15.994398,
+          "control": 16.409193,
+          "remaining": 13.730052,
+          "conditional": 13.732647
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.025933767560367,
+          "remaining": 0.8584288073861861,
+          "conditional": 0.8585910516919736
+        },
+        "checksums": {
+          "baseline": [
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432
+          ],
+          "control": [
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432
+          ],
+          "remaining": [
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432
+          ],
+          "conditional": [
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432,
+            786432
+          ]
+        }
+      }
+    ],
+    "harness_sha256": "2502ee8e9f6c42ae393caa81b6e79882751323f741a2ec97128d333470514513",
+    "conditions": "C++23 -O2 no native; SKIP; GCC15.3 Clang21.1.8; buildCPU6 timingCPU14; dual exclusive locks; 7 alternating runs ~18ms each; preparation outside measurement"
+  },
+  "confirmation": [
+    {
+      "compiler": "gcc",
+      "n": 32,
+      "op": 0,
+      "mode": 2,
+      "count": 62500,
+      "raw_ms": {
+        "baseline": [
+          30.600257,
+          28.992123,
+          29.423051,
+          13.383339,
+          14.071833,
+          14.051101,
+          14.076651,
+          14.058139,
+          14.129509
+        ],
+        "control": [
+          30.539408,
+          30.38301,
+          29.092393,
+          13.534971,
+          14.050853,
+          14.105138,
+          14.057455,
+          14.079866,
+          14.078448
+        ],
+        "remaining": [
+          32.079016,
+          31.915289,
+          31.171692,
+          13.985955,
+          13.956739,
+          13.926355,
+          13.931839,
+          13.926246,
+          13.935213
+        ],
+        "conditional": [
+          32.372402,
+          31.162951,
+          30.037493,
+          30.597453,
+          14.029638,
+          14.016986,
+          14.011101,
+          14.046679,
+          14.026152
+        ]
+      },
+      "median_ms": {
+        "baseline": 14.076651,
+        "control": 14.079866,
+        "remaining": 13.956739,
+        "conditional": 14.046679
+      },
+      "ratio": {
+        "baseline": 1.0,
+        "control": 1.0002283923924804,
+        "remaining": 0.9914814965576685,
+        "conditional": 0.9978708003771635
+      },
+      "checksum": 33000000
+    },
+    {
+      "compiler": "gcc",
+      "n": 131072,
+      "op": 1,
+      "mode": 3,
+      "count": 4,
+      "raw_ms": {
+        "baseline": [
+          27.525783,
+          27.229107,
+          27.267898,
+          27.446753,
+          27.521977,
+          27.318663,
+          27.149351,
+          27.347809,
+          27.435291
+        ],
+        "control": [
+          27.466154,
+          27.287621,
+          27.392001,
+          27.436416,
+          27.318375,
+          27.425312,
+          27.468679,
+          27.318278,
+          27.344979
+        ],
+        "remaining": [
+          28.488039,
+          27.762754,
+          28.563489,
+          28.419343,
+          28.527226,
+          28.332856,
+          28.340053,
+          28.52898,
+          28.443308
+        ],
+        "conditional": [
+          31.097264,
+          30.686604,
+          31.416585,
+          30.899692,
+          31.19234,
+          30.773966,
+          31.072621,
+          30.971284,
+          30.945982
+        ]
+      },
+      "median_ms": {
+        "baseline": 27.347809,
+        "control": 27.392001,
+        "remaining": 28.443308,
+        "conditional": 30.971284
+      },
+      "ratio": {
+        "baseline": 1.0,
+        "control": 1.001615924698026,
+        "remaining": 1.0400580170791742,
+        "conditional": 1.1324959889839803
+      },
+      "checksum": 17180131328
+    },
+    {
+      "compiler": "gcc",
+      "n": 131072,
+      "op": 3,
+      "mode": 12,
+      "count": 6,
+      "raw_ms": {
+        "baseline": [
+          27.64241,
+          27.587727,
+          27.646121,
+          27.600269,
+          27.602884,
+          27.635679,
+          27.609015,
+          27.614179,
+          27.633671
+        ],
+        "control": [
+          27.634675,
+          27.60879,
+          27.700567,
+          27.624991,
+          27.634439,
+          27.618998,
+          27.630772,
+          27.642332,
+          27.63729
+        ],
+        "remaining": [
+          29.00148,
+          28.997649,
+          28.943263,
+          28.962532,
+          28.950587,
+          28.988424,
+          28.943859,
+          28.984728,
+          29.022298
+        ],
+        "conditional": [
+          29.339446,
+          29.317812,
+          29.344403,
+          29.345603,
+          29.341414,
+          29.316499,
+          29.300925,
+          29.289029,
+          29.363815
+        ]
+      },
+      "median_ms": {
+        "baseline": 27.614179,
+        "control": 27.634439,
+        "remaining": 28.984728,
+        "conditional": 29.339446
+      },
+      "ratio": {
+        "baseline": 1.0,
+        "control": 1.0007336810556635,
+        "remaining": 1.0496320748844281,
+        "conditional": 1.0624775771896025
+      },
+      "checksum": 1572864
+    },
+    {
+      "compiler": "clang",
+      "n": 131072,
+      "op": 0,
+      "mode": 0,
+      "count": 12,
+      "raw_ms": {
+        "baseline": [
+          31.293617,
+          30.321711,
+          31.348931,
+          31.301646,
+          31.433014,
+          31.297015,
+          31.277445,
+          30.237368,
+          31.138556
+        ],
+        "control": [
+          31.379279,
+          31.378551,
+          31.269283,
+          31.472157,
+          30.434871,
+          31.307326,
+          31.255345,
+          30.059148,
+          30.849337
+        ],
+        "remaining": [
+          32.520561,
+          32.508859,
+          32.426542,
+          32.446614,
+          32.444746,
+          32.525639,
+          32.394623,
+          31.992793,
+          32.25635
+        ],
+        "conditional": [
+          32.441662,
+          32.47572,
+          32.489716,
+          32.489987,
+          32.494295,
+          32.580634,
+          32.523997,
+          32.508208,
+          32.455769
+        ]
+      },
+      "median_ms": {
+        "baseline": 31.293617,
+        "control": 31.269283,
+        "remaining": 32.444746,
+        "conditional": 32.489987
+      },
+      "ratio": {
+        "baseline": 1.0,
+        "control": 0.9992223973342551,
+        "remaining": 1.0367847858558505,
+        "conditional": 1.0382304800368714
+      },
+      "checksum": 1636044
+    }
+  ],
+  "abstract_search": {
+    "status": "PASS",
+    "paths": 43707,
+    "limits": "0..255 plus 2^16-1, 2^32-1, 2^63-1, 2^64-1; exhaustive branch outcomes for small limits and representative outcome sequences for large limits",
+    "scope": "same middle order, return and overflow-safe remaining arithmetic even with nonmonotonic hash equality; not full library regression suite"
+  },
+  "decision": "Both candidates rejected: large-input regressions confirmed with stable controls; initial small all_same slowdown did not reproduce; no production changes; no more candidates or full-main timing needed.",
+  "unchanged_apis": [
+    "get",
+    "construction",
+    "assign",
+    "copy",
+    "concat",
+    "equal",
+    "ownership",
+    "base normalization",
+    "runtime checks",
+    "standard arithmetic",
+    "main",
+    "fast I/O"
+  ],
+  "limits": [
+    "Only native GCC/Clang skip API screening; no checked/standard full correctness campaign for rejected candidates.",
+    "Identical midpoint proof preserves intentional collision outcomes; checksums agree in every performance run.",
+    "No candidate adopted. SIMD not changed; dependent hash walk and current scalar multiply kept."
+  ],
+  "harness": "#include SOURCE\n#include <algorithm>\n#include <chrono>\n#include <cstddef>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#include <random>\n#include <string>\n#include <utility>\n#include <vector>\nint main(int argc,char**argv) {\n if(argc!=4)return 1;\n const std::size_t n=std::strtoull(argv[1],nullptr,10);const int mode=std::atoi(argv[2]);const int reps=std::atoi(argv[3]);\n std::mt19937_64 rng(61022);std::string s(n,'a'),t(n,'a');\n if(mode==0||mode==4||mode==5||mode==6||mode>=8)for(char&c:s)c=static_cast<char>(rng()%26+'a');\n if(mode==1)for(std::size_t i=0;i<n;++i)s[i]=static_cast<char>('a'+i%4);\n if(mode==2)for(std::size_t i=0;i<n;++i)s[i]=static_cast<char>('a');\n if(mode==3||mode==12||mode==13){for(char&c:s)c=static_cast<char>(rng()%26+'a');t=s;if(n)t[mode==3?n/2:mode==12?n-1:n*3/4]='!';}\n else t=s;\n const std::uint64_t base=1000000007;RollingHash a(s,base),b(t,base);\n std::vector<std::pair<std::size_t,std::size_t>> queries;queries.reserve(n);\n for(std::size_t i=0;i<n;++i){if(mode<=2)queries.emplace_back(0,i);else if(mode==3||mode>=11)queries.emplace_back(i/2,i/2);else queries.emplace_back(rng()%(n+1),rng()%(n+1));}\n std::uint64_t checksum=0;\n const auto run=[&](){\n  if(mode==7){RollingHash built(s,base);checksum+=built.whole();return;}\n  if(mode==8){RollingHash copy=a;checksum+=copy.whole();return;}\n  for(auto[x,y]:queries){\n   if constexpr(OP==0)checksum+=a.lcp(x,a,y);\n   else if constexpr(OP==1)checksum+=a.lcp(x,b,y);\n   else if constexpr(OP==2)checksum+=a.lcp(x,b,y,64);\n   else if constexpr(OP==3)checksum+=a.compare(x,n,b,y,n)+1;\n   else if constexpr(OP==4)checksum+=a.get(std::min(x,y),std::max(x,y));\n   else if(mode==9)checksum+=a.equal(x,n,b,y,n);\n   else if(mode==10)checksum+=a.concat(a.get(0,x),a.get(x,n),n-x);\n  }\n };\n run();checksum=0;\n const auto begin=std::chrono::steady_clock::now();for(int r=0;r<reps;++r)run();const auto end=std::chrono::steady_clock::now();\n const auto ns=std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();\n std::printf(\"%jd %ju\\n\",static_cast<std::intmax_t>(ns),static_cast<std::uintmax_t>(checksum));\n}\n",
+  "reproduction": {
+    "setup.py": "from pathlib import Path\nimport hashlib, json\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env')\ns=(r/'String/RollingHash.cpp').read_text();assert hashlib.sha256(s.encode()).hexdigest()=='dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276'\n(p/'baseline.hpp').write_text(s);(p/'control.hpp').write_text(s)\nstart=s.index('        if (l == 0) {', s.index('std::size_t lcp_unchecked'))\nend=s.index('\\n        return low;\\n    }',start)+len('\\n        return low;')\nfor kind in ['remaining','conditional']:\n def loop(prefix):\n  cond=('data_[middle].value' if prefix else 'get_unchecked(l, l + middle)')+' == other.get_unchecked(ol, ol + middle)'\n  update=('''                if (equal) { low = middle; remaining -= step; }\n                else remaining = step - 1;''' if kind=='remaining' else '''                low = equal ? middle : low;\n                remaining = equal ? remaining - step : step - 1;''')\n  return '''            std::size_t low = 0;\n            std::size_t remaining = limit;\n            while (remaining != 0) {\n                const std::size_t step = remaining - remaining / 2;\n                const std::size_t middle = low + step;\n                const bool equal = '''+cond+''';\n'''+update+'''\n            }\n            return low;'''\n body='        if (l == 0) {\\n'+loop(True)+'\\n        }\\n'+ '\\n'.join(x[4:] for x in loop(False).splitlines())\n (p/(kind+'.hpp')).write_text(s[:start]+body+s[end:])\n# reuse representative fixed-op harness, eliminating dynamic operation choice in measured loop\nh=Path('/tmp/sirkit_rh_20261022/opt/api_v2.cpp').read_text()\nh=h.replace('const auto run=[&](){','const auto run=[&](){')\nh=h.replace('if(mode<=2)checksum+=a.lcp(x,a,y);','if constexpr(OP==0)checksum+=a.lcp(x,a,y);')\nh=h.replace('else if(mode==3||mode>=11)checksum+=a.lcp(x,b,y);','else if constexpr(OP==1)checksum+=a.lcp(x,b,y);')\nh=h.replace('else if(mode==4)checksum+=a.lcp(x,b,y,64);','else if constexpr(OP==2)checksum+=a.lcp(x,b,y,64);')\nh=h.replace('else if(mode==5)checksum+=a.compare(x,n,b,y,n)+1;','else if constexpr(OP==3)checksum+=a.compare(x,n,b,y,n)+1;')\nh=h.replace('else if(mode==6)checksum+=a.get(std::min(x,y),std::max(x,y));','else if constexpr(OP==4)checksum+=a.get(std::min(x,y),std::max(x,y));')\n# compare near-equal uses mode12 (same position different final byte), op independent.\n(p/'api.cpp').write_text(h)\n(p/'sources.json').write_text(json.dumps({f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in p.glob('*.hpp')},indent=2))\n",
+    "screen.py": "from pathlib import Path\nimport subprocess,json,hashlib,statistics,fcntl,time\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');sha=lambda b:hashlib.sha256(b).hexdigest()\nvariants=['baseline','control','remaining','conditional'];compilers={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']};rows=[];builds=[]\nfor cc,args in compilers.items():\n for op in [0,1,3]:\n  for v in variants:\n   exe=p/(cc+'_'+str(op)+'_'+v);cmd=['taskset','-c','6',*args,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors','-DSKIP_RUNTIME_CHECKS',f'-DOP={op}','-DSOURCE=\"'+str(p/(v+'.hpp'))+'\"',str(p/'api.cpp'),'-o',str(exe)]\n   z=subprocess.run(cmd,capture_output=True,text=True);assert z.returncode==0 and not z.stderr,z.stderr\n   builds.append(dict(command=cmd,header_sha256=sha((p/(v+'.hpp')).read_bytes())))\nprint('builds completed',flush=True)\ndef run(cc,op,v,n,mode,count):\n z=subprocess.run(['taskset','-c','14',str(p/(cc+'_'+str(op)+'_'+v)),str(n),str(mode),str(count)],capture_output=True,text=True);assert z.returncode==0 and not z.stderr,z.stderr\n return tuple(map(int,z.stdout.split()))\nwith open('/tmp/sirkit_performance_cpu14.lock','a') as lock1,open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a') as lock2:\n fcntl.flock(lock1,fcntl.LOCK_EX);fcntl.flock(lock2,fcntl.LOCK_EX)\n for cc in compilers:\n  for n in [32,131072]:\n   for op,mode in [(0,0),(0,2),(1,3),(1,11),(1,12),(3,5),(3,12)]:\n    pilot=1;ns,_=run(cc,op,'baseline',n,mode,pilot);count=max(1,int(18e6/max(1,ns)));raw={v:[] for v in variants};checks={v:[] for v in variants}\n    for rep in range(7):\n     order=variants[rep%4:]+variants[:rep%4]\n     for v in order:\n      ns,check=run(cc,op,v,n,mode,count);raw[v].append(ns/1e6);checks[v].append(check)\n    assert len(set(x for a in checks.values() for x in a))==1,checks\n    med={v:statistics.median(a) for v,a in raw.items()};ratios={v:med[v]/med['baseline'] for v in variants}\n    row=dict(compiler=cc,n=n,op=op,mode=mode,count=count,raw_ms=raw,median_ms=med,ratio=ratios,checksums=checks);rows.append(row)\n    (p/'screen_partial.json').write_text(json.dumps(dict(builds=builds,rows=rows),indent=2))\n    print(cc,n,op,mode,{v:round(x,4) for v,x in ratios.items()},flush=True)\n(p/'screen_results.json').write_text(json.dumps(dict(status='PASS',builds=builds,rows=rows,harness_sha256=sha((p/'api.cpp').read_bytes()),conditions='C++23 -O2 no native; SKIP; GCC15.3 Clang21.1.8; buildCPU6 timingCPU14; dual exclusive locks; 7 alternating runs ~18ms each; preparation outside measurement'),indent=2)+'\\n')\n",
+    "finalize.py": "from pathlib import Path\nimport subprocess,json,hashlib,statistics,fcntl,itertools,difflib\np=Path(__file__).parent;sha=lambda b:hashlib.sha256(b).hexdigest();variants=['baseline','control','remaining','conditional'];rows=[]\nwith open('/tmp/sirkit_performance_cpu14.lock','a') as lock1,open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a') as lock2:\n fcntl.flock(lock1,fcntl.LOCK_EX);fcntl.flock(lock2,fcntl.LOCK_EX)\n for cc,n,op,mode in [('gcc',32,0,2),('gcc',131072,1,3),('gcc',131072,3,12),('clang',131072,0,0)]:\n  prev=next(x for x in json.loads((p/'screen_results.json').read_text())['rows'] if all(x[k]==v for k,v in [('compiler',cc),('n',n),('op',op),('mode',mode)]));count=prev['count']*2;raw={v:[]for v in variants};checks=[]\n  for rep in range(9):\n   for v in variants[rep%4:]+variants[:rep%4]:\n    z=subprocess.run(['taskset','-c','14',str(p/(cc+'_'+str(op)+'_'+v)),str(n),str(mode),str(count)],capture_output=True,text=True);assert z.returncode==0 and not z.stderr,z.stderr;ns,c=map(int,z.stdout.split());raw[v].append(ns/1e6);checks.append(c)\n  assert len(set(checks))==1\n  med={v:statistics.median(ts)for v,ts in raw.items()};ratios={v:t/med['baseline']for v,t in med.items()};rows.append(dict(compiler=cc,n=n,op=op,mode=mode,count=count,raw_ms=raw,median_ms=med,ratio=ratios,checksum=checks[0]));print(cc,n,op,mode,ratios,flush=True)\n# Verify identical binary-search midpoints for all predicate sequences, including nonmonotone collision outcomes.\ntraces=0\nfor limit in list(range(256))+[(1<<k)-1 for k in [16,32,63,64]]:\n if limit<256:\n  paths=itertools.product([False,True],repeat=limit.bit_length())\n else:\n  paths=([False]*64,[True]*64,[(i%2)==0 for i in range(64)],[(i%3)==0 for i in range(64)])\n for outcomes in paths:\n  low=0;high=limit;lo2=0;remain=limit;i=0\n  while low<high:\n   mid=high-(high-low)//2;step=remain-remain//2;mid2=lo2+step;assert mid==mid2\n   eq=outcomes[i];i+=1\n   if eq:low=mid;lo2=mid2;remain-=step\n   else:high=mid-1;remain=step-1\n   assert high-low==remain and low==lo2\n  assert remain==0 and low==lo2;traces+=1\nreport=dict(status='COMPLETE_REJECTED',source_sha256={v:sha((p/(v+'.hpp')).read_bytes())for v in variants},sources={v:(p/(v+'.hpp')).read_text()for v in variants},diffs={v:''.join(difflib.unified_diff((p/'baseline.hpp').read_text().splitlines(True),(p/(v+'.hpp')).read_text().splitlines(True),fromfile='baseline',tofile=v))for v in variants[2:]},screen=json.loads((p/'screen_results.json').read_text()),confirmation=rows,abstract_search=dict(status='PASS',paths=traces,limits='0..255 plus 2^16-1, 2^32-1, 2^63-1, 2^64-1; exhaustive branch outcomes for small limits and representative outcome sequences for large limits',scope='same middle order, return and overflow-safe remaining arithmetic even with nonmonotonic hash equality; not full library regression suite'),decision='Both candidates rejected: stable small/large regressions; no production changes; no more candidates or full-main timing needed.',unchanged_apis=['get','construction','assign','copy','concat','equal','ownership','base normalization','runtime checks','standard arithmetic','main','fast I/O'],limits=['Only native GCC/Clang skip API screening; no checked/standard full correctness campaign for rejected candidates.','Identical midpoint proof preserves intentional collision outcomes; checksums agree in every performance run.','No candidate adopted. SIMD not changed; dependent hash walk and current scalar multiply kept.'],harness=(p/'api.cpp').read_text(),reproduction={f:(p/f).read_text()for f in ['setup.py','screen.py','finalize.py']},previous_rejections=['prefix/full hash early returns','exponential search','get l==0 general branch','split construction loops'],environment={k:subprocess.check_output(cmd,text=True)for k,cmd in [('gcc',['g++','--version']),('clang',['clang++','--version']),('cpu',['lscpu'])]})\n(p/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\\n');print('report',p/'report.json',sha((p/'report.json').read_bytes()),flush=True)\n"
+  },
+  "previous_rejections": [
+    "prefix/full hash early returns",
+    "exponential search",
+    "get l==0 general branch",
+    "split construction loops"
+  ],
+  "environment": {
+    "gcc": "g++ (GCC) 15.3.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: /usr/lib/llvm-21/bin\n",
+    "cpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           46 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  32\nOn-line CPU(s) list:                     0-31\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Core(TM) i9-14900K\nCPU family:                              6\nModel:                                   183\nThread(s) per core:                      2\nCore(s) per socket:                      24\nSocket(s):                               1\nStepping:                                1\nCPU(s) scaling MHz:                      28%\nCPU max MHz:                             6000.0000\nCPU min MHz:                             800.0000\nBogoMIPS:                                6374.40\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb intel_pt sha_ni xsaveopt xsavec xgetbv1 xsaves split_lock_detect user_shstk avx_vnni dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp hwp_pkg_req hfi vnmi umip pku ospke waitpkg gfni vaes vpclmulqdq rdpid movdiri movdir64b fsrm md_clear serialize pconfig arch_lbr ibt flush_l1d arch_capabilities\nVirtualization:                          VT-x\nL1d cache:                               896 KiB (24 instances)\nL1i cache:                               1.3 MiB (24 instances)\nL2 cache:                                32 MiB (12 instances)\nL3 cache:                                36 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-31\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Mitigation; Clear Register File\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Enhanced / Automatic IBRS; IBPB conditional; PBRSB-eIBRS SW sequence; BHI BHI_DIS_S\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Mitigation; IBPB before exit to userspace\n"
+  },
+  "limitations_note": "Small all_same first screen +5.0%/+5.0% did not reproduce (confirmation 0.9915/0.9979). Do not cite that as stable regression. Large GCC middle-mismatch LCP +4.01%/+13.25%, GCC near-equal compare +4.96%/+6.25%, Clang random-prefix LCP +3.68%/+3.82% reproduced.",
+  "date": "2026-10-23",
+  "source": "String/RollingHash.cpp",
+  "online_audit": "Audit/online-rolling-hash-412622-2026-10-23.json",
+  "online_result": {
+    "status": "AC",
+    "cases": 29,
+    "time_ms": 44
+  },
+  "optimization_scope": "今回の2案はRollingHash::lcpとcompareから使う内部二分探索の区間表現と条件代入を変更するもの。ハッシュ構築・剰余乗算は変更していない。",
+  "final_source_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276"
+}

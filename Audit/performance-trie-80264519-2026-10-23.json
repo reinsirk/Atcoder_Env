@@ -1,0 +1,2873 @@
+{
+  "date": "2026-10-23",
+  "source": "String/Trie.cpp",
+  "baseline_sha256": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0",
+  "decision": "全3候補を不採用。本体・main・入出力・公開APIは変更しない。",
+  "conditions": {
+    "cpu": "Intel Core i9-14900K",
+    "compilers": {
+      "gcc": "g++ (GCC) 15.3.0",
+      "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)"
+    },
+    "flags": [
+      "-std=c++23",
+      "-O2",
+      "-DSKIP_RUNTIME_CHECKS"
+    ],
+    "native": false,
+    "compile_and_correctness_cpu": 6,
+    "performance_cpu": 14,
+    "locks": [
+      "/tmp/sirkit_performance_cpu14.lock",
+      "/tmp/atcoder_full_performance_20261018/benchmark.lock"
+    ],
+    "separation": "全build完了後に出力照合。出力照合完了後に時間測定。rootにも重い処理停止を依頼し受諾。時間測定中にビルド・検証実行・メモリ測定を並行しない。",
+    "statistic": "median; variants rotated",
+    "api_repetitions_per_condition": 7,
+    "fixed_main_repetitions_screen": 9,
+    "hybrid_fixed_main_repetitions": 7,
+    "reproduction_repetitions": 11,
+    "main": "同一fast IO+元main。計算手順・バッチ化・入出力変更なし。",
+    "control": "同文本体を別buildし、両compilerの固定main .text同一を確認。"
+  },
+  "frozen": {
+    "String/Trie.cpp": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0",
+    "Verify/current/drivers/trie_gacha_main.cpp": "5fc9518bc1e13a41cb0f4e3ea45878df17cf5ea569d5cd0b168d7495356415b7",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "candidate_explanation": {
+    "grow15": "1.5倍（capacity+floor(capacity/2)）、new_sizeとmax_sizeに合わせてreserve。小規模混合GCCで8〜17%悪化、固定main大ランダムは両compilerで約13%悪化。",
+    "grow175": "1.75倍（capacity+capacity-floor(capacity/4)）。固定main大ランダムは約7〜8%短縮するが、GCC小規模混合で約7%悪化。一律採用しない。",
+    "grow175_large": "4096枠未満は従来vector成長、以降1.75倍。小規模重複GCC+7.32%、固定main大ランダムGCC+5.98%/Clang+6.25%の退行を11回追加測定で再現。controlは+0.35%/+0.74%/-0.34%。"
+  },
+  "candidate_sha256": {
+    "baseline": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0",
+    "control": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0",
+    "grow15": "3adb149a2b5b880eff148f42e78fd7306ba8ff23fb3673caa3720dfcaec2ea0d",
+    "grow175": "195ed0c70594953aafd76dd56fd82ab21b8a8bf31a4c548407a91a835069785b",
+    "grow175_large": "0a498a14f267b2554c13dc70cc321a4608fa48ca3feee6d0bc297fab3fc9a4ed"
+  },
+  "capacity_and_safety_review": [
+    "reserve_nodes(n)は少なくともn枠を確保、capacity()は実際のcapacityを返す契約を維持。exact growth factorの公開保証はない。",
+    "候補のgrow計算はmax_size-capacityで加算overflowを防ぎ、new_sizeを下回らない。既存live上限・free list・root条件・長いword用経路を維持。",
+    "Nodeは標準整数の集成体でresize後の構築は例外なし。確保失敗時のtables.pop_back処理を維持。",
+    "公開本体に候補を採用しないため、追加の例外・全API回帰suiteは不要。候補出力一致はAPIの網羅検証を意味しない。"
+  ],
+  ".text_sha256": {
+    "gcc": {
+      "baseline": "3b169741284e6846dedee7ad3abe23f0ebc0afad878352d9723c5ffb65b4928f",
+      "control": "3b169741284e6846dedee7ad3abe23f0ebc0afad878352d9723c5ffb65b4928f",
+      "grow15": "dd2bf8537a0f157dd005675893de5e7766debcde85b2ce637274417c0377209f",
+      "grow175": "60d030c495e03a8235b95ea165eb1771ea9168c0aac7a6984feb5a8e60351987",
+      "grow175_large": "5e6a4b676a74c193dcb0dc94bc82757a6e4b8f499b1f1ed02bd414e23dea5628"
+    },
+    "clang": {
+      "baseline": "4510cf08af00da28a13355a011279fa730bec96d9ba971479fe606db1929cb22",
+      "control": "4510cf08af00da28a13355a011279fa730bec96d9ba971479fe606db1929cb22",
+      "grow15": "7d41dfc68ddbeb0081db9e9c741c73f0c84923c52a5341624e36da2ea84da3da",
+      "grow175": "95d3f11e60c51173a203801ddf8e17ecf6c88a763058557cc588f5e77846bd88",
+      "grow175_large": "80ea6ab00d18c3787215f385f77e06ddd9ec2c84c5a07d5889d9b654b6806586"
+    }
+  },
+  "screen": {
+    "api": [
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "length": 6,
+        "kind": 0,
+        "repetitions": 5000,
+        "raw_ms": {
+          "baseline": [
+            8.39609,
+            8.09418,
+            8.12923,
+            8.11411,
+            8.11446,
+            8.17114,
+            8.24354
+          ],
+          "control": [
+            8.15791,
+            8.11827,
+            8.15365,
+            8.10284,
+            8.05561,
+            8.11282,
+            8.13714
+          ],
+          "grow15": [
+            9.53369,
+            9.59807,
+            9.43148,
+            9.48013,
+            9.56184,
+            9.41765,
+            9.61843
+          ],
+          "grow175": [
+            8.73434,
+            8.67662,
+            8.64511,
+            8.88326,
+            8.81464,
+            8.75671,
+            8.77542
+          ]
+        },
+        "median_ms": {
+          "baseline": 8.12923,
+          "control": 8.11827,
+          "grow15": 9.53369,
+          "grow175": 8.75671
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9986517788277611,
+          "grow15": 1.1727666703980575,
+          "grow175": 1.0771881223682933
+        },
+        "checksum": "320000"
+      },
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "length": 6,
+        "kind": 1,
+        "repetitions": 5000,
+        "raw_ms": {
+          "baseline": [
+            8.54051,
+            8.69307,
+            8.56128,
+            8.61697,
+            8.56353,
+            8.56368,
+            8.54972
+          ],
+          "control": [
+            8.52858,
+            8.57461,
+            8.62906,
+            8.48614,
+            8.50827,
+            8.58605,
+            8.56397
+          ],
+          "grow15": [
+            9.23757,
+            9.15564,
+            9.26035,
+            9.46591,
+            9.28115,
+            9.46466,
+            9.22893
+          ],
+          "grow175": [
+            9.14838,
+            9.04889,
+            9.17185,
+            9.05605,
+            9.15234,
+            9.16494,
+            9.017
+          ]
+        },
+        "median_ms": {
+          "baseline": 8.56353,
+          "control": 8.56397,
+          "grow15": 9.26035,
+          "grow175": 9.14838
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0000513806806304,
+          "grow15": 1.081370649720384,
+          "grow175": 1.0682954342426545
+        },
+        "checksum": "320000"
+      },
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "length": 6,
+        "kind": 2,
+        "repetitions": 5000,
+        "raw_ms": {
+          "baseline": [
+            8.21087,
+            8.14914,
+            8.13916,
+            8.20036,
+            8.16297,
+            8.14647,
+            8.44959
+          ],
+          "control": [
+            8.19069,
+            8.20279,
+            8.18317,
+            8.23026,
+            8.15873,
+            8.17215,
+            8.31094
+          ],
+          "grow15": [
+            9.48326,
+            9.45142,
+            9.51276,
+            9.48814,
+            9.47692,
+            9.51649,
+            9.68031
+          ],
+          "grow175": [
+            8.67597,
+            8.69898,
+            8.76911,
+            8.78813,
+            8.72295,
+            8.69684,
+            8.87702
+          ]
+        },
+        "median_ms": {
+          "baseline": 8.16297,
+          "control": 8.19069,
+          "grow15": 9.48814,
+          "grow175": 8.72295
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0033958228438915,
+          "grow15": 1.162339197620474,
+          "grow175": 1.0686000316061435
+        },
+        "checksum": "440000"
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 0,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            145.558,
+            144.812,
+            142.311,
+            157.916,
+            141.138,
+            142.862,
+            176.054
+          ],
+          "control": [
+            142.859,
+            139.938,
+            141.216,
+            141.758,
+            143.923,
+            142.007,
+            142.486
+          ],
+          "grow15": [
+            151.275,
+            150.412,
+            155.015,
+            152.421,
+            151.86,
+            150.79,
+            157.846
+          ],
+          "grow175": [
+            131.015,
+            132.352,
+            130.185,
+            129.733,
+            130.746,
+            133.233,
+            134.293
+          ]
+        },
+        "median_ms": {
+          "baseline": 144.812,
+          "control": 142.007,
+          "grow15": 151.86,
+          "grow175": 131.015
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9806300582824627,
+          "grow15": 1.0486699997237798,
+          "grow175": 0.9047247465679639
+        },
+        "checksum": "400000"
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            69.3932,
+            65.77,
+            65.4716,
+            66.0964,
+            65.3098,
+            66.1839,
+            65.2253
+          ],
+          "control": [
+            65.9519,
+            65.0855,
+            65.1628,
+            64.8769,
+            65.6547,
+            64.7026,
+            102.761
+          ],
+          "grow15": [
+            65.65,
+            65.6753,
+            65.9452,
+            65.9186,
+            65.6455,
+            67.2926,
+            65.9988
+          ],
+          "grow175": [
+            64.697,
+            64.5101,
+            64.5599,
+            64.9956,
+            64.4468,
+            79.0404,
+            64.7761
+          ]
+        },
+        "median_ms": {
+          "baseline": 65.77,
+          "control": 65.1628,
+          "grow15": 65.9186,
+          "grow175": 64.697
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9907678272768741,
+          "grow15": 1.0022593887790787,
+          "grow175": 0.9836855709289951
+        },
+        "checksum": "402911"
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 2,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            9.1254,
+            9.10173,
+            9.10155,
+            9.20699,
+            9.09015,
+            9.32607,
+            13.3181
+          ],
+          "control": [
+            9.09127,
+            9.09026,
+            9.13201,
+            9.12248,
+            9.04372,
+            9.08685,
+            13.3248
+          ],
+          "grow15": [
+            9.24387,
+            9.19746,
+            9.26578,
+            9.22956,
+            9.19481,
+            9.18275,
+            13.8388
+          ],
+          "grow175": [
+            9.43884,
+            9.23536,
+            9.186,
+            9.22466,
+            9.22246,
+            9.21744,
+            13.9192
+          ]
+        },
+        "median_ms": {
+          "baseline": 9.1254,
+          "control": 9.09127,
+          "grow15": 9.22956,
+          "grow175": 9.22466
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9962598899774255,
+          "grow15": 1.0114142941679267,
+          "grow175": 1.0108773314046506
+        },
+        "checksum": "2500100008"
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "length": 6,
+        "kind": 0,
+        "repetitions": 5000,
+        "raw_ms": {
+          "baseline": [
+            9.41508,
+            9.39628,
+            9.42122,
+            9.44318,
+            9.42822,
+            9.42849,
+            9.43728
+          ],
+          "control": [
+            9.43617,
+            9.40456,
+            9.3994,
+            9.46026,
+            9.4608,
+            9.41487,
+            9.41717
+          ],
+          "grow15": [
+            10.3699,
+            10.2203,
+            10.2401,
+            10.2602,
+            10.0182,
+            10.6111,
+            10.4127
+          ],
+          "grow175": [
+            9.61409,
+            9.7397,
+            9.51266,
+            9.47293,
+            9.59673,
+            9.58754,
+            9.36661
+          ]
+        },
+        "median_ms": {
+          "baseline": 9.42822,
+          "control": 9.41717,
+          "grow15": 10.2602,
+          "grow175": 9.58754
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9988279866188953,
+          "grow15": 1.0882435921096452,
+          "grow175": 1.0168982055997846
+        },
+        "checksum": "320000"
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "length": 6,
+        "kind": 1,
+        "repetitions": 5000,
+        "raw_ms": {
+          "baseline": [
+            10.4072,
+            10.5333,
+            10.28,
+            10.2327,
+            10.5214,
+            10.3335,
+            10.4315
+          ],
+          "control": [
+            10.4237,
+            10.3052,
+            10.3899,
+            10.3241,
+            10.2315,
+            10.5767,
+            10.2345
+          ],
+          "grow15": [
+            10.6355,
+            10.7885,
+            10.581,
+            10.371,
+            10.2641,
+            10.3213,
+            10.7046
+          ],
+          "grow175": [
+            10.2563,
+            10.3207,
+            10.3095,
+            10.4722,
+            10.3062,
+            9.83948,
+            10.3913
+          ]
+        },
+        "median_ms": {
+          "baseline": 10.4072,
+          "control": 10.3241,
+          "grow15": 10.581,
+          "grow175": 10.3095
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9920151433622877,
+          "grow15": 1.0166999769390421,
+          "grow175": 0.9906122684295489
+        },
+        "checksum": "320000"
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "length": 6,
+        "kind": 2,
+        "repetitions": 5000,
+        "raw_ms": {
+          "baseline": [
+            9.89749,
+            9.8637,
+            9.91619,
+            9.93096,
+            9.90431,
+            10.1646,
+            9.94227
+          ],
+          "control": [
+            9.9243,
+            9.87621,
+            10.0236,
+            9.88065,
+            9.94387,
+            9.92554,
+            9.8955
+          ],
+          "grow15": [
+            10.9438,
+            10.8808,
+            10.9748,
+            10.8901,
+            10.891,
+            10.8575,
+            10.9431
+          ],
+          "grow175": [
+            10.1457,
+            10.1642,
+            10.1828,
+            10.2223,
+            10.3055,
+            10.2316,
+            10.2841
+          ]
+        },
+        "median_ms": {
+          "baseline": 9.91619,
+          "control": 9.9243,
+          "grow15": 10.891,
+          "grow175": 10.2223
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0008178544380453,
+          "grow15": 1.0983048933108381,
+          "grow175": 1.0308697191159104
+        },
+        "checksum": "440000"
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 0,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            159.279,
+            144.095,
+            142.763,
+            164.438,
+            143.0,
+            143.173,
+            156.012
+          ],
+          "control": [
+            144.72,
+            145.847,
+            142.334,
+            144.949,
+            142.858,
+            143.695,
+            145.492
+          ],
+          "grow15": [
+            153.473,
+            153.571,
+            154.098,
+            153.911,
+            153.51,
+            153.854,
+            152.599
+          ],
+          "grow175": [
+            134.348,
+            139.235,
+            134.265,
+            136.517,
+            133.116,
+            132.929,
+            133.501
+          ]
+        },
+        "median_ms": {
+          "baseline": 144.095,
+          "control": 144.72,
+          "grow15": 153.571,
+          "grow175": 134.265
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0043374162878655,
+          "grow15": 1.0657621707901037,
+          "grow175": 0.9317811166244491
+        },
+        "checksum": "400000"
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            68.605,
+            70.535,
+            62.9052,
+            67.2397,
+            66.9199,
+            101.174,
+            67.5038
+          ],
+          "control": [
+            70.9639,
+            67.6791,
+            66.2549,
+            66.5699,
+            66.8175,
+            67.0156,
+            67.7417
+          ],
+          "grow15": [
+            69.8759,
+            66.0111,
+            65.9619,
+            66.3729,
+            66.0923,
+            65.9311,
+            69.1465
+          ],
+          "grow175": [
+            67.4657,
+            65.8863,
+            59.7575,
+            65.5971,
+            66.2363,
+            65.7024,
+            67.5586
+          ]
+        },
+        "median_ms": {
+          "baseline": 67.5038,
+          "control": 67.0156,
+          "grow15": 66.0923,
+          "grow175": 65.8863
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9927678145526624,
+          "grow15": 0.9790900660407266,
+          "grow175": 0.9760383859871593
+        },
+        "checksum": "402911"
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 2,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            17.0734,
+            17.1338,
+            17.4597,
+            17.1335,
+            17.1827,
+            17.072,
+            17.1093
+          ],
+          "control": [
+            17.0936,
+            17.1186,
+            17.095,
+            17.0659,
+            16.9954,
+            17.0797,
+            17.121
+          ],
+          "grow15": [
+            16.3356,
+            16.7953,
+            16.5649,
+            16.4403,
+            16.5384,
+            16.4467,
+            16.8196
+          ],
+          "grow175": [
+            16.6311,
+            16.4059,
+            16.5692,
+            16.7193,
+            16.3246,
+            16.6115,
+            16.5008
+          ]
+        },
+        "median_ms": {
+          "baseline": 17.1335,
+          "control": 17.0936,
+          "grow15": 16.5384,
+          "grow175": 16.5692
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9976712288790963,
+          "grow15": 0.9652668748358477,
+          "grow175": 0.9670645227186504
+        },
+        "checksum": "2500100008"
+      }
+    ],
+    "fixed_main": [
+      {
+        "compiler": "gcc",
+        "case": "random_200000",
+        "raw_ms": {
+          "baseline": [
+            95.831761,
+            94.950019,
+            94.709494,
+            95.00786,
+            94.69475,
+            94.956906,
+            94.724868,
+            95.767703,
+            95.13945
+          ],
+          "control": [
+            95.253181,
+            98.815131,
+            94.984093,
+            94.589431,
+            94.358039,
+            94.535525,
+            94.403567,
+            105.322382,
+            95.109015
+          ],
+          "grow15": [
+            107.376901,
+            107.807678,
+            114.074264,
+            108.526286,
+            107.221536,
+            106.77285,
+            107.26099,
+            107.028056,
+            107.477307
+          ],
+          "grow175": [
+            90.358656,
+            87.163534,
+            93.543137,
+            88.028918,
+            88.097075,
+            88.061804,
+            87.899811,
+            87.34417,
+            88.997646
+          ]
+        },
+        "median_ms": {
+          "baseline": 94.956906,
+          "control": 94.984093,
+          "grow15": 107.376901,
+          "grow175": 88.061804
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.000286308823078,
+          "grow15": 1.1307961213479303,
+          "grow175": 0.9273870401801001
+        }
+      },
+      {
+        "compiler": "gcc",
+        "case": "shared_prefix_200000",
+        "raw_ms": {
+          "baseline": [
+            46.82515,
+            42.990907,
+            42.750094,
+            42.834519,
+            42.829574,
+            42.756086,
+            42.805766,
+            42.801639,
+            42.95857
+          ],
+          "control": [
+            42.675204,
+            42.555869,
+            47.63405,
+            42.681481,
+            43.010292,
+            42.618103,
+            42.296439,
+            42.401775,
+            42.821199
+          ],
+          "grow15": [
+            43.427458,
+            44.070417,
+            44.349716,
+            44.30817,
+            44.059867,
+            43.882772,
+            43.785112,
+            43.59446,
+            50.972866
+          ],
+          "grow175": [
+            42.403467,
+            42.778485,
+            43.182886,
+            45.610202,
+            42.605743,
+            43.223909,
+            42.636481,
+            42.9552,
+            53.125196
+          ]
+        },
+        "median_ms": {
+          "baseline": 42.829574,
+          "control": 42.675204,
+          "grow15": 44.059867,
+          "grow175": 42.9552
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9963957147927738,
+          "grow15": 1.0287253148957305,
+          "grow175": 1.0029331601570446
+        }
+      },
+      {
+        "compiler": "gcc",
+        "case": "duplicates_200000",
+        "raw_ms": {
+          "baseline": [
+            9.149468,
+            8.661967,
+            8.153452,
+            8.431066,
+            8.12661,
+            8.117079,
+            8.359446,
+            8.23998,
+            8.174958
+          ],
+          "control": [
+            8.359132,
+            8.165803,
+            7.935099,
+            8.112157,
+            8.286901,
+            8.01575,
+            8.161067,
+            8.045716,
+            7.927141
+          ],
+          "grow15": [
+            8.165762,
+            8.181975,
+            8.292666,
+            8.359459,
+            8.014047,
+            7.980285,
+            8.270434,
+            8.256731,
+            8.187755
+          ],
+          "grow175": [
+            8.099578,
+            8.361066,
+            8.012037,
+            8.64027,
+            8.070385,
+            8.109616,
+            8.064945,
+            8.275462,
+            8.351618
+          ]
+        },
+        "median_ms": {
+          "baseline": 8.23998,
+          "control": 8.112157,
+          "grow15": 8.187755,
+          "grow175": 8.109616
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9844874623482096,
+          "grow15": 0.9936619991796096,
+          "grow175": 0.9841790878133201
+        }
+      },
+      {
+        "compiler": "gcc",
+        "case": "length1_200000",
+        "raw_ms": {
+          "baseline": [
+            2.65687,
+            2.39756,
+            2.381308,
+            2.293804,
+            2.23434,
+            2.329098,
+            2.329615,
+            2.259453,
+            2.353523
+          ],
+          "control": [
+            2.525125,
+            2.46309,
+            2.320133,
+            2.328804,
+            2.231491,
+            2.413464,
+            2.247343,
+            2.462326,
+            2.304743
+          ],
+          "grow15": [
+            2.608561,
+            2.4355,
+            2.31116,
+            2.287223,
+            2.310058,
+            2.45645,
+            2.441417,
+            2.292862,
+            2.331587
+          ],
+          "grow175": [
+            2.446172,
+            2.397176,
+            2.34634,
+            2.488691,
+            2.302124,
+            2.343714,
+            2.266291,
+            2.265849,
+            2.346525
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.329615,
+          "control": 2.328804,
+          "grow15": 2.331587,
+          "grow175": 2.34634
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9996518738074746,
+          "grow15": 1.0008464918022935,
+          "grow175": 1.007179297866815
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "random_200000",
+        "raw_ms": {
+          "baseline": [
+            96.305402,
+            95.283175,
+            95.052518,
+            94.487468,
+            101.274053,
+            94.78208,
+            94.653526,
+            93.873274,
+            93.815835
+          ],
+          "control": [
+            95.563006,
+            94.132693,
+            94.64912,
+            95.304035,
+            110.542667,
+            95.179381,
+            95.284916,
+            94.033344,
+            94.120268
+          ],
+          "grow15": [
+            107.291986,
+            106.744238,
+            106.493571,
+            108.722553,
+            107.28947,
+            106.925886,
+            108.151044,
+            107.044065,
+            106.845194
+          ],
+          "grow175": [
+            88.481971,
+            86.946537,
+            87.773137,
+            87.013009,
+            87.330087,
+            87.527003,
+            87.545314,
+            86.427989,
+            86.356024
+          ]
+        },
+        "median_ms": {
+          "baseline": 94.78208,
+          "control": 95.179381,
+          "grow15": 107.044065,
+          "grow175": 87.330087
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.004191731179565,
+          "grow15": 1.129370288138855,
+          "grow175": 0.9213776169503772
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "shared_prefix_200000",
+        "raw_ms": {
+          "baseline": [
+            47.275619,
+            48.812075,
+            42.376162,
+            42.175748,
+            41.902508,
+            42.370992,
+            41.901229,
+            42.219759,
+            41.954007
+          ],
+          "control": [
+            42.127502,
+            42.624933,
+            42.728523,
+            43.271122,
+            42.042644,
+            42.193238,
+            41.925451,
+            42.082665,
+            42.512552
+          ],
+          "grow15": [
+            42.707448,
+            52.339058,
+            44.457672,
+            42.728477,
+            43.28149,
+            43.474288,
+            42.857907,
+            42.742835,
+            42.741081
+          ],
+          "grow175": [
+            41.804972,
+            53.265989,
+            42.773286,
+            42.024526,
+            42.361467,
+            42.608334,
+            41.930174,
+            42.218192,
+            43.983823
+          ]
+        },
+        "median_ms": {
+          "baseline": 42.219759,
+          "control": 42.193238,
+          "grow15": 42.857907,
+          "grow175": 42.361467
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9993718344057814,
+          "grow15": 1.0151149133750383,
+          "grow175": 1.0033564379180846
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "duplicates_200000",
+        "raw_ms": {
+          "baseline": [
+            8.349988,
+            7.629961,
+            7.524722,
+            7.581074,
+            7.717832,
+            7.601879,
+            7.530166,
+            7.497805,
+            7.571645
+          ],
+          "control": [
+            8.108834,
+            7.521007,
+            7.815649,
+            7.795576,
+            7.441648,
+            7.749407,
+            7.525017,
+            7.908333,
+            7.719355
+          ],
+          "grow15": [
+            7.877873,
+            7.647151,
+            7.548109,
+            7.554966,
+            7.57246,
+            7.491956,
+            7.785396,
+            7.62226,
+            7.477249
+          ],
+          "grow175": [
+            7.628916,
+            7.57174,
+            7.744112,
+            7.667064,
+            7.620549,
+            7.610081,
+            7.652894,
+            7.631543,
+            7.488315
+          ]
+        },
+        "median_ms": {
+          "baseline": 7.581074,
+          "control": 7.749407,
+          "grow15": 7.57246,
+          "grow175": 7.628916
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0222043736810906,
+          "grow15": 0.9988637493843221,
+          "grow175": 1.006310715341916
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "length1_200000",
+        "raw_ms": {
+          "baseline": [
+            2.515933,
+            2.953694,
+            2.616041,
+            2.532048,
+            2.603003,
+            2.513917,
+            2.504575,
+            2.49254,
+            2.485103
+          ],
+          "control": [
+            2.482877,
+            2.466466,
+            2.514353,
+            2.514948,
+            2.491923,
+            2.486515,
+            2.520197,
+            2.533591,
+            2.477784
+          ],
+          "grow15": [
+            2.433997,
+            2.545171,
+            2.636323,
+            2.474332,
+            2.638746,
+            2.545895,
+            2.517038,
+            2.694378,
+            2.493781
+          ],
+          "grow175": [
+            2.509793,
+            2.535979,
+            2.496106,
+            2.49677,
+            2.481101,
+            2.492348,
+            2.490298,
+            2.547382,
+            2.499391
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.515933,
+          "control": 2.491923,
+          "grow15": 2.545171,
+          "grow175": 2.49677
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9904568205910094,
+          "grow15": 1.0116211361749299,
+          "grow175": 0.9923833424816957
+        }
+      }
+    ],
+    "builds": [
+      {
+        "compiler": "gcc",
+        "variant": "baseline",
+        "kind": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_trie_80264519_opt/main_baseline.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/main_gcc_baseline"
+        ],
+        "source_sha256": "d5ccf96d707cd3ff82154159c3eeb19f372bf607587d0cab0653df9d4ba375a3",
+        "binary_sha256": "20f80561a6a17290ac9e67838aad1f79f5dcbc972ca2310209e8d7ac4757fcb0"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "baseline",
+        "kind": "bench",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_trie_80264519_opt/baseline.hpp\"",
+          "/tmp/sirkit_trie_80264519_opt/bench.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/bench_gcc_baseline"
+        ],
+        "source_sha256": "cc955a7316a146e92f1b6987fb5ec419ffc950a8481db54f7e7c60d15db19661",
+        "binary_sha256": "e2568e90d9891b07d6fb034b8c717c792640e230dc6829e2a13cb0f2916820ad"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "control",
+        "kind": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_trie_80264519_opt/main_control.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/main_gcc_control"
+        ],
+        "source_sha256": "d5ccf96d707cd3ff82154159c3eeb19f372bf607587d0cab0653df9d4ba375a3",
+        "binary_sha256": "7317b4a4951538fa9df190f1e4a5ac39df578162f1873e1498c1051567fc4c9d"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "control",
+        "kind": "bench",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_trie_80264519_opt/control.hpp\"",
+          "/tmp/sirkit_trie_80264519_opt/bench.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/bench_gcc_control"
+        ],
+        "source_sha256": "cc955a7316a146e92f1b6987fb5ec419ffc950a8481db54f7e7c60d15db19661",
+        "binary_sha256": "e2568e90d9891b07d6fb034b8c717c792640e230dc6829e2a13cb0f2916820ad"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "grow15",
+        "kind": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_trie_80264519_opt/main_grow15.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/main_gcc_grow15"
+        ],
+        "source_sha256": "fa62ec8309d5e10e2a2df4f671fb6c32c9fe6aea58233fa64952a96e9dc4c535",
+        "binary_sha256": "d93803c87f1abf83dc954867bbd3c8e3c206d6821530430d854914b4a2d85385"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "grow15",
+        "kind": "bench",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_trie_80264519_opt/grow15.hpp\"",
+          "/tmp/sirkit_trie_80264519_opt/bench.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/bench_gcc_grow15"
+        ],
+        "source_sha256": "cc955a7316a146e92f1b6987fb5ec419ffc950a8481db54f7e7c60d15db19661",
+        "binary_sha256": "5495050643b7757c2d446eb46368ef8e0106bede8206f68cd6b4645be5db76c8"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "grow175",
+        "kind": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_trie_80264519_opt/main_grow175.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/main_gcc_grow175"
+        ],
+        "source_sha256": "5c3538bf49eb6274f6f905730387964fd0f5cb3024a5108fd8333b629de46f13",
+        "binary_sha256": "c67338e47ca8eb646ec5aead287513f86588eec062ff9675f9d587623d98db29"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "grow175",
+        "kind": "bench",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_trie_80264519_opt/grow175.hpp\"",
+          "/tmp/sirkit_trie_80264519_opt/bench.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/bench_gcc_grow175"
+        ],
+        "source_sha256": "cc955a7316a146e92f1b6987fb5ec419ffc950a8481db54f7e7c60d15db19661",
+        "binary_sha256": "4b58c83ee6b29971fd2eb1af94dd3545029c5625bfbb510465a50ef57a45fac9"
+      },
+      {
+        "compiler": "clang",
+        "variant": "baseline",
+        "kind": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_trie_80264519_opt/main_baseline.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/main_clang_baseline"
+        ],
+        "source_sha256": "d5ccf96d707cd3ff82154159c3eeb19f372bf607587d0cab0653df9d4ba375a3",
+        "binary_sha256": "471680a2ae76a00be26f1ca021c9941efc33a6e5f6b8a21c33db58cf8a24f9ed"
+      },
+      {
+        "compiler": "clang",
+        "variant": "baseline",
+        "kind": "bench",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_trie_80264519_opt/baseline.hpp\"",
+          "/tmp/sirkit_trie_80264519_opt/bench.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/bench_clang_baseline"
+        ],
+        "source_sha256": "cc955a7316a146e92f1b6987fb5ec419ffc950a8481db54f7e7c60d15db19661",
+        "binary_sha256": "4be347eb141fd277b2775687881553a12c9e8f950047753c374de2274ebd4a8e"
+      },
+      {
+        "compiler": "clang",
+        "variant": "control",
+        "kind": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_trie_80264519_opt/main_control.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/main_clang_control"
+        ],
+        "source_sha256": "d5ccf96d707cd3ff82154159c3eeb19f372bf607587d0cab0653df9d4ba375a3",
+        "binary_sha256": "a5eea7430440ab54422cdc326b0e169a82bcef5e48838f9ef3f5e1faf81797e1"
+      },
+      {
+        "compiler": "clang",
+        "variant": "control",
+        "kind": "bench",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_trie_80264519_opt/control.hpp\"",
+          "/tmp/sirkit_trie_80264519_opt/bench.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/bench_clang_control"
+        ],
+        "source_sha256": "cc955a7316a146e92f1b6987fb5ec419ffc950a8481db54f7e7c60d15db19661",
+        "binary_sha256": "4be347eb141fd277b2775687881553a12c9e8f950047753c374de2274ebd4a8e"
+      },
+      {
+        "compiler": "clang",
+        "variant": "grow15",
+        "kind": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_trie_80264519_opt/main_grow15.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/main_clang_grow15"
+        ],
+        "source_sha256": "fa62ec8309d5e10e2a2df4f671fb6c32c9fe6aea58233fa64952a96e9dc4c535",
+        "binary_sha256": "6611a49f14ab6eeb97927ee0e00833802216771fbeab73f4723af08e3641130a"
+      },
+      {
+        "compiler": "clang",
+        "variant": "grow15",
+        "kind": "bench",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_trie_80264519_opt/grow15.hpp\"",
+          "/tmp/sirkit_trie_80264519_opt/bench.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/bench_clang_grow15"
+        ],
+        "source_sha256": "cc955a7316a146e92f1b6987fb5ec419ffc950a8481db54f7e7c60d15db19661",
+        "binary_sha256": "1ac18668aeb4f49fb53cf04b14e11f3c1e11b0ae2b19acb8e05b112ad65efca4"
+      },
+      {
+        "compiler": "clang",
+        "variant": "grow175",
+        "kind": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_trie_80264519_opt/main_grow175.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/main_clang_grow175"
+        ],
+        "source_sha256": "5c3538bf49eb6274f6f905730387964fd0f5cb3024a5108fd8333b629de46f13",
+        "binary_sha256": "665baa8aff075c4f7b300aa2514f5b156566ba982a41571816dfd941d17560c0"
+      },
+      {
+        "compiler": "clang",
+        "variant": "grow175",
+        "kind": "bench",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_trie_80264519_opt/grow175.hpp\"",
+          "/tmp/sirkit_trie_80264519_opt/bench.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/bench_clang_grow175"
+        ],
+        "source_sha256": "cc955a7316a146e92f1b6987fb5ec419ffc950a8481db54f7e7c60d15db19661",
+        "binary_sha256": "cfaa9bd13a11adc66df5277e92001859233a0e19f7ee5cf29e893466aa8819e8"
+      }
+    ],
+    "source_sha256": {
+      "baseline": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0",
+      "control": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0",
+      "grow15": "3adb149a2b5b880eff148f42e78fd7306ba8ff23fb3673caa3720dfcaec2ea0d",
+      "grow175": "195ed0c70594953aafd76dd56fd82ab21b8a8bf31a4c548407a91a835069785b"
+    }
+  },
+  "hybrid_screen": {
+    "api": [
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "length": 6,
+        "kind": 0,
+        "repetitions": 5000,
+        "raw_ms": {
+          "baseline": [
+            4.46198,
+            4.37592,
+            4.34168,
+            4.42028,
+            4.4428,
+            4.367,
+            4.39503
+          ],
+          "control": [
+            4.43894,
+            4.37949,
+            4.45761,
+            4.37289,
+            4.36481,
+            4.41729,
+            4.38328
+          ],
+          "grow175_large": [
+            4.52869,
+            4.55288,
+            4.57571,
+            4.50281,
+            4.58437,
+            4.74,
+            4.55861
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.39503,
+          "control": 4.38328,
+          "grow175_large": 4.55861
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9973265256437385,
+          "grow175_large": 1.037219313633809
+        },
+        "checksum": "320000"
+      },
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "length": 6,
+        "kind": 1,
+        "repetitions": 5000,
+        "raw_ms": {
+          "baseline": [
+            4.48099,
+            4.54714,
+            4.52444,
+            4.50286,
+            4.57734,
+            4.49551,
+            4.50362
+          ],
+          "control": [
+            4.52714,
+            4.62383,
+            4.61489,
+            4.51165,
+            4.50351,
+            4.53945,
+            4.59322
+          ],
+          "grow175_large": [
+            4.59673,
+            4.61365,
+            4.61182,
+            4.60747,
+            4.59304,
+            4.62197,
+            4.67145
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.50362,
+          "control": 4.53945,
+          "grow175_large": 4.61182
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0079558222052485,
+          "grow175_large": 1.0240251175720865
+        },
+        "checksum": "320000"
+      },
+      {
+        "compiler": "gcc",
+        "n": 32,
+        "length": 6,
+        "kind": 2,
+        "repetitions": 5000,
+        "raw_ms": {
+          "baseline": [
+            5.2954,
+            5.13628,
+            5.35044,
+            5.09131,
+            5.05827,
+            5.13339,
+            5.1731
+          ],
+          "control": [
+            5.11535,
+            5.09257,
+            5.07496,
+            5.35087,
+            5.10495,
+            5.09961,
+            5.13787
+          ],
+          "grow175_large": [
+            5.57472,
+            5.60616,
+            5.41531,
+            5.47503,
+            5.63468,
+            5.53644,
+            5.51285
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.13628,
+          "control": 5.10495,
+          "grow175_large": 5.53644
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9939002546590138,
+          "grow175_large": 1.077908525236163
+        },
+        "checksum": "440000"
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 0,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            117.0,
+            127.277,
+            116.008,
+            114.736,
+            114.017,
+            115.0,
+            114.378
+          ],
+          "control": [
+            115.167,
+            135.164,
+            114.521,
+            114.441,
+            115.741,
+            115.974,
+            128.212
+          ],
+          "grow175_large": [
+            136.171,
+            122.377,
+            125.702,
+            123.271,
+            121.719,
+            121.502,
+            122.619
+          ]
+        },
+        "median_ms": {
+          "baseline": 115.0,
+          "control": 115.741,
+          "grow175_large": 122.619
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0064434782608696,
+          "grow175_large": 1.0662521739130435
+        },
+        "checksum": "400000"
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            65.959,
+            61.5885,
+            61.9113,
+            62.825,
+            61.7817,
+            64.0021,
+            62.4884
+          ],
+          "control": [
+            61.4796,
+            63.5054,
+            62.0586,
+            62.8153,
+            62.2388,
+            61.8436,
+            62.0109
+          ],
+          "grow175_large": [
+            60.0839,
+            60.0353,
+            61.4006,
+            59.7231,
+            60.0368,
+            61.3195,
+            60.7874
+          ]
+        },
+        "median_ms": {
+          "baseline": 62.4884,
+          "control": 62.0586,
+          "grow175_large": 60.0839
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9931219234289884,
+          "grow175_large": 0.9615208582712952
+        },
+        "checksum": "402911"
+      },
+      {
+        "compiler": "gcc",
+        "n": 200000,
+        "length": 10,
+        "kind": 2,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            9.32113,
+            9.14297,
+            9.08477,
+            9.09909,
+            9.06352,
+            9.02647,
+            9.15689
+          ],
+          "control": [
+            9.05878,
+            9.6903,
+            9.06167,
+            9.03003,
+            9.09474,
+            9.08787,
+            9.32765
+          ],
+          "grow175_large": [
+            9.17191,
+            9.9063,
+            9.18977,
+            9.38582,
+            9.17723,
+            9.22029,
+            9.18469
+          ]
+        },
+        "median_ms": {
+          "baseline": 9.09909,
+          "control": 9.08787,
+          "grow175_large": 9.18977
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9987669096579987,
+          "grow175_large": 1.0099658317480098
+        },
+        "checksum": "2500100008"
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "length": 6,
+        "kind": 0,
+        "repetitions": 5000,
+        "raw_ms": {
+          "baseline": [
+            4.6849,
+            4.65791,
+            4.89057,
+            4.60311,
+            4.68448,
+            4.6239,
+            4.78711
+          ],
+          "control": [
+            4.62327,
+            4.64193,
+            4.66281,
+            4.8234,
+            4.63038,
+            4.76544,
+            4.63796
+          ],
+          "grow175_large": [
+            4.68768,
+            4.57294,
+            4.83677,
+            4.82685,
+            4.83575,
+            4.84636,
+            4.66648
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.68448,
+          "control": 4.64193,
+          "grow175_large": 4.82685
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9909168146731335,
+          "grow175_large": 1.0303918471207052
+        },
+        "checksum": "320000"
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "length": 6,
+        "kind": 1,
+        "repetitions": 5000,
+        "raw_ms": {
+          "baseline": [
+            5.32008,
+            5.25942,
+            5.26354,
+            5.20851,
+            5.99883,
+            5.26982,
+            5.28001
+          ],
+          "control": [
+            5.25343,
+            5.21936,
+            5.27127,
+            5.24918,
+            5.91278,
+            5.25874,
+            5.30681
+          ],
+          "grow175_large": [
+            5.44113,
+            5.25568,
+            5.23611,
+            5.23545,
+            5.30343,
+            5.34956,
+            5.18405
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.26982,
+          "control": 5.25874,
+          "grow175_large": 5.25568
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9978974613933683,
+          "grow175_large": 0.997316796399118
+        },
+        "checksum": "320000"
+      },
+      {
+        "compiler": "clang",
+        "n": 32,
+        "length": 6,
+        "kind": 2,
+        "repetitions": 5000,
+        "raw_ms": {
+          "baseline": [
+            5.84109,
+            5.81973,
+            5.8659,
+            5.86423,
+            5.8295,
+            5.84381,
+            5.84988
+          ],
+          "control": [
+            5.836,
+            5.85106,
+            5.84145,
+            5.83825,
+            5.83151,
+            5.9077,
+            5.82254
+          ],
+          "grow175_large": [
+            5.95421,
+            5.85013,
+            5.84414,
+            5.84822,
+            5.84491,
+            5.95331,
+            5.84159
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.84381,
+          "control": 5.83825,
+          "grow175_large": 5.84822
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9990485659184676,
+          "grow175_large": 1.0007546446581939
+        },
+        "checksum": "440000"
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 0,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            121.992,
+            120.949,
+            118.518,
+            118.589,
+            119.773,
+            119.455,
+            119.331
+          ],
+          "control": [
+            118.06,
+            121.618,
+            118.828,
+            118.603,
+            119.442,
+            119.653,
+            119.329
+          ],
+          "grow175_large": [
+            126.849,
+            134.69,
+            126.908,
+            126.068,
+            139.433,
+            128.636,
+            125.28
+          ]
+        },
+        "median_ms": {
+          "baseline": 119.455,
+          "control": 119.329,
+          "grow175_large": 126.908
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9989452094931145,
+          "grow175_large": 1.0623916956175967
+        },
+        "checksum": "400000"
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 1,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            67.8053,
+            62.3633,
+            62.1722,
+            63.8368,
+            68.2431,
+            65.7295,
+            63.3633
+          ],
+          "control": [
+            63.0021,
+            62.9919,
+            62.4672,
+            61.8727,
+            63.3291,
+            62.8024,
+            62.1377
+          ],
+          "grow175_large": [
+            60.8976,
+            60.3593,
+            60.5112,
+            60.349,
+            59.88,
+            69.3222,
+            59.5295
+          ]
+        },
+        "median_ms": {
+          "baseline": 63.8368,
+          "control": 62.8024,
+          "grow175_large": 60.3593
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9837961802596622,
+          "grow175_large": 0.9455251516366735
+        },
+        "checksum": "402911"
+      },
+      {
+        "compiler": "clang",
+        "n": 200000,
+        "length": 10,
+        "kind": 2,
+        "repetitions": 1,
+        "raw_ms": {
+          "baseline": [
+            10.8052,
+            11.1487,
+            10.8396,
+            10.8152,
+            10.7945,
+            11.42,
+            10.9195
+          ],
+          "control": [
+            10.7607,
+            10.7916,
+            10.7367,
+            10.7864,
+            10.7547,
+            10.7466,
+            11.3236
+          ],
+          "grow175_large": [
+            10.8445,
+            10.8089,
+            11.4313,
+            10.9308,
+            10.8355,
+            10.8986,
+            11.6843
+          ]
+        },
+        "median_ms": {
+          "baseline": 10.8396,
+          "control": 10.7607,
+          "grow175_large": 10.8986
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9927211336211668,
+          "grow175_large": 1.0054430052769474
+        },
+        "checksum": "2500100008"
+      }
+    ],
+    "fixed_main": [
+      {
+        "compiler": "gcc",
+        "case": "random_200000",
+        "raw_ms": {
+          "baseline": [
+            82.819484,
+            83.160968,
+            84.156153,
+            83.131072,
+            91.257741,
+            83.029776,
+            82.942683
+          ],
+          "control": [
+            81.238313,
+            83.521277,
+            83.573163,
+            86.745757,
+            82.766947,
+            84.051621,
+            81.792565
+          ],
+          "grow175_large": [
+            85.468511,
+            87.252388,
+            89.888509,
+            88.638318,
+            87.585703,
+            103.306452,
+            88.596189
+          ]
+        },
+        "median_ms": {
+          "baseline": 83.131072,
+          "control": 83.521277,
+          "grow175_large": 88.596189
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0046938526186695,
+          "grow175_large": 1.0657409662658988
+        }
+      },
+      {
+        "compiler": "gcc",
+        "case": "shared_prefix_200000",
+        "raw_ms": {
+          "baseline": [
+            42.971531,
+            37.311006,
+            36.504291,
+            37.390758,
+            37.152334,
+            37.281275,
+            38.264609
+          ],
+          "control": [
+            36.927213,
+            38.469662,
+            38.398514,
+            36.97622,
+            36.954149,
+            37.088949,
+            37.503636
+          ],
+          "grow175_large": [
+            37.405814,
+            36.106942,
+            35.751779,
+            35.775137,
+            36.243987,
+            36.026413,
+            36.127014
+          ]
+        },
+        "median_ms": {
+          "baseline": 37.311006,
+          "control": 37.088949,
+          "grow175_large": 36.106942
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9940484853182463,
+          "grow175_large": 0.9677289859190609
+        }
+      },
+      {
+        "compiler": "gcc",
+        "case": "duplicates_200000",
+        "raw_ms": {
+          "baseline": [
+            6.511023,
+            5.865028,
+            5.892056,
+            5.967855,
+            5.826495,
+            5.65887,
+            5.502035
+          ],
+          "control": [
+            6.240013,
+            6.115701,
+            5.848996,
+            5.832619,
+            6.000596,
+            5.521908,
+            5.503423
+          ],
+          "grow175_large": [
+            6.157677,
+            5.963566,
+            5.928582,
+            5.901027,
+            5.961884,
+            5.787149,
+            5.449631
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.865028,
+          "control": 5.848996,
+          "grow175_large": 5.928582
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9972665092135963,
+          "grow175_large": 1.0108360949001436
+        }
+      },
+      {
+        "compiler": "gcc",
+        "case": "length1_200000",
+        "raw_ms": {
+          "baseline": [
+            1.538108,
+            1.530002,
+            1.555877,
+            1.605117,
+            1.500143,
+            1.512399,
+            1.494788
+          ],
+          "control": [
+            1.528707,
+            1.532203,
+            1.649459,
+            1.518853,
+            1.582641,
+            1.585829,
+            1.581306
+          ],
+          "grow175_large": [
+            1.549382,
+            1.604632,
+            1.560899,
+            1.430704,
+            1.518461,
+            1.547205,
+            1.531915
+          ]
+        },
+        "median_ms": {
+          "baseline": 1.530002,
+          "control": 1.581306,
+          "grow175_large": 1.547205
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0335319823111342,
+          "grow175_large": 1.0112437761519264
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "random_200000",
+        "raw_ms": {
+          "baseline": [
+            84.389377,
+            82.46505,
+            111.675117,
+            82.847887,
+            81.166955,
+            83.866197,
+            81.47018
+          ],
+          "control": [
+            82.291291,
+            82.651078,
+            82.01402,
+            82.304083,
+            82.056256,
+            82.606305,
+            83.394557
+          ],
+          "grow175_large": [
+            89.293097,
+            87.346808,
+            86.998762,
+            88.258515,
+            88.171465,
+            86.3135,
+            87.785959
+          ]
+        },
+        "median_ms": {
+          "baseline": 82.847887,
+          "control": 82.304083,
+          "grow175_large": 87.785959
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9934361150333262,
+          "grow175_large": 1.0596040789791055
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "shared_prefix_200000",
+        "raw_ms": {
+          "baseline": [
+            45.2993,
+            36.727489,
+            37.254416,
+            36.405074,
+            36.296704,
+            37.19016,
+            39.402517
+          ],
+          "control": [
+            38.502923,
+            36.561863,
+            36.528591,
+            40.196431,
+            37.582937,
+            38.989147,
+            37.381099
+          ],
+          "grow175_large": [
+            35.480703,
+            35.405003,
+            35.72741,
+            36.065213,
+            35.718839,
+            36.806252,
+            35.613746
+          ]
+        },
+        "median_ms": {
+          "baseline": 37.19016,
+          "control": 37.582937,
+          "grow175_large": 35.718839
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0105613151435757,
+          "grow175_large": 0.9604378954002888
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "duplicates_200000",
+        "raw_ms": {
+          "baseline": [
+            6.727525,
+            5.734726,
+            5.818662,
+            5.901858,
+            5.4165,
+            5.405053,
+            5.688324
+          ],
+          "control": [
+            6.200468,
+            5.957244,
+            5.883943,
+            5.931674,
+            5.355927,
+            5.442785,
+            5.537085
+          ],
+          "grow175_large": [
+            6.050596,
+            5.843331,
+            5.807222,
+            5.608253,
+            5.46756,
+            5.395292,
+            5.571837
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.734726,
+          "control": 5.883943,
+          "grow175_large": 5.608253
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0260199005148634,
+          "grow175_large": 0.9779461128570048
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "length1_200000",
+        "raw_ms": {
+          "baseline": [
+            1.686784,
+            1.681492,
+            1.688912,
+            1.592473,
+            1.696388,
+            1.669234,
+            1.730537
+          ],
+          "control": [
+            1.695787,
+            1.665146,
+            1.561626,
+            1.650118,
+            1.634554,
+            4.896754,
+            1.628739
+          ],
+          "grow175_large": [
+            1.679979,
+            1.724443,
+            1.602708,
+            1.658992,
+            1.615393,
+            1.721421,
+            1.710655
+          ]
+        },
+        "median_ms": {
+          "baseline": 1.686784,
+          "control": 1.650118,
+          "grow175_large": 1.679979
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9782627769767794,
+          "grow175_large": 0.9959656956670206
+        }
+      }
+    ],
+    "builds": [
+      {
+        "compiler": "gcc",
+        "variant": "grow175_large",
+        "kind": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_trie_80264519_opt/main_grow175_large.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/main_gcc_grow175_large"
+        ],
+        "source_sha256": "11237b25ac57b988f15322b9bfe3170c72a7cba156074b2fdb6dfd985360a73e",
+        "binary_sha256": "16fa5c018060ace77475049c95b6e09179f4a03ea72e3bacceb92ea8d1cdf1fc"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "grow175_large",
+        "kind": "bench",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_trie_80264519_opt/grow175_large.hpp\"",
+          "/tmp/sirkit_trie_80264519_opt/bench.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/bench_gcc_grow175_large"
+        ],
+        "source_sha256": "cc955a7316a146e92f1b6987fb5ec419ffc950a8481db54f7e7c60d15db19661",
+        "binary_sha256": "71b125e2cfb10954d8bd505f6f0929abc17551fa8e1006922f688b88ac6c2f59"
+      },
+      {
+        "compiler": "clang",
+        "variant": "grow175_large",
+        "kind": "main",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_trie_80264519_opt/main_grow175_large.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/main_clang_grow175_large"
+        ],
+        "source_sha256": "11237b25ac57b988f15322b9bfe3170c72a7cba156074b2fdb6dfd985360a73e",
+        "binary_sha256": "bf02d0bd9872c94142234836355e171ea58d9f6276ddace123960c2368ea810b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "grow175_large",
+        "kind": "bench",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_trie_80264519_opt/grow175_large.hpp\"",
+          "/tmp/sirkit_trie_80264519_opt/bench.cpp",
+          "-o",
+          "/tmp/sirkit_trie_80264519_opt/bench_clang_grow175_large"
+        ],
+        "source_sha256": "cc955a7316a146e92f1b6987fb5ec419ffc950a8481db54f7e7c60d15db19661",
+        "binary_sha256": "0c27d26fecc1bf2e6f7b6cb902744534c0875e99bf723d4fe3fcaf92954e5f85"
+      }
+    ],
+    "source_sha256": {
+      "baseline": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0",
+      "control": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0",
+      "grow175_large": "0a498a14f267b2554c13dc70cc321a4608fa48ca3feee6d0bc297fab3fc9a4ed"
+    }
+  },
+  "reproduction": [
+    {
+      "compiler": "gcc",
+      "case": "small_duplicate",
+      "raw_ms": {
+        "baseline": [
+          5.67987,
+          5.0755,
+          5.15669,
+          5.14859,
+          5.11974,
+          5.07955,
+          5.09357,
+          5.12713,
+          5.25032,
+          5.12204,
+          5.06687
+        ],
+        "control": [
+          5.20987,
+          5.21383,
+          5.14775,
+          5.09478,
+          5.09965,
+          5.16768,
+          5.08491,
+          5.10471,
+          5.16426,
+          5.13978,
+          5.10326
+        ],
+        "grow175_large": [
+          5.5625,
+          5.49722,
+          5.30416,
+          5.52135,
+          5.36608,
+          5.4131,
+          5.53006,
+          5.47399,
+          5.37387,
+          5.51631,
+          5.49966
+        ]
+      },
+      "median_ms": {
+        "baseline": 5.12204,
+        "control": 5.13978,
+        "grow175_large": 5.49722
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0034634637761517,
+        "grow175_large": 1.0732481589366738
+      }
+    },
+    {
+      "compiler": "gcc",
+      "case": "main_random",
+      "raw_ms": {
+        "baseline": [
+          84.086706,
+          82.240063,
+          82.354218,
+          82.69741,
+          82.690111,
+          81.62874,
+          83.399487,
+          83.747153,
+          82.489962,
+          91.81335,
+          83.367859
+        ],
+        "control": [
+          80.932314,
+          83.996999,
+          83.026639,
+          83.312905,
+          82.447615,
+          82.411123,
+          83.654266,
+          82.713904,
+          84.157897,
+          83.987215,
+          83.41161
+        ],
+        "grow175_large": [
+          95.886774,
+          87.094696,
+          86.83682,
+          87.621009,
+          89.423921,
+          88.56254,
+          87.572759,
+          87.639699,
+          87.134509,
+          88.374285,
+          88.200451
+        ]
+      },
+      "median_ms": {
+        "baseline": 82.69741,
+        "control": 83.312905,
+        "grow175_large": 87.639699
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 1.0074427361147102,
+        "grow175_large": 1.0597635282652744
+      }
+    },
+    {
+      "compiler": "clang",
+      "case": "main_random",
+      "raw_ms": {
+        "baseline": [
+          82.771984,
+          85.604082,
+          82.550843,
+          81.929105,
+          83.313318,
+          82.366877,
+          91.652318,
+          82.498437,
+          84.849694,
+          83.707186,
+          83.773871
+        ],
+        "control": [
+          82.336638,
+          82.831424,
+          82.991217,
+          81.923021,
+          83.031772,
+          82.916322,
+          83.568118,
+          83.117778,
+          83.143651,
+          83.660089,
+          83.18143
+        ],
+        "grow175_large": [
+          89.350711,
+          88.967451,
+          87.434441,
+          89.581289,
+          89.400543,
+          88.168212,
+          87.710186,
+          88.389986,
+          92.995192,
+          87.568542,
+          88.521491
+        ]
+      },
+      "median_ms": {
+        "baseline": 83.313318,
+        "control": 83.031772,
+        "grow175_large": 88.521491
+      },
+      "ratios": {
+        "baseline": 1.0,
+        "control": 0.9966206363309166,
+        "grow175_large": 1.0625130906441633
+      }
+    }
+  ],
+  "candidate_correctness": {
+    "initial_fixed_main_runs": 152,
+    "hybrid_fixed_main_runs": 114,
+    "all_pass": true,
+    "cases": "3公式サンプル＋独立Python set生成16ケース。公式非公開ケースのローカル実行ではない。",
+    "checksums": "混合API各回のchecksumも全variant一致。"
+  },
+  "limitations": [
+    "AtCoder画像136msとはCPU/compiler/非公開入力が違うのでローカル時間を同列比較しない。",
+    "時間screenで退行が確定したためメモリ実測は行わない。メモリ削減の効果を実測値として主張しない。",
+    "一律1.75倍の固定main大ランダム短縮は他条件を含む採用条件を満たさない。",
+    "既却下の32bit索引、初期化、探索比較順、単一子、レイアウト案は繰り返していない。"
+  ],
+  "api_extension": "既存の多重集合・prefix・順序統計・列挙・容量・copy/move/swapで主要用途を満たすため今回追加なし。",
+  "simd": "追加なし。親子・兄弟の依存した追跡が主で、今回候補は確保方針のみ。",
+  "provenance": "外部実装コードの移植なし。CC0表示は維持。",
+  "reproduction_directory": "/tmp/sirkit_trie_80264519_opt",
+  "files": {
+    "reproduce.py": "110d6ec573b4306e5810371a5eeee6c895420d37240140a557e86ea09b4c9d28",
+    "screen_hybrid.py": "c051c4160cbc68abf4a2a4f537fa2be086cd50c6f937b828f3bf2bb922bf8b28",
+    "build_hybrid.py": "c412ea7bac65b0f636aa0a499fb962c31c8ec643beccdb0809e4d9adc7906462",
+    "main_grow175_large.cpp": "11237b25ac57b988f15322b9bfe3170c72a7cba156074b2fdb6dfd985360a73e",
+    "grow175_large.hpp": "0a498a14f267b2554c13dc70cc321a4608fa48ca3feee6d0bc297fab3fc9a4ed",
+    "screen.py": "3d4b1cb049a03d53419a6981ffb7246a10b002c52fe311aaa1bd1528e170189e",
+    "build.py": "f99205068a6f1580938ab74f0641f00f4082f875975434768dd99f058570b2b8",
+    "main_grow175.cpp": "5c3538bf49eb6274f6f905730387964fd0f5cb3024a5108fd8333b629de46f13",
+    "main_grow15.cpp": "fa62ec8309d5e10e2a2df4f671fb6c32c9fe6aea58233fa64952a96e9dc4c535",
+    "main_control.cpp": "d5ccf96d707cd3ff82154159c3eeb19f372bf607587d0cab0653df9d4ba375a3",
+    "main_baseline.cpp": "d5ccf96d707cd3ff82154159c3eeb19f372bf607587d0cab0653df9d4ba375a3",
+    "bench.cpp": "cc955a7316a146e92f1b6987fb5ec419ffc950a8481db54f7e7c60d15db19661",
+    "grow175.hpp": "195ed0c70594953aafd76dd56fd82ab21b8a8bf31a4c548407a91a835069785b",
+    "grow15.hpp": "3adb149a2b5b880eff148f42e78fd7306ba8ff23fb3673caa3720dfcaec2ea0d",
+    "control.hpp": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0",
+    "baseline.hpp": "19174e0fd3d0afbceb464006e4962e2302ed5f8d7637628d40ebb7c4c9b0d7f0"
+  },
+  "online_audit": "Audit/online-trie-80264519-2026-10-23.json",
+  "online_scope": "画像からAC136ms/104384KiBを確認。AtCoder403により提出ソースは未照合。ローカル測定は現行19174e0f本体と固定main/I/Oの比較。オンライン時間の短縮は主張しない。"
+}

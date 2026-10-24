@@ -1,0 +1,4874 @@
+{
+  "date": "2026-10-22",
+  "round": 2,
+  "scope": "行列の転置と90度回転。32bit要素のAVX2処理を条件付きで追加。",
+  "baseline_source_sha256": "4fb7cee4b60f1c38a3ad55fc44b751b6f3864f1c36c5bad99e48256113be84b9",
+  "final_source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+  "final_files_sha256": {
+    "Algorithm/rotate.cpp": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+    "Document/matrix_transform.md": "eb3f4d2e6e44fab52e611a5cdc8ef2119052914fcafb94945ee73d44d758bd82",
+    "Examples/matrix_transform_example.cpp": "c882cc0322de0393911d11d8ed84a738b0c22d6bade5b8d16a1254ae8641742a",
+    "Verify/current/tests/matrix_simd_reference_test.cpp": "5a32ceb5051a67fd4e16f1952916dc19034a00f0000764354098c9817dbdf9aa",
+    "Verify/current/tests/matrix_simd_allocation_test.cpp": "63f183402c45ad40ea69334eafcf71a68cf81871edf76e15ced1a2cb47db06bc"
+  },
+  "status": "PASS",
+  "independent_reference": "添字式で全出力要素を照合。int32/uint32/float/固定基底列挙/4byte自明クラスはbit_castで表現を比較し、NaNのbitも含める。volatileメンバーを持つクラスは標準経路で値を照合。8/32/4096境界・非正方形・端数・不正矩形・元入力不変・逆操作。",
+  "tests": {
+    "status": "PASS",
+    "records": [
+      {
+        "configuration": "gcc_checked",
+        "test": "reference",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_checked_reference"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "5a32ceb5051a67fd4e16f1952916dc19034a00f0000764354098c9817dbdf9aa",
+        "stdout": "PASS checks=58744555\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "gcc_checked",
+        "test": "allocation",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_checked_allocation"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "63f183402c45ad40ea69334eafcf71a68cf81871edf76e15ced1a2cb47db06bc",
+        "stdout": "PASS checks=826 failures=399 live_delta=0\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "gcc_checked",
+        "test": "core",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_checked_core"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "c5708d81ce30b8b454381e763cde98b99839b8529d36e771cf1e4205d0aec556",
+        "stdout": "4807 independent matrix datasets passed\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "gcc_skip",
+        "test": "reference",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_skip_reference"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "5a32ceb5051a67fd4e16f1952916dc19034a00f0000764354098c9817dbdf9aa",
+        "stdout": "PASS checks=58744540\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "gcc_skip",
+        "test": "allocation",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_skip_allocation"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "63f183402c45ad40ea69334eafcf71a68cf81871edf76e15ced1a2cb47db06bc",
+        "stdout": "PASS checks=826 failures=399 live_delta=0\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "gcc_skip",
+        "test": "core",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_skip_core"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "c5708d81ce30b8b454381e763cde98b99839b8529d36e771cf1e4205d0aec556",
+        "stdout": "4807 independent matrix datasets passed\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "gcc_standard",
+        "test": "reference",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_standard_reference"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "5a32ceb5051a67fd4e16f1952916dc19034a00f0000764354098c9817dbdf9aa",
+        "stdout": "PASS checks=58744555\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "gcc_standard",
+        "test": "allocation",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_standard_allocation"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "63f183402c45ad40ea69334eafcf71a68cf81871edf76e15ced1a2cb47db06bc",
+        "stdout": "PASS checks=826 failures=399 live_delta=0\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "gcc_standard",
+        "test": "core",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_standard_core"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "c5708d81ce30b8b454381e763cde98b99839b8529d36e771cf1e4205d0aec556",
+        "stdout": "4807 independent matrix datasets passed\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_checked",
+        "test": "reference",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_checked_reference"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "5a32ceb5051a67fd4e16f1952916dc19034a00f0000764354098c9817dbdf9aa",
+        "stdout": "PASS checks=58744555\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_checked",
+        "test": "allocation",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_checked_allocation"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "63f183402c45ad40ea69334eafcf71a68cf81871edf76e15ced1a2cb47db06bc",
+        "stdout": "PASS checks=826 failures=399 live_delta=0\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_checked",
+        "test": "core",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_checked_core"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "c5708d81ce30b8b454381e763cde98b99839b8529d36e771cf1e4205d0aec556",
+        "stdout": "4807 independent matrix datasets passed\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_skip",
+        "test": "reference",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_skip_reference"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "5a32ceb5051a67fd4e16f1952916dc19034a00f0000764354098c9817dbdf9aa",
+        "stdout": "PASS checks=58744540\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_skip",
+        "test": "allocation",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_skip_allocation"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "63f183402c45ad40ea69334eafcf71a68cf81871edf76e15ced1a2cb47db06bc",
+        "stdout": "PASS checks=826 failures=399 live_delta=0\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_skip",
+        "test": "core",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_skip_core"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "c5708d81ce30b8b454381e763cde98b99839b8529d36e771cf1e4205d0aec556",
+        "stdout": "4807 independent matrix datasets passed\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_standard",
+        "test": "reference",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_standard_reference"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "5a32ceb5051a67fd4e16f1952916dc19034a00f0000764354098c9817dbdf9aa",
+        "stdout": "PASS checks=58744555\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_standard",
+        "test": "allocation",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_standard_allocation"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "63f183402c45ad40ea69334eafcf71a68cf81871edf76e15ced1a2cb47db06bc",
+        "stdout": "PASS checks=826 failures=399 live_delta=0\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_standard",
+        "test": "core",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_standard_core"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "c5708d81ce30b8b454381e763cde98b99839b8529d36e771cf1e4205d0aec556",
+        "stdout": "4807 independent matrix datasets passed\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_asan",
+        "test": "reference",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_asan_reference"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "5a32ceb5051a67fd4e16f1952916dc19034a00f0000764354098c9817dbdf9aa",
+        "stdout": "PASS checks=58744555\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_asan",
+        "test": "allocation",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_asan_allocation"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "63f183402c45ad40ea69334eafcf71a68cf81871edf76e15ced1a2cb47db06bc",
+        "stdout": "PASS checks=826 failures=399 live_delta=0\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_asan",
+        "test": "core",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_asan_core"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "c5708d81ce30b8b454381e763cde98b99839b8529d36e771cf1e4205d0aec556",
+        "stdout": "4807 independent matrix datasets passed\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_asan_standard_skip",
+        "test": "reference",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_asan_standard_skip_reference"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "5a32ceb5051a67fd4e16f1952916dc19034a00f0000764354098c9817dbdf9aa",
+        "stdout": "PASS checks=58744540\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_asan_standard_skip",
+        "test": "allocation",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_asan_standard_skip_allocation"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "63f183402c45ad40ea69334eafcf71a68cf81871edf76e15ced1a2cb47db06bc",
+        "stdout": "PASS checks=826 failures=399 live_delta=0\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "clang_asan_standard_skip",
+        "test": "core",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/direct_cpu.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_asan_standard_skip_core"
+        ],
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+        "test_sha256": "c5708d81ce30b8b454381e763cde98b99839b8529d36e771cf1e4205d0aec556",
+        "stdout": "4807 independent matrix datasets passed\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "gcc_forced_scalar",
+        "test": "reference",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/directcpu_forced_scalar.hpp\"",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_forced_scalar_reference"
+        ],
+        "source_sha256": "4a77653b6c4d30a22a0d828c833fe8166a3d5c5d78f3fcf83ac133b1290d5ca1",
+        "test_sha256": "5a32ceb5051a67fd4e16f1952916dc19034a00f0000764354098c9817dbdf9aa",
+        "stdout": "PASS checks=58744555\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "gcc_forced_scalar",
+        "test": "allocation",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/directcpu_forced_scalar.hpp\"",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_forced_scalar_allocation"
+        ],
+        "source_sha256": "4a77653b6c4d30a22a0d828c833fe8166a3d5c5d78f3fcf83ac133b1290d5ca1",
+        "test_sha256": "63f183402c45ad40ea69334eafcf71a68cf81871edf76e15ced1a2cb47db06bc",
+        "stdout": "PASS checks=826 failures=399 live_delta=0\n",
+        "returncode": 0
+      },
+      {
+        "configuration": "gcc_forced_scalar",
+        "test": "core",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/directcpu_forced_scalar.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_forced_scalar_core"
+        ],
+        "source_sha256": "4a77653b6c4d30a22a0d828c833fe8166a3d5c5d78f3fcf83ac133b1290d5ca1",
+        "test_sha256": "c5708d81ce30b8b454381e763cde98b99839b8529d36e771cf1e4205d0aec556",
+        "stdout": "4807 independent matrix datasets passed\n",
+        "returncode": 0
+      }
+    ]
+  },
+  "integration": {
+    "status": "PASS",
+    "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+    "preprocessor": [
+      {
+        "compiler": "gcc",
+        "configuration": "checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/preprocess.cpp"
+        ],
+        "body_sha256": "6d97949413db0d408f7af062b550b0b445b5fd85e2a7b4bcbb7185b20d136552"
+      },
+      {
+        "compiler": "gcc",
+        "configuration": "skip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/preprocess.cpp"
+        ],
+        "body_sha256": "2b44fca7a4aa097b486a4dfe0b83169707ec0bb9a672695dfa23f1f344c2cc7b"
+      },
+      {
+        "compiler": "gcc",
+        "configuration": "standard",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/preprocess.cpp"
+        ],
+        "body_sha256": "141a9f479d9faf03a3725f6a1eb849960dd4b2a03760fc59499eece4f4a74986"
+      },
+      {
+        "compiler": "clang",
+        "configuration": "checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/preprocess.cpp"
+        ],
+        "body_sha256": "9dac0e9901138dcef2d45f422fb0842110f692992ceedfe41494447e305944bd"
+      },
+      {
+        "compiler": "clang",
+        "configuration": "skip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/preprocess.cpp"
+        ],
+        "body_sha256": "b405f1b29f99db49bb5a5f875e3df1d128edb32959fccfa06393a0653e18e6ba"
+      },
+      {
+        "compiler": "clang",
+        "configuration": "standard",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-E",
+          "-P",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/preprocess.cpp"
+        ],
+        "body_sha256": "1b9cead6decadcbe99d40538feec2355f59fe5fc3c9ee20408c63e4a3cdab937"
+      }
+    ],
+    "examples": [
+      {
+        "compiler": "gcc",
+        "skip": false,
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/matrix_transform_example.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_example_False"
+        ],
+        "stdout": ""
+      },
+      {
+        "compiler": "gcc",
+        "skip": true,
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Examples/matrix_transform_example.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_example_True"
+        ],
+        "stdout": ""
+      },
+      {
+        "compiler": "clang",
+        "skip": false,
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Examples/matrix_transform_example.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_example_False"
+        ],
+        "stdout": ""
+      },
+      {
+        "compiler": "clang",
+        "skip": true,
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Examples/matrix_transform_example.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_example_True"
+        ],
+        "stdout": ""
+      }
+    ],
+    "canonical_tests": [
+      {
+        "compiler": "gcc",
+        "test": "reference",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_simd_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_canonical_reference"
+        ],
+        "stdout": "PASS checks=58744555\n"
+      },
+      {
+        "compiler": "gcc",
+        "test": "allocation",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_simd_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/gcc_canonical_allocation"
+        ],
+        "stdout": "PASS checks=826 failures=399 live_delta=0\n"
+      },
+      {
+        "compiler": "clang",
+        "test": "reference",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_simd_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_canonical_reference"
+        ],
+        "stdout": "PASS checks=58744540\n"
+      },
+      {
+        "compiler": "clang",
+        "test": "allocation",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/matrix_simd_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/clang_canonical_allocation"
+        ],
+        "stdout": "PASS checks=826 failures=399 live_delta=0\n"
+      }
+    ]
+  },
+  "fixed_main": {
+    "status": "PASS",
+    "builds": [
+      {
+        "compiler": "gcc",
+        "variant": "baseline",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/gcc_baseline.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/gcc_baseline"
+        ],
+        "tu_sha256": "54fab4284750f320e2991eba235daef94103f549cdc6a8e5925ec788966e92c2",
+        "source_sha256": "4fb7cee4b60f1c38a3ad55fc44b751b6f3864f1c36c5bad99e48256113be84b9"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "control",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/gcc_control.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/gcc_control"
+        ],
+        "tu_sha256": "54fab4284750f320e2991eba235daef94103f549cdc6a8e5925ec788966e92c2",
+        "source_sha256": "4fb7cee4b60f1c38a3ad55fc44b751b6f3864f1c36c5bad99e48256113be84b9"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/gcc_final.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/gcc_final"
+        ],
+        "tu_sha256": "f3c4aae5e5fb70bbb2e992c07dc562acb718439361e0b8e0ef0909375f558a9a",
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/gcc_standard.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/gcc_standard"
+        ],
+        "tu_sha256": "c1b026327e82cdba57083d5433a47d4af02ea1798513077c638ec2801d67370e",
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/gcc_final_checked.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/gcc_final_checked"
+        ],
+        "tu_sha256": "f990f27f25596c8930e2eb7752abfd4c4915ae55f7c908d41a7ebd69bde70bd1",
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/gcc_standard_checked.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/gcc_standard_checked"
+        ],
+        "tu_sha256": "255a804017e6deb7c61975eeb6076dbd5faf78f5231e4e71cf63fdddb0f2652e",
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "baseline",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/clang_baseline.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/clang_baseline"
+        ],
+        "tu_sha256": "54fab4284750f320e2991eba235daef94103f549cdc6a8e5925ec788966e92c2",
+        "source_sha256": "4fb7cee4b60f1c38a3ad55fc44b751b6f3864f1c36c5bad99e48256113be84b9"
+      },
+      {
+        "compiler": "clang",
+        "variant": "control",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/clang_control.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/clang_control"
+        ],
+        "tu_sha256": "54fab4284750f320e2991eba235daef94103f549cdc6a8e5925ec788966e92c2",
+        "source_sha256": "4fb7cee4b60f1c38a3ad55fc44b751b6f3864f1c36c5bad99e48256113be84b9"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/clang_final.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/clang_final"
+        ],
+        "tu_sha256": "f3c4aae5e5fb70bbb2e992c07dc562acb718439361e0b8e0ef0909375f558a9a",
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/clang_standard.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/clang_standard"
+        ],
+        "tu_sha256": "c1b026327e82cdba57083d5433a47d4af02ea1798513077c638ec2801d67370e",
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/clang_final_checked.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/clang_final_checked"
+        ],
+        "tu_sha256": "f990f27f25596c8930e2eb7752abfd4c4915ae55f7c908d41a7ebd69bde70bd1",
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/clang_standard_checked.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/actual_main/clang_standard_checked"
+        ],
+        "tu_sha256": "255a804017e6deb7c61975eeb6076dbd5faf78f5231e4e71cf63fdddb0f2652e",
+        "source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b"
+      }
+    ],
+    "correctness": [
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "immediate_yes_1.in",
+        "input_sha256": "ccce065269620747ca153e9a430d44b175cdc1f7e0958741b567250a1d6b1d95",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "immediate_yes_100.in",
+        "input_sha256": "b8ca2e20e3e4b6e82966fb4c6b6e96701d5d5143633818db95530134d8c34f5b",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "immediate_yes_16.in",
+        "input_sha256": "d3ccd6dee9c8ecca58a7afdc3b6d1ebd4c63e29e9e41756621ca4bd989289908",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "immediate_yes_2.in",
+        "input_sha256": "f7a62b7b81d464ac1969b9bcf4460f9de60f7a52d37e380644ee7d64dc2a6c28",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "immediate_yes_31.in",
+        "input_sha256": "3dfb33cff108d3af6b3dc914b41bcb1dd004d1731e8225763cafd4e52c22ec12",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "immediate_yes_32.in",
+        "input_sha256": "45cba02856bb451f2b20f381620fcb9f1890c77572f31aaf6da49031a5d95528",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "immediate_yes_4.in",
+        "input_sha256": "d8ca774d19329b028c818d6ea450cf53dbd46115b7c5da0278ba4049ad79b416",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "immediate_yes_8.in",
+        "input_sha256": "081559c3e1dc232693fe75d279941485ae0a46d83a4ae5ae7a2b68f115fd082d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_no_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_no_100.in",
+        "input_sha256": "d216998ea8960a099e4925d07fd03ea33cb6b0d888eec001d49e0f608fe85864",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_no_16.in",
+        "input_sha256": "db57decd56c760f53b89ea842ced97d8a7283d827dc506694c65b736ed15c361",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_no_2.in",
+        "input_sha256": "c0460775a2df904b9505a6e89158d9cbf25772ad9ef4385c1995f901a3ed30f8",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_no_31.in",
+        "input_sha256": "282cf421fe8264d807b2836d75e6e880f7c225bcb4027bdc6c0146b90be814d0",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_no_32.in",
+        "input_sha256": "db8d0acf8d3c21d87919d0dfef1cb3679dac712cd1c17a728fe18aeb7c0d404e",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_no_4.in",
+        "input_sha256": "e1318dca473f813acd0dca8ffe07243169d359bb8a822a452edbc70651c9312b",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "random_no_8.in",
+        "input_sha256": "164839c38559a6c3f70dd58bd2d2356e37a2e4d28a944fa98700b00aa5888c16",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "sample_1.in",
+        "input_sha256": "d36870f8f9db407fe347bfdd8c1d7da083f2ab7782f71c3e449d3b599d41c762",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "sample_2.in",
+        "input_sha256": "c116a7977e93e346e9736904d3ea4c5b20d51640282e9f2f6a8f7e13c5147bbc",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "sample_3.in",
+        "input_sha256": "7e79091c5b463859b946e4bc308fc077322edffc661382da16eb9cceb30d1d30",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "turned_yes_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "turned_yes_100.in",
+        "input_sha256": "70c8c8433bbc2af92938ead0792abdb07af1099b8f481964ffc5e400dabe10d9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "turned_yes_16.in",
+        "input_sha256": "281e3f96f1a9198cb4626d078dfc52675bca5e63cc0323258203124964f15455",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "turned_yes_2.in",
+        "input_sha256": "56298eabfa04a1e01a8466a632ef1f07b8d39dbb92dc94d1d7a064e2b8380992",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "turned_yes_31.in",
+        "input_sha256": "86603bf02c32c5b34c52435d25b41bd193967e245dbd9dfa56fb7f216cc0869a",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "turned_yes_32.in",
+        "input_sha256": "c3b8f81e493580c35a210ec12c46c68b088b396d10f25b1dd3acc082864576cb",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "turned_yes_4.in",
+        "input_sha256": "bd9263fb08686bdaa84b91a5d7470df122681c176905c3ba2b9bb98a16b2831f",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final",
+        "case": "turned_yes_8.in",
+        "input_sha256": "a6d09589a735093eeb91fa0bdc4c25d789feb03ac9a65093f9e5aff691f1d13d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "immediate_yes_1.in",
+        "input_sha256": "ccce065269620747ca153e9a430d44b175cdc1f7e0958741b567250a1d6b1d95",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "immediate_yes_100.in",
+        "input_sha256": "b8ca2e20e3e4b6e82966fb4c6b6e96701d5d5143633818db95530134d8c34f5b",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "immediate_yes_16.in",
+        "input_sha256": "d3ccd6dee9c8ecca58a7afdc3b6d1ebd4c63e29e9e41756621ca4bd989289908",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "immediate_yes_2.in",
+        "input_sha256": "f7a62b7b81d464ac1969b9bcf4460f9de60f7a52d37e380644ee7d64dc2a6c28",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "immediate_yes_31.in",
+        "input_sha256": "3dfb33cff108d3af6b3dc914b41bcb1dd004d1731e8225763cafd4e52c22ec12",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "immediate_yes_32.in",
+        "input_sha256": "45cba02856bb451f2b20f381620fcb9f1890c77572f31aaf6da49031a5d95528",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "immediate_yes_4.in",
+        "input_sha256": "d8ca774d19329b028c818d6ea450cf53dbd46115b7c5da0278ba4049ad79b416",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "immediate_yes_8.in",
+        "input_sha256": "081559c3e1dc232693fe75d279941485ae0a46d83a4ae5ae7a2b68f115fd082d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_no_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_no_100.in",
+        "input_sha256": "d216998ea8960a099e4925d07fd03ea33cb6b0d888eec001d49e0f608fe85864",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_no_16.in",
+        "input_sha256": "db57decd56c760f53b89ea842ced97d8a7283d827dc506694c65b736ed15c361",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_no_2.in",
+        "input_sha256": "c0460775a2df904b9505a6e89158d9cbf25772ad9ef4385c1995f901a3ed30f8",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_no_31.in",
+        "input_sha256": "282cf421fe8264d807b2836d75e6e880f7c225bcb4027bdc6c0146b90be814d0",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_no_32.in",
+        "input_sha256": "db8d0acf8d3c21d87919d0dfef1cb3679dac712cd1c17a728fe18aeb7c0d404e",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_no_4.in",
+        "input_sha256": "e1318dca473f813acd0dca8ffe07243169d359bb8a822a452edbc70651c9312b",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "random_no_8.in",
+        "input_sha256": "164839c38559a6c3f70dd58bd2d2356e37a2e4d28a944fa98700b00aa5888c16",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "sample_1.in",
+        "input_sha256": "d36870f8f9db407fe347bfdd8c1d7da083f2ab7782f71c3e449d3b599d41c762",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "sample_2.in",
+        "input_sha256": "c116a7977e93e346e9736904d3ea4c5b20d51640282e9f2f6a8f7e13c5147bbc",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "sample_3.in",
+        "input_sha256": "7e79091c5b463859b946e4bc308fc077322edffc661382da16eb9cceb30d1d30",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "turned_yes_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "turned_yes_100.in",
+        "input_sha256": "70c8c8433bbc2af92938ead0792abdb07af1099b8f481964ffc5e400dabe10d9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "turned_yes_16.in",
+        "input_sha256": "281e3f96f1a9198cb4626d078dfc52675bca5e63cc0323258203124964f15455",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "turned_yes_2.in",
+        "input_sha256": "56298eabfa04a1e01a8466a632ef1f07b8d39dbb92dc94d1d7a064e2b8380992",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "turned_yes_31.in",
+        "input_sha256": "86603bf02c32c5b34c52435d25b41bd193967e245dbd9dfa56fb7f216cc0869a",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "turned_yes_32.in",
+        "input_sha256": "c3b8f81e493580c35a210ec12c46c68b088b396d10f25b1dd3acc082864576cb",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "turned_yes_4.in",
+        "input_sha256": "bd9263fb08686bdaa84b91a5d7470df122681c176905c3ba2b9bb98a16b2831f",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard",
+        "case": "turned_yes_8.in",
+        "input_sha256": "a6d09589a735093eeb91fa0bdc4c25d789feb03ac9a65093f9e5aff691f1d13d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "immediate_yes_1.in",
+        "input_sha256": "ccce065269620747ca153e9a430d44b175cdc1f7e0958741b567250a1d6b1d95",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "immediate_yes_100.in",
+        "input_sha256": "b8ca2e20e3e4b6e82966fb4c6b6e96701d5d5143633818db95530134d8c34f5b",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "immediate_yes_16.in",
+        "input_sha256": "d3ccd6dee9c8ecca58a7afdc3b6d1ebd4c63e29e9e41756621ca4bd989289908",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "immediate_yes_2.in",
+        "input_sha256": "f7a62b7b81d464ac1969b9bcf4460f9de60f7a52d37e380644ee7d64dc2a6c28",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "immediate_yes_31.in",
+        "input_sha256": "3dfb33cff108d3af6b3dc914b41bcb1dd004d1731e8225763cafd4e52c22ec12",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "immediate_yes_32.in",
+        "input_sha256": "45cba02856bb451f2b20f381620fcb9f1890c77572f31aaf6da49031a5d95528",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "immediate_yes_4.in",
+        "input_sha256": "d8ca774d19329b028c818d6ea450cf53dbd46115b7c5da0278ba4049ad79b416",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "immediate_yes_8.in",
+        "input_sha256": "081559c3e1dc232693fe75d279941485ae0a46d83a4ae5ae7a2b68f115fd082d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "random_no_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "random_no_100.in",
+        "input_sha256": "d216998ea8960a099e4925d07fd03ea33cb6b0d888eec001d49e0f608fe85864",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "random_no_16.in",
+        "input_sha256": "db57decd56c760f53b89ea842ced97d8a7283d827dc506694c65b736ed15c361",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "random_no_2.in",
+        "input_sha256": "c0460775a2df904b9505a6e89158d9cbf25772ad9ef4385c1995f901a3ed30f8",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "random_no_31.in",
+        "input_sha256": "282cf421fe8264d807b2836d75e6e880f7c225bcb4027bdc6c0146b90be814d0",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "random_no_32.in",
+        "input_sha256": "db8d0acf8d3c21d87919d0dfef1cb3679dac712cd1c17a728fe18aeb7c0d404e",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "random_no_4.in",
+        "input_sha256": "e1318dca473f813acd0dca8ffe07243169d359bb8a822a452edbc70651c9312b",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "random_no_8.in",
+        "input_sha256": "164839c38559a6c3f70dd58bd2d2356e37a2e4d28a944fa98700b00aa5888c16",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "sample_1.in",
+        "input_sha256": "d36870f8f9db407fe347bfdd8c1d7da083f2ab7782f71c3e449d3b599d41c762",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "sample_2.in",
+        "input_sha256": "c116a7977e93e346e9736904d3ea4c5b20d51640282e9f2f6a8f7e13c5147bbc",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "sample_3.in",
+        "input_sha256": "7e79091c5b463859b946e4bc308fc077322edffc661382da16eb9cceb30d1d30",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "turned_yes_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "turned_yes_100.in",
+        "input_sha256": "70c8c8433bbc2af92938ead0792abdb07af1099b8f481964ffc5e400dabe10d9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "turned_yes_16.in",
+        "input_sha256": "281e3f96f1a9198cb4626d078dfc52675bca5e63cc0323258203124964f15455",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "turned_yes_2.in",
+        "input_sha256": "56298eabfa04a1e01a8466a632ef1f07b8d39dbb92dc94d1d7a064e2b8380992",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "turned_yes_31.in",
+        "input_sha256": "86603bf02c32c5b34c52435d25b41bd193967e245dbd9dfa56fb7f216cc0869a",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "turned_yes_32.in",
+        "input_sha256": "c3b8f81e493580c35a210ec12c46c68b088b396d10f25b1dd3acc082864576cb",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "turned_yes_4.in",
+        "input_sha256": "bd9263fb08686bdaa84b91a5d7470df122681c176905c3ba2b9bb98a16b2831f",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "final_checked",
+        "case": "turned_yes_8.in",
+        "input_sha256": "a6d09589a735093eeb91fa0bdc4c25d789feb03ac9a65093f9e5aff691f1d13d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "immediate_yes_1.in",
+        "input_sha256": "ccce065269620747ca153e9a430d44b175cdc1f7e0958741b567250a1d6b1d95",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "immediate_yes_100.in",
+        "input_sha256": "b8ca2e20e3e4b6e82966fb4c6b6e96701d5d5143633818db95530134d8c34f5b",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "immediate_yes_16.in",
+        "input_sha256": "d3ccd6dee9c8ecca58a7afdc3b6d1ebd4c63e29e9e41756621ca4bd989289908",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "immediate_yes_2.in",
+        "input_sha256": "f7a62b7b81d464ac1969b9bcf4460f9de60f7a52d37e380644ee7d64dc2a6c28",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "immediate_yes_31.in",
+        "input_sha256": "3dfb33cff108d3af6b3dc914b41bcb1dd004d1731e8225763cafd4e52c22ec12",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "immediate_yes_32.in",
+        "input_sha256": "45cba02856bb451f2b20f381620fcb9f1890c77572f31aaf6da49031a5d95528",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "immediate_yes_4.in",
+        "input_sha256": "d8ca774d19329b028c818d6ea450cf53dbd46115b7c5da0278ba4049ad79b416",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "immediate_yes_8.in",
+        "input_sha256": "081559c3e1dc232693fe75d279941485ae0a46d83a4ae5ae7a2b68f115fd082d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "random_no_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "random_no_100.in",
+        "input_sha256": "d216998ea8960a099e4925d07fd03ea33cb6b0d888eec001d49e0f608fe85864",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "random_no_16.in",
+        "input_sha256": "db57decd56c760f53b89ea842ced97d8a7283d827dc506694c65b736ed15c361",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "random_no_2.in",
+        "input_sha256": "c0460775a2df904b9505a6e89158d9cbf25772ad9ef4385c1995f901a3ed30f8",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "random_no_31.in",
+        "input_sha256": "282cf421fe8264d807b2836d75e6e880f7c225bcb4027bdc6c0146b90be814d0",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "random_no_32.in",
+        "input_sha256": "db8d0acf8d3c21d87919d0dfef1cb3679dac712cd1c17a728fe18aeb7c0d404e",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "random_no_4.in",
+        "input_sha256": "e1318dca473f813acd0dca8ffe07243169d359bb8a822a452edbc70651c9312b",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "random_no_8.in",
+        "input_sha256": "164839c38559a6c3f70dd58bd2d2356e37a2e4d28a944fa98700b00aa5888c16",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "sample_1.in",
+        "input_sha256": "d36870f8f9db407fe347bfdd8c1d7da083f2ab7782f71c3e449d3b599d41c762",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "sample_2.in",
+        "input_sha256": "c116a7977e93e346e9736904d3ea4c5b20d51640282e9f2f6a8f7e13c5147bbc",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "sample_3.in",
+        "input_sha256": "7e79091c5b463859b946e4bc308fc077322edffc661382da16eb9cceb30d1d30",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "turned_yes_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "turned_yes_100.in",
+        "input_sha256": "70c8c8433bbc2af92938ead0792abdb07af1099b8f481964ffc5e400dabe10d9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "turned_yes_16.in",
+        "input_sha256": "281e3f96f1a9198cb4626d078dfc52675bca5e63cc0323258203124964f15455",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "turned_yes_2.in",
+        "input_sha256": "56298eabfa04a1e01a8466a632ef1f07b8d39dbb92dc94d1d7a064e2b8380992",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "turned_yes_31.in",
+        "input_sha256": "86603bf02c32c5b34c52435d25b41bd193967e245dbd9dfa56fb7f216cc0869a",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "turned_yes_32.in",
+        "input_sha256": "c3b8f81e493580c35a210ec12c46c68b088b396d10f25b1dd3acc082864576cb",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "turned_yes_4.in",
+        "input_sha256": "bd9263fb08686bdaa84b91a5d7470df122681c176905c3ba2b9bb98a16b2831f",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "gcc",
+        "variant": "standard_checked",
+        "case": "turned_yes_8.in",
+        "input_sha256": "a6d09589a735093eeb91fa0bdc4c25d789feb03ac9a65093f9e5aff691f1d13d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "immediate_yes_1.in",
+        "input_sha256": "ccce065269620747ca153e9a430d44b175cdc1f7e0958741b567250a1d6b1d95",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "immediate_yes_100.in",
+        "input_sha256": "b8ca2e20e3e4b6e82966fb4c6b6e96701d5d5143633818db95530134d8c34f5b",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "immediate_yes_16.in",
+        "input_sha256": "d3ccd6dee9c8ecca58a7afdc3b6d1ebd4c63e29e9e41756621ca4bd989289908",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "immediate_yes_2.in",
+        "input_sha256": "f7a62b7b81d464ac1969b9bcf4460f9de60f7a52d37e380644ee7d64dc2a6c28",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "immediate_yes_31.in",
+        "input_sha256": "3dfb33cff108d3af6b3dc914b41bcb1dd004d1731e8225763cafd4e52c22ec12",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "immediate_yes_32.in",
+        "input_sha256": "45cba02856bb451f2b20f381620fcb9f1890c77572f31aaf6da49031a5d95528",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "immediate_yes_4.in",
+        "input_sha256": "d8ca774d19329b028c818d6ea450cf53dbd46115b7c5da0278ba4049ad79b416",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "immediate_yes_8.in",
+        "input_sha256": "081559c3e1dc232693fe75d279941485ae0a46d83a4ae5ae7a2b68f115fd082d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_no_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_no_100.in",
+        "input_sha256": "d216998ea8960a099e4925d07fd03ea33cb6b0d888eec001d49e0f608fe85864",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_no_16.in",
+        "input_sha256": "db57decd56c760f53b89ea842ced97d8a7283d827dc506694c65b736ed15c361",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_no_2.in",
+        "input_sha256": "c0460775a2df904b9505a6e89158d9cbf25772ad9ef4385c1995f901a3ed30f8",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_no_31.in",
+        "input_sha256": "282cf421fe8264d807b2836d75e6e880f7c225bcb4027bdc6c0146b90be814d0",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_no_32.in",
+        "input_sha256": "db8d0acf8d3c21d87919d0dfef1cb3679dac712cd1c17a728fe18aeb7c0d404e",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_no_4.in",
+        "input_sha256": "e1318dca473f813acd0dca8ffe07243169d359bb8a822a452edbc70651c9312b",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "random_no_8.in",
+        "input_sha256": "164839c38559a6c3f70dd58bd2d2356e37a2e4d28a944fa98700b00aa5888c16",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "sample_1.in",
+        "input_sha256": "d36870f8f9db407fe347bfdd8c1d7da083f2ab7782f71c3e449d3b599d41c762",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "sample_2.in",
+        "input_sha256": "c116a7977e93e346e9736904d3ea4c5b20d51640282e9f2f6a8f7e13c5147bbc",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "sample_3.in",
+        "input_sha256": "7e79091c5b463859b946e4bc308fc077322edffc661382da16eb9cceb30d1d30",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "turned_yes_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "turned_yes_100.in",
+        "input_sha256": "70c8c8433bbc2af92938ead0792abdb07af1099b8f481964ffc5e400dabe10d9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "turned_yes_16.in",
+        "input_sha256": "281e3f96f1a9198cb4626d078dfc52675bca5e63cc0323258203124964f15455",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "turned_yes_2.in",
+        "input_sha256": "56298eabfa04a1e01a8466a632ef1f07b8d39dbb92dc94d1d7a064e2b8380992",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "turned_yes_31.in",
+        "input_sha256": "86603bf02c32c5b34c52435d25b41bd193967e245dbd9dfa56fb7f216cc0869a",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "turned_yes_32.in",
+        "input_sha256": "c3b8f81e493580c35a210ec12c46c68b088b396d10f25b1dd3acc082864576cb",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "turned_yes_4.in",
+        "input_sha256": "bd9263fb08686bdaa84b91a5d7470df122681c176905c3ba2b9bb98a16b2831f",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final",
+        "case": "turned_yes_8.in",
+        "input_sha256": "a6d09589a735093eeb91fa0bdc4c25d789feb03ac9a65093f9e5aff691f1d13d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "immediate_yes_1.in",
+        "input_sha256": "ccce065269620747ca153e9a430d44b175cdc1f7e0958741b567250a1d6b1d95",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "immediate_yes_100.in",
+        "input_sha256": "b8ca2e20e3e4b6e82966fb4c6b6e96701d5d5143633818db95530134d8c34f5b",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "immediate_yes_16.in",
+        "input_sha256": "d3ccd6dee9c8ecca58a7afdc3b6d1ebd4c63e29e9e41756621ca4bd989289908",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "immediate_yes_2.in",
+        "input_sha256": "f7a62b7b81d464ac1969b9bcf4460f9de60f7a52d37e380644ee7d64dc2a6c28",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "immediate_yes_31.in",
+        "input_sha256": "3dfb33cff108d3af6b3dc914b41bcb1dd004d1731e8225763cafd4e52c22ec12",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "immediate_yes_32.in",
+        "input_sha256": "45cba02856bb451f2b20f381620fcb9f1890c77572f31aaf6da49031a5d95528",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "immediate_yes_4.in",
+        "input_sha256": "d8ca774d19329b028c818d6ea450cf53dbd46115b7c5da0278ba4049ad79b416",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "immediate_yes_8.in",
+        "input_sha256": "081559c3e1dc232693fe75d279941485ae0a46d83a4ae5ae7a2b68f115fd082d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_no_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_no_100.in",
+        "input_sha256": "d216998ea8960a099e4925d07fd03ea33cb6b0d888eec001d49e0f608fe85864",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_no_16.in",
+        "input_sha256": "db57decd56c760f53b89ea842ced97d8a7283d827dc506694c65b736ed15c361",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_no_2.in",
+        "input_sha256": "c0460775a2df904b9505a6e89158d9cbf25772ad9ef4385c1995f901a3ed30f8",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_no_31.in",
+        "input_sha256": "282cf421fe8264d807b2836d75e6e880f7c225bcb4027bdc6c0146b90be814d0",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_no_32.in",
+        "input_sha256": "db8d0acf8d3c21d87919d0dfef1cb3679dac712cd1c17a728fe18aeb7c0d404e",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_no_4.in",
+        "input_sha256": "e1318dca473f813acd0dca8ffe07243169d359bb8a822a452edbc70651c9312b",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "random_no_8.in",
+        "input_sha256": "164839c38559a6c3f70dd58bd2d2356e37a2e4d28a944fa98700b00aa5888c16",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "sample_1.in",
+        "input_sha256": "d36870f8f9db407fe347bfdd8c1d7da083f2ab7782f71c3e449d3b599d41c762",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "sample_2.in",
+        "input_sha256": "c116a7977e93e346e9736904d3ea4c5b20d51640282e9f2f6a8f7e13c5147bbc",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "sample_3.in",
+        "input_sha256": "7e79091c5b463859b946e4bc308fc077322edffc661382da16eb9cceb30d1d30",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "turned_yes_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "turned_yes_100.in",
+        "input_sha256": "70c8c8433bbc2af92938ead0792abdb07af1099b8f481964ffc5e400dabe10d9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "turned_yes_16.in",
+        "input_sha256": "281e3f96f1a9198cb4626d078dfc52675bca5e63cc0323258203124964f15455",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "turned_yes_2.in",
+        "input_sha256": "56298eabfa04a1e01a8466a632ef1f07b8d39dbb92dc94d1d7a064e2b8380992",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "turned_yes_31.in",
+        "input_sha256": "86603bf02c32c5b34c52435d25b41bd193967e245dbd9dfa56fb7f216cc0869a",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "turned_yes_32.in",
+        "input_sha256": "c3b8f81e493580c35a210ec12c46c68b088b396d10f25b1dd3acc082864576cb",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "turned_yes_4.in",
+        "input_sha256": "bd9263fb08686bdaa84b91a5d7470df122681c176905c3ba2b9bb98a16b2831f",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard",
+        "case": "turned_yes_8.in",
+        "input_sha256": "a6d09589a735093eeb91fa0bdc4c25d789feb03ac9a65093f9e5aff691f1d13d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "immediate_yes_1.in",
+        "input_sha256": "ccce065269620747ca153e9a430d44b175cdc1f7e0958741b567250a1d6b1d95",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "immediate_yes_100.in",
+        "input_sha256": "b8ca2e20e3e4b6e82966fb4c6b6e96701d5d5143633818db95530134d8c34f5b",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "immediate_yes_16.in",
+        "input_sha256": "d3ccd6dee9c8ecca58a7afdc3b6d1ebd4c63e29e9e41756621ca4bd989289908",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "immediate_yes_2.in",
+        "input_sha256": "f7a62b7b81d464ac1969b9bcf4460f9de60f7a52d37e380644ee7d64dc2a6c28",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "immediate_yes_31.in",
+        "input_sha256": "3dfb33cff108d3af6b3dc914b41bcb1dd004d1731e8225763cafd4e52c22ec12",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "immediate_yes_32.in",
+        "input_sha256": "45cba02856bb451f2b20f381620fcb9f1890c77572f31aaf6da49031a5d95528",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "immediate_yes_4.in",
+        "input_sha256": "d8ca774d19329b028c818d6ea450cf53dbd46115b7c5da0278ba4049ad79b416",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "immediate_yes_8.in",
+        "input_sha256": "081559c3e1dc232693fe75d279941485ae0a46d83a4ae5ae7a2b68f115fd082d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "random_no_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "random_no_100.in",
+        "input_sha256": "d216998ea8960a099e4925d07fd03ea33cb6b0d888eec001d49e0f608fe85864",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "random_no_16.in",
+        "input_sha256": "db57decd56c760f53b89ea842ced97d8a7283d827dc506694c65b736ed15c361",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "random_no_2.in",
+        "input_sha256": "c0460775a2df904b9505a6e89158d9cbf25772ad9ef4385c1995f901a3ed30f8",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "random_no_31.in",
+        "input_sha256": "282cf421fe8264d807b2836d75e6e880f7c225bcb4027bdc6c0146b90be814d0",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "random_no_32.in",
+        "input_sha256": "db8d0acf8d3c21d87919d0dfef1cb3679dac712cd1c17a728fe18aeb7c0d404e",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "random_no_4.in",
+        "input_sha256": "e1318dca473f813acd0dca8ffe07243169d359bb8a822a452edbc70651c9312b",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "random_no_8.in",
+        "input_sha256": "164839c38559a6c3f70dd58bd2d2356e37a2e4d28a944fa98700b00aa5888c16",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "sample_1.in",
+        "input_sha256": "d36870f8f9db407fe347bfdd8c1d7da083f2ab7782f71c3e449d3b599d41c762",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "sample_2.in",
+        "input_sha256": "c116a7977e93e346e9736904d3ea4c5b20d51640282e9f2f6a8f7e13c5147bbc",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "sample_3.in",
+        "input_sha256": "7e79091c5b463859b946e4bc308fc077322edffc661382da16eb9cceb30d1d30",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "turned_yes_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "turned_yes_100.in",
+        "input_sha256": "70c8c8433bbc2af92938ead0792abdb07af1099b8f481964ffc5e400dabe10d9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "turned_yes_16.in",
+        "input_sha256": "281e3f96f1a9198cb4626d078dfc52675bca5e63cc0323258203124964f15455",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "turned_yes_2.in",
+        "input_sha256": "56298eabfa04a1e01a8466a632ef1f07b8d39dbb92dc94d1d7a064e2b8380992",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "turned_yes_31.in",
+        "input_sha256": "86603bf02c32c5b34c52435d25b41bd193967e245dbd9dfa56fb7f216cc0869a",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "turned_yes_32.in",
+        "input_sha256": "c3b8f81e493580c35a210ec12c46c68b088b396d10f25b1dd3acc082864576cb",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "turned_yes_4.in",
+        "input_sha256": "bd9263fb08686bdaa84b91a5d7470df122681c176905c3ba2b9bb98a16b2831f",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "final_checked",
+        "case": "turned_yes_8.in",
+        "input_sha256": "a6d09589a735093eeb91fa0bdc4c25d789feb03ac9a65093f9e5aff691f1d13d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "immediate_yes_1.in",
+        "input_sha256": "ccce065269620747ca153e9a430d44b175cdc1f7e0958741b567250a1d6b1d95",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "immediate_yes_100.in",
+        "input_sha256": "b8ca2e20e3e4b6e82966fb4c6b6e96701d5d5143633818db95530134d8c34f5b",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "immediate_yes_16.in",
+        "input_sha256": "d3ccd6dee9c8ecca58a7afdc3b6d1ebd4c63e29e9e41756621ca4bd989289908",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "immediate_yes_2.in",
+        "input_sha256": "f7a62b7b81d464ac1969b9bcf4460f9de60f7a52d37e380644ee7d64dc2a6c28",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "immediate_yes_31.in",
+        "input_sha256": "3dfb33cff108d3af6b3dc914b41bcb1dd004d1731e8225763cafd4e52c22ec12",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "immediate_yes_32.in",
+        "input_sha256": "45cba02856bb451f2b20f381620fcb9f1890c77572f31aaf6da49031a5d95528",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "immediate_yes_4.in",
+        "input_sha256": "d8ca774d19329b028c818d6ea450cf53dbd46115b7c5da0278ba4049ad79b416",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "immediate_yes_8.in",
+        "input_sha256": "081559c3e1dc232693fe75d279941485ae0a46d83a4ae5ae7a2b68f115fd082d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "random_no_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "random_no_100.in",
+        "input_sha256": "d216998ea8960a099e4925d07fd03ea33cb6b0d888eec001d49e0f608fe85864",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "random_no_16.in",
+        "input_sha256": "db57decd56c760f53b89ea842ced97d8a7283d827dc506694c65b736ed15c361",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "random_no_2.in",
+        "input_sha256": "c0460775a2df904b9505a6e89158d9cbf25772ad9ef4385c1995f901a3ed30f8",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "random_no_31.in",
+        "input_sha256": "282cf421fe8264d807b2836d75e6e880f7c225bcb4027bdc6c0146b90be814d0",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "random_no_32.in",
+        "input_sha256": "db8d0acf8d3c21d87919d0dfef1cb3679dac712cd1c17a728fe18aeb7c0d404e",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "random_no_4.in",
+        "input_sha256": "e1318dca473f813acd0dca8ffe07243169d359bb8a822a452edbc70651c9312b",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "random_no_8.in",
+        "input_sha256": "164839c38559a6c3f70dd58bd2d2356e37a2e4d28a944fa98700b00aa5888c16",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "sample_1.in",
+        "input_sha256": "d36870f8f9db407fe347bfdd8c1d7da083f2ab7782f71c3e449d3b599d41c762",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "sample_2.in",
+        "input_sha256": "c116a7977e93e346e9736904d3ea4c5b20d51640282e9f2f6a8f7e13c5147bbc",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "sample_3.in",
+        "input_sha256": "7e79091c5b463859b946e4bc308fc077322edffc661382da16eb9cceb30d1d30",
+        "output_sha256": "31375587f8bedb1f33f6eca3d8cee94ab70845a6dd1a7c7eeb929f4aa7dc10ab"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "turned_yes_1.in",
+        "input_sha256": "88fb1949a818a3ac0a5721e13e120088287f89eeaeff214e69a16587b6b159b9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "turned_yes_100.in",
+        "input_sha256": "70c8c8433bbc2af92938ead0792abdb07af1099b8f481964ffc5e400dabe10d9",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "turned_yes_16.in",
+        "input_sha256": "281e3f96f1a9198cb4626d078dfc52675bca5e63cc0323258203124964f15455",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "turned_yes_2.in",
+        "input_sha256": "56298eabfa04a1e01a8466a632ef1f07b8d39dbb92dc94d1d7a064e2b8380992",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "turned_yes_31.in",
+        "input_sha256": "86603bf02c32c5b34c52435d25b41bd193967e245dbd9dfa56fb7f216cc0869a",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "turned_yes_32.in",
+        "input_sha256": "c3b8f81e493580c35a210ec12c46c68b088b396d10f25b1dd3acc082864576cb",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "turned_yes_4.in",
+        "input_sha256": "bd9263fb08686bdaa84b91a5d7470df122681c176905c3ba2b9bb98a16b2831f",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      },
+      {
+        "compiler": "clang",
+        "variant": "standard_checked",
+        "case": "turned_yes_8.in",
+        "input_sha256": "a6d09589a735093eeb91fa0bdc4c25d789feb03ac9a65093f9e5aff691f1d13d",
+        "output_sha256": "927580bf287560d4a26a5d6e129f91ffa9cb63031b1a8c772be6ec584e65e82b"
+      }
+    ],
+    "runs": 216,
+    "raw": {
+      "gcc_sample_1.in": {
+        "baseline": {
+          "wall_ms": [
+            1.182513,
+            1.03544,
+            0.952483,
+            0.954592,
+            0.971772,
+            1.050348,
+            0.951581,
+            0.947135,
+            0.937462,
+            0.952915,
+            0.936218
+          ],
+          "cpu_ms": [
+            1.06400000000062,
+            0.952000000000286,
+            0.8690000000000087,
+            0.8749999999999591,
+            0.8869999999999711,
+            0.9700000000002484,
+            0.8729999999999016,
+            0.8690000000004527,
+            0.8630000000005023,
+            0.876000000000321,
+            0.8579999999996923
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            1.068408,
+            0.992465,
+            1.053175,
+            1.029248,
+            1.031296,
+            0.926011,
+            0.942338,
+            0.93477,
+            0.918274,
+            0.94719,
+            0.943183
+          ],
+          "cpu_ms": [
+            0.976000000000421,
+            0.9059999999996293,
+            0.9649999999998826,
+            0.9519999999998419,
+            0.9540000000001214,
+            0.8479999999998489,
+            0.8660000000001444,
+            0.8569999999996636,
+            0.842999999999483,
+            0.8619999999994743,
+            0.866999999999174
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            1.051058,
+            1.067351,
+            0.95977,
+            1.058,
+            0.94092,
+            1.009899,
+            0.930483,
+            0.974188,
+            1.10121,
+            0.939805,
+            0.95459
+          ],
+          "cpu_ms": [
+            0.9640000000001869,
+            0.9829999999997341,
+            0.8760000000002099,
+            0.9750000000003922,
+            0.8609999999996676,
+            0.9350000000000191,
+            0.8529999999995486,
+            0.8919999999992267,
+            0.97600000000031,
+            0.8610000000000007,
+            0.8739999999998194
+          ]
+        },
+        "standard": {
+          "wall_ms": [
+            1.052474,
+            0.985148,
+            1.043378,
+            1.022375,
+            1.100817,
+            1.015682,
+            0.940935,
+            0.957197,
+            0.982938,
+            0.940988,
+            0.945627
+          ],
+          "cpu_ms": [
+            0.9689999999999976,
+            0.9009999999995966,
+            0.960000000000294,
+            0.9420000000002204,
+            1.0150000000003212,
+            0.9379999999996613,
+            0.8639999999995318,
+            0.8809999999997986,
+            0.8919999999997819,
+            0.8610000000000007,
+            0.8689999999996756
+          ]
+        }
+      },
+      "gcc_random_no_32.in": {
+        "baseline": {
+          "wall_ms": [
+            0.974395,
+            0.960994,
+            0.951645,
+            0.963296,
+            1.023503,
+            0.967256,
+            0.977726,
+            0.961567,
+            0.957428,
+            0.973538,
+            0.98601
+          ],
+          "cpu_ms": [
+            0.8969999999998146,
+            0.8849999999998026,
+            0.8740000000000414,
+            0.8840000000001069,
+            0.9390000000003562,
+            0.8869999999998601,
+            0.8879999999996668,
+            0.8839999999999959,
+            0.8749999999997371,
+            0.8910000000004192,
+            0.8999999999999009
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            0.95478,
+            0.966163,
+            0.956468,
+            0.965063,
+            0.961414,
+            0.993075,
+            0.969315,
+            0.953873,
+            0.963806,
+            0.968886,
+            0.968287
+          ],
+          "cpu_ms": [
+            0.8750000000002922,
+            0.8909999999998641,
+            0.8759999999999879,
+            0.8869999999997491,
+            0.8809999999993545,
+            0.912000000000246,
+            0.8899999999999464,
+            0.8770000000000167,
+            0.8850000000002467,
+            0.8879999999997779,
+            0.8770000000002387
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            0.964974,
+            0.970539,
+            0.984343,
+            0.974299,
+            0.958995,
+            0.961753,
+            1.004985,
+            0.957674,
+            0.975974,
+            0.970527,
+            0.969248
+          ],
+          "cpu_ms": [
+            0.8849999999999136,
+            0.8939999999996173,
+            0.9019999999997363,
+            0.898999999999206,
+            0.8819999999994943,
+            0.8850000000004687,
+            0.8829999999998561,
+            0.8759999999998769,
+            0.8970000000003697,
+            0.8930000000002547,
+            0.892000000000559
+          ]
+        },
+        "standard": {
+          "wall_ms": [
+            0.952326,
+            0.972462,
+            0.960129,
+            0.997257,
+            0.947168,
+            0.960373,
+            1.070962,
+            0.98208,
+            0.973166,
+            0.975946,
+            0.964307
+          ],
+          "cpu_ms": [
+            0.8749999999996261,
+            0.896000000000452,
+            0.8819999999996053,
+            0.9139999999998594,
+            0.8709999999997331,
+            0.8830000000001892,
+            0.9740000000001414,
+            0.8999999999995678,
+            0.8929999999999216,
+            0.8970000000003697,
+            0.8830000000001892
+          ]
+        }
+      },
+      "gcc_turned_yes_32.in": {
+        "baseline": {
+          "wall_ms": [
+            0.964829,
+            0.962005,
+            0.986605,
+            1.055967,
+            0.984584,
+            0.983663,
+            0.933827,
+            0.948015,
+            0.93078,
+            0.934991,
+            0.937065
+          ],
+          "cpu_ms": [
+            0.8740000000007075,
+            0.8670000000002842,
+            0.8829999999996341,
+            0.9640000000000759,
+            0.8969999999995926,
+            0.8980000000005095,
+            0.8909999999995311,
+            0.8979999999992883,
+            0.8850000000002467,
+            0.892000000000226,
+            0.892000000000226
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            0.969868,
+            0.969553,
+            0.963124,
+            1.144936,
+            0.998072,
+            1.14804,
+            0.940406,
+            0.936837,
+            0.929158,
+            0.932128,
+            0.949776
+          ],
+          "cpu_ms": [
+            0.8779999999994903,
+            0.8770000000002387,
+            0.8690000000003417,
+            1.0570000000003077,
+            0.9109999999999951,
+            1.0589999999999211,
+            0.8969999999997036,
+            0.8939999999996173,
+            0.8850000000004687,
+            0.8879999999996668,
+            0.9040000000001269
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            0.97944,
+            0.974972,
+            0.972553,
+            1.054034,
+            0.970138,
+            1.002076,
+            0.962925,
+            0.937982,
+            0.992123,
+            0.936992,
+            0.943767
+          ],
+          "cpu_ms": [
+            0.8879999999993338,
+            0.8830000000001892,
+            0.8799999999998809,
+            0.9660000000003555,
+            0.880000000000436,
+            0.9100000000004105,
+            0.9049999999997116,
+            0.8920000000000039,
+            0.9330000000002947,
+            0.8930000000003657,
+            0.8999999999999009
+          ]
+        },
+        "standard": {
+          "wall_ms": [
+            0.962498,
+            0.969575,
+            0.976928,
+            1.20733,
+            0.96392,
+            1.051281,
+            0.935455,
+            0.937486,
+            0.930825,
+            0.929697,
+            0.933761
+          ],
+          "cpu_ms": [
+            0.8690000000002307,
+            0.8749999999998481,
+            0.8819999999996053,
+            1.1170000000001457,
+            0.876000000000321,
+            0.9300000000005415,
+            0.8870000000007483,
+            0.8909999999999751,
+            0.8859999999998314,
+            0.8869999999995271,
+            0.8899999999999464
+          ]
+        }
+      },
+      "gcc_immediate_yes_100.in": {
+        "baseline": {
+          "wall_ms": [
+            1.007995,
+            1.005866,
+            0.99771,
+            1.006133,
+            1.016625,
+            0.99546,
+            1.07288,
+            1.002721,
+            1.002771,
+            1.014847,
+            0.991979
+          ],
+          "cpu_ms": [
+            0.956000000000512,
+            0.9589999999999321,
+            0.95600000000029,
+            0.9609999999996566,
+            0.9699999999994713,
+            0.9530000000003147,
+            1.018999999999659,
+            0.9630000000002692,
+            0.9599999999998499,
+            0.9729999999990024,
+            0.9500000000002284
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            1.133775,
+            1.000571,
+            1.061479,
+            1.00889,
+            1.003667,
+            0.944583,
+            0.975808,
+            0.993794,
+            0.99461,
+            1.022747,
+            1.099897
+          ],
+          "cpu_ms": [
+            1.0619999999996743,
+            0.9550000000004832,
+            1.0100000000002884,
+            0.964000000000298,
+            0.9589999999997101,
+            0.8850000000001357,
+            0.930999999999238,
+            0.95099999999948,
+            0.9519999999996198,
+            0.9810000000000096,
+            1.0179999999995193
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            1.193379,
+            1.011563,
+            1.003841,
+            1.000679,
+            1.008766,
+            1.080373,
+            1.005345,
+            1.014627,
+            1.002816,
+            1.015819,
+            1.011634
+          ],
+          "cpu_ms": [
+            1.1090000000001377,
+            0.9660000000002444,
+            0.9579999999997924,
+            0.9559999999998459,
+            0.9659999999998004,
+            1.0029999999999761,
+            0.9629999999999361,
+            0.9740000000000304,
+            0.9609999999998786,
+            0.9740000000002524,
+            0.9719999999997508
+          ]
+        },
+        "standard": {
+          "wall_ms": [
+            1.058569,
+            1.018683,
+            0.99828,
+            0.998978,
+            1.016891,
+            1.025544,
+            0.985227,
+            0.996661,
+            0.992845,
+            1.011911,
+            1.048988
+          ],
+          "cpu_ms": [
+            1.0100000000001774,
+            0.9710000000000552,
+            0.9539999999998994,
+            0.9540000000004545,
+            0.9729999999998906,
+            0.9750000000003922,
+            0.9420000000002204,
+            0.9539999999997884,
+            0.9529999999996486,
+            0.9689999999997756,
+            0.9790000000007293
+          ]
+        }
+      },
+      "gcc_random_no_100.in": {
+        "baseline": {
+          "wall_ms": [
+            1.348564,
+            1.103927,
+            1.114352,
+            1.107445,
+            1.130861,
+            1.110717,
+            1.141679,
+            1.245324,
+            1.135789,
+            1.115313,
+            1.116401
+          ],
+          "cpu_ms": [
+            1.3000000000000789,
+            1.062999999999703,
+            1.0679999999998468,
+            1.068000000000402,
+            1.0890000000003397,
+            1.066999999999707,
+            1.0839999999998629,
+            1.2059999999997073,
+            1.0889999999996736,
+            1.0759999999996328,
+            1.0759999999999659
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            1.091875,
+            1.242926,
+            1.130341,
+            1.109189,
+            1.117282,
+            1.168895,
+            1.139704,
+            1.270396,
+            1.112769,
+            1.112059,
+            1.191077
+          ],
+          "cpu_ms": [
+            1.0499999999997733,
+            1.1409999999998366,
+            1.084000000000307,
+            1.0679999999995138,
+            1.0740000000003525,
+            1.1300000000008525,
+            1.0999999999999899,
+            1.2300000000001754,
+            1.0689999999998756,
+            1.0729999999995465,
+            1.1439999999997008
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            1.26177,
+            1.10797,
+            1.106184,
+            1.126761,
+            1.107002,
+            1.125464,
+            1.111984,
+            1.126736,
+            1.115649,
+            1.114482,
+            1.136085
+          ],
+          "cpu_ms": [
+            1.2190000000003032,
+            1.068000000000291,
+            1.0619999999997853,
+            1.0839999999999739,
+            1.0660000000001224,
+            1.0849999999997806,
+            1.066999999999707,
+            1.0850000000000026,
+            1.0739999999996863,
+            1.0700000000000154,
+            1.0910000000002862
+          ]
+        },
+        "standard": {
+          "wall_ms": [
+            1.361338,
+            1.105939,
+            1.105156,
+            1.127035,
+            1.127882,
+            1.18464,
+            1.122652,
+            1.11731,
+            1.109817,
+            1.103293,
+            1.141575
+          ],
+          "cpu_ms": [
+            1.2809999999998656,
+            1.0650000000008708,
+            1.0659999999995673,
+            1.076000000000632,
+            1.080000000000081,
+            1.1379999999998613,
+            1.0710000000002662,
+            1.0769999999994395,
+            1.0689999999998756,
+            1.0650000000002047,
+            1.0979999999991552
+          ]
+        }
+      },
+      "gcc_turned_yes_100.in": {
+        "baseline": {
+          "wall_ms": [
+            1.047516,
+            1.055826,
+            1.025755,
+            1.037124,
+            1.131302,
+            1.093479,
+            1.055682,
+            1.042821,
+            1.015198,
+            1.053915,
+            1.07518
+          ],
+          "cpu_ms": [
+            1.0010000000002517,
+            1.006999999999869,
+            0.9849999999999026,
+            0.994999999999524,
+            1.0619999999998964,
+            1.0019999999993923,
+            1.0149999999998771,
+            0.9989999999998611,
+            0.9729999999998906,
+            1.0059999999996183,
+            1.012000000000124
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            1.079958,
+            1.058938,
+            1.041983,
+            1.040485,
+            1.067533,
+            1.037097,
+            1.043343,
+            1.059461,
+            1.046357,
+            1.092727,
+            1.039425
+          ],
+          "cpu_ms": [
+            0.9980000000002764,
+            1.0100000000001774,
+            1.0010000000003627,
+            0.9969999999998036,
+            1.0229999999998851,
+            0.994999999999524,
+            1.0009999999996966,
+            1.0089999999995936,
+            1.0039999999997828,
+            0.9950000000007453,
+            0.9970000000000256
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            1.044003,
+            1.043749,
+            1.150928,
+            1.086365,
+            1.053951,
+            1.062723,
+            1.143154,
+            1.063966,
+            1.048378,
+            1.096099,
+            1.056019
+          ],
+          "cpu_ms": [
+            0.9999999999996678,
+            1.0009999999996966,
+            1.09899999999985,
+            1.0419999999997653,
+            1.012000000000124,
+            1.0059999999998404,
+            1.0910000000002862,
+            1.010999999999762,
+            1.0039999999997828,
+            1.0100000000001774,
+            1.0119999999997908
+          ]
+        },
+        "standard": {
+          "wall_ms": [
+            1.061626,
+            1.14256,
+            1.03948,
+            1.039784,
+            1.041844,
+            1.085954,
+            1.050261,
+            1.132074,
+            1.037273,
+            1.132983,
+            1.08827
+          ],
+          "cpu_ms": [
+            1.020000000000132,
+            1.0630000000003692,
+            0.9969999999998036,
+            0.9969999999998036,
+            0.9979999999999434,
+            1.002999999999643,
+            1.0070000000000912,
+            1.0639999999996208,
+            0.9950000000003012,
+            1.0090000000000376,
+            1.002999999999754
+          ]
+        }
+      },
+      "clang_sample_1.in": {
+        "baseline": {
+          "wall_ms": [
+            0.911149,
+            0.902418,
+            0.898448,
+            0.833464,
+            0.889958,
+            0.894931,
+            0.891631,
+            1.018333,
+            1.005317,
+            0.960412,
+            0.948408
+          ],
+          "cpu_ms": [
+            0.8660000000002555,
+            0.8619999999999184,
+            0.8580000000000254,
+            0.776000000000332,
+            0.8449999999996516,
+            0.8539999999997994,
+            0.8480000000000709,
+            0.8679999999998689,
+            0.8759999999997659,
+            0.8579999999995813,
+            0.8509999999996021
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            0.917093,
+            0.899457,
+            0.884471,
+            0.969718,
+            0.890997,
+            0.923782,
+            1.085915,
+            1.077965,
+            1.022842,
+            0.938057,
+            0.969421
+          ],
+          "cpu_ms": [
+            0.8710000000002882,
+            0.8580000000002475,
+            0.8429999999997051,
+            0.8859999999997203,
+            0.8490000000002107,
+            0.8789999999998521,
+            0.8729999999991245,
+            0.8889999999998066,
+            0.9110000000002172,
+            0.8420000000006755,
+            0.8739999999992643
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            0.89567,
+            0.90072,
+            0.910242,
+            0.900234,
+            0.908034,
+            0.903133,
+            0.896563,
+            1.029916,
+            0.958053,
+            0.98514,
+            0.963653
+          ],
+          "cpu_ms": [
+            0.8540000000005765,
+            0.860000000000527,
+            0.8699999999999264,
+            0.8469999999999311,
+            0.8650000000003377,
+            0.8630000000002802,
+            0.8539999999992443,
+            0.8590000000000542,
+            0.8580000000002475,
+            0.8790000000005183,
+            0.8679999999993138
+          ]
+        },
+        "standard": {
+          "wall_ms": [
+            0.936006,
+            0.907636,
+            0.911712,
+            0.897487,
+            0.90654,
+            0.916579,
+            0.942106,
+            1.03159,
+            0.944418,
+            0.939588,
+            0.945735
+          ],
+          "cpu_ms": [
+            0.8889999999992515,
+            0.8640000000001979,
+            0.8709999999999551,
+            0.8550000000001612,
+            0.8650000000004487,
+            0.864000000000309,
+            0.8949999999996461,
+            0.8620000000002515,
+            0.8440000000000669,
+            0.8470000000007083,
+            0.8540000000000214
+          ]
+        }
+      },
+      "clang_random_no_32.in": {
+        "baseline": {
+          "wall_ms": [
+            0.963722,
+            0.976639,
+            1.000684,
+            1.008031,
+            1.000309,
+            0.999311,
+            0.988276,
+            0.988541,
+            0.988153,
+            1.033325,
+            0.985125
+          ],
+          "cpu_ms": [
+            0.8649999999997826,
+            0.8829999999998561,
+            0.8959999999996748,
+            0.9109999999996621,
+            0.9050000000003777,
+            0.9009999999998186,
+            0.8890000000000287,
+            0.8949999999997571,
+            0.8959999999998969,
+            0.9080000000000199,
+            0.8879999999998889
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            0.969883,
+            0.970365,
+            1.007533,
+            0.999759,
+            0.967744,
+            0.996178,
+            0.999879,
+            0.995044,
+            1.010478,
+            0.996203,
+            0.982958
+          ],
+          "cpu_ms": [
+            0.874999999999404,
+            0.8769999999997946,
+            0.900000000000234,
+            0.8979999999999544,
+            0.876000000000321,
+            0.9019999999999584,
+            0.904000000000349,
+            0.9029999999998761,
+            0.9189999999995591,
+            0.9020000000000694,
+            0.8759999999999879
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            0.966341,
+            0.98034,
+            0.984929,
+            1.011885,
+            1.007505,
+            1.009615,
+            0.976069,
+            1.005737,
+            1.117945,
+            0.999053,
+            1.004336
+          ],
+          "cpu_ms": [
+            0.8719999999998729,
+            0.8850000000000247,
+            0.8879999999996668,
+            0.9090000000000487,
+            0.9130000000000527,
+            0.904000000000238,
+            0.8839999999999959,
+            0.912000000000357,
+            0.9800000000000919,
+            0.9059999999997403,
+            0.8989999999996501
+          ]
+        },
+        "standard": {
+          "wall_ms": [
+            0.979373,
+            0.969626,
+            0.996243,
+            0.993728,
+            0.979916,
+            1.043464,
+            0.98277,
+            0.986781,
+            1.029172,
+            0.999798,
+            0.980485
+          ],
+          "cpu_ms": [
+            0.8829999999997451,
+            0.8759999999998769,
+            0.8959999999996748,
+            0.8950000000000902,
+            0.8860000000003865,
+            0.9390000000000231,
+            0.8910000000001972,
+            0.8929999999999216,
+            0.9300000000004305,
+            0.9050000000004887,
+            0.872000000000317
+          ]
+        }
+      },
+      "clang_turned_yes_32.in": {
+        "baseline": {
+          "wall_ms": [
+            0.9798,
+            0.953783,
+            1.028012,
+            0.993346,
+            0.976319,
+            0.986499,
+            0.970666,
+            1.011412,
+            0.963749,
+            1.201561,
+            1.066582
+          ],
+          "cpu_ms": [
+            0.8750000000007363,
+            0.8619999999998074,
+            0.9369999999997436,
+            0.8899999999997243,
+            0.8679999999994248,
+            0.8949999999998681,
+            0.8750000000000702,
+            0.9030000000002092,
+            0.8709999999997331,
+            1.092000000000537,
+            0.9570000000008738
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            0.980698,
+            1.0021,
+            0.958931,
+            0.967563,
+            0.956704,
+            0.948343,
+            0.998203,
+            0.977091,
+            0.981619,
+            1.018242,
+            1.092228
+          ],
+          "cpu_ms": [
+            0.8739999999997083,
+            0.912000000000579,
+            0.8689999999994535,
+            0.874999999999515,
+            0.868000000000313,
+            0.8590000000000542,
+            0.8869999999997491,
+            0.8739999999998194,
+            0.8889999999995846,
+            0.9209999999996166,
+            0.9670000000004952
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            1.236439,
+            0.983027,
+            0.959921,
+            0.971967,
+            0.956814,
+            0.948894,
+            0.999428,
+            0.975255,
+            0.974339,
+            1.00259,
+            1.12179
+          ],
+          "cpu_ms": [
+            1.1150000000005322,
+            0.89099999999942,
+            0.8689999999995646,
+            0.8850000000000247,
+            0.8689999999995646,
+            0.8609999999995566,
+            0.9110000000002172,
+            0.8819999999996053,
+            0.8839999999997739,
+            0.9050000000000447,
+            0.9929999999997996
+          ]
+        },
+        "standard": {
+          "wall_ms": [
+            1.000599,
+            0.967214,
+            0.96354,
+            0.970938,
+            0.954144,
+            1.061664,
+            0.964895,
+            1.012657,
+            1.02143,
+            0.994637,
+            1.094102
+          ],
+          "cpu_ms": [
+            0.9049999999996006,
+            0.8780000000002675,
+            0.8750000000001812,
+            0.8620000000002515,
+            0.8649999999998936,
+            0.9689999999999976,
+            0.8780000000003785,
+            0.8990000000005383,
+            0.9239999999991477,
+            0.8939999999997283,
+            0.9820000000003715
+          ]
+        }
+      },
+      "clang_immediate_yes_100.in": {
+        "baseline": {
+          "wall_ms": [
+            1.146618,
+            1.060312,
+            1.060087,
+            1.079528,
+            1.049722,
+            1.069384,
+            1.041367,
+            1.185573,
+            1.070087,
+            1.06044,
+            1.056074
+          ],
+          "cpu_ms": [
+            1.0420000000004315,
+            0.9610000000001007,
+            0.9620000000002404,
+            0.9579999999997924,
+            0.9559999999997348,
+            0.9750000000007253,
+            0.9450000000003067,
+            1.0929999999996776,
+            0.9749999999997261,
+            0.9650000000001047,
+            0.9620000000002404
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            4.063031,
+            1.113274,
+            1.058686,
+            1.067472,
+            1.049452,
+            1.074979,
+            1.059017,
+            1.08306,
+            1.065738,
+            1.202856,
+            1.127496
+          ],
+          "cpu_ms": [
+            1.0449999999999626,
+            0.9639999999996318,
+            0.9639999999999649,
+            0.9690000000002197,
+            0.9529999999997596,
+            0.9700000000000264,
+            0.9609999999996566,
+            0.9890000000002397,
+            0.9690000000006638,
+            1.0990000000001832,
+            1.0079999999998979
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            1.174022,
+            1.109329,
+            1.062966,
+            1.045446,
+            1.059731,
+            1.124766,
+            1.026404,
+            1.140772,
+            1.061127,
+            1.057959,
+            0.995386
+          ],
+          "cpu_ms": [
+            1.056000000000612,
+            0.9649999999995496,
+            0.9670000000000512,
+            0.9470000000002532,
+            0.964000000000298,
+            1.0100000000002884,
+            0.9340000000003235,
+            1.0420000000002094,
+            0.9670000000003842,
+            0.9630000000007133,
+            0.8960000000001189
+          ]
+        },
+        "standard": {
+          "wall_ms": [
+            1.082224,
+            1.068811,
+            1.055253,
+            1.055943,
+            1.055126,
+            1.061169,
+            1.029675,
+            1.166486,
+            1.065169,
+            1.058846,
+            1.051032
+          ],
+          "cpu_ms": [
+            0.9679999999998579,
+            0.9609999999998786,
+            0.9619999999993523,
+            0.9550000000002612,
+            0.9540000000004545,
+            0.9620000000006845,
+            0.9359999999997148,
+            1.0719999999994068,
+            0.9679999999996358,
+            0.9660000000002444,
+            0.9579999999999034
+          ]
+        }
+      },
+      "clang_random_no_100.in": {
+        "baseline": {
+          "wall_ms": [
+            1.220386,
+            1.179929,
+            1.234477,
+            1.125155,
+            1.148699,
+            1.138988,
+            1.141613,
+            1.161847,
+            1.201821,
+            1.126844,
+            1.167081
+          ],
+          "cpu_ms": [
+            1.1039999999996608,
+            1.0929999999998996,
+            1.1379999999998613,
+            1.0459999999999914,
+            1.05600000000039,
+            1.0599999999998388,
+            1.0599999999997278,
+            1.068000000000291,
+            1.1139999999997263,
+            1.0479999999997158,
+            1.044000000000489
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            1.164058,
+            1.273536,
+            1.151708,
+            1.13272,
+            1.127375,
+            1.186086,
+            1.140341,
+            1.142649,
+            1.165356,
+            1.146902,
+            1.156288
+          ],
+          "cpu_ms": [
+            1.076000000000188,
+            1.1380000000003054,
+            1.0699999999992382,
+            1.0570000000003077,
+            1.0490000000002997,
+            1.1060000000003845,
+            1.0619999999997853,
+            1.0610000000003117,
+            1.0790000000001632,
+            1.0429999999999051,
+            1.054999999999584
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            1.159978,
+            1.181342,
+            1.146987,
+            1.142304,
+            1.150727,
+            1.14325,
+            1.147487,
+            1.132301,
+            1.127413,
+            1.128748,
+            1.165017
+          ],
+          "cpu_ms": [
+            1.0699999999996823,
+            1.0859999999998093,
+            1.066999999999818,
+            1.048000000000271,
+            1.0690000000005417,
+            1.0540000000002214,
+            1.0669999999999291,
+            1.05200000000083,
+            1.0470000000000201,
+            1.0479999999997158,
+            1.0799999999996368
+          ]
+        },
+        "standard": {
+          "wall_ms": [
+            1.240278,
+            1.141794,
+            1.17119,
+            1.140304,
+            1.133629,
+            1.133247,
+            1.119193,
+            1.13351,
+            1.132467,
+            1.128509,
+            1.079057
+          ],
+          "cpu_ms": [
+            1.1350000000002192,
+            1.0549999999999171,
+            1.0539999999997773,
+            1.0460000000003244,
+            1.0550000000003612,
+            1.0529999999999706,
+            1.0409999999998476,
+            1.0580000000002254,
+            1.046999999999798,
+            1.0510000000001352,
+            0.9950000000001902
+          ]
+        }
+      },
+      "clang_turned_yes_100.in": {
+        "baseline": {
+          "wall_ms": [
+            1.067133,
+            1.076374,
+            1.097458,
+            1.0725,
+            1.07978,
+            1.0632,
+            1.12692,
+            1.378998,
+            1.255577,
+            1.070257,
+            1.066762
+          ],
+          "cpu_ms": [
+            0.9700000000001374,
+            0.9790000000001742,
+            0.9779999999999234,
+            0.9759999999998659,
+            0.9870000000002932,
+            0.9729999999993355,
+            1.0279999999999179,
+            1.2750000000002482,
+            1.1539999999994333,
+            1.016000000000461,
+            0.9809999999998986
+          ]
+        },
+        "control": {
+          "wall_ms": [
+            1.078025,
+            1.114003,
+            1.06135,
+            1.073096,
+            1.060575,
+            1.080523,
+            1.078519,
+            1.234691,
+            1.063238,
+            1.058793,
+            1.033721
+          ],
+          "cpu_ms": [
+            0.980000000000647,
+            1.0139999999998484,
+            0.968000000000302,
+            0.9789999999999521,
+            0.9630000000007133,
+            0.9889999999996846,
+            0.9860000000000424,
+            1.1409999999998366,
+            0.9690000000002197,
+            1.0079999999996758,
+            0.9849999999999026
+          ]
+        },
+        "final": {
+          "wall_ms": [
+            1.078149,
+            1.076659,
+            1.083663,
+            1.0795,
+            1.045666,
+            1.101245,
+            1.075015,
+            1.285198,
+            1.286603,
+            1.040828,
+            1.025853
+          ],
+          "cpu_ms": [
+            0.9799999999997588,
+            0.9819999999998164,
+            0.9899999999999354,
+            0.9850000000000136,
+            0.9489999999996446,
+            0.9820000000001494,
+            0.9840000000008731,
+            1.1840000000000739,
+            1.1089999999998046,
+            0.9910000000005192,
+            0.9820000000000384
+          ]
+        },
+        "standard": {
+          "wall_ms": [
+            1.15236,
+            1.07464,
+            1.086534,
+            1.122715,
+            1.075269,
+            1.063662,
+            1.066404,
+            1.060953,
+            1.188217,
+            1.038458,
+            1.02584
+          ],
+          "cpu_ms": [
+            1.0390000000002342,
+            0.9800000000000919,
+            0.9900000000007125,
+            1.0239999999994698,
+            0.9739999999999194,
+            0.9740000000003635,
+            0.9759999999997548,
+            0.9689999999996646,
+            1.1289999999999356,
+            0.9909999999996311,
+            0.9819999999995943
+          ]
+        }
+      }
+    },
+    "medians": {
+      "gcc_sample_1.in": {
+        "baseline": {
+          "wall_ms": 0.952915,
+          "cpu_ms": 0.8749999999999591
+        },
+        "control": {
+          "wall_ms": 0.94719,
+          "cpu_ms": 0.866999999999174
+        },
+        "final": {
+          "wall_ms": 0.974188,
+          "cpu_ms": 0.8919999999992267
+        },
+        "standard": {
+          "wall_ms": 0.985148,
+          "cpu_ms": 0.9009999999995966
+        }
+      },
+      "gcc_random_no_32.in": {
+        "baseline": {
+          "wall_ms": 0.967256,
+          "cpu_ms": 0.8869999999998601
+        },
+        "control": {
+          "wall_ms": 0.965063,
+          "cpu_ms": 0.8850000000002467
+        },
+        "final": {
+          "wall_ms": 0.970527,
+          "cpu_ms": 0.892000000000559
+        },
+        "standard": {
+          "wall_ms": 0.972462,
+          "cpu_ms": 0.8929999999999216
+        }
+      },
+      "gcc_turned_yes_32.in": {
+        "baseline": {
+          "wall_ms": 0.962005,
+          "cpu_ms": 0.892000000000226
+        },
+        "control": {
+          "wall_ms": 0.963124,
+          "cpu_ms": 0.8939999999996173
+        },
+        "final": {
+          "wall_ms": 0.972553,
+          "cpu_ms": 0.8930000000003657
+        },
+        "standard": {
+          "wall_ms": 0.962498,
+          "cpu_ms": 0.8869999999995271
+        }
+      },
+      "gcc_immediate_yes_100.in": {
+        "baseline": {
+          "wall_ms": 1.005866,
+          "cpu_ms": 0.9599999999998499
+        },
+        "control": {
+          "wall_ms": 1.003667,
+          "cpu_ms": 0.9589999999997101
+        },
+        "final": {
+          "wall_ms": 1.011563,
+          "cpu_ms": 0.9660000000002444
+        },
+        "standard": {
+          "wall_ms": 1.011911,
+          "cpu_ms": 0.9689999999997756
+        }
+      },
+      "gcc_random_no_100.in": {
+        "baseline": {
+          "wall_ms": 1.116401,
+          "cpu_ms": 1.0759999999999659
+        },
+        "control": {
+          "wall_ms": 1.130341,
+          "cpu_ms": 1.084000000000307
+        },
+        "final": {
+          "wall_ms": 1.115649,
+          "cpu_ms": 1.0739999999996863
+        },
+        "standard": {
+          "wall_ms": 1.122652,
+          "cpu_ms": 1.076000000000632
+        }
+      },
+      "gcc_turned_yes_100.in": {
+        "baseline": {
+          "wall_ms": 1.053915,
+          "cpu_ms": 1.0019999999993923
+        },
+        "control": {
+          "wall_ms": 1.046357,
+          "cpu_ms": 1.0009999999996966
+        },
+        "final": {
+          "wall_ms": 1.062723,
+          "cpu_ms": 1.010999999999762
+        },
+        "standard": {
+          "wall_ms": 1.061626,
+          "cpu_ms": 1.002999999999754
+        }
+      },
+      "clang_sample_1.in": {
+        "baseline": {
+          "wall_ms": 0.902418,
+          "cpu_ms": 0.8579999999995813
+        },
+        "control": {
+          "wall_ms": 0.938057,
+          "cpu_ms": 0.8729999999991245
+        },
+        "final": {
+          "wall_ms": 0.908034,
+          "cpu_ms": 0.860000000000527
+        },
+        "standard": {
+          "wall_ms": 0.936006,
+          "cpu_ms": 0.8640000000001979
+        }
+      },
+      "clang_random_no_32.in": {
+        "baseline": {
+          "wall_ms": 0.988541,
+          "cpu_ms": 0.8959999999996748
+        },
+        "control": {
+          "wall_ms": 0.996178,
+          "cpu_ms": 0.900000000000234
+        },
+        "final": {
+          "wall_ms": 1.004336,
+          "cpu_ms": 0.904000000000238
+        },
+        "standard": {
+          "wall_ms": 0.986781,
+          "cpu_ms": 0.8929999999999216
+        }
+      },
+      "clang_turned_yes_32.in": {
+        "baseline": {
+          "wall_ms": 0.986499,
+          "cpu_ms": 0.8899999999997243
+        },
+        "control": {
+          "wall_ms": 0.980698,
+          "cpu_ms": 0.874999999999515
+        },
+        "final": {
+          "wall_ms": 0.975255,
+          "cpu_ms": 0.8850000000000247
+        },
+        "standard": {
+          "wall_ms": 0.994637,
+          "cpu_ms": 0.8939999999997283
+        }
+      },
+      "clang_immediate_yes_100.in": {
+        "baseline": {
+          "wall_ms": 1.06044,
+          "cpu_ms": 0.9620000000002404
+        },
+        "control": {
+          "wall_ms": 1.074979,
+          "cpu_ms": 0.9690000000006638
+        },
+        "final": {
+          "wall_ms": 1.061127,
+          "cpu_ms": 0.9649999999995496
+        },
+        "standard": {
+          "wall_ms": 1.058846,
+          "cpu_ms": 0.9619999999993523
+        }
+      },
+      "clang_random_no_100.in": {
+        "baseline": {
+          "wall_ms": 1.161847,
+          "cpu_ms": 1.0599999999998388
+        },
+        "control": {
+          "wall_ms": 1.151708,
+          "cpu_ms": 1.0619999999997853
+        },
+        "final": {
+          "wall_ms": 1.146987,
+          "cpu_ms": 1.066999999999818
+        },
+        "standard": {
+          "wall_ms": 1.13351,
+          "cpu_ms": 1.0529999999999706
+        }
+      },
+      "clang_turned_yes_100.in": {
+        "baseline": {
+          "wall_ms": 1.076374,
+          "cpu_ms": 0.9809999999998986
+        },
+        "control": {
+          "wall_ms": 1.073096,
+          "cpu_ms": 0.9849999999999026
+        },
+        "final": {
+          "wall_ms": 1.078149,
+          "cpu_ms": 0.9840000000008731
+        },
+        "standard": {
+          "wall_ms": 1.07464,
+          "cpu_ms": 0.9819999999995943
+        }
+      }
+    },
+    "ratios": {
+      "gcc_sample_1.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.993992118919316,
+          "cpu_ms": 0.9908571428562452
+        },
+        "final": {
+          "wall_ms": 1.022324131743125,
+          "cpu_ms": 1.0194285714277354
+        },
+        "standard": {
+          "wall_ms": 1.033825682248679,
+          "cpu_ms": 1.0297142857138728
+        }
+      },
+      "gcc_random_no_32.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9977327615439966,
+          "cpu_ms": 0.9977452085686429
+        },
+        "final": {
+          "wall_ms": 1.0033817314134004,
+          "cpu_ms": 1.0056369785802701
+        },
+        "standard": {
+          "wall_ms": 1.0053822359334035,
+          "cpu_ms": 1.0067643742954482
+        }
+      },
+      "gcc_turned_yes_32.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.0011631956174865,
+          "cpu_ms": 1.0022421524656848
+        },
+        "final": {
+          "wall_ms": 1.0109645999760917,
+          "cpu_ms": 1.0011210762333402
+        },
+        "standard": {
+          "wall_ms": 1.0005124713489015,
+          "cpu_ms": 0.9943946188332986
+        }
+      },
+      "gcc_immediate_yes_100.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9978138241077839,
+          "cpu_ms": 0.9989583333331876
+        },
+        "final": {
+          "wall_ms": 1.005663776288293,
+          "cpu_ms": 1.006250000000412
+        },
+        "standard": {
+          "wall_ms": 1.006009746825124,
+          "cpu_ms": 1.0093749999999242
+        }
+      },
+      "gcc_random_no_100.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.012486552770913,
+          "cpu_ms": 1.0074349442382353
+        },
+        "final": {
+          "wall_ms": 0.9993264069093453,
+          "cpu_ms": 0.9981412639402606
+        },
+        "standard": {
+          "wall_ms": 1.0055992425660671,
+          "cpu_ms": 1.000000000000619
+        }
+      },
+      "gcc_turned_yes_100.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9928286436761978,
+          "cpu_ms": 0.9990019960082871
+        },
+        "final": {
+          "wall_ms": 1.00835741022758,
+          "cpu_ms": 1.0089820359285182
+        },
+        "standard": {
+          "wall_ms": 1.0073165293216246,
+          "cpu_ms": 1.0009980039923776
+        }
+      },
+      "clang_sample_1.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.0394927849400166,
+          "cpu_ms": 1.0174825174819935
+        },
+        "final": {
+          "wall_ms": 1.0062232801207422,
+          "cpu_ms": 1.0023310023321057
+        },
+        "standard": {
+          "wall_ms": 1.037220002260593,
+          "cpu_ms": 1.0069930069937292
+        }
+      },
+      "clang_random_no_32.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.0077255268117358,
+          "cpu_ms": 1.0044642857149113
+        },
+        "final": {
+          "wall_ms": 1.0159780929673123,
+          "cpu_ms": 1.0089285714292031
+        },
+        "standard": {
+          "wall_ms": 0.9982195983778114,
+          "cpu_ms": 0.9966517857145599
+        }
+      },
+      "clang_turned_yes_32.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9941196088389344,
+          "cpu_ms": 0.9831460674154899
+        },
+        "final": {
+          "wall_ms": 0.9886021171841025,
+          "cpu_ms": 0.9943820224722458
+        },
+        "standard": {
+          "wall_ms": 1.0082493748093004,
+          "cpu_ms": 1.0044943820224779
+        }
+      },
+      "clang_immediate_yes_100.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 1.0137103466485609,
+          "cpu_ms": 1.0072765072769456
+        },
+        "final": {
+          "wall_ms": 1.000647844291049,
+          "cpu_ms": 1.003118503117784
+        },
+        "standard": {
+          "wall_ms": 0.9984968503639997,
+          "cpu_ms": 0.9999999999990767
+        }
+      },
+      "clang_random_no_100.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9912733776478313,
+          "cpu_ms": 1.00188679245278
+        },
+        "final": {
+          "wall_ms": 0.9872100199079569,
+          "cpu_ms": 1.0066037735848872
+        },
+        "standard": {
+          "wall_ms": 0.97561038587697,
+          "cpu_ms": 0.9933962264152176
+        }
+      },
+      "clang_turned_yes_100.in": {
+        "baseline": {
+          "wall_ms": 1.0,
+          "cpu_ms": 1.0
+        },
+        "control": {
+          "wall_ms": 0.9969545901331694,
+          "cpu_ms": 1.0040774719673846
+        },
+        "final": {
+          "wall_ms": 1.0016490550682198,
+          "cpu_ms": 1.0030581039765287
+        },
+        "standard": {
+          "wall_ms": 0.9983890357812434,
+          "cpu_ms": 1.001019367991535
+        }
+      }
+    },
+    "text_sha256": {
+      "gcc": {
+        "baseline": "9cd9c55fc070885011ca287b39c17c7d553c4e0c9e04109719c7d6bd8b89a311",
+        "control": "9cd9c55fc070885011ca287b39c17c7d553c4e0c9e04109719c7d6bd8b89a311",
+        "final": "9a1277262f5e9435b7623353ec0df440f23837274082bcead6d7157039ae4d3d",
+        "standard": "9cd9c55fc070885011ca287b39c17c7d553c4e0c9e04109719c7d6bd8b89a311",
+        "final_checked": "9b97a034bde7030fc3448d2728f0b882c60faefac8f2ffd6d970bf6704c8a6f4",
+        "standard_checked": "5f53e1bdb690f9a358a0cb664f331aa3b3382db9629c346fff8cec6a89157bd9"
+      },
+      "clang": {
+        "baseline": "bcd76a65b0ff87961fb2061951152a507ec7b9a64159d29f0082a90c411d099b",
+        "control": "bcd76a65b0ff87961fb2061951152a507ec7b9a64159d29f0082a90c411d099b",
+        "final": "fbc5fcefce11c3895c1b74d3c5111926f42078aafc76523e586ab5a25cf19f9e",
+        "standard": "bcd76a65b0ff87961fb2061951152a507ec7b9a64159d29f0082a90c411d099b",
+        "final_checked": "3798259b2088d1281fc63b64803fd1596f670ae6435f78738745b20e33f5ced8",
+        "standard_checked": "3dd50ae03a7c97bcffd1c95dada1996bd1df5dd2e8eb16d6427f95db9ea246a8"
+      }
+    },
+    "baseline_control_text_equal": {
+      "gcc": true,
+      "clang": true
+    },
+    "standard_baseline_text_equal": {
+      "gcc": true,
+      "clang": true
+    },
+    "source_header_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+    "method": "ABC298B vector<vector<int>>実mainを変更せず本体だけ置換。共通IO/同flags/C++23-O2、27inputs×native/standard/checked/skip。性能11回は起動/IO/破棄込み壁時間と子CPUを分離、子CPU14固定、親affinityは未固定。",
+    "measurement_condition_correction": "今回の最終再実行では親プロセスにtasksetを付けていない。旧記述parent4を訂正し、raw自体は変更しない。子の固定とAPI内部計時には変更なし。"
+  },
+  "ownership": "各構成で399確保失敗点・入力不変・live_delta0。SIMD用に追加確保せず、出力はvector所有。既存のCopyOnly/ThrowCopyも維持。",
+  "allocation_test_harness": {
+    "diagnosis": [
+      {
+        "header": "baseline",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/baseline.hpp\"",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/original_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/original_alloc_baseline"
+        ],
+        "returncode": -6,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "header": "all32_unrolled",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DMATRIX_HEADER=\"/tmp/sirkit_four_hours_20261022/matrix_simd/all32_unrolled.hpp\"",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/original_allocation_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/matrix_simd/original_alloc_all32_unrolled"
+        ],
+        "returncode": -6,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "correction": "旧本体と候補の両方で非atomicカウンタ版の検査が失敗し、診断文を加えると変わる最適化依存があった。置換newの予算/確保収支をatomicへ変更し、9構成で確認。ライブラリの例外経路変更は不要。",
+    "original": "// SPDX-License-Identifier: CC0-1.0\n#include <cstddef>\n#include <cstdint>\n#include <cstdlib>\n#include <iostream>\n#include <new>\n#include <vector>\nnamespace {\nstd::ptrdiff_t remaining = -1;\nstd::size_t live = 0, requests = 0;\nstd::uint64_t checks = 0;\nvoid check(bool x) { ++checks; if (!x) std::abort(); }\n}\n[[gnu::noinline]] void* operator new(std::size_t n) {\n    ++requests;\n    if (remaining == 0) throw std::bad_alloc();\n    if (remaining > 0) --remaining;\n    if (void* p = std::malloc(n == 0 ? 1 : n)) { ++live; return p; }\n    throw std::bad_alloc();\n}\n[[gnu::noinline]] void operator delete(void* p) noexcept { if (p) { --live; std::free(p); } }\n[[gnu::noinline]] void operator delete(void* p, std::size_t) noexcept { ::operator delete(p); }\n[[gnu::noinline]] void* operator new[](std::size_t n) { return ::operator new(n); }\n[[gnu::noinline]] void operator delete[](void* p) noexcept { ::operator delete(p); }\n[[gnu::noinline]] void operator delete[](void* p, std::size_t) noexcept { ::operator delete(p); }\n#ifndef MATRIX_HEADER\n#define MATRIX_HEADER \"../../../Algorithm/rotate.cpp\"\n#endif\n#include MATRIX_HEADER\nint main() {\n    std::size_t failures = 0;\n    const auto global_before = live;\n    for (auto [h,w] : {std::pair{32,32}, {33,65}, {129,33}}) {\n        std::vector<std::vector<std::uint32_t>> input(h, std::vector<std::uint32_t>(w));\n        for (int i=0;i<h;++i)for(int j=0;j<w;++j)input[i][j]=std::uint32_t(i*257+j);\n        const auto before = input;\n        for (int mode : {0,1,3}) for (int budget=0;budget<w+2;++budget) {\n            const auto owned = live;\n            remaining = budget;\n            try { auto output = mode==0 ? transpose(input) : mode==1 ? rotate_90r(input) : rotate_90l(input); remaining=-1; check(output.size()==std::size_t(w)); }\n            catch (const std::bad_alloc&) { remaining=-1; ++failures; }\n            check(input==before); check(live==owned);\n        }\n    }\n    check(live==global_before);\n    std::cout << \"PASS checks=\" << checks << \" failures=\" << failures << \" live_delta=\" << (live-global_before) << '\\n';\n}\n",
+    "corrected": "// SPDX-License-Identifier: CC0-1.0\n#include <cstddef>\n#include <atomic>\n#include <cinttypes>\n#include <cstdint>\n#include <cstdlib>\n#include <cstdio>\n#include <iostream>\n#include <new>\n#include <vector>\nnamespace {\nstd::atomic<std::ptrdiff_t> remaining{-1};\nstd::atomic<std::size_t> live{0}, requests{0};\nstd::uint64_t checks = 0;\nint current_h=0,current_w=0,current_mode=0,current_budget=0;\nvoid check(bool x) { ++checks; if (!x) { std::fprintf(stderr,\"check=%\" PRIu64 \" h=%d w=%d mode=%d budget=%d live=%zu remain=%td requests=%zu\\n\",checks,current_h,current_w,current_mode,current_budget,live.load(),remaining.load(),requests.load()); std::abort(); } }\n}\n[[gnu::noinline]] void* operator new(std::size_t n) {\n    ++requests;\n    if (remaining == 0) throw std::bad_alloc();\n    if (remaining > 0) --remaining;\n    if (void* p = std::malloc(n == 0 ? 1 : n)) { ++live; return p; }\n    throw std::bad_alloc();\n}\n[[gnu::noinline]] void operator delete(void* p) noexcept { if (p) { --live; std::free(p); } }\n[[gnu::noinline]] void operator delete(void* p, std::size_t) noexcept { ::operator delete(p); }\n[[gnu::noinline]] void* operator new[](std::size_t n) { return ::operator new(n); }\n[[gnu::noinline]] void operator delete[](void* p) noexcept { ::operator delete(p); }\n[[gnu::noinline]] void operator delete[](void* p, std::size_t) noexcept { ::operator delete(p); }\n#ifndef MATRIX_HEADER\n#define MATRIX_HEADER \"../../../Algorithm/rotate.cpp\"\n#endif\n#include MATRIX_HEADER\nint main() {\n    std::size_t failures = 0;\n    const auto global_before = live.load();\n    for (auto [h,w] : {std::pair{32,32}, {33,65}, {129,33}}) {\n        std::vector<std::vector<std::uint32_t>> input(h, std::vector<std::uint32_t>(w));\n        for (int i=0;i<h;++i)for(int j=0;j<w;++j)input[i][j]=std::uint32_t(i*257+j);\n        const auto before = input;\n        for (int mode : {0,1,3}) for (int budget=0;budget<w+2;++budget) {\n            current_h=h;current_w=w;current_mode=mode;current_budget=budget;\n            const auto owned = live.load();\n            remaining = budget;\n            try { auto output = mode==0 ? transpose(input) : mode==1 ? rotate_90r(input) : rotate_90l(input); remaining=-1; check(output.size()==std::size_t(w)); }\n            catch (const std::bad_alloc&) { remaining=-1; ++failures; }\n            check(input==before); check(live.load()==owned);\n        }\n    }\n    check(live.load()==global_before);\n    std::cout << \"PASS checks=\" << checks << \" failures=\" << failures << \" live_delta=\" << (live.load()-global_before) << '\\n';\n}\n"
+  },
+  "simd_disabled": "プリプロセスでAVX2 helperとCPU判定の除外を両compilerで確認。強制CPU非対応コピーでも標準経路の参照試験が通る。実機の非AVX2 CPUでの測定は行っていない。",
+  "online_submissions_performed": false,
+  "independent_review": {
+    "reviewed_utc": "2026-10-22T15:19:52.242153+00:00",
+    "reviewer": "graph lane, read-only independent review",
+    "status": "PASS after resolved type restriction",
+    "source_files_sha256": {
+      "Algorithm/rotate.cpp": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b",
+      "Algorithm/Radix_sort.cpp": "0c117c2be3c1e488d0716d3c321428918e56d8ac16260ed119edd289fb1377f9",
+      "Audit/performance-matrix-simd-second-round-2026-10-22.json": "5299700bee829f54cec51a61ad8671ea5c252ff50ca0d611b1518f7870020c24",
+      "Audit/verify-matrix-simd-second-round-2026-10-22.json": "4a1644f81db46b6ae7c65d6e02d2d6593d0201946d6f156cc4e37d4c56e1a954",
+      "Audit/provenance-matrix-simd-second-round-2026-10-22.json": "9acf827866d5b2ae0a4fec5f1ccf370a948d64836e2dd0a48fb2028172c38ef8",
+      "Audit/performance-radix-sort-second-round-four-hours-2026-10-22.json": "ecaffffbfb4b13aa90faf8dc4569c229ee16cf8a020a382355ec30caf95e8e1d",
+      "Verify/current/drivers/matrix_rotate_main.cpp": "b8a05bb69548cf03db49426ffb15e1e883af147d71fd6a0a3f71688c7744f73a"
+    },
+    "live_source_edits_by_reviewer": false,
+    "resolved_finding": {
+      "before": "The original sizeof4 + trivially copyable/default constructible/copy assignable predicate also accepted a class containing a volatile uint32_t member. Those traits do not express whether class member access has volatile semantics. SIMD representation transfers would bypass the ordinary class/member scalar access route.",
+      "evidence": "type_probe.cpp confirms all three traits and sizeof4; a conservative restriction avoids requiring a general detector for volatile members. This review does not claim that every trivial class representation copy is undefined.",
+      "resolution_by_parent": "SIMD eligibility additionally requires is_arithmetic_v<Value> || is_enum_v<Value>; class/struct types retain existing scalar/block routes.",
+      "confirmed_source_sha256": "84cb658ef778e4b1ce36e40fc2eadb4ef44dcbb7dc4d939b143d46a453ac860b"
+    },
+    "matrix_review": [
+      "Eligibility is nested under the existing trivial type predicates. sizeof4 arithmetic/enum values have no class member volatile access concern; vector<bool> and non-4-byte objects never instantiate the helper.",
+      "The SIMD helper writes already constructed output elements, with a separately owned vector for every output row. No source/destination aliasing is possible. Throwing shape checks or allocations destroy temporary ownership and leave the const input unchanged.",
+      "GCC AVX headers mark unaligned vector access types may_alias/aligned1. Clang loadu/storeu use packed may_alias wrapper structs. These are supported compiler intrinsic semantics, not a claim that reinterpret_cast vector dereference is portable standard C++.",
+      "8x8 row/column permutations match all three modes. h-i>=8 and w-j>=8 protect full loads/stores, scalar loops cover each remaining row/column once. Reverse indices stay in range.",
+      "Nonzero h,w are established before threshold h>4095/w, so area threshold has no product overflow or divide-by-zero. 32-row/column gates preserve short/small fallback. All source row lengths are checked before their vector loads.",
+      "Target attribute confines AVX2 instructions to the helper; runtime AVX2 builtin gates entry. Function ABI exposes owned vectors and scalar parameters, no 256-bit vector cross-target ABI.",
+      "SIRKIT_DISABLE_SIMD excludes intrinsic include, helper definitions, CPU builtin and dispatch references. Compiler/architecture guards preserve standard C++ fallback. No non-AVX2 hardware was independently exercised.",
+      "ABC298B actual frozen main uses vector<vector<int>>. Audit correctly distinguishes large matrix API measurements from the small real main and makes no established whole-main gain claim."
+    ],
+    "radix_review": [
+      "RadixInteger excludes bool and cv values; accepts only 1/2/4/8-byte full-width integral unsigned representations. The 64-bit scan member is only instantiated from the bytes8 branch; smaller types remain valid.",
+      "Overlapping current/previous loads are read-only and remain inside input. Starting at i=1, each 4-lane block covers adjacent pairs i-1..i+3, and the tail covers remaining pairs and differences. Input vector allocation bounds keep i+4 arithmetic representable on supported implementations.",
+      "XOR sign bias converts unsigned64 order to signed lane comparisons. Raw XOR against first equals signed-key XOR because a fixed sign bias cancels. Ordered/reversed flags and aggregate variation therefore match scalar formulas.",
+      "The first item, all SIMD lanes and every scalar tail are covered by maximum checks before large-input mutation. SKIP_RUNTIME_CHECKS preprocesses out check-only accumulators. Small insertion-sort exception behavior remains the existing contract.",
+      "Deferred Histogram initialization is safe: ordered/reversed return before reading counts, while unordered initializes all histograms before scatter. Unordered input has nonzero variation, so active byte count cannot be zero on the optimized path.",
+      "The SIMD scan allocates nothing and writes only local already-live lane storage. Workspace ownership and scatter capacity/storage behavior are unchanged. Unsigned shifts remain within bit width.",
+      "Target/CPU/disable requirements are consistent with matrix. Existing default/natively vectorized comparisons and first-call/main distinction are recorded; ABC331C whole-main gain is not established and is not asserted."
+    ],
+    "supplemental_fallback_test": {
+      "description": "VolatileBox class size4 with all three original traits; matrices64x65,65x64,63x129,129x63. Independent index equations for transpose/CW/CCW and unchanged input. Each executable nm checked for absent matrix_turn_avx2 instantiation and absent CPU indicator symbols.",
+      "test_sha256": "8e5b77e0593ab2367fe014b17112781ab45d89d70e8eab2182106e25b3d55e78",
+      "runner_sha256": "2f1eff3a1be062d3438fbed157007452338c5ce0ba936f690e21db3b781aa618",
+      "records": [
+        {
+          "compiler": "g++",
+          "configuration": "checked",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/gpp_checked"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        },
+        {
+          "compiler": "g++",
+          "configuration": "skip",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/gpp_skip"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        },
+        {
+          "compiler": "g++",
+          "configuration": "disabled",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/gpp_disabled"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        },
+        {
+          "compiler": "clang++",
+          "configuration": "checked",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-std=c++23",
+            "-O2",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/clangpp_checked"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        },
+        {
+          "compiler": "clang++",
+          "configuration": "skip",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-std=c++23",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/clangpp_skip"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        },
+        {
+          "compiler": "clang++",
+          "configuration": "disabled",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-std=c++23",
+            "-O2",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/clangpp_disabled"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        },
+        {
+          "compiler": "clang++",
+          "configuration": "san",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "clang++",
+            "--gcc-toolchain=/opt/atcoder/gcc",
+            "-std=c++23",
+            "-O2",
+            "-O1",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-omit-frame-pointer",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/volatile_fallback.cpp",
+            "-o",
+            "/tmp/sirkit_four_hours_20261022/simd_review_graph/clangpp_san"
+          ],
+          "exit": 0,
+          "stdout": "PASS 98296",
+          "stderr": "",
+          "unwanted_avx_instantiation_or_cpu_symbols": []
+        }
+      ],
+      "limitations": [
+        "GCC ASan link environment lacks libasan; sanitizer coverage uses Clang.",
+        "Clang ASan/UBSan passes with detect_leaks=0 because LeakSanitizer is unavailable under this sandbox ptrace environment. Existing parent fault-injection tests cover ownership."
+      ]
+    },
+    "additional_blocking_findings": [],
+    "not_repeated": "Existing broad references, allocation faults and fixed-main suites were read rather than mechanically rerun; supplemental test targets the independently identified type boundary."
+  },
+  "independent_review_correction": "独立レビューでvolatileメンバーを持つ自明クラスも従来のtraitを満たすことを確認。SIMDを算術型・列挙型に限定し、クラスは従来の要素代入を保つ。制限後の最終ソースでAPI測定・9構成27suite・216実main・PP/例を再確認。"
+}

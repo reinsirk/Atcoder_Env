@@ -1,0 +1,1068 @@
+{
+  "status": "READY_FOR_ONLINE_SUBMISSION",
+  "source_sha256": "020f03338bbcc1429862b96176daba34badcc44db5d6a6c5940cc2cbfc244028",
+  "submission_sha256": "f02d93ca46df26dabdbc30ef1816d58e69a6320ea9e873a9134ea4cd78f5cf60",
+  "driver_sha256": "c55c2601e7863c90ee58a2bac8ff39fb79fc3a5921134d039cca17da5871387f",
+  "io_sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+  "body_unchanged_from": "Audit/verify-topological-2026-10-22.json",
+  "builds": [
+    {
+      "name": "gcc15_2_atcoder_related_checked",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-std=gnu++23",
+        "-march=native",
+        "-ftrivial-auto-var-init=zero",
+        "-DATCODER",
+        "-DNOMINMAX",
+        "-DONLINE_JUDGE",
+        "/tmp/sirkit_topological_current_20261023/gcc15_2_atcoder_related_checked.cpp",
+        "-o",
+        "/tmp/sirkit_topological_current_20261023/gcc15_2_atcoder_related_checked"
+      ],
+      "source_sha256": "a26796ef18a53843c2281a7199d8d61a419cb2fb871f1472536cb9d80f5bcfb2"
+    },
+    {
+      "name": "gcc15_2_atcoder_related_skip",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-std=gnu++23",
+        "-march=native",
+        "-ftrivial-auto-var-init=zero",
+        "-DATCODER",
+        "-DNOMINMAX",
+        "-DONLINE_JUDGE",
+        "/tmp/sirkit_topological_current_20261023/gcc15_2_atcoder_related_skip.cpp",
+        "-o",
+        "/tmp/sirkit_topological_current_20261023/gcc15_2_atcoder_related_skip"
+      ],
+      "source_sha256": "f02d93ca46df26dabdbc30ef1816d58e69a6320ea9e873a9134ea4cd78f5cf60"
+    },
+    {
+      "name": "clang21_standard_checked",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-std=c++23",
+        "-pedantic-errors",
+        "-DSIRKIT_DISABLE_SIMD",
+        "/tmp/sirkit_topological_current_20261023/clang21_standard_checked.cpp",
+        "-o",
+        "/tmp/sirkit_topological_current_20261023/clang21_standard_checked"
+      ],
+      "source_sha256": "a26796ef18a53843c2281a7199d8d61a419cb2fb871f1472536cb9d80f5bcfb2"
+    },
+    {
+      "name": "clang21_standard_skip",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-std=c++23",
+        "-pedantic-errors",
+        "-DSIRKIT_DISABLE_SIMD",
+        "/tmp/sirkit_topological_current_20261023/clang21_standard_skip.cpp",
+        "-o",
+        "/tmp/sirkit_topological_current_20261023/clang21_standard_skip"
+      ],
+      "source_sha256": "f02d93ca46df26dabdbc30ef1816d58e69a6320ea9e873a9134ea4cd78f5cf60"
+    }
+  ],
+  "independent_tests": [
+    {
+      "name": "gcc15_2_atcoder_related_checked",
+      "test": "Verify/current/tests/topological_reference_test.cpp",
+      "test_sha256": "605ae57bac4a52af147eba2b272c2c3e52b2d7681a876575fba59e573e2a9e6e",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-std=gnu++23",
+        "-march=native",
+        "-ftrivial-auto-var-init=zero",
+        "-DATCODER",
+        "-DNOMINMAX",
+        "-DONLINE_JUDGE",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/topological_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_topological_current_20261023/gcc15_2_atcoder_related_checked_topological_reference_test"
+      ],
+      "stdout": "{\"cases\":67160,\"checks\":873017}\n"
+    },
+    {
+      "name": "gcc15_2_atcoder_related_checked",
+      "test": "Verify/current/tests/topological_allocation_test.cpp",
+      "test_sha256": "6cdfe6ec730f9cce50b24d9b7fd58f26ce69b23eedd989fd2f624965bf786cfe",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-std=gnu++23",
+        "-march=native",
+        "-ftrivial-auto-var-init=zero",
+        "-DATCODER",
+        "-DNOMINMAX",
+        "-DONLINE_JUDGE",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/topological_allocation_test.cpp",
+        "-o",
+        "/tmp/sirkit_topological_current_20261023/gcc15_2_atcoder_related_checked_topological_allocation_test"
+      ],
+      "stdout": "{\"cases\":200,\"injected_failures\":52}\n"
+    },
+    {
+      "name": "gcc15_2_atcoder_related_skip",
+      "test": "Verify/current/tests/topological_reference_test.cpp",
+      "test_sha256": "605ae57bac4a52af147eba2b272c2c3e52b2d7681a876575fba59e573e2a9e6e",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-std=gnu++23",
+        "-march=native",
+        "-ftrivial-auto-var-init=zero",
+        "-DATCODER",
+        "-DNOMINMAX",
+        "-DONLINE_JUDGE",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/topological_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_topological_current_20261023/gcc15_2_atcoder_related_skip_topological_reference_test"
+      ],
+      "stdout": "{\"cases\":67160,\"checks\":872987}\n"
+    },
+    {
+      "name": "gcc15_2_atcoder_related_skip",
+      "test": "Verify/current/tests/topological_allocation_test.cpp",
+      "test_sha256": "6cdfe6ec730f9cce50b24d9b7fd58f26ce69b23eedd989fd2f624965bf786cfe",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/g++",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-std=gnu++23",
+        "-march=native",
+        "-ftrivial-auto-var-init=zero",
+        "-DATCODER",
+        "-DNOMINMAX",
+        "-DONLINE_JUDGE",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/topological_allocation_test.cpp",
+        "-o",
+        "/tmp/sirkit_topological_current_20261023/gcc15_2_atcoder_related_skip_topological_allocation_test"
+      ],
+      "stdout": "{\"cases\":200,\"injected_failures\":52}\n"
+    },
+    {
+      "name": "clang21_standard_checked",
+      "test": "Verify/current/tests/topological_reference_test.cpp",
+      "test_sha256": "605ae57bac4a52af147eba2b272c2c3e52b2d7681a876575fba59e573e2a9e6e",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-std=c++23",
+        "-pedantic-errors",
+        "-DSIRKIT_DISABLE_SIMD",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/topological_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_topological_current_20261023/clang21_standard_checked_topological_reference_test"
+      ],
+      "stdout": "{\"cases\":67160,\"checks\":873017}\n"
+    },
+    {
+      "name": "clang21_standard_checked",
+      "test": "Verify/current/tests/topological_allocation_test.cpp",
+      "test_sha256": "6cdfe6ec730f9cce50b24d9b7fd58f26ce69b23eedd989fd2f624965bf786cfe",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-std=c++23",
+        "-pedantic-errors",
+        "-DSIRKIT_DISABLE_SIMD",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/topological_allocation_test.cpp",
+        "-o",
+        "/tmp/sirkit_topological_current_20261023/clang21_standard_checked_topological_allocation_test"
+      ],
+      "stdout": "{\"cases\":200,\"injected_failures\":52}\n"
+    },
+    {
+      "name": "clang21_standard_skip",
+      "test": "Verify/current/tests/topological_reference_test.cpp",
+      "test_sha256": "605ae57bac4a52af147eba2b272c2c3e52b2d7681a876575fba59e573e2a9e6e",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-std=c++23",
+        "-pedantic-errors",
+        "-DSIRKIT_DISABLE_SIMD",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/topological_reference_test.cpp",
+        "-o",
+        "/tmp/sirkit_topological_current_20261023/clang21_standard_skip_topological_reference_test"
+      ],
+      "stdout": "{\"cases\":67160,\"checks\":872987}\n"
+    },
+    {
+      "name": "clang21_standard_skip",
+      "test": "Verify/current/tests/topological_allocation_test.cpp",
+      "test_sha256": "6cdfe6ec730f9cce50b24d9b7fd58f26ce69b23eedd989fd2f624965bf786cfe",
+      "command": [
+        "taskset",
+        "-c",
+        "6",
+        "/usr/bin/clang++",
+        "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-std=c++23",
+        "-pedantic-errors",
+        "-DSIRKIT_DISABLE_SIMD",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/topological_allocation_test.cpp",
+        "-o",
+        "/tmp/sirkit_topological_current_20261023/clang21_standard_skip_topological_allocation_test"
+      ],
+      "stdout": "{\"cases\":200,\"injected_failures\":52}\n"
+    }
+  ],
+  "outputs": [
+    {
+      "build": "gcc15_2_atcoder_related_checked",
+      "case": "sample1",
+      "kind": "official_sample",
+      "input_sha256": "b794bb44ae94c68bc101de28f0359c38d8c25f2859771431a154853b43890c71",
+      "output_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_checked",
+      "case": "sample2",
+      "kind": "official_sample",
+      "input_sha256": "39ef509034bbddb52b4d37e2d6b7a252bff6c1fc0478b87abd7831292ab06a2f",
+      "output_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_checked",
+      "case": "sample3",
+      "kind": "official_sample",
+      "input_sha256": "81ad8693a6e35a38c0b97a2345ff580dfe1ed4297746d74226bef343ae5450f9",
+      "output_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_checked",
+      "case": "single_edge",
+      "kind": "custom_problem_domain",
+      "input_sha256": "a56d7e234ec84a1f4f7a222b173c3db98018457cc1507ff17b5c6e0c324a03ea",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_checked",
+      "case": "forward_chain",
+      "kind": "custom_problem_domain",
+      "input_sha256": "d0cfeab6968065660418b4eaa01afa42d8c57b69e2218638f99346fb6a9cd551",
+      "output_sha256": "27f8d822ea64f5bdb9564c533195e35d21689b84bf074d83bb2d7a866b5276d4"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_checked",
+      "case": "reverse_chain",
+      "kind": "custom_problem_domain",
+      "input_sha256": "b6552d83823d3e02b9c66795c393e658d4bf92335af79a061d625534bfdb9ab8",
+      "output_sha256": "27f8d822ea64f5bdb9564c533195e35d21689b84bf074d83bb2d7a866b5276d4"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_checked",
+      "case": "star",
+      "kind": "custom_problem_domain",
+      "input_sha256": "4b0cf08c5742332d4adf97a041c14a6a5ec877fbfbe4c20a352eae0d4da39dd5",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_checked",
+      "case": "reverse_star",
+      "kind": "custom_problem_domain",
+      "input_sha256": "275008728c18f403daea9e7fb614a15eda8df5fcadda1689535ab47583aa9cc0",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_checked",
+      "case": "random_dag",
+      "kind": "custom_problem_domain",
+      "input_sha256": "3ffe454dec428ed0aac9a1958e5175fc4981f61a15dfc713b4c2a46862c19341",
+      "output_sha256": "6e2ae11dad0616f66bbb2b6e6556f580bb987fd911d7132aa6bee2bfc7cc7b52"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_checked",
+      "case": "permuted_dag",
+      "kind": "custom_problem_domain",
+      "input_sha256": "79f7db160c41d95687e1931746cb276abfc4497fb9afbdb4e28656b83b394791",
+      "output_sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_skip",
+      "case": "sample1",
+      "kind": "official_sample",
+      "input_sha256": "b794bb44ae94c68bc101de28f0359c38d8c25f2859771431a154853b43890c71",
+      "output_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_skip",
+      "case": "sample2",
+      "kind": "official_sample",
+      "input_sha256": "39ef509034bbddb52b4d37e2d6b7a252bff6c1fc0478b87abd7831292ab06a2f",
+      "output_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_skip",
+      "case": "sample3",
+      "kind": "official_sample",
+      "input_sha256": "81ad8693a6e35a38c0b97a2345ff580dfe1ed4297746d74226bef343ae5450f9",
+      "output_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_skip",
+      "case": "single_edge",
+      "kind": "custom_problem_domain",
+      "input_sha256": "a56d7e234ec84a1f4f7a222b173c3db98018457cc1507ff17b5c6e0c324a03ea",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_skip",
+      "case": "forward_chain",
+      "kind": "custom_problem_domain",
+      "input_sha256": "d0cfeab6968065660418b4eaa01afa42d8c57b69e2218638f99346fb6a9cd551",
+      "output_sha256": "27f8d822ea64f5bdb9564c533195e35d21689b84bf074d83bb2d7a866b5276d4"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_skip",
+      "case": "reverse_chain",
+      "kind": "custom_problem_domain",
+      "input_sha256": "b6552d83823d3e02b9c66795c393e658d4bf92335af79a061d625534bfdb9ab8",
+      "output_sha256": "27f8d822ea64f5bdb9564c533195e35d21689b84bf074d83bb2d7a866b5276d4"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_skip",
+      "case": "star",
+      "kind": "custom_problem_domain",
+      "input_sha256": "4b0cf08c5742332d4adf97a041c14a6a5ec877fbfbe4c20a352eae0d4da39dd5",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_skip",
+      "case": "reverse_star",
+      "kind": "custom_problem_domain",
+      "input_sha256": "275008728c18f403daea9e7fb614a15eda8df5fcadda1689535ab47583aa9cc0",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_skip",
+      "case": "random_dag",
+      "kind": "custom_problem_domain",
+      "input_sha256": "3ffe454dec428ed0aac9a1958e5175fc4981f61a15dfc713b4c2a46862c19341",
+      "output_sha256": "6e2ae11dad0616f66bbb2b6e6556f580bb987fd911d7132aa6bee2bfc7cc7b52"
+    },
+    {
+      "build": "gcc15_2_atcoder_related_skip",
+      "case": "permuted_dag",
+      "kind": "custom_problem_domain",
+      "input_sha256": "79f7db160c41d95687e1931746cb276abfc4497fb9afbdb4e28656b83b394791",
+      "output_sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    },
+    {
+      "build": "clang21_standard_checked",
+      "case": "sample1",
+      "kind": "official_sample",
+      "input_sha256": "b794bb44ae94c68bc101de28f0359c38d8c25f2859771431a154853b43890c71",
+      "output_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "build": "clang21_standard_checked",
+      "case": "sample2",
+      "kind": "official_sample",
+      "input_sha256": "39ef509034bbddb52b4d37e2d6b7a252bff6c1fc0478b87abd7831292ab06a2f",
+      "output_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "build": "clang21_standard_checked",
+      "case": "sample3",
+      "kind": "official_sample",
+      "input_sha256": "81ad8693a6e35a38c0b97a2345ff580dfe1ed4297746d74226bef343ae5450f9",
+      "output_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "build": "clang21_standard_checked",
+      "case": "single_edge",
+      "kind": "custom_problem_domain",
+      "input_sha256": "a56d7e234ec84a1f4f7a222b173c3db98018457cc1507ff17b5c6e0c324a03ea",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "build": "clang21_standard_checked",
+      "case": "forward_chain",
+      "kind": "custom_problem_domain",
+      "input_sha256": "d0cfeab6968065660418b4eaa01afa42d8c57b69e2218638f99346fb6a9cd551",
+      "output_sha256": "27f8d822ea64f5bdb9564c533195e35d21689b84bf074d83bb2d7a866b5276d4"
+    },
+    {
+      "build": "clang21_standard_checked",
+      "case": "reverse_chain",
+      "kind": "custom_problem_domain",
+      "input_sha256": "b6552d83823d3e02b9c66795c393e658d4bf92335af79a061d625534bfdb9ab8",
+      "output_sha256": "27f8d822ea64f5bdb9564c533195e35d21689b84bf074d83bb2d7a866b5276d4"
+    },
+    {
+      "build": "clang21_standard_checked",
+      "case": "star",
+      "kind": "custom_problem_domain",
+      "input_sha256": "4b0cf08c5742332d4adf97a041c14a6a5ec877fbfbe4c20a352eae0d4da39dd5",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "build": "clang21_standard_checked",
+      "case": "reverse_star",
+      "kind": "custom_problem_domain",
+      "input_sha256": "275008728c18f403daea9e7fb614a15eda8df5fcadda1689535ab47583aa9cc0",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "build": "clang21_standard_checked",
+      "case": "random_dag",
+      "kind": "custom_problem_domain",
+      "input_sha256": "3ffe454dec428ed0aac9a1958e5175fc4981f61a15dfc713b4c2a46862c19341",
+      "output_sha256": "6e2ae11dad0616f66bbb2b6e6556f580bb987fd911d7132aa6bee2bfc7cc7b52"
+    },
+    {
+      "build": "clang21_standard_checked",
+      "case": "permuted_dag",
+      "kind": "custom_problem_domain",
+      "input_sha256": "79f7db160c41d95687e1931746cb276abfc4497fb9afbdb4e28656b83b394791",
+      "output_sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    },
+    {
+      "build": "clang21_standard_skip",
+      "case": "sample1",
+      "kind": "official_sample",
+      "input_sha256": "b794bb44ae94c68bc101de28f0359c38d8c25f2859771431a154853b43890c71",
+      "output_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "build": "clang21_standard_skip",
+      "case": "sample2",
+      "kind": "official_sample",
+      "input_sha256": "39ef509034bbddb52b4d37e2d6b7a252bff6c1fc0478b87abd7831292ab06a2f",
+      "output_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "build": "clang21_standard_skip",
+      "case": "sample3",
+      "kind": "official_sample",
+      "input_sha256": "81ad8693a6e35a38c0b97a2345ff580dfe1ed4297746d74226bef343ae5450f9",
+      "output_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "build": "clang21_standard_skip",
+      "case": "single_edge",
+      "kind": "custom_problem_domain",
+      "input_sha256": "a56d7e234ec84a1f4f7a222b173c3db98018457cc1507ff17b5c6e0c324a03ea",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "build": "clang21_standard_skip",
+      "case": "forward_chain",
+      "kind": "custom_problem_domain",
+      "input_sha256": "d0cfeab6968065660418b4eaa01afa42d8c57b69e2218638f99346fb6a9cd551",
+      "output_sha256": "27f8d822ea64f5bdb9564c533195e35d21689b84bf074d83bb2d7a866b5276d4"
+    },
+    {
+      "build": "clang21_standard_skip",
+      "case": "reverse_chain",
+      "kind": "custom_problem_domain",
+      "input_sha256": "b6552d83823d3e02b9c66795c393e658d4bf92335af79a061d625534bfdb9ab8",
+      "output_sha256": "27f8d822ea64f5bdb9564c533195e35d21689b84bf074d83bb2d7a866b5276d4"
+    },
+    {
+      "build": "clang21_standard_skip",
+      "case": "star",
+      "kind": "custom_problem_domain",
+      "input_sha256": "4b0cf08c5742332d4adf97a041c14a6a5ec877fbfbe4c20a352eae0d4da39dd5",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "build": "clang21_standard_skip",
+      "case": "reverse_star",
+      "kind": "custom_problem_domain",
+      "input_sha256": "275008728c18f403daea9e7fb614a15eda8df5fcadda1689535ab47583aa9cc0",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "build": "clang21_standard_skip",
+      "case": "random_dag",
+      "kind": "custom_problem_domain",
+      "input_sha256": "3ffe454dec428ed0aac9a1958e5175fc4981f61a15dfc713b4c2a46862c19341",
+      "output_sha256": "6e2ae11dad0616f66bbb2b6e6556f580bb987fd911d7132aa6bee2bfc7cc7b52"
+    },
+    {
+      "build": "clang21_standard_skip",
+      "case": "permuted_dag",
+      "kind": "custom_problem_domain",
+      "input_sha256": "79f7db160c41d95687e1931746cb276abfc4497fb9afbdb4e28656b83b394791",
+      "output_sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    }
+  ],
+  "examples": [
+    {
+      "configuration": "gcc15_2_atcoder_related",
+      "stdout": "0 1 3 2 \n1 0\n0 1 3 2 \n0\n"
+    },
+    {
+      "configuration": "clang21_standard",
+      "stdout": "0 1 3 2 \n1 0\n0 1 3 2 \n0\n"
+    }
+  ],
+  "timing_raw_ms": {
+    "sample1": [
+      {
+        "wall_ms": 1.454229,
+        "cpu_ms": 1.3140000000007035
+      },
+      {
+        "wall_ms": 1.208056,
+        "cpu_ms": 1.122999999999208
+      },
+      {
+        "wall_ms": 1.425982,
+        "cpu_ms": 1.262999999999792
+      },
+      {
+        "wall_ms": 1.150724,
+        "cpu_ms": 1.0119999999997908
+      },
+      {
+        "wall_ms": 0.994094,
+        "cpu_ms": 0.9539999999998994
+      },
+      {
+        "wall_ms": 1.019682,
+        "cpu_ms": 0.984000000000762
+      },
+      {
+        "wall_ms": 0.976123,
+        "cpu_ms": 0.9329999999999616
+      }
+    ],
+    "sample2": [
+      {
+        "wall_ms": 1.284532,
+        "cpu_ms": 1.158999999999466
+      },
+      {
+        "wall_ms": 1.179143,
+        "cpu_ms": 1.128000000000351
+      },
+      {
+        "wall_ms": 1.076813,
+        "cpu_ms": 0.9469999999980327
+      },
+      {
+        "wall_ms": 1.014387,
+        "cpu_ms": 0.9370000000001877
+      },
+      {
+        "wall_ms": 0.973499,
+        "cpu_ms": 0.9379999999995503
+      },
+      {
+        "wall_ms": 0.982449,
+        "cpu_ms": 0.9470000000008083
+      },
+      {
+        "wall_ms": 0.972514,
+        "cpu_ms": 0.9359999999992707
+      }
+    ],
+    "sample3": [
+      {
+        "wall_ms": 1.273464,
+        "cpu_ms": 1.2289999999980372
+      },
+      {
+        "wall_ms": 1.015864,
+        "cpu_ms": 0.9790000000012844
+      },
+      {
+        "wall_ms": 1.074393,
+        "cpu_ms": 1.0339999999998684
+      },
+      {
+        "wall_ms": 1.101014,
+        "cpu_ms": 1.0239999999994698
+      },
+      {
+        "wall_ms": 0.982165,
+        "cpu_ms": 0.9449999999993075
+      },
+      {
+        "wall_ms": 0.97904,
+        "cpu_ms": 0.9459999999997803
+      },
+      {
+        "wall_ms": 0.974798,
+        "cpu_ms": 0.9390000000000231
+      }
+    ],
+    "single_edge": [
+      {
+        "wall_ms": 2.59503,
+        "cpu_ms": 2.5249999999997774
+      },
+      {
+        "wall_ms": 2.047721,
+        "cpu_ms": 2.010999999999874
+      },
+      {
+        "wall_ms": 2.138576,
+        "cpu_ms": 2.0679999999994036
+      },
+      {
+        "wall_ms": 2.091256,
+        "cpu_ms": 2.0129999999995984
+      },
+      {
+        "wall_ms": 1.83714,
+        "cpu_ms": 1.8039999999991396
+      },
+      {
+        "wall_ms": 1.942837,
+        "cpu_ms": 1.8830000000009672
+      },
+      {
+        "wall_ms": 1.913368,
+        "cpu_ms": 1.878999999999964
+      }
+    ],
+    "forward_chain": [
+      {
+        "wall_ms": 6.295982,
+        "cpu_ms": 6.139000000000783
+      },
+      {
+        "wall_ms": 5.9342,
+        "cpu_ms": 5.89599999999979
+      },
+      {
+        "wall_ms": 6.559406,
+        "cpu_ms": 6.332000000000337
+      },
+      {
+        "wall_ms": 5.90857,
+        "cpu_ms": 5.82000000000138
+      },
+      {
+        "wall_ms": 5.672916,
+        "cpu_ms": 5.5349999999995125
+      },
+      {
+        "wall_ms": 5.674846,
+        "cpu_ms": 5.521999999999916
+      },
+      {
+        "wall_ms": 5.499086,
+        "cpu_ms": 5.461999999998968
+      }
+    ],
+    "reverse_chain": [
+      {
+        "wall_ms": 5.738052,
+        "cpu_ms": 5.644999999999234
+      },
+      {
+        "wall_ms": 6.006037,
+        "cpu_ms": 5.854999999998389
+      },
+      {
+        "wall_ms": 7.283419,
+        "cpu_ms": 6.978000000000262
+      },
+      {
+        "wall_ms": 5.660209,
+        "cpu_ms": 5.555999999998118
+      },
+      {
+        "wall_ms": 5.462003,
+        "cpu_ms": 5.376999999999965
+      },
+      {
+        "wall_ms": 5.42668,
+        "cpu_ms": 5.387999999999171
+      },
+      {
+        "wall_ms": 5.454199,
+        "cpu_ms": 5.419999999998426
+      }
+    ],
+    "star": [
+      {
+        "wall_ms": 3.244728,
+        "cpu_ms": 3.2000000000006468
+      },
+      {
+        "wall_ms": 3.494234,
+        "cpu_ms": 3.410000000000357
+      },
+      {
+        "wall_ms": 4.407299,
+        "cpu_ms": 4.229999999999623
+      },
+      {
+        "wall_ms": 3.613378,
+        "cpu_ms": 3.4649999999998293
+      },
+      {
+        "wall_ms": 3.400669,
+        "cpu_ms": 3.271000000000024
+      },
+      {
+        "wall_ms": 3.147411,
+        "cpu_ms": 3.1140000000011714
+      },
+      {
+        "wall_ms": 3.315856,
+        "cpu_ms": 3.1580000000005493
+      }
+    ],
+    "reverse_star": [
+      {
+        "wall_ms": 4.890473,
+        "cpu_ms": 4.846999999998047
+      },
+      {
+        "wall_ms": 4.985858,
+        "cpu_ms": 4.949000000000869
+      },
+      {
+        "wall_ms": 6.271967,
+        "cpu_ms": 6.026999999999338
+      },
+      {
+        "wall_ms": 5.172064,
+        "cpu_ms": 5.0770000000014415
+      },
+      {
+        "wall_ms": 4.873552,
+        "cpu_ms": 4.8180000000001
+      },
+      {
+        "wall_ms": 4.910203,
+        "cpu_ms": 4.848999999998882
+      },
+      {
+        "wall_ms": 5.06496,
+        "cpu_ms": 4.973000000000005
+      }
+    ],
+    "random_dag": [
+      {
+        "wall_ms": 7.911728,
+        "cpu_ms": 7.867999999999764
+      },
+      {
+        "wall_ms": 7.986871,
+        "cpu_ms": 7.943999999999174
+      },
+      {
+        "wall_ms": 9.27475,
+        "cpu_ms": 9.079999999999089
+      },
+      {
+        "wall_ms": 8.272486,
+        "cpu_ms": 8.078999999998837
+      },
+      {
+        "wall_ms": 7.813635,
+        "cpu_ms": 7.765000000001021
+      },
+      {
+        "wall_ms": 7.923752,
+        "cpu_ms": 7.881000000001026
+      },
+      {
+        "wall_ms": 7.884659,
+        "cpu_ms": 7.765999999999051
+      }
+    ],
+    "permuted_dag": [
+      {
+        "wall_ms": 8.260089,
+        "cpu_ms": 8.163000000001585
+      },
+      {
+        "wall_ms": 8.35961,
+        "cpu_ms": 8.307000000000286
+      },
+      {
+        "wall_ms": 9.963262,
+        "cpu_ms": 9.760000000001101
+      },
+      {
+        "wall_ms": 8.452527,
+        "cpu_ms": 8.346000000001187
+      },
+      {
+        "wall_ms": 8.122074,
+        "cpu_ms": 8.072999999999443
+      },
+      {
+        "wall_ms": 8.065056,
+        "cpu_ms": 8.02799999999948
+      },
+      {
+        "wall_ms": 8.128439,
+        "cpu_ms": 8.064999999999767
+      }
+    ]
+  },
+  "fixtures": [
+    {
+      "id": "topological",
+      "case": "sample1",
+      "input": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_sample1.in",
+      "expected": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_sample1.out",
+      "n": 4,
+      "m": 5,
+      "kind": "official_sample",
+      "input_sha256": "b794bb44ae94c68bc101de28f0359c38d8c25f2859771431a154853b43890c71",
+      "output_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "id": "topological",
+      "case": "sample2",
+      "input": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_sample2.in",
+      "expected": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_sample2.out",
+      "n": 6,
+      "m": 3,
+      "kind": "official_sample",
+      "input_sha256": "39ef509034bbddb52b4d37e2d6b7a252bff6c1fc0478b87abd7831292ab06a2f",
+      "output_sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "id": "topological",
+      "case": "sample3",
+      "input": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_sample3.in",
+      "expected": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_sample3.out",
+      "n": 5,
+      "m": 8,
+      "kind": "official_sample",
+      "input_sha256": "81ad8693a6e35a38c0b97a2345ff580dfe1ed4297746d74226bef343ae5450f9",
+      "output_sha256": "1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2"
+    },
+    {
+      "id": "topological",
+      "case": "single_edge",
+      "input": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_single_edge.in",
+      "expected": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_single_edge.out",
+      "n": 100000,
+      "m": 1,
+      "kind": "custom_problem_domain",
+      "input_sha256": "a56d7e234ec84a1f4f7a222b173c3db98018457cc1507ff17b5c6e0c324a03ea",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "id": "topological",
+      "case": "forward_chain",
+      "input": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_forward_chain.in",
+      "expected": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_forward_chain.out",
+      "n": 100000,
+      "m": 99999,
+      "kind": "custom_problem_domain",
+      "input_sha256": "d0cfeab6968065660418b4eaa01afa42d8c57b69e2218638f99346fb6a9cd551",
+      "output_sha256": "27f8d822ea64f5bdb9564c533195e35d21689b84bf074d83bb2d7a866b5276d4"
+    },
+    {
+      "id": "topological",
+      "case": "reverse_chain",
+      "input": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_reverse_chain.in",
+      "expected": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_reverse_chain.out",
+      "n": 100000,
+      "m": 99999,
+      "kind": "custom_problem_domain",
+      "input_sha256": "b6552d83823d3e02b9c66795c393e658d4bf92335af79a061d625534bfdb9ab8",
+      "output_sha256": "27f8d822ea64f5bdb9564c533195e35d21689b84bf074d83bb2d7a866b5276d4"
+    },
+    {
+      "id": "topological",
+      "case": "star",
+      "input": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_star.in",
+      "expected": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_star.out",
+      "n": 100000,
+      "m": 99999,
+      "kind": "custom_problem_domain",
+      "input_sha256": "4b0cf08c5742332d4adf97a041c14a6a5ec877fbfbe4c20a352eae0d4da39dd5",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "id": "topological",
+      "case": "reverse_star",
+      "input": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_reverse_star.in",
+      "expected": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_reverse_star.out",
+      "n": 100000,
+      "m": 99999,
+      "kind": "custom_problem_domain",
+      "input_sha256": "275008728c18f403daea9e7fb614a15eda8df5fcadda1689535ab47583aa9cc0",
+      "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "id": "topological",
+      "case": "random_dag",
+      "input": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_random_dag.in",
+      "expected": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_random_dag.out",
+      "n": 100000,
+      "m": 100000,
+      "kind": "custom_problem_domain",
+      "input_sha256": "3ffe454dec428ed0aac9a1958e5175fc4981f61a15dfc713b4c2a46862c19341",
+      "output_sha256": "6e2ae11dad0616f66bbb2b6e6556f580bb987fd911d7132aa6bee2bfc7cc7b52"
+    },
+    {
+      "id": "topological",
+      "case": "permuted_dag",
+      "input": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_permuted_dag.in",
+      "expected": "/tmp/sirkit_four_hours_20261022/graph/topological/inputs/topological_permuted_dag.out",
+      "n": 100000,
+      "m": 100000,
+      "kind": "custom_problem_domain",
+      "input_sha256": "79f7db160c41d95687e1931746cb276abfc4497fb9afbdb4e28656b83b394791",
+      "output_sha256": "68ca3fba3b7e864770cb61aeb306d4bd4354b68ab4dd38450860c5d823e42a53"
+    }
+  ],
+  "online_submission_performed": false,
+  "compiler_reference": "https://atcoder.jp/contests/language-test-202505/rules",
+  "compiler_note": "GCC15.2/O2/gnu++23/native/auto-var-zero/AtCoder関連マクロを再現。公式の全外部ライブラリリンクや実行環境全体を再現したものではない。Clangは標準C++23・march指定なし。",
+  "official_sample_passes": 12,
+  "custom_reference_passes": 28,
+  "median_ms": {
+    "sample1": {
+      "wall_ms": 1.150724,
+      "cpu_ms": 1.0119999999997908
+    },
+    "sample2": {
+      "wall_ms": 1.014387,
+      "cpu_ms": 0.9469999999980327
+    },
+    "sample3": {
+      "wall_ms": 1.015864,
+      "cpu_ms": 0.9790000000012844
+    },
+    "single_edge": {
+      "wall_ms": 2.047721,
+      "cpu_ms": 2.010999999999874
+    },
+    "forward_chain": {
+      "wall_ms": 5.90857,
+      "cpu_ms": 5.82000000000138
+    },
+    "reverse_chain": {
+      "wall_ms": 5.660209,
+      "cpu_ms": 5.555999999998118
+    },
+    "star": {
+      "wall_ms": 3.400669,
+      "cpu_ms": 3.271000000000024
+    },
+    "reverse_star": {
+      "wall_ms": 4.985858,
+      "cpu_ms": 4.949000000000869
+    },
+    "random_dag": {
+      "wall_ms": 7.923752,
+      "cpu_ms": 7.881000000001026
+    },
+    "permuted_dag": {
+      "wall_ms": 8.260089,
+      "cpu_ms": 8.163000000001585
+    }
+  },
+  "timing_note": "Fixedmain/sharedIO currentbaseline only; no speedup or onlineAC claim. Regularfilestdout, SHAaftertiming. Endtoend childCPUuser+sys andwall. Sevenrounds rotatingcaseorder; sharedlocksCPU6buildCPU14run. AtCoder-related GNUflags recordedseparately.",
+  "date": "2026-10-23",
+  "local_status": "PASS",
+  "problem_url": "https://atcoder.jp/contests/dp/tasks/dp_g",
+  "source_changed": false,
+  "main_changed": false,
+  "io_changed": false,
+  "measurement_environment": {
+    "cpu": "Intel Core i9-14900K",
+    "build_cpu": 6,
+    "run_cpu": 14,
+    "timing_rounds": 7,
+    "locks": [
+      "/tmp/sirkit_performance_cpu14.lock",
+      "/tmp/atcoder_full_performance_20261018/benchmark.lock"
+    ]
+  },
+  "note": "現在版の初回オンライン提出を準備。本体の変更はなく、今回の測定は比較用の現行基準値。公式サンプル3件と自作の問題制約内DAG7件。オンラインACおよび高速化の実績ではない。",
+  "reproduction_script": "from pathlib import Path\nimport subprocess,json,hashlib,fcntl,resource,time,statistics\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');sha=lambda b:hashlib.sha256(b).hexdigest();source=r/'Verify/current/submissions/topological.cpp';data=source.read_bytes();body=(r/'Graph/Topological.cpp').read_bytes();assert sha(body)=='020f03338bbcc1429862b96176daba34badcc44db5d6a6c5940cc2cbfc244028';assert body==(r/'Graph/Topological_sort.cpp').read_bytes();(p/'body.hpp').write_bytes(body);(p/'submission.cpp').write_bytes(data)\nprior=json.loads((r/'Audit/performance-topological-2026-10-22.json').read_text());cases=[a for a in prior['inputs']if a['id']=='topological'];assert len(cases)==10\nfor c in cases:assert sha(Path(c['input']).read_bytes())==c['input_sha256']and sha(Path(c['expected']).read_bytes())==c['output_sha256']\nmeta=next(e for e in json.loads((r/'Verify/current/groups/structures.json').read_text())['entries']if e['id']=='topological')\nfor i,s in enumerate(meta['samples'],1):assert Path(next(c['input']for c in cases if c['case']=='sample'+str(i))).read_text()==s['input']\nconfigs={'gcc15_2_atcoder_related':(['/usr/bin/g++'],['-std=gnu++23','-march=native','-ftrivial-auto-var-init=zero','-DATCODER','-DNOMINMAX','-DONLINE_JUDGE']),'clang21_standard':(['/usr/bin/clang++','--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15'],['-std=c++23','-pedantic-errors','-DSIRKIT_DISABLE_SIMD'])}\nresult={'status':'INCOMPLETE','source_sha256':sha(body),'submission_sha256':sha(data),'driver_sha256':sha((r/'Verify/current/drivers/topological_longest_path_main.cpp').read_bytes()),'io_sha256':sha((r/'Verify/current/common/fast_io.hpp').read_bytes()),'body_unchanged_from':'Audit/verify-topological-2026-10-22.json','builds':[],'independent_tests':[],'outputs':[],'examples':[],'timing_raw_ms':{},'fixtures':cases,'online_submission_performed':False,'compiler_reference':'https://atcoder.jp/contests/language-test-202505/rules','compiler_note':'GCC15.2/O2/gnu++23/native/auto-var-zero/AtCoder関連マクロを再現。公式の全外部ライブラリリンクや実行環境全体を再現したものではない。Clangは標準C++23・march指定なし。'}\nwith open('/tmp/sirkit_performance_cpu14.lock','a')as a,open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as b:\n print('waiting locks',flush=True);fcntl.flock(a,fcntl.LOCK_EX);fcntl.flock(b,fcntl.LOCK_EX);print('acquired',flush=True)\n for conf,(cc,extra)in configs.items():\n  for skip in [False,True]:\n   name=conf+('_skip'if skip else'_checked');src=p/(name+'.cpp');src.write_bytes(data if skip else data.replace(b'#define SKIP_RUNTIME_CHECKS\\n',b'',1));exe=src.with_suffix('');cmd=['taskset','-c','6',*cc,'-O2','-Wall','-Wextra','-Werror',*extra,str(src),'-o',str(exe)];o=subprocess.run(cmd,capture_output=True,text=True);assert o.returncode==0 and not o.stderr,(cmd,o.stderr);result['builds'].append({'name':name,'command':cmd,'source_sha256':sha(src.read_bytes())})\n   for c in cases:\n    f=Path(c['input'])\n    with f.open('rb')as inp,(p/'answer.out').open('wb')as out:o=subprocess.run(['taskset','-c','14',str(exe)],stdin=inp,stdout=out,stderr=subprocess.PIPE)\n    output=(p/'answer.out').read_bytes();assert o.returncode==0 and not o.stderr and sha(output)==c['output_sha256'],(name,c,o.stderr,output);result['outputs'].append({'build':name,'case':c['case'],'kind':c['kind'],'input_sha256':sha(f.read_bytes()),'output_sha256':sha(output)})\n   for test in ['topological_reference_test.cpp','topological_allocation_test.cpp']:\n    testsource=r/'Verify/current/tests'/test;binary=p/(name+'_'+test[:-4]);cmd=['taskset','-c','6',*cc,'-O2','-Wall','-Wextra','-Werror',*extra,*(['-DSKIP_RUNTIME_CHECKS']if skip else[]),str(testsource),'-o',str(binary)];o=subprocess.run(cmd,capture_output=True,text=True);assert o.returncode==0 and not o.stderr,(cmd,o.stderr);o=subprocess.run(['taskset','-c','14',str(binary)],capture_output=True,text=True);assert o.returncode==0 and not o.stderr,(test,name,o.stderr);result['independent_tests'].append({'name':name,'test':str(testsource.relative_to(r)),'test_sha256':sha(testsource.read_bytes()),'command':cmd,'stdout':o.stdout})\n   print(name,'10 outputs and2 API suites PASS',flush=True)\n  exe=p/(conf+'_example');cmd=['taskset','-c','6',*cc,'-O2','-Wall','-Wextra','-Werror',*extra,str(r/'Examples/topological_example.cpp'),'-o',str(exe)];o=subprocess.run(cmd,capture_output=True,text=True);assert o.returncode==0 and not o.stderr,o.stderr;o=subprocess.run(['taskset','-c','14',str(exe)],capture_output=True,text=True);assert o.returncode==0 and not o.stderr;assert o.stdout=='0 1 3 2 \\n1 0\\n0 1 3 2 \\n0\\n',o.stdout;result['examples'].append({'configuration':conf,'stdout':o.stdout})\n for rep in range(7):\n  for c in cases[rep:]+cases[:rep]:\n   with Path(c['input']).open('rb')as inp,(p/'timing.out').open('wb')as out:\n    before=resource.getrusage(resource.RUSAGE_CHILDREN);t=time.perf_counter_ns();o=subprocess.run(['taskset','-c','14',str(p/'gcc15_2_atcoder_related_skip')],stdin=inp,stdout=out,stderr=subprocess.PIPE);wall=(time.perf_counter_ns()-t)/1e6;after=resource.getrusage(resource.RUSAGE_CHILDREN)\n   assert o.returncode==0 and not o.stderr and sha((p/'timing.out').read_bytes())==c['output_sha256'];cpu=(after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime)*1000;result['timing_raw_ms'].setdefault(c['case'],[]).append({'wall_ms':wall,'cpu_ms':cpu})\n  print('timing round',rep,flush=True)\n result.update(status='PASS',official_sample_passes=sum(x['kind']=='official_sample'for x in result['outputs']),custom_reference_passes=sum(x['kind']!='official_sample'for x in result['outputs']),median_ms={c:{k:statistics.median(t[k]for t in ts)for k in ['wall_ms','cpu_ms']}for c,ts in result['timing_raw_ms'].items()},timing_note='Fixedmain/sharedIO currentbaseline only; no speedup or onlineAC claim. Regularfilestdout, SHAaftertiming. Endtoend childCPUuser+sys andwall. Sevenrounds rotatingcaseorder; sharedlocksCPU6buildCPU14run. AtCoder-related GNUflags recordedseparately.')\n(p/'results.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n');print('PASS',len(result['outputs']),'outputs',len(result['independent_tests']),'API suites',flush=True)\n"
+}

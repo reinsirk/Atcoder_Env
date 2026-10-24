@@ -1,0 +1,361 @@
+{
+  "date": "2026-10-22",
+  "scope": "weighted_union_findの原典・ライセンス・履歴と現在APIの記録。速度測定と最終検証は別Audit。",
+  "source": {
+    "path": "DataStructure/union_find_w.cpp",
+    "sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+    "SPDX": "CC0-1.0",
+    "label": "Original Source",
+    "url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/weighted-union-find"
+  },
+  "primary_sources": [
+    {
+      "name": "chapter.html",
+      "url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/weighted-union-find",
+      "final_url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/weighted-union-find",
+      "status": 200,
+      "sha256": "5a18124b54e3ecf0a5d927338e7ca42ff342ecdde212b0662f4ffc65affa5cab",
+      "bytes": 51347
+    },
+    {
+      "name": "book.html",
+      "url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming",
+      "final_url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming",
+      "status": 200,
+      "sha256": "edfb009fe3c67f5c2235d951107125adb29db1f1d5563d2f1aba2f10dae31395",
+      "bytes": 99899
+    },
+    {
+      "name": "weighted-union-find.md",
+      "url": "https://raw.githubusercontent.com/Reputeless/Zenn.Public/main/books/standard-cpp-for-competitive-programming/weighted-union-find.md",
+      "final_url": "https://raw.githubusercontent.com/Reputeless/Zenn.Public/main/books/standard-cpp-for-competitive-programming/weighted-union-find.md",
+      "status": 200,
+      "sha256": "1258efd2060cb11874d55a60b0b6db1341e026453da5986f3c40c79bbf81bb5b",
+      "bytes": 17174
+    },
+    {
+      "name": "README.md",
+      "url": "https://raw.githubusercontent.com/Reputeless/Zenn.Public/main/README.md",
+      "final_url": "https://raw.githubusercontent.com/Reputeless/Zenn.Public/main/README.md",
+      "status": 200,
+      "sha256": "0c0d8be9515a33951c229bb3f139230b31c6591fdea78de511a9f4b5007bafec",
+      "bytes": 13
+    }
+  ],
+  "license": {
+    "status": "confirmed_cc0",
+    "evidence": {
+      "url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming",
+      "source_snapshot_sha256": "edfb009fe3c67f5c2235d951107125adb29db1f1d5563d2f1aba2f10dae31395",
+      "short_excerpt": "記事中のソースコードは CC0 1.0",
+      "scope": "記事内のソースコード。書籍本文一般や全git履歴へ一括適用する意味ではない。"
+    },
+    "scope_note": "著者の書籍トップが記事中ソースコードへのCC0 1.0適用を明記する。本文一般・全リポジトリ・全履歴へ一括適用したという意味ではない。READMEの取得成功だけをライセンス根拠にはしない。"
+  },
+  "history": {
+    "bundle": {
+      "path": "/tmp/Atcoder_Env_before_initial_20261021T163122Z/history.bundle",
+      "sha256": "4201f74738404c4d6f7f5ce672f3a782327fa4613daf48b3e73f2918dccc9020"
+    },
+    "snapshots": [
+      {
+        "git": "30c83f0:union_find_w.cpp",
+        "command": [
+          "git",
+          "--git-dir=/tmp/sirkit_wuf_20261022/provenance/history.git",
+          "show",
+          "30c83f0:union_find_w.cpp"
+        ],
+        "sha256": "ddc67240a3a301d114d2188eac08c047c89500cf3fbdcc2fdd8a6ab0ddb1f0f5",
+        "bytes": 3238,
+        "source": "#include <bits/stdc++.h>\r\nusing namespace std;\r\n\r\n// Union-Find\r\ntemplate <class Type>\r\nclass UnionFindW\r\n{\r\npublic:\r\n    UnionFindW() = default;\r\n\r\n    /// @brief Union-Find 木を構築します。\r\n    /// @param n 要素数\r\n    explicit UnionFindW(size_t n)\r\n        : param(n, -1), diff_w(n) {};\r\n\r\n    /// @brief 頂点 i の root のインデックスを返します。\r\n    /// @param i 調べる頂点のインデックス\r\n    /// @return 頂点 i の root のインデックス\r\n    int root(int i)\r\n    {\r\n        const int y = param.at(i);\r\n        if (y < 0)\r\n        {\r\n            return i;\r\n        }\r\n\r\n        const int x = root(y);\r\n        diff_w.at(i) += diff_w.at(y);\r\n\r\n        // 経路圧縮\r\n        return (param.at(i) = x);\r\n    }\r\n\r\n    /// @brief a のグループと b のグループを統合します。\r\n    /// @param a 一方のインデックス\r\n    /// @param b 他方のインデックス\r\n    /// @param w (bの重み) - (aの重み)\r\n    void unite(int a, int b, Type w)\r\n    {\r\n\r\n        w = w + weight(a) - weight(b);\r\n\r\n        a = root(a);\r\n        b = root(b);       \r\n\r\n        if (a != b)\r\n        {\r\n            // union by size (小さいほうが子になる）\r\n            if (-param.at(a) < -param.at(b))\r\n            {\r\n                std::swap(a, b);\r\n                w = -w;\r\n            }\r\n\r\n            param.at(a) += param.at(b);\r\n            param.at(b) = a;\r\n            diff_w.at(b) = w;\r\n        }\r\n    }\r\n\r\n    /// @brief a と b が同じグループに属すかを返します。\r\n    /// @param a 一方のインデックス\r\n    /// @param b 他方のインデックス\r\n    /// @return a と b が同じグループに属す場合 true, それ以外の場合は false\r\n    bool issame(int a, int b)\r\n    {\r\n        return (root(a) == root(b));\r\n    }\r\n\r\n    /// @brief i が属するグループの要素数を返します。\r\n    /// @param i インデックス\r\n    /// @return i が属するグループの要素数\r\n    int size(int i)\r\n    {\r\n        return -param.at(root(i));\r\n    }\r\n\r\n    /// @brief (b の重み) - (a の重み) を返します。\r\n    /// @param a 一方のインデックス\r\n    /// @param b 他方のインデックス\r\n    /// @remark a と b が同じグループに属さない場合の結果は不定です。\r\n    /// @return (b の重み) - (a の重み)\r\n    Type diff(int a, int b)\r\n    {\r\n        return (weight(b) - weight(a));\r\n    }\r\n\r\nprivate:\r\n    // param[i] は i の 親,\r\n    // ただし root の場合は (-1 * そのグループに属する要素数)\r\n    std::vector<int> param;\r\n\r\n    std::vector<Type> diff_w;\r\n\r\n    Type weight(int i)\r\n    {\r\n        root(i);\r\n        return diff_w.at(i);\r\n    }\r\n};\r\n\r\nint main(void)\r\n{\r\n    int n, m;\r\n    cin >> n >> m;\r\n    UnionFindW<int> uf(n);\r\n    for (int i = 0; i < m; i++)\r\n    {\r\n        int l, r, d;\r\n        cin >> l >> r >> d;\r\n        l--;\r\n        r--;\r\n        if (uf.issame(l, r))\r\n        {\r\n            if (uf.diff(l, r) != d)\r\n            {\r\n                cout << \"No\" << endl;\r\n                return 0;\r\n            }\r\n        }\r\n        else\r\n        {\r\n            uf.unite(l, r, d);\r\n        }\r\n    }\r\n    cout << \"Yes\" << endl;\r\n    return 0;\r\n}"
+      },
+      {
+        "git": "7f77a51:union_find_w.cpp",
+        "command": [
+          "git",
+          "--git-dir=/tmp/sirkit_wuf_20261022/provenance/history.git",
+          "show",
+          "7f77a51:union_find_w.cpp"
+        ],
+        "sha256": "ddc67240a3a301d114d2188eac08c047c89500cf3fbdcc2fdd8a6ab0ddb1f0f5",
+        "bytes": 3238,
+        "source": "#include <bits/stdc++.h>\r\nusing namespace std;\r\n\r\n// Union-Find\r\ntemplate <class Type>\r\nclass UnionFindW\r\n{\r\npublic:\r\n    UnionFindW() = default;\r\n\r\n    /// @brief Union-Find 木を構築します。\r\n    /// @param n 要素数\r\n    explicit UnionFindW(size_t n)\r\n        : param(n, -1), diff_w(n) {};\r\n\r\n    /// @brief 頂点 i の root のインデックスを返します。\r\n    /// @param i 調べる頂点のインデックス\r\n    /// @return 頂点 i の root のインデックス\r\n    int root(int i)\r\n    {\r\n        const int y = param.at(i);\r\n        if (y < 0)\r\n        {\r\n            return i;\r\n        }\r\n\r\n        const int x = root(y);\r\n        diff_w.at(i) += diff_w.at(y);\r\n\r\n        // 経路圧縮\r\n        return (param.at(i) = x);\r\n    }\r\n\r\n    /// @brief a のグループと b のグループを統合します。\r\n    /// @param a 一方のインデックス\r\n    /// @param b 他方のインデックス\r\n    /// @param w (bの重み) - (aの重み)\r\n    void unite(int a, int b, Type w)\r\n    {\r\n\r\n        w = w + weight(a) - weight(b);\r\n\r\n        a = root(a);\r\n        b = root(b);       \r\n\r\n        if (a != b)\r\n        {\r\n            // union by size (小さいほうが子になる）\r\n            if (-param.at(a) < -param.at(b))\r\n            {\r\n                std::swap(a, b);\r\n                w = -w;\r\n            }\r\n\r\n            param.at(a) += param.at(b);\r\n            param.at(b) = a;\r\n            diff_w.at(b) = w;\r\n        }\r\n    }\r\n\r\n    /// @brief a と b が同じグループに属すかを返します。\r\n    /// @param a 一方のインデックス\r\n    /// @param b 他方のインデックス\r\n    /// @return a と b が同じグループに属す場合 true, それ以外の場合は false\r\n    bool issame(int a, int b)\r\n    {\r\n        return (root(a) == root(b));\r\n    }\r\n\r\n    /// @brief i が属するグループの要素数を返します。\r\n    /// @param i インデックス\r\n    /// @return i が属するグループの要素数\r\n    int size(int i)\r\n    {\r\n        return -param.at(root(i));\r\n    }\r\n\r\n    /// @brief (b の重み) - (a の重み) を返します。\r\n    /// @param a 一方のインデックス\r\n    /// @param b 他方のインデックス\r\n    /// @remark a と b が同じグループに属さない場合の結果は不定です。\r\n    /// @return (b の重み) - (a の重み)\r\n    Type diff(int a, int b)\r\n    {\r\n        return (weight(b) - weight(a));\r\n    }\r\n\r\nprivate:\r\n    // param[i] は i の 親,\r\n    // ただし root の場合は (-1 * そのグループに属する要素数)\r\n    std::vector<int> param;\r\n\r\n    std::vector<Type> diff_w;\r\n\r\n    Type weight(int i)\r\n    {\r\n        root(i);\r\n        return diff_w.at(i);\r\n    }\r\n};\r\n\r\nint main(void)\r\n{\r\n    int n, m;\r\n    cin >> n >> m;\r\n    UnionFindW<int> uf(n);\r\n    for (int i = 0; i < m; i++)\r\n    {\r\n        int l, r, d;\r\n        cin >> l >> r >> d;\r\n        l--;\r\n        r--;\r\n        if (uf.issame(l, r))\r\n        {\r\n            if (uf.diff(l, r) != d)\r\n            {\r\n                cout << \"No\" << endl;\r\n                return 0;\r\n            }\r\n        }\r\n        else\r\n        {\r\n            uf.unite(l, r, d);\r\n        }\r\n    }\r\n    cout << \"Yes\" << endl;\r\n    return 0;\r\n}"
+      },
+      {
+        "git": "32fb166:union_find_w.cpp",
+        "command": [
+          "git",
+          "--git-dir=/tmp/sirkit_wuf_20261022/provenance/history.git",
+          "show",
+          "32fb166:union_find_w.cpp"
+        ],
+        "sha256": "a6601a78050ba9b0499d9d9dc563f59cc0d60b4cec5a4bda53987ba7cc315860",
+        "bytes": 3354,
+        "source": "#include <bits/stdc++.h>\r\nusing namespace std;\r\n// original: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/weighted-union-find\r\n\r\n// Union-Find\r\ntemplate <class Type>\r\nclass UnionFindW\r\n{\r\npublic:\r\n    UnionFindW() = default;\r\n\r\n    /// @brief Union-Find 木を構築します。\r\n    /// @param n 要素数\r\n    explicit UnionFindW(size_t n)\r\n        : param(n, -1), diff_w(n) {};\r\n\r\n    /// @brief 頂点 i の root のインデックスを返します。\r\n    /// @param i 調べる頂点のインデックス\r\n    /// @return 頂点 i の root のインデックス\r\n    int root(int i)\r\n    {\r\n        const int y = param.at(i);\r\n        if (y < 0)\r\n        {\r\n            return i;\r\n        }\r\n\r\n        const int x = root(y);\r\n        diff_w.at(i) += diff_w.at(y);\r\n\r\n        // 経路圧縮\r\n        return (param.at(i) = x);\r\n    }\r\n\r\n    /// @brief a のグループと b のグループを統合します。\r\n    /// @param a 一方のインデックス\r\n    /// @param b 他方のインデックス\r\n    /// @param w (bの重み) - (aの重み)\r\n    void unite(int a, int b, Type w)\r\n    {\r\n\r\n        w = w + weight(a) - weight(b);\r\n\r\n        a = root(a);\r\n        b = root(b);       \r\n\r\n        if (a != b)\r\n        {\r\n            // union by size (小さいほうが子になる）\r\n            if (-param.at(a) < -param.at(b))\r\n            {\r\n                std::swap(a, b);\r\n                w = -w;\r\n            }\r\n\r\n            param.at(a) += param.at(b);\r\n            param.at(b) = a;\r\n            diff_w.at(b) = w;\r\n        }\r\n    }\r\n\r\n    /// @brief a と b が同じグループに属すかを返します。\r\n    /// @param a 一方のインデックス\r\n    /// @param b 他方のインデックス\r\n    /// @return a と b が同じグループに属す場合 true, それ以外の場合は false\r\n    bool issame(int a, int b)\r\n    {\r\n        return (root(a) == root(b));\r\n    }\r\n\r\n    /// @brief i が属するグループの要素数を返します。\r\n    /// @param i インデックス\r\n    /// @return i が属するグループの要素数\r\n    int size(int i)\r\n    {\r\n        return -param.at(root(i));\r\n    }\r\n\r\n    /// @brief (b の重み) - (a の重み) を返します。\r\n    /// @param a 一方のインデックス\r\n    /// @param b 他方のインデックス\r\n    /// @remark a と b が同じグループに属さない場合の結果は不定です。\r\n    /// @return (b の重み) - (a の重み)\r\n    Type diff(int a, int b)\r\n    {\r\n        return (weight(b) - weight(a));\r\n    }\r\n\r\nprivate:\r\n    // param[i] は i の 親,\r\n    // ただし root の場合は (-1 * そのグループに属する要素数)\r\n    std::vector<int> param;\r\n\r\n    std::vector<Type> diff_w;\r\n\r\n    Type weight(int i)\r\n    {\r\n        root(i);\r\n        return diff_w.at(i);\r\n    }\r\n};\r\n\r\nint main(void)\r\n{\r\n    int n, m;\r\n    cin >> n >> m;\r\n    UnionFindW<int> uf(n);\r\n    for (int i = 0; i < m; i++)\r\n    {\r\n        int l, r, d;\r\n        cin >> l >> r >> d;\r\n        l--;\r\n        r--;\r\n        if (uf.issame(l, r))\r\n        {\r\n            if (uf.diff(l, r) != d)\r\n            {\r\n                cout << \"No\" << endl;\r\n                return 0;\r\n            }\r\n        }\r\n        else\r\n        {\r\n            uf.unite(l, r, d);\r\n        }\r\n    }\r\n    cout << \"Yes\" << endl;\r\n    return 0;\r\n}"
+      },
+      {
+        "git": "b76e70f:DataStructure/union_find_w.cpp",
+        "command": [
+          "git",
+          "--git-dir=/tmp/sirkit_wuf_20261022/provenance/history.git",
+          "show",
+          "b76e70f:DataStructure/union_find_w.cpp"
+        ],
+        "sha256": "4217e895f790a3cfc720ba87d321685e3c38cb39b4ac3c8b515743909013eacf",
+        "bytes": 5630,
+        "source": "// SPDX-License-Identifier: CC0-1.0\n// Original Source: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/weighted-union-find\n#include <algorithm>\n#include <cstddef>\n#include <limits>\n#include <optional>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n#ifndef REINSIRK_UNION_FIND_W_DEFINED\n#define REINSIRK_UNION_FIND_W_DEFINED\n// UnionFindW<T>(n=0): n要素を構築。T{}は零、加減算・符号反転・等値比較が必要。O(n)時間・領域。\n// root(i)/leader(i): 代表、issame(a,b)/same(a,b): 同一成分か、size(i): 成分サイズ。償却O(α(n))。\n// unite(a,b,w): weight(b)-weight(a)=wとして未接続なら結合。既接続の矛盾は従来どおり無視。\n// merge(a,b,w): 同じ制約で新規結合ならtrue、既接続なら整合性にかかわらずfalse。償却O(α(n))。\n// constrain(a,b,w): 未接続なら結合しtrue、既接続なら制約が整合するときtrue。償却O(α(n))。\n// weight(i): 代表を零とした重み、diff(a,b): 重み差。diffは既定で未接続なら例外、検査省略時は接続が前提。\n// try_diff(a,b): 接続済みなら差、未接続ならnullopt。償却O(α(n))。Tの演算結果は表現範囲内が前提。\n// swap(other): 内容を交換。O(1)。コピーは独立、移動元は空。\n// size()/component_count(): 全要素数/成分数、O(1)。groups(): 成分ごとの頂点昇順一覧、O(n α(n))。\ntemplate<class Type>\nclass UnionFindW {\n    std::vector<int> param;\n    std::vector<Type> diff_w;\n    int components_ = 0;\n    static std::size_t checked_size(std::size_t n) {\n        if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n            throw std::length_error(\"UnionFindW: too many vertices\");\n        return n;\n    }\n    void check(int i) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (static_cast<std::size_t>(i) >= param.size()) throw std::out_of_range(\"UnionFindW: vertex\");\n#else\n        (void)i;\n#endif\n    }\n    int leader_unchecked(int i) {\n        const int p = param[i];\n        if (p < 0) return i;\n        if (param[p] < 0) return p;\n        const int r = leader_unchecked(p);\n        diff_w[i] += diff_w[p];\n        return param[i] = r;\n    }\n    bool link(int a, int b, Type w) {\n        if (param[a] > param[b]) { std::swap(a, b); w = -w; }\n        diff_w[b] = w;\n        param[a] += param[b]; param[b] = a; --components_;\n        return true;\n    }\npublic:\n    explicit UnionFindW(std::size_t n = 0)\n        : param(checked_size(n), -1), diff_w(n), components_(static_cast<int>(n)) {}\n    UnionFindW(const UnionFindW&) = default;\n    UnionFindW& operator=(const UnionFindW& other) {\n        if (this != &other) { UnionFindW copy(other); swap(copy); }\n        return *this;\n    }\n    void swap(UnionFindW& other) noexcept {\n        param.swap(other.param); diff_w.swap(other.diff_w); std::swap(components_, other.components_);\n    }\n    UnionFindW(UnionFindW&& other) noexcept\n        : param(std::move(other.param)), diff_w(std::move(other.diff_w)), components_(std::exchange(other.components_, 0)) { other.param.clear(); other.diff_w.clear(); }\n    UnionFindW& operator=(UnionFindW&& other) noexcept {\n        if (this != &other) {\n            param = std::move(other.param); diff_w = std::move(other.diff_w);\n            components_ = std::exchange(other.components_, 0); other.param.clear(); other.diff_w.clear();\n        }\n        return *this;\n    }\n    int root(int i) { check(i); return leader_unchecked(i); }\n    int leader(int i) { return root(i); }\n    bool merge(int a, int b, Type w) {\n        check(a); check(b);\n        const int ra = leader_unchecked(a), rb = leader_unchecked(b);\n        if (ra == rb) return false;\n        return link(ra, rb, w + diff_w[a] - diff_w[b]);\n    }\n    void unite(int a, int b, Type w) { (void)merge(a, b, w); }\n    bool constrain(int a, int b, Type w) {\n        check(a); check(b);\n        const int ra = leader_unchecked(a), rb = leader_unchecked(b);\n        if (ra == rb) return diff_w[b] - diff_w[a] == w;\n        return link(ra, rb, w + diff_w[a] - diff_w[b]);\n    }\n    bool same(int a, int b) { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n    bool issame(int a, int b) { return same(a, b); }\n    int size(int i) { return -param[root(i)]; }\n    int size() const noexcept { return static_cast<int>(param.size()); }\n    int component_count() const noexcept { return components_; }\n    Type weight(int i) { (void)root(i); return diff_w[i]; }\n    Type diff(int a, int b) {\n        check(a); check(b);\n#ifndef SKIP_RUNTIME_CHECKS\n        if (leader_unchecked(a) != leader_unchecked(b)) throw std::invalid_argument(\"UnionFindW: disconnected\");\n#else\n        (void)leader_unchecked(a); (void)leader_unchecked(b);\n#endif\n        return diff_w[b] - diff_w[a];\n    }\n    std::optional<Type> try_diff(int a, int b) {\n        check(a); check(b);\n        if (leader_unchecked(a) != leader_unchecked(b)) return std::nullopt;\n        return diff_w[b] - diff_w[a];\n    }\n    std::vector<std::vector<int>> groups() {\n        std::vector<int> leaders(param.size()), counts(param.size(), 0), slot(param.size());\n        for (int i = 0; i < size(); ++i) ++counts[leaders[i] = leader_unchecked(i)];\n        std::vector<std::vector<int>> result; result.reserve(components_);\n        for (int i = 0; i < size(); ++i) if (counts[i]) {\n            slot[i] = static_cast<int>(result.size()); result.emplace_back(); result.back().reserve(counts[i]);\n        }\n        for (int i = 0; i < size(); ++i) result[slot[leaders[i]]].push_back(i);\n        return result;\n    }\n};\n#endif\n"
+      }
+    ],
+    "baseline_sha256": "9b732b7570f8b3e1fd41ab2d70e92f3f479ada0bd4cfc24e193cffc1a583b52c",
+    "guard_prefix_only": true
+  },
+  "primary_old_comparison": {
+    "source_section": "1.2 省メモリ化",
+    "primary_section_code_sha256": "f71ad6978368ff3369bcd2a29c39efc9ab168572bb75f8712336b0f2f91473e4",
+    "license_evidence": {
+      "url": "https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming",
+      "source_snapshot_sha256": "edfb009fe3c67f5c2235d951107125adb29db1f1d5563d2f1aba2f10dae31395",
+      "short_excerpt": "記事中のソースコードは CC0 1.0",
+      "scope": "記事内のソースコード。書籍本文一般や全git履歴へ一括適用する意味ではない。"
+    },
+    "historical_verify_link": "https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7276925#2",
+    "normalization": "コメント・空白を除去、m_parentsOrSize/param・m_diffWeights/diff_w・find/root・merge/unite・connected/issameを対応付け、at(expr)と[expr]を対応付けた。rootは親の一時変数を展開、結合は加減の式の違いを明示して照合。",
+    "methods": [
+      {
+        "primary_signature": "Type diff(int a, int b)",
+        "old_signature": "Type diff(int a, int b)",
+        "normalized_identical": true,
+        "normalized_sha256": "ca295d3b6849c00139bafbf061a360487c217e50a3bc26d37afcfb2df5485ad2",
+        "primary_code": "Type diff(int a, int b)\n\t{\n\t\treturn (weight(b) - weight(a));\n\t}",
+        "old_code": "Type diff(int a, int b)\n    {\n        return (weight(b) - weight(a));\n    }"
+      },
+      {
+        "primary_signature": "bool connected(int a, int b)",
+        "old_signature": "bool issame(int a, int b)",
+        "normalized_identical": true,
+        "normalized_sha256": "1dc25c8845739f50ccf05c57dd1854a0513fd93d68eb955354241396349957bb",
+        "primary_code": "bool connected(int a, int b)\n\t{\n\t\treturn (find(a) == find(b));\n\t}",
+        "old_code": "bool issame(int a, int b)\n    {\n        return (root(a) == root(b));\n    }"
+      },
+      {
+        "primary_signature": "int size(int i)",
+        "old_signature": "int size(int i)",
+        "normalized_identical": true,
+        "normalized_sha256": "efa7678c5b49c748c994ebb945b5fcb6f6194f5b25b8442957c2fc93528a3048",
+        "primary_code": "int size(int i)\n\t{\n\t\treturn -m_parentsOrSize[find(i)];\n\t}",
+        "old_code": "int size(int i)\n    {\n        return -param.at(root(i));\n    }"
+      },
+      {
+        "primary_signature": "Type weight(int i)",
+        "old_signature": "Type weight(int i)",
+        "normalized_identical": true,
+        "normalized_sha256": "37a43de840b48c1084cfaebc8a4d2085eea17623d81a57b1156872440b045ab5",
+        "primary_code": "Type weight(int i)\n\t{\n\t\tfind(i); // 経路圧縮\n\t\treturn m_diffWeights[i];\n\t}",
+        "old_code": "Type weight(int i)\n    {\n        root(i);\n        return diff_w.at(i);\n    }"
+      },
+      {
+        "primary_signature": "int find(int i)",
+        "old_signature": "int root(int i)",
+        "after_parent_temporary_inlining_identical": true,
+        "normalized_sha256": "46382965f12ae49935bf86c13d9a61a85b223625010e77eb3f987145db8794ba",
+        "primary_code": "int find(int i)\n\t{\n\t\tif (m_parentsOrSize[i] < 0)\n\t\t{\n\t\t\treturn i;\n\t\t}\n\n\t\tconst int root = find(m_parentsOrSize[i]);\n\n\t\tm_diffWeights[i] += m_diffWeights[m_parentsOrSize[i]];\n\n\t\t// 経路圧縮\n\t\treturn (m_parentsOrSize[i] = root);\n\t}",
+        "old_code": "int root(int i)\n    {\n        const int y = param.at(i);\n        if (y < 0)\n        {\n            return i;\n        }\n\n        const int x = root(y);\n        diff_w.at(i) += diff_w.at(y);\n\n        // 経路圧縮\n        return (param.at(i) = x);\n    }"
+      },
+      {
+        "primary_signature": "void merge(int a, int b, Type w)",
+        "old_signature": "void unite(int a, int b, Type w)",
+        "normalized_identical": false,
+        "after_weight_expression_rewrite_identical": true,
+        "expression_rewrite": "w += weight(a); w -= weight(b); → w = w + weight(a) - weight(b);。可換加法群と表現範囲の前提で同値。任意のthrowing演算の失敗挙動まで同じとする意味ではない。",
+        "primary_code": "void merge(int a, int b, Type w)\n\t{\n\t\tw += weight(a);\n\t\tw -= weight(b);\n\n\t\ta = find(a);\n\t\tb = find(b);\n\n\t\tif (a != b)\n\t\t{\n\t\t\t// union by size (小さいほうが子になる）\n\t\t\tif (-m_parentsOrSize[a] < -m_parentsOrSize[b])\n\t\t\t{\n\t\t\t\tstd::swap(a, b);\n\t\t\t\tw = -w;\n\t\t\t}\n\n\t\t\tm_parentsOrSize[a] += m_parentsOrSize[b];\n\t\t\tm_parentsOrSize[b] = a;\n\t\t\tm_diffWeights[b] = w;\n\t\t}\n\t}",
+        "old_code": "void unite(int a, int b, Type w)\n    {\n\n        w = w + weight(a) - weight(b);\n\n        a = root(a);\n        b = root(b);       \n\n        if (a != b)\n        {\n            // union by size (小さいほうが子になる）\n            if (-param.at(a) < -param.at(b))\n            {\n                std::swap(a, b);\n                w = -w;\n            }\n\n            param.at(a) += param.at(b);\n            param.at(b) = a;\n            diff_w.at(b) = w;\n        }\n    }"
+      }
+    ],
+    "old_7f77a51_vs_32fb166_comment_only": true
+  },
+  "primary_code_1_2": "#include <iostream>\n#include <vector>\n#include <utility> // std::swap()\n\n/// @brief 重み付き Union-Find 木\n/// @tparam Type 重みの表現に使う型\n/// @note 1.2 省メモリ化\n/// @see https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/weighted-union-find\ntemplate <class Type>\nclass WeightedUnionFind\n{\npublic:\n\n\tWeightedUnionFind() = default;\n\n\t/// @brief 重み付き Union-Find 木を構築します。\n\t/// @param n 要素数\n\texplicit WeightedUnionFind(size_t n)\n\t\t: m_parentsOrSize(n, -1)\n\t\t, m_diffWeights(n) {}\n\n\t/// @brief 頂点 i の root のインデックスを返します。\n\t/// @param i 調べる頂点のインデックス\n\t/// @return 頂点 i の root のインデックス\n\tint find(int i)\n\t{\n\t\tif (m_parentsOrSize[i] < 0)\n\t\t{\n\t\t\treturn i;\n\t\t}\n\n\t\tconst int root = find(m_parentsOrSize[i]);\n\n\t\tm_diffWeights[i] += m_diffWeights[m_parentsOrSize[i]];\n\n\t\t// 経路圧縮\n\t\treturn (m_parentsOrSize[i] = root);\n\t}\n\n\t/// @brief a のグループと b のグループを統合します。\n\t/// @param a 一方のインデックス\n\t/// @param b 他方のインデックス\n\t/// @param w (b の重み) - (a の重み)\n\tvoid merge(int a, int b, Type w)\n\t{\n\t\tw += weight(a);\n\t\tw -= weight(b);\n\n\t\ta = find(a);\n\t\tb = find(b);\n\n\t\tif (a != b)\n\t\t{\n\t\t\t// union by size (小さいほうが子になる）\n\t\t\tif (-m_parentsOrSize[a] < -m_parentsOrSize[b])\n\t\t\t{\n\t\t\t\tstd::swap(a, b);\n\t\t\t\tw = -w;\n\t\t\t}\n\n\t\t\tm_parentsOrSize[a] += m_parentsOrSize[b];\n\t\t\tm_parentsOrSize[b] = a;\n\t\t\tm_diffWeights[b] = w;\n\t\t}\n\t}\n\n\t/// @brief (b の重み) - (a の重み) を返します。\n\t/// @param a 一方のインデックス\n\t/// @param b 他方のインデックス\n\t/// @remark a と b が同じグループに属さない場合の結果は不定です。\n\t/// @return (b の重み) - (a の重み)\n\tType diff(int a, int b)\n\t{\n\t\treturn (weight(b) - weight(a));\n\t}\n\n\t/// @brief a と b が同じグループに属すかを返します。\n\t/// @param a 一方のインデックス\n\t/// @param b 他方のインデックス\n\t/// @return a と b が同じグループに属す場合 true, それ以外の場合は false\n\tbool connected(int a, int b)\n\t{\n\t\treturn (find(a) == find(b));\n\t}\n\n\t/// @brief i が属するグループの要素数を返します。\n\t/// @param i インデックス\n\t/// @return i が属するグループの要素数\n\tint size(int i)\n\t{\n\t\treturn -m_parentsOrSize[find(i)];\n\t}\n\nprivate:\n\n\t// m_parentsOrSize[i] は i の 親,\n\t// ただし root の場合は (-1 * そのグループに属する要素数)\n\tstd::vector<int> m_parentsOrSize;\n\n\t// 重み\n\tstd::vector<Type> m_diffWeights;\n\n\tType weight(int i)\n\t{\n\t\tfind(i); // 経路圧縮\n\t\treturn m_diffWeights[i];\n\t}\n};\n",
+  "lineage": [
+    "ローカル30c83f0のunion_find_w.cppと7f77a51は同一SHA。負サイズの親配列と別の差配列を持つ旧版は原典1.2省メモリ化と対応する。",
+    "diff/connected/size/weightと旧版diff/issame/size/weightは、名称・配列at/indexアクセス・コメント/空白を対応付けると本文が一致。rootは親の一時変数を展開すると一致する。",
+    "結合時のw補正には原典の2回の複合代入と旧版の加減式という違いがあり、可換加法群と表現範囲の前提で同値な書換えとして明示した。throwing演算の失敗挙動まで同じと断定しない。",
+    "32fb166は出典コメントを追加した版で、同じ正規化では旧版と一致する。",
+    "既存整備記録では標準include・private所有・入力検査・bool merge/constrain/try_diff・成分数/groups・コピー/移動等をローカル改修として記録する。",
+    "b76e70fのDataStructure/union_find_w.cppは4217e895...。これにREINSIRK_からSIRKIT_へのガード名置換だけを施すと今回の凍結baseline9b732b75...と全バイト一致する。"
+  ],
+  "label_decision": {
+    "label": "Original Source",
+    "reason": "負サイズの親配列と差配列・重み付き経路圧縮・サイズ併合と符号反転という元実装の表現と手順を引き継いでいるため、単なる数学的参考とは区別して出典を維持する。",
+    "mathematics": "サイズ併合の深さ上限と経路圧縮による償却計算量は数学的性質として説明する。別の数学論文を今回の実装の出典として追加していない。"
+  },
+  "verify_selection": {
+    "current_problem_url": "https://judge.yosupo.jp/problem/unionfind_with_potential",
+    "historical_evidence_url": "https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7276925#2",
+    "fact": "原典1.2のコード直後はAOJ DSL_1_Bの提出7276925を掲載する。原典の例題にはABC087DとABC280Fもある。現在はLibrary Checker優先・AOJを新規提出先にしない方針に従い、加法群の整合制約をconstrain/try_diffで扱うUnionfind with Potentialへ移行している。",
+    "note": "原典の過去提出と移行先の現在版オンライン判定を区別し、過去の記録を現在版の検証済みへ書き換えない。"
+  },
+  "final_implementation": {
+    "sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+    "storage": "親添字または根の負サイズをvector<int>、親からの差をvector<Type>で所有する。直接の所有new式は使わない。",
+    "representatives": "サイズ併合。同サイズでは最初の引数が属する代表を維持する。重み付き経路圧縮は論理的な連結関係・代表・頂点間差を保つ。",
+    "groups": "すべて独立なら結果を直接構築し、複数頂点からなる1成分なら各頂点を重み付き圧縮して番号を列挙する。一般の場合はleadersとcountsの2本を使い、countsをサイズから結果の添字へ再利用する。成分は根の番号順、各成分内は頂点昇順。基準版の別slot配列を廃し、代表探索や他の通常操作の本体は維持する。",
+    "reset": "別のUnionFindW(n)を先に構築してswapする。確保や値の構築が失敗しても元の連結状態を保持する。この方式は旧容量を再利用する契約ではない。",
+    "clear": "両配列の要素を消して成分数0へ戻す。容量保持、noexcept。",
+    "ownership": "コピーは独立、ムーブ後の移動元は空。自己代入・自己ムーブは内容を保持。member/free swapはO(1)、noexcept。",
+    "method_snapshots": {
+      "representative": {
+        "baseline_sha256": "d1bf0cf1ed1ac99336989aea185f834fa1712bbbd91cae6bb56b966d124a8766",
+        "final_sha256": "d1bf0cf1ed1ac99336989aea185f834fa1712bbbd91cae6bb56b966d124a8766",
+        "body_identical": true,
+        "final_body": "int leader_unchecked(int i) {\n        const int p = param[i];\n        if (p < 0) return i;\n        if (param[p] < 0) return p;\n        const int r = leader_unchecked(p);\n        diff_w[i] += diff_w[p];\n        return param[i] = r;\n    }"
+      },
+      "link": {
+        "baseline_sha256": "a2ea977461bbaf13613ee7e9e2c458d76779ab0e84043c19adacd6556bd07886",
+        "final_sha256": "a2ea977461bbaf13613ee7e9e2c458d76779ab0e84043c19adacd6556bd07886",
+        "body_identical": true,
+        "final_body": "bool link(int a, int b, Type w) {\n        if (param[a] > param[b]) { std::swap(a, b); w = -w; }\n        diff_w[b] = w;\n        param[a] += param[b]; param[b] = a; --components_;\n        return true;\n    }"
+      },
+      "merge": {
+        "baseline_sha256": "ab1d91d3af3b621ad26e89278a82d0aaf0e3cb760cce5f1a32e833355cc84bf9",
+        "final_sha256": "ab1d91d3af3b621ad26e89278a82d0aaf0e3cb760cce5f1a32e833355cc84bf9",
+        "body_identical": true,
+        "final_body": "bool merge(int a, int b, Type w) {\n        check(a); check(b);\n        const int ra = leader_unchecked(a), rb = leader_unchecked(b);\n        if (ra == rb) return false;\n        return link(ra, rb, w + diff_w[a] - diff_w[b]);\n    }"
+      },
+      "constrain": {
+        "baseline_sha256": "e286baa6bb4061f9b9f101eaa36137fe35ab6be3c85cb365404269ea87fa82f9",
+        "final_sha256": "373d73051b554561bce92296601caed8d5b257936027f2d2d6ccb89d5ef6711e",
+        "body_identical": false,
+        "final_body": "bool constrain(int a, int b, Type w) {\n        check(a); check(b);\n        const int ra = leader_unchecked(a), rb = leader_unchecked(b);\n        if (ra == rb) return static_cast<Type>(diff_w[b] - diff_w[a]) == w;\n        return link(ra, rb, w + diff_w[a] - diff_w[b]);\n    }"
+      },
+      "same": {
+        "baseline_sha256": "f4c18511fb5b24aad281c57d18906a64f58b4c8c6b89c168a9838451712fc87f",
+        "final_sha256": "f4c18511fb5b24aad281c57d18906a64f58b4c8c6b89c168a9838451712fc87f",
+        "body_identical": true,
+        "final_body": "bool same(int a, int b) { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }"
+      },
+      "try_diff": {
+        "baseline_sha256": "1e1afe58c461c79b0bc316fd44de24bbf701e161c9694ed15ae2a25490092293",
+        "final_sha256": "1e1afe58c461c79b0bc316fd44de24bbf701e161c9694ed15ae2a25490092293",
+        "body_identical": true,
+        "final_body": "std::optional<Type> try_diff(int a, int b) {\n        check(a); check(b);\n        if (leader_unchecked(a) != leader_unchecked(b)) return std::nullopt;\n        return diff_w[b] - diff_w[a];\n    }"
+      },
+      "groups": {
+        "baseline_sha256": "0eb91e8f3688ad7bc74500d037e46d69509f33e5886b488f7087898e2193959a",
+        "final_sha256": "781f2c2de78ac2d5173c679ad195a91b7912df9ee6b6cf9a64c33721492f2cdd",
+        "body_identical": false,
+        "final_body": "std::vector<std::vector<int>> groups() {\n        std::vector<std::vector<int>> result; result.reserve(components_);\n        if (components_ == size()) {\n            for (int v = 0; v < size(); ++v) result.emplace_back(std::size_t{1}, v);\n            return result;\n        }\n        if (components_ == 1) {\n            result.emplace_back(param.size());\n            for (int v = 0; v < size(); ++v) {\n                (void)leader_unchecked(v); result[0][v] = v;\n            }\n            return result;\n        }\n        std::vector<int> leaders(param.size()), counts(param.size(), 0);\n        for (int i = 0; i < size(); ++i) ++counts[leaders[i] = leader_unchecked(i)];\n        for (int i = 0; i < size(); ++i) if (counts[i]) {\n            const int count = counts[i]; counts[i] = static_cast<int>(result.size());\n            result.emplace_back(); result.back().reserve(count);\n        }\n        for (int i = 0; i < size(); ++i) result[counts[leaders[i]]].push_back(i);\n        return result;\n    }"
+      }
+    }
+  },
+  "api_notes": [
+    "uniteはvoid、mergeは新しく結合したときだけtrue。既接続ならunite/mergeは矛盾を無視する。constrainは既接続時の差を検査し、矛盾ならfalse。矛盾フラグを成分へ残すAPIではない。",
+    "制約の向きはpotential(b)-potential(a)=w。weightは代表を0とした重みで、代表が変わればその値も変わり得る。diff/try_diffは頂点間の差。",
+    "T{}を零とし、コピー/ムーブ/代入、加減、単項符号反転、複合加算、等値比較を使う可換加法群を前提とする。Typeの算術・代入が送出する場合の通常圧縮/結合の失敗後状態保持は保証しない。",
+    "標準符号付き整数では保存差・根への累積・根間差補正・符号反転・差の照会の全途中演算が表現範囲内であることが前提。最終差だけの範囲内保証やoverflow_error検出機能はない。rollback_weighted_union_findの広い累積による相殺保持とは契約を分ける。",
+    "小型unsignedのconstrainでは差の式が整数昇格するため、今回Typeへ明示変換してからwと比較する。uint8_tの250と5の差が剰余で11となる例を含む。これは今回の修正であり、過去版が全て正しかったという意味に書き換えない。",
+    "頂点は0<=i<size()。既定で頂点と未連結diffを検査し、SKIP_RUNTIME_CHECKSで入力検査を除く。頂点数のint上限は維持。検査のためだけに全頂点を走査しない。",
+    "構築/コピー構築O(n+1)、容量Cで保持領域O(C+1)。1頂点の代表探索とそれを定数回行う操作は償却O(alpha(n+1))、個別ではO(log(n+1))の上界。groupsは償却O(1+n alpha(n+1))とO(n+1)追加領域。型演算の費用は別に数える。",
+    "reset(m)/コピー代入は旧nを含むO(n+m+1)上界。clearと移動代入は旧状態破棄を含むO(n+1)上界。非送出の値演算という前提ではgroups確保失敗後も論理状態は維持するが、途中の圧縮は残り得る。"
+  ],
+  "prior_audits": [
+    {
+      "path": "Audit/license-audit-2026-10-17.json",
+      "section": "union_find_w.cpp / confirmed_cc0",
+      "observed_source_sha256": "4217e895f790a3cfc720ba87d321685e3c38cb39b4ac3c8b515743909013eacf"
+    },
+    {
+      "path": "Audit/review-size-license-2026-10-19.json",
+      "section": "union_find_w.cpp",
+      "observed_source_sha256": "4217e895f790a3cfc720ba87d321685e3c38cb39b4ac3c8b515743909013eacf"
+    }
+  ],
+  "document_validation": {
+    "status": "PASS",
+    "source_sha256": "f3e25464329d393daf01c0b4cacdd0dd9f129fd369a20ad8d86cde597e564009",
+    "document_sha256": "a0af5137a8bf579a8f53a945de396617b85e76be6897c395f873a23c3ed63fe8",
+    "cpp_sha256": "8e6f2616511c67e6da490f0d5fa9e8df018aada90a26afd5bdd60f2c026ce265",
+    "links": [
+      "../Examples/union_find_w_example.cpp",
+      "../Audit/provenance-weighted-union-find-2026-10-22.json"
+    ],
+    "all_relative_links_exist_after_audit_written": true,
+    "examples": [
+      {
+        "name": "gcc_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_wuf_20261022/provenance/document_example.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/provenance/document_gcc_checked"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "name": "clang_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-U__SIZEOF_INT128__",
+          "/tmp/sirkit_wuf_20261022/provenance/document_example.cpp",
+          "-o",
+          "/tmp/sirkit_wuf_20261022/provenance/document_clang_skip"
+        ],
+        "build_returncode": 0,
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "all_processes_waited": true
+  },
+  "reproduction": {
+    "fetch.py": {
+      "sha256": "6456f036d9c3c587b8c6922d419981c58cf718ffb65a2e3f3e86cbdb56f4b381",
+      "source": "from pathlib import Path\nimport urllib.request,json,hashlib,concurrent.futures\np=Path(__file__).parent;p.mkdir(exist_ok=True)\nurls={\n 'chapter.html':'https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/weighted-union-find',\n 'book.html':'https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming',\n 'weighted-union-find.md':'https://raw.githubusercontent.com/Reputeless/Zenn.Public/main/books/standard-cpp-for-competitive-programming/weighted-union-find.md',\n 'README.md':'https://raw.githubusercontent.com/Reputeless/Zenn.Public/main/README.md'}\ndef get(item):\n name,url=item\n try:\n  with urllib.request.urlopen(url,timeout=30)as f:data=f.read();status=f.status;final=f.url\n  (p/name).write_bytes(data);return dict(name=name,url=url,final_url=final,status=status,sha256=hashlib.sha256(data).hexdigest(),bytes=len(data))\n except Exception as e:return dict(name=name,url=url,error=str(e))\nwith concurrent.futures.ThreadPoolExecutor(max_workers=4)as pool:rows=list(pool.map(get,urls.items()))\n(p/'primary_sources.json').write_text(json.dumps(rows,indent=2)+'\\n');print(json.dumps(rows,indent=2))\n"
+    },
+    "history.py": {
+      "sha256": "4c0e240b41459c978f0e1c12a05f125f21276e8ced6d8b5c388a98cd34a6dd48",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib\np=Path(__file__).parent;g=p/'history.git';bundle=Path('/tmp/Atcoder_Env_before_initial_20261021T163122Z/history.bundle');sha=lambda b:hashlib.sha256(b).hexdigest();rows=[]\nif not g.exists():subprocess.run(['git','clone','--bare',str(bundle),str(g)],capture_output=True,check=True)\nfor ref,path in [('30c83f0','union_find_w.cpp'),('7f77a51','union_find_w.cpp'),('32fb166','union_find_w.cpp'),('b76e70f','DataStructure/union_find_w.cpp')]:\n cmd=['git','--git-dir='+str(g),'show',ref+':'+path];a=subprocess.run(cmd,capture_output=True,check=True);(p/(ref+'.cpp')).write_bytes(a.stdout);rows.append(dict(git=ref+':'+path,command=cmd,sha256=sha(a.stdout),bytes=len(a.stdout),source=a.stdout.decode()))\nold=(p/'b76e70f.cpp').read_bytes();baseline=(p.parent/'baseline/DataStructure/union_find_w.cpp').read_bytes();assert old.replace(b'REINSIRK_',b'SIRKIT_')==baseline\nresult=dict(bundle=dict(path=str(bundle),sha256=sha(bundle.read_bytes())),snapshots=rows,baseline_sha256=sha(baseline),guard_prefix_only=True);(p/'history.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n');print('history',[(x['git'],x['sha256'])for x in rows], 'guard only PASS')\n"
+    },
+    "compare.py": {
+      "sha256": "e928b4ff8a0a05c62f73714538c4d343e0f04785faa556e6f7ef452c583daf87",
+      "source": "from pathlib import Path\nimport re,json,hashlib,html\np=Path(__file__).parent;sha=lambda b:hashlib.sha256(b).hexdigest();md=(p/'weighted-union-find.md').read_text();section=md.split('## 1.2 省メモリ化',1)[1].split('# 2.',1)[0];code=section.split('```cpp\\n',1)[1].split('```',1)[0];(p/'source_1_2.cpp').write_text(code);old=(p/'7f77a51.cpp').read_text()\ndef body(s,signature):\n i=s.index(signature);a=s.index('{',i);depth=1;b=a+1\n while depth:\n  if s[b]=='{':depth+=1\n  if s[b]=='}':depth-=1\n  b+=1\n return s[i:b]\ndef normalize(s):\n s=re.sub(r'/\\*.*?\\*/','',s,flags=re.S);s=re.sub(r'//[^\\n]*','',s)\n for a,b in [('m_parentsOrSize','param'),('m_diffWeights','diff_w'),('find','root'),('merge','unite'),('connected','issame')]:s=re.sub(r'\\b'+a+r'\\b',b,s)\n for container in ['param','diff_w']:\n  while container+'.at('in s:\n   a=s.index(container+'.at(');b=a+len(container+'.at(');j=b;depth=1\n   while depth:\n    if s[j]=='(':depth+=1\n    if s[j]==')':depth-=1\n    j+=1\n   s=s[:a]+container+'['+s[b:j-1]+']'+s[j:]\n return re.sub(r'\\s+','',s)\nmethods=[]\nfor a,b in [('Type diff(int a, int b)','Type diff(int a, int b)'),('bool connected(int a, int b)','bool issame(int a, int b)'),('int size(int i)','int size(int i)'),('Type weight(int i)','Type weight(int i)')]:\n left=body(code,a);right=body(old,b);nl=normalize(left);nr=normalize(right);assert nl==nr,(a,nl,nr);methods.append(dict(primary_signature=a,old_signature=b,normalized_identical=True,normalized_sha256=sha(nl.encode()),primary_code=left,old_code=right))\nleft=normalize(body(code,'int find(int i)'));right=normalize(body(old,'int root(int i)'));right=right.replace('constinty=param[i];','').replace('root(y)','root(param[i])').replace('diff_w[y]','diff_w[param[i]]').replace('constintx=','constintroot=').replace('=x);','=root);').replace('if(y<0)','if(param[i]<0)');assert left==right,(left,right)\nmethods.append(dict(primary_signature='int find(int i)',old_signature='int root(int i)',after_parent_temporary_inlining_identical=True,normalized_sha256=sha(left.encode()),primary_code=body(code,'int find(int i)'),old_code=body(old,'int root(int i)')))\nleft=normalize(body(code,'void merge(int a, int b, Type w)'));right=normalize(body(old,'void unite(int a, int b, Type w)'));rewrite=left.replace('w+=weight(a);w-=weight(b);','w=w+weight(a)-weight(b);');assert rewrite==right,(rewrite,right)\nmethods.append(dict(primary_signature='void merge(int a, int b, Type w)',old_signature='void unite(int a, int b, Type w)',normalized_identical=False,after_weight_expression_rewrite_identical=True,expression_rewrite='w += weight(a); w -= weight(b); → w = w + weight(a) - weight(b);。可換加法群と表現範囲の前提で同値。任意のthrowing演算の失敗挙動まで同じとする意味ではない。',primary_code=body(code,'void merge(int a, int b, Type w)'),old_code=body(old,'void unite(int a, int b, Type w)')))\nold2=(p/'32fb166.cpp').read_text();assert normalize(old)==normalize(old2)\nbook=html.unescape((p/'book.html').read_text());needle='記事中のソースコードは CC0 1.0';assert needle in book;assert 'https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7276925#2'in section\nresult=dict(source_section='1.2 省メモリ化',primary_section_code_sha256=sha(code.encode()),license_evidence=dict(url='https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming',source_snapshot_sha256=sha((p/'book.html').read_bytes()),short_excerpt=needle,scope='記事内のソースコード。書籍本文一般や全git履歴へ一括適用する意味ではない。'),historical_verify_link='https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7276925#2',normalization='コメント・空白を除去、m_parentsOrSize/param・m_diffWeights/diff_w・find/root・merge/unite・connected/issameを対応付け、at(expr)と[expr]を対応付けた。rootは親の一時変数を展開、結合は加減の式の違いを明示して照合。',methods=methods,old_7f77a51_vs_32fb166_comment_only=True)\n(p/'comparison.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n');print('primary1.2/old6methods compared; CC0 + historical verify evidence PASS')\n"
+    },
+    "check_document.py": {
+      "sha256": "58e19a90d699be7228a4baddaccf18020bc4c5643229ea74f924d86038be50df",
+      "source": "from pathlib import Path\nimport subprocess,re,json,hashlib,shutil,sys\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');h=sys.argv[1];sha=lambda b:hashlib.sha256(b).hexdigest();source=r/'DataStructure/union_find_w.cpp';assert sha(source.read_bytes())==h\nassert source.read_bytes()==(p.parent/'final.hpp').read_bytes()\ndoc=r/'Document/weighted_union_find.md';shutil.copy2(p/'document_draft.md',doc);text=doc.read_text();blocks=re.findall(r'```cpp\\n(.*?)```',text,re.S);assert len(blocks)==1\ncpp=p/'document_example.cpp';cpp.write_text('#include \"'+str(source)+'\"\\n#include <cassert>\\n#include <cstdint>\\nint main() {\\n'+blocks[0]+'\\n}\\n');rows=[]\nfor name,cc,flags in [('gcc_checked',['g++'],[]),('clang_skip',['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0'],['-DSKIP_RUNTIME_CHECKS','-DSIRKIT_DISABLE_SIMD','-U__SIZEOF_INT128__'])]:\n exe=p/('document_'+name);cmd=['taskset','-c','10',*cc,'-std=c++23','-O2','-Wall','-Wextra','-Werror','-pedantic-errors',*flags,str(cpp),'-o',str(exe)];a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0 and not a.stderr,a.stderr;b=subprocess.run([str(exe)],capture_output=True,text=True);assert b.returncode==0 and not b.stderr,(b.stdout,b.stderr);rows.append(dict(name=name,command=cmd,build_returncode=a.returncode,returncode=b.returncode,stdout=b.stdout,stderr=b.stderr))\nlinks=re.findall(r'\\]\\(([^)]+)\\)',text)\nfor link in links:\n if not link.startswith(('https://','http://')) and 'provenance-weighted-union-find-2026-10-22.json' not in link:assert (doc.parent/link).exists(),link\nassert sha(source.read_bytes())==h\nd=dict(status='PASS',source_sha256=h,document_sha256=sha(doc.read_bytes()),cpp_sha256=sha(cpp.read_bytes()),links=links,all_relative_links_exist_after_audit_written=True,examples=rows,all_processes_waited=True);(p/'document_checks.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\\n');print('document 2 configurations PASS; links final check follows audit write')\n"
+    },
+    "make_audit.py": {
+      "sha256": "0f47a093d3b28d1c7e09e0a1b7a6300647d7328fb0ceef6999a79ff839ad7087",
+      "source": "from pathlib import Path\nimport json,hashlib,re,sys\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');sha=lambda b:hashlib.sha256(b).hexdigest();load=lambda f:json.loads((p/f).read_text())\nsource=r/'DataStructure/union_find_w.cpp';data=source.read_bytes();h=sha(data);assert h==sys.argv[1];assert data==(p.parent/'final.hpp').read_bytes();text=data.decode();base=(p.parent/'baseline/DataStructure/union_find_w.cpp').read_bytes()\nurl='https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/weighted-union-find';assert '// SPDX-License-Identifier: CC0-1.0'in text and '// Original Source: '+url in text\nfor marker in ['void reset(', 'void clear()', 'bool empty()', 'void swap(', 'friend void swap(', 'return static_cast<Type>(diff_w[b] - diff_w[a]) == w;']:assert marker in text,marker\ndef body(s,signature):\n i=s.index(signature);a=s.index('{',i);depth=1;b=a+1\n while depth:\n  if s[b]=='{':depth+=1\n  if s[b]=='}':depth-=1\n  b+=1\n return s[i:b]\nmethods={}\nfor name,sig in [('representative','int leader_unchecked('),('link','bool link('),('merge','bool merge('),('constrain','bool constrain('),('same','bool same('),('try_diff','std::optional<Type> try_diff('),('groups','std::vector<std::vector<int>> groups(')]:\n old=body(base.decode(),sig)\n if sig not in text:methods[name]=dict(baseline_sha256=sha(old.encode()),final_signature_present=False);continue\n new=body(text,sig);methods[name]=dict(baseline_sha256=sha(old.encode()),final_sha256=sha(new.encode()),body_identical=old==new,final_body=new)\nrepro={name:dict(sha256=sha((p/name).read_bytes()),source=(p/name).read_text())for name in ['fetch.py','history.py','compare.py','check_document.py','make_audit.py']}\nhistory=load('history.json');comparison=load('comparison.json')\nresult={\n 'date':'2026-10-22','scope':'weighted_union_findの原典・ライセンス・履歴と現在APIの記録。速度測定と最終検証は別Audit。',\n 'source':{'path':'DataStructure/union_find_w.cpp','sha256':h,'SPDX':'CC0-1.0','label':'Original Source','url':url},\n 'primary_sources':load('primary_sources.json'),\n 'license':{'status':'confirmed_cc0','evidence':comparison['license_evidence'],'scope_note':'著者の書籍トップが記事中ソースコードへのCC0 1.0適用を明記する。本文一般・全リポジトリ・全履歴へ一括適用したという意味ではない。READMEの取得成功だけをライセンス根拠にはしない。'},\n 'history':history,'primary_old_comparison':comparison,'primary_code_1_2':(p/'source_1_2.cpp').read_text(),\n 'lineage':[\n  'ローカル30c83f0のunion_find_w.cppと7f77a51は同一SHA。負サイズの親配列と別の差配列を持つ旧版は原典1.2省メモリ化と対応する。',\n  'diff/connected/size/weightと旧版diff/issame/size/weightは、名称・配列at/indexアクセス・コメント/空白を対応付けると本文が一致。rootは親の一時変数を展開すると一致する。',\n  '結合時のw補正には原典の2回の複合代入と旧版の加減式という違いがあり、可換加法群と表現範囲の前提で同値な書換えとして明示した。throwing演算の失敗挙動まで同じと断定しない。',\n  '32fb166は出典コメントを追加した版で、同じ正規化では旧版と一致する。',\n  '既存整備記録では標準include・private所有・入力検査・bool merge/constrain/try_diff・成分数/groups・コピー/移動等をローカル改修として記録する。',\n  'b76e70fのDataStructure/union_find_w.cppは4217e895...。これにREINSIRK_からSIRKIT_へのガード名置換だけを施すと今回の凍結baseline9b732b75...と全バイト一致する。'\n ],\n 'label_decision':{'label':'Original Source','reason':'負サイズの親配列と差配列・重み付き経路圧縮・サイズ併合と符号反転という元実装の表現と手順を引き継いでいるため、単なる数学的参考とは区別して出典を維持する。','mathematics':'サイズ併合の深さ上限と経路圧縮による償却計算量は数学的性質として説明する。別の数学論文を今回の実装の出典として追加していない。'},\n 'verify_selection':{'current_problem_url':'https://judge.yosupo.jp/problem/unionfind_with_potential','historical_evidence_url':comparison['historical_verify_link'],'fact':'原典1.2のコード直後はAOJ DSL_1_Bの提出7276925を掲載する。原典の例題にはABC087DとABC280Fもある。現在はLibrary Checker優先・AOJを新規提出先にしない方針に従い、加法群の整合制約をconstrain/try_diffで扱うUnionfind with Potentialへ移行している。','note':'原典の過去提出と移行先の現在版オンライン判定を区別し、過去の記録を現在版の検証済みへ書き換えない。'},\n 'final_implementation':{'sha256':h,'storage':'親添字または根の負サイズをvector<int>、親からの差をvector<Type>で所有する。直接の所有new式は使わない。','representatives':'サイズ併合。同サイズでは最初の引数が属する代表を維持する。重み付き経路圧縮は論理的な連結関係・代表・頂点間差を保つ。','groups':'すべて独立なら結果を直接構築し、複数頂点からなる1成分なら各頂点を重み付き圧縮して番号を列挙する。一般の場合はleadersとcountsの2本を使い、countsをサイズから結果の添字へ再利用する。成分は根の番号順、各成分内は頂点昇順。基準版の別slot配列を廃し、代表探索や他の通常操作の本体は維持する。','reset':'別のUnionFindW(n)を先に構築してswapする。確保や値の構築が失敗しても元の連結状態を保持する。この方式は旧容量を再利用する契約ではない。','clear':'両配列の要素を消して成分数0へ戻す。容量保持、noexcept。','ownership':'コピーは独立、ムーブ後の移動元は空。自己代入・自己ムーブは内容を保持。member/free swapはO(1)、noexcept。','method_snapshots':methods},\n 'api_notes':[\n  'uniteはvoid、mergeは新しく結合したときだけtrue。既接続ならunite/mergeは矛盾を無視する。constrainは既接続時の差を検査し、矛盾ならfalse。矛盾フラグを成分へ残すAPIではない。',\n  '制約の向きはpotential(b)-potential(a)=w。weightは代表を0とした重みで、代表が変わればその値も変わり得る。diff/try_diffは頂点間の差。',\n  'T{}を零とし、コピー/ムーブ/代入、加減、単項符号反転、複合加算、等値比較を使う可換加法群を前提とする。Typeの算術・代入が送出する場合の通常圧縮/結合の失敗後状態保持は保証しない。',\n  '標準符号付き整数では保存差・根への累積・根間差補正・符号反転・差の照会の全途中演算が表現範囲内であることが前提。最終差だけの範囲内保証やoverflow_error検出機能はない。rollback_weighted_union_findの広い累積による相殺保持とは契約を分ける。',\n  '小型unsignedのconstrainでは差の式が整数昇格するため、今回Typeへ明示変換してからwと比較する。uint8_tの250と5の差が剰余で11となる例を含む。これは今回の修正であり、過去版が全て正しかったという意味に書き換えない。',\n  '頂点は0<=i<size()。既定で頂点と未連結diffを検査し、SKIP_RUNTIME_CHECKSで入力検査を除く。頂点数のint上限は維持。検査のためだけに全頂点を走査しない。',\n  '構築/コピー構築O(n+1)、容量Cで保持領域O(C+1)。1頂点の代表探索とそれを定数回行う操作は償却O(alpha(n+1))、個別ではO(log(n+1))の上界。groupsは償却O(1+n alpha(n+1))とO(n+1)追加領域。型演算の費用は別に数える。',\n  'reset(m)/コピー代入は旧nを含むO(n+m+1)上界。clearと移動代入は旧状態破棄を含むO(n+1)上界。非送出の値演算という前提ではgroups確保失敗後も論理状態は維持するが、途中の圧縮は残り得る。'\n ],\n 'prior_audits':[\n  {'path':'Audit/license-audit-2026-10-17.json','section':'union_find_w.cpp / confirmed_cc0','observed_source_sha256':'4217e895f790a3cfc720ba87d321685e3c38cb39b4ac3c8b515743909013eacf'},\n  {'path':'Audit/review-size-license-2026-10-19.json','section':'union_find_w.cpp','observed_source_sha256':'4217e895f790a3cfc720ba87d321685e3c38cb39b4ac3c8b515743909013eacf'}],\n 'document_validation':load('document_checks.json'),'reproduction':repro,\n 'limits':[\n  'primaryは当日取得したURLとSHAで固定し、将来のmainブランチや書籍更新と同一とは断定しない。',\n  '公開URL・原典のCC0範囲・ローカル履歴を確認したもので、全ファイルや全git履歴のライセンスを一括で再判定していない。',\n  '本監査は最終sourceのオンラインACを意味しない。独立参照・境界・確保失敗・小型unsigned修正の最終試験はverify-weighted-union-find監査、速度条件と生データはperformance-weighted-union-find監査に保存する。'\n ]}\n(r/'Audit/provenance-weighted-union-find-2026-10-22.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n');print('provenance written',h)\n"
+    }
+  },
+  "limits": [
+    "primaryは当日取得したURLとSHAで固定し、将来のmainブランチや書籍更新と同一とは断定しない。",
+    "公開URL・原典のCC0範囲・ローカル履歴を確認したもので、全ファイルや全git履歴のライセンスを一括で再判定していない。",
+    "本監査は最終sourceのオンラインACを意味しない。独立参照・境界・確保失敗・小型unsigned修正の最終試験はverify-weighted-union-find監査、速度条件と生データはperformance-weighted-union-find監査に保存する。"
+  ]
+}

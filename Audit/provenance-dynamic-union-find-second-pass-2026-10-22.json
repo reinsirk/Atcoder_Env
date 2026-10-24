@@ -1,0 +1,96 @@
+{
+  "date": "2026-10-22",
+  "scope": "4時間整備二周目。DynamicUnionFind::groupsの全独立/全連結の場合だけ専用化。共有HashMapと他の操作は変更しない。",
+  "source": {
+    "path": "DataStructure/dynamic-union-find.cpp",
+    "baseline_sha256": "d2627ac9eefeb73e0a7eff02c339e950d6299038dbbcbbe67038305b2169251c",
+    "final_sha256": "0472cd0f62b94f457ec355d5bc14f02b3e6aca0a4855987773b41c032482910b"
+  },
+  "artifacts": {
+    "DataStructure/dynamic-union-find.cpp": {
+      "sha256": "0472cd0f62b94f457ec355d5bc14f02b3e6aca0a4855987773b41c032482910b",
+      "bytes": 19937
+    },
+    "Document/dynamic_union_find.md": {
+      "sha256": "88116b5ff502ad9e0ae48fa872fddcf1dad021a926e2d4ef1c4ac950946542d5",
+      "bytes": 4434
+    },
+    "Examples/dynamic_union_find_example.cpp": {
+      "sha256": "62b297b77862835b67e34d60d45ccff561ad3769556f09c46d8253e27053d172",
+      "bytes": 1203
+    },
+    "Verify/current/tests/dynamic_union_find_test.cpp": {
+      "sha256": "f3bc9d189bc65b9b597701f2d5aca141ead2068d7fe865ad07ce8c6ebea76b39",
+      "bytes": 16048
+    },
+    "Verify/current/tests/dynamic_union_groups_test.cpp": {
+      "sha256": "8a67fc13e5e273db8a97753a44ca72561fc802ce17f69200bf641cb44367595b",
+      "bytes": 4779
+    },
+    "Verify/current/tests/dynamic_union_groups_performance_benchmark.cpp": {
+      "sha256": "81df34bfc31f2af7d53478dd73e9d8ebd84b0219c845eeed7970deb3698f2543",
+      "bytes": 2354
+    }
+  },
+  "previous_audits": {
+    "Audit/verify-dynamic-union-find-2026-10-22.json": "29f894e9e9d4bd3f9084d32fa29bdfedb4365dec4b9e48e5da7e7b3e7420ec16",
+    "Audit/performance-dynamic-union-find-2026-10-22.json": "0625b2e9276c75e736a3bec47d62d861977fc6c2ca07ce9ba421e2b84e85b456",
+    "Audit/investigation-dynamic-union-find-412312-2026-10-22.json": "8024e272fad520aafdd9445e3c842bc854d8eabf4db5f82cff267a25eb9f56fb",
+    "Audit/online-dynamic-union-find-412312-2026-10-22.json": "27187a4e7655fe49155ecd33ae76fe8647720f4f702c3537d54be9dc880bb0c0",
+    "Audit/provenance-internal-hash-map-2026-10-22.json": "92b024252935de7c53db5e4090ea905f72f6185c77e69d141d51a9c87a76ca12",
+    "Audit/review-size-license-2026-10-19.json": "670f8bdca2d372dc6af35478ebac91a29e57d0792b462cb6c7b9fa2153a2f472"
+  },
+  "source_proof": {
+    "only_groups_dispatch_and_private_helper_changed": true,
+    "shared_hash_byte_identical": true,
+    "shared_hash_guarded_block_sha256": "c1dec4323b0a46e9aa34612165d95e6286ee26f80060867bc28d6a383a86c806",
+    "baseline_sha256": "d2627ac9eefeb73e0a7eff02c339e950d6299038dbbcbbe67038305b2169251c",
+    "final_sha256": "0472cd0f62b94f457ec355d5bc14f02b3e6aca0a4855987773b41c032482910b",
+    "driver_sha256": "3bf11077095fbfdd1803851de4aea3d29357034e2f3be66445165f13677ff818",
+    "io_sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "primary_and_history_recheck": {
+    "historical": {
+      "command": [
+        "git",
+        "--git-dir=/tmp/sirkit_ruf_20261022/provenance/history.git",
+        "show",
+        "30c83f0:dynamic-union-find.cpp"
+      ],
+      "sha256": "ba5377ae53da3cc3ca3e849a690aec9e753c72a9d14abd8342f9ff4eeaee4135",
+      "bytes": 10483,
+      "class_equal_after_comments_and_whitespace": true,
+      "normalized_class_sha256": "dce772a0d25819b084280f0208fa5fbbe94b49671c873f0976af10541e0b4990"
+    },
+    "primary_original": {
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/data-structure/dynamic-union-find.hpp",
+      "saved_as": "/tmp/sirkit_duf_20261022/reference_original.txt",
+      "sha256": "cb594a6dcc4088a44a8b6e062000c58fb91eb9b756e4ced27a70cbc3f0e712f3"
+    },
+    "primary_license": {
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/LICENSE",
+      "saved_as": "/tmp/sirkit_ruf_20261022/provenance/LICENSE",
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "spdx": "CC0-1.0"
+    }
+  },
+  "attribution": {
+    "headers_unchanged": true,
+    "dynamic_uf": "従来の参考表記を維持。旧30c83f0のclassは原典とコメント/空白を除いて一致することを再照合した。現行は負キーを添字へ分離したNode配列と独立したInternalHashMapを持つ方式へ組み直されている。",
+    "shared_hash": "既存のOriginal Source (InternalHashMap)とOriginal Source (mix)を保持。共有実装の本文が既存のInternal/Nyaan_hash_map_min.cppとbyte一致することを検証し、今回新たな第三者実装を導入していない。",
+    "license": "CC0-1.0。Nyaan原典とLICENSEの保存SHAが2026-10-19監査と一致。自己改修のCC0を未確認の別配布物の許諾へ読み替えない。"
+  },
+  "own_changes": "成分数の既存メタデータから全独立/全連結を選び、vectorの予約完了後に一覧化と親の直結を行うprivate helperを追加。共有HashMapと他操作の本文は不変。新しい外部実装を参照していない。",
+  "api_ownership_exception_contract": {
+    "groups": "登録キー順の全成分一覧。成分間は未規定。",
+    "connected": "全出力領域の確保後にroot_index(0)を1回呼び、根自身の負サイズを保って全ての非根を代表へ直結。後続探索の経路圧縮を飛ばさない。",
+    "singletons": "Node順に1キーの一覧を返す。追加の成分番号配列や根探索は不要。",
+    "empty": "既存のGCC空groups早期returnを維持。Clangでは空の一覧を返す。",
+    "ordinary": "既存のGCC固定/未初期化作業領域とClang vector作業領域の処理を保持。",
+    "exception": "共有/出力領域の確保後だけ親を変更する。確保失敗時の登録・連結・親を確認。戻り値はvectorで所有。"
+  },
+  "source_history_limits": [
+    "保存された原典とLICENSE、ローカルgit履歴、既存監査を照合した。ネット上の最新commitを今回取り直したとは主張しない。",
+    "前周のオンライン記録のsource dc160...と今回の最終0472...を区別する。"
+  ]
+}

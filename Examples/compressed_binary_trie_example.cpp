@@ -1,5 +1,7 @@
+// SPDX-License-Identifier: CC0-1.0
 #include "../DataStructure/Compressed_Binary_Trie.cpp"
 #include <iostream>
+#include <cstdint>
 
 int main()
 {
@@ -33,4 +35,10 @@ int main()
         std::cout << id << '\n';                // 20（保存値1のID）
     std::cout << trie.max_xor(3).first << '\n';   // 5（3 ^ 6）
     std::cout << trie.count_xor_less(3, 5) << '\n'; // 1
+    // 64bitの共通接頭辞を持つ集合。接頭辞の外にある値は存在しない。
+    CompressedBinaryTrie<std::uint64_t, 63> prefix;
+    const auto high = std::uint64_t{1} << 63;
+    prefix.add(high, 1);
+    prefix.add(high + 1, 2);
+    std::cout << prefix.contains(high + 1) << ' ' << prefix.del(0) << '\n'; // 1 0
 }

@@ -1,0 +1,253 @@
+{
+  "reviewed_utc": "2026-10-22T16:17:28.970546+00:00",
+  "status": "PASS",
+  "scope": "RollingHash copy assignment reserve→resize→Entry representation copyの標準適合と論理strong guarantee。",
+  "canonical_source": "String/RollingHash.cpp",
+  "source_sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276",
+  "live_source_edited": false,
+  "blocking_findings": [],
+  "historical_correction": "旧eecf0b2d…版のvector.assignについて、容量内なら追加確保しないとの前提を標準保証として扱った旧レビューは訂正する。旧JSONは履歴として保持。本レビューの結論はdc79dd84…版だけに適用。",
+  "analysis": [
+    {
+      "point": "自己代入",
+      "finding": "this!=&otherの外側guardで処理を全て除く。自分の記憶域をmemcpy元/先へ同時に渡すことはない。"
+    },
+    {
+      "point": "別所有とalias",
+      "finding": "二つの有効な非同一RollingHashのvectorは値を別所有する。コピーもvectorの独立コピー、moveも所有を移して元を空にするため、非空コピー範囲は重ならない。Entryはbase classやno_unique_address memberではなくvectorの通常要素。"
+    },
+    {
+      "point": "構築済みEntry",
+      "finding": "Entryはuint64_t member一つ。user-provided default constructorはnoexceptだがcopy/move/destructorはtrivialで、trivially copyableに変わりない。resizeで必要要素の生存期間を開始してから全表現をmemcpyする。初期値未設定のvalueはコピー前に読まない。N4950 basic.types.general#3の別オブジェクト間の表現コピーに該当。"
+    },
+    {
+      "point": "容量と非送出段階",
+      "finding": "reserveは指定個数以上のcapacityを確保し、後のcapacity内の挿入では再確保を行わない。resizeは末尾erase/default-insert。Entryの生成/コピー/破棄は非送出、allocatorはstd::allocator<Entry>。両reserve後は追加のvector領域確保を要せず、std::memcpyもC標準関数として例外を送出しない。"
+    },
+    {
+      "point": "空文字列/clear/move元",
+      "finding": "両vectorのsizeは公開操作境界で一致する。空文字列を構築した状態はprefix0/power0を含む1要素、clear/move元は0要素。!other.data_.empty()は後者で両memcpyを省き、nullptrを0byte memcpyへ渡さない。前者は構築済み1要素の表現を正しくコピーする。"
+    },
+    {
+      "point": "byte数",
+      "finding": "個数ではなくsizeof(Entry)を掛けたbyte数を渡す。sourceの有効なstd::vector<Entry>は既に連続領域を持ち、default allocatorはSIZE_MAX/sizeof(Entry)を超える個数を確保できないので、この積は表現可能。constructor/assignのmax_size/2制限も維持する。移植性の根拠をEntryが常に8byteであることには置かない。"
+    },
+    {
+      "point": "strong guarantee",
+      "finding": "1回目reserve失敗なら元のまま。1回目data_ reserve成功後、2回目power_data_ reserve失敗でも、data_の内容/sizeは維持され、powers_が指すpower_data_はそのreserveの例外保証で元のまま。2回目成功後はresize/表現コピー/primitive member更新を完了できる。最後にbase/offset/powers_を一致させる。例外でprivate capacity/addressが変わる場合はあるが公開の論理値と問い合わせ結果は保持する。"
+    },
+    {
+      "point": "以前のassign(s)変更",
+      "finding": "copy assignment変更後もbase/powerの対応、短縮後の再拡張、clear後の再構築、独立コピーの不変条件は保持される。今回の新しい2memcpy以外の数学演算/範囲検査/標準算術経路は変更されない。"
+    }
+  ],
+  "primary_standard_sources": [
+    {
+      "section": "N4950 [vector.capacity] p4,p7,p15",
+      "url": "https://timsong-cpp.github.io/cppwp/n4950/vector.capacity",
+      "used_for": "reserve後capacity/入力数まで再確保なし、resizeのerase/default-insert。"
+    },
+    {
+      "section": "N4950 [sequence.reqmts] p59",
+      "url": "https://timsong-cpp.github.io/cppwp/n4950/sequence.reqmts#59",
+      "used_for": "assignは全参照を無効にし、容量再利用の根拠にはしない。"
+    },
+    {
+      "section": "N4950 [basic.types.general] p3",
+      "url": "https://timsong-cpp.github.io/cppwp/n4950/basic.types#3",
+      "used_for": "別のtrivially copyable objectへ表現をコピーした後の値。"
+    },
+    {
+      "section": "N4950 [allocator.members] p4",
+      "url": "https://timsong-cpp.github.io/cppwp/n4950/allocator.members#4",
+      "used_for": "要素数*sizeof(T)がsize_tに収まる既存allocation。"
+    },
+    {
+      "section": "N4950 [res.on.exception.handling] p2",
+      "url": "https://timsong-cpp.github.io/cppwp/n4950/res.on.exception.handling#2",
+      "used_for": "プログラムcallbackを持たないmemcpyの非送出。"
+    },
+    {
+      "section": "N4950 [cstring.syn] p3",
+      "url": "https://timsong-cpp.github.io/cppwp/n4950/c.strings#cstring.syn-3",
+      "used_for": "memcpyのコピーと生存期間に関する補足。ここでは事前resizeで要素を構築し、暗黙生成だけに依存しない。"
+    }
+  ],
+  "supplemental_probe": {
+    "description": "test-only snapshotへEntryのtrivially-copyable/nothrow traitsをstatic_assertし、memcpy引数/呼出し数/byte数を観測。自己copy/別底copy/独立性/empty-string/clear/move元/容量のある空destinationを区別。",
+    "configurations": 7,
+    "checks_per_configuration": 13,
+    "records": [
+      {
+        "compiler": "gcc",
+        "configuration": "checked",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/gcc_checked"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checks=13\n",
+        "stderr": ""
+      },
+      {
+        "compiler": "gcc",
+        "configuration": "skip",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/gcc_skip"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checks=13\n",
+        "stderr": ""
+      },
+      {
+        "compiler": "gcc",
+        "configuration": "standard",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-U__SIZEOF_INT128__",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/gcc_standard"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checks=13\n",
+        "stderr": ""
+      },
+      {
+        "compiler": "clang",
+        "configuration": "checked",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-toolchain=/opt/atcoder/gcc",
+          "-std=c++23",
+          "-O2",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/clang_checked"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checks=13\n",
+        "stderr": ""
+      },
+      {
+        "compiler": "clang",
+        "configuration": "skip",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-toolchain=/opt/atcoder/gcc",
+          "-std=c++23",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/clang_skip"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checks=13\n",
+        "stderr": ""
+      },
+      {
+        "compiler": "clang",
+        "configuration": "standard",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-toolchain=/opt/atcoder/gcc",
+          "-std=c++23",
+          "-O2",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-U__SIZEOF_INT128__",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/clang_standard"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checks=13\n",
+        "stderr": ""
+      },
+      {
+        "compiler": "clang",
+        "configuration": "san",
+        "command": [
+          "taskset",
+          "-c",
+          "8",
+          "clang++",
+          "--gcc-toolchain=/opt/atcoder/gcc",
+          "-std=c++23",
+          "-O2",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review/clang_san"
+        ],
+        "returncode": 0,
+        "stdout": "PASS checks=13\n",
+        "stderr": ""
+      }
+    ],
+    "limitations": "sizeof(Entry)==sizeof(uint64_t)のassertは本環境ABIの補足のみ。標準適合の証明に8byte固定を用いない。既存24suites/272mainは再実行していない。GCCASan環境不足、ClangLSanはptrace制約でdetect_leaks=0。"
+  },
+  "reproduction": {
+    "directory": "/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review",
+    "files": {
+      "prepare.py": {
+        "sha256": "8dd93851944815dd1b4a52d71b8e89c2803c272470e58c260d0303ac516d2a94",
+        "source": "import pathlib,hashlib,json\np=pathlib.Path('/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review');root=pathlib.Path('/home/reinsirk/Atcoder_Env');s=(root/'String/RollingHash.cpp').read_text();assert s==pathlib.Path('/tmp/sirkit_four_hours_20261022/rolling_reuse/final.hpp').read_text();(p/'frozen.hpp').write_text(s)\ns=s.replace('std::memcpy(', 'review_memcpy(')\nneedle='''    std::vector<Entry> data_, power_data_;'''\nassert needle in s;s=s.replace(needle,'''    static_assert(std::is_trivially_copyable_v<Entry> && std::is_nothrow_default_constructible_v<Entry> && std::is_nothrow_copy_constructible_v<Entry> && std::is_nothrow_destructible_v<Entry>);\n    static_assert(sizeof(Entry)==sizeof(std::uint64_t));\n'''+needle)\n(p/'instrumented.hpp').write_text(s)\na={'source_sha256':hashlib.sha256((p/'frozen.hpp').read_bytes()).hexdigest(),'instrumented_sha256':hashlib.sha256(s.encode()).hexdigest(),'instrumentation':'test-only: Entry traits static_assert, memcpy call tracing. Actual source untouched.'};(p/'manifest.json').write_text(json.dumps(a,indent=2)+'\\n')\n"
+      },
+      "test.cpp": {
+        "sha256": "dfc73c06665df29328c2a808a610185090127f43467abcde039212ae19892b2a",
+        "source": "#include <cstring>\n#include <cstddef>\n#include <cstdint>\n#include <type_traits>\n#include <stdexcept>\n#include <string>\n#include <iostream>\nstatic std::size_t calls=0,bytes=0;\nvoid* review_memcpy(void* a,const void* b,std::size_t n){if(!a||!b||!n||a==b)throw std::runtime_error(\"copy range\");++calls;bytes+=n;return std::memcpy(a,b,n);}\n#include \"instrumented.hpp\"\nint main(){std::size_t checks=0;auto require=[&](bool b){++checks;if(!b)throw std::runtime_error(\"copy review\");};\n RollingHash a(\"abc\",11),b(\"other\",13);auto hash=a.whole();calls=bytes=0;b=a;require(calls==2&&bytes==8*sizeof(std::uint64_t));require(b.base()==11&&b.size()==3&&b.whole()==hash&&b.get(0,3)==hash);\n calls=bytes=0;const RollingHash& same=b;b=same;require(calls==0&&bytes==0&&b.whole()==hash);\n a.assign(\"changed\");require(b.whole()==hash&&b.size()==3);\n a.clear();calls=bytes=0;b=a;require(calls==0&&bytes==0&&b.empty()&&b.base()==11&&b.whole()==0&&b.get(0,0)==0);\n RollingHash empty_string(\"\",17);calls=bytes=0;b=empty_string;require(calls==2&&bytes==2*sizeof(std::uint64_t));require(b.empty()&&b.base()==17&&b.whole()==0);\n RollingHash fresh(\"source\",19),moved(std::move(fresh));calls=bytes=0;b=fresh;require(calls==0&&bytes==0&&b.empty()&&b.base()==19);\n calls=bytes=0;b=moved;require(calls==2&&bytes==14*sizeof(std::uint64_t));require(b.whole()==moved.whole()&&b.base()==19);\n RollingHash large(std::string(1024,'x'),23);large.clear();calls=bytes=0;large=moved;require(calls==2&&bytes==14*sizeof(std::uint64_t));require(large.whole()==moved.whole());\n large.assign(\"after copy\");require(moved.size()==6&&b.whole()==moved.whole());\n std::cout<<\"PASS checks=\"<<checks<<'\\n';}\n"
+      },
+      "run.py": {
+        "sha256": "02e7c391a72b2c385003d1b7bc36cbb230f0fc8a16b24fe94921cb6fcedbff99",
+        "source": "import pathlib,subprocess,json,os\np=pathlib.Path('/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review');rows=[]\nfor cc in ['gcc','clang']:\n for mode,flags in [('checked',[]),('skip',['-DSKIP_RUNTIME_CHECKS']),('standard',['-DSIRKIT_FORCE_STANDARD_ARITHMETIC','-U__SIZEOF_INT128__']),('san',['-O1','-g','-fsanitize=address,undefined','-fno-omit-frame-pointer'])]:\n  if cc=='gcc'and mode=='san':continue\n  cmd=['taskset','-c','8','g++'if cc=='gcc'else'clang++',*(['--gcc-toolchain=/opt/atcoder/gcc']if cc=='clang'else[]),'-std=c++23','-O2',*flags,str(p/'test.cpp'),'-o',str(p/(cc+'_'+mode))];c=subprocess.run(cmd,capture_output=True,text=True)\n  if c.returncode:raise RuntimeError(c.stderr)\n  r=subprocess.run(['taskset','-c','8',str(p/(cc+'_'+mode))],capture_output=True,text=True,env={**os.environ,'ASAN_OPTIONS':'detect_leaks=0'});row=dict(compiler=cc,configuration=mode,command=cmd,returncode=r.returncode,stdout=r.stdout,stderr=r.stderr);rows.append(row)\n  if r.returncode:raise RuntimeError(row)\n(p/'results.json').write_text(json.dumps(rows,indent=2)+'\\n');print([(x['compiler'],x['configuration'],x['stdout'].strip())for x in rows])\n"
+      },
+      "frozen.hpp": {
+        "sha256": "dc79dd8413e072bc179741e202889ac0ce28ff47b26b5377760d142c7d7ea276",
+        "source": "// SPDX-License-Identifier: CC0-1.0\n\n#include <algorithm>\n#include <cstddef>\n#include <cstdint>\n#include <cstring>\n#include <limits>\n#include <stdexcept>\n#include <string_view>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLING_HASH_DEFINED\n#define SIRKIT_ROLLING_HASH_DEFINED\n\n// RollingHash(s, base): 符号なしバイト列をO(|s|+1)時間・空間で構築。base<2は10、base>modulus-2はmodulus-10に補正。\n// modulus: ハッシュの法2^61-1。ハッシュ値は常に[0,modulus)。\n// get(l,r): 半開区間[l,r)のハッシュ、whole(): 全体のハッシュをO(1)で返す。空区間は0。\n// size(), empty(), base(): 長さ・空判定・補正後の底をO(1)で返す。\n// concat(left,right,right_length): 同じ底の正規化済みハッシュを連結してO(1)で返す。right_length<=size()。\n// equal(l,r,other,ol,orr): 同じ底の2区間の長さとハッシュをO(1)で比較する。\n// lcp(l,other,ol,limit): 同じ底の接尾辞の最長共通接頭辞長をlimit以下でO(log(min(残長,limit)+1))で返す。\n// compare(l,r,other,ol,orr): 同じ底の2区間を符号なしバイト辞書順で比較し-1/0/1をO(log(短い方の長さ+1))で返す。\n// 比較にはハッシュ衝突による誤判定の可能性がある。検査有効時は不正な範囲にout_of_range、底・ハッシュにinvalid_argument。\n// assign(s): 現在の底で再構築し容量・利用可能な累乗表を再利用、O(旧長+|s|+1)上界、強い例外保証。clear(): 空へ戻して底・容量を保持、O(旧長+1)上界、noexcept。\n// 元文字列は保持しない。コピーはO(n+1)で独立、代入は容量を再利用し強い例外保証。ムーブ元は空（自己ムーブ代入は保持）。swapはO(1)。\nclass RollingHash {\npublic:\n    static constexpr std::uint64_t modulus = (std::uint64_t{1} << 61) - 1;\n\n    RollingHash(std::string_view s, std::uint64_t base)\n        : base_(normalize_base(base)) {\n        if (s.size() >= data_.max_size() / 2) {\n            throw std::length_error(\"RollingHash: capacity overflow\");\n        }\n        data_.resize(s.size() + 1);\n        power_data_.resize(s.size() + 1);\n        const std::size_t offset = s.size() + 1;\n        offset_ = offset;\n        Entry* const prefixes = data_.data();\n        Entry* const powers = power_data_.data();\n        powers_ = powers;\n        const std::uint64_t factor = base_;\n        std::uint64_t hash = 0;\n        std::uint64_t power = 1;\n        prefixes[0].value = hash;\n        powers[0].value = power;\n        for (std::size_t i = 0; i < s.size(); ++i) {\n            const auto byte = static_cast<unsigned char>(s[i]);\n            hash = multiply_add_byte(hash, factor, byte);\n            power = multiply(power, factor);\n            prefixes[i + 1].value = hash;\n            powers[i + 1].value = power;\n        }\n    }\n\n    void assign(std::string_view s) {\n        if (s.size() >= data_.max_size() / 2) {\n            throw std::length_error(\"RollingHash: capacity overflow\");\n        }\n        const std::size_t count = s.size() + 1;\n        const bool reuse_powers = power_data_.size() >= count;\n        // 両方の確保を先に終え、失敗時も内容と非所有ポインタを保つ。\n        data_.reserve(count);\n        power_data_.reserve(count);\n        data_.resize(count);\n        power_data_.resize(count);\n        offset_ = count;\n        powers_ = power_data_.data();\n        Entry* const prefixes = data_.data();\n        Entry* const powers = power_data_.data();\n        const std::uint64_t factor = base_;\n        std::uint64_t hash = 0;\n        prefixes[0].value = hash;\n        powers[0].value = 1;\n        if (reuse_powers) {\n            for (std::size_t i = 0; i < s.size(); ++i) {\n                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));\n                prefixes[i + 1].value = hash;\n            }\n        } else {\n            std::uint64_t power = 1;\n            for (std::size_t i = 0; i < s.size(); ++i) {\n                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));\n                power = multiply(power, factor);\n                prefixes[i + 1].value = hash;\n                powers[i + 1].value = power;\n            }\n        }\n    }\n\n    void clear() noexcept {\n        data_.clear(); power_data_.clear();\n        offset_ = 0; powers_ = nullptr;\n    }\n\n    RollingHash(const RollingHash& other)\n        : data_(other.data_), power_data_(other.power_data_),\n          base_(other.base_), offset_(other.offset_),\n          powers_(data_.empty() ? nullptr : power_data_.data()) {}\n\n    RollingHash& operator=(const RollingHash& other) {\n        if (this != &other) {\n            data_.reserve(other.data_.size());\n            power_data_.reserve(other.power_data_.size());\n            data_.resize(other.data_.size());\n            power_data_.resize(other.power_data_.size());\n            // Entryはtrivially copyable。独立した配列間で、構築済み要素の表現を写す。\n            if (!other.data_.empty()) {\n                std::memcpy(data_.data(), other.data_.data(), other.data_.size() * sizeof(Entry));\n                std::memcpy(power_data_.data(), other.power_data_.data(), other.power_data_.size() * sizeof(Entry));\n            }\n            base_ = other.base_;\n            offset_ = other.offset_;\n            powers_ = data_.empty() ? nullptr : power_data_.data();\n        }\n        return *this;\n    }\n\n    RollingHash(RollingHash&& other) noexcept\n        : data_(std::move(other.data_)), power_data_(std::move(other.power_data_)),\n          base_(other.base_), offset_(other.offset_),\n          powers_(other.powers_) {\n        other.data_.clear();\n        other.power_data_.clear();\n        other.offset_ = 0;\n        other.powers_ = nullptr;\n    }\n\n    RollingHash& operator=(RollingHash&& other) noexcept {\n        if (this != &other) {\n            data_ = std::move(other.data_);\n            power_data_ = std::move(other.power_data_);\n            base_ = other.base_;\n            offset_ = other.offset_;\n            powers_ = other.powers_;\n            other.data_.clear();\n            other.power_data_.clear();\n            other.offset_ = 0;\n            other.powers_ = nullptr;\n        }\n        return *this;\n    }\n\n    void swap(RollingHash& other) noexcept {\n        data_.swap(other.data_);\n        power_data_.swap(other.power_data_);\n        std::swap(base_, other.base_);\n        std::swap(offset_, other.offset_);\n        std::swap(powers_, other.powers_);\n    }\n\n    friend void swap(RollingHash& left, RollingHash& right) noexcept {\n        left.swap(right);\n    }\n\n    [[nodiscard]] std::size_t size() const noexcept {\n        return offset_ == 0 ? 0 : offset_ - 1;\n    }\n\n    [[nodiscard]] bool empty() const noexcept {\n        return size() == 0;\n    }\n\n    [[nodiscard]] std::uint64_t base() const noexcept {\n        return base_;\n    }\n\n    [[nodiscard]] std::uint64_t whole() const noexcept {\n        return offset_ == 0 ? 0 : data_[offset_ - 1].value;\n    }\n\n    [[nodiscard]] std::uint64_t get(std::size_t l, std::size_t r) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n#endif\n        return get_unchecked(l, r);\n    }\n\n    [[nodiscard]] std::uint64_t concat(std::uint64_t left,\n                                     std::uint64_t right,\n                                     std::size_t right_length) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (right_length > size()) {\n            throw std::out_of_range(\"RollingHash: concatenation length\");\n        }\n        if (left >= modulus || right >= modulus) {\n            throw std::invalid_argument(\"RollingHash: noncanonical hash\");\n        }\n#endif\n        return add(right_length == 0 ? left\n                                    : multiply(left, powers_[right_length].value),\n                   right);\n    }\n\n    [[nodiscard]] bool equal(std::size_t l, std::size_t r,\n                             const RollingHash& other,\n                             std::size_t ol, std::size_t orr) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n        other.check_range(ol, orr);\n        check_base(other);\n#endif\n        return r - l == orr - ol &&\n               get_unchecked(l, r) == other.get_unchecked(ol, orr);\n    }\n\n    [[nodiscard]] std::size_t lcp(\n        std::size_t l, const RollingHash& other, std::size_t ol,\n        std::size_t limit = std::numeric_limits<std::size_t>::max()) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, l);\n        other.check_range(ol, ol);\n        check_base(other);\n#endif\n        return lcp_unchecked(l, other, ol,\n                             std::min({size() - l, other.size() - ol, limit}));\n    }\n\n    [[nodiscard]] int compare(std::size_t l, std::size_t r,\n                              const RollingHash& other,\n                              std::size_t ol, std::size_t orr) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n        other.check_range(ol, orr);\n        check_base(other);\n#endif\n        const std::size_t length = r - l;\n        const std::size_t other_length = orr - ol;\n        const std::size_t common = lcp_unchecked(\n            l, other, ol, std::min(length, other_length));\n        if (common == std::min(length, other_length)) {\n            return (length > other_length) - (length < other_length);\n        }\n        const std::uint64_t byte = get_unchecked(l + common, l + common + 1);\n        const std::uint64_t other_byte =\n            other.get_unchecked(ol + common, ol + common + 1);\n        return (byte > other_byte) - (byte < other_byte);\n    }\n\nprivate:\n    struct Entry {\n        std::uint64_t value;\n        // 構築ループで全要素を設定し、不要なゼロ初期化を避ける。\n        Entry() noexcept {}\n    };\n\n    std::vector<Entry> data_, power_data_;\n    std::uint64_t base_;\n    std::size_t offset_ = 0;\n    const Entry* powers_ = nullptr; // power_data_の累乗領域への非所有ポインタ。\n\n    static constexpr std::uint64_t normalize_base(std::uint64_t base) noexcept {\n        return base < 2 ? 10 : (base > modulus - 2 ? modulus - 10 : base);\n    }\n\n    static constexpr std::uint64_t add(std::uint64_t a,\n                                       std::uint64_t b) noexcept {\n        const std::uint64_t sum = a + b;\n        return sum >= modulus ? sum - modulus : sum;\n    }\n\n    static constexpr std::uint64_t multiply_raw(std::uint64_t a,\n                                            std::uint64_t b) noexcept {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \\\n    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const __uint128_t product = static_cast<__uint128_t>(a) * b;\n        const std::uint64_t folded =\n            (static_cast<std::uint64_t>(product) & modulus) +\n            static_cast<std::uint64_t>(product >> 61);\n#else\n        // 32bitの4積を2^61=1、2^64=8として直接折り返す。\n        const std::uint64_t a0 = static_cast<std::uint32_t>(a);\n        const std::uint64_t b0 = static_cast<std::uint32_t>(b);\n        const std::uint64_t a1 = a >> 32;\n        const std::uint64_t b1 = b >> 32;\n        const std::uint64_t low = a0 * b0;\n        const std::uint64_t cross = a0 * b1 + a1 * b0;\n        constexpr std::uint64_t mask29 = (std::uint64_t{1} << 29) - 1;\n        const std::uint64_t sum = (low & modulus) + (low >> 61) +\n                                  ((cross & mask29) << 32) + (cross >> 29) +\n                                  ((a1 * b1) << 3);\n        const std::uint64_t folded = sum;\n#endif\n        return folded;\n    }\n\n    static constexpr std::uint64_t multiply(std::uint64_t a, std::uint64_t b) noexcept {\n        std::uint64_t folded = multiply_raw(a, b);\n#if !((defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)) || defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        folded = (folded & modulus) + (folded >> 61);\n#endif\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    // byteは0..255。乗算結果への加算を正規化前にまとめる。\n    static constexpr std::uint64_t multiply_add_byte(\n        std::uint64_t a, std::uint64_t b, unsigned char byte) noexcept {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const __uint128_t product = static_cast<__uint128_t>(a) * b + byte;\n        const std::uint64_t folded =\n            (static_cast<std::uint64_t>(product) & modulus) +\n            static_cast<std::uint64_t>(product >> 61);\n#else\n        const std::uint64_t sum = multiply_raw(a, b) + byte;\n        const std::uint64_t folded = (sum & modulus) + (sum >> 61);\n#endif\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    [[nodiscard]] std::uint64_t get_unchecked(std::size_t l,\n                                             std::size_t r) const noexcept {\n        if (l == r) {\n            return 0;\n        }\n        const std::uint64_t right = data_[r].value;\n        const std::uint64_t left = multiply_raw(data_[l].value, powers_[r - l].value);\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const std::uint64_t difference = right + 2 * modulus - left;\n#else\n        // raw積は4p未満、右辺全体は5p未満で64bitに収まる。\n        const std::uint64_t difference = right + 4 * modulus - left;\n#endif\n        const std::uint64_t folded = (difference & modulus) + (difference >> 61);\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    [[nodiscard]] std::size_t lcp_unchecked(std::size_t l,\n                                           const RollingHash& other,\n                                           std::size_t ol,\n                                           std::size_t limit) const noexcept {\n        if (l == 0) {\n            std::size_t low = 0;\n            std::size_t high = limit;\n            while (low < high) {\n                const std::size_t middle = high - (high - low) / 2;\n                if (data_[middle].value == other.get_unchecked(ol, ol + middle)) low = middle;\n                else high = middle - 1;\n            }\n            return low;\n        }\n        std::size_t low = 0;\n        std::size_t high = limit;\n        while (low < high) {\n            const std::size_t middle = high - (high - low) / 2;\n            if (get_unchecked(l, l + middle) ==\n                other.get_unchecked(ol, ol + middle)) {\n                low = middle;\n            } else {\n                high = middle - 1;\n            }\n        }\n        return low;\n    }\n\n#ifndef SKIP_RUNTIME_CHECKS\n    void check_range(std::size_t l, std::size_t r) const {\n        if (l > r || r > size()) {\n            throw std::out_of_range(\"RollingHash: substring range\");\n        }\n    }\n\n    void check_base(const RollingHash& other) const {\n        if (base_ != other.base_) {\n            throw std::invalid_argument(\"RollingHash: different bases\");\n        }\n    }\n#endif\n};\n\n#endif\n"
+      },
+      "instrumented.hpp": {
+        "sha256": "30745d4ff5dacdbebacb378502cf6f3d26056b41b5be8226609b118b1eb36b80",
+        "source": "// SPDX-License-Identifier: CC0-1.0\n\n#include <algorithm>\n#include <cstddef>\n#include <cstdint>\n#include <cstring>\n#include <limits>\n#include <stdexcept>\n#include <string_view>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLING_HASH_DEFINED\n#define SIRKIT_ROLLING_HASH_DEFINED\n\n// RollingHash(s, base): 符号なしバイト列をO(|s|+1)時間・空間で構築。base<2は10、base>modulus-2はmodulus-10に補正。\n// modulus: ハッシュの法2^61-1。ハッシュ値は常に[0,modulus)。\n// get(l,r): 半開区間[l,r)のハッシュ、whole(): 全体のハッシュをO(1)で返す。空区間は0。\n// size(), empty(), base(): 長さ・空判定・補正後の底をO(1)で返す。\n// concat(left,right,right_length): 同じ底の正規化済みハッシュを連結してO(1)で返す。right_length<=size()。\n// equal(l,r,other,ol,orr): 同じ底の2区間の長さとハッシュをO(1)で比較する。\n// lcp(l,other,ol,limit): 同じ底の接尾辞の最長共通接頭辞長をlimit以下でO(log(min(残長,limit)+1))で返す。\n// compare(l,r,other,ol,orr): 同じ底の2区間を符号なしバイト辞書順で比較し-1/0/1をO(log(短い方の長さ+1))で返す。\n// 比較にはハッシュ衝突による誤判定の可能性がある。検査有効時は不正な範囲にout_of_range、底・ハッシュにinvalid_argument。\n// assign(s): 現在の底で再構築し容量・利用可能な累乗表を再利用、O(旧長+|s|+1)上界、強い例外保証。clear(): 空へ戻して底・容量を保持、O(旧長+1)上界、noexcept。\n// 元文字列は保持しない。コピーはO(n+1)で独立、代入は容量を再利用し強い例外保証。ムーブ元は空（自己ムーブ代入は保持）。swapはO(1)。\nclass RollingHash {\npublic:\n    static constexpr std::uint64_t modulus = (std::uint64_t{1} << 61) - 1;\n\n    RollingHash(std::string_view s, std::uint64_t base)\n        : base_(normalize_base(base)) {\n        if (s.size() >= data_.max_size() / 2) {\n            throw std::length_error(\"RollingHash: capacity overflow\");\n        }\n        data_.resize(s.size() + 1);\n        power_data_.resize(s.size() + 1);\n        const std::size_t offset = s.size() + 1;\n        offset_ = offset;\n        Entry* const prefixes = data_.data();\n        Entry* const powers = power_data_.data();\n        powers_ = powers;\n        const std::uint64_t factor = base_;\n        std::uint64_t hash = 0;\n        std::uint64_t power = 1;\n        prefixes[0].value = hash;\n        powers[0].value = power;\n        for (std::size_t i = 0; i < s.size(); ++i) {\n            const auto byte = static_cast<unsigned char>(s[i]);\n            hash = multiply_add_byte(hash, factor, byte);\n            power = multiply(power, factor);\n            prefixes[i + 1].value = hash;\n            powers[i + 1].value = power;\n        }\n    }\n\n    void assign(std::string_view s) {\n        if (s.size() >= data_.max_size() / 2) {\n            throw std::length_error(\"RollingHash: capacity overflow\");\n        }\n        const std::size_t count = s.size() + 1;\n        const bool reuse_powers = power_data_.size() >= count;\n        // 両方の確保を先に終え、失敗時も内容と非所有ポインタを保つ。\n        data_.reserve(count);\n        power_data_.reserve(count);\n        data_.resize(count);\n        power_data_.resize(count);\n        offset_ = count;\n        powers_ = power_data_.data();\n        Entry* const prefixes = data_.data();\n        Entry* const powers = power_data_.data();\n        const std::uint64_t factor = base_;\n        std::uint64_t hash = 0;\n        prefixes[0].value = hash;\n        powers[0].value = 1;\n        if (reuse_powers) {\n            for (std::size_t i = 0; i < s.size(); ++i) {\n                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));\n                prefixes[i + 1].value = hash;\n            }\n        } else {\n            std::uint64_t power = 1;\n            for (std::size_t i = 0; i < s.size(); ++i) {\n                hash = multiply_add_byte(hash, factor, static_cast<unsigned char>(s[i]));\n                power = multiply(power, factor);\n                prefixes[i + 1].value = hash;\n                powers[i + 1].value = power;\n            }\n        }\n    }\n\n    void clear() noexcept {\n        data_.clear(); power_data_.clear();\n        offset_ = 0; powers_ = nullptr;\n    }\n\n    RollingHash(const RollingHash& other)\n        : data_(other.data_), power_data_(other.power_data_),\n          base_(other.base_), offset_(other.offset_),\n          powers_(data_.empty() ? nullptr : power_data_.data()) {}\n\n    RollingHash& operator=(const RollingHash& other) {\n        if (this != &other) {\n            data_.reserve(other.data_.size());\n            power_data_.reserve(other.power_data_.size());\n            data_.resize(other.data_.size());\n            power_data_.resize(other.power_data_.size());\n            // Entryはtrivially copyable。独立した配列間で、構築済み要素の表現を写す。\n            if (!other.data_.empty()) {\n                review_memcpy(data_.data(), other.data_.data(), other.data_.size() * sizeof(Entry));\n                review_memcpy(power_data_.data(), other.power_data_.data(), other.power_data_.size() * sizeof(Entry));\n            }\n            base_ = other.base_;\n            offset_ = other.offset_;\n            powers_ = data_.empty() ? nullptr : power_data_.data();\n        }\n        return *this;\n    }\n\n    RollingHash(RollingHash&& other) noexcept\n        : data_(std::move(other.data_)), power_data_(std::move(other.power_data_)),\n          base_(other.base_), offset_(other.offset_),\n          powers_(other.powers_) {\n        other.data_.clear();\n        other.power_data_.clear();\n        other.offset_ = 0;\n        other.powers_ = nullptr;\n    }\n\n    RollingHash& operator=(RollingHash&& other) noexcept {\n        if (this != &other) {\n            data_ = std::move(other.data_);\n            power_data_ = std::move(other.power_data_);\n            base_ = other.base_;\n            offset_ = other.offset_;\n            powers_ = other.powers_;\n            other.data_.clear();\n            other.power_data_.clear();\n            other.offset_ = 0;\n            other.powers_ = nullptr;\n        }\n        return *this;\n    }\n\n    void swap(RollingHash& other) noexcept {\n        data_.swap(other.data_);\n        power_data_.swap(other.power_data_);\n        std::swap(base_, other.base_);\n        std::swap(offset_, other.offset_);\n        std::swap(powers_, other.powers_);\n    }\n\n    friend void swap(RollingHash& left, RollingHash& right) noexcept {\n        left.swap(right);\n    }\n\n    [[nodiscard]] std::size_t size() const noexcept {\n        return offset_ == 0 ? 0 : offset_ - 1;\n    }\n\n    [[nodiscard]] bool empty() const noexcept {\n        return size() == 0;\n    }\n\n    [[nodiscard]] std::uint64_t base() const noexcept {\n        return base_;\n    }\n\n    [[nodiscard]] std::uint64_t whole() const noexcept {\n        return offset_ == 0 ? 0 : data_[offset_ - 1].value;\n    }\n\n    [[nodiscard]] std::uint64_t get(std::size_t l, std::size_t r) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n#endif\n        return get_unchecked(l, r);\n    }\n\n    [[nodiscard]] std::uint64_t concat(std::uint64_t left,\n                                     std::uint64_t right,\n                                     std::size_t right_length) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (right_length > size()) {\n            throw std::out_of_range(\"RollingHash: concatenation length\");\n        }\n        if (left >= modulus || right >= modulus) {\n            throw std::invalid_argument(\"RollingHash: noncanonical hash\");\n        }\n#endif\n        return add(right_length == 0 ? left\n                                    : multiply(left, powers_[right_length].value),\n                   right);\n    }\n\n    [[nodiscard]] bool equal(std::size_t l, std::size_t r,\n                             const RollingHash& other,\n                             std::size_t ol, std::size_t orr) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n        other.check_range(ol, orr);\n        check_base(other);\n#endif\n        return r - l == orr - ol &&\n               get_unchecked(l, r) == other.get_unchecked(ol, orr);\n    }\n\n    [[nodiscard]] std::size_t lcp(\n        std::size_t l, const RollingHash& other, std::size_t ol,\n        std::size_t limit = std::numeric_limits<std::size_t>::max()) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, l);\n        other.check_range(ol, ol);\n        check_base(other);\n#endif\n        return lcp_unchecked(l, other, ol,\n                             std::min({size() - l, other.size() - ol, limit}));\n    }\n\n    [[nodiscard]] int compare(std::size_t l, std::size_t r,\n                              const RollingHash& other,\n                              std::size_t ol, std::size_t orr) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_range(l, r);\n        other.check_range(ol, orr);\n        check_base(other);\n#endif\n        const std::size_t length = r - l;\n        const std::size_t other_length = orr - ol;\n        const std::size_t common = lcp_unchecked(\n            l, other, ol, std::min(length, other_length));\n        if (common == std::min(length, other_length)) {\n            return (length > other_length) - (length < other_length);\n        }\n        const std::uint64_t byte = get_unchecked(l + common, l + common + 1);\n        const std::uint64_t other_byte =\n            other.get_unchecked(ol + common, ol + common + 1);\n        return (byte > other_byte) - (byte < other_byte);\n    }\n\nprivate:\n    struct Entry {\n        std::uint64_t value;\n        // 構築ループで全要素を設定し、不要なゼロ初期化を避ける。\n        Entry() noexcept {}\n    };\n\n    static_assert(std::is_trivially_copyable_v<Entry> && std::is_nothrow_default_constructible_v<Entry> && std::is_nothrow_copy_constructible_v<Entry> && std::is_nothrow_destructible_v<Entry>);\n    static_assert(sizeof(Entry)==sizeof(std::uint64_t));\n    std::vector<Entry> data_, power_data_;\n    std::uint64_t base_;\n    std::size_t offset_ = 0;\n    const Entry* powers_ = nullptr; // power_data_の累乗領域への非所有ポインタ。\n\n    static constexpr std::uint64_t normalize_base(std::uint64_t base) noexcept {\n        return base < 2 ? 10 : (base > modulus - 2 ? modulus - 10 : base);\n    }\n\n    static constexpr std::uint64_t add(std::uint64_t a,\n                                       std::uint64_t b) noexcept {\n        const std::uint64_t sum = a + b;\n        return sum >= modulus ? sum - modulus : sum;\n    }\n\n    static constexpr std::uint64_t multiply_raw(std::uint64_t a,\n                                            std::uint64_t b) noexcept {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && \\\n    !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const __uint128_t product = static_cast<__uint128_t>(a) * b;\n        const std::uint64_t folded =\n            (static_cast<std::uint64_t>(product) & modulus) +\n            static_cast<std::uint64_t>(product >> 61);\n#else\n        // 32bitの4積を2^61=1、2^64=8として直接折り返す。\n        const std::uint64_t a0 = static_cast<std::uint32_t>(a);\n        const std::uint64_t b0 = static_cast<std::uint32_t>(b);\n        const std::uint64_t a1 = a >> 32;\n        const std::uint64_t b1 = b >> 32;\n        const std::uint64_t low = a0 * b0;\n        const std::uint64_t cross = a0 * b1 + a1 * b0;\n        constexpr std::uint64_t mask29 = (std::uint64_t{1} << 29) - 1;\n        const std::uint64_t sum = (low & modulus) + (low >> 61) +\n                                  ((cross & mask29) << 32) + (cross >> 29) +\n                                  ((a1 * b1) << 3);\n        const std::uint64_t folded = sum;\n#endif\n        return folded;\n    }\n\n    static constexpr std::uint64_t multiply(std::uint64_t a, std::uint64_t b) noexcept {\n        std::uint64_t folded = multiply_raw(a, b);\n#if !((defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)) || defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        folded = (folded & modulus) + (folded >> 61);\n#endif\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    // byteは0..255。乗算結果への加算を正規化前にまとめる。\n    static constexpr std::uint64_t multiply_add_byte(\n        std::uint64_t a, std::uint64_t b, unsigned char byte) noexcept {\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const __uint128_t product = static_cast<__uint128_t>(a) * b + byte;\n        const std::uint64_t folded =\n            (static_cast<std::uint64_t>(product) & modulus) +\n            static_cast<std::uint64_t>(product >> 61);\n#else\n        const std::uint64_t sum = multiply_raw(a, b) + byte;\n        const std::uint64_t folded = (sum & modulus) + (sum >> 61);\n#endif\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    [[nodiscard]] std::uint64_t get_unchecked(std::size_t l,\n                                             std::size_t r) const noexcept {\n        if (l == r) {\n            return 0;\n        }\n        const std::uint64_t right = data_[r].value;\n        const std::uint64_t left = multiply_raw(data_[l].value, powers_[r - l].value);\n#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        const std::uint64_t difference = right + 2 * modulus - left;\n#else\n        // raw積は4p未満、右辺全体は5p未満で64bitに収まる。\n        const std::uint64_t difference = right + 4 * modulus - left;\n#endif\n        const std::uint64_t folded = (difference & modulus) + (difference >> 61);\n        return folded >= modulus ? folded - modulus : folded;\n    }\n\n    [[nodiscard]] std::size_t lcp_unchecked(std::size_t l,\n                                           const RollingHash& other,\n                                           std::size_t ol,\n                                           std::size_t limit) const noexcept {\n        if (l == 0) {\n            std::size_t low = 0;\n            std::size_t high = limit;\n            while (low < high) {\n                const std::size_t middle = high - (high - low) / 2;\n                if (data_[middle].value == other.get_unchecked(ol, ol + middle)) low = middle;\n                else high = middle - 1;\n            }\n            return low;\n        }\n        std::size_t low = 0;\n        std::size_t high = limit;\n        while (low < high) {\n            const std::size_t middle = high - (high - low) / 2;\n            if (get_unchecked(l, l + middle) ==\n                other.get_unchecked(ol, ol + middle)) {\n                low = middle;\n            } else {\n                high = middle - 1;\n            }\n        }\n        return low;\n    }\n\n#ifndef SKIP_RUNTIME_CHECKS\n    void check_range(std::size_t l, std::size_t r) const {\n        if (l > r || r > size()) {\n            throw std::out_of_range(\"RollingHash: substring range\");\n        }\n    }\n\n    void check_base(const RollingHash& other) const {\n        if (base_ != other.base_) {\n            throw std::invalid_argument(\"RollingHash: different bases\");\n        }\n    }\n#endif\n};\n\n#endif\n"
+      },
+      "write_review.py": {
+        "sha256": "188746c10927b993ca29ec82d1e4a2c3f17e15411f5bcf1c01324219b104ba0b",
+        "source": "import pathlib,json,hashlib,datetime\np=pathlib.Path('/tmp/sirkit_four_hours_20261022/graph/rolling_memcpy_review');root=pathlib.Path('/home/reinsirk/Atcoder_Env');sha=lambda b:hashlib.sha256(b).hexdigest();source=(root/'String/RollingHash.cpp').read_bytes();assert source==(p/'frozen.hpp').read_bytes()==pathlib.Path('/tmp/sirkit_four_hours_20261022/rolling_reuse/final.hpp').read_bytes();rows=json.load(open(p/'results.json'))\na={'reviewed_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS','scope':'RollingHash copy assignment reserve→resize→Entry representation copyの標準適合と論理strong guarantee。','canonical_source':'String/RollingHash.cpp','source_sha256':sha(source),'live_source_edited':False,'blocking_findings':[],\n'historical_correction':'旧eecf0b2d…版のvector.assignについて、容量内なら追加確保しないとの前提を標準保証として扱った旧レビューは訂正する。旧JSONは履歴として保持。本レビューの結論はdc79dd84…版だけに適用。',\n'analysis':[\n{'point':'自己代入','finding':'this!=&otherの外側guardで処理を全て除く。自分の記憶域をmemcpy元/先へ同時に渡すことはない。'},\n{'point':'別所有とalias','finding':'二つの有効な非同一RollingHashのvectorは値を別所有する。コピーもvectorの独立コピー、moveも所有を移して元を空にするため、非空コピー範囲は重ならない。Entryはbase classやno_unique_address memberではなくvectorの通常要素。'},\n{'point':'構築済みEntry','finding':'Entryはuint64_t member一つ。user-provided default constructorはnoexceptだがcopy/move/destructorはtrivialで、trivially copyableに変わりない。resizeで必要要素の生存期間を開始してから全表現をmemcpyする。初期値未設定のvalueはコピー前に読まない。N4950 basic.types.general#3の別オブジェクト間の表現コピーに該当。'},\n{'point':'容量と非送出段階','finding':'reserveは指定個数以上のcapacityを確保し、後のcapacity内の挿入では再確保を行わない。resizeは末尾erase/default-insert。Entryの生成/コピー/破棄は非送出、allocatorはstd::allocator<Entry>。両reserve後は追加のvector領域確保を要せず、std::memcpyもC標準関数として例外を送出しない。'},\n{'point':'空文字列/clear/move元','finding':'両vectorのsizeは公開操作境界で一致する。空文字列を構築した状態はprefix0/power0を含む1要素、clear/move元は0要素。!other.data_.empty()は後者で両memcpyを省き、nullptrを0byte memcpyへ渡さない。前者は構築済み1要素の表現を正しくコピーする。'},\n{'point':'byte数','finding':'個数ではなくsizeof(Entry)を掛けたbyte数を渡す。sourceの有効なstd::vector<Entry>は既に連続領域を持ち、default allocatorはSIZE_MAX/sizeof(Entry)を超える個数を確保できないので、この積は表現可能。constructor/assignのmax_size/2制限も維持する。移植性の根拠をEntryが常に8byteであることには置かない。'},\n{'point':'strong guarantee','finding':'1回目reserve失敗なら元のまま。1回目data_ reserve成功後、2回目power_data_ reserve失敗でも、data_の内容/sizeは維持され、powers_が指すpower_data_はそのreserveの例外保証で元のまま。2回目成功後はresize/表現コピー/primitive member更新を完了できる。最後にbase/offset/powers_を一致させる。例外でprivate capacity/addressが変わる場合はあるが公開の論理値と問い合わせ結果は保持する。'},\n{'point':'以前のassign(s)変更','finding':'copy assignment変更後もbase/powerの対応、短縮後の再拡張、clear後の再構築、独立コピーの不変条件は保持される。今回の新しい2memcpy以外の数学演算/範囲検査/標準算術経路は変更されない。'}],\n'primary_standard_sources':[\n{'section':'N4950 [vector.capacity] p4,p7,p15','url':'https://timsong-cpp.github.io/cppwp/n4950/vector.capacity','used_for':'reserve後capacity/入力数まで再確保なし、resizeのerase/default-insert。'},\n{'section':'N4950 [sequence.reqmts] p59','url':'https://timsong-cpp.github.io/cppwp/n4950/sequence.reqmts#59','used_for':'assignは全参照を無効にし、容量再利用の根拠にはしない。'},\n{'section':'N4950 [basic.types.general] p3','url':'https://timsong-cpp.github.io/cppwp/n4950/basic.types#3','used_for':'別のtrivially copyable objectへ表現をコピーした後の値。'},\n{'section':'N4950 [allocator.members] p4','url':'https://timsong-cpp.github.io/cppwp/n4950/allocator.members#4','used_for':'要素数*sizeof(T)がsize_tに収まる既存allocation。'},\n{'section':'N4950 [res.on.exception.handling] p2','url':'https://timsong-cpp.github.io/cppwp/n4950/res.on.exception.handling#2','used_for':'プログラムcallbackを持たないmemcpyの非送出。'},\n{'section':'N4950 [cstring.syn] p3','url':'https://timsong-cpp.github.io/cppwp/n4950/c.strings#cstring.syn-3','used_for':'memcpyのコピーと生存期間に関する補足。ここでは事前resizeで要素を構築し、暗黙生成だけに依存しない。'}],\n'supplemental_probe':{'description':'test-only snapshotへEntryのtrivially-copyable/nothrow traitsをstatic_assertし、memcpy引数/呼出し数/byte数を観測。自己copy/別底copy/独立性/empty-string/clear/move元/容量のある空destinationを区別。','configurations':len(rows),'checks_per_configuration':13,'records':rows,'limitations':'sizeof(Entry)==sizeof(uint64_t)のassertは本環境ABIの補足のみ。標準適合の証明に8byte固定を用いない。既存24suites/272mainは再実行していない。GCCASan環境不足、ClangLSanはptrace制約でdetect_leaks=0。'},\n'reproduction':{'directory':str(p),'files':{name:{'sha256':sha((p/name).read_bytes()),'source':(p/name).read_text()}for name in ['prepare.py','test.cpp','run.py','frozen.hpp','instrumented.hpp','write_review.py']}}}\nout=p/'independent_review.json';out.write_text(json.dumps(a,ensure_ascii=False,indent=2)+'\\n');print(out,sha(out.read_bytes()))\n"
+      }
+    }
+  }
+}

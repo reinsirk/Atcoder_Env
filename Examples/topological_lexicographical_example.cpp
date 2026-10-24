@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: CC0-1.0
 #include "../Graph/Topological_sort.cpp"
 #include <iostream>
 int main() {

@@ -1,0 +1,3324 @@
+{
+  "date": "2026-10-22",
+  "round": "first Verify-sequence review, with earlier bulk audits retained",
+  "source": "Algorithm/next_combination.cpp",
+  "baseline_source_sha256": "5b71a1e2a3785b45b4fe757a3ba56da2b8f2a43211561e4217da6999f21bd295",
+  "final_source_sha256": "d1dd4db388e52fe6c0b630ebee13aa97dc096ac3f5b564ff16d8e8fb29eeedc8",
+  "changed": [
+    "for_each_combinationが最終マスクを最初に一度計算し、毎回の幅の判定を終端比較に変更。",
+    "last_combination(n,k)を追加。"
+  ],
+  "conditions": {
+    "cpu": "Intel Core i9-14900K",
+    "compiler": [
+      "GCC15.3.0",
+      "Clang21.1.8"
+    ],
+    "flags": [
+      "-std=c++23",
+      "-O2",
+      "-DSKIP_RUNTIME_CHECKS"
+    ],
+    "native_cpu_flags": false,
+    "compile_affinity": 12,
+    "performance_affinity": 28,
+    "shared_lock": "/tmp/sirkit_four_hours_20261022/benchmark_algorithms.lock",
+    "statistic": "median",
+    "control": "separate build of byte-identical baseline, rotated execution order",
+    "main": "frozen existing Verify main + shared fast IO; no batching/reordering/extra repeat loop"
+  },
+  "frozen": {
+    "Algorithm/next_combination.cpp": "5b71a1e2a3785b45b4fe757a3ba56da2b8f2a43211561e4217da6999f21bd295",
+    "Examples/next_combination_example.cpp": "6b3964431ee98abfc01a7a707a6bde86e00e6440b3fe1f62a27d80ff2c4ad168",
+    "Verify/current/drivers/next_combination_main.cpp": "4d155206c67fe88a61cbf6d784a5f1f92c44a02a313542ed3299c9dab381ce3f",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "final_files_sha256": {
+    "Algorithm/next_combination.cpp": "d1dd4db388e52fe6c0b630ebee13aa97dc096ac3f5b564ff16d8e8fb29eeedc8",
+    "Examples/next_combination_example.cpp": "b2961ae86f25f700c8eb644b33e50183c4daf0d6a2e4a761dfa1c93866d83af7",
+    "Document/combination_masks.md": "14d10360a24d854427ac9164d090b32cc095666a391bb91aa139872d20558484",
+    "Verify/current/tests/combination_reference_test.cpp": "7d1bed075f26e03c152428f1e321d41101114b8d522a6c2a5ca6fefff6392fcc"
+  },
+  "selection": {
+    "build": [
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/baseline.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/control.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/last.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_last"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/baseline.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/control.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/last.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_last"
+      ]
+    ],
+    "rows": [
+      {
+        "compiler": "gcc",
+        "n": 0,
+        "k": 0,
+        "repetitions": 10000000,
+        "raw_ms": {
+          "baseline": [
+            2.66799,
+            2.56602,
+            2.63048,
+            2.5968,
+            2.56053,
+            2.5766,
+            2.63889
+          ],
+          "control": [
+            2.64449,
+            2.60756,
+            2.63628,
+            2.60408,
+            2.54546,
+            2.54429,
+            2.56306
+          ],
+          "last": [
+            2.28297,
+            2.28229,
+            2.28171,
+            2.28183,
+            2.28497,
+            2.30726,
+            2.28319
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.5968,
+          "control": 2.60408,
+          "last": 2.28297
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.002803450400493,
+          "last": 0.8791474121996303
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 5,
+        "k": 2,
+        "repetitions": 1000000,
+        "raw_ms": {
+          "baseline": [
+            16.5594,
+            16.5388,
+            16.5312,
+            16.5372,
+            16.5379,
+            16.5324,
+            16.5375
+          ],
+          "control": [
+            16.5294,
+            16.5422,
+            16.5301,
+            16.5223,
+            16.5399,
+            16.5299,
+            16.5172
+          ],
+          "last": [
+            12.553,
+            12.543,
+            12.541,
+            12.5428,
+            12.5446,
+            12.5461,
+            12.555
+          ]
+        },
+        "median_ms": {
+          "baseline": 16.5375,
+          "control": 16.5299,
+          "last": 12.5446
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9995404383975812,
+          "last": 0.7585547996976568
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 20,
+        "k": 10,
+        "repetitions": 50,
+        "raw_ms": {
+          "baseline": [
+            18.1969,
+            18.2103,
+            18.1939,
+            18.1966,
+            18.2133,
+            18.1894,
+            18.1632
+          ],
+          "control": [
+            18.1757,
+            18.1702,
+            18.2073,
+            18.1774,
+            18.2338,
+            18.1969,
+            18.2307
+          ],
+          "last": [
+            15.2479,
+            15.2395,
+            15.2078,
+            15.2491,
+            15.1638,
+            15.3042,
+            15.1849
+          ]
+        },
+        "median_ms": {
+          "baseline": 18.1966,
+          "control": 18.1969,
+          "last": 15.2395
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0000164865963972,
+          "last": 0.8374916193134981
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 28,
+        "k": 7,
+        "repetitions": 10,
+        "raw_ms": {
+          "baseline": [
+            23.4951,
+            23.4745,
+            23.4376,
+            23.5021,
+            23.4237,
+            23.4826,
+            23.4445
+          ],
+          "control": [
+            23.4876,
+            23.5093,
+            23.4638,
+            23.454,
+            23.5077,
+            23.5208,
+            23.5145
+          ],
+          "last": [
+            19.6883,
+            19.7819,
+            19.782,
+            19.783,
+            19.8462,
+            19.7765,
+            19.9621
+          ]
+        },
+        "median_ms": {
+          "baseline": 23.4745,
+          "control": 23.5077,
+          "last": 19.782
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0014143006240814,
+          "last": 0.8427016549873267
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 64,
+        "k": 1,
+        "repetitions": 100000,
+        "raw_ms": {
+          "baseline": [
+            11.257,
+            11.2667,
+            11.2681,
+            11.2712,
+            11.2517,
+            11.2684,
+            11.2642
+          ],
+          "control": [
+            11.2692,
+            11.2628,
+            11.2689,
+            11.2687,
+            11.2676,
+            11.2695,
+            11.2577
+          ],
+          "last": [
+            10.5628,
+            10.5462,
+            10.5261,
+            10.5254,
+            10.5127,
+            10.5431,
+            10.5351
+          ]
+        },
+        "median_ms": {
+          "baseline": 11.2667,
+          "control": 11.2687,
+          "last": 10.5351
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0001775142677094,
+          "last": 0.9350652808719501
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 64,
+        "k": 63,
+        "repetitions": 100000,
+        "raw_ms": {
+          "baseline": [
+            11.2696,
+            11.2665,
+            11.289,
+            11.2646,
+            11.2688,
+            11.2661,
+            11.2662
+          ],
+          "control": [
+            11.27,
+            11.2711,
+            11.2684,
+            11.2667,
+            11.2655,
+            11.2627,
+            11.2604
+          ],
+          "last": [
+            10.5264,
+            10.526,
+            10.528,
+            10.5229,
+            10.5289,
+            10.5601,
+            10.5221
+          ]
+        },
+        "median_ms": {
+          "baseline": 11.2665,
+          "control": 11.2667,
+          "last": 10.5264
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0000177517418896,
+          "last": 0.9343096791372654
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 64,
+        "k": 64,
+        "repetitions": 10000000,
+        "raw_ms": {
+          "baseline": [
+            6.84802,
+            6.84933,
+            6.86185,
+            6.8676,
+            6.84663,
+            6.84863,
+            6.86673
+          ],
+          "control": [
+            6.86741,
+            6.88447,
+            6.85274,
+            6.86988,
+            6.84815,
+            6.8564,
+            6.86322
+          ],
+          "last": [
+            9.1597,
+            9.17493,
+            9.14827,
+            9.14516,
+            9.14399,
+            9.14907,
+            9.13948
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.84933,
+          "control": 6.86322,
+          "last": 9.14827
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0020279355791004,
+          "last": 1.335644508294972
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 0,
+        "k": 0,
+        "repetitions": 10000000,
+        "raw_ms": {
+          "baseline": [
+            4.56597,
+            4.57688,
+            4.56362,
+            4.56273,
+            4.57885,
+            4.57822,
+            4.57899
+          ],
+          "control": [
+            4.58223,
+            4.58003,
+            4.58272,
+            4.56328,
+            4.56254,
+            4.57932,
+            4.56624
+          ],
+          "last": [
+            4.97228,
+            4.82214,
+            4.99274,
+            4.70087,
+            4.92012,
+            5.00121,
+            4.92564
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.57688,
+          "control": 4.57932,
+          "last": 4.92564
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0005331142612435,
+          "last": 1.0762003810456031
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 5,
+        "k": 2,
+        "repetitions": 1000000,
+        "raw_ms": {
+          "baseline": [
+            17.4455,
+            17.4452,
+            17.4466,
+            17.4453,
+            17.4481,
+            17.4503,
+            17.4432
+          ],
+          "control": [
+            17.4508,
+            17.4371,
+            17.4435,
+            17.4535,
+            17.4455,
+            17.4349,
+            17.4398
+          ],
+          "last": [
+            13.6783,
+            13.6505,
+            13.6553,
+            13.6624,
+            13.656,
+            13.6994,
+            13.6678
+          ]
+        },
+        "median_ms": {
+          "baseline": 17.4455,
+          "control": 17.4435,
+          "last": 13.6624
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9998853572554528,
+          "last": 0.7831475165515462
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 20,
+        "k": 10,
+        "repetitions": 50,
+        "raw_ms": {
+          "baseline": [
+            18.7573,
+            18.7294,
+            18.7608,
+            18.7319,
+            18.7395,
+            18.7601,
+            18.7459
+          ],
+          "control": [
+            18.7322,
+            18.7447,
+            18.7681,
+            18.7586,
+            18.745,
+            18.743,
+            18.7462
+          ],
+          "last": [
+            16.9085,
+            16.9327,
+            16.9424,
+            16.9238,
+            16.9306,
+            16.9019,
+            16.9018
+          ]
+        },
+        "median_ms": {
+          "baseline": 18.7459,
+          "control": 18.745,
+          "last": 16.9238
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9999519895017045,
+          "last": 0.9028000789505972
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 28,
+        "k": 7,
+        "repetitions": 10,
+        "raw_ms": {
+          "baseline": [
+            24.0193,
+            24.012,
+            24.0134,
+            24.0178,
+            24.0347,
+            24.0281,
+            24.0264
+          ],
+          "control": [
+            24.0144,
+            24.0177,
+            24.0134,
+            24.0144,
+            24.0157,
+            24.0213,
+            24.0063
+          ],
+          "last": [
+            21.8257,
+            21.889,
+            21.8732,
+            21.8523,
+            21.9203,
+            21.9298,
+            21.8706
+          ]
+        },
+        "median_ms": {
+          "baseline": 24.0193,
+          "control": 24.0144,
+          "last": 21.8732
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9997959973854358,
+          "last": 0.9106510181395794
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 64,
+        "k": 1,
+        "repetitions": 100000,
+        "raw_ms": {
+          "baseline": [
+            12.6142,
+            12.6247,
+            12.6244,
+            12.625,
+            12.6228,
+            12.644,
+            12.6228
+          ],
+          "control": [
+            12.626,
+            12.6241,
+            12.6258,
+            12.6259,
+            12.6244,
+            12.6261,
+            12.6555
+          ],
+          "last": [
+            11.3134,
+            11.2914,
+            11.2808,
+            11.2649,
+            11.2983,
+            11.2503,
+            11.3002
+          ]
+        },
+        "median_ms": {
+          "baseline": 12.6244,
+          "control": 12.6259,
+          "last": 11.2914
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0001188175279618,
+          "last": 0.8944108234846805
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 64,
+        "k": 63,
+        "repetitions": 100000,
+        "raw_ms": {
+          "baseline": [
+            12.6339,
+            12.6264,
+            12.6215,
+            12.6203,
+            12.6109,
+            12.6255,
+            12.6217
+          ],
+          "control": [
+            12.6223,
+            12.6289,
+            12.6231,
+            12.6098,
+            12.6261,
+            12.6235,
+            12.609
+          ],
+          "last": [
+            11.2652,
+            11.3287,
+            11.314,
+            11.2921,
+            11.2854,
+            11.2609,
+            11.3093
+          ]
+        },
+        "median_ms": {
+          "baseline": 12.6217,
+          "control": 12.6231,
+          "last": 11.2921
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0001109200820808,
+          "last": 0.8946576134752053
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 64,
+        "k": 64,
+        "repetitions": 10000000,
+        "raw_ms": {
+          "baseline": [
+            7.77198,
+            7.76659,
+            7.77694,
+            7.78284,
+            7.78324,
+            7.76053,
+            7.77838
+          ],
+          "control": [
+            7.75974,
+            7.77388,
+            7.78543,
+            7.77415,
+            7.77492,
+            7.77487,
+            7.77325
+          ],
+          "last": [
+            4.96575,
+            5.0562,
+            4.92071,
+            4.77579,
+            4.87796,
+            4.72634,
+            4.92347
+          ]
+        },
+        "median_ms": {
+          "baseline": 7.77694,
+          "control": 7.77415,
+          "last": 4.92071
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9996412470714703,
+          "last": 0.6327308684392576
+        }
+      }
+    ]
+  },
+  "direct_final": {
+    "build": [
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/baseline.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/control.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/final.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_final"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/baseline.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/control.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DHEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/final.hpp\"",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/bench.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_final"
+      ]
+    ],
+    "rows": [
+      {
+        "compiler": "gcc",
+        "n": 0,
+        "k": 0,
+        "repetitions": 10000000,
+        "raw_ms": {
+          "baseline": [
+            2.59376,
+            2.66231,
+            2.61631,
+            2.64285,
+            2.56514,
+            2.61701,
+            2.59519
+          ],
+          "control": [
+            2.63634,
+            2.52091,
+            2.61543,
+            2.58456,
+            2.52574,
+            2.52418,
+            2.59971
+          ],
+          "final": [
+            2.29194,
+            2.30597,
+            2.38481,
+            2.34814,
+            2.30206,
+            2.28312,
+            2.2845
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.61631,
+          "control": 2.58456,
+          "final": 2.30206
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9878645879119831,
+          "final": 0.8798880866563977
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 5,
+        "k": 2,
+        "repetitions": 1000000,
+        "raw_ms": {
+          "baseline": [
+            16.595,
+            16.5473,
+            16.5545,
+            16.5226,
+            16.5396,
+            16.5533,
+            16.5404
+          ],
+          "control": [
+            16.5455,
+            16.5288,
+            16.554,
+            16.5426,
+            16.5496,
+            16.5501,
+            16.5546
+          ],
+          "final": [
+            12.5559,
+            12.567,
+            12.5464,
+            12.5711,
+            12.5636,
+            12.5456,
+            12.5487
+          ]
+        },
+        "median_ms": {
+          "baseline": 16.5473,
+          "control": 16.5496,
+          "final": 12.5559
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0001389954856685,
+          "final": 0.7587884428275308
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 20,
+        "k": 10,
+        "repetitions": 50,
+        "raw_ms": {
+          "baseline": [
+            18.2012,
+            18.2011,
+            18.2272,
+            18.2016,
+            18.22,
+            18.1954,
+            18.2232
+          ],
+          "control": [
+            18.201,
+            18.2264,
+            18.228,
+            18.1744,
+            18.224,
+            18.2083,
+            18.1882
+          ],
+          "final": [
+            15.2603,
+            15.2117,
+            15.2372,
+            15.1821,
+            15.2238,
+            15.1953,
+            15.3106
+          ]
+        },
+        "median_ms": {
+          "baseline": 18.2016,
+          "control": 18.2083,
+          "final": 15.2238
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0003680995077358,
+          "final": 0.8363989978902955
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 28,
+        "k": 7,
+        "repetitions": 10,
+        "raw_ms": {
+          "baseline": [
+            23.555,
+            23.4621,
+            23.5219,
+            23.4633,
+            23.5511,
+            23.4825,
+            23.5538
+          ],
+          "control": [
+            23.4971,
+            23.4759,
+            23.5383,
+            23.4637,
+            23.6009,
+            23.5956,
+            23.5244
+          ],
+          "final": [
+            19.7647,
+            19.6925,
+            19.9014,
+            19.8073,
+            19.7569,
+            19.8642,
+            19.7727
+          ]
+        },
+        "median_ms": {
+          "baseline": 23.5219,
+          "control": 23.5244,
+          "final": 19.7727
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.000106283931145,
+          "final": 0.8406081141404393
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 64,
+        "k": 1,
+        "repetitions": 100000,
+        "raw_ms": {
+          "baseline": [
+            11.2505,
+            11.2764,
+            11.3104,
+            11.2772,
+            11.2773,
+            11.2731,
+            11.2742
+          ],
+          "control": [
+            11.2648,
+            11.2826,
+            11.2541,
+            11.2571,
+            11.287,
+            11.2771,
+            11.3555
+          ],
+          "final": [
+            10.5553,
+            10.5293,
+            10.5378,
+            10.5422,
+            10.524,
+            10.5399,
+            10.5337
+          ]
+        },
+        "median_ms": {
+          "baseline": 11.2764,
+          "control": 11.2771,
+          "final": 10.5378
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0000620765492534,
+          "final": 0.9345003724592955
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 64,
+        "k": 63,
+        "repetitions": 100000,
+        "raw_ms": {
+          "baseline": [
+            11.2709,
+            11.2554,
+            11.2813,
+            11.2713,
+            11.273,
+            11.2676,
+            11.2976
+          ],
+          "control": [
+            11.2747,
+            11.2775,
+            11.2736,
+            11.2859,
+            11.269,
+            11.2747,
+            11.2545
+          ],
+          "final": [
+            10.5218,
+            10.5446,
+            10.5327,
+            10.5451,
+            10.5319,
+            10.551,
+            10.5266
+          ]
+        },
+        "median_ms": {
+          "baseline": 11.2713,
+          "control": 11.2747,
+          "final": 10.5327
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0003016510961469,
+          "final": 0.9344707354076283
+        }
+      },
+      {
+        "compiler": "gcc",
+        "n": 64,
+        "k": 64,
+        "repetitions": 10000000,
+        "raw_ms": {
+          "baseline": [
+            6.84814,
+            6.86555,
+            6.89278,
+            6.87338,
+            6.86264,
+            6.86511,
+            6.86381
+          ],
+          "control": [
+            6.84728,
+            6.86909,
+            6.8579,
+            6.87029,
+            6.84834,
+            6.87726,
+            6.85925
+          ],
+          "final": [
+            9.15655,
+            9.15686,
+            9.17456,
+            9.14708,
+            9.14827,
+            9.12972,
+            9.13799
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.86511,
+          "control": 6.85925,
+          "final": 9.14827
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9991464084333682,
+          "final": 1.3325744234251164
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 0,
+        "k": 0,
+        "repetitions": 10000000,
+        "raw_ms": {
+          "baseline": [
+            4.58356,
+            4.58137,
+            4.56701,
+            4.58374,
+            4.59125,
+            4.58191,
+            4.59509
+          ],
+          "control": [
+            4.58365,
+            4.57029,
+            4.57493,
+            4.56908,
+            4.59977,
+            4.56694,
+            4.56717
+          ],
+          "final": [
+            5.06432,
+            5.07895,
+            5.09824,
+            5.07883,
+            5.05596,
+            5.08779,
+            5.09752
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.58356,
+          "control": 4.57029,
+          "final": 5.07895
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9971048704500431,
+          "final": 1.1080797458743858
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 5,
+        "k": 2,
+        "repetitions": 1000000,
+        "raw_ms": {
+          "baseline": [
+            17.4983,
+            17.4546,
+            17.488,
+            17.4828,
+            17.4494,
+            17.4583,
+            17.4672
+          ],
+          "control": [
+            17.4634,
+            17.4582,
+            17.4606,
+            17.4746,
+            17.484,
+            17.4602,
+            17.4422
+          ],
+          "final": [
+            13.6721,
+            13.6381,
+            13.662,
+            13.678,
+            13.6764,
+            13.7062,
+            13.6682
+          ]
+        },
+        "median_ms": {
+          "baseline": 17.4672,
+          "control": 17.4606,
+          "final": 13.6721
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9996221489420171,
+          "final": 0.7827299166437667
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 20,
+        "k": 10,
+        "repetitions": 50,
+        "raw_ms": {
+          "baseline": [
+            18.7486,
+            18.7556,
+            18.7341,
+            18.7505,
+            18.743,
+            18.7505,
+            18.7482
+          ],
+          "control": [
+            18.7338,
+            18.7512,
+            18.7564,
+            18.7513,
+            18.7598,
+            18.7509,
+            18.7443
+          ],
+          "final": [
+            16.9399,
+            16.9331,
+            16.9402,
+            16.9499,
+            16.9652,
+            16.9514,
+            16.9276
+          ]
+        },
+        "median_ms": {
+          "baseline": 18.7486,
+          "control": 18.7512,
+          "final": 16.9402
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0001386770212177,
+          "final": 0.9035447980115849
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 28,
+        "k": 7,
+        "repetitions": 10,
+        "raw_ms": {
+          "baseline": [
+            24.027,
+            24.0272,
+            24.0311,
+            24.0346,
+            24.0275,
+            24.0508,
+            24.0216
+          ],
+          "control": [
+            24.0265,
+            24.0362,
+            24.025,
+            24.0297,
+            24.036,
+            24.0267,
+            24.0191
+          ],
+          "final": [
+            21.8881,
+            21.9215,
+            21.8873,
+            21.9586,
+            21.935,
+            21.8061,
+            21.95
+          ]
+        },
+        "median_ms": {
+          "baseline": 24.0275,
+          "control": 24.0267,
+          "final": 21.9215
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9999667048173968,
+          "final": 0.9123504317968995
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 64,
+        "k": 1,
+        "repetitions": 100000,
+        "raw_ms": {
+          "baseline": [
+            12.6315,
+            12.6236,
+            12.6273,
+            12.6178,
+            12.6417,
+            12.6183,
+            12.6308
+          ],
+          "control": [
+            12.6378,
+            12.6103,
+            12.6357,
+            12.6389,
+            12.6468,
+            12.6299,
+            12.6318
+          ],
+          "final": [
+            11.347,
+            11.3341,
+            11.2728,
+            11.3097,
+            11.2384,
+            11.2833,
+            11.2791
+          ]
+        },
+        "median_ms": {
+          "baseline": 12.6273,
+          "control": 12.6357,
+          "final": 11.2833
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.0006652253450856,
+          "final": 0.8935639447862964
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 64,
+        "k": 63,
+        "repetitions": 100000,
+        "raw_ms": {
+          "baseline": [
+            12.6291,
+            12.6123,
+            12.6232,
+            12.6275,
+            12.6259,
+            12.6262,
+            12.6221
+          ],
+          "control": [
+            12.6301,
+            12.6332,
+            12.625,
+            12.6115,
+            12.6262,
+            12.6396,
+            12.6156
+          ],
+          "final": [
+            11.3105,
+            11.3122,
+            11.275,
+            11.2721,
+            11.3121,
+            11.2499,
+            11.2903
+          ]
+        },
+        "median_ms": {
+          "baseline": 12.6259,
+          "control": 12.6262,
+          "final": 11.2903
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.000023760682407,
+          "final": 0.8942174419249321
+        }
+      },
+      {
+        "compiler": "clang",
+        "n": 64,
+        "k": 64,
+        "repetitions": 10000000,
+        "raw_ms": {
+          "baseline": [
+            7.77525,
+            7.77074,
+            7.78649,
+            7.79868,
+            7.76342,
+            7.78431,
+            7.77873
+          ],
+          "control": [
+            7.75872,
+            7.78316,
+            7.7685,
+            7.79131,
+            7.76112,
+            7.78022,
+            7.76152
+          ],
+          "final": [
+            5.00886,
+            5.01027,
+            5.04739,
+            5.06402,
+            5.09453,
+            5.06191,
+            5.06337
+          ]
+        },
+        "median_ms": {
+          "baseline": 7.77873,
+          "control": 7.7685,
+          "final": 5.06191
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9986848752945532,
+          "final": 0.650737331158171
+        }
+      }
+    ]
+  },
+  "fixed_main": {
+    "builds": [
+      {
+        "name": "gcc_baseline",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_baseline.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_baseline"
+        ],
+        "tu_sha256": "a1b633590c873402a62ee61e2dd178aa49a918d87131d1a929b4a906c78c6a65",
+        "binary_sha256": "14f747be408368af4164e1d1339c20bb9ec6ffeeeb71b566ee6aff695d4497ae"
+      },
+      {
+        "name": "gcc_control",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_control.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_control"
+        ],
+        "tu_sha256": "a1b633590c873402a62ee61e2dd178aa49a918d87131d1a929b4a906c78c6a65",
+        "binary_sha256": "7147e30d4396ed0b3ee3ce47eb553c84dcf4f52f0cf00c791556793d3608e186"
+      },
+      {
+        "name": "gcc_final",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_final.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_final"
+        ],
+        "tu_sha256": "8f3d22710e87549b797e4d2a177da348b49dc27ea8aa9475b9b992c795e465ca",
+        "binary_sha256": "82e58f62217f639e159451047cb50dc730cfe41fab39cc8d9d99e15965c109b7"
+      },
+      {
+        "name": "gcc_final_checked",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_final_checked.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_final_checked"
+        ],
+        "tu_sha256": "277b4396fbc7684f2db8728fd901e98d36d99c423f0a2950762c7a15cad45ced",
+        "binary_sha256": "dec43aaacd81586f319e6f2b6e80c8881d50bf86f030eab0bafeda9fe6abae39"
+      },
+      {
+        "name": "clang_baseline",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_baseline.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_baseline"
+        ],
+        "tu_sha256": "a1b633590c873402a62ee61e2dd178aa49a918d87131d1a929b4a906c78c6a65",
+        "binary_sha256": "c8af9afdb94de37d01adc68762c9c0d3f796491e0c866c10a5a5e4ea5c011b01"
+      },
+      {
+        "name": "clang_control",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_control.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_control"
+        ],
+        "tu_sha256": "a1b633590c873402a62ee61e2dd178aa49a918d87131d1a929b4a906c78c6a65",
+        "binary_sha256": "70d278a66a6df04e794d990e16bdc37ec3b89608d4e67800d1e0c849e9eab646"
+      },
+      {
+        "name": "clang_final",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_final.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_final"
+        ],
+        "tu_sha256": "8f3d22710e87549b797e4d2a177da348b49dc27ea8aa9475b9b992c795e465ca",
+        "binary_sha256": "634bcbf3821624f9ce091d8965c58b52ab234180f6b3fe98e46129f7b55bcec6"
+      },
+      {
+        "name": "clang_final_checked",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_final_checked.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_final_checked"
+        ],
+        "tu_sha256": "277b4396fbc7684f2db8728fd901e98d36d99c423f0a2950762c7a15cad45ced",
+        "binary_sha256": "7221f75e6b048be91f4cd936c465ec1f51b519a861d6c9f2759cbc5560e9daf2"
+      }
+    ],
+    "correctness": [
+      {
+        "name": "gcc_baseline",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "path_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "complete_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "random_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "path_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "complete_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "random_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "path_4",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "complete_4",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "random_4",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "path_5",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "complete_5",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "random_5",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "path_6",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "complete_6",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "random_6",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "path_8",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "complete_8",
+        "passed": true
+      },
+      {
+        "name": "gcc_baseline",
+        "case": "random_8",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "path_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "complete_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "random_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "path_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "complete_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "random_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "path_4",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "complete_4",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "random_4",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "path_5",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "complete_5",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "random_5",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "path_6",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "complete_6",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "random_6",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "path_8",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "complete_8",
+        "passed": true
+      },
+      {
+        "name": "gcc_control",
+        "case": "random_8",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "path_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "complete_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "random_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "path_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "complete_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "random_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "path_4",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "complete_4",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "random_4",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "path_5",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "complete_5",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "random_5",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "path_6",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "complete_6",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "random_6",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "path_8",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "complete_8",
+        "passed": true
+      },
+      {
+        "name": "gcc_final",
+        "case": "random_8",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "path_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "complete_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "random_2",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "path_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "complete_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "random_3",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "path_4",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "complete_4",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "random_4",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "path_5",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "complete_5",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "random_5",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "path_6",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "complete_6",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "random_6",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "path_8",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "complete_8",
+        "passed": true
+      },
+      {
+        "name": "gcc_final_checked",
+        "case": "random_8",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "path_2",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "complete_2",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "random_2",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "path_3",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "complete_3",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "random_3",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "path_4",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "complete_4",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "random_4",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "path_5",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "complete_5",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "random_5",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "path_6",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "complete_6",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "random_6",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "path_8",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "complete_8",
+        "passed": true
+      },
+      {
+        "name": "clang_baseline",
+        "case": "random_8",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "path_2",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "complete_2",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "random_2",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "path_3",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "complete_3",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "random_3",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "path_4",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "complete_4",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "random_4",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "path_5",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "complete_5",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "random_5",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "path_6",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "complete_6",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "random_6",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "path_8",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "complete_8",
+        "passed": true
+      },
+      {
+        "name": "clang_control",
+        "case": "random_8",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "path_2",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "complete_2",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "random_2",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "path_3",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "complete_3",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "random_3",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "path_4",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "complete_4",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "random_4",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "path_5",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "complete_5",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "random_5",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "path_6",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "complete_6",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "random_6",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "path_8",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "complete_8",
+        "passed": true
+      },
+      {
+        "name": "clang_final",
+        "case": "random_8",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "sample_1",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "sample_2",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "sample_3",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "path_2",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "complete_2",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "random_2",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "path_3",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "complete_3",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "random_3",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "path_4",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "complete_4",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "random_4",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "path_5",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "complete_5",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "random_5",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "path_6",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "complete_6",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "random_6",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "path_8",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "complete_8",
+        "passed": true
+      },
+      {
+        "name": "clang_final_checked",
+        "case": "random_8",
+        "passed": true
+      }
+    ],
+    "cases": [
+      {
+        "name": "sample_1",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/sample_1.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/sample_1.ans",
+        "kind": "official sample",
+        "input_sha256": "2edb3d03e21576b345f614f7f1bd97a7f8a11648fe222f42839d8d0643bd8cbc",
+        "answer_sha256": "19b8d5c59e421f037fe563007c7254eb8d98bc221b278c3db3e5fdbbfd52e273"
+      },
+      {
+        "name": "sample_2",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/sample_2.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/sample_2.ans",
+        "kind": "official sample",
+        "input_sha256": "48190415fa327f5f3cb74eb1de280269399e93bfd1781ec2a6a490928a23e9f6",
+        "answer_sha256": "012921fba93b6fa30e08f75e68591999a6ccdc393d0392320f3a8e475e035d83"
+      },
+      {
+        "name": "sample_3",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/sample_3.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/sample_3.ans",
+        "kind": "official sample",
+        "input_sha256": "8c127a6ec65896096056581d25becdd0e9a016f818dffc92ade43f27d290dd31",
+        "answer_sha256": "93203c33694e4091d960a90b413cd4b7c9ea2d5e2ab87679ef2d2ac465d83f75"
+      },
+      {
+        "name": "path_2",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/path_2.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/path_2.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "79f7b8b7cd19525995b6199c365be5805d914c879b4b2da041fc87c871f7bae3",
+        "answer_sha256": "2e291d1b60990132a27d57970922bd2c8eef14b7df0ff831c54062d2bd4f62cf"
+      },
+      {
+        "name": "complete_2",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/complete_2.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/complete_2.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "056235eb60e9064da300d55976777e1130e2c4fdad23ecdd12b3ff2ddd2ae5b6",
+        "answer_sha256": "97401dac240f1fafbbbc8131e45f8b6bd0697fd69725b0c0b7529ab120f962ad"
+      },
+      {
+        "name": "random_2",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/random_2.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/random_2.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "1bcf765e2f70a8c3bb0dc9e2fe350b9970e8710b98dc5f39bbbe5cd7641f454c",
+        "answer_sha256": "df28e9e1556469c406324b728876c00c17e56f82a903194b633e0be0c36ef98e"
+      },
+      {
+        "name": "path_3",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/path_3.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/path_3.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "d4631d9a6bbfef0ea75a125457091ae870fa124658fd4945022bf7dba98c0448",
+        "answer_sha256": "247a36622b4dde60de1b332d19875a271ebf533c07e3b921703defd9945c14ef"
+      },
+      {
+        "name": "complete_3",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/complete_3.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/complete_3.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "b37bb88acf64927778228631cacc5f2c51ab9366d99eb66761dabb46d9bbfd89",
+        "answer_sha256": "e4fa40793ddff424afc48673c1fb162227b492b938db118dd9536e8ca2bd1b60"
+      },
+      {
+        "name": "random_3",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/random_3.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/random_3.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "66f02b6f60093cc1c9facfc1de46359649f3128ee119b1ea8ea599eacb45ecc4",
+        "answer_sha256": "2b1c6f4470e4055b894a6c662086fa65158e4f910bdf381bc681d6adf2c45203"
+      },
+      {
+        "name": "path_4",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/path_4.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/path_4.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "9c2da9ddd9e4ef5afe3712049bc361ac3b913c5d2c7ce78bd18ae44d1df2681a",
+        "answer_sha256": "f5de8cffbf483eb4c1eb973e945637b2cff60de63bc85a0538ff137d2a395e8c"
+      },
+      {
+        "name": "complete_4",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/complete_4.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/complete_4.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "f1102928c59e40eefb852e48a2d64e2a0e1814243f41c178ad6f9f4a9f2ea258",
+        "answer_sha256": "1396032f540c5139c6034ed303c0c1841ac492b0911bc5d49eee3fb88e225e71"
+      },
+      {
+        "name": "random_4",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/random_4.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/random_4.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "91130f6809c21a2c28a7083fca9278013856650ba49ee99b5f1c1fc078d1701d",
+        "answer_sha256": "0ecb7e08c584869e62707c8ca23471925a504d2bd928e36be83c794af2dbb8a9"
+      },
+      {
+        "name": "path_5",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/path_5.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/path_5.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "3e334de5c9985e457e8f39cacccc9a12ea4668348afd6d3977ef0706a2849a1e",
+        "answer_sha256": "4abf51942d7ad6a4bd299afd7e77d905f5a825753aa7288a2bb56e1666f206a4"
+      },
+      {
+        "name": "complete_5",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/complete_5.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/complete_5.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "061bf9dc8087c42579b17be291e38af29242b68ff5daad8725242aa6b35dc8b0",
+        "answer_sha256": "b0f0ba7a908984599087c2f4a8b56a87368d2b251de6c8cb2023eaa35b17569a"
+      },
+      {
+        "name": "random_5",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/random_5.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/random_5.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "5326428ddfedfc1da0fdbcab7a73b56fcf86fe3b14487946a899dc3d87845c9c",
+        "answer_sha256": "193118488ed72cf34e2d28a589e766a57205be20c58dd8d510f26527755ba70e"
+      },
+      {
+        "name": "path_6",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/path_6.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/path_6.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "c30ed577130beffae70aff454a02e63d9dd536f0f51b067d2e96abfbd616b2ef",
+        "answer_sha256": "88a114e0a31ed6e219d08886972cb9855a83bf7957df18dfa12f7530b53ac323"
+      },
+      {
+        "name": "complete_6",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/complete_6.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/complete_6.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "dfee652c716632bd9204dc8fd12754979b7903dec80a7c45a2043c493dfbacb1",
+        "answer_sha256": "e143b14d96c3ae01b57ea2fd736a019743ced7a12173a482787597c87c9c0300"
+      },
+      {
+        "name": "random_6",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/random_6.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/random_6.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "4815156d117f4a334a730e3e0415ee81a4dd20bf5dbaf58b4e173dab5cfc4e7b",
+        "answer_sha256": "a0f80ee30ec96c619db5c9939cbc28f62310e0f795896e2130dced888a66d084"
+      },
+      {
+        "name": "path_8",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/path_8.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/path_8.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "63110ee5a44327b380c9d7823ce379897df61c961fc576d787b96d41e770a0d6",
+        "answer_sha256": "7a124be36826c6d4c2c2d0c91b491060cb90d6737aad9d558dda281253872924"
+      },
+      {
+        "name": "complete_8",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/complete_8.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/complete_8.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "d5f42034aebac48374766a7ee4bd45b8973355f729f59ad91bb28b1be8a0969e",
+        "answer_sha256": "2006be4fb72c9fea3b45d6da1d24c86f8da39aa0aad3a3359b76bab8f15e3bd5"
+      },
+      {
+        "name": "random_8",
+        "input": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/random_8.in",
+        "answer": "/tmp/sirkit_four_hours_20261022/algorithms/combination/cases/random_8.ans",
+        "kind": "independent Pruefer sequence reference",
+        "input_sha256": "4d5b7b2d9b913db58ec700a8eb4c75d186861888f8fe5db69ad63e9396af9097",
+        "answer_sha256": "e72ff2ceb7d8448221e11da7f848623bf4ba2599bd6529a1455109bf9b8af8f8"
+      }
+    ],
+    "measurements": [
+      {
+        "compiler": "gcc",
+        "case": "complete_6",
+        "raw_ms": {
+          "baseline": [
+            1.579047,
+            1.54811,
+            1.521731,
+            1.450545,
+            1.447863,
+            1.431198,
+            1.439374,
+            1.452882,
+            1.380974,
+            1.462692,
+            1.424013
+          ],
+          "control": [
+            1.608944,
+            1.617269,
+            1.474607,
+            1.427235,
+            1.462879,
+            1.413847,
+            1.456263,
+            1.460932,
+            1.453403,
+            1.461013,
+            1.487236
+          ],
+          "final": [
+            1.490207,
+            1.532059,
+            1.479724,
+            1.490272,
+            1.436003,
+            1.385254,
+            1.423384,
+            1.371697,
+            1.373061,
+            1.474731,
+            1.426975
+          ]
+        },
+        "median_ms": {
+          "baseline": 1.450545,
+          "control": 1.461013,
+          "final": 1.436003
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.00721659789941,
+          "final": 0.9899748025742048
+        }
+      },
+      {
+        "compiler": "gcc",
+        "case": "complete_8",
+        "raw_ms": {
+          "baseline": [
+            43.700849,
+            43.613271,
+            43.661794,
+            44.027326,
+            43.823177,
+            44.133957,
+            43.668599,
+            43.953803,
+            44.004528,
+            43.968143,
+            43.689304
+          ],
+          "control": [
+            43.824993,
+            43.418231,
+            43.727173,
+            44.655522,
+            43.897393,
+            43.651238,
+            44.219773,
+            43.943007,
+            44.094348,
+            44.000097,
+            43.528154
+          ],
+          "final": [
+            43.472291,
+            43.079792,
+            42.92864,
+            43.598294,
+            43.396905,
+            43.13624,
+            43.256872,
+            43.515233,
+            43.452373,
+            42.863867,
+            43.487552
+          ]
+        },
+        "median_ms": {
+          "baseline": 43.823177,
+          "control": 43.897393,
+          "final": 43.396905
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.001693533081821,
+          "final": 0.9902729096979892
+        }
+      },
+      {
+        "compiler": "gcc",
+        "case": "random_8",
+        "raw_ms": {
+          "baseline": [
+            1.683708,
+            1.405497,
+            1.380684,
+            1.281863,
+            1.33654,
+            1.36061,
+            1.276804,
+            1.274757,
+            1.281995,
+            1.278145,
+            1.307276
+          ],
+          "control": [
+            1.538436,
+            1.663289,
+            1.339125,
+            1.404325,
+            1.396715,
+            1.276522,
+            1.291211,
+            1.26671,
+            1.32846,
+            1.271244,
+            1.27294
+          ],
+          "final": [
+            1.581613,
+            1.493621,
+            1.342865,
+            1.384164,
+            1.442114,
+            1.413049,
+            1.280998,
+            1.349679,
+            1.271504,
+            1.296679,
+            1.275014
+          ]
+        },
+        "median_ms": {
+          "baseline": 1.307276,
+          "control": 1.32846,
+          "final": 1.349679
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 1.016204688221921,
+          "final": 1.0324361496730605
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "complete_6",
+        "raw_ms": {
+          "baseline": [
+            1.392338,
+            1.421189,
+            1.366746,
+            1.467073,
+            1.47669,
+            1.491367,
+            1.410618,
+            1.446525,
+            1.447534,
+            1.385854,
+            1.421038
+          ],
+          "control": [
+            1.407646,
+            1.402584,
+            1.413997,
+            1.416211,
+            1.383087,
+            1.37383,
+            1.468204,
+            1.381649,
+            1.390972,
+            1.407827,
+            1.456
+          ],
+          "final": [
+            1.476799,
+            1.456759,
+            1.389528,
+            1.49547,
+            1.398369,
+            1.392361,
+            1.392447,
+            1.499265,
+            1.440265,
+            1.396439,
+            1.369642
+          ]
+        },
+        "median_ms": {
+          "baseline": 1.421189,
+          "control": 1.407646,
+          "final": 1.398369
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9904706552049023,
+          "final": 0.9839430223566323
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "complete_8",
+        "raw_ms": {
+          "baseline": [
+            52.63903,
+            52.880347,
+            53.193424,
+            52.739942,
+            52.472134,
+            52.886072,
+            52.972619,
+            53.25424,
+            53.213997,
+            53.617312,
+            52.582748
+          ],
+          "control": [
+            52.305931,
+            52.66113,
+            53.007811,
+            52.585123,
+            52.757251,
+            52.726102,
+            52.696904,
+            53.088391,
+            52.967898,
+            52.968324,
+            53.181433
+          ],
+          "final": [
+            53.839533,
+            54.059541,
+            54.753137,
+            54.025477,
+            53.788192,
+            53.51903,
+            54.505243,
+            53.854554,
+            54.344659,
+            53.831646,
+            53.733564
+          ]
+        },
+        "median_ms": {
+          "baseline": 52.886072,
+          "control": 52.757251,
+          "final": 53.854554
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9975641790904796,
+          "final": 1.0183126097926123
+        }
+      },
+      {
+        "compiler": "clang",
+        "case": "random_8",
+        "raw_ms": {
+          "baseline": [
+            2.481416,
+            1.627074,
+            1.426672,
+            1.433516,
+            1.425213,
+            1.427278,
+            1.37362,
+            1.348777,
+            1.410729,
+            1.45363,
+            1.352382
+          ],
+          "control": [
+            2.285471,
+            1.982732,
+            1.412733,
+            1.394013,
+            1.470162,
+            1.452225,
+            1.33995,
+            1.299424,
+            1.439407,
+            1.350749,
+            1.322439
+          ],
+          "final": [
+            2.093921,
+            1.720273,
+            1.421412,
+            1.394228,
+            1.41286,
+            1.393332,
+            1.331205,
+            1.373862,
+            1.386068,
+            1.38626,
+            1.486918
+          ]
+        },
+        "median_ms": {
+          "baseline": 1.426672,
+          "control": 1.412733,
+          "final": 1.394228
+        },
+        "ratios": {
+          "baseline": 1.0,
+          "control": 0.9902297094216471,
+          "final": 0.9772589635178934
+        }
+      }
+    ],
+    "timing": "Process wall time, including launch, IO, computation and teardown. No repeat loop added to main.",
+    "affinity": 28
+  },
+  "verification": {
+    "source_sha256": "d1dd4db388e52fe6c0b630ebee13aa97dc096ac3f5b564ff16d8e8fb29eeedc8",
+    "test_sha256": "7d1bed075f26e03c152428f1e321d41101114b8d522a6c2a5ca6fefff6392fcc",
+    "runs": [
+      {
+        "name": "gcc_checked",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DCOMBINATION_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/final.hpp\"",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/combination_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_checked"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "run_exit": 0,
+        "stdout": "PASS exhaustive/boundary checks=394510\n",
+        "stderr": ""
+      },
+      {
+        "name": "gcc_skip",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DCOMBINATION_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/final.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/combination_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_skip"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "run_exit": 0,
+        "stdout": "PASS exhaustive/boundary checks=394500\n",
+        "stderr": ""
+      },
+      {
+        "name": "clang_checked",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DCOMBINATION_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/final.hpp\"",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/combination_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_checked"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "run_exit": 0,
+        "stdout": "PASS exhaustive/boundary checks=394510\n",
+        "stderr": ""
+      },
+      {
+        "name": "clang_skip",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DCOMBINATION_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/final.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/combination_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_skip"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "run_exit": 0,
+        "stdout": "PASS exhaustive/boundary checks=394500\n",
+        "stderr": ""
+      },
+      {
+        "name": "clang_checked_asan_ubsan",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DCOMBINATION_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/final.hpp\"",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-fno-omit-frame-pointer",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/combination_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_checked_asan_ubsan"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "run_exit": 0,
+        "stdout": "PASS exhaustive/boundary checks=394510\n",
+        "stderr": ""
+      },
+      {
+        "name": "clang_skip_asan_ubsan",
+        "compile": [
+          "taskset",
+          "-c",
+          "12",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "-DCOMBINATION_HEADER=\"/tmp/sirkit_four_hours_20261022/algorithms/combination/final.hpp\"",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-fno-omit-frame-pointer",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/combination_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_skip_asan_ubsan"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "run_exit": 0,
+        "stdout": "PASS exhaustive/boundary checks=394500\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "examples": [
+    {
+      "compiler": "gcc",
+      "skip_checks": false,
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "/home/reinsirk/Atcoder_Env/Examples/next_combination_example.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_exampleFalse"
+      ],
+      "output": "11\n28\n7 11 13 14 19 21 22 25 26 28 \n0\n18446744073709551615\n",
+      "passed": true
+    },
+    {
+      "compiler": "gcc",
+      "skip_checks": true,
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Examples/next_combination_example.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/gcc_exampleTrue"
+      ],
+      "output": "11\n28\n7 11 13 14 19 21 22 25 26 28 \n0\n18446744073709551615\n",
+      "passed": true
+    },
+    {
+      "compiler": "clang",
+      "skip_checks": false,
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "/home/reinsirk/Atcoder_Env/Examples/next_combination_example.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_exampleFalse"
+      ],
+      "output": "11\n28\n7 11 13 14 19 21 22 25 26 28 \n0\n18446744073709551615\n",
+      "passed": true
+    },
+    {
+      "compiler": "clang",
+      "skip_checks": true,
+      "command": [
+        "taskset",
+        "-c",
+        "12",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Examples/next_combination_example.cpp",
+        "-o",
+        "/tmp/sirkit_four_hours_20261022/algorithms/combination/clang_exampleTrue"
+      ],
+      "output": "11\n28\n7 11 13 14 19 21 22 25 26 28 \n0\n18446744073709551615\n",
+      "passed": true
+    }
+  ],
+  "online_judgement": "未提出。公式サンプルはローカル実行、独立参照の生成入力は公式テストではない。",
+  "extension_or_simd": "追加なし。標準C++23の同一実装。SIMD専用化は行・要素確保または逐次依存が主体のため不採用。",
+  "convenience_api": "last_combination(n,k)で列挙の最後の値を得る。k=0と全幅も対応。使用例と全列挙テストへ追加。",
+  "provenance": {
+    "license": "CC0-1.0、現行表示を維持",
+    "previous_audit": "Audit/revision-remaining-libraries-2026-10-18.json",
+    "history": "既存監査でGosper式をcountr_zeroとシフトで組み直した版を引き継ぐ。drkenの公開例は数学的な参考として表示を維持し、新たな実装の移植はしない。",
+    "primary": {
+      "problem_url": "https://atcoder.jp/contests/abc328/tasks/abc328_e",
+      "download_sha256": "f3eee3a04bc6728bf00fac0693148dbf0e3e2535db0c796277657cf8bf92c27b",
+      "reference_url": "https://raw.githubusercontent.com/drken1215/algorithm/master/Search/next_combination.cpp",
+      "download_sha256_reference": "07d9a1963d25c14bb7b383f25c004384d869b97fc80b5fe2803f7ef8966cad97"
+    }
+  },
+  "limitations": [
+    "固定mainの支配的な処理は部分集合ごとの木の判定。列挙だけの改善率を提出全体の短縮とは扱わない。",
+    "今回の固定main測定ではGCCの最大完全グラフが約1%短縮、Clangは約1.8%増。直接列挙の短縮に対し提出全体の改善は確立しない。",
+    "0個・全幅では訪問が1回だけのため判定費用が支配し、短縮を保証しない。演算依存のためSIMD化しない。"
+  ],
+  "reproduction": {
+    "directory": "/tmp/sirkit_four_hours_20261022/algorithms/combination",
+    "benchmark_source": {
+      "sha256": "0db35672f1902f373ace70bd293227728cf4ff3bde34fccaa6e6ee5b09847fba",
+      "text": "#include HEADER\n#include <chrono>\n#include <cstdint>\n#include <cstdlib>\n#include <iostream>\nint main(int argc,char** argv){if(argc!=4)return 2;int n=std::atoi(argv[1]),k=std::atoi(argv[2]),reps=std::atoi(argv[3]);std::uint64_t sum=0;auto t=std::chrono::steady_clock::now();for(int i=0;i<reps;++i)for_each_combination<std::uint64_t>(n,k,[&](std::uint64_t m){sum+=m;});auto e=std::chrono::steady_clock::now();std::cout<<std::chrono::duration<double,std::milli>(e-t).count()<<' '<<sum<<'\\n';}\n"
+    },
+    "main_measure_script_sha256": "1d3a0e60ba31b7b5d9ade780f8caba7761ee98f1dcf6800f4466ee9ada24c931",
+    "reference_test": "Verify/current/tests/combination_reference_test.cpp",
+    "reference_test_sha256": "7d1bed075f26e03c152428f1e321d41101114b8d522a6c2a5ca6fefff6392fcc",
+    "fixtures_script_sha256": "215e4ab9eec315bc2ba60109d8b165c6a6d908fddde34d7a6c148c3767544eec",
+    "main_measure_script_path": "/tmp/sirkit_four_hours_20261022/algorithms/measure_main_v1.py"
+  }
+}

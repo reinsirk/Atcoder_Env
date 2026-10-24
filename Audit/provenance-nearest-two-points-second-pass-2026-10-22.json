@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-22",
+  "round": 2,
+  "scope": "最近点対：2048点以上の未整列入力の先頭2点が同じ場合、全入力コピー後に距離0を返して基数整列を省く。",
+  "baseline_source_sha256": "3cd3a1977b6b77a8d95b449f4c60142bcc22f6cea85656c7013c4f4f80694ce0",
+  "final_source_sha256": "360afec531344fea77ba6f5cb43012bcd56e7c0e6e002c1f3cb4132e262840ab",
+  "files_sha256": {
+    "Geometry/Nearest_Two_points.cpp": "360afec531344fea77ba6f5cb43012bcd56e7c0e6e002c1f3cb4132e262840ab",
+    "Document/nearest_two_points.md": "a979cce474d0f2765b6e3c91fcb5e60f4302e1603f07f05ec275e49601b78587",
+    "Examples/nearest_two_points_example.cpp": "773b5dc3b1a6f3290e89fdfe8e4b6148a11290ca47774f80078d1acaf7b4fbfc",
+    "Verify/current/tests/nearest_duplicate_test.cpp": "a5eb0c83aa37e0a6e4f7088c4ba5b3a26207a28255c441c921cf788bfb80e3a4"
+  },
+  "driver_io_sha256": {
+    "Verify/current/drivers/nearest_two_points_main.cpp": "3ef5cdedba89f836901d35940fdb9d273bab6d1d64752d85d2fb61801600e517",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "license": "CC0-1.0",
+  "prior_record": "Audit/provenance-nearest-two-points-2026-10-22.jsonを引き継ぐ。今回外部実装は取り込まず、表示を変更していない。",
+  "new_implementation": "一致する2点の距離二乗は0で、非負距離の下限に達するという数学的事実を直接利用。元添字0,1を返し、既存vector所有と全入力コピーの位置を維持。",
+  "diff": "--- baseline\n+++ final\n@@ -201,7 +201,12 @@\n         if (solver.nodes_.size() < 2) return std::nullopt;\n         if constexpr (!Sorted) {\n \n-            if (solver.nodes_.size() >= 2048) solver.sort_by_x();\n+            if (solver.nodes_.size() >= 2048) {\n+                if (solver.nodes_[0].x == solver.nodes_[1].x &&\n+                    solver.nodes_[0].y == solver.nodes_[1].y)\n+                    return NearestTwoPointsResult{0, 0, 1};\n+                solver.sort_by_x();\n+            }\n             else std::sort(solver.nodes_.begin(), solver.nodes_.end(), [](const Node& a, const Node& b) {\n                 return a.x != b.x ? a.x < b.x : a.y < b.y;\n             });\n"
+}

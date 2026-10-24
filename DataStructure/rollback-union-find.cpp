@@ -1,5 +1,22 @@
 // SPDX-License-Identifier: CC0-1.0
 // Original Source: https://nyaannyaan.github.io/library/data-structure/rollback-union-find.hpp.html
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/rollback_union_find.md
+//
+// API一覧
+// [RollbackUnionFind]
+// RollbackUnionFind(n=0): n要素を構築。O(n+1)時間・領域。コピーはO(n+h+1)時間・領域で独立（hは履歴長）、移動元は空。
+// find(i)/root(i)/leader(i): 代表、same(a,b)/issame(a,b): 同一成分か、size(i): 成分サイズ。O(log(n+1))。
+// unite(a,b)/merge(a,b): 新規結合ならtrue。falseでも履歴は1回分増える。O(log(n+1))償却時間。
+// undo(): 結合呼出し1回を戻す。O(1)。履歴が必要。get_state(): 現在の呼出し回数、O(1)。
+// snapshot(): 現在位置を保存。rollback(state=-1): 指定位置/保存位置まで戻す。O(1+戻す回数)。
+// size()/component_count(): 全要素数/成分数、O(1)。groups(): 成分別の頂点昇順一覧、O(1+n log(n+1))。
+// swap(other)/swap(a,b): 履歴を含めて内容を交換、O(1)、noexcept。
+// reset(n)/reset(): 指定/現在の頂点数で全成分を独立にし履歴・保存位置を消去。O(旧n+旧h+n+1)上界。容量再利用。
+// clear()/empty(): 頂点と履歴を空にして容量保持/空か。clearはO(n+h+1)上界、いずれもnoexcept。
+// コピー代入とresetの失敗時は論理状態を保持（予約容量は変わり得る）。
+// reserve_history(k): k回分の履歴容量を確保。履歴・代表の直接書換えは不可。
+// clear_history(): 森林を保ち履歴と保存位置を消去。容量は保持し、旧stateは無効。O(h+1)上界、noexcept。
+
 #include <algorithm>
 #include <cstddef>
 #include <limits>
@@ -9,14 +26,6 @@
 
 #ifndef SIRKIT_ROLLBACK_UNION_FIND_DEFINED
 #define SIRKIT_ROLLBACK_UNION_FIND_DEFINED
-// RollbackUnionFind(n=0): n要素を構築。O(n)時間・領域。コピーは履歴を含め独立、移動元は空。
-// find(i)/root(i)/leader(i): 代表、same(a,b)/issame(a,b): 同一成分か、size(i): 成分サイズ。O(log n)。
-// unite(a,b)/merge(a,b): 新規結合ならtrue。失敗した結合も履歴1回分を消費。O(log n)。
-// undo(): 結合呼出し1回を戻す。O(1)。履歴が必要。get_state(): 現在の呼出し回数、O(1)。
-// snapshot(): 現在位置を保存。rollback(state=-1): 指定位置/保存位置まで戻す。戻す回数に比例。
-// size()/component_count(): 全要素数/成分数、O(1)。groups(): 成分別の頂点昇順一覧、O(n log n)。
-// swap(other): 履歴を含めて内容を交換。O(1)。
-// reserve_history(k): k回分の履歴容量を確保。履歴・代表の直接書換えは不可。
 class RollbackUnionFind {
     struct Change { int x, y, dx, dy; };
     std::vector<int> data;
@@ -38,15 +47,31 @@ class RollbackUnionFind {
     int leader_unchecked(int i) const { while (data[i] >= 0) i = data[i]; return i; }
     void undo_last() noexcept {
         const auto c = history.back(); history.pop_back();
-        data[c.x] = c.dx; data[c.y] = c.dy;
-        components_ += (c.x != c.y);
+        data[c.x] = c.dx; data[c.y] = c.dy; components_ += (c.x != c.y);
+    }
+    std::vector<std::vector<int>> trivial_groups() const {
+        std::vector<std::vector<int>> result;
+        result.reserve(static_cast<std::size_t>(components_));
+        if (components_ == size()) {
+            for (int v = 0; v < size(); ++v) result.emplace_back(std::size_t{1}, v);
+        } else {
+            result.emplace_back(data.size());
+            for (int v = 0; v < size(); ++v) result[0][v] = v;
+        }
+        return result;
     }
 public:
     explicit RollbackUnionFind(std::size_t n = 0)
         : data(checked_size(n), -1), components_(static_cast<int>(n)) { history.reserve(std::min(n, std::size_t{64})); }
     RollbackUnionFind(const RollbackUnionFind&) = default;
     RollbackUnionFind& operator=(const RollbackUnionFind& other) {
-        if (this != &other) { RollbackUnionFind copy(other); swap(copy); }
+        if (this != &other) {
+            data.reserve(other.data.size()); history.reserve(other.history.size());
+            data.clear(); history.clear();
+            data.insert(data.end(), other.data.begin(), other.data.end());
+            history.insert(history.end(), other.history.begin(), other.history.end());
+            inner_snap = other.inner_snap; components_ = other.components_;
+        }
         return *this;
     }
     void swap(RollbackUnionFind& other) noexcept {
@@ -66,6 +91,17 @@ public:
         }
         return *this;
     }
+    void reset(std::size_t n) {
+        const auto count = checked_size(n);
+        data.reserve(count); history.reserve(std::min(count, std::size_t{64}));
+        data.clear(); history.clear();
+        data.resize(count, -1);
+        inner_snap = 0; components_ = static_cast<int>(count);
+    }
+    void reset() { reset(data.size()); }
+    void clear() noexcept { data.clear(); history.clear(); inner_snap = 0; components_ = 0; }
+    bool empty() const noexcept { return data.empty(); }
+    friend void swap(RollbackUnionFind& a, RollbackUnionFind& b) noexcept { a.swap(b); }
     int find(int i) const { check(i); return leader_unchecked(i); }
     int root(int i) const { return find(i); }
     int leader(int i) const { return find(i); }
@@ -88,7 +124,10 @@ public:
 #ifndef SKIP_RUNTIME_CHECKS
         if (history.empty()) throw std::out_of_range("RollbackUnionFind: empty history");
 #endif
-        undo_last();
+        const auto c = history.back(); history.pop_back();
+        if (c.x != c.y) {
+            data[c.x] = c.dx; data[c.y] = c.dy; ++components_;
+        }
         if (inner_snap > get_state()) inner_snap = get_state();
     }
     void snapshot() noexcept { inner_snap = get_state(); }
@@ -101,12 +140,14 @@ public:
         while (get_state() > state) undo_last();
         if (inner_snap > state) inner_snap = state;
     }
+    void clear_history() noexcept { history.clear(); inner_snap = 0; }
     void reserve_history(std::size_t count) {
         if (count > static_cast<std::size_t>(std::numeric_limits<int>::max()))
             throw std::length_error("RollbackUnionFind: history overflow");
         history.reserve(count);
     }
     std::vector<std::vector<int>> groups() const {
+        if (components_ == size() || components_ == 1) return trivial_groups();
         std::vector<int> leaders(data.size()), counts(data.size(), 0), slot(data.size());
         for (int i = 0; i < size(); ++i) ++counts[leaders[i] = leader_unchecked(i)];
         std::vector<std::vector<int>> result; result.reserve(components_);

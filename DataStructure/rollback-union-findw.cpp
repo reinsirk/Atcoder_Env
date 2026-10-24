@@ -1,4 +1,27 @@
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/rollback_weighted_union_find.md
+//
+// API一覧
+// [RollbackWeightedUnionFind<T>]
+// TはT(0), +, -を備えるコピー・ムーブ可能な可換加法群。consistent/unite_checkedには==も必要。
+// 標準の符号付き整数Tは最終結果の範囲外でoverflow_error。結合時は保存する根間の差もT範囲内が必要。
+// 符号なし整数は剰余演算。整数の容量・演算保護はSKIP_RUNTIME_CHECKSでも維持する。
+// RollbackWeightedUnionFind(): 空。RollbackWeightedUnionFind(n): n>=0のn頂点を構築、O(n+1)。
+// コピーはO(n+h+1)で独立（hは履歴長）。移動元は空、移動構築O(1)。
+// find(v)/same(x,y)/size(v): 代表/同一成分か/成分サイズ、O(log(n+1))。get_weight(v)は根からvへの差。
+// root_with_weight(v): {根, 根からvへの差}。diff(x,y): y-xの差、同一成分が前提。各O(log(n+1))。
+// try_diff(x,y): 未連結ならnullopt、consistent(x,y,w): 未連結または差がwならtrue。各O(log(n+1))。
+// unite(x,y,w): y-x=wを追加、新規結合ならtrue。unite_checkedはMerged/AlreadyConsistent/Contradictionを返す。
+// 各追加は冗長・矛盾時も履歴1件、O(log(n+1))償却時間。経路圧縮なし。undo(): 1追加を戻す、O(1)、履歴必須。
+// snapshot()/get_state(): 保存位置設定/現在の追加回数、O(1)。rollback(state=-1): 指定/保存位置へ戻す、O(1+戻す回数)。
+// 保存位置より前へ戻ると保存位置も縮める。clear_history(): 連結状態と容量を保ち履歴/保存位置を消去、O(h+1)上界、noexcept。
+// size()/empty()/component_count(): 全頂点数/空判定/成分数、O(1)。groups(): 成分ごとの頂点昇順一覧、O(1+n log(n+1))。
+// reserve_history(k): k追加分の容量を確保、O(h+1)上界。swap(other): 履歴・保存位置ごと交換、O(1)。
+// clear(): 空へ戻して容量保持、O(n+h+1)上界。reset(n)/reset(): 指定/現在の頂点数で再構築、O(旧n+旧h+n+1)上界。
+// resetはコピー構築・破棄が非送出で頂点/重み容量が足りる場合に領域再利用。代入も非送出なら既存重みを0へ戻す。
+// その他は一時構築後に交換。reset失敗時は論理状態を保持（予約容量は変わり得る）。
+// swap(a,b): 履歴・保存位置ごと定数時間で交換、noexcept。
+
 #include <algorithm>
 #include <bit>
 #include <cstddef>
@@ -12,21 +35,6 @@
 
 #ifndef SIRKIT_ROLLBACK_WEIGHTED_UNION_FIND_DEFINED
 #define SIRKIT_ROLLBACK_WEIGHTED_UNION_FIND_DEFINED
-// TはT(0), +, -を備える加法群。consistent/unite_checkedのみ==も必要。
-// 標準の符号付き整数Tは最終結果の範囲外でoverflow_error。符号なし整数は剰余演算。
-// find/same/size(v)はO(log n)、root_with_weight/get_weight/diff/try_diff/consistentもO(log n)。
-// unite(x,y,w)はpotential(y)-potential(x)=wを追加し、異なる成分を結合した場合だけtrue。
-// unite_checkedはMerged/AlreadyConsistent/Contradictionを返す。各追加は冗長・矛盾時も履歴1件。
-// 各追加は償却O(log n)、undoはO(1)、rollbackは戻す追加数に比例。経路圧縮なし。
-// snapshotは現在位置を保存、get_stateは追加回数、rollback(-1)は保存位置へ戻る。
-// 保存位置より前へ戻ると保存位置も現在位置へ縮める。空でのundoは前提違反。
-// diffは同一成分が前提、try_diffは別成分ならnullopt、consistentは未連結または差がwならtrue。
-// root_with_weight(v)は{根, 根からvへの差}、get_weight(v)はその差。find(v)は根。
-// size(v)は成分サイズ、size/empty/component_countは全頂点数/空判定/成分数をO(1)で返す。
-// 既定構築は空、構築/reset(n)はn>=0。構築O(n)、reset/clear/コピーはO(n+履歴数)。
-// clearは空へ戻し容量を保持。コピーは独立、ムーブ元は空。ムーブ構築はO(1)。
-// groupsは成分の頂点列をO(n log n)で返す。reserve_history(k)はk件分確保しO(履歴数)。
-// swapはO(1)。入力検査はSKIP_RUNTIME_CHECKSで除外。容量と整数演算の保護は常に有効。
 template <typename T>
 struct RollbackWeightedUnionFind {
     enum class MergeResult { Merged, AlreadyConsistent, Contradiction };
@@ -38,7 +46,8 @@ private:
     // 根までの高々O(log n)個の整数を、途中の相殺を保って加算する。
     struct SignedSum {
 #if defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
-        __int128 value = 0;
+        __extension__ using WideInteger = __int128;
+        WideInteger value = 0;
         SignedSum() = default;
         explicit SignedSum(T x) : value(x) {}
         void add(T x) { value += x; }
@@ -160,7 +169,12 @@ private:
         }
         return {v, std::move(value)};
     }
-    static bool try_add(T a, T b, T& out) {
+    using ArithmeticArgument = std::conditional_t<
+        std::is_trivially_copy_constructible_v<T> ||
+        !requires(const T& a, const T& b) {
+            static_cast<T>(a + b); static_cast<T>(a - b);
+        }, T, const T&>;
+    static bool try_add(ArithmeticArgument a, ArithmeticArgument b, T& out) {
         if constexpr (checked_integer) {
 #if (defined(__GNUC__) || defined(__clang__)) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
             return !__builtin_add_overflow(a, b, &out);
@@ -178,7 +192,7 @@ private:
             return true;
         }
     }
-    static bool try_subtract(T a, T b, T& out) {
+    static bool try_subtract(ArithmeticArgument a, ArithmeticArgument b, T& out) {
         if constexpr (checked_integer) {
 #if (defined(__GNUC__) || defined(__clang__)) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
             return !__builtin_sub_overflow(a, b, &out);
@@ -322,11 +336,11 @@ private:
         }
         return record_merge(a.root, b.root, std::move(gap));
     }
-    void undo_unchecked() {
+    void undo_unchecked() noexcept {
         const auto change = history_.back();
         if (change.child >= 0) {
             const int root = parent_[change.child];
-            weight_[change.child] = T(0);
+            if constexpr (std::is_integral_v<T>) weight_[change.child] = T(0);
             parent_[change.child] = parent_[root] - change.previous_parent_size;
             parent_[root] = change.previous_parent_size;
             ++components_;
@@ -398,7 +412,33 @@ public:
         std::swap(snapshot_, other.snapshot_);
         std::swap(bounded_weights_, other.bounded_weights_);
     }
-    void reset(int n) { RollbackWeightedUnionFind replacement(n); swap(replacement); }
+    void reset(int n) {
+        if constexpr (std::is_nothrow_copy_constructible_v<T> && std::is_nothrow_destructible_v<T>) {
+#ifndef SKIP_RUNTIME_CHECKS
+            if (n < 0) throw std::invalid_argument("weighted union find negative size");
+#endif
+            const auto count = static_cast<std::size_t>(n);
+            if (count > static_cast<std::size_t>(std::numeric_limits<int>::max()) ||
+                count > parent_.max_size() || count > weight_.max_size())
+                throw std::length_error("weighted union find vertex capacity");
+            if (count > parent_.capacity() || count > weight_.capacity()) {
+                RollbackWeightedUnionFind replacement(n); swap(replacement); return;
+            }
+            const T initial(0);
+            parent_.reserve(count); weight_.reserve(count);
+            history_.reserve(std::min(count, std::size_t{64}));
+            history_.clear();
+            parent_.resize(count, -1);
+            std::fill(parent_.begin(), parent_.end(), -1);
+            if constexpr (std::is_nothrow_copy_assignable_v<T>) {
+                weight_.resize(count, initial);
+                std::fill(weight_.begin(), weight_.end(), initial);
+            } else { weight_.clear(); weight_.resize(count, initial); }
+            components_ = n; snapshot_ = 0; bounded_weights_ = true;
+        } else { RollbackWeightedUnionFind replacement(n); swap(replacement); }
+    }
+    void reset() { reset(size()); }
+    friend void swap(RollbackWeightedUnionFind& a, RollbackWeightedUnionFind& b) noexcept { a.swap(b); }
     void clear() {
         parent_.clear(); weight_.clear(); history_.clear();
         components_ = 0; snapshot_ = 0;
@@ -494,6 +534,7 @@ public:
     }
     bool unite(int x, int y, T w) { return unite_impl<false>(x, y, w) == MergeResult::Merged; }
     MergeResult unite_checked(int x, int y, T w) { return unite_impl<true>(x, y, w); }
+    void clear_history() noexcept { history_.clear(); snapshot_ = 0; }
     void reserve_history(std::size_t calls) {
         if (calls > static_cast<std::size_t>(std::numeric_limits<int>::max()) ||
             calls > history_.max_size()) {
@@ -522,11 +563,27 @@ public:
         snapshot_ = std::min(snapshot_, get_state());
     }
     std::vector<std::vector<int>> groups() const {
-        std::vector<std::vector<int>> buckets(parent_.size());
-        for (int v = 0; v < size(); ++v) buckets[find_unchecked(v)].push_back(v);
-        buckets.erase(std::remove_if(buckets.begin(), buckets.end(),
-            [](const auto& group) { return group.empty(); }), buckets.end());
-        return buckets;
+        std::vector<std::vector<int>> result;
+        result.reserve(components_);
+        if (components_ == size()) {
+            for (int v = 0; v < size(); ++v) result.emplace_back(std::size_t{1}, v);
+            return result;
+        }
+        if (components_ == 1) {
+            result.emplace_back(parent_.size());
+            for (int v = 0; v < size(); ++v) result[0][v] = v;
+            return result;
+        }
+        std::vector<int> roots(parent_.size()), counts(parent_.size(), 0);
+        for (int v = 0; v < size(); ++v) ++counts[roots[v] = find_unchecked(v)];
+        for (int v = 0; v < size(); ++v) if (counts[v]) {
+            const int count = counts[v];
+            counts[v] = static_cast<int>(result.size());
+            result.emplace_back(); result.back().reserve(count);
+        }
+        for (int v = 0; v < size(); ++v) result[counts[roots[v]]].push_back(v);
+        return result;
     }
+
 };
 #endif

@@ -3,13 +3,83 @@
 namespace reinsirk::detail {
 struct IntegerTransform {
     // 素数pについて、指数を1段進める／戻す伝播を行う。
+#if defined(__GNUC__) && !defined(__clang__)
     template <bool ToMultiples, bool Subtract, class T, class PrimeRange>
     static void propagate(std::vector<T>& a, const PrimeRange& primes) {
+        if constexpr (std::is_trivially_copyable_v<T> && sizeof(T) <= 8) {
+            if (a.size() >= 257) {
+                propagate_expanded<ToMultiples, Subtract>(a, primes);
+                return;
+            }
+        }
+        propagate_scalar<ToMultiples, Subtract>(a, primes);
+    }
+    template <bool ToMultiples, bool Subtract, class T, class PrimeRange>
+    static void propagate_expanded(std::vector<T>& a, const PrimeRange& primes) {
         if (a.size() <= 2) return;
         const std::size_t upper = a.size() - 1;
-        for (const int value : primes) {
-            const auto p = static_cast<std::size_t>(value);
+        auto prime = primes.begin();
+        const auto end = primes.end();
+        for (; prime != end; ++prime) {
+            const auto p = static_cast<std::size_t>(*prime);
+            if (p > upper / 2) break;
+            const auto count = upper / p;
+            if constexpr (ToMultiples != Subtract) {
+                std::size_t from = 1, to = p;
+                for (; count - from + 1 >= 8; from += 8, to += p * 8) {
+                    if constexpr (ToMultiples) a[to + p * 0] += a[from + 0]; else a[from + 0] -= a[to + p * 0];
+                    if constexpr (ToMultiples) a[to + p * 1] += a[from + 1]; else a[from + 1] -= a[to + p * 1];
+                    if constexpr (ToMultiples) a[to + p * 2] += a[from + 2]; else a[from + 2] -= a[to + p * 2];
+                    if constexpr (ToMultiples) a[to + p * 3] += a[from + 3]; else a[from + 3] -= a[to + p * 3];
+                    if constexpr (ToMultiples) a[to + p * 4] += a[from + 4]; else a[from + 4] -= a[to + p * 4];
+                    if constexpr (ToMultiples) a[to + p * 5] += a[from + 5]; else a[from + 5] -= a[to + p * 5];
+                    if constexpr (ToMultiples) a[to + p * 6] += a[from + 6]; else a[from + 6] -= a[to + p * 6];
+                    if constexpr (ToMultiples) a[to + p * 7] += a[from + 7]; else a[from + 7] -= a[to + p * 7];
+                }
+                for (; from <= count; ++from, to += p) {
+                    if constexpr (ToMultiples) a[to] += a[from]; else a[from] -= a[to];
+                }
+            } else {
+                std::size_t from = count, to = count * p;
+                for (; from >= 8; from -= 8, to -= p * 8) {
+                    if constexpr (ToMultiples) a[to - p * 0] -= a[from - 0]; else a[from - 0] += a[to - p * 0];
+                    if constexpr (ToMultiples) a[to - p * 1] -= a[from - 1]; else a[from - 1] += a[to - p * 1];
+                    if constexpr (ToMultiples) a[to - p * 2] -= a[from - 2]; else a[from - 2] += a[to - p * 2];
+                    if constexpr (ToMultiples) a[to - p * 3] -= a[from - 3]; else a[from - 3] += a[to - p * 3];
+                    if constexpr (ToMultiples) a[to - p * 4] -= a[from - 4]; else a[from - 4] += a[to - p * 4];
+                    if constexpr (ToMultiples) a[to - p * 5] -= a[from - 5]; else a[from - 5] += a[to - p * 5];
+                    if constexpr (ToMultiples) a[to - p * 6] -= a[from - 6]; else a[from - 6] += a[to - p * 6];
+                    if constexpr (ToMultiples) a[to - p * 7] -= a[from - 7]; else a[from - 7] += a[to - p * 7];
+                }
+                for (; from; --from, to -= p) {
+                    if constexpr (ToMultiples) a[to] -= a[from]; else a[from] += a[to];
+                }
+            }
+        }
+        for (; prime != end; ++prime) {
+            const auto p = static_cast<std::size_t>(*prime);
             if (p > upper) break;
+            if constexpr (ToMultiples) {
+                if constexpr (Subtract) a[p] -= a[1]; else a[p] += a[1];
+            } else {
+                if constexpr (Subtract) a[1] -= a[p]; else a[1] += a[p];
+            }
+        }
+    }
+#endif
+    template <bool ToMultiples, bool Subtract, class T, class PrimeRange>
+#if defined(__GNUC__) && !defined(__clang__)
+    static void propagate_scalar(std::vector<T>& a, const PrimeRange& primes) {
+#else
+    static void propagate(std::vector<T>& a, const PrimeRange& primes) {
+#endif
+        if (a.size() <= 2) return;
+        const std::size_t upper = a.size() - 1;
+        auto prime = primes.begin();
+        const auto end = primes.end();
+        for (; prime != end; ++prime) {
+            const auto p = static_cast<std::size_t>(*prime);
+            if (p > upper / 2) break;
             const auto count = upper / p;
             if constexpr (ToMultiples != Subtract) {
                 for (std::size_t from = 1, to = p; from <= count; ++from, to += p) {
@@ -21,6 +91,15 @@ struct IntegerTransform {
                     if constexpr (ToMultiples) a[to] -= a[from];
                     else a[from] += a[to];
                 }
+            }
+        }
+        for (; prime != end; ++prime) {
+            const auto p = static_cast<std::size_t>(*prime);
+            if (p > upper) break;
+            if constexpr (ToMultiples) {
+                if constexpr (Subtract) a[p] -= a[1]; else a[p] += a[1];
+            } else {
+                if constexpr (Subtract) a[1] -= a[p]; else a[1] += a[p];
             }
         }
     }

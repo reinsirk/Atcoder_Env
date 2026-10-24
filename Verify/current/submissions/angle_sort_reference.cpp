@@ -2,6 +2,19 @@
 
 // Library: Geometry/偏角ソート.cpp
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/angle_sort.md
+//
+// API一覧
+// [偏角ソート]
+// pair<int64_t,int64_t>の偏角は+xから反時計回りの[0,2π)。零は昇順先頭・降順末尾、同方向の長さ順は任意。
+// angle_cross_sign(a,b): int64_t全域で厳密な外積の符号を-1/0/1で返す。O(1)。
+// same_angle(a,b): 同方向ならtrue。零は零とのみ同方向、長さを問わない。O(1)。
+// arccmp_less(a,b)/arccmp_g(a,b): 偏角の厳密なa<b/a>b。std::sortに渡せる。O(1)。
+// arccmp_less_eq(a,b)/arccmp_g_eq(a,b): 偏角の非厳密なa<=b/a>=b。std::sortの比較器には使わない。O(1)。
+// AngleLess/AngleGreater: 昇順/降順の比較器オブジェクト。O(1)。
+// angle_sort(p,descending=false): 配列をその場で昇順にソート。trueなら降順、同角の順序は任意。O(N log N)。
+// angle_sort_indices(p,descending=false): 入力不変で昇順の添字列。trueなら降順。O(N log N)時間/O(N)追加領域。
+// いずれもint64_t全域で有効なため入力検査は不要。SKIP_RUNTIME_CHECKSで動作は変わらない。
 
 #include <algorithm>
 #include <cstddef>
@@ -10,13 +23,6 @@
 #include <utility>
 #include <vector>
 
-// 偏角は+xから反時計回りの[0,2π)。零は昇順先頭、同方向の長さ順は任意。
-// arccmp_less/arccmp_g: 厳密な昇順/降順比較。std::sortに渡せる。O(1)。
-// arccmp_less_eq/arccmp_g_eq: 非厳密比較。std::sortの比較器には使わない。O(1)。
-// angle_cross_sign/same_angle: int64_t全域の外積符号/同方向判定。O(1)。
-// AngleLess/AngleGreater: 昇順/降順の比較器オブジェクト。O(1)。
-// angle_sort: 配列をその場でソート。angle_sort_indices: 入力不変で添字順を返す。O(n log n)。
-// いずれもint64_t全域で有効なため入力検査は不要。SKIP_RUNTIME_CHECKSで動作は変わらない。
 
 #ifndef SIRKIT_ANGLE_ARITHMETIC_DEFINED
 #define SIRKIT_ANGLE_ARITHMETIC_DEFINED
@@ -70,7 +76,6 @@ struct AngleArithmetic {
 
 #ifndef SIRKIT_ANGLE_CROSS_SIGN_DEFINED
 #define SIRKIT_ANGLE_CROSS_SIGN_DEFINED
-// a,b の外積の符号を -1/0/1 で返す。int64_t 全域で厳密、O(1)。
 inline constexpr int angle_cross_sign(
     const std::pair<std::int64_t, std::int64_t>& a,
     const std::pair<std::int64_t, std::int64_t>& b) noexcept {
@@ -118,7 +123,6 @@ inline constexpr bool AngleStandardLessWide(
 
 #ifndef SIRKIT_ARCCMP_LESS_DEFINED
 #define SIRKIT_ARCCMP_LESS_DEFINED
-// [0,2π) の偏角で a<b を返す。零は先頭、同方向は等値、O(1)。
 inline constexpr bool arccmp_less(
     const std::pair<std::int64_t, std::int64_t>& a,
     const std::pair<std::int64_t, std::int64_t>& b) noexcept {
@@ -158,7 +162,6 @@ inline constexpr bool arccmp_less(
 
 #ifndef SIRKIT_ARCCMP_G_DEFINED
 #define SIRKIT_ARCCMP_G_DEFINED
-// 偏角で a>b を返す。零は降順末尾、同方向は等値、O(1)。
 inline constexpr bool arccmp_g(
     const std::pair<std::int64_t, std::int64_t>& a,
     const std::pair<std::int64_t, std::int64_t>& b) noexcept {
@@ -168,7 +171,6 @@ inline constexpr bool arccmp_g(
 
 #ifndef SIRKIT_ARCCMP_LESS_EQ_DEFINED
 #define SIRKIT_ARCCMP_LESS_EQ_DEFINED
-// 零を先頭とする偏角で a<=b を返す。同方向は真、O(1)。
 inline constexpr bool arccmp_less_eq(
     const std::pair<std::int64_t, std::int64_t>& a,
     const std::pair<std::int64_t, std::int64_t>& b) noexcept {
@@ -178,7 +180,6 @@ inline constexpr bool arccmp_less_eq(
 
 #ifndef SIRKIT_ARCCMP_G_EQ_DEFINED
 #define SIRKIT_ARCCMP_G_EQ_DEFINED
-// 零を先頭とする偏角で a>=b を返す。同方向は真、O(1)。
 inline constexpr bool arccmp_g_eq(
     const std::pair<std::int64_t, std::int64_t>& a,
     const std::pair<std::int64_t, std::int64_t>& b) noexcept {
@@ -188,7 +189,6 @@ inline constexpr bool arccmp_g_eq(
 
 #ifndef SIRKIT_SAME_ANGLE_DEFINED
 #define SIRKIT_SAME_ANGLE_DEFINED
-// a,b が同方向なら真。零は零とのみ同方向、長さを問わず O(1)。
 inline constexpr bool same_angle(
     const std::pair<std::int64_t, std::int64_t>& a,
     const std::pair<std::int64_t, std::int64_t>& b) noexcept {
@@ -201,7 +201,6 @@ inline constexpr bool same_angle(
 
 #ifndef SIRKIT_ANGLE_LESS_DEFINED
 #define SIRKIT_ANGLE_LESS_DEFINED
-// std::sort 用の昇順偏角比較器。零は先頭、同方向は等値、O(1)。
 struct AngleLess {
     constexpr bool operator()(const std::pair<std::int64_t, std::int64_t>& a,
                               const std::pair<std::int64_t, std::int64_t>& b) const noexcept {
@@ -212,7 +211,6 @@ struct AngleLess {
 
 #ifndef SIRKIT_ANGLE_GREATER_DEFINED
 #define SIRKIT_ANGLE_GREATER_DEFINED
-// std::sort 用の降順偏角比較器。零は末尾、同方向は等値、O(1)。
 struct AngleGreater {
     constexpr bool operator()(const std::pair<std::int64_t, std::int64_t>& a,
                               const std::pair<std::int64_t, std::int64_t>& b) const noexcept {
@@ -275,7 +273,6 @@ inline void AngleSortLarge(std::vector<std::pair<std::int64_t, std::int64_t>>& p
 
 #ifndef SIRKIT_ANGLE_SORT_DEFINED
 #define SIRKIT_ANGLE_SORT_DEFINED
-// pをその場で偏角順にソート。descending=trueは降順、同角の順序は任意、O(n log n)。
 inline void angle_sort(std::vector<std::pair<std::int64_t, std::int64_t>>& p,
                        bool descending = false) {
     if (p.size() < 32) {
@@ -289,7 +286,6 @@ inline void angle_sort(std::vector<std::pair<std::int64_t, std::int64_t>>& p,
 
 #ifndef SIRKIT_ANGLE_SORT_INDICES_DEFINED
 #define SIRKIT_ANGLE_SORT_INDICES_DEFINED
-// p を変更せず偏角順の添字を返す。descending=true は降順、O(n log n)、追加領域 O(n)。
 inline std::vector<std::size_t> angle_sort_indices(
     const std::vector<std::pair<std::int64_t, std::int64_t>>& p,
     bool descending = false) {

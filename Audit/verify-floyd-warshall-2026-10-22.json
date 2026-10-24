@@ -1,0 +1,2912 @@
+{
+  "date": "2026-10-22",
+  "source": "Graph/Floyd-Warshall.cpp",
+  "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+  "baseline_source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+  "baseline": {
+    "results": {
+      "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+      "results": [
+        {
+          "config": "gcc_checked",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_checked_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_checked",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_checked_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_checked_disabled",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_checked_disabled_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_checked_disabled",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_checked_disabled_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_skip",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_skip_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_skip",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_skip_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_skip_disabled",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_skip_disabled_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_skip_disabled",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_skip_disabled_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_wide_standard_checked",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_wide_standard_checked_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_wide_standard_checked",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_wide_standard_checked_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_wide_standard_skip",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_wide_standard_skip_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_wide_standard_skip",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_wide_standard_skip_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_native_skip",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-march=native",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_native_skip_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "gcc_native_skip",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-march=native",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/gcc_native_skip_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_checked",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_checked_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_checked",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_checked_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_checked_disabled",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_checked_disabled_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_checked_disabled",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_checked_disabled_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_skip",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_skip_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_skip",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_skip_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_skip_disabled",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_skip_disabled_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_skip_disabled",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_skip_disabled_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_wide_standard_checked",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_wide_standard_checked_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_wide_standard_checked",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_wide_standard_checked_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_wide_standard_skip",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_wide_standard_skip_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_wide_standard_skip",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_wide_standard_skip_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_native_skip",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-march=native",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_native_skip_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_native_skip",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-march=native",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_native_skip_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_sanitize",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O1",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-omit-frame-pointer",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_sanitize_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_sanitize",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O1",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-omit-frame-pointer",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_sanitize_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_standard_sanitize",
+          "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O1",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-omit-frame-pointer",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_standard_sanitize_floyd_simd_test"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "30126 randomized graphs + boundaries passed\n",
+          "stderr": ""
+        },
+        {
+          "config": "clang_standard_sanitize",
+          "test": "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+          "source_sha256": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+          "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O1",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-omit-frame-pointer",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_DISABLE_SIMD",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_20261022/verify/supplement.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_20261022/verify/baseline/clang_standard_sanitize_supplement"
+          ],
+          "compile_code": 0,
+          "warnings": "",
+          "run_code": 0,
+          "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+          "stderr": ""
+        }
+      ]
+    },
+    "note": "改修前の検証記録として保持。"
+  },
+  "final": {
+    "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+    "results": [
+      {
+        "config": "gcc_checked",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_checked_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_checked",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_checked_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_checked_disabled",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_checked_disabled_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_checked_disabled",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_checked_disabled_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_skip",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_skip_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_skip",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_skip_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_skip_disabled",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_skip_disabled_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_skip_disabled",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_skip_disabled_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_wide_standard_checked",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_wide_standard_checked_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_wide_standard_checked",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_wide_standard_checked_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_wide_standard_skip",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_wide_standard_skip_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_wide_standard_skip",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_wide_standard_skip_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_native_skip",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-march=native",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_native_skip_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "gcc_native_skip",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "g++",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-march=native",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/gcc_native_skip_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_checked",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_checked_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_checked",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_checked_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_checked_disabled",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_checked_disabled_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_checked_disabled",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_checked_disabled_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_skip",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_skip_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_skip",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_skip_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_skip_disabled",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_skip_disabled_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_skip_disabled",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_skip_disabled_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_wide_standard_checked",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_wide_standard_checked_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_wide_standard_checked",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_wide_standard_checked_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_wide_standard_skip",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_wide_standard_skip_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_wide_standard_skip",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_wide_standard_skip_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_native_skip",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-march=native",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_native_skip_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_native_skip",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-march=native",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_native_skip_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_sanitize",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_sanitize_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_sanitize",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_sanitize_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_standard_sanitize",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_simd_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_standard_sanitize_floyd_simd_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "30126 randomized graphs + boundaries passed\n",
+        "stderr": ""
+      },
+      {
+        "config": "clang_standard_sanitize",
+        "test": "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+        "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "test_sha256": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+        "command": [
+          "taskset",
+          "-c",
+          "10",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O1",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_DISABLE_SIMD",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_boundary_test.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_20261022/verify/final/clang_standard_sanitize_floyd_boundary_test"
+        ],
+        "compile_code": 0,
+        "warnings": "",
+        "run_code": 0,
+        "stdout": "45 boundary/SCC graphs + checked invalid arguments passed\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "near_inf": [
+    {
+      "config": "gcc_checked",
+      "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+      "test_sha256": "a3dd314a2bc68db1ad6a2539fb3f931650f53ff815fa46577706bf98c2cd4641",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+        "/tmp/sirkit_floyd_20261022/verify/finite_limit.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/verify/finite_limit_final_gcc_checked"
+      ],
+      "compile_stderr": "",
+      "run_code": 0,
+      "stdout": "20 near-INF finite-fast-path graphs passed\n",
+      "stderr": ""
+    },
+    {
+      "config": "gcc_native_skip",
+      "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+      "test_sha256": "a3dd314a2bc68db1ad6a2539fb3f931650f53ff815fa46577706bf98c2cd4641",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-march=native",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+        "/tmp/sirkit_floyd_20261022/verify/finite_limit.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/verify/finite_limit_final_gcc_native_skip"
+      ],
+      "compile_stderr": "",
+      "run_code": 0,
+      "stdout": "20 near-INF finite-fast-path graphs passed\n",
+      "stderr": ""
+    },
+    {
+      "config": "clang_checked",
+      "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+      "test_sha256": "a3dd314a2bc68db1ad6a2539fb3f931650f53ff815fa46577706bf98c2cd4641",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-O2",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+        "/tmp/sirkit_floyd_20261022/verify/finite_limit.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/verify/finite_limit_final_clang_checked"
+      ],
+      "compile_stderr": "",
+      "run_code": 0,
+      "stdout": "20 near-INF finite-fast-path graphs passed\n",
+      "stderr": ""
+    },
+    {
+      "config": "clang_sanitize",
+      "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+      "test_sha256": "a3dd314a2bc68db1ad6a2539fb3f931650f53ff815fa46577706bf98c2cd4641",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_20261022/final.hpp\"",
+        "/tmp/sirkit_floyd_20261022/verify/finite_limit.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/verify/finite_limit_final_clang_sanitize"
+      ],
+      "compile_stderr": "",
+      "run_code": 0,
+      "stdout": "20 near-INF finite-fast-path graphs passed\n",
+      "stderr": ""
+    }
+  ],
+  "near_inf_published_test": {
+    "path": "Verify/current/tests/floyd_finite_range_test.cpp",
+    "sha256": "a3dd314a2bc68db1ad6a2539fb3f931650f53ff815fa46577706bf98c2cd4641",
+    "equals_tested_temp_source": true
+  },
+  "review": {
+    "source_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+    "change": "FiniteRangeのAVX2更新だけ未到達lane maskを省略する。新wrapperはn>=64かつAVX2対応時だけ選択。",
+    "preconditions": [
+      "FloydWarshallImplの初期走査により負辺がない。",
+      "maximum<=floor((INF-1)/n)により単純路の全有限距離はINF未満。",
+      "Relaxに入るprefixとthrough有限値は非負、row値は0..INF。"
+    ],
+    "unreachable_lane": "prefix+INF>=INFなので、old<=INFに対してcandidate<oldは偽。prefix<=INF-1よりprefix+INF<2*INF=2^61<INT64_MAXで符号付き加算はoverflowしない。未到達laneは距離・nextのどちらも更新されない。",
+    "reachable_lane": "有限laneの候補比較とstrict改善時のnext更新は元の処理と同じ。Dense/非Denseの違いは不要なmaskとそのscalar tail検査だけ。",
+    "preserved": [
+      "中継頂点・始点・終点の順序",
+      "負辺・負閉路・wide演算経路",
+      "標準C++代替のループ",
+      "入力検査と所有権"
+    ],
+    "extra_cases": "finite_limit.cppでn64/65/66/127/128、最大入力重みfloor((INF-1)/n)、未到達列・全域正鎖・正閉路・0鎖を独立Bellman-Ford参照と照合する。",
+    "mode_selection": "既存のbool引数は従来のSIMD経路、FloydWarshallSimdMode::Finiteだけが最適化選択子。mask省略はFiniteRange && enum型の時に限定。Denseは元からmask不要。enum値1はstatic_cast<bool>でtrue。",
+    "near_inf_results": "finite_limit_final_results.json",
+    "dispatch_selection": "公開APIのdispatch本文をbaselineと同じにし、既存noinline FloydWarshallVectorized内でn>=64だけFinite専用wrapperへ渡す。CPU判定、閾値、UseSimd選択の条件と結果はmode版と同じ。",
+    "compiler_selection": "Finite専用wrapperとn>=64分岐は !defined(__clang__) の時だけ含める。GCCのAVX2経路に最適化を限定し、Clangは従来boolのSIMD経路・通常経路を維持する。"
+  },
+  "public_test_hashes": {
+    "Verify/current/tests/floyd_simd_test.cpp": "18a9fa67fdfe37276f291787c0460f81fcf099e929005ccd2a2301c172c629c5",
+    "Verify/current/tests/floyd_boundary_test.cpp": "2d9c892e0cade970e833bc36a600008469ea36b30da039239ed0211bd24f5f18",
+    "Verify/current/tests/floyd_finite_range_test.cpp": "a3dd314a2bc68db1ad6a2539fb3f931650f53ff815fa46577706bf98c2cd4641"
+  },
+  "published_checks": [
+    {
+      "source": "Examples/floyd_warshall_example.cpp",
+      "source_sha256": "8aedc96057ca5f3ff6e08509d031c679cf517d70c0fc9cdb87d18efcfcfc1692",
+      "skip": false,
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "/home/reinsirk/Atcoder_Env/Examples/floyd_warshall_example.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/published/gcc_checked_floyd_warshall_example"
+      ],
+      "warnings": "",
+      "status": "PASS",
+      "cases": 1
+    },
+    {
+      "source": "Examples/floyd_warshall_example.cpp",
+      "source_sha256": "8aedc96057ca5f3ff6e08509d031c679cf517d70c0fc9cdb87d18efcfcfc1692",
+      "skip": true,
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Examples/floyd_warshall_example.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/published/gcc_skip_floyd_warshall_example"
+      ],
+      "warnings": "",
+      "status": "PASS",
+      "cases": 1
+    },
+    {
+      "source": "Verify/current/submissions/floyd_warshall.cpp",
+      "source_sha256": "e4b201990819096e61b6cf3272e10384923e8a7c00728b086a071f5b7d618c9c",
+      "skip": false,
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "/home/reinsirk/Atcoder_Env/Verify/current/submissions/floyd_warshall.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/published/gcc_checked_floyd_warshall"
+      ],
+      "warnings": "",
+      "status": "PASS",
+      "cases": 3
+    },
+    {
+      "source": "Verify/current/submissions/graph_local.cpp",
+      "source_sha256": "77437e20cc7ea315af30da2a0291b52226b51fab32bad4397570b68c846601b0",
+      "skip": false,
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "/home/reinsirk/Atcoder_Env/Verify/current/submissions/graph_local.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/published/gcc_checked_graph_local"
+      ],
+      "warnings": "",
+      "status": "PASS",
+      "cases": 1
+    },
+    {
+      "source": "Verify/current/tests/floyd_finite_range_test.cpp",
+      "source_sha256": "a3dd314a2bc68db1ad6a2539fb3f931650f53ff815fa46577706bf98c2cd4641",
+      "skip": false,
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_finite_range_test.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/published/gcc_checked_floyd_finite_range_test"
+      ],
+      "warnings": "",
+      "status": "PASS",
+      "cases": 1
+    },
+    {
+      "source": "Examples/floyd_warshall_example.cpp",
+      "source_sha256": "8aedc96057ca5f3ff6e08509d031c679cf517d70c0fc9cdb87d18efcfcfc1692",
+      "skip": false,
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-O2",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "/home/reinsirk/Atcoder_Env/Examples/floyd_warshall_example.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/published/clang_checked_floyd_warshall_example"
+      ],
+      "warnings": "",
+      "status": "PASS",
+      "cases": 1
+    },
+    {
+      "source": "Examples/floyd_warshall_example.cpp",
+      "source_sha256": "8aedc96057ca5f3ff6e08509d031c679cf517d70c0fc9cdb87d18efcfcfc1692",
+      "skip": true,
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-O2",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-DSKIP_RUNTIME_CHECKS",
+        "/home/reinsirk/Atcoder_Env/Examples/floyd_warshall_example.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/published/clang_skip_floyd_warshall_example"
+      ],
+      "warnings": "",
+      "status": "PASS",
+      "cases": 1
+    },
+    {
+      "source": "Verify/current/submissions/floyd_warshall.cpp",
+      "source_sha256": "e4b201990819096e61b6cf3272e10384923e8a7c00728b086a071f5b7d618c9c",
+      "skip": false,
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-O2",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "/home/reinsirk/Atcoder_Env/Verify/current/submissions/floyd_warshall.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/published/clang_checked_floyd_warshall"
+      ],
+      "warnings": "",
+      "status": "PASS",
+      "cases": 3
+    },
+    {
+      "source": "Verify/current/submissions/graph_local.cpp",
+      "source_sha256": "77437e20cc7ea315af30da2a0291b52226b51fab32bad4397570b68c846601b0",
+      "skip": false,
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-O2",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "/home/reinsirk/Atcoder_Env/Verify/current/submissions/graph_local.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/published/clang_checked_graph_local"
+      ],
+      "warnings": "",
+      "status": "PASS",
+      "cases": 1
+    },
+    {
+      "source": "Verify/current/tests/floyd_finite_range_test.cpp",
+      "source_sha256": "a3dd314a2bc68db1ad6a2539fb3f931650f53ff815fa46577706bf98c2cd4641",
+      "skip": false,
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-O2",
+        "-std=c++23",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "/home/reinsirk/Atcoder_Env/Verify/current/tests/floyd_finite_range_test.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/published/clang_checked_floyd_finite_range_test"
+      ],
+      "warnings": "",
+      "status": "PASS",
+      "cases": 1
+    }
+  ],
+  "driver_independent_reference": {
+    "preparation": {
+      "seed": "0xF10D2026",
+      "reference": "Repeated Dijkstra with priority_queue. Standalone, no librarydependency.",
+      "command": [
+        "taskset",
+        "-c",
+        "8",
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "/tmp/sirkit_floyd_20261022/main/reference.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_20261022/main/reference"
+      ],
+      "oracle_source": "#include <algorithm>\n#include <cstdint>\n#include <functional>\n#include <iostream>\n#include <limits>\n#include <queue>\n#include <utility>\n#include <vector>\nint main(){int n,m;std::cin>>n>>m;using I=std::int64_t;using E=std::pair<I,int>;std::vector<std::vector<E>>g(n);while(m--){int a,b;I w;std::cin>>a>>b>>w;--a;--b;g[a].push_back({w,b});g[b].push_back({w,a});}I ans=std::numeric_limits<I>::max();for(int s=0;s<n;++s){std::vector<I>d(n,std::numeric_limits<I>::max());std::priority_queue<E,std::vector<E>,std::greater<E>>q;d[s]=0;q.push({0,s});while(!q.empty()){auto [dist,u]=q.top();q.pop();if(dist!=d[u])continue;for(auto [w,v]:g[u])if(dist+w<d[v]){d[v]=dist+w;q.push({d[v],v});}}ans=std::min(ans,*std::max_element(d.begin(),d.end()));}std::cout<<ans<<'\\n';}",
+      "cases": [
+        {
+          "input": "dense_random_300.in",
+          "input_sha256": "276b3b94f9adf61ed811ae976f0790b589ade7302f9090f163fdcc4c100b8097",
+          "expected": "dense_random_300.out",
+          "output_sha256": "a4b2c5db15348c29451e18b8307e5ef81625ea638e807935f39ceaa8d9ac7758"
+        },
+        {
+          "input": "dense_uniform_300.in",
+          "input_sha256": "ecf16544a67ef81eba38a480f6212f9753d2288b432d7d6d0f8523969a2778a5",
+          "expected": "dense_uniform_300.out",
+          "output_sha256": "83c02ac2d48c863dab2ccf6870455aadfc2cec073b8db269b517c879d76aa6d9"
+        },
+        {
+          "input": "line_100.in",
+          "input_sha256": "33bf860630dadd73c628dcfca71a41a73586724ac673ce543a73efc7a922b19f",
+          "expected": "line_100.out",
+          "output_sha256": "8639079d6d801e2bf0f96607d25c19fe6c294405c2ca95b1aeeee5353a2b9338"
+        },
+        {
+          "input": "line_2.in",
+          "input_sha256": "d31400a9196af8d78037127201e471353fcd1f5aaecc9939ea4740a054559c0f",
+          "expected": "line_2.out",
+          "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+        },
+        {
+          "input": "line_300.in",
+          "input_sha256": "d21a7a71049d58aa437638a3b286b78ff5826e9732e0a171a0b3671f72571d4f",
+          "expected": "line_300.out",
+          "output_sha256": "6f6312dfbc833d8ec64288c1869e4b595091456546404a0b0f6f22bea00c23a2"
+        },
+        {
+          "input": "line_32.in",
+          "input_sha256": "93a67a2d788386cd4892a0a23c26da612430acc4ff810c331749d80c33c2dea4",
+          "expected": "line_32.out",
+          "output_sha256": "54f386b96ba2a8218506b3ea5ed20113011ea9691aded69e065b835422c14f11"
+        },
+        {
+          "input": "line_8.in",
+          "input_sha256": "fd37fcfb4128c03dd77e561342787bf44c33eff8239a99f7fef17788522ffef7",
+          "expected": "line_8.out",
+          "output_sha256": "f06f93d621eb3e0ee0831f6bec1903d2a0368696212bf1d7efe07b19d78c6bd5"
+        },
+        {
+          "input": "random_100_0.1.in",
+          "input_sha256": "e7b5e637de8ab74d6c06654c40bf7ba3713e179b2cb1a9b907b52e327242e017",
+          "expected": "random_100_0.1.out",
+          "output_sha256": "221c480639ab25d97b487b56214ee18b3046062bc797ca1d2a420ddf9b203cf2"
+        },
+        {
+          "input": "random_300_0.02.in",
+          "input_sha256": "dd82f4a8badc6a83990ee97c8a8a503fadeeb1b0511eed0c7a6f7929e75c32ed",
+          "expected": "random_300_0.02.out",
+          "output_sha256": "32a95da3074cd0441cbefbad905ecdb9c7c66a296ef94fc686b1831075a516c3"
+        },
+        {
+          "input": "random_300_0.15.in",
+          "input_sha256": "d82e317a9c8fffcd31c3defaec4dd4831294112958b89188ba9bbcb77156fe75",
+          "expected": "random_300_0.15.out",
+          "output_sha256": "7ffa842bcdc9ae5580846bb8073b7177dfe024604a9a57ee675b73d73ce29f28"
+        },
+        {
+          "input": "sample_0.in",
+          "input_sha256": "b2dbbfb502d5fe456b4a5584f1d8d43643de6b67c862f28aef86222bc1ed2a55",
+          "expected": "sample_0.out",
+          "output_sha256": "917df3320d778ddbaa5c5c7742bc4046bf803c36ed2b050f30844ed206783469"
+        },
+        {
+          "input": "sample_1.in",
+          "input_sha256": "9d6a5e8b692df1b1741d644f4ac55a404f5d39d5761701d785a3c416c6279ccf",
+          "expected": "sample_1.out",
+          "output_sha256": "20d2add851bf39edcc6b5e830930f962db7e19dffa2cab8610eed551eda6c302"
+        },
+        {
+          "input": "sample_2.in",
+          "input_sha256": "f609067ab61d41aa659b0bca4bd5c4e94eb9b31418d4ad42de0fe8ec8324b891",
+          "expected": "sample_2.out",
+          "output_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+        },
+        {
+          "input": "star_300.in",
+          "input_sha256": "6a1b04a625bd3482027fda99f577191610b2e1c57abded1154131dde1b48e15c",
+          "expected": "star_300.out",
+          "output_sha256": "94d59b76e5b10f74d285313f8c69cc4799f538481dbc05edb8dc62f7a59f6eab"
+        }
+      ]
+    },
+    "checks": [
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "dense_random_300"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "dense_uniform_300"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "line_100"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "line_2"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "line_300"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "line_32"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "line_8"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "random_100_0.1"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "random_300_0.02"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "random_300_0.15"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "sample_0"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "sample_1"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "sample_2"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "baseline",
+        "case": "star_300"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "dense_random_300"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "dense_uniform_300"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "line_100"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "line_2"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "line_300"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "line_32"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "line_8"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "random_100_0.1"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "random_300_0.02"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "random_300_0.15"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "sample_0"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "sample_1"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "sample_2"
+      },
+      {
+        "mode": "gcc_plain",
+        "variant": "candidate",
+        "case": "star_300"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "dense_random_300"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "dense_uniform_300"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "line_100"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "line_2"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "line_300"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "line_32"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "line_8"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "random_100_0.1"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "random_300_0.02"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "random_300_0.15"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "sample_0"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "sample_1"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "sample_2"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "baseline",
+        "case": "star_300"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "dense_random_300"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "dense_uniform_300"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "line_100"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "line_2"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "line_300"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "line_32"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "line_8"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "random_100_0.1"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "random_300_0.02"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "random_300_0.15"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "sample_0"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "sample_1"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "sample_2"
+      },
+      {
+        "mode": "gcc_native",
+        "variant": "candidate",
+        "case": "star_300"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "dense_random_300"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "dense_uniform_300"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "line_100"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "line_2"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "line_300"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "line_32"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "line_8"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "random_100_0.1"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "random_300_0.02"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "random_300_0.15"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "sample_0"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "sample_1"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "sample_2"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "baseline",
+        "case": "star_300"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "dense_random_300"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "dense_uniform_300"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "line_100"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "line_2"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "line_300"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "line_32"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "line_8"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "random_100_0.1"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "random_300_0.02"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "random_300_0.15"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "sample_0"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "sample_1"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "sample_2"
+      },
+      {
+        "mode": "clang_plain",
+        "variant": "candidate",
+        "case": "star_300"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "dense_random_300"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "dense_uniform_300"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "line_100"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "line_2"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "line_300"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "line_32"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "line_8"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "random_100_0.1"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "random_300_0.02"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "random_300_0.15"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "sample_0"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "sample_1"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "sample_2"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "baseline",
+        "case": "star_300"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "dense_random_300"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "dense_uniform_300"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "line_100"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "line_2"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "line_300"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "line_32"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "line_8"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "random_100_0.1"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "random_300_0.02"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "random_300_0.15"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "sample_0"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "sample_1"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "sample_2"
+      },
+      {
+        "mode": "clang_native",
+        "variant": "candidate",
+        "case": "star_300"
+      }
+    ],
+    "note": "繰返しDijkstraの独立出力と、公式3例+自作11例をbaseline/candidate各4compiler設定で照合。最終GCCはこのcandidateとバイナリ一致、最終Clangはbaselineと実行コード一致。"
+  },
+  "selection": {
+    "endpoint": "https://v3.api.judge.yosupo.jp/problems",
+    "sha256": "56f6a57dd4f319710ee3474bfce16ebbbed5d3e1b5c33e7ba1e541d4d58fddc0",
+    "problem_count": 253,
+    "shortest_path_titles": [
+      {
+        "name": "k_shortest_walk",
+        "title": "K-Shortest Walk"
+      },
+      {
+        "name": "shortest_path",
+        "title": "Shortest Path"
+      }
+    ],
+    "decision": "現行一覧に全点対最短路の直接対応問題を確認できず、既存Verify先ABC012 Dを継続。",
+    "atcoder": "https://atcoder.jp/contests/abc012/tasks/abc012_4"
+  },
+  "online": {
+    "url": "https://atcoder.jp/contests/abc012/submissions/80244912",
+    "historical_status": "AC",
+    "historical_time_ms": 7,
+    "evidence": "Audit/online-floyd-warshall-80244912-2026-10-22.png",
+    "evidence_sha256": "22f82d0115ab4daea30c85c582b1da7ad463e2fc4380b5bb5da54ed510e4c7d7",
+    "source_access": "2026-10-22にも公開提出ページHTTP403で本文取得不可。画像のAC7msを現行版の結果へ読み替えない。",
+    "source_match": false,
+    "current_generation": "今回の改良版はオンライン未提出。",
+    "manifest_status": "AC（提出ソース未照合）"
+  },
+  "frozen_main_io": {
+    "Graph/Floyd-Warshall.cpp": "959eaddf00ee4092265d2fa12afde4300c9491ff8d2815fea84b5b2cdc6c3294",
+    "Verify/current/drivers/floyd_warshall_bus_main.cpp": "3cc2222919105c01ccd4486bc4826bcb0d00bf74c3f81ea165127564b5c773f1",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "source_bytes": 17694,
+  "sanitizer": "ASan/UBSan成功。ASAN_OPTIONS=detect_leaks=0。LSanを実行した意味ではない。",
+  "provenance": "既存CC0独自実装の範囲判定とSIMD呼出しを整理。外部実装の移植なし、SPDXと既存の参考URLを維持。",
+  "reproduction": {
+    "run.py": "from pathlib import Path\nimport subprocess,json,os,hashlib,fcntl,argparse\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');parser=argparse.ArgumentParser();parser.add_argument('source',type=Path);parser.add_argument('--label',required=True);args=parser.parse_args();source=args.source.resolve();digest=hashlib.sha256(source.read_bytes()).hexdigest();out=p/args.label;out.mkdir(exist_ok=True)\ncompilers={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']};configs=[]\nfor c in compilers:\n for skip in [False,True]:\n  for disabled in [False,True]:configs.append((c+('_skip'if skip else'_checked')+('_disabled'if disabled else''),c,['-O2']+(['-DSKIP_RUNTIME_CHECKS']if skip else[])+(['-DSIRKIT_DISABLE_SIMD']if disabled else[])))\n for skip in [False,True]:configs.append((c+'_wide_standard'+('_skip'if skip else'_checked'),c,['-O2','-U__SIZEOF_INT128__','-DSIRKIT_DISABLE_SIMD']+(['-DSKIP_RUNTIME_CHECKS']if skip else[])))\n configs.append((c+'_native_skip',c,['-O2','-DSKIP_RUNTIME_CHECKS','-march=native']))\nconfigs.append(('clang_sanitize','clang',['-O1','-g','-fsanitize=address,undefined','-fno-omit-frame-pointer']))\nconfigs.append(('clang_standard_sanitize','clang',['-O1','-g','-fsanitize=address,undefined','-fno-omit-frame-pointer','-U__SIZEOF_INT128__','-DSIRKIT_DISABLE_SIMD']))\nrows=[]\nfor name,c,flags in configs:\n with open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n  fcntl.flock(lock,fcntl.LOCK_EX)\n  for test in [r/'Verify/current/tests/floyd_simd_test.cpp',r/'Verify/current/tests/floyd_boundary_test.cpp']:\n   exe=out/(name+'_'+test.stem);cmd=['taskset','-c','10',*compilers[c],'-std=c++23','-Wall','-Wextra','-Wpedantic',*flags,'-DFLOYD_SOURCE=\"'+str(source)+'\"',str(test),'-o',str(exe)];a=subprocess.run(cmd,capture_output=True,text=True);row=dict(config=name,test=str(test),source_sha256=digest,test_sha256=hashlib.sha256(test.read_bytes()).hexdigest(),command=cmd,compile_code=a.returncode,warnings=a.stderr)\n   if a.returncode==0:\n    env=os.environ.copy();env['ASAN_OPTIONS']='detect_leaks=0';a=subprocess.run(['taskset','-c','10',str(exe)],capture_output=True,text=True,env=env);row.update(run_code=a.returncode,stdout=a.stdout,stderr=a.stderr)\n   rows.append(row);(out/'results.json').write_text(json.dumps(dict(source_sha256=digest,results=rows),indent=2)+'\\n');print(name,test.stem,row.get('run_code',row['compile_code']),row.get('stdout','').strip(),flush=True)\n   assert row.get('run_code')==0,row\n   assert not row['warnings'],row\nassert hashlib.sha256(source.read_bytes()).hexdigest()==digest\nprint('ALL',len(rows),'PASS',flush=True)\n",
+    "finite_limit_final_runner.py": "from pathlib import Path\nimport subprocess,json,os,hashlib,fcntl\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');source=p.parent/'final.hpp';test=p/'finite_limit.cpp';s=(r/'Verify/current/tests/floyd_simd_test.cpp').read_text();prefix=s[:s.index('\\nint main(){')];test.write_text(prefix+'''\\nint main() {\n for(int n : {64,65,66,127,128}) {\n  const std::int64_t bound=(INF-1)/n;\n  for(int kind=0;kind<4;++kind) {\n   Matrix a(n,std::vector<std::int64_t>(n,INF));\n   for(int i=0;i<n;++i)a[i][i]=0;\n   const int length=kind==0?n/2:n;\n   for(int i=0;i+1<length;++i)a[i][i+1]=kind==3?0:bound;\n   if(kind==2)a[n-1][0]=bound;\n   check(a);\n  }\n }\n std::cout<<\"20 near-INF finite-fast-path graphs passed\\\\n\";\n}\n''')\nconfigs={'gcc_checked':['g++','-O2'],'gcc_native_skip':['g++','-O2','-DSKIP_RUNTIME_CHECKS','-march=native'],'clang_checked':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0','-O2'],'clang_sanitize':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0','-O1','-g','-fsanitize=address,undefined','-fno-omit-frame-pointer']};rows=[]\nfor c,flags in configs.items():\n with open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n  fcntl.flock(lock,fcntl.LOCK_EX)\n  exe=p/('finite_limit_final_'+c);cmd=['taskset','-c','10',*flags,'-std=c++23','-Wall','-Wextra','-Wpedantic','-DFLOYD_SOURCE=\"'+str(source)+'\"',str(test),'-o',str(exe)];a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0 and not a.stderr,a.stderr;env=os.environ.copy();env['ASAN_OPTIONS']='detect_leaks=0';b=subprocess.run(['taskset','-c','10',str(exe)],env=env,capture_output=True,text=True);assert b.returncode==0,b.stderr;rows.append(dict(config=c,source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),test_sha256=hashlib.sha256(test.read_bytes()).hexdigest(),command=cmd,compile_stderr=a.stderr,run_code=b.returncode,stdout=b.stdout,stderr=b.stderr));print(c,b.stdout.strip(),flush=True)\n(p/'finite_limit_final_results.json').write_text(json.dumps(rows,indent=2)+'\\n')\n"
+  }
+}

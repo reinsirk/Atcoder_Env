@@ -2,6 +2,7 @@
 #include "../DataStructure/rollback-union-findw.cpp"
 #include <cassert>
 #include <cstdint>
+#include <iostream>
 
 int main() {
     using UnionFind = RollbackWeightedUnionFind<std::int64_t>;
@@ -26,4 +27,16 @@ int main() {
     assert(copy.groups().size() == 2);
     uf.reset(2);
     assert(uf.size() == 2 && uf.get_state() == 0);
+    assert(uf.unite(0, 1, 5));
+    uf.snapshot();
+    uf.clear_history(); // 現在の差を新しい開始状態にする。
+    assert(uf.get_state() == 0 && uf.diff(0, 1) == 5);
+    assert(uf.unite_checked(0, 1, 6) == UnionFind::MergeResult::Contradiction);
+    uf.rollback();
+    assert(uf.diff(0, 1) == 5 && uf.component_count() == 1);
+    copy.reset(); // 確保済み領域を再利用し、頂点数を保って差と履歴を初期化する。
+    assert(copy.size() == 4 && copy.component_count() == 4 && copy.get_state() == 0);
+    UnionFind reused; swap(copy, reused);
+    assert(copy.empty() && reused.size() == 4);
+    std::cout << uf.diff(0, 1) << ' ' << uf.get_state() << '\n';
 }

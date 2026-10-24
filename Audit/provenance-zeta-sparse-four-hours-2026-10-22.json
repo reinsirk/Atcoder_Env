@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-22",
+  "scope": [
+    "Math/Zeta/components/sparse_transform.inc",
+    "Math/Zeta/Sparse_Transform.cpp",
+    "Math/Zeta_Mebius.cpp"
+  ],
+  "source_freeze": {
+    "nt_components_before": {
+      "sieve": "a2100c1abd78b526c9a98973d4394caa33bec520dcc5f8373c1ad100d761d636",
+      "integer_transform_detail": "b90bc68975199eef6272a095ff6aa4edcffc456a2bc8e3997ad8786635446458",
+      "integer_convolution_detail": "a43a8eb9029e4c4f2368984aa25fa8d520f841f18799e4a71b6ac637d0b36449",
+      "gcd_lcm_convolution": "2ebcef184cf9cd4153276482a48bb7891497b2cc664109de9001fa1f3d1f91f9"
+    },
+    "full_integer_only_sha256": "ae358fb07b02fe2e5b7d00e17536d23c362e6e4ffa4344e2253a55836b65a30e",
+    "nt_components_after": {
+      "sieve": "a2100c1abd78b526c9a98973d4394caa33bec520dcc5f8373c1ad100d761d636",
+      "integer_transform_detail": "b90bc68975199eef6272a095ff6aa4edcffc456a2bc8e3997ad8786635446458",
+      "integer_convolution_detail": "a43a8eb9029e4c4f2368984aa25fa8d520f841f18799e4a71b6ac637d0b36449",
+      "gcd_lcm_convolution": "2ebcef184cf9cd4153276482a48bb7891497b2cc664109de9001fa1f3d1f91f9"
+    },
+    "final_sources": {
+      "Math/Zeta_Mebius.cpp": "94399b90e72b716a2f7ed0075d57f10019085576ce31182eb4836259f8bc6250",
+      "Math/Zeta/Sparse_Transform.cpp": "835713ac5d403100ce0a6e042aa58d7fb33963560310e4b3f60caa5f68c65961",
+      "Math/Zeta/components/sparse_transform.inc": "80ab929f3f47ea03f6d5ff92375d2de552a57709e8126076de6db50cdf32c8ec"
+    }
+  },
+  "spdx": "CC0-1.0",
+  "source_classification": "疎なkey位置管理/伝播列/prefix直接添字は現在のrepository実装。数学的な素数ごとの倍数変換の参考をNyaanNyaanのdivisor-multiple-transformと区別する。今回のprefixコードがその原典のコピーであるとは表示しない。",
+  "primary_sources": [
+    {
+      "file": "divisor_multiple.hpp",
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/multiplicative-function/divisor-multiple-transform.hpp",
+      "status": 200,
+      "sha256": "88d092ec049b8aeddd46fe65845b662d7237cf2118acd38dc85fcc14364c1d3e",
+      "bytes": 2187
+    },
+    {
+      "file": "LICENSE",
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/LICENSE",
+      "status": 200,
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "bytes": 7048
+    },
+    {
+      "file": "divisor_multiple.html",
+      "url": "https://nyaannyaan.github.io/library/multiplicative-function/divisor-multiple-transform.hpp.html",
+      "status": 200,
+      "sha256": "c861d31c80e7e1d1c07dd2c59020e995a6f637700024877a2079ac4bb29ff5a8",
+      "bytes": 53608
+    }
+  ],
+  "primary_snapshot_reuse": "同日・同じ4時間作業中に親がHTTP200で取得した固定一次資料を再利用し、SHAとコード・LICENSE本文を確認。HTMLや文書の説明本文は転載しない。",
+  "reference_cpp": "#pragma once\n\n#include <map>\n#include <vector>\nusing namespace std;\n\n#include \"../prime/prime-enumerate.hpp\"\n\nstruct divisor_transform {\n  template <typename T>\n  static void zeta_transform(vector<T> &a) {\n    int N = a.size() - 1;\n    auto sieve = prime_enumerate(N);\n    for (auto &p : sieve)\n      for (int k = 1; k * p <= N; ++k) a[k * p] += a[k];\n  }\n  template <typename T>\n  static void mobius_transform(vector<T> &a) {\n    int N = a.size() - 1;\n    auto sieve = prime_enumerate(N);\n    for (auto &p : sieve)\n      for (int k = N / p; k > 0; --k) a[k * p] -= a[k];\n  }\n\n  template <typename I, typename T>\n  static void zeta_transform(map<I, T> &a) {\n    for (auto p = rbegin(a); p != rend(a); p++)\n      for (auto &x : a) {\n        if (p->first == x.first) break;\n        if (p->first % x.first == 0) p->second += x.second;\n      }\n  }\n  template <typename I, typename T>\n  static void mobius_transform(map<I, T> &a) {\n    for (auto &x : a) {\n      for (auto p = rbegin(a); p != rend(a); p++) {\n        if (x.first == p->first) break;\n        if (p->first % x.first == 0) p->second -= x.second;\n      }\n    }\n  }\n};\n\nstruct multiple_transform {\n  template <typename T>\n  static void zeta_transform(vector<T> &a) {\n    int N = a.size() - 1;\n    auto sieve = prime_enumerate(N);\n    for (auto &p : sieve)\n      for (int k = N / p; k > 0; --k) a[k] += a[k * p];\n  }\n  template <typename T>\n  static void mobius_transform(vector<T> &a) {\n    int N = a.size() - 1;\n    auto sieve = prime_enumerate(N);\n    for (auto &p : sieve)\n      for (int k = 1; k * p <= N; ++k) a[k] -= a[k * p];\n  }\n\n  template <typename I, typename T>\n  static void zeta_transform(map<I, T> &a) {\n    for (auto &x : a)\n      for (auto p = rbegin(a); p->first != x.first; p++)\n        if (p->first % x.first == 0) x.second += p->second;\n  }\n  template <typename I, typename T>\n  static void mobius_transform(map<I, T> &a) {\n    for (auto p1 = rbegin(a); p1 != rend(a); p1++)\n      for (auto p2 = rbegin(a); p2 != p1; p2++)\n        if (p2->first % p1->first == 0) p1->second -= p2->second;\n  }\n};\n\n/**\n * @brief 倍数変換・約数変換\n * @docs docs/multiplicative-function/divisor-multiple-transform.md\n */\n",
+  "license_identification": "NyaanNyaan/libraryのLICENSE冒頭はCreative Commons Legal Code / CC0 1.0 Universal。SPDX CC0-1.0を保持。",
+  "history": {
+    "available_sparse_revision": "b66b1c5",
+    "component_path": "Math/Zeta/components/sparse_transform.inc",
+    "component_sha256": "047981face2d5c4f730a8d92cf99be4dd40abc2e51c2d7dd1b8eaa4572877b2e",
+    "matches_task_sparse_baseline": true,
+    "earlier_revision": "30c83f07b0f12777217d7098cbb56da372fabfbe",
+    "earlier_file": "Zeta_Mebius.cpp",
+    "earlier_sha256": "67decea63761b30c74605faa2393c4290c0f2cf0c3ffa031a2737a46209244f0",
+    "earlier_content_scope": "集合のゼータ/メビウスのループ断片のみ。疎な整数変換の実装の由来とは区別する。"
+  },
+  "historical_component": "#ifndef SIRKIT_INTERNAL_SPARSE_INTEGER_TRANSFORM_DEFINED\n#define SIRKIT_INTERNAL_SPARSE_INTEGER_TRANSFORM_DEFINED\nnamespace reinsirk::detail {\n// 内部用。密な範囲は位置配列、疎な範囲は素数別の伝播列を使う。\ntemplate <bool Inverse, std::integral Int, class Val>\nvoid sparse_integer_transform(std::vector<std::pair<Int, Val>>& f,\n                                      const IntegerSieve& sieve) {\n    if (f.empty()) return;\n    std::sort(f.begin(), f.end(), [](const auto& a, const auto& b) {\n        return a.first < b.first;\n    });\n#ifndef SKIP_RUNTIME_CHECKS\n    if (sieve.max_value() < 0 || f.front().first <= 0\n        || static_cast<std::uintmax_t>(f.back().first)\n            > static_cast<std::uintmax_t>(sieve.max_value())) {\n        throw std::out_of_range(\"sparse integer transform: key out of range\");\n    }\n#endif\n    const std::size_t m = f.size();\n    const auto largest = static_cast<std::uintmax_t>(f.back().first);\n    constexpr auto absent = std::numeric_limits<std::size_t>::max();\n    auto propagate = [&](std::size_t src, std::size_t dst) {\n        if constexpr (Inverse) f[dst].second -= f[src].second;\n        else f[dst].second += f[src].second;\n    };\n\n    // 範囲をmの4倍以下に制限し、値域に比例する記憶量を避ける。\n    if (largest <= std::numeric_limits<std::size_t>::max() - 1\n        && (largest / m < 4 || (largest / m == 4 && largest % m == 0))) {\n        const auto n = static_cast<std::size_t>(largest);\n        std::vector<std::size_t> position;\n        if (n >= position.max_size()) {\n            throw std::length_error(\"sparse integer transform: position capacity\");\n        }\n        position.assign(n + 1, absent);\n        for (std::size_t i = 0; i < m; ++i) {\n            const auto key = static_cast<std::size_t>(f[i].first);\n#ifndef SKIP_RUNTIME_CHECKS\n            if (position[key] != absent) {\n                throw std::invalid_argument(\"sparse integer transform: duplicate key\");\n            }\n#endif\n            position[key] = i;\n        }\n        for (const auto raw_prime : sieve.prime_list) {\n            const auto p = static_cast<std::size_t>(raw_prime);\n            if (p > n) break;\n            const auto limit = n / p;\n            auto visit = [&](std::size_t q) {\n                const auto src = position[q * p];\n                if (src == absent) return;\n                const auto dst = position[q];\n#ifndef SKIP_RUNTIME_CHECKS\n                if (dst == absent) {\n                    throw std::invalid_argument(\"sparse integer transform: missing divisor\");\n                }\n#endif\n                propagate(src, dst);\n            };\n            if constexpr (Inverse) {\n                for (std::size_t q = 1; q <= limit; ++q) visit(q);\n            } else {\n                for (std::size_t q = limit; q != 0; --q) visit(q);\n            }\n        }\n        return;\n    }\n\n    struct Transfer {\n        std::size_t src, dst, next;\n    };\n    std::vector<std::size_t> head(m, absent);\n    std::vector<Transfer> transfers;\n    if (m <= transfers.max_size() / 4) transfers.reserve(m * 4);\n    else transfers.reserve(m);\n    // 最大8回だけ探索し、衝突が続けば二分探索へ戻す。\n    std::vector<std::size_t> slots;\n    if (m > slots.max_size() / 4) {\n        throw std::length_error(\"sparse integer transform: lookup capacity\");\n    }\n    const auto slot_count = std::bit_ceil(m * 2);\n    slots.assign(slot_count, absent);\n    const auto mask = slot_count - 1;\n    const auto hash_shift = std::numeric_limits<std::uint64_t>::digits\n        - std::bit_width(mask);\n    auto hash_key = [&](std::uintmax_t key) {\n        const auto h = static_cast<std::uint64_t>(key) * UINT64_C(0x9e3779b97f4a7c15);\n        return static_cast<std::size_t>(h >> hash_shift);\n    };\n    std::array<std::size_t, 64> small_position;\n    small_position.fill(absent);\n    for (std::size_t i = 0; i < m; ++i) {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (i != 0 && f[i - 1].first == f[i].first) {\n            throw std::invalid_argument(\"sparse integer transform: duplicate key\");\n        }\n#endif\n        const auto key = static_cast<std::uintmax_t>(f[i].first);\n        if (key < small_position.size()) small_position[static_cast<std::size_t>(key)] = i;\n        auto at = hash_key(key);\n        for (unsigned probe = 0; probe != 8; ++probe) {\n            if (slots[at] == absent) {\n                slots[at] = i;\n                break;\n            }\n            at = (at + 1) & mask;\n        }\n    }\n    auto locate = [&](std::uintmax_t key) {\n        if (key < small_position.size()) {\n            const auto index = small_position[static_cast<std::size_t>(key)];\n#ifndef SKIP_RUNTIME_CHECKS\n            if (index == absent) {\n                throw std::invalid_argument(\"sparse integer transform: missing divisor\");\n            }\n#endif\n            return index;\n        }\n        auto at = hash_key(key);\n        for (unsigned probe = 0; probe != 8; ++probe) {\n            const auto index = slots[at];\n            if (index == absent) break;\n            if (static_cast<std::uintmax_t>(f[index].first) == key) return index;\n            at = (at + 1) & mask;\n        }\n        const auto it = std::lower_bound(f.begin(), f.end(), key,\n            [](const auto& item, std::uintmax_t value) {\n                return static_cast<std::uintmax_t>(item.first) < value;\n            });\n#ifndef SKIP_RUNTIME_CHECKS\n        if (it == f.end() || static_cast<std::uintmax_t>(it->first) != key) {\n            throw std::invalid_argument(\"sparse integer transform: missing divisor\");\n        }\n#endif\n        return static_cast<std::size_t>(it - f.begin());\n    };\n    for (std::size_t step = 0; step < m; ++step) {\n        // 先頭への連結でゼータは降順、メビウスは昇順に伝播する。\n        const auto i = Inverse ? m - 1 - step : step;\n        using Factor = std::make_unsigned_t<decltype(sieve.max_value())>;\n        const auto original = static_cast<Factor>(f[i].first);\n        auto remaining = original;\n        while (remaining > 1) {\n            const auto p = static_cast<Factor>(\n                sieve.least_prime_factor[static_cast<std::size_t>(remaining)]);\n            const auto prime_index = locate(p);\n            const auto dst = locate(original / p);\n            if (transfers.size() == transfers.max_size()) {\n                throw std::length_error(\"sparse integer transform: transfer capacity\");\n            }\n            transfers.push_back({i, dst, head[prime_index]});\n            head[prime_index] = transfers.size() - 1;\n            do remaining /= p;\n            while (remaining > 1\n                && static_cast<Factor>(sieve.least_prime_factor[static_cast<std::size_t>(remaining)]) == p);\n        }\n    }\n    for (const auto first : head) {\n        for (auto at = first; at != absent; at = transfers[at].next) {\n            const auto& transfer = transfers[at];\n            propagate(transfer.src, transfer.dst);\n        }\n    }\n}\n} // namespace reinsirk::detail\n#endif\n\n#ifndef SIRKIT_SPARSE_FAST_INTEGER_ZETA_DEFINED\n#define SIRKIT_SPARSE_FAST_INTEGER_ZETA_DEFINED\n// m=f.size()、rは各keyの素因数を重複込みで数えた総数（以下の両API共通）。\n// 正で一意なkeyの全約数を含むfをkey昇順にし、各値を倍数和へ置換。key<=sieve.max_value()、Valは+=対応。O((m+r)log(m+1))時間、O(m+r)補助領域。\ntemplate <std::integral Int, class Val>\nvoid sparse_multiple_zeta_transform(std::vector<std::pair<Int, Val>>& f,\n                              const IntegerSieve& sieve) {\n    reinsirk::detail::sparse_integer_transform<false>(f, sieve);\n}\n#endif\n\n#ifndef SIRKIT_SPARSE_FAST_INTEGER_MOEBIUS_DEFINED\n#define SIRKIT_SPARSE_FAST_INTEGER_MOEBIUS_DEFINED\n// 正で一意なkeyの全約数を含むfをkey昇順にし、倍数和の逆変換を実行。key<=sieve.max_value()、Valは-=対応。O((m+r)log(m+1))時間、O(m+r)補助領域。\ntemplate <std::integral Int, class Val>\nvoid sparse_multiple_mobius_transform(std::vector<std::pair<Int, Val>>& f,\n                                 const IntegerSieve& sieve) {\n    reinsirk::detail::sparse_integer_transform<true>(f, sieve);\n}\n#endif\n",
+  "derivation": [
+    "1..mのすべての正の整数を含めば正・一意・全約数の閉包が成立する。端点と内部keyの照合でこの条件を確定する。",
+    "prefix伝播は各素数pについてq*pからqへ加減算する。zetaはq降順、mobiusはq昇順で、既存の位置配列の密経路と同じ演算順を保つ。",
+    "未参照の篩状態を検査しない前提、generic値の所有権と演算例外、signed途中範囲/unsigned幅剰余の前提を保つ。"
+  ],
+  "parent_integer_snapshot": "NT-only full ae358fb...にあるSieve/IntegerTransform/IntegerConvolution/gcd_lcm componentのhashを変更せず、full全体のSHA更新はSparseだけによるもの。親の過去測定を現版ACへ書き換えない。",
+  "verify_problem": "https://judge.yosupo.jp/problem/gcd_convolution",
+  "online_status": "未提出"
+}

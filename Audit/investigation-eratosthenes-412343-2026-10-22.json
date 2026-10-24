@@ -1,0 +1,1098 @@
+{
+  "date": "2026-10-22",
+  "library": "Math/Eratosthenes.cpp",
+  "current_source_sha256": "de16c4a5fb868f3e54e00752de02011df5d0dfa99755b87fb7110254e6252cab",
+  "unchanged": true,
+  "decision": "8連・16連消去は遅いため棄却。オンラインAC335msの4連版を維持する。main・共有入出力・ライブラリ・使用例・テスト本体は変更なし。",
+  "online_url": "https://judge.yosupo.jp/submission/412343",
+  "online_status": "AC",
+  "online_time_ms": 335,
+  "online_source_match": true,
+  "online_comparison": [
+    {
+      "case": "example_00",
+      "previous_ms": 1,
+      "current_ms": 0
+    },
+    {
+      "case": "1_00",
+      "previous_ms": 1,
+      "current_ms": 0
+    },
+    {
+      "case": "2_00",
+      "previous_ms": 1,
+      "current_ms": 1
+    },
+    {
+      "case": "499477801_00",
+      "previous_ms": 334,
+      "current_ms": 321
+    },
+    {
+      "case": "499999993_00",
+      "previous_ms": 325,
+      "current_ms": 322
+    },
+    {
+      "case": "max_00",
+      "previous_ms": 345,
+      "current_ms": 335
+    },
+    {
+      "case": "max_01",
+      "previous_ms": 335,
+      "current_ms": 335
+    },
+    {
+      "case": "ten_00",
+      "previous_ms": 79,
+      "current_ms": 80
+    },
+    {
+      "case": "ten_01",
+      "previous_ms": 16,
+      "current_ms": 16
+    },
+    {
+      "case": "ten_02",
+      "previous_ms": 2,
+      "current_ms": 2
+    }
+  ],
+  "environment": {
+    "cpu": "Intel Core i9-14900K",
+    "gcc": "g++ (GCC) 15.3.0",
+    "measurement_cpu": 14,
+    "shared_lock": "/tmp/atcoder_full_performance_20261018/benchmark.lock",
+    "flags": "GCC15.3 -O2 -std=c++23 -DSKIP_RUNTIME_CHECKS。nativeは-DEVAL -DONLINE_JUDGE -march=nativeを追加。オンラインGCC15.2/別CPUとは区別。"
+  },
+  "experiment": {
+    "summary": {
+      "headers": {
+        "baseline": {
+          "path": "/tmp/sirkit_sieve_412343_20261022/baseline.hpp",
+          "sha256": "de16c4a5fb868f3e54e00752de02011df5d0dfa99755b87fb7110254e6252cab"
+        },
+        "control": {
+          "path": "/tmp/sirkit_sieve_412343_20261022/baseline.hpp",
+          "sha256": "de16c4a5fb868f3e54e00752de02011df5d0dfa99755b87fb7110254e6252cab"
+        },
+        "unroll8": {
+          "path": "/tmp/sirkit_sieve_412343_20261022/strike/unroll8.hpp",
+          "sha256": "a4f09797b670f5b55d4b108b8d4c8212a0f178919cc2a629c676c8c6d44caec2"
+        },
+        "unroll16": {
+          "path": "/tmp/sirkit_sieve_412343_20261022/strike/unroll16.hpp",
+          "sha256": "e226692c7ef50b00a24a8b51091dad315b03db651ed4e56991f071ed0c8cfe1c"
+        }
+      },
+      "builds": [
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_plain_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_plain_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/strike/unroll8.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_plain_unroll8"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/strike/unroll16.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_plain_unroll16"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_native_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_native_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/strike/unroll8.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_native_unroll8"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/strike/unroll16.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_native_unroll16"
+        ]
+      ],
+      "results": {
+        "gcc_plain": {
+          "262144": {
+            "median_ns": {
+              "baseline": 23252.63,
+              "control": 23241.04,
+              "unroll8": 24612.28,
+              "unroll16": 25087.5
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9995015617588204,
+              "unroll8": 1.0584729555323418,
+              "unroll16": 1.0789102135973436
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 51409.68,
+              "control": 51365.65,
+              "unroll8": 54508.66,
+              "unroll16": 55719.71
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9991435465071947,
+              "unroll8": 1.060280087329857,
+              "unroll16": 1.083836934989675
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 107867.49,
+              "control": 107831.31,
+              "unroll8": 113888.68,
+              "unroll16": 116651.49
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.999664588468685,
+              "unroll8": 1.0558202476019418,
+              "unroll16": 1.0814332474038286
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1414509.7,
+              "control": 1411548.4,
+              "unroll8": 1492578.8,
+              "unroll16": 1520083.5
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9979064830732515,
+              "unroll8": 1.0551916328322104,
+              "unroll16": 1.074636320981044
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 18007556.5,
+              "control": 17887772.0,
+              "unroll8": 18906363.0,
+              "unroll16": 19107419.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9933480980609446,
+              "unroll8": 1.0499127407985642,
+              "unroll16": 1.0610778314092753
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 106079772.0,
+              "control": 105965159.0,
+              "unroll8": 111864526.0,
+              "unroll16": 112462620.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9989195583866828,
+              "unroll8": 1.0545321119279931,
+              "unroll16": 1.0601702650718368
+            }
+          }
+        },
+        "gcc_native": {
+          "262144": {
+            "median_ns": {
+              "baseline": 18215.8,
+              "control": 18142.99,
+              "unroll8": 18888.83,
+              "unroll16": 20805.85
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9960029205415081,
+              "unroll8": 1.0369475949450477,
+              "unroll16": 1.1421870024923417
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 39752.47,
+              "control": 39850.51,
+              "unroll8": 41805.86,
+              "unroll16": 46135.56
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0024662618448614,
+              "unroll8": 1.051654400342922,
+              "unroll16": 1.1605709028898077
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 83380.58,
+              "control": 83257.54,
+              "unroll8": 87870.94,
+              "unroll16": 96857.79
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9985243566307646,
+              "unroll8": 1.0538537870568903,
+              "unroll16": 1.161634879488725
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1092992.1,
+              "control": 1094994.2,
+              "unroll8": 1158755.4,
+              "unroll16": 1274081.6
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0018317607236136,
+              "unroll8": 1.0601681384522357,
+              "unroll16": 1.1656823503115896
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 14239375.5,
+              "control": 14090938.0,
+              "unroll8": 15023635.5,
+              "unroll16": 16358372.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9895755610911448,
+              "unroll8": 1.0550768536162278,
+              "unroll16": 1.1488124602093681
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 84814743.0,
+              "control": 84704675.0,
+              "unroll8": 89035540.0,
+              "unroll16": 96876108.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9987022539230002,
+              "unroll8": 1.0497648975956928,
+              "unroll16": 1.1422083540358072
+            }
+          }
+        }
+      }
+    },
+    "raw": {
+      "gcc_plain": {
+        "baseline": {
+          "262144": [
+            23252.63,
+            22343.27,
+            23203.66,
+            23340.19,
+            23280.59
+          ],
+          "524288": [
+            51384.61,
+            51083.66,
+            51409.68,
+            51529.58,
+            51609.35
+          ],
+          "1000000": [
+            107867.49,
+            107638.73,
+            107788.05,
+            107895.81,
+            107993.37
+          ],
+          "10000000": [
+            1418113.0,
+            1414509.7,
+            1413630.3,
+            1417588.3,
+            1412852.8
+          ],
+          "100000000": [
+            18151601.0,
+            17925875.5,
+            18193378.0,
+            17894042.5,
+            18007556.5
+          ],
+          "500000000": [
+            107321618.0,
+            106022239.0,
+            105709881.0,
+            106079772.0,
+            106382432.0
+          ]
+        },
+        "control": {
+          "262144": [
+            23241.04,
+            23190.46,
+            23295.65,
+            23213.28,
+            23294.32
+          ],
+          "524288": [
+            51541.48,
+            50072.4,
+            51365.65,
+            51414.35,
+            51344.4
+          ],
+          "1000000": [
+            108461.57,
+            106534.85,
+            107831.31,
+            107672.29,
+            108045.67
+          ],
+          "10000000": [
+            1411432.7,
+            1379666.3,
+            1411548.4,
+            1411960.9,
+            1412025.7
+          ],
+          "100000000": [
+            17871115.0,
+            18093733.0,
+            18013658.0,
+            17844853.0,
+            17887772.0
+          ],
+          "500000000": [
+            106752151.0,
+            107309851.0,
+            105965159.0,
+            105105085.0,
+            105585697.0
+          ]
+        },
+        "unroll8": {
+          "262144": [
+            24563.44,
+            24142.62,
+            24721.31,
+            24612.28,
+            24637.19
+          ],
+          "524288": [
+            54508.66,
+            53753.09,
+            54636.82,
+            54491.06,
+            54921.3
+          ],
+          "1000000": [
+            115008.45,
+            110578.77,
+            114168.75,
+            113693.04,
+            113888.68
+          ],
+          "10000000": [
+            1490572.2,
+            1476801.7,
+            1492578.8,
+            1494498.9,
+            1496349.4
+          ],
+          "100000000": [
+            18924573.5,
+            18906363.0,
+            19126784.5,
+            18846931.5,
+            18884391.5
+          ],
+          "500000000": [
+            112830181.0,
+            111864526.0,
+            113035196.0,
+            111837651.0,
+            111838721.0
+          ]
+        },
+        "unroll16": {
+          "262144": [
+            25191.42,
+            24511.82,
+            25149.83,
+            25087.5,
+            25020.68
+          ],
+          "524288": [
+            55593.47,
+            54122.4,
+            55739.16,
+            55955.19,
+            55719.71
+          ],
+          "1000000": [
+            116476.95,
+            112698.43,
+            116651.49,
+            116780.92,
+            116722.27
+          ],
+          "10000000": [
+            1524974.5,
+            1506434.8,
+            1520083.5,
+            1523254.3,
+            1518461.9
+          ],
+          "100000000": [
+            19063325.0,
+            19107419.0,
+            19112884.5,
+            19418421.0,
+            19052797.0
+          ],
+          "500000000": [
+            112304198.0,
+            112245505.0,
+            112537748.0,
+            113338385.0,
+            112462620.0
+          ]
+        }
+      },
+      "gcc_native": {
+        "baseline": {
+          "262144": [
+            18132.56,
+            18228.9,
+            18215.8,
+            18235.22,
+            18108.81
+          ],
+          "524288": [
+            39710.09,
+            39886.87,
+            40053.34,
+            39752.47,
+            39706.76
+          ],
+          "1000000": [
+            83380.58,
+            83620.84,
+            83238.06,
+            83281.95,
+            83431.45
+          ],
+          "10000000": [
+            1092357.1,
+            1093504.8,
+            1092440.5,
+            1092992.1,
+            1101884.3
+          ],
+          "100000000": [
+            14239375.5,
+            15725756.0,
+            14040162.0,
+            14157132.5,
+            14356826.5
+          ],
+          "500000000": [
+            86450890.0,
+            84438613.0,
+            84064040.0,
+            84814743.0,
+            85490546.0
+          ]
+        },
+        "control": {
+          "262144": [
+            18142.99,
+            18155.62,
+            18131.62,
+            18134.38,
+            18148.16
+          ],
+          "524288": [
+            39673.14,
+            40220.73,
+            39736.95,
+            39920.54,
+            39850.51
+          ],
+          "1000000": [
+            84087.74,
+            83257.54,
+            83163.98,
+            83129.34,
+            83309.85
+          ],
+          "10000000": [
+            1094994.2,
+            1125880.5,
+            1095481.8,
+            1091040.3,
+            1094388.1
+          ],
+          "100000000": [
+            14074325.0,
+            14338778.5,
+            14090938.0,
+            14338379.0,
+            14073521.0
+          ],
+          "500000000": [
+            84974840.0,
+            86072845.0,
+            84704675.0,
+            83869502.0,
+            84366456.0
+          ]
+        },
+        "unroll8": {
+          "262144": [
+            19129.2,
+            18888.83,
+            18849.29,
+            18854.79,
+            19102.78
+          ],
+          "524288": [
+            41726.28,
+            41697.74,
+            41847.35,
+            42007.69,
+            41805.86
+          ],
+          "1000000": [
+            87870.94,
+            112250.78,
+            87902.12,
+            87587.97,
+            87719.75
+          ],
+          "10000000": [
+            1158755.4,
+            1158960.0,
+            1157625.9,
+            1158316.0,
+            1164040.9
+          ],
+          "100000000": [
+            15038896.5,
+            14973890.5,
+            15023635.5,
+            15917992.0,
+            14854236.5
+          ],
+          "500000000": [
+            88996599.0,
+            118510662.0,
+            89685338.0,
+            88607973.0,
+            89035540.0
+          ]
+        },
+        "unroll16": {
+          "262144": [
+            20861.84,
+            20906.16,
+            20743.25,
+            20772.94,
+            20805.85
+          ],
+          "524288": [
+            45952.38,
+            46020.44,
+            46239.04,
+            46135.56,
+            46155.68
+          ],
+          "1000000": [
+            97220.08,
+            98511.13,
+            96626.63,
+            96857.79,
+            96790.33
+          ],
+          "10000000": [
+            1274381.8,
+            1271643.6,
+            1273624.3,
+            1275148.6,
+            1274081.6
+          ],
+          "100000000": [
+            16358372.0,
+            16419338.5,
+            16235666.0,
+            16427752.5,
+            16262282.5
+          ],
+          "500000000": [
+            96670329.0,
+            103666140.0,
+            96876108.0,
+            98765093.0,
+            96769084.0
+          ]
+        }
+      }
+    },
+    "decision": {
+      "candidate_selection": "none",
+      "decision": "4連の現行実装を維持。8連・16連はGCC plain/nativeの全点で低速。",
+      "baseline_sha256": "de16c4a5fb868f3e54e00752de02011df5d0dfa99755b87fb7110254e6252cab",
+      "headers": {
+        "baseline": {
+          "path": "/tmp/sirkit_sieve_412343_20261022/baseline.hpp",
+          "sha256": "de16c4a5fb868f3e54e00752de02011df5d0dfa99755b87fb7110254e6252cab"
+        },
+        "control": {
+          "path": "/tmp/sirkit_sieve_412343_20261022/baseline.hpp",
+          "sha256": "de16c4a5fb868f3e54e00752de02011df5d0dfa99755b87fb7110254e6252cab"
+        },
+        "unroll8": {
+          "path": "/tmp/sirkit_sieve_412343_20261022/strike/unroll8.hpp",
+          "sha256": "a4f09797b670f5b55d4b108b8d4c8212a0f178919cc2a629c676c8c6d44caec2"
+        },
+        "unroll16": {
+          "path": "/tmp/sirkit_sieve_412343_20261022/strike/unroll16.hpp",
+          "sha256": "e226692c7ef50b00a24a8b51091dad315b03db651ed4e56991f071ed0c8cfe1c"
+        }
+      },
+      "compiler": "g++ (GCC) 15.3.0",
+      "cpu": "Intel Core i9-14900K",
+      "method": "5回の順序交代、CPU14固定、共有flock、同一main/config。構築+prime_count+破棄を含む。",
+      "flags": [
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_plain_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_plain_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/strike/unroll8.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_plain_unroll8"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/strike/unroll16.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_plain_unroll16"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_native_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/baseline.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_native_control"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/strike/unroll8.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_native_unroll8"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-DEVAL",
+          "-DONLINE_JUDGE",
+          "-march=native",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DHEADER=\"/tmp/sirkit_sieve_412343_20261022/strike/unroll16.hpp\"",
+          "/tmp/sirkit_sieve_412343_20261022/strike/bench.cpp",
+          "-o",
+          "/tmp/sirkit_sieve_412343_20261022/strike/gcc_native_unroll16"
+        ]
+      ],
+      "results": {
+        "gcc_plain": {
+          "262144": {
+            "median_ns": {
+              "baseline": 23252.63,
+              "control": 23241.04,
+              "unroll8": 24612.28,
+              "unroll16": 25087.5
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9995015617588204,
+              "unroll8": 1.0584729555323418,
+              "unroll16": 1.0789102135973436
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 51409.68,
+              "control": 51365.65,
+              "unroll8": 54508.66,
+              "unroll16": 55719.71
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9991435465071947,
+              "unroll8": 1.060280087329857,
+              "unroll16": 1.083836934989675
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 107867.49,
+              "control": 107831.31,
+              "unroll8": 113888.68,
+              "unroll16": 116651.49
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.999664588468685,
+              "unroll8": 1.0558202476019418,
+              "unroll16": 1.0814332474038286
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1414509.7,
+              "control": 1411548.4,
+              "unroll8": 1492578.8,
+              "unroll16": 1520083.5
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9979064830732515,
+              "unroll8": 1.0551916328322104,
+              "unroll16": 1.074636320981044
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 18007556.5,
+              "control": 17887772.0,
+              "unroll8": 18906363.0,
+              "unroll16": 19107419.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9933480980609446,
+              "unroll8": 1.0499127407985642,
+              "unroll16": 1.0610778314092753
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 106079772.0,
+              "control": 105965159.0,
+              "unroll8": 111864526.0,
+              "unroll16": 112462620.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9989195583866828,
+              "unroll8": 1.0545321119279931,
+              "unroll16": 1.0601702650718368
+            }
+          }
+        },
+        "gcc_native": {
+          "262144": {
+            "median_ns": {
+              "baseline": 18215.8,
+              "control": 18142.99,
+              "unroll8": 18888.83,
+              "unroll16": 20805.85
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9960029205415081,
+              "unroll8": 1.0369475949450477,
+              "unroll16": 1.1421870024923417
+            }
+          },
+          "524288": {
+            "median_ns": {
+              "baseline": 39752.47,
+              "control": 39850.51,
+              "unroll8": 41805.86,
+              "unroll16": 46135.56
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0024662618448614,
+              "unroll8": 1.051654400342922,
+              "unroll16": 1.1605709028898077
+            }
+          },
+          "1000000": {
+            "median_ns": {
+              "baseline": 83380.58,
+              "control": 83257.54,
+              "unroll8": 87870.94,
+              "unroll16": 96857.79
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9985243566307646,
+              "unroll8": 1.0538537870568903,
+              "unroll16": 1.161634879488725
+            }
+          },
+          "10000000": {
+            "median_ns": {
+              "baseline": 1092992.1,
+              "control": 1094994.2,
+              "unroll8": 1158755.4,
+              "unroll16": 1274081.6
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 1.0018317607236136,
+              "unroll8": 1.0601681384522357,
+              "unroll16": 1.1656823503115896
+            }
+          },
+          "100000000": {
+            "median_ns": {
+              "baseline": 14239375.5,
+              "control": 14090938.0,
+              "unroll8": 15023635.5,
+              "unroll16": 16358372.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9895755610911448,
+              "unroll8": 1.0550768536162278,
+              "unroll16": 1.1488124602093681
+            }
+          },
+          "500000000": {
+            "median_ns": {
+              "baseline": 84814743.0,
+              "control": 84704675.0,
+              "unroll8": 89035540.0,
+              "unroll16": 96876108.0
+            },
+            "ratio": {
+              "baseline": 1.0,
+              "control": 0.9987022539230002,
+              "unroll8": 1.0497648975956928,
+              "unroll16": 1.1422083540358072
+            }
+          }
+        }
+      },
+      "integer_safety": "end<=2^63、step<=2^32-1、初期k=p*p/2<2^63。各まとめ消去後もk<end+stepを維持。幅16でもk+15*step/k+16*step<2^63+17*2^32<2^64なので演算はuint64_t内。最後の位置がend未満の場合だけ各flagsを消し、残りは従来の1個ずつのloopで処理する。",
+      "correctness": "測定時の全baseline/control/candidateのprime_count一致。棄却候補なので追加の本検証やClang追試は行わない。",
+      "production": "本体とテストソースは未編集。",
+      "raw_data": "results.json",
+      "script": "probe.py"
+    },
+    "method": "構築+prime_count+破棄。baseline/control（同一ソース）/8連/16連を5回順序交代し中央値を比較。全点の素数数一致。main/I/O変更の効果を含まない。",
+    "limits": "現行の性能を超える根拠が得られないためClang追試・棄却候補の広い機能検証は行わない。アルゴリズム全体の最適性や限界を証明したものではない。"
+  },
+  "current_verification": {
+    "evidence": "Audit/verify-eratosthenes-412339-2026-10-22.json",
+    "same_library_sha256": true,
+    "same_test_source_hashes": {
+      "Verify/current/tests/prime_sieve_simd_test.cpp": "0c8596b63a95db9dad71e67811a18954c6f498b2e0d0a1035d91499219c5c41b",
+      "Verify/current/tests/prime_sieve_allocation_test.cpp": "335071d892ef322acbd52fa0a4f71cc2d422ac1097345ff6a1978d3a5c9897ae"
+    },
+    "reuse": "前回の独立12構成24実行、native公式20出力、ASan/UBSan、確保失敗試験は現行と同一の本体SHAに対する記録。今回再実行した意味に書き換えない。"
+  },
+  "frozen_main_io": {
+    "Math/Eratosthenes.cpp": "de16c4a5fb868f3e54e00752de02011df5d0dfa99755b87fb7110254e6252cab",
+    "Verify/current/drivers/eratosthenes_main.cpp": "3a64febf817b342de8c892a7abbff079d5aaccdd959bd472a5f95843ca523581",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "generation": {
+    "judge_status": "AC",
+    "submission_sha256": "7710d9255ec27a20cbde6daeac81f7a086daf271577b0a7f58273fec66a838e6",
+    "source_hashes": {
+      "Math/Eratosthenes.cpp": "de16c4a5fb868f3e54e00752de02011df5d0dfa99755b87fb7110254e6252cab"
+    },
+    "driver_sha256": "3a64febf817b342de8c892a7abbff079d5aaccdd959bd472a5f95843ca523581",
+    "io_source_hashes": {
+      "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+    }
+  },
+  "reproduction": {
+    "bench.cpp": "#include HEADER\n#include <chrono>\n#include <cstdio>\n#include <cstdint>\n#include <cstdlib>\nint main(int argc,char**argv){\n const std::uint64_t n=std::strtoull(argv[1],nullptr,10);const int mode=std::atoi(argv[2]);const int reps=std::atoi(argv[3]);\n std::uint64_t sum=0;const auto start=std::chrono::steady_clock::now();\n for(int r=0;r<reps;++r){PrimeSieve sieve(n);if(mode==0)sum+=sieve.prime_count();else{const auto p=sieve.primes();sum+=p.size()+(p.empty()?0:p.back());}}\n const auto ns=std::chrono::duration<double,std::nano>(std::chrono::steady_clock::now()-start).count()/reps;\n std::printf(\"%.6f %llu\\n\",ns,static_cast<unsigned long long>(sum));\n}\n",
+    "probe.py": "from pathlib import Path\nimport subprocess,json,fcntl,statistics,hashlib\np=Path(__file__).parent;headers={'baseline':p.parent/'baseline.hpp','control':p.parent/'baseline.hpp','unroll8':p/'unroll8.hpp','unroll16':p/'unroll16.hpp'};configs={'gcc_plain':['g++','-O2'],'gcc_native':['g++','-O2','-DEVAL','-DONLINE_JUDGE','-march=native']};variants=list(headers);builds=[]\nfor c,flags in configs.items():\n for v,h in headers.items():\n  cmd=['taskset','-c','6',*flags,'-std=c++23','-DSKIP_RUNTIME_CHECKS','-DHEADER=\"'+str(h)+'\"',str(p/'bench.cpp'),'-o',str(p/(c+'_'+v))];r=subprocess.run(cmd,capture_output=True,text=True);assert r.returncode==0,r.stderr;builds.append(cmd)\nprint('compiled',flush=True)\ncases=[(262144,100),(524288,100),(1000000,100),(10000000,10),(100000000,2),(500000000,1)];data={c:{v:{str(n):[]for n,r in cases}for v in variants}for c in configs}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for rep in range(5):\n  for c in configs:\n   for n,reps in cases:\n    shift=rep%len(variants);counts=[]\n    for v in variants[shift:]+variants[:shift]:\n     out=subprocess.check_output(['taskset','-c','14',str(p/(c+'_'+v)),str(n),'0',str(reps)],text=True).split();data[c][v][str(n)].append(float(out[0]));counts.append(out[1])\n    assert len(set(counts))==1,(c,n,counts)\n  print('round',rep,flush=True)\nsummary={c:{str(n):{'median_ns':{v:statistics.median(data[c][v][str(n)])for v in variants}}for n,r in cases}for c in configs}\nfor c in configs:\n for n,r in cases:\n  m=summary[c][str(n)]['median_ns'];summary[c][str(n)]['ratio']={v:m[v]/m['baseline']for v in variants}\n(p/'results.json').write_text(json.dumps(data,indent=2));(p/'summary.json').write_text(json.dumps({'headers':{v:{'path':str(h),'sha256':hashlib.sha256(h.read_bytes()).hexdigest()}for v,h in headers.items()},'builds':builds,'results':summary},indent=2));print(json.dumps(summary,indent=2))\n",
+    "unroll8.hpp": "// SPDX-License-Identifier: CC0-1.0\n\n#include <algorithm>\n#include <array>\n#include <bit>\n#include <cstddef>\n#include <cstdint>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n#include <immintrin.h>\n#endif\n\n#ifndef SIRKIT_PRIME_SIEVE_POPCOUNT_DEFINED\n#define SIRKIT_PRIME_SIEVE_POPCOUNT_DEFINED\nnamespace reinsirk::detail {\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n// 内部用。32語単位で集計し、残りを4語・1語ずつ処理する。\n[[gnu::target(\"avx2\"), gnu::noinline]] inline std::uint64_t popcount_words_avx2(\n    const std::uint64_t* words, std::size_t count) noexcept {\n    const auto table = _mm256_setr_epi8(\n        0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4,\n        0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4);\n    const auto mask = _mm256_set1_epi8(15);\n    const auto zero = _mm256_setzero_si256();\n    auto sum = zero;\n    std::size_t i = 0;\n    for (; count - i >= 32; i += 32) {\n        auto bytes = zero;\n        for (std::size_t j = 0; j < 32; j += 4) {\n            const auto value = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(words + i + j));\n            const auto low = _mm256_and_si256(value, mask);\n            const auto high = _mm256_and_si256(_mm256_srli_epi16(value, 4), mask);\n            const auto bits = _mm256_add_epi8(_mm256_shuffle_epi8(table, low),\n                                             _mm256_shuffle_epi8(table, high));\n            bytes = _mm256_add_epi8(bytes, bits);\n        }\n        sum = _mm256_add_epi64(sum, _mm256_sad_epu8(bytes, zero));\n    }\n    for (; count - i >= 4; i += 4) {\n        const auto value = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(words + i));\n        const auto low = _mm256_and_si256(value, mask);\n        const auto high = _mm256_and_si256(_mm256_srli_epi16(value, 4), mask);\n        const auto bits = _mm256_add_epi8(_mm256_shuffle_epi8(table, low),\n                                         _mm256_shuffle_epi8(table, high));\n        sum = _mm256_add_epi64(sum, _mm256_sad_epu8(bits, zero));\n    }\n    alignas(32) std::uint64_t lanes[4];\n    _mm256_store_si256(reinterpret_cast<__m256i*>(lanes), sum);\n    std::uint64_t result = lanes[0] + lanes[1] + lanes[2] + lanes[3];\n    for (; i < count; ++i) result += std::popcount(words[i]);\n    return result;\n}\n#endif\n} // namespace reinsirk::detail\n#endif\n\n\n#ifndef SIRKIT_PRIME_SIEVE_PATTERN_DEFINED\n#define SIRKIT_PRIME_SIEVE_PATTERN_DEFINED\nnamespace reinsirk::detail {\ninline constexpr auto sieve_pattern = [] {\n    std::array<std::uint64_t, 1155> values{};\n    for (std::size_t word = 0; word < values.size(); ++word)\n        for (unsigned bit = 0; bit < 64; ++bit) {\n            const auto n = (word * 64 + bit) * 2 + 1;\n            if (n % 3 != 0 && n % 5 != 0 && n % 7 != 0 && n % 11 != 0)\n                values[word] |= std::uint64_t{1} << bit;\n        }\n    return values;\n}();\ninline void fill_sieve_pattern(std::uint64_t* dest, std::size_t count) noexcept {\n    constexpr std::size_t period = sieve_pattern.size();\n    while (count >= period) {\n        std::copy(sieve_pattern.begin(), sieve_pattern.end(), dest);\n        dest += period; count -= period;\n    }\n    std::copy_n(sieve_pattern.begin(), count, dest);\n}\n}\n#endif\n#ifndef SIRKIT_PRIME_SIEVE_DEFINED\n#define SIRKIT_PRIME_SIEVE_DEFINED\n\n// PrimeSieve(limit=0): [0,limit]の素数表を構築する。O(limit log log limit)、奇数1個につき1bit。\n// コピーは独立した表を持ち、移動元はlimit=0の空の素数表として再利用できる。\n// is_prime(n): 0<=n<=limitの素数判定をO(1)で返す。\n// limit(): 構築時の上限を返す。O(1)。\n// prime_count(): 上限以下の素数の個数を返す。O(limit/64)。\n// primes(): 上限以下の素数を昇順のvectorで返す。O(limit/64+素数数)。\n// append_to(ans): 上限以下の素数を昇順でansの末尾に追加する。O(limit/64+素数数)、償却。\n// for_each_prime(f): 昇順にf(uint64_tの素数)を呼ぶ。O(limit/64+素数数)、呼出し中に表を変更しない。\nclass PrimeSieve {\npublic:\n    explicit PrimeSieve(std::uint64_t limit = 0) : limit_(limit) {\n        if (limit < 128) {\n            if (limit != 0) {\n                // 127以下の奇合成数は3・5・7・11のいずれかの倍数。\n                constexpr auto primes = (reinsirk::detail::sieve_pattern[0] |\n                    (std::uint64_t{1} << 1) | (std::uint64_t{1} << 2) |\n                    (std::uint64_t{1} << 3) | (std::uint64_t{1} << 5)) & ~std::uint64_t{1};\n                const auto bits = static_cast<unsigned>((limit + 1) / 2);\n                flags_.push_back(primes & (~std::uint64_t{0} >> (64 - bits)));\n            }\n            return;\n        }\n        const std::uint64_t odds = limit / 2 + limit % 2;\n        const std::uint64_t words = odds / 64 + (odds % 64 != 0);\n        if (words > flags_.max_size())\n            throw std::length_error(\"PrimeSieve: limit exceeds capacity\");\n        flags_.assign(static_cast<std::size_t>(words), ~std::uint64_t{0});\n        build_large(odds);\n    }\n\n    PrimeSieve(const PrimeSieve&) = default;\n    PrimeSieve& operator=(const PrimeSieve& other) {\n        flags_ = other.flags_;\n        limit_ = other.limit_;\n        return *this;\n    }\n    PrimeSieve(PrimeSieve&& other) noexcept : limit_(std::exchange(other.limit_, 0)) {\n        flags_.swap(other.flags_);\n    }\n    PrimeSieve& operator=(PrimeSieve&& other) noexcept {\n        if (this != &other) {\n            PrimeSieve next(std::move(other));\n            std::swap(limit_, next.limit_);\n            flags_.swap(next.flags_);\n        }\n        return *this;\n    }\n\n    bool is_prime(std::uint64_t n) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (n > limit_) [[unlikely]]\n            throw std::out_of_range(\"PrimeSieve::is_prime: beyond limit\");\n#endif\n        if ((n & 1) == 0) return n == 2;\n        const std::uint64_t index = n / 2;\n        return (flags_[static_cast<std::size_t>(index / 64)] >> (index % 64) & 1) != 0;\n    }\n    std::uint64_t limit() const noexcept { return limit_; }\n    std::uint64_t prime_count() const noexcept {\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n#if !(defined(__clang__) && defined(__AVX2__))\n        if (limit_ >= 3969 && __builtin_cpu_supports(\"avx2\")) [[unlikely]]\n            return static_cast<std::uint64_t>(limit_ >= 2) +\n                   reinsirk::detail::popcount_words_avx2(flags_.data(), flags_.size());\n#endif\n#endif\n        std::uint64_t count = limit_ >= 2;\n        for (std::uint64_t word : flags_) count += std::popcount(word);\n        return count;\n    }\n#if defined(__clang__) && !defined(__AVX2__)\n    std::vector<std::uint64_t> primes() const {\n        std::vector<std::uint64_t> result;\n        if (limit_ < 2) return result;\n        if (limit_ >= 16) {\n            const auto count = prime_count();\n            if (count > result.max_size())\n                throw std::length_error(\"PrimeSieve::primes: capacity exceeded\");\n            result.reserve(static_cast<std::size_t>(count));\n        }\n        append_to(result);\n        return result;\n    }\n#else\n    std::vector<std::uint64_t> primes() const {\n        std::vector<std::uint64_t> result;\n        if (limit_ < 2) return result;\n        if (limit_ >= 16384) {\n            const auto count = prime_count();\n            if (count > result.max_size())\n                throw std::length_error(\"PrimeSieve::primes: capacity exceeded\");\n            result.reserve(static_cast<std::size_t>(count));\n        } else if (limit_ >= 16) {\n            return small_primes();\n        }\n        append_to(result);\n        return result;\n    }\n#endif\n#if defined(__clang__)\n    [[gnu::always_inline]]\n#endif\n    void append_to(std::vector<std::uint64_t>& ans) const {\n        if (limit_ >= 2) ans.push_back(2);\n        for (std::size_t i = 0; i < flags_.size(); ++i) {\n            std::uint64_t word = flags_[i];\n            while (word != 0) {\n                const unsigned bit = std::countr_zero(word);\n                ans.push_back((static_cast<std::uint64_t>(i) * 64 + bit) * 2 + 1);\n                word &= word - 1;\n            }\n        }\n    }\n\n    template <class Function>\n    void for_each_prime(Function&& function) const {\n        if (limit_ >= 2) function(std::uint64_t{2});\n        for (std::size_t i = 0; i < flags_.size(); ++i) {\n            std::uint64_t word = flags_[i];\n            while (word != 0) {\n                const unsigned bit = std::countr_zero(word);\n                function((static_cast<std::uint64_t>(i) * 64 + bit) * 2 + 1);\n                word &= word - 1;\n            }\n        }\n    }\n\nprivate:\n#if !defined(__clang__) || defined(__AVX2__)\n#if defined(__GNUC__) || defined(__clang__)\n    [[gnu::noinline]]\n#endif\n    std::vector<std::uint64_t> small_primes() const {\n        std::vector<std::uint64_t> result;\n        const auto count = prime_count();\n        if (count > result.max_size())\n            throw std::length_error(\"PrimeSieve::primes: capacity exceeded\");\n        result.reserve(static_cast<std::size_t>(count));\n        append_to(result);\n        return result;\n    }\n#endif\n\n    void build_large(std::uint64_t odds) {\n        reinsirk::detail::fill_sieve_pattern(flags_.data(), flags_.size());\n        flags_[0] |= (std::uint64_t{1} << 1) | (std::uint64_t{1} << 2) |\n                     (std::uint64_t{1} << 3) | (std::uint64_t{1} << 5);\n        flags_[0] &= ~std::uint64_t{1};\n        if (odds % 64 != 0)\n            flags_.back() &= (std::uint64_t{1} << (odds % 64)) - 1;\n        if (limit_ >= 262144) {\n            build_blocked(odds);\n            return;\n        }\n        for (std::uint64_t p = 13; p <= limit_ / p; p += 2) {\n            const auto index = p / 2;\n            if (((flags_[index / 64] >> (index % 64)) & 1) == 0) continue;\n            for (auto k = p * p / 2; k < odds; k += p)\n                flags_[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n        }\n    }\n\n    // 小素数の倍数をp語周期のANDで消す。素数自身は呼出側で復元する。\n    template <unsigned Prime>\n#if defined(__GNUC__) || defined(__clang__)\n    [[gnu::noinline]]\n#endif\n    static void mask_multiples(std::uint64_t* flags, std::uint64_t first_word,\n                               std::uint64_t word_count) noexcept {\n        static constexpr auto pattern = [] {\n            std::array<std::uint64_t, Prime> result{};\n            for (unsigned w = 0; w < Prime; ++w)\n                for (unsigned bit = 0; bit < 64; ++bit)\n                    if ((w * 128 + bit * 2 + 1) % Prime != 0)\n                        result[w] |= std::uint64_t{1} << bit;\n            return result;\n        }();\n        auto* dest = flags + first_word;\n        auto phase = first_word % Prime;\n        while (phase != 0 && word_count != 0) {\n            *dest++ &= pattern[phase];\n            --word_count;\n            if (++phase == Prime) phase = 0;\n        }\n        while (word_count >= Prime) {\n            for (unsigned j = 0; j < Prime; ++j) dest[j] &= pattern[j];\n            dest += Prime;\n            word_count -= Prime;\n        }\n        for (unsigned j = 0; j < word_count; ++j) dest[j] &= pattern[j];\n    }\n\n    void build_blocked(std::uint64_t odds) {\n        std::uint64_t root = std::uint64_t{1} << ((std::bit_width(limit_) + 1) / 2);\n        for (;;) {\n            const auto next = (root + limit_ / root) / 2;\n            if (next >= root) break;\n            root = next;\n        }\n        const std::uint64_t base_odds = root / 2 + root % 2;\n        auto* const flags = flags_.data();\n        for (std::uint64_t p = 13; p <= root / p; p += 2) {\n            const auto index = p / 2;\n            if (((flags[index / 64] >> (index % 64)) & 1) == 0) continue;\n            for (auto k = p * p / 2; k < base_odds; k += p)\n                flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n        }\n        struct Strike { std::uint64_t prime, next; };\n        std::vector<Strike> strikes;\n        for (std::uint64_t p = 37; p <= root; p += 2) {\n            const auto index = p / 2;\n            if ((flags[index / 64] >> (index % 64)) & 1)\n                strikes.push_back({p, p * p / 2});\n        }\n        const std::uint64_t block_bits = std::max(std::uint64_t{262144},\n            (root + 63) & ~std::uint64_t{63});\n        std::size_t active = 0;\n        for (std::uint64_t begin = 0; begin < odds; begin += block_bits) {\n            const auto end = std::min(odds, begin + block_bits);\n            const auto first_word = begin / 64;\n            const auto word_count = (end + 63) / 64 - first_word;\n            mask_multiples<13>(flags, first_word, word_count);\n            mask_multiples<17>(flags, first_word, word_count);\n            mask_multiples<19>(flags, first_word, word_count);\n            mask_multiples<23>(flags, first_word, word_count);\n            mask_multiples<29>(flags, first_word, word_count);\n            mask_multiples<31>(flags, first_word, word_count);\n            while (active < strikes.size() && strikes[active].next < end) ++active;\n            for (std::size_t i = 0; i < active; ++i) {\n                auto k = strikes[i].next;\n                const auto step = strikes[i].prime;\n                for (; k + step * 7 < end; k += step * 8) {\n                    flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n                    flags[(k + step * 1) / 64] &= ~(std::uint64_t{1} << ((k + step * 1) % 64));\n                    flags[(k + step * 2) / 64] &= ~(std::uint64_t{1} << ((k + step * 2) % 64));\n                    flags[(k + step * 3) / 64] &= ~(std::uint64_t{1} << ((k + step * 3) % 64));\n                    flags[(k + step * 4) / 64] &= ~(std::uint64_t{1} << ((k + step * 4) % 64));\n                    flags[(k + step * 5) / 64] &= ~(std::uint64_t{1} << ((k + step * 5) % 64));\n                    flags[(k + step * 6) / 64] &= ~(std::uint64_t{1} << ((k + step * 6) % 64));\n                    flags[(k + step * 7) / 64] &= ~(std::uint64_t{1} << ((k + step * 7) % 64));\n                }\n                for (; k < end; k += step)\n                    flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n                strikes[i].next = k;\n            }\n        }\n        flags[0] |= (std::uint64_t{1} << 6) | (std::uint64_t{1} << 8) |\n                    (std::uint64_t{1} << 9) | (std::uint64_t{1} << 11) |\n                    (std::uint64_t{1} << 14) | (std::uint64_t{1} << 15);\n    }\n\n    std::uint64_t limit_;\n    std::vector<std::uint64_t> flags_;\n};\n#endif\n\n#ifndef SIRKIT_ERATOSTHENES_DEFINED\n#define SIRKIT_ERATOSTHENES_DEFINED\n// eratosthenes(limit, ans): limit以下の素数を昇順でansの末尾へ追加する。O(limit log log limit)。\n// eratosthenes(limit): limit以下の素数を昇順のvectorで返す。同じ計算量。\ninline void eratosthenes(std::uint64_t limit, std::vector<std::uint64_t>& ans) {\n    PrimeSieve(limit).append_to(ans);\n}\ninline std::vector<std::uint64_t> eratosthenes(std::uint64_t limit) {\n    return PrimeSieve(limit).primes();\n}\n#endif\n",
+    "unroll16.hpp": "// SPDX-License-Identifier: CC0-1.0\n\n#include <algorithm>\n#include <array>\n#include <bit>\n#include <cstddef>\n#include <cstdint>\n#include <stdexcept>\n#include <utility>\n#include <vector>\n\n\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n#include <immintrin.h>\n#endif\n\n#ifndef SIRKIT_PRIME_SIEVE_POPCOUNT_DEFINED\n#define SIRKIT_PRIME_SIEVE_POPCOUNT_DEFINED\nnamespace reinsirk::detail {\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n// 内部用。32語単位で集計し、残りを4語・1語ずつ処理する。\n[[gnu::target(\"avx2\"), gnu::noinline]] inline std::uint64_t popcount_words_avx2(\n    const std::uint64_t* words, std::size_t count) noexcept {\n    const auto table = _mm256_setr_epi8(\n        0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4,\n        0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4);\n    const auto mask = _mm256_set1_epi8(15);\n    const auto zero = _mm256_setzero_si256();\n    auto sum = zero;\n    std::size_t i = 0;\n    for (; count - i >= 32; i += 32) {\n        auto bytes = zero;\n        for (std::size_t j = 0; j < 32; j += 4) {\n            const auto value = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(words + i + j));\n            const auto low = _mm256_and_si256(value, mask);\n            const auto high = _mm256_and_si256(_mm256_srli_epi16(value, 4), mask);\n            const auto bits = _mm256_add_epi8(_mm256_shuffle_epi8(table, low),\n                                             _mm256_shuffle_epi8(table, high));\n            bytes = _mm256_add_epi8(bytes, bits);\n        }\n        sum = _mm256_add_epi64(sum, _mm256_sad_epu8(bytes, zero));\n    }\n    for (; count - i >= 4; i += 4) {\n        const auto value = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(words + i));\n        const auto low = _mm256_and_si256(value, mask);\n        const auto high = _mm256_and_si256(_mm256_srli_epi16(value, 4), mask);\n        const auto bits = _mm256_add_epi8(_mm256_shuffle_epi8(table, low),\n                                         _mm256_shuffle_epi8(table, high));\n        sum = _mm256_add_epi64(sum, _mm256_sad_epu8(bits, zero));\n    }\n    alignas(32) std::uint64_t lanes[4];\n    _mm256_store_si256(reinterpret_cast<__m256i*>(lanes), sum);\n    std::uint64_t result = lanes[0] + lanes[1] + lanes[2] + lanes[3];\n    for (; i < count; ++i) result += std::popcount(words[i]);\n    return result;\n}\n#endif\n} // namespace reinsirk::detail\n#endif\n\n\n#ifndef SIRKIT_PRIME_SIEVE_PATTERN_DEFINED\n#define SIRKIT_PRIME_SIEVE_PATTERN_DEFINED\nnamespace reinsirk::detail {\ninline constexpr auto sieve_pattern = [] {\n    std::array<std::uint64_t, 1155> values{};\n    for (std::size_t word = 0; word < values.size(); ++word)\n        for (unsigned bit = 0; bit < 64; ++bit) {\n            const auto n = (word * 64 + bit) * 2 + 1;\n            if (n % 3 != 0 && n % 5 != 0 && n % 7 != 0 && n % 11 != 0)\n                values[word] |= std::uint64_t{1} << bit;\n        }\n    return values;\n}();\ninline void fill_sieve_pattern(std::uint64_t* dest, std::size_t count) noexcept {\n    constexpr std::size_t period = sieve_pattern.size();\n    while (count >= period) {\n        std::copy(sieve_pattern.begin(), sieve_pattern.end(), dest);\n        dest += period; count -= period;\n    }\n    std::copy_n(sieve_pattern.begin(), count, dest);\n}\n}\n#endif\n#ifndef SIRKIT_PRIME_SIEVE_DEFINED\n#define SIRKIT_PRIME_SIEVE_DEFINED\n\n// PrimeSieve(limit=0): [0,limit]の素数表を構築する。O(limit log log limit)、奇数1個につき1bit。\n// コピーは独立した表を持ち、移動元はlimit=0の空の素数表として再利用できる。\n// is_prime(n): 0<=n<=limitの素数判定をO(1)で返す。\n// limit(): 構築時の上限を返す。O(1)。\n// prime_count(): 上限以下の素数の個数を返す。O(limit/64)。\n// primes(): 上限以下の素数を昇順のvectorで返す。O(limit/64+素数数)。\n// append_to(ans): 上限以下の素数を昇順でansの末尾に追加する。O(limit/64+素数数)、償却。\n// for_each_prime(f): 昇順にf(uint64_tの素数)を呼ぶ。O(limit/64+素数数)、呼出し中に表を変更しない。\nclass PrimeSieve {\npublic:\n    explicit PrimeSieve(std::uint64_t limit = 0) : limit_(limit) {\n        if (limit < 128) {\n            if (limit != 0) {\n                // 127以下の奇合成数は3・5・7・11のいずれかの倍数。\n                constexpr auto primes = (reinsirk::detail::sieve_pattern[0] |\n                    (std::uint64_t{1} << 1) | (std::uint64_t{1} << 2) |\n                    (std::uint64_t{1} << 3) | (std::uint64_t{1} << 5)) & ~std::uint64_t{1};\n                const auto bits = static_cast<unsigned>((limit + 1) / 2);\n                flags_.push_back(primes & (~std::uint64_t{0} >> (64 - bits)));\n            }\n            return;\n        }\n        const std::uint64_t odds = limit / 2 + limit % 2;\n        const std::uint64_t words = odds / 64 + (odds % 64 != 0);\n        if (words > flags_.max_size())\n            throw std::length_error(\"PrimeSieve: limit exceeds capacity\");\n        flags_.assign(static_cast<std::size_t>(words), ~std::uint64_t{0});\n        build_large(odds);\n    }\n\n    PrimeSieve(const PrimeSieve&) = default;\n    PrimeSieve& operator=(const PrimeSieve& other) {\n        flags_ = other.flags_;\n        limit_ = other.limit_;\n        return *this;\n    }\n    PrimeSieve(PrimeSieve&& other) noexcept : limit_(std::exchange(other.limit_, 0)) {\n        flags_.swap(other.flags_);\n    }\n    PrimeSieve& operator=(PrimeSieve&& other) noexcept {\n        if (this != &other) {\n            PrimeSieve next(std::move(other));\n            std::swap(limit_, next.limit_);\n            flags_.swap(next.flags_);\n        }\n        return *this;\n    }\n\n    bool is_prime(std::uint64_t n) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (n > limit_) [[unlikely]]\n            throw std::out_of_range(\"PrimeSieve::is_prime: beyond limit\");\n#endif\n        if ((n & 1) == 0) return n == 2;\n        const std::uint64_t index = n / 2;\n        return (flags_[static_cast<std::size_t>(index / 64)] >> (index % 64) & 1) != 0;\n    }\n    std::uint64_t limit() const noexcept { return limit_; }\n    std::uint64_t prime_count() const noexcept {\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n#if !(defined(__clang__) && defined(__AVX2__))\n        if (limit_ >= 3969 && __builtin_cpu_supports(\"avx2\")) [[unlikely]]\n            return static_cast<std::uint64_t>(limit_ >= 2) +\n                   reinsirk::detail::popcount_words_avx2(flags_.data(), flags_.size());\n#endif\n#endif\n        std::uint64_t count = limit_ >= 2;\n        for (std::uint64_t word : flags_) count += std::popcount(word);\n        return count;\n    }\n#if defined(__clang__) && !defined(__AVX2__)\n    std::vector<std::uint64_t> primes() const {\n        std::vector<std::uint64_t> result;\n        if (limit_ < 2) return result;\n        if (limit_ >= 16) {\n            const auto count = prime_count();\n            if (count > result.max_size())\n                throw std::length_error(\"PrimeSieve::primes: capacity exceeded\");\n            result.reserve(static_cast<std::size_t>(count));\n        }\n        append_to(result);\n        return result;\n    }\n#else\n    std::vector<std::uint64_t> primes() const {\n        std::vector<std::uint64_t> result;\n        if (limit_ < 2) return result;\n        if (limit_ >= 16384) {\n            const auto count = prime_count();\n            if (count > result.max_size())\n                throw std::length_error(\"PrimeSieve::primes: capacity exceeded\");\n            result.reserve(static_cast<std::size_t>(count));\n        } else if (limit_ >= 16) {\n            return small_primes();\n        }\n        append_to(result);\n        return result;\n    }\n#endif\n#if defined(__clang__)\n    [[gnu::always_inline]]\n#endif\n    void append_to(std::vector<std::uint64_t>& ans) const {\n        if (limit_ >= 2) ans.push_back(2);\n        for (std::size_t i = 0; i < flags_.size(); ++i) {\n            std::uint64_t word = flags_[i];\n            while (word != 0) {\n                const unsigned bit = std::countr_zero(word);\n                ans.push_back((static_cast<std::uint64_t>(i) * 64 + bit) * 2 + 1);\n                word &= word - 1;\n            }\n        }\n    }\n\n    template <class Function>\n    void for_each_prime(Function&& function) const {\n        if (limit_ >= 2) function(std::uint64_t{2});\n        for (std::size_t i = 0; i < flags_.size(); ++i) {\n            std::uint64_t word = flags_[i];\n            while (word != 0) {\n                const unsigned bit = std::countr_zero(word);\n                function((static_cast<std::uint64_t>(i) * 64 + bit) * 2 + 1);\n                word &= word - 1;\n            }\n        }\n    }\n\nprivate:\n#if !defined(__clang__) || defined(__AVX2__)\n#if defined(__GNUC__) || defined(__clang__)\n    [[gnu::noinline]]\n#endif\n    std::vector<std::uint64_t> small_primes() const {\n        std::vector<std::uint64_t> result;\n        const auto count = prime_count();\n        if (count > result.max_size())\n            throw std::length_error(\"PrimeSieve::primes: capacity exceeded\");\n        result.reserve(static_cast<std::size_t>(count));\n        append_to(result);\n        return result;\n    }\n#endif\n\n    void build_large(std::uint64_t odds) {\n        reinsirk::detail::fill_sieve_pattern(flags_.data(), flags_.size());\n        flags_[0] |= (std::uint64_t{1} << 1) | (std::uint64_t{1} << 2) |\n                     (std::uint64_t{1} << 3) | (std::uint64_t{1} << 5);\n        flags_[0] &= ~std::uint64_t{1};\n        if (odds % 64 != 0)\n            flags_.back() &= (std::uint64_t{1} << (odds % 64)) - 1;\n        if (limit_ >= 262144) {\n            build_blocked(odds);\n            return;\n        }\n        for (std::uint64_t p = 13; p <= limit_ / p; p += 2) {\n            const auto index = p / 2;\n            if (((flags_[index / 64] >> (index % 64)) & 1) == 0) continue;\n            for (auto k = p * p / 2; k < odds; k += p)\n                flags_[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n        }\n    }\n\n    // 小素数の倍数をp語周期のANDで消す。素数自身は呼出側で復元する。\n    template <unsigned Prime>\n#if defined(__GNUC__) || defined(__clang__)\n    [[gnu::noinline]]\n#endif\n    static void mask_multiples(std::uint64_t* flags, std::uint64_t first_word,\n                               std::uint64_t word_count) noexcept {\n        static constexpr auto pattern = [] {\n            std::array<std::uint64_t, Prime> result{};\n            for (unsigned w = 0; w < Prime; ++w)\n                for (unsigned bit = 0; bit < 64; ++bit)\n                    if ((w * 128 + bit * 2 + 1) % Prime != 0)\n                        result[w] |= std::uint64_t{1} << bit;\n            return result;\n        }();\n        auto* dest = flags + first_word;\n        auto phase = first_word % Prime;\n        while (phase != 0 && word_count != 0) {\n            *dest++ &= pattern[phase];\n            --word_count;\n            if (++phase == Prime) phase = 0;\n        }\n        while (word_count >= Prime) {\n            for (unsigned j = 0; j < Prime; ++j) dest[j] &= pattern[j];\n            dest += Prime;\n            word_count -= Prime;\n        }\n        for (unsigned j = 0; j < word_count; ++j) dest[j] &= pattern[j];\n    }\n\n    void build_blocked(std::uint64_t odds) {\n        std::uint64_t root = std::uint64_t{1} << ((std::bit_width(limit_) + 1) / 2);\n        for (;;) {\n            const auto next = (root + limit_ / root) / 2;\n            if (next >= root) break;\n            root = next;\n        }\n        const std::uint64_t base_odds = root / 2 + root % 2;\n        auto* const flags = flags_.data();\n        for (std::uint64_t p = 13; p <= root / p; p += 2) {\n            const auto index = p / 2;\n            if (((flags[index / 64] >> (index % 64)) & 1) == 0) continue;\n            for (auto k = p * p / 2; k < base_odds; k += p)\n                flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n        }\n        struct Strike { std::uint64_t prime, next; };\n        std::vector<Strike> strikes;\n        for (std::uint64_t p = 37; p <= root; p += 2) {\n            const auto index = p / 2;\n            if ((flags[index / 64] >> (index % 64)) & 1)\n                strikes.push_back({p, p * p / 2});\n        }\n        const std::uint64_t block_bits = std::max(std::uint64_t{262144},\n            (root + 63) & ~std::uint64_t{63});\n        std::size_t active = 0;\n        for (std::uint64_t begin = 0; begin < odds; begin += block_bits) {\n            const auto end = std::min(odds, begin + block_bits);\n            const auto first_word = begin / 64;\n            const auto word_count = (end + 63) / 64 - first_word;\n            mask_multiples<13>(flags, first_word, word_count);\n            mask_multiples<17>(flags, first_word, word_count);\n            mask_multiples<19>(flags, first_word, word_count);\n            mask_multiples<23>(flags, first_word, word_count);\n            mask_multiples<29>(flags, first_word, word_count);\n            mask_multiples<31>(flags, first_word, word_count);\n            while (active < strikes.size() && strikes[active].next < end) ++active;\n            for (std::size_t i = 0; i < active; ++i) {\n                auto k = strikes[i].next;\n                const auto step = strikes[i].prime;\n                for (; k + step * 15 < end; k += step * 16) {\n                    flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n                    flags[(k + step * 1) / 64] &= ~(std::uint64_t{1} << ((k + step * 1) % 64));\n                    flags[(k + step * 2) / 64] &= ~(std::uint64_t{1} << ((k + step * 2) % 64));\n                    flags[(k + step * 3) / 64] &= ~(std::uint64_t{1} << ((k + step * 3) % 64));\n                    flags[(k + step * 4) / 64] &= ~(std::uint64_t{1} << ((k + step * 4) % 64));\n                    flags[(k + step * 5) / 64] &= ~(std::uint64_t{1} << ((k + step * 5) % 64));\n                    flags[(k + step * 6) / 64] &= ~(std::uint64_t{1} << ((k + step * 6) % 64));\n                    flags[(k + step * 7) / 64] &= ~(std::uint64_t{1} << ((k + step * 7) % 64));\n                    flags[(k + step * 8) / 64] &= ~(std::uint64_t{1} << ((k + step * 8) % 64));\n                    flags[(k + step * 9) / 64] &= ~(std::uint64_t{1} << ((k + step * 9) % 64));\n                    flags[(k + step * 10) / 64] &= ~(std::uint64_t{1} << ((k + step * 10) % 64));\n                    flags[(k + step * 11) / 64] &= ~(std::uint64_t{1} << ((k + step * 11) % 64));\n                    flags[(k + step * 12) / 64] &= ~(std::uint64_t{1} << ((k + step * 12) % 64));\n                    flags[(k + step * 13) / 64] &= ~(std::uint64_t{1} << ((k + step * 13) % 64));\n                    flags[(k + step * 14) / 64] &= ~(std::uint64_t{1} << ((k + step * 14) % 64));\n                    flags[(k + step * 15) / 64] &= ~(std::uint64_t{1} << ((k + step * 15) % 64));\n                }\n                for (; k < end; k += step)\n                    flags[k / 64] &= ~(std::uint64_t{1} << (k % 64));\n                strikes[i].next = k;\n            }\n        }\n        flags[0] |= (std::uint64_t{1} << 6) | (std::uint64_t{1} << 8) |\n                    (std::uint64_t{1} << 9) | (std::uint64_t{1} << 11) |\n                    (std::uint64_t{1} << 14) | (std::uint64_t{1} << 15);\n    }\n\n    std::uint64_t limit_;\n    std::vector<std::uint64_t> flags_;\n};\n#endif\n\n#ifndef SIRKIT_ERATOSTHENES_DEFINED\n#define SIRKIT_ERATOSTHENES_DEFINED\n// eratosthenes(limit, ans): limit以下の素数を昇順でansの末尾へ追加する。O(limit log log limit)。\n// eratosthenes(limit): limit以下の素数を昇順のvectorで返す。同じ計算量。\ninline void eratosthenes(std::uint64_t limit, std::vector<std::uint64_t>& ans) {\n    PrimeSieve(limit).append_to(ans);\n}\ninline std::vector<std::uint64_t> eratosthenes(std::uint64_t limit) {\n    return PrimeSieve(limit).primes();\n}\n#endif\n"
+  }
+}

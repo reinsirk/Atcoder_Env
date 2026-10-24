@@ -1,10 +1,17 @@
-// SPDX-License-Identifier: CC0-1.0
+// Library Codes are in: https://github.com/reinsirk/sirkit-cpp-library
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/template.md
+//
+// API一覧
+// [共有型・定数]
+// Graph: 無重み隣接リスト。Edge{to,w}/WGraph: 行先int・重みint64_tの隣接リスト。
+// INF: int64_t{1}<<60。型・定数はライブラリの共通ガードで共有する。
+// [補助関数]
+// chmin(a, b): b < a なら a を更新して true を返す。比較・代入各1回以下。
+// chmax(a, b): a < b なら a を更新して true を返す。比較・代入各1回以下。
+// pow64i(x, n): x^n mod 2^64 を O(log(n + 1)) で返す。0^0 は1。
+// is_mul_overflow(a, b): a*b が符号付き64ビット整数の範囲外なら true。O(1)。
 
-#include <cstdint>
-#include <iostream>
-#include <limits>
-#include <utility>
-#include <vector>
+#include <bits/stdc++.h>
 #include <atcoder/all>
 
 using namespace std;
@@ -24,7 +31,6 @@ using Graph = std::vector<std::vector<int>>;
 
 #ifndef SIRKIT_GRAPH_TYPES_DEFINED
 #define SIRKIT_GRAPH_TYPES_DEFINED
-// 有向辺。出発点は隣接リストの添字。
 struct Edge {
     int to;
     std::int64_t w;
@@ -36,30 +42,27 @@ using WGraph = std::vector<std::vector<Edge>>;
 #ifndef SIRKIT_CHMIN_DEFINED
 #define SIRKIT_CHMIN_DEFINED
 #define SIRKIT_TEMP_DEFINE_CHMIN
-// chmin(a, b): b < a なら a を更新して true を返す。比較・代入各1回以下。
 template <class T> constexpr bool chmin(T& a, T b);
 #endif
 
 #ifndef SIRKIT_CHMAX_DEFINED
 #define SIRKIT_CHMAX_DEFINED
 #define SIRKIT_TEMP_DEFINE_CHMAX
-// chmax(a, b): a < b なら a を更新して true を返す。比較・代入各1回以下。
 template <class T> constexpr bool chmax(T& a, T b);
 #endif
 
 #ifndef SIRKIT_POW64I_DEFINED
 #define SIRKIT_POW64I_DEFINED
 #define SIRKIT_TEMP_DEFINE_POW64I
-// pow64i(x, n): x^n mod 2^64 を O(log(n + 1)) で返す。0^0 は1。
 constexpr std::uint64_t pow64i(std::uint64_t x, std::uint64_t n);
 #endif
 
 #ifndef SIRKIT_IS_MUL_OVERFLOW_DEFINED
 #define SIRKIT_IS_MUL_OVERFLOW_DEFINED
 #define SIRKIT_TEMP_DEFINE_IS_MUL_OVERFLOW
-// is_mul_overflow(a, b): a*b が符号付き64ビット整数の範囲外なら true。O(1)。
 constexpr bool is_mul_overflow(std::int64_t a, std::int64_t b);
 #endif
+// cout << std::fixed << std::setprecision(15);
 
 int main() {
     std::ios::sync_with_stdio(false);

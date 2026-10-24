@@ -1,0 +1,421 @@
+{
+  "date": "2026-10-22",
+  "scope": "rollback_weighted_union_findの現行実装、旧weighted版、数学的な方法を区別した来歴監査。オンライン判定を新たに取得した記録ではない。",
+  "current_source": {
+    "path": "DataStructure/rollback-union-findw.cpp",
+    "sha256": "7555d62b6eb2b4e87750a1b429c1e2fa26aa46f7a0216afcfaddd0ba7aeffdf6",
+    "bytes": 22798,
+    "spdx": "CC0-1.0",
+    "header_attribution": "SPDXのみを維持。現在の実装は下記の独立した新規寄与の記録に基づき、旧weighted版やNyaan版を現Original Sourceとは表示しない。"
+  },
+  "historical_bundle": {
+    "path": "/tmp/Atcoder_Env_before_initial_20261021T163122Z/history.bundle",
+    "sha256": "4201f74738404c4d6f7f5ce672f3a782327fa4613daf48b3e73f2918dccc9020",
+    "clone_command": [
+      "git",
+      "clone",
+      "--bare",
+      "/tmp/Atcoder_Env_before_initial_20261021T163122Z/history.bundle",
+      "/tmp/sirkit_rwuf_20261022/provenance/history.git"
+    ]
+  },
+  "historical_snapshots": [
+    {
+      "git": "7f77a51:rollback-union-findw.cpp",
+      "command": [
+        "git",
+        "--git-dir=/tmp/sirkit_rwuf_20261022/provenance/history.git",
+        "show",
+        "7f77a51:rollback-union-findw.cpp"
+      ],
+      "sha256": "6227077e4feb691ee22aad34fb664e7391f1c09079334f1c19af9244fc87829c",
+      "bytes": 2424,
+      "saved_as": "/tmp/sirkit_rwuf_20261022/provenance/7f77a51.cpp"
+    },
+    {
+      "git": "32fb166:rollback-union-findw.cpp",
+      "command": [
+        "git",
+        "--git-dir=/tmp/sirkit_rwuf_20261022/provenance/history.git",
+        "show",
+        "32fb166:rollback-union-findw.cpp"
+      ],
+      "sha256": "6227077e4feb691ee22aad34fb664e7391f1c09079334f1c19af9244fc87829c",
+      "bytes": 2424,
+      "saved_as": "/tmp/sirkit_rwuf_20261022/provenance/32fb166.cpp"
+    },
+    {
+      "git": "b76e70f:DataStructure/rollback-union-findw.cpp",
+      "command": [
+        "git",
+        "--git-dir=/tmp/sirkit_rwuf_20261022/provenance/history.git",
+        "show",
+        "b76e70f:DataStructure/rollback-union-findw.cpp"
+      ],
+      "sha256": "c84b79a28d177612af1d1a2c3b8043ac7b685d00e283b0a0a277d26479773c9f",
+      "bytes": 21762,
+      "saved_as": "/tmp/sirkit_rwuf_20261022/provenance/b76e70f.cpp"
+    },
+    {
+      "note": "b76e70f→baselineはREINSIRK_からSIRKIT_へのガード名置換だけ",
+      "after_normalization_identical": true
+    }
+  ],
+  "historical_weighted_source": {
+    "path": "/tmp/sirkit_rwuf_20261022/provenance/7f77a51.cpp",
+    "sha256": "6227077e4feb691ee22aad34fb664e7391f1c09079334f1c19af9244fc87829c",
+    "source": "#include <bits/stdc++.h>\n#include <atcoder/all>\nusing namespace std;\nusing namespace atcoder;\n\n// Roll-back・重み付きUnion-Find\ntemplate <typename T>\nstruct RollbackWeightedUnionFind {\n  vector<int> data;\n  vector<T> weight;\n\n  // 履歴を保存するための構造体\n  struct HistoryState {\n    int x;\n    int data_x;\n    T weight_x;\n  };\n  stack<HistoryState> history;\n  int inner_snap;\n\n  RollbackWeightedUnionFind(int sz) : inner_snap(0) {\n    data.assign(sz, -1);\n    weight.assign(sz, T(0)); // 重みを0で初期化\n  }\n\n  // weight(y) - weight(x) = w となるように x と y を結合する\n  bool unite(int x, int y, T w) {\n    w += get_weight(x);\n    w -= get_weight(y);\n    x = find(x), y = find(y);\n\n    // 変更前の状態を保存\n    history.push({x, data[x], weight[x]});\n    history.push({y, data[y], weight[y]});\n\n    if (x == y) return false;\n\n    // サイズによるマージテク (x をサイズの大きい木にする)\n    if (data[x] > data[y]) {\n      swap(x, y);\n      w = -w;\n    }\n    data[x] += data[y];\n    data[y] = x;\n    weight[y] = w; // 根に対する重みの差分を記録\n    return true;\n  }\n\n  // k の属する木の根を求める\n  int find(int k) {\n    if (data[k] < 0) return k;\n    return find(data[k]);\n  }\n\n  // 根から k までの重みの和を求める\n  T get_weight(int k) {\n    if (data[k] < 0) return T(0);\n    return weight[k] + get_weight(data[k]);\n  }\n\n  // weight(y) - weight(x) を求める\n  // ※ x と y が同じ木に属している (same(x, y) == true) ことが前提です\n  T diff(int x, int y) {\n    return get_weight(y) - get_weight(x);\n  }\n\n  bool same(int x, int y) { return find(x) == find(y); }\n\n  int size(int k) { return (-data[find(k)]); }\n\n  // 直前の unite を取り消す\n  void undo() {\n    data[history.top().x] = history.top().data_x;\n    weight[history.top().x] = history.top().weight_x;\n    history.pop();\n    data[history.top().x] = history.top().data_x;\n    weight[history.top().x] = history.top().weight_x;\n    history.pop();\n  }\n\n  void snapshot() { inner_snap = int(history.size() >> 1); }\n\n  int get_state() { return int(history.size() >> 1); }\n\n  // 指定した state (デフォルトは snapshot) まで巻き戻す\n  void rollback(int state = -1) {\n    if (state == -1) state = inner_snap;\n    state <<= 1;\n    assert(state <= (int)history.size());\n    while (state < (int)history.size()) undo();\n  }\n};",
+    "source_attribution_in_file": null,
+    "license_notice_in_file": null,
+    "finding": "7f77a51と32fb166は同じ旧weighted実装。Nyaanの短い共通操作は対応するが、HistoryState・weight・get_weight・diffを誰がどの原典から追加したかの記録は確認できない。"
+  },
+  "primary_sources": [
+    {
+      "name": "verify.test.cpp",
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/verify/verify-yosupo-ds/yosupo-rollback-union-find.test.cpp",
+      "final_url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/verify/verify-yosupo-ds/yosupo-rollback-union-find.test.cpp",
+      "status": 200,
+      "sha256": "a7905ae573cff295e9dfec0151c76aefc938d89fbee78155178dc96cae2b1897",
+      "bytes": 807,
+      "retrieved_utc": "2026-10-22T02:10:06.999124+00:00",
+      "saved_as": "/tmp/sirkit_rwuf_20261022/provenance/nyaan_verify.test.cpp"
+    },
+    {
+      "name": "rollback-union-find.hpp",
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/data-structure/rollback-union-find.hpp",
+      "final_url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/data-structure/rollback-union-find.hpp",
+      "status": 200,
+      "sha256": "6c1d141825f00a008e486e44daaa772716532972bbb409516774f7a4586533c6",
+      "bytes": 1198,
+      "retrieved_utc": "2026-10-22T02:10:07.182627+00:00",
+      "saved_as": "/tmp/sirkit_rwuf_20261022/provenance/nyaan_rollback-union-find.hpp"
+    },
+    {
+      "name": "source.html",
+      "url": "https://nyaannyaan.github.io/library/data-structure/rollback-union-find.hpp.html",
+      "final_url": "https://nyaannyaan.github.io/library/data-structure/rollback-union-find.hpp.html",
+      "status": 200,
+      "sha256": "487dc42a4458e6db5afd78c55500a3f6b06fe9044e9ba0583eb02b37c1d582fe",
+      "bytes": 27037,
+      "retrieved_utc": "2026-10-22T02:10:07.203299+00:00",
+      "saved_as": "/tmp/sirkit_rwuf_20261022/provenance/nyaan_source.html"
+    },
+    {
+      "name": "LICENSE",
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/LICENSE",
+      "final_url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/LICENSE",
+      "status": 200,
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "bytes": 7048,
+      "retrieved_utc": "2026-10-22T02:10:07.382612+00:00",
+      "saved_as": "/tmp/sirkit_rwuf_20261022/provenance/nyaan_LICENSE"
+    },
+    {
+      "name": "README.md",
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/README.md",
+      "final_url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/README.md",
+      "status": 200,
+      "sha256": "fc5c5029cf7dcd7100ae79b931f791314172d81a456f6f44e1905fb54d12907a",
+      "bytes": 1019,
+      "retrieved_utc": "2026-10-22T02:10:07.567960+00:00",
+      "saved_as": "/tmp/sirkit_rwuf_20261022/provenance/nyaan_README.md"
+    }
+  ],
+  "primary_snapshot_note": "当日の直前のrollback_union_find調査で2026-10-22T02:10Zに取得した原典5ファイルを再利用し、全SHAを再照合した。URL中masterは取得時の固定snapshotとして記録し、Git commitや現在のHEADと同一とは主張しない。これらは旧共通部の調査資料であり、現weighted実装を転記した原典という位置付けではない。",
+  "common_legacy_methods": [
+    {
+      "method": "find",
+      "identical_after_whitespace": true,
+      "weighted": "int find(int k) {\n    if (data[k] < 0) return k;\n    return find(data[k]);\n  }",
+      "nyaan": "int find(int k) {\n    if (data[k] < 0) return k;\n    return find(data[k]);\n  }"
+    },
+    {
+      "method": "snapshot",
+      "identical_after_whitespace": true,
+      "weighted": "void snapshot() { inner_snap = int(history.size() >> 1); }",
+      "nyaan": "void snapshot() { inner_snap = int(history.size() >> 1); }"
+    },
+    {
+      "method": "get_state",
+      "identical_after_whitespace": true,
+      "weighted": "int get_state() { return int(history.size() >> 1); }",
+      "nyaan": "int get_state() { return int(history.size() >> 1); }"
+    },
+    {
+      "method": "rollback",
+      "identical_after_whitespace": true,
+      "weighted": "void rollback(int state = -1) {\n    if (state == -1) state = inner_snap;\n    state <<= 1;\n    assert(state <= (int)history.size());\n    while (state < (int)history.size()) undo();\n  }",
+      "nyaan": "void rollback(int state = -1) {\n    if (state == -1) state = inner_snap;\n    state <<= 1;\n    assert(state <= (int)history.size());\n    while (state < (int)history.size()) undo();\n  }"
+    }
+  ],
+  "historical_license_limit": "NyaanのLICENSEとREADMEはCC0表示を確認できる。ただし旧weighted拡張の起源と許諾を裏付けないため、Nyaan共通部のCC0だけを根拠に旧weightedファイル全体をCC0とは断定しない。非CC0実装があると確認したという意味でもない。旧配布物の利用条件を現行SPDXで変更しない。",
+  "recorded_reimplementation": {
+    "file": "Audit/rewrite-geometry-rollbackw-2026-10-18.json",
+    "sha256": "07bdc75abc157b9f9007e24d8f074ca7e0189b10534e21e680eeeb9df615376e",
+    "creation": {
+      "method": "旧コード・原典・Readme・git履歴を渡さない別担当へAPI仕様と数学的な定義を渡して全面新規実装。実装を読まない担当の幾何独立試験、およびrootの独立BFS照合・旧新版性能比較に基づき調整。",
+      "implementation_authors_received_legacy_source": false,
+      "implementation_author_scope": "この2項目は初回の全面新規実装を担当した独立担当を指す。rootは旧コードをAPI抽出・性能比較のため参照し、新規部品の設置・文書化と高速経路の適用範囲を調整。旧コード本文を新規実装へ取り込んでいない。",
+      "implementation_authors_accessed_external_implementation": false,
+      "third_party_legacy_terms": "旧版の由来・許諾の確認限界はmain監査のhistorical_auditに保存。新規寄与のCC0は旧配布物を再許諾しない。"
+    },
+    "recorded_source_sha256": "c84b79a28d177612af1d1a2c3b8043ac7b685d00e283b0a0a277d26479773c9f",
+    "license": "CC0-1.0",
+    "changes": "旧公開data/weight/history/HistoryState/inner_snapを内部へ整理。unite_checked/try_diff/consistent/root_with_weight/component_count/groups/reserve_history/reset/clear/size()/empty/copy/move/swapを追加。root相対重みは最終T範囲内が前提、diffは途中T範囲外でも相殺を保持。保存辺の絶対値上限とサイズ併合深さによる安全保証で途中の反復加算検査を省く。保証が崩れたフラグはrollbackでも保守的に保持しreset/clearで戻す。全走査や追加履歴なし。",
+    "confirmation": "履歴b76e70fの実装は記録されたc84b79...に一致し、今回のbaseline841d...はSIRKIT_へのガード接頭辞変更だけ。圧縮履歴、private所有、SignedSum、通常幅の高速経路が旧2件HistoryState形式と異なることを確認。独立作成過程は既存の作成記録を根拠とし、今回の文字列比較だけで再証明したとは述べない。"
+  },
+  "license_audit_record": {
+    "file": "rollback-union-findw.cpp",
+    "status": "recorded_cc0_contribution",
+    "license": "CC0-1.0（独立した新規実装の記録）",
+    "source_urls": [],
+    "evidence_urls": [
+      "Readme.md",
+      "Audit/rewrite-geometry-rollbackw-2026-10-18.json"
+    ],
+    "evidence": [
+      "旧コード・原典・Readme・git履歴を渡さない担当へAPI仕様と数学的な定義を提示し、全面新規実装。",
+      "自己寄与のCC0宣言と現行SPDX、独立参照照合と性能測定を記録。"
+    ],
+    "limitations": [
+      "新規寄与の来歴記録であり、世界中の既存コードとの非一致を保証するものではない。",
+      "旧配布物・保存済み旧コードの利用条件は変更しない。"
+    ],
+    "sha256": "c84b79a28d177612af1d1a2c3b8043ac7b685d00e283b0a0a277d26479773c9f",
+    "spdx": "// SPDX-License-Identifier: CC0-1.0",
+    "head_commit": "32fb166dfdaa0b7912f04e682b1480908d21b605",
+    "group": "改修済み",
+    "historical_audit": {
+      "status": "unresolved",
+      "license": "Nyaan由来とみられるrollback共通部はCC0-1.0。重み付き拡張の起源・許諾は未確認。",
+      "source_urls": [
+        "https://nyaannyaan.github.io/library/data-structure/rollback-union-find.hpp.html"
+      ],
+      "evidence_urls": [
+        "https://raw.githubusercontent.com/NyaanNyaan/library/master/LICENSE"
+      ],
+      "evidence": [
+        "ローカルgit 7f77a51 (2026-09-06 add)の追加時点にも出典URL・ライセンス表記がない。",
+        "snapshot/get_state/rollback、2件履歴保存とsizeによる結合は同時追加のNyaan rollback実装と強く対応。",
+        "HistoryState、weight/get_weight/diffを追加した派生形だが、重み付き拡張を誰がどの原典から書いたかを示す記録は得られなかった。"
+      ],
+      "limitations": [
+        "Nyaan共通部のCC0だけでファイル全体のCC0を確定しない。非CC0の実装があると確認したわけではない。"
+      ],
+      "sha256": "6227077e4feb691ee22aad34fb664e7391f1c09079334f1c19af9244fc87829c",
+      "spdx": null
+    },
+    "priority": "normal",
+    "summary": "API仕様から圧縮履歴・通常幅の高速経路と整数相殺保護を持つ実装を全面新規作成。",
+    "performance_reviews": [
+      "Audit/performance-all-libraries-2026-10-18.json"
+    ]
+  },
+  "current_license_decision": {
+    "spdx": "CC0-1.0",
+    "basis": [
+      "Readme.mdの自己寄与のCC0宣言",
+      "2026-10-18のAPI仕様からの全面新規実装の記録",
+      "記録されたsource SHAと履歴・baselineの照合"
+    ],
+    "limits": [
+      "世界中の他実装との非一致や、出自が未確認の旧配布物の再許諾を保証するものではない。",
+      "現在の全実装をNyaanのOriginal Sourceから直接引き継いだと説明しない。"
+    ],
+    "mathematics": "差の制約を根からのポテンシャルで表し、サイズによる結合で深さを抑え、変更を逆順に戻す方法。今回新たに論文や第三者実装を数学的参考文献として追加していない。"
+  },
+  "verify_problem": {
+    "current": {
+      "id": "rollback_weighted_union_find",
+      "driver": "Verify/current/drivers/rollback_weighted_union_find_potential_main.cpp",
+      "problem_url": "https://judge.yosupo.jp/problem/unionfind_with_potential",
+      "selection_reason": "Library Checkerを優先し、公開APIの加法群・制約整合性を検証できる問題を選定。",
+      "coverage": [
+        "unite_checked",
+        "try_diff",
+        "mod998244353の加法群",
+        "矛盾・冗長制約"
+      ]
+    },
+    "past": [
+      {
+        "driver": "Verify/current/drivers/rollback_weighted_union_find_main.cpp",
+        "title": "Weighted Union Find Trees",
+        "problem_url": "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_B",
+        "selection_reason": "現在の公開APIに直接対応する問題を選択。",
+        "evidence_url": "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_B",
+        "coverage": [
+          "unite",
+          "try_diff"
+        ],
+        "limitations": "矛盾制約・undo・rollback・整数範囲端は補助ローカル検査が必要。",
+        "samples": [
+          {
+            "input": "5 6\n0 0 2 5\n0 1 2 3\n1 0 1\n1 1 3\n0 1 4 8\n1 0 4\n",
+            "output": "2\n?\n10\n"
+          }
+        ],
+        "status": "historical（旧提出先・旧ドライバー。移行後の検証とは別）"
+      }
+    ],
+    "finding": "現在はLibrary Checker Unionfind with Potentialで加法群・制約整合性を確認する。旧AOJ問題の記録は過去の条件として保持し、現在の提出先や今回の速度比較へは使わない。公式問題はundo/rollbackを呼ばないため、履歴API・符号付き整数端・例外は独立ローカル検証で補足する。"
+  },
+  "final_implementation": {
+    "sha256": "7555d62b6eb2b4e87750a1b429c1e2fa26aa46f7a0216afcfaddd0ba7aeffdf6",
+    "source": "// SPDX-License-Identifier: CC0-1.0\n#include <algorithm>\n#include <bit>\n#include <cstddef>\n#include <cstdint>\n#include <limits>\n#include <optional>\n#include <stdexcept>\n#include <type_traits>\n#include <utility>\n#include <vector>\n\n#ifndef SIRKIT_ROLLBACK_WEIGHTED_UNION_FIND_DEFINED\n#define SIRKIT_ROLLBACK_WEIGHTED_UNION_FIND_DEFINED\n// TはT(0), +, -を備えるコピー・ムーブ可能な可換加法群。consistent/unite_checkedには==も必要。\n// 標準の符号付き整数Tは最終結果の範囲外でoverflow_error。結合時は保存する根間の差もT範囲内が必要。\n// 符号なし整数は剰余演算。整数の容量・演算保護はSKIP_RUNTIME_CHECKSでも維持する。\n// RollbackWeightedUnionFind(): 空。RollbackWeightedUnionFind(n): n>=0のn頂点を構築、O(n+1)。\n// コピーはO(n+h+1)で独立（hは履歴長）。移動元は空、移動構築O(1)。\n// find(v)/same(x,y)/size(v): 代表/同一成分か/成分サイズ、O(log(n+1))。get_weight(v)は根からvへの差。\n// root_with_weight(v): {根, 根からvへの差}。diff(x,y): y-xの差、同一成分が前提。各O(log(n+1))。\n// try_diff(x,y): 未連結ならnullopt、consistent(x,y,w): 未連結または差がwならtrue。各O(log(n+1))。\n// unite(x,y,w): y-x=wを追加、新規結合ならtrue。unite_checkedはMerged/AlreadyConsistent/Contradictionを返す。\n// 各追加は冗長・矛盾時も履歴1件、O(log(n+1))償却時間。経路圧縮なし。undo(): 1追加を戻す、O(1)、履歴必須。\n// snapshot()/get_state(): 保存位置設定/現在の追加回数、O(1)。rollback(state=-1): 指定/保存位置へ戻す、O(1+戻す回数)。\n// 保存位置より前へ戻ると保存位置も縮める。clear_history(): 連結状態と容量を保ち履歴/保存位置を消去、O(h+1)上界、noexcept。\n// size()/empty()/component_count(): 全頂点数/空判定/成分数、O(1)。groups(): 成分ごとの頂点昇順一覧、O(1+n log(n+1))。\n// reserve_history(k): k追加分の容量を確保、O(h+1)上界。swap(other): 履歴・保存位置ごと交換、O(1)。\n// clear(): 空へ戻して容量保持、O(n+h+1)上界。reset(n): O(旧n+旧h+n+1)で再構築。\ntemplate <typename T>\nstruct RollbackWeightedUnionFind {\n    enum class MergeResult { Merged, AlreadyConsistent, Contradiction };\n\nprivate:\n    static constexpr bool checked_integer =\n        std::is_integral_v<T> && std::is_signed_v<T>;\n\n    // 根までの高々O(log n)個の整数を、途中の相殺を保って加算する。\n    struct SignedSum {\n#if defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n        __extension__ using WideInteger = __int128;\n        WideInteger value = 0;\n        SignedSum() = default;\n        explicit SignedSum(T x) : value(x) {}\n        void add(T x) { value += x; }\n        void add_sum(const SignedSum& x) { value += x.value; }\n        void subtract(const SignedSum& x) { value -= x.value; }\n        void negate() { value = -value; }\n        bool equals(T x) const { return value == x; }\n        T result() const {\n            if (value < std::numeric_limits<T>::min() ||\n                value > std::numeric_limits<T>::max()) {\n                throw std::overflow_error(\"weighted union find potential overflow\");\n            }\n            return static_cast<T>(value);\n        }\n#else\n        // 標準C++の符号と2桁の大きさ。頂点数がint以内なので2桁で足りる。\n        std::uintmax_t low = 0;\n        std::uintmax_t high = 0;\n        bool negative = false;\n        SignedSum() = default;\n        explicit SignedSum(T x) {\n            negative = x < 0;\n            const auto u = static_cast<std::uintmax_t>(x);\n            low = negative ? std::uintmax_t{0} - u : u;\n        }\n        void add_sum(const SignedSum& x) {\n            if (negative == x.negative) {\n                const auto old = low;\n                low += x.low;\n                high += x.high + (low < old);\n            } else if (high > x.high || (high == x.high && low >= x.low)) {\n                const auto old = low;\n                low -= x.low;\n                high -= x.high + (old < x.low);\n            } else {\n                const auto old = low;\n                low = x.low - low;\n                high = x.high - high - (x.low < old);\n                negative = x.negative;\n            }\n            if (high == 0 && low == 0) negative = false;\n        }\n        void add(T x) { add_sum(SignedSum(x)); }\n        void negate() { if (high != 0 || low != 0) negative = !negative; }\n        void subtract(SignedSum x) { x.negate(); add_sum(x); }\n        bool equals(T x) const {\n            const SignedSum other(x);\n            return high == 0 && low == other.low && negative == other.negative;\n        }\n        T result() const {\n            const auto positive_limit = static_cast<std::uintmax_t>(std::numeric_limits<T>::max());\n            const auto negative_limit = std::uintmax_t{0} -\n                static_cast<std::uintmax_t>(std::numeric_limits<T>::min());\n            if (high != 0 || low > (negative ? negative_limit : positive_limit)) {\n                throw std::overflow_error(\"weighted union find potential overflow\");\n            }\n            if (!negative) return static_cast<T>(low);\n            if (low == negative_limit) return std::numeric_limits<T>::min();\n            return static_cast<T>(-static_cast<T>(low));\n        }\n#endif\n    };\n    using Accumulator = std::conditional_t<checked_integer, SignedSum, T>;\n    struct RootWeight { int root; Accumulator weight; };\n    struct NarrowRootWeight { int root; T weight; };\n    struct Change { int child; int previous_parent_size; };\n    std::vector<int> parent_;\n    std::vector<T> weight_;\n    std::vector<Change> history_;\n    int components_ = 0;\n    int snapshot_ = 0;\n    // falseはundo後も保持し、全走査なしで保守的な上限を維持する。\n    bool bounded_weights_ = true;\n\n    static Accumulator zero() {\n        if constexpr (checked_integer) return SignedSum();\n        else return T(0);\n    }\n    static void add_value(Accumulator& a, const T& b) {\n        if constexpr (checked_integer) a.add(b);\n        else a = static_cast<T>(a + b);\n    }\n    static void add_sum(Accumulator& a, const Accumulator& b) {\n        if constexpr (checked_integer) a.add_sum(b);\n        else a = static_cast<T>(a + b);\n    }\n    static void subtract(Accumulator& a, const Accumulator& b) {\n        if constexpr (checked_integer) a.subtract(b);\n        else a = static_cast<T>(a - b);\n    }\n    static void negate(Accumulator& a) {\n        if constexpr (checked_integer) a.negate();\n        else a = static_cast<T>(T(0) - a);\n    }\n    static T result(const Accumulator& a) {\n        if constexpr (checked_integer) return a.result();\n        else return a;\n    }\n    static bool equals(const Accumulator& a, const T& b) {\n        if constexpr (checked_integer) return a.equals(b);\n        else return a == b;\n    }\n#ifndef SKIP_RUNTIME_CHECKS\n    void check_vertex(int v) const {\n        if (static_cast<unsigned int>(v) >= parent_.size()) {\n            throw std::out_of_range(\"weighted union find vertex\");\n        }\n    }\n#endif\n    int find_unchecked(int v) const {\n        while (parent_[v] >= 0) v = parent_[v];\n        return v;\n    }\n    RootWeight root_weight_unchecked(int v) const {\n        auto value = zero();\n        while (parent_[v] >= 0) {\n            add_value(value, weight_[v]);\n            v = parent_[v];\n        }\n        return {v, std::move(value)};\n    }\n    static bool try_add(T a, T b, T& out) {\n        if constexpr (checked_integer) {\n#if (defined(__GNUC__) || defined(__clang__)) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n            return !__builtin_add_overflow(a, b, &out);\n#else\n            using U = std::make_unsigned_t<T>;\n            const U ua = static_cast<U>(a), ub = static_cast<U>(b);\n            const U sum = static_cast<U>(ua + ub);\n            constexpr U sign = U{1} << std::numeric_limits<T>::digits;\n            if (((ua ^ sum) & (ub ^ sum) & sign) != 0) return false;\n            out = std::bit_cast<T>(sum);\n            return true;\n#endif\n        } else {\n            out = static_cast<T>(a + b);\n            return true;\n        }\n    }\n    static bool try_subtract(T a, T b, T& out) {\n        if constexpr (checked_integer) {\n#if (defined(__GNUC__) || defined(__clang__)) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)\n            return !__builtin_sub_overflow(a, b, &out);\n#else\n            using U = std::make_unsigned_t<T>;\n            const U ua = static_cast<U>(a), ub = static_cast<U>(b);\n            const U difference = static_cast<U>(ua - ub);\n            constexpr U sign = U{1} << std::numeric_limits<T>::digits;\n            if (((ua ^ ub) & (ua ^ difference) & sign) != 0) return false;\n            out = std::bit_cast<T>(difference);\n            return true;\n#endif\n        } else {\n            out = static_cast<T>(a - b);\n            return true;\n        }\n    }\n    // 通常はTのまま返す。途中で範囲を超えた場合だけ広い演算で再走査する。\n    NarrowRootWeight narrow_root_weight(int v) const {\n        if (parent_[v] < 0) return {v, T(0)};\n        T value = weight_[v];\n        v = parent_[v];\n        if constexpr (checked_integer) {\n            // サイズ併合の深さ<=intの桁数。全辺の絶対値<=Tmax/(2*桁数)なら途中和と2経路の差も安全。\n            if (bounded_weights_) {\n                while (parent_[v] >= 0) {\n                    value = static_cast<T>(value + weight_[v]);\n                    v = parent_[v];\n                }\n                return {v, value};\n            }\n        }\n        while (parent_[v] >= 0) {\n            if (!try_add(value, weight_[v], value)) return {-1, T(0)};\n            v = parent_[v];\n        }\n        return {v, std::move(value)};\n    }\n    void check_history_capacity() const {\n        if (history_.size() >= static_cast<std::size_t>(std::numeric_limits<int>::max()) ||\n            history_.size() >= history_.max_size()) {\n            throw std::length_error(\"weighted union find history capacity\");\n        }\n    }\n    MergeResult record_merge(int parent, int child, T gap) {\n        if constexpr (checked_integer) {\n            constexpr T limit = std::numeric_limits<T>::max() /\n                (2 * std::numeric_limits<int>::digits);\n            if (gap < -limit || gap > limit) bounded_weights_ = false;\n        }\n        history_.push_back({child, parent_[parent]});\n        try {\n            weight_[child] = std::move(gap);\n        } catch (...) {\n            history_.pop_back();\n            throw;\n        }\n        parent_[parent] += parent_[child];\n        parent_[child] = parent;\n        --components_;\n        return MergeResult::Merged;\n    }\n    template <bool CheckConsistency>\n#if defined(__GNUC__) || defined(__clang__)\n    [[gnu::noinline]]\n#endif\n    MergeResult unite_wide(int x, int y, const T& w) {\n        auto a = root_weight_unchecked(x);\n        auto b = root_weight_unchecked(y);\n        if (a.root == b.root) {\n            MergeResult status = MergeResult::AlreadyConsistent;\n            if constexpr (CheckConsistency) {\n                subtract(b.weight, a.weight);\n                if (!equals(b.weight, w)) status = MergeResult::Contradiction;\n            }\n            history_.push_back({-1, 0});\n            return status;\n        }\n        auto gap = zero();\n        add_value(gap, w);\n        add_sum(gap, a.weight);\n        subtract(gap, b.weight);\n        if (parent_[a.root] > parent_[b.root]) {\n            std::swap(a.root, b.root);\n            negate(gap);\n        }\n        return record_merge(a.root, b.root, result(gap));\n    }\n    template <bool CheckConsistency>\n#if defined(__GNUC__) || defined(__clang__)\n    [[gnu::always_inline]]\n#endif\n    MergeResult unite_impl(int x, int y, const T& w) {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_vertex(x); check_vertex(y);\n#endif\n        check_history_capacity();\n        if (parent_[y] == -1 && x != y) {\n            const auto a = narrow_root_weight(x);\n            if (a.root < 0) return unite_wide<CheckConsistency>(x, y, w);\n            T gap(0);\n            if (!try_add(w, a.weight, gap)) {\n                auto wide_gap = zero();\n                add_value(wide_gap, w);\n                add_value(wide_gap, a.weight);\n                gap = result(wide_gap);\n            }\n            return record_merge(a.root, y, std::move(gap));\n        }\n        auto a = narrow_root_weight(x);\n        auto b = narrow_root_weight(y);\n        if (a.root < 0 || b.root < 0) return unite_wide<CheckConsistency>(x, y, w);\n        if (a.root == b.root) {\n            MergeResult status = MergeResult::AlreadyConsistent;\n            if constexpr (CheckConsistency) {\n                T difference(0);\n                if (!try_subtract(b.weight, a.weight, difference) || !(difference == w)) {\n                    status = MergeResult::Contradiction;\n                }\n            }\n            history_.push_back({-1, 0});\n            return status;\n        }\n        T gap(0);\n        bool fits;\n        const bool reverse = parent_[a.root] > parent_[b.root];\n        if (reverse) {\n            fits = try_subtract(b.weight, a.weight, gap) && try_subtract(gap, w, gap);\n            std::swap(a.root, b.root);\n        } else {\n            fits = try_add(w, a.weight, gap) && try_subtract(gap, b.weight, gap);\n        }\n        if (!fits) {\n            auto wide_gap = zero();\n            add_value(wide_gap, w);\n            add_value(wide_gap, a.weight);\n            auto other = zero(); add_value(other, b.weight);\n            subtract(wide_gap, other);\n            if (reverse) negate(wide_gap);\n            gap = result(wide_gap);\n        }\n        return record_merge(a.root, b.root, std::move(gap));\n    }\n    void undo_unchecked() noexcept {\n        const auto change = history_.back();\n        if (change.child >= 0) {\n            const int root = parent_[change.child];\n            if constexpr (std::is_integral_v<T>) weight_[change.child] = T(0);\n            parent_[change.child] = parent_[root] - change.previous_parent_size;\n            parent_[root] = change.previous_parent_size;\n            ++components_;\n        }\n        history_.pop_back();\n    }\n#if defined(__GNUC__) || defined(__clang__)\n    [[gnu::noinline]]\n#endif\n    std::pair<int, T> root_with_weight_slow(int v) const {\n        const auto narrow = narrow_root_weight(v);\n        if (narrow.root >= 0) return {narrow.root, narrow.weight};\n        const auto found = root_weight_unchecked(v);\n        return {found.root, result(found.weight)};\n    }\n#if defined(__GNUC__) || defined(__clang__)\n    [[gnu::noinline]]\n#endif\n    T diff_slow(int x, int y) const {\n        const auto narrow_a = narrow_root_weight(x);\n        const auto narrow_b = narrow_root_weight(y);\n        if (narrow_a.root >= 0 && narrow_b.root >= 0) {\n#ifndef SKIP_RUNTIME_CHECKS\n            if (narrow_a.root != narrow_b.root) {\n                throw std::invalid_argument(\"weighted union find disconnected vertices\");\n            }\n#endif\n            T difference(0);\n            if (try_subtract(narrow_b.weight, narrow_a.weight, difference)) return difference;\n        }\n        const auto a = root_weight_unchecked(x);\n        auto b = root_weight_unchecked(y);\n#ifndef SKIP_RUNTIME_CHECKS\n        if (a.root != b.root) {\n            throw std::invalid_argument(\"weighted union find disconnected vertices\");\n        }\n#endif\n        subtract(b.weight, a.weight);\n        return result(b.weight);\n    }\n\npublic:\n    RollbackWeightedUnionFind() = default;\n    explicit RollbackWeightedUnionFind(int n) {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (n < 0) throw std::invalid_argument(\"weighted union find negative size\");\n#endif\n        const auto count = static_cast<std::size_t>(n);\n        if (count > static_cast<std::size_t>(std::numeric_limits<int>::max()) ||\n            count > parent_.max_size() || count > weight_.max_size()) {\n            throw std::length_error(\"weighted union find vertex capacity\");\n        }\n        parent_.assign(count, -1);\n        weight_.assign(count, T(0));\n        history_.reserve(std::min(count, std::size_t{64}));\n        components_ = n;\n    }\n    RollbackWeightedUnionFind(const RollbackWeightedUnionFind&) = default;\n    RollbackWeightedUnionFind(RollbackWeightedUnionFind&& other) noexcept { swap(other); }\n    RollbackWeightedUnionFind& operator=(RollbackWeightedUnionFind other) noexcept {\n        swap(other);\n        return *this;\n    }\n    void swap(RollbackWeightedUnionFind& other) noexcept {\n        parent_.swap(other.parent_);\n        weight_.swap(other.weight_);\n        history_.swap(other.history_);\n        std::swap(components_, other.components_);\n        std::swap(snapshot_, other.snapshot_);\n        std::swap(bounded_weights_, other.bounded_weights_);\n    }\n    void reset(int n) { RollbackWeightedUnionFind replacement(n); swap(replacement); }\n    void clear() {\n        parent_.clear(); weight_.clear(); history_.clear();\n        components_ = 0; snapshot_ = 0;\n        bounded_weights_ = true;\n    }\n    int size() const noexcept { return static_cast<int>(parent_.size()); }\n    bool empty() const noexcept { return parent_.empty(); }\n    int component_count() const noexcept { return components_; }\n    int find(int v) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_vertex(v);\n#endif\n        return find_unchecked(v);\n    }\n    int size(int v) const { return -parent_[find(v)]; }\n    bool same(int x, int y) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_vertex(x); check_vertex(y);\n#endif\n        const int px = parent_[x], py = parent_[y];\n        const int a = px < 0 ? x : px, b = py < 0 ? y : py;\n        return a == b || find_unchecked(a) == find_unchecked(b);\n    }\n    std::pair<int, T> root_with_weight(int v) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_vertex(v);\n#endif\n        const int p = parent_[v];\n        if (p < 0) return {v, T(0)};\n        if (parent_[p] < 0) return {p, weight_[v]};\n        return root_with_weight_slow(v);\n    }\n    T get_weight(int v) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_vertex(v);\n#endif\n        const int p = parent_[v];\n        if (p < 0) return T(0);\n        if (parent_[p] < 0) return weight_[v];\n        return root_with_weight_slow(v).second;\n    }\n    std::optional<T> try_diff(int x, int y) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_vertex(x); check_vertex(y);\n#endif\n        const auto narrow_a = narrow_root_weight(x);\n        const auto narrow_b = narrow_root_weight(y);\n        if (narrow_a.root >= 0 && narrow_b.root >= 0) {\n            if (narrow_a.root != narrow_b.root) return std::nullopt;\n            T difference(0);\n            if (try_subtract(narrow_b.weight, narrow_a.weight, difference)) return difference;\n        }\n        const auto a = root_weight_unchecked(x);\n        auto b = root_weight_unchecked(y);\n        if (a.root != b.root) return std::nullopt;\n        subtract(b.weight, a.weight);\n        return result(b.weight);\n    }\n    T diff(int x, int y) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_vertex(x); check_vertex(y);\n#endif\n        const int px = parent_[x], py = parent_[y];\n        const int a = px < 0 ? x : px, b = py < 0 ? y : py;\n        if (a == b) {\n            T difference(0);\n            if constexpr (std::is_integral_v<T>) {\n                if (try_subtract(weight_[y], weight_[x], difference)) return difference;\n            } else {\n                const T wx = px < 0 ? T(0) : weight_[x];\n                const T wy = py < 0 ? T(0) : weight_[y];\n                if (try_subtract(wy, wx, difference)) return difference;\n            }\n        }\n        return diff_slow(x, y);\n    }\n    bool consistent(int x, int y, const T& w) const {\n#ifndef SKIP_RUNTIME_CHECKS\n        check_vertex(x); check_vertex(y);\n#endif\n        const auto narrow_a = narrow_root_weight(x);\n        const auto narrow_b = narrow_root_weight(y);\n        if (narrow_a.root >= 0 && narrow_b.root >= 0) {\n            if (narrow_a.root != narrow_b.root) return true;\n            T difference(0);\n            return try_subtract(narrow_b.weight, narrow_a.weight, difference) && difference == w;\n        }\n        const auto a = root_weight_unchecked(x);\n        auto b = root_weight_unchecked(y);\n        if (a.root != b.root) return true;\n        subtract(b.weight, a.weight);\n        return equals(b.weight, w);\n    }\n    bool unite(int x, int y, T w) { return unite_impl<false>(x, y, w) == MergeResult::Merged; }\n    MergeResult unite_checked(int x, int y, T w) { return unite_impl<true>(x, y, w); }\n    void clear_history() noexcept { history_.clear(); snapshot_ = 0; }\n    void reserve_history(std::size_t calls) {\n        if (calls > static_cast<std::size_t>(std::numeric_limits<int>::max()) ||\n            calls > history_.max_size()) {\n            throw std::length_error(\"weighted union find history capacity\");\n        }\n        if (calls <= history_.size()) return;\n        history_.reserve(calls);\n    }\n    int get_state() const noexcept { return static_cast<int>(history_.size()); }\n    void snapshot() noexcept { snapshot_ = get_state(); }\n    void undo() {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (history_.empty()) throw std::out_of_range(\"weighted union find empty history\");\n#endif\n        undo_unchecked();\n        snapshot_ = std::min(snapshot_, get_state());\n    }\n    void rollback(int state = -1) {\n        if (state == -1) state = snapshot_;\n#ifndef SKIP_RUNTIME_CHECKS\n        if (state < 0 || state > get_state()) {\n            throw std::out_of_range(\"weighted union find rollback state\");\n        }\n#endif\n        while (get_state() > state) undo_unchecked();\n        snapshot_ = std::min(snapshot_, get_state());\n    }\n    std::vector<std::vector<int>> groups() const {\n        std::vector<std::vector<int>> result;\n        result.reserve(components_);\n        if (components_ == size()) {\n            for (int v = 0; v < size(); ++v) result.emplace_back(std::size_t{1}, v);\n            return result;\n        }\n        if (components_ == 1) {\n            result.emplace_back(parent_.size());\n            for (int v = 0; v < size(); ++v) result[0][v] = v;\n            return result;\n        }\n        std::vector<int> roots(parent_.size()), counts(parent_.size(), 0);\n        for (int v = 0; v < size(); ++v) ++counts[roots[v] = find_unchecked(v)];\n        for (int v = 0; v < size(); ++v) if (counts[v]) {\n            const int count = counts[v];\n            counts[v] = static_cast<int>(result.size());\n            result.emplace_back(); result.back().reserve(count);\n        }\n        for (int v = 0; v < size(); ++v) result[counts[roots[v]]].push_back(v);\n        return result;\n    }\n\n};\n#endif\n",
+    "history": "Changeはchildと旧親サイズを持つ。成功時は子と旧親サイズ、冗長・矛盾時はchild=-1を1件記録。全追加呼出しを履歴1回として数える。",
+    "integer_arithmetic": "標準の符号付き整数だけを検査対象とし、通常幅の安全な経路を優先する。途中和の失敗時は広い累積演算へ戻り相殺を保つ。__int128はGCC/Clangの拡張で、SIRKIT_FORCE_STANDARD_ARITHMETICまたは非対応時は符号+2桁uintmax_tの標準代替を使う。",
+    "potential_contract": "get_weight/root_with_weightの最終根相対差、diff/try_diffの最終頂点間差はTへ収まること。新しい結合はサイズで選ばれた根間gapをTへ保存できること。consistentの論理的trueは保存gapの表現可能性までは保証しない。",
+    "bounded_flag": "符号付き重みの絶対値による安全保証が崩れたフラグはundo/rollbackで戻さず保守的に保持する。検査だけのための全走査はしない。",
+    "ownership": "vectorが配列と履歴を所有。コピーは独立、コピー代入は置換値の先行構築とswap、resetも先行構築。移動構築/代入後は移動元が空。",
+    "exception_limit": "独自Tの破壊的な代入・演算例外に対し、すべての操作の強保証を無条件に宣言しない。最終テストで確認した保証はVerify Auditへ記録する。",
+    "undo": "undo_uncheckedはnoexcept。非integral Tでは根になった子のweightを0へ代入せず、親・サイズ・成分数・履歴だけを戻す。独自Tの構築・代入・算術を呼ばない。全公開照会は根の論理weightをT(0)として扱う。std::is_integral_v<T>の場合だけ、既存diff高速経路の前提を保つため保存weightも0へ戻す。",
+    "groups": "全頂点が別成分ならsingleton列、1成分なら頂点昇順列を直接作る。その他は根と件数を集計し、出力の各成分に必要な容量を確保してから頂点を並べる。成分の順序と頂点の昇順を維持する。",
+    "clear_history": "連結状態と差を保って履歴とsnapshot位置を消去するnoexcept API。容量とbounded_weights_を保持する。旧状態位置は無効になりget_stateは0となる。標準vector::clearの保証による時間上界はO(h+1)。",
+    "portability": "__extension__付きのprivate WideInteger aliasへGNU/Clangの128ビット拡張型を隔離。SIRKIT_FORCE_STANDARD_ARITHMETICまたは__SIZEOF_INT128__無しでは標準の符号+2桁実装を使う。拡張型を標準C++の型とは説明しない。",
+    "complexity": "Tの演算・コピー・破棄をO(1)として、現在履歴h・確保容量Hの保持領域はO(n+H+1)、コピーO(n+h+1)。通常groupsはO(1+n log(n+1))、全singleton/1成分ではO(n+1)。reset(m)は旧状態破棄込みO(n+h+m+1)。"
+  },
+  "document": {
+    "path": "Document/rollback_weighted_union_find.md",
+    "sha256": "12f64c17ef7b60fe9b9291e03357be5e8e6d2af851d7b8ae9d8cd6eaf005fdd0"
+  },
+  "local_records": [
+    {
+      "path": "Audit/license-audit-2026-10-17.json",
+      "sha256": "d411536c0d25f4cf2ee0f87cb83aab23a480f054c59cfa9f6486ca22b0927a8c"
+    },
+    {
+      "path": "Audit/rewrite-geometry-rollbackw-2026-10-18.json",
+      "sha256": "07bdc75abc157b9f9007e24d8f074ca7e0189b10534e21e680eeeb9df615376e"
+    },
+    {
+      "path": "Audit/review-size-license-2026-10-19.json",
+      "sha256": "670f8bdca2d372dc6af35478ebac91a29e57d0792b462cb6c7b9fa2153a2f472"
+    },
+    {
+      "path": "Audit/verify-judge-selection-2026-10-20.json",
+      "sha256": "a684ae4cd917f124cb90fde323ecae2a3a066bb47350822735b21ac3b1101d74"
+    },
+    {
+      "path": "Readme.md",
+      "sha256": "01188e6e9ddb747a1e2fb0cb809e821393a2f3e54dda2c7289863e90b51ed389"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "6d489af6292662d9e36d34ce49423784984a5f6e41d7b58f49b01264df59fa03"
+    }
+  ],
+  "verification_record": "Audit/verify-rollback-weighted-union-find-2026-10-22.json",
+  "reproduction": {
+    "history.py": {
+      "sha256": "3f22849d2b9858bbbef9d836dc710d951cf77aa49c1d4dfc7019efb55ff29a0f",
+      "source": "from pathlib import Path\nimport subprocess,json,hashlib\np=Path(__file__).parent;git=p/'history.git';bundle=Path('/tmp/Atcoder_Env_before_initial_20261021T163122Z/history.bundle')\nif not git.exists(): subprocess.run(['git','clone','--bare',str(bundle),str(git)],check=True)\nrows=[]\nfor ref,name in [('7f77a51','rollback-union-findw.cpp'),('32fb166','rollback-union-findw.cpp'),('b76e70f','DataStructure/rollback-union-findw.cpp')]:\n cmd=['git','--git-dir='+str(git),'show',ref+':'+name];a=subprocess.run(cmd,capture_output=True,check=True);f=p/(ref+'.cpp');f.write_bytes(a.stdout);rows.append(dict(git=ref+':'+name,command=cmd,sha256=hashlib.sha256(a.stdout).hexdigest(),bytes=len(a.stdout),saved_as=str(f)))\nbaseline=(p.parent/'baseline/DataStructure/rollback-union-findw.cpp').read_bytes();old=(p/'b76e70f.cpp').read_bytes();assert old.replace(b'REINSIRK_',b'SIRKIT_')==baseline\nrows.append(dict(note='b76e70f→baselineはREINSIRK_からSIRKIT_へのガード名置換だけ',after_normalization_identical=True))\n(p/'snapshots.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\\n');print('history snapshots PASS')\n"
+    },
+    "compare_methods.py": {
+      "sha256": "ef13529b591f4d9f1a41c1402d53e2dd3615d3fe3420f1a73812a7894e8cf1fa",
+      "source": "from pathlib import Path\nimport re,json\np=Path(__file__).parent;a=(p/'7f77a51.cpp').read_text();b=(p/'nyaan_rollback-union-find.hpp').read_text();rows=[]\nfor name in ['find','snapshot','get_state','rollback']:\n parts=[]\n for text in [a,b]:\n  m=re.search(r'\\b(?:int|void)\\s+'+name+r'\\([^)]*\\)\\s*\\{',text);i=m.end();level=1\n  while level:\n   if text[i]=='{': level+=1\n   elif text[i]=='}': level-=1\n   i+=1\n  parts.append(text[m.start():i])\n rows.append(dict(method=name,identical_after_whitespace=''.join(parts[0].split())==''.join(parts[1].split()),weighted=parts[0],nyaan=parts[1]))\nassert all(x['identical_after_whitespace'] for x in rows)\n(p/'common_methods.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\\n');print('4 short common methods match after whitespace normalization')\n"
+    }
+  },
+  "limits": [
+    "旧APIと数学的な定義が共通することと、旧実装本文を現実装へ転記したことを混同しない。",
+    "この監査はライセンスの調査根拠を保存するもので、過去のオンライン判定を現sourceの検証済みへ書き換えるものではない。"
+  ],
+  "unchanged_hot_methods": {
+    "MergeResult unite_impl(int x, int y, const T& w)": {
+      "byte_identical": true,
+      "sha256": "cdacc7ab0c051f4422dfa40feda61029c4a0ef50cffc37614e96202bc6ede5bb"
+    },
+    "std::optional<T> try_diff(int x, int y) const": {
+      "byte_identical": true,
+      "sha256": "6dda8da133c94c75e7f27dfd9766ecc9531daca2c3316d9b1f0bd2d362e78bb9"
+    },
+    "T diff(int x, int y) const": {
+      "byte_identical": true,
+      "sha256": "9a86f41dcc4c91e1e608f711c36132439817b05aed23626f0d68bfd1229d8f46"
+    }
+  },
+  "baseline_exception_diagnostic": {
+    "record": {
+      "source_sha256": "841d376c908152c3ac4da5a3f7d503bfb81445eb5cf03e8b970c77b1a1161421",
+      "test_sha256": "0ff8fe63d08c97fd202a65dfbc6c882dff0c5fdc94b161e2c569208337f7bfe3",
+      "command": [
+        "taskset",
+        "-c",
+        "10",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DSOURCE=\"/tmp/sirkit_rwuf_20261022/baseline/DataStructure/rollback-union-findw.cpp\"",
+        "/tmp/sirkit_rwuf_20261022/verify/destructive_assignment.cpp",
+        "-o",
+        "/tmp/sirkit_rwuf_20261022/verify/destructive_baseline"
+      ],
+      "build_returncode": 0,
+      "returncode": 0,
+      "stdout": "undo threw=1 state=1 components=2 same01=1 before_diff=3 after_diff=0\nmerge threw=1 state=1 components=2 same02=0 root_weight2=0 diff01=3\n",
+      "stderr": "",
+      "note": "破壊的代入失敗を観察する診断。最終版の成功/強保証試験と混同しない。"
+    },
+    "meaning": "旧版841d...で、値を変更してからthrowする独自代入によりundoが途中失敗し、成分/履歴が同じままdiffが3から0へ変わることを観察した。今回のundoの独自T操作除去の修正根拠であり、最終版の失敗を示す記録ではない。",
+    "final_verification": "最終版7555...の独立照合・例外試験は別のVerify Auditに記録する。中間typednoexcept候補の試験を最終SHAの検証へ読み替えない。"
+  },
+  "document_examples": {
+    "record": {
+      "status": "PASS",
+      "source_sha256": "7555d62b6eb2b4e87750a1b429c1e2fa26aa46f7a0216afcfaddd0ba7aeffdf6",
+      "document_sha256": "12f64c17ef7b60fe9b9291e03357be5e8e6d2af851d7b8ae9d8cd6eaf005fdd0",
+      "test_sha256": "66c58e6123d0b3fc263ae62923dd9385f06871c1cdada350113943a10dfe1ce4",
+      "runs": [
+        {
+          "name": "gcc_standard",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+            "-U__SIZEOF_INT128__",
+            "/tmp/sirkit_rwuf_20261022/provenance/document_example.cpp",
+            "-o",
+            "/tmp/sirkit_rwuf_20261022/provenance/gcc_standard"
+          ],
+          "build_returncode": 0,
+          "run_returncode": 0
+        },
+        {
+          "name": "clang_skip",
+          "command": [
+            "taskset",
+            "-c",
+            "10",
+            "clang++",
+            "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-pedantic-errors",
+            "-DSKIP_RUNTIME_CHECKS",
+            "/tmp/sirkit_rwuf_20261022/provenance/document_example.cpp",
+            "-o",
+            "/tmp/sirkit_rwuf_20261022/provenance/clang_skip"
+          ],
+          "build_returncode": 0,
+          "run_returncode": 0
+        }
+      ]
+    },
+    "source": "#include \"/home/reinsirk/Atcoder_Env/DataStructure/rollback-union-findw.cpp\"\n#include <cassert>\n#include <cstdint>\nint main(){\nusing UF = RollbackWeightedUnionFind<std::int64_t>;\nUF uf(3);\nassert(uf.unite(0, 1, 4));\nuf.snapshot();\nassert(uf.unite(1, 2, -7));\nassert(uf.diff(0, 2) == -3);\nassert(uf.unite_checked(0, 2, 9) == UF::MergeResult::Contradiction);\nuf.undo(); // 矛盾した追加だけを戻す。\nuf.rollback();\nassert(uf.same(0, 1) && !uf.same(0, 2));\n\nuf.clear_history();\nassert(uf.get_state() == 0 && uf.diff(0, 1) == 4);\nuf.unite(1, 2, 6);\nuf.rollback(0);\nassert(uf.diff(0, 1) == 4 && !uf.same(0, 2));\n\n}\n",
+    "note": "Documentの2つのcpp例を順に連結し、GCC標準代替checked/Clang native skipの2構成で厳密C++23ビルドと実行を確認。全APIの検証の代替ではない。"
+  }
+}

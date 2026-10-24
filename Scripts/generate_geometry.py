@@ -8,6 +8,8 @@ from pathlib import Path
 import re
 import sys
 
+from source_api_docs import render_api_overview
+
 # 依存は生成時に展開する。配布される C++ ファイルに自作 include は残さない。
 PARTS: dict[str, tuple[str, ...]] = {
     "epsilon": (),
@@ -30,6 +32,41 @@ TARGETS: dict[str, tuple[str, ...]] = {
     "Geometry/Line_Segment.cpp": ("linear_functions",),
     "Geometry/Polygon.cpp": ("polygon",),
     "Geometry/Circle.cpp": ("circle_functions",),
+}
+
+DOCUMENTS: dict[str, tuple[str, ...]] = {
+    "Geometry/geometory.cpp": (
+        "Document/geometry_point.md",
+        "Document/geometry_orientation.md",
+        "Document/geometry_segment_intersection.md",
+        "Document/geometry_point_segment_distance.md",
+        "Document/geometry_area.md",
+        "Document/geometry_point_location.md",
+        "Document/convex_hull.md",
+        "Document/geometry_circle_intersection.md",
+    ),
+    "Geometry/Point.cpp": (
+        "Document/geometry_point.md", "Document/geometry_orientation.md",
+    ),
+    "Geometry/Line_Segment.cpp": (
+        "Document/geometry_point.md",
+        "Document/geometry_orientation.md",
+        "Document/geometry_segment_intersection.md",
+        "Document/geometry_point_segment_distance.md",
+    ),
+    "Geometry/Polygon.cpp": (
+        "Document/geometry_point.md",
+        "Document/geometry_orientation.md",
+        "Document/geometry_area.md",
+        "Document/geometry_point_location.md",
+        "Document/convex_hull.md",
+    ),
+    "Geometry/Circle.cpp": (
+        "Document/geometry_point.md",
+        "Document/geometry_orientation.md",
+        "Document/geometry_segment_intersection.md",
+        "Document/geometry_circle_intersection.md",
+    ),
 }
 
 
@@ -91,6 +128,7 @@ def main() -> int:
         for relative, roots in TARGETS.items():
             content = "// SPDX-License-Identifier: CC0-1.0\n" + headers + "\n"
             content += "\n".join(pieces[name] for name in dependency_order(roots))
+            content = render_api_overview(content, DOCUMENTS[relative])
             target = options.output_dir / relative
             if options.check:
                 if not target.is_file() or target.read_bytes() != content.encode("utf-8"):

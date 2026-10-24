@@ -1,0 +1,2239 @@
+{
+  "date": "2026-10-22",
+  "source": "Graph/Floyd-Warshall.cpp",
+  "baseline_sha256": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+  "final_sha256": "b6b899176e941b67762b73b386b5ca1d0eebeecf539d75e27aa0530ab24ac877",
+  "main_io_hashes": {
+    "Graph/Floyd-Warshall.cpp": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+    "Verify/current/drivers/floyd_warshall_bus_main.cpp": "3cc2222919105c01ccd4486bc4826bcb0d00bf74c3f81ea165127564b5c773f1",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "environment": {
+    "cpu": "Intel Core i9-14900K",
+    "cpu_affinity": 14,
+    "lock": "/tmp/atcoder_full_performance_20261018/benchmark.lock",
+    "gcc": "g++ (GCC) 15.3.0",
+    "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+    "flags": "-O2 -std=c++23 -DSKIP_RUNTIME_CHECKS。nativeは-march=nativeを追加。オンラインGCC15.2とは区別。"
+  },
+  "accepted": {
+    "scope": "GCCかつ__AVX2__が定義されるコンパイル。既存のruntime AVX2判定も維持する。",
+    "change": "n>=64の呼出し選択の配置のみ変更。genericGCC・Clang・専用SIMD無効の処理は既存を維持。",
+    "api": "公開API・数学処理・wide/負閉路/経路復元の意味・動的確保量は不変。"
+  },
+  "api_single": {
+    "summary": {
+      "source_hashes": {
+        "baseline": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "control": "5a211d20f0420a9db200ad7a67106b2c4f8e9da9ec45f341be745d7a521258b9",
+        "candidate": "b6b899176e941b67762b73b386b5ca1d0eebeecf539d75e27aa0530ab24ac877"
+      },
+      "builds": [
+        {
+          "mode": "gcc_plain",
+          "variant": "baseline",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-O2",
+            "-std=c++23",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_80246981_20261022/dispatch/bench.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_80246981_20261022/dispatch/gcc_plain_baseline"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_plain",
+          "variant": "control",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-O2",
+            "-std=c++23",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_80246981_20261022/dispatch/bench.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_80246981_20261022/dispatch/gcc_plain_control"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_plain",
+          "variant": "candidate",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-O2",
+            "-std=c++23",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/dispatch/candidate.hpp\"",
+            "/tmp/sirkit_floyd_80246981_20261022/dispatch/bench.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_80246981_20261022/dispatch/gcc_plain_candidate"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_native",
+          "variant": "baseline",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_80246981_20261022/dispatch/bench.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_80246981_20261022/dispatch/gcc_native_baseline"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_native",
+          "variant": "control",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/baseline.hpp\"",
+            "/tmp/sirkit_floyd_80246981_20261022/dispatch/bench.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_80246981_20261022/dispatch/gcc_native_control"
+          ],
+          "warnings": ""
+        },
+        {
+          "mode": "gcc_native",
+          "variant": "candidate",
+          "command": [
+            "taskset",
+            "-c",
+            "8",
+            "g++",
+            "-march=native",
+            "-O2",
+            "-std=c++23",
+            "-DSKIP_RUNTIME_CHECKS",
+            "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/dispatch/candidate.hpp\"",
+            "/tmp/sirkit_floyd_80246981_20261022/dispatch/bench.cpp",
+            "-o",
+            "/tmp/sirkit_floyd_80246981_20261022/dispatch/gcc_native_candidate"
+          ],
+          "warnings": ""
+        }
+      ],
+      "summary": {
+        "gcc_plain": {
+          "2_dense": {
+            "baseline": 17,
+            "control": 17,
+            "candidate": 17
+          },
+          "2_sparse": {
+            "baseline": 14,
+            "control": 14,
+            "candidate": 14
+          },
+          "2_isolated": {
+            "baseline": 14,
+            "control": 14,
+            "candidate": 14
+          },
+          "2_line": {
+            "baseline": 16,
+            "control": 16,
+            "candidate": 16
+          },
+          "2_path": {
+            "baseline": 37,
+            "control": 37,
+            "candidate": 37
+          },
+          "8_dense": {
+            "baseline": 137,
+            "control": 136,
+            "candidate": 136
+          },
+          "8_sparse": {
+            "baseline": 94,
+            "control": 91,
+            "candidate": 91
+          },
+          "8_isolated": {
+            "baseline": 94,
+            "control": 91,
+            "candidate": 93
+          },
+          "8_line": {
+            "baseline": 123,
+            "control": 122,
+            "candidate": 124
+          },
+          "8_path": {
+            "baseline": 209,
+            "control": 210,
+            "candidate": 210
+          },
+          "32_dense": {
+            "baseline": 4235,
+            "control": 4239,
+            "candidate": 4235
+          },
+          "32_sparse": {
+            "baseline": 1097,
+            "control": 1087,
+            "candidate": 1093
+          },
+          "32_isolated": {
+            "baseline": 1157,
+            "control": 1167,
+            "candidate": 1171
+          },
+          "32_line": {
+            "baseline": 3296,
+            "control": 3235,
+            "candidate": 3264
+          },
+          "32_path": {
+            "baseline": 6995,
+            "control": 7016,
+            "candidate": 7020
+          },
+          "64_dense": {
+            "baseline": 32046,
+            "control": 32114,
+            "candidate": 32119
+          },
+          "64_sparse": {
+            "baseline": 5354,
+            "control": 5395,
+            "candidate": 5373
+          },
+          "64_isolated": {
+            "baseline": 4068,
+            "control": 4108,
+            "candidate": 4212
+          },
+          "64_line": {
+            "baseline": 18698,
+            "control": 18717,
+            "candidate": 18849
+          },
+          "64_path": {
+            "baseline": 51092,
+            "control": 50529,
+            "candidate": 49953
+          },
+          "300_dense": {
+            "baseline": 3488004,
+            "control": 3491494,
+            "candidate": 3487943
+          },
+          "300_sparse": {
+            "baseline": 2470030,
+            "control": 2479691,
+            "candidate": 2469159
+          },
+          "300_isolated": {
+            "baseline": 79559,
+            "control": 80690,
+            "candidate": 79452
+          },
+          "300_line": {
+            "baseline": 1800513,
+            "control": 1798078,
+            "candidate": 1800979
+          },
+          "300_path": {
+            "baseline": 4804294,
+            "control": 4860304,
+            "candidate": 4885413
+          }
+        },
+        "gcc_native": {
+          "2_dense": {
+            "baseline": 17,
+            "control": 17,
+            "candidate": 17
+          },
+          "2_sparse": {
+            "baseline": 14,
+            "control": 15,
+            "candidate": 14
+          },
+          "2_isolated": {
+            "baseline": 15,
+            "control": 15,
+            "candidate": 14
+          },
+          "2_line": {
+            "baseline": 17,
+            "control": 17,
+            "candidate": 17
+          },
+          "2_path": {
+            "baseline": 37,
+            "control": 37,
+            "candidate": 36
+          },
+          "8_dense": {
+            "baseline": 148,
+            "control": 150,
+            "candidate": 132
+          },
+          "8_sparse": {
+            "baseline": 86,
+            "control": 88,
+            "candidate": 89
+          },
+          "8_isolated": {
+            "baseline": 86,
+            "control": 87,
+            "candidate": 88
+          },
+          "8_line": {
+            "baseline": 127,
+            "control": 128,
+            "candidate": 137
+          },
+          "8_path": {
+            "baseline": 206,
+            "control": 207,
+            "candidate": 207
+          },
+          "32_dense": {
+            "baseline": 4209,
+            "control": 4214,
+            "candidate": 4251
+          },
+          "32_sparse": {
+            "baseline": 1246,
+            "control": 1243,
+            "candidate": 1184
+          },
+          "32_isolated": {
+            "baseline": 1281,
+            "control": 1264,
+            "candidate": 1155
+          },
+          "32_line": {
+            "baseline": 3301,
+            "control": 3315,
+            "candidate": 3230
+          },
+          "32_path": {
+            "baseline": 7069,
+            "control": 7050,
+            "candidate": 7061
+          },
+          "64_dense": {
+            "baseline": 31608,
+            "control": 31567,
+            "candidate": 31428
+          },
+          "64_sparse": {
+            "baseline": 5866,
+            "control": 6048,
+            "candidate": 5993
+          },
+          "64_isolated": {
+            "baseline": 4403,
+            "control": 4333,
+            "candidate": 4449
+          },
+          "64_line": {
+            "baseline": 18528,
+            "control": 18223,
+            "candidate": 18486
+          },
+          "64_path": {
+            "baseline": 50483,
+            "control": 50115,
+            "candidate": 51497
+          },
+          "300_dense": {
+            "baseline": 3449143,
+            "control": 3445972,
+            "candidate": 3458771
+          },
+          "300_sparse": {
+            "baseline": 2422986,
+            "control": 2452248,
+            "candidate": 2407467
+          },
+          "300_isolated": {
+            "baseline": 78588,
+            "control": 78355,
+            "candidate": 78279
+          },
+          "300_line": {
+            "baseline": 1770565,
+            "control": 1769795,
+            "candidate": 1769820
+          },
+          "300_path": {
+            "baseline": 4803667,
+            "control": 4807794,
+            "candidate": 4806325
+          }
+        }
+      }
+    },
+    "raw": {
+      "gcc_plain": {
+        "2_dense": {
+          "baseline": [
+            17,
+            17,
+            16,
+            17,
+            17
+          ],
+          "control": [
+            17,
+            17,
+            17,
+            17,
+            16
+          ],
+          "candidate": [
+            17,
+            17,
+            16,
+            17,
+            16
+          ]
+        },
+        "2_sparse": {
+          "baseline": [
+            14,
+            14,
+            14,
+            14,
+            14
+          ],
+          "control": [
+            14,
+            14,
+            14,
+            13,
+            14
+          ],
+          "candidate": [
+            14,
+            14,
+            14,
+            14,
+            14
+          ]
+        },
+        "2_isolated": {
+          "baseline": [
+            14,
+            15,
+            14,
+            14,
+            14
+          ],
+          "control": [
+            14,
+            14,
+            14,
+            14,
+            14
+          ],
+          "candidate": [
+            14,
+            14,
+            14,
+            14,
+            14
+          ]
+        },
+        "2_line": {
+          "baseline": [
+            17,
+            16,
+            16,
+            16,
+            16
+          ],
+          "control": [
+            16,
+            16,
+            16,
+            16,
+            17
+          ],
+          "candidate": [
+            16,
+            17,
+            16,
+            16,
+            16
+          ]
+        },
+        "2_path": {
+          "baseline": [
+            37,
+            37,
+            40,
+            38,
+            36
+          ],
+          "control": [
+            37,
+            37,
+            37,
+            37,
+            37
+          ],
+          "candidate": [
+            37,
+            38,
+            37,
+            36,
+            37
+          ]
+        },
+        "8_dense": {
+          "baseline": [
+            135,
+            139,
+            137,
+            140,
+            136
+          ],
+          "control": [
+            135,
+            137,
+            136,
+            135,
+            136
+          ],
+          "candidate": [
+            137,
+            135,
+            136,
+            136,
+            137
+          ]
+        },
+        "8_sparse": {
+          "baseline": [
+            97,
+            94,
+            95,
+            88,
+            92
+          ],
+          "control": [
+            89,
+            94,
+            88,
+            91,
+            96
+          ],
+          "candidate": [
+            91,
+            94,
+            89,
+            99,
+            91
+          ]
+        },
+        "8_isolated": {
+          "baseline": [
+            94,
+            90,
+            91,
+            96,
+            96
+          ],
+          "control": [
+            91,
+            96,
+            81,
+            94,
+            86
+          ],
+          "candidate": [
+            92,
+            101,
+            95,
+            90,
+            93
+          ]
+        },
+        "8_line": {
+          "baseline": [
+            124,
+            123,
+            125,
+            121,
+            123
+          ],
+          "control": [
+            122,
+            122,
+            122,
+            120,
+            121
+          ],
+          "candidate": [
+            125,
+            124,
+            122,
+            126,
+            122
+          ]
+        },
+        "8_path": {
+          "baseline": [
+            214,
+            205,
+            210,
+            209,
+            206
+          ],
+          "control": [
+            210,
+            221,
+            210,
+            208,
+            210
+          ],
+          "candidate": [
+            211,
+            210,
+            208,
+            210,
+            206
+          ]
+        },
+        "32_dense": {
+          "baseline": [
+            4235,
+            4254,
+            4235,
+            4306,
+            4231
+          ],
+          "control": [
+            4225,
+            4239,
+            4258,
+            4227,
+            4250
+          ],
+          "candidate": [
+            4258,
+            4235,
+            4227,
+            4237,
+            4228
+          ]
+        },
+        "32_sparse": {
+          "baseline": [
+            1134,
+            1079,
+            1218,
+            1097,
+            1083
+          ],
+          "control": [
+            1108,
+            1087,
+            1074,
+            1131,
+            1077
+          ],
+          "candidate": [
+            1094,
+            1093,
+            1124,
+            1081,
+            1079
+          ]
+        },
+        "32_isolated": {
+          "baseline": [
+            1157,
+            1149,
+            1168,
+            1159,
+            1138
+          ],
+          "control": [
+            1185,
+            1153,
+            1117,
+            1208,
+            1167
+          ],
+          "candidate": [
+            1171,
+            1154,
+            1183,
+            1164,
+            1181
+          ]
+        },
+        "32_line": {
+          "baseline": [
+            3250,
+            3405,
+            3577,
+            3296,
+            3212
+          ],
+          "control": [
+            3283,
+            3235,
+            3235,
+            3272,
+            3199
+          ],
+          "candidate": [
+            3268,
+            3378,
+            3240,
+            3264,
+            3261
+          ]
+        },
+        "32_path": {
+          "baseline": [
+            7007,
+            6979,
+            7024,
+            6995,
+            6980
+          ],
+          "control": [
+            7016,
+            7004,
+            7131,
+            7036,
+            7006
+          ],
+          "candidate": [
+            7021,
+            7000,
+            7020,
+            7020,
+            6988
+          ]
+        },
+        "64_dense": {
+          "baseline": [
+            31998,
+            32008,
+            32125,
+            32415,
+            32046
+          ],
+          "control": [
+            32056,
+            32114,
+            32016,
+            32114,
+            32168
+          ],
+          "candidate": [
+            32132,
+            32119,
+            32056,
+            32284,
+            31951
+          ]
+        },
+        "64_sparse": {
+          "baseline": [
+            5373,
+            5354,
+            5323,
+            5404,
+            5156
+          ],
+          "control": [
+            5396,
+            5248,
+            5401,
+            5343,
+            5395
+          ],
+          "candidate": [
+            5340,
+            5306,
+            5492,
+            5373,
+            5414
+          ]
+        },
+        "64_isolated": {
+          "baseline": [
+            4278,
+            4067,
+            4173,
+            4049,
+            4068
+          ],
+          "control": [
+            4108,
+            4101,
+            4149,
+            4189,
+            4097
+          ],
+          "candidate": [
+            4121,
+            4236,
+            4212,
+            4019,
+            4236
+          ]
+        },
+        "64_line": {
+          "baseline": [
+            18698,
+            18629,
+            18724,
+            18688,
+            18726
+          ],
+          "control": [
+            18624,
+            18718,
+            18717,
+            18981,
+            18673
+          ],
+          "candidate": [
+            18849,
+            18893,
+            18692,
+            18641,
+            19150
+          ]
+        },
+        "64_path": {
+          "baseline": [
+            51469,
+            49900,
+            49739,
+            51579,
+            51092
+          ],
+          "control": [
+            50529,
+            51934,
+            51919,
+            49737,
+            50098
+          ],
+          "candidate": [
+            50110,
+            49831,
+            50732,
+            49633,
+            49953
+          ]
+        },
+        "300_dense": {
+          "baseline": [
+            3488794,
+            3488004,
+            3486741,
+            3486180,
+            3497275
+          ],
+          "control": [
+            3485402,
+            3486280,
+            3491494,
+            3494671,
+            3500524
+          ],
+          "candidate": [
+            3487943,
+            3499278,
+            3487296,
+            3493863,
+            3484041
+          ]
+        },
+        "300_sparse": {
+          "baseline": [
+            2467245,
+            2468388,
+            2470078,
+            2470030,
+            2509932
+          ],
+          "control": [
+            2469250,
+            2494401,
+            2479691,
+            2493863,
+            2470186
+          ],
+          "candidate": [
+            2470704,
+            2468747,
+            2468863,
+            2471877,
+            2469159
+          ]
+        },
+        "300_isolated": {
+          "baseline": [
+            78913,
+            79559,
+            78819,
+            82030,
+            81195
+          ],
+          "control": [
+            80690,
+            81782,
+            78887,
+            82800,
+            78706
+          ],
+          "candidate": [
+            84261,
+            79452,
+            78805,
+            80367,
+            78718
+          ]
+        },
+        "300_line": {
+          "baseline": [
+            1800513,
+            1805126,
+            1797113,
+            1836376,
+            1798660
+          ],
+          "control": [
+            1798078,
+            1797102,
+            1805142,
+            1799307,
+            1797613
+          ],
+          "candidate": [
+            1800979,
+            1822224,
+            1799779,
+            1821016,
+            1799043
+          ]
+        },
+        "300_path": {
+          "baseline": [
+            4815212,
+            4768949,
+            4804294,
+            4785855,
+            4843430
+          ],
+          "control": [
+            4793320,
+            4860304,
+            4872196,
+            4888257,
+            4776438
+          ],
+          "candidate": [
+            4885413,
+            4859917,
+            4897199,
+            4916155,
+            4787034
+          ]
+        }
+      },
+      "gcc_native": {
+        "2_dense": {
+          "baseline": [
+            17,
+            17,
+            17,
+            17,
+            17
+          ],
+          "control": [
+            17,
+            17,
+            17,
+            17,
+            17
+          ],
+          "candidate": [
+            17,
+            17,
+            17,
+            17,
+            17
+          ]
+        },
+        "2_sparse": {
+          "baseline": [
+            14,
+            14,
+            14,
+            15,
+            15
+          ],
+          "control": [
+            15,
+            14,
+            15,
+            15,
+            15
+          ],
+          "candidate": [
+            14,
+            14,
+            14,
+            14,
+            14
+          ]
+        },
+        "2_isolated": {
+          "baseline": [
+            15,
+            15,
+            14,
+            15,
+            14
+          ],
+          "control": [
+            15,
+            14,
+            15,
+            15,
+            15
+          ],
+          "candidate": [
+            14,
+            14,
+            15,
+            14,
+            14
+          ]
+        },
+        "2_line": {
+          "baseline": [
+            17,
+            17,
+            17,
+            17,
+            17
+          ],
+          "control": [
+            17,
+            16,
+            17,
+            17,
+            17
+          ],
+          "candidate": [
+            17,
+            17,
+            17,
+            17,
+            17
+          ]
+        },
+        "2_path": {
+          "baseline": [
+            37,
+            36,
+            37,
+            37,
+            37
+          ],
+          "control": [
+            37,
+            36,
+            37,
+            36,
+            38
+          ],
+          "candidate": [
+            36,
+            37,
+            37,
+            36,
+            36
+          ]
+        },
+        "8_dense": {
+          "baseline": [
+            148,
+            150,
+            149,
+            148,
+            148
+          ],
+          "control": [
+            148,
+            148,
+            150,
+            151,
+            151
+          ],
+          "candidate": [
+            132,
+            133,
+            132,
+            132,
+            132
+          ]
+        },
+        "8_sparse": {
+          "baseline": [
+            86,
+            88,
+            86,
+            85,
+            88
+          ],
+          "control": [
+            88,
+            88,
+            87,
+            86,
+            89
+          ],
+          "candidate": [
+            94,
+            98,
+            88,
+            87,
+            89
+          ]
+        },
+        "8_isolated": {
+          "baseline": [
+            86,
+            86,
+            86,
+            85,
+            85
+          ],
+          "control": [
+            84,
+            87,
+            84,
+            87,
+            87
+          ],
+          "candidate": [
+            89,
+            87,
+            88,
+            91,
+            86
+          ]
+        },
+        "8_line": {
+          "baseline": [
+            126,
+            128,
+            127,
+            127,
+            127
+          ],
+          "control": [
+            126,
+            128,
+            128,
+            130,
+            128
+          ],
+          "candidate": [
+            134,
+            135,
+            138,
+            137,
+            137
+          ]
+        },
+        "8_path": {
+          "baseline": [
+            205,
+            206,
+            205,
+            206,
+            209
+          ],
+          "control": [
+            207,
+            210,
+            209,
+            205,
+            206
+          ],
+          "candidate": [
+            205,
+            213,
+            206,
+            207,
+            207
+          ]
+        },
+        "32_dense": {
+          "baseline": [
+            4209,
+            4189,
+            4216,
+            4190,
+            4220
+          ],
+          "control": [
+            4216,
+            4233,
+            4214,
+            4196,
+            4184
+          ],
+          "candidate": [
+            4249,
+            4258,
+            4251,
+            4256,
+            4235
+          ]
+        },
+        "32_sparse": {
+          "baseline": [
+            1255,
+            1239,
+            1250,
+            1246,
+            1245
+          ],
+          "control": [
+            1234,
+            1238,
+            1243,
+            1248,
+            1243
+          ],
+          "candidate": [
+            1181,
+            1280,
+            1181,
+            1184,
+            1184
+          ]
+        },
+        "32_isolated": {
+          "baseline": [
+            1257,
+            1277,
+            1298,
+            1293,
+            1281
+          ],
+          "control": [
+            1230,
+            1264,
+            1251,
+            1278,
+            1297
+          ],
+          "candidate": [
+            1155,
+            1162,
+            1133,
+            1180,
+            1131
+          ]
+        },
+        "32_line": {
+          "baseline": [
+            3292,
+            3366,
+            3301,
+            3287,
+            3371
+          ],
+          "control": [
+            3363,
+            3311,
+            3250,
+            3446,
+            3315
+          ],
+          "candidate": [
+            3189,
+            3416,
+            3230,
+            3239,
+            3201
+          ]
+        },
+        "32_path": {
+          "baseline": [
+            7052,
+            7029,
+            7069,
+            7086,
+            7236
+          ],
+          "control": [
+            7050,
+            7083,
+            7086,
+            7044,
+            7047
+          ],
+          "candidate": [
+            7060,
+            7124,
+            7063,
+            7061,
+            7050
+          ]
+        },
+        "64_dense": {
+          "baseline": [
+            30428,
+            31608,
+            30782,
+            31850,
+            31639
+          ],
+          "control": [
+            31590,
+            31535,
+            31840,
+            31567,
+            30250
+          ],
+          "candidate": [
+            31600,
+            30358,
+            30450,
+            31502,
+            31428
+          ]
+        },
+        "64_sparse": {
+          "baseline": [
+            5879,
+            5853,
+            6158,
+            5836,
+            5866
+          ],
+          "control": [
+            6068,
+            5887,
+            6048,
+            6205,
+            5877
+          ],
+          "candidate": [
+            5926,
+            6095,
+            5993,
+            5827,
+            6033
+          ]
+        },
+        "64_isolated": {
+          "baseline": [
+            4420,
+            4403,
+            4348,
+            4359,
+            4422
+          ],
+          "control": [
+            4460,
+            4271,
+            4333,
+            4354,
+            4297
+          ],
+          "candidate": [
+            4385,
+            4449,
+            4330,
+            4539,
+            4513
+          ]
+        },
+        "64_line": {
+          "baseline": [
+            17844,
+            18528,
+            18530,
+            18900,
+            18356
+          ],
+          "control": [
+            18371,
+            17840,
+            18223,
+            18683,
+            17887
+          ],
+          "candidate": [
+            18370,
+            18486,
+            18018,
+            18658,
+            18722
+          ]
+        },
+        "64_path": {
+          "baseline": [
+            50483,
+            50348,
+            50181,
+            51238,
+            51471
+          ],
+          "control": [
+            49975,
+            50115,
+            50157,
+            49955,
+            50469
+          ],
+          "candidate": [
+            51640,
+            51601,
+            51497,
+            50265,
+            49878
+          ]
+        },
+        "300_dense": {
+          "baseline": [
+            3449143,
+            3447863,
+            3441538,
+            3464819,
+            3453795
+          ],
+          "control": [
+            3442781,
+            3459622,
+            3455017,
+            3440454,
+            3445972
+          ],
+          "candidate": [
+            3446043,
+            3464421,
+            3458771,
+            3472110,
+            3451718
+          ]
+        },
+        "300_sparse": {
+          "baseline": [
+            2446787,
+            2411128,
+            2422986,
+            2418631,
+            2472964
+          ],
+          "control": [
+            2452979,
+            2452248,
+            2400903,
+            2405646,
+            2452593
+          ],
+          "candidate": [
+            2402719,
+            2407467,
+            2431191,
+            2471037,
+            2401544
+          ]
+        },
+        "300_isolated": {
+          "baseline": [
+            79390,
+            77846,
+            78588,
+            78446,
+            79886
+          ],
+          "control": [
+            83697,
+            81557,
+            77991,
+            78142,
+            78355
+          ],
+          "candidate": [
+            78160,
+            83083,
+            78279,
+            77903,
+            78279
+          ]
+        },
+        "300_line": {
+          "baseline": [
+            1770186,
+            1770565,
+            1772597,
+            1785092,
+            1765989
+          ],
+          "control": [
+            1769795,
+            1771982,
+            1728209,
+            1747980,
+            1772021
+          ],
+          "candidate": [
+            1765545,
+            1789134,
+            1786423,
+            1719656,
+            1769820
+          ]
+        },
+        "300_path": {
+          "baseline": [
+            4802681,
+            4803994,
+            4837306,
+            4799228,
+            4803667
+          ],
+          "control": [
+            4820526,
+            4814683,
+            4807794,
+            4800664,
+            4804567
+          ],
+          "candidate": [
+            4877219,
+            4802726,
+            4806325,
+            4802032,
+            4811092
+          ]
+        }
+      }
+    },
+    "confirmation": {
+      "raw": {
+        "8_dense": {
+          "baseline": [
+            149,
+            147,
+            147,
+            215,
+            147,
+            147,
+            148
+          ],
+          "control": [
+            147,
+            152,
+            147,
+            213,
+            148,
+            145,
+            150
+          ],
+          "candidate": [
+            132,
+            133,
+            131,
+            236,
+            132,
+            131,
+            134
+          ]
+        },
+        "8_line": {
+          "baseline": [
+            125,
+            127,
+            187,
+            211,
+            128,
+            127,
+            126
+          ],
+          "control": [
+            125,
+            128,
+            128,
+            205,
+            126,
+            126,
+            128
+          ],
+          "candidate": [
+            140,
+            136,
+            137,
+            198,
+            135,
+            139,
+            138
+          ]
+        },
+        "32_isolated": {
+          "baseline": [
+            1246,
+            1246,
+            1241,
+            2125,
+            1245,
+            1259,
+            1246
+          ],
+          "control": [
+            1221,
+            1243,
+            1229,
+            2133,
+            1242,
+            1253,
+            1236
+          ],
+          "candidate": [
+            1153,
+            1102,
+            1148,
+            2096,
+            1130,
+            1122,
+            1150
+          ]
+        },
+        "64_path": {
+          "baseline": [
+            52441,
+            52305,
+            52243,
+            78696,
+            52122,
+            52290,
+            52696
+          ],
+          "control": [
+            52219,
+            52166,
+            52111,
+            49618,
+            52341,
+            52355,
+            53872
+          ],
+          "candidate": [
+            52142,
+            50968,
+            52176,
+            52109,
+            51996,
+            54308,
+            51386
+          ]
+        },
+        "300_sparse": {
+          "baseline": [
+            2532729,
+            2484979,
+            2547607,
+            2534850,
+            2481119,
+            2492242,
+            2527169
+          ],
+          "control": [
+            2501998,
+            2488457,
+            3256078,
+            2577754,
+            2476927,
+            2534320,
+            2491642
+          ],
+          "candidate": [
+            2535968,
+            2505604,
+            3706573,
+            2485927,
+            2571061,
+            2484176,
+            2493871
+          ]
+        }
+      },
+      "summary": {
+        "8_dense": {
+          "baseline": 147,
+          "control": 148,
+          "candidate": 132
+        },
+        "8_line": {
+          "baseline": 127,
+          "control": 128,
+          "candidate": 138
+        },
+        "32_isolated": {
+          "baseline": 1246,
+          "control": 1242,
+          "candidate": 1148
+        },
+        "64_path": {
+          "baseline": 52305,
+          "control": 52219,
+          "candidate": 52109
+        },
+        "300_sparse": {
+          "baseline": 2527169,
+          "control": 2501998,
+          "candidate": 2505604
+        }
+      },
+      "rounds": 7
+    },
+    "method": "入力行列コピーは計測外。5順序交代+4条件7回追試、CPU14/共有lock、中央値ns。"
+  },
+  "native_main": {
+    "raw": {
+      "line_8": {
+        "baseline": [
+          1.25864,
+          1.055629,
+          1.291757,
+          1.441925,
+          1.298877,
+          2.280184,
+          1.743108,
+          1.408817,
+          1.398477
+        ],
+        "control": [
+          1.168016,
+          1.617275,
+          1.177049,
+          1.183538,
+          1.39166,
+          2.246089,
+          1.3299,
+          1.602996,
+          1.306675
+        ],
+        "candidate": [
+          1.193945,
+          1.32021,
+          1.800726,
+          1.139804,
+          1.154665,
+          1.461001,
+          1.340338,
+          1.509339,
+          1.692179
+        ]
+      },
+      "line_32": {
+        "baseline": [
+          1.241875,
+          1.286255,
+          1.228098,
+          1.232947,
+          1.110002,
+          1.802232,
+          1.244934,
+          1.346238,
+          1.352367
+        ],
+        "control": [
+          1.042136,
+          1.21071,
+          1.216178,
+          1.187801,
+          1.115729,
+          1.849748,
+          1.336128,
+          1.323114,
+          1.315964
+        ],
+        "candidate": [
+          1.022691,
+          1.151765,
+          1.149757,
+          1.298965,
+          1.022688,
+          1.994396,
+          1.255291,
+          1.564754,
+          1.334843
+        ]
+      },
+      "line_300": {
+        "baseline": [
+          3.379475,
+          3.503863,
+          6.523436,
+          5.427347,
+          3.33333,
+          3.257231,
+          4.624096,
+          4.475114,
+          4.48963
+        ],
+        "control": [
+          4.675788,
+          3.532634,
+          3.453964,
+          3.578797,
+          3.463803,
+          3.952149,
+          4.656873,
+          4.680395,
+          4.340993
+        ],
+        "candidate": [
+          3.332213,
+          3.601065,
+          3.613351,
+          3.458678,
+          3.306136,
+          3.603922,
+          4.471109,
+          4.209556,
+          4.490262
+        ]
+      },
+      "star_300": {
+        "baseline": [
+          5.441962,
+          5.36987,
+          5.30339,
+          5.399871,
+          5.524094,
+          5.678438,
+          7.126923,
+          7.271776,
+          8.523082
+        ],
+        "control": [
+          5.246543,
+          5.304447,
+          5.814888,
+          5.326721,
+          5.361359,
+          9.806946,
+          7.655867,
+          7.273941,
+          7.374276
+        ],
+        "candidate": [
+          5.426977,
+          5.379801,
+          5.363089,
+          5.421434,
+          5.616782,
+          6.17699,
+          7.843927,
+          7.307648,
+          7.181776
+        ]
+      },
+      "dense_random_300": {
+        "baseline": [
+          6.247087,
+          6.176492,
+          6.16884,
+          5.796247,
+          6.085305,
+          8.725823,
+          8.317335,
+          8.265057,
+          8.446119
+        ],
+        "control": [
+          6.035114,
+          5.943882,
+          6.658869,
+          5.995894,
+          5.963695,
+          8.338944,
+          8.452541,
+          8.327385,
+          8.170651
+        ],
+        "candidate": [
+          6.100976,
+          6.235275,
+          6.14677,
+          6.020836,
+          6.298441,
+          8.438097,
+          8.380483,
+          8.07708,
+          8.26531
+        ]
+      },
+      "random_300_0.02": {
+        "baseline": [
+          4.94619,
+          5.200946,
+          4.976224,
+          5.002444,
+          4.977866,
+          6.91058,
+          6.658067,
+          6.698506,
+          7.068746
+        ],
+        "control": [
+          5.156432,
+          5.108015,
+          5.215452,
+          4.986834,
+          4.910869,
+          7.53586,
+          6.661889,
+          6.722001,
+          6.84462
+        ],
+        "candidate": [
+          5.233625,
+          5.266612,
+          4.840975,
+          5.082562,
+          5.019577,
+          7.074477,
+          6.927783,
+          6.797235,
+          7.071361
+        ]
+      }
+    },
+    "summary": {
+      "line_8": {
+        "baseline": 1.398477,
+        "control": 1.3299,
+        "candidate": 1.340338
+      },
+      "line_32": {
+        "baseline": 1.244934,
+        "control": 1.216178,
+        "candidate": 1.255291
+      },
+      "line_300": {
+        "baseline": 4.475114,
+        "control": 3.952149,
+        "candidate": 3.603922
+      },
+      "star_300": {
+        "baseline": 5.524094,
+        "control": 5.814888,
+        "candidate": 5.616782
+      },
+      "dense_random_300": {
+        "baseline": 6.247087,
+        "control": 6.658869,
+        "candidate": 6.298441
+      },
+      "random_300_0.02": {
+        "baseline": 5.200946,
+        "control": 5.215452,
+        "candidate": 5.266612
+      }
+    },
+    "commands": [
+      [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "-march=native",
+        "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/baseline.hpp\"",
+        "/tmp/sirkit_floyd_20261022/main_dispatch/main.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_80246981_20261022/dispatch/main_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "-march=native",
+        "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/baseline.hpp\"",
+        "/tmp/sirkit_floyd_20261022/main_dispatch/main.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_80246981_20261022/dispatch/main_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "-march=native",
+        "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/dispatch/candidate.hpp\"",
+        "/tmp/sirkit_floyd_20261022/main_dispatch/main.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_80246981_20261022/dispatch/main_candidate"
+      ]
+    ],
+    "case_count": 14,
+    "rounds": 9,
+    "main_sha256": "0255ee313cf9b78ffe75f51626ca2952595c337e53ddb574e731a3c4443dea94"
+  },
+  "native_main_limit": "main全体の明確な追加高速化は主張しない。baseline/control同一コード間にもline300約4.48/3.95ms、dense約6.25/6.66msなどの揺れがあり、小差の退行/改善は確定できない。API単独n300では現行高速化を概ね維持。",
+  "equivalence": [
+    {
+      "mode": "gcc_plain",
+      "sections": {
+        "baseline": {
+          ".text": "732cdc77eb2d8339da45e5939409721a6113a2dcb21cc4be2b0b67625639de84",
+          ".rodata": "b91c88fe57db4a37a718ff2ae8b6a4bc4e2b3e44aef0d618b0679ec23e68e17d"
+        },
+        "candidate": {
+          ".text": "732cdc77eb2d8339da45e5939409721a6113a2dcb21cc4be2b0b67625639de84",
+          ".rodata": "b91c88fe57db4a37a718ff2ae8b6a4bc4e2b3e44aef0d618b0679ec23e68e17d"
+        }
+      },
+      "binaries": {
+        "baseline": "26a3317d8281c5acd3775355424edd449232d6ee842ba479708510af518f1bc4",
+        "candidate": "26a3317d8281c5acd3775355424edd449232d6ee842ba479708510af518f1bc4"
+      },
+      "commands": [
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/baseline.hpp\"",
+          "/tmp/sirkit_floyd_80246981_20261022/dispatch/bench.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_80246981_20261022/dispatch/proof_gcc_plain_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/dispatch/candidate.hpp\"",
+          "/tmp/sirkit_floyd_80246981_20261022/dispatch/bench.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_80246981_20261022/dispatch/proof_gcc_plain_candidate"
+        ]
+      ],
+      "binary_identical": true,
+      "runtime_sections_identical": true
+    },
+    {
+      "mode": "clang_plain",
+      "sections": {
+        "baseline": {
+          ".text": "6c103dbad165b0f75216dc64da07ef5023861d2d0385439abb0fbf10adb7f2cb",
+          ".rodata": "7b441e119f424e1ac1448caa008dacdfbb4b66b2fb8474ee19021b386f5a2beb"
+        },
+        "candidate": {
+          ".text": "6c103dbad165b0f75216dc64da07ef5023861d2d0385439abb0fbf10adb7f2cb",
+          ".rodata": "7b441e119f424e1ac1448caa008dacdfbb4b66b2fb8474ee19021b386f5a2beb"
+        }
+      },
+      "binaries": {
+        "baseline": "6fdb4f5a70b01e3dc3040d1e0f74283ec053cf4c5f167b22a403e79aa2ade0d0",
+        "candidate": "6fdb4f5a70b01e3dc3040d1e0f74283ec053cf4c5f167b22a403e79aa2ade0d0"
+      },
+      "commands": [
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/baseline.hpp\"",
+          "/tmp/sirkit_floyd_80246981_20261022/dispatch/bench.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_80246981_20261022/dispatch/proof_clang_plain_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/dispatch/candidate.hpp\"",
+          "/tmp/sirkit_floyd_80246981_20261022/dispatch/bench.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_80246981_20261022/dispatch/proof_clang_plain_candidate"
+        ]
+      ],
+      "binary_identical": true,
+      "runtime_sections_identical": true
+    },
+    {
+      "mode": "clang_native",
+      "sections": {
+        "baseline": {
+          ".text": "5209cc0cd56e48411ffc1cdb3488c100076d2d3cc72d110ec11cba10cfc35668",
+          ".rodata": "3de0fa07c2a3292ebae0fac1553176f0124cbc423dcfd96c37c64cd6b061e17b"
+        },
+        "candidate": {
+          ".text": "5209cc0cd56e48411ffc1cdb3488c100076d2d3cc72d110ec11cba10cfc35668",
+          ".rodata": "3de0fa07c2a3292ebae0fac1553176f0124cbc423dcfd96c37c64cd6b061e17b"
+        }
+      },
+      "binaries": {
+        "baseline": "61176d8df610c8f115832f0ba54d2e2df3ba83845ca394a1bd14ad996644d1d3",
+        "candidate": "61176d8df610c8f115832f0ba54d2e2df3ba83845ca394a1bd14ad996644d1d3"
+      },
+      "commands": [
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-march=native",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/baseline.hpp\"",
+          "/tmp/sirkit_floyd_80246981_20261022/dispatch/bench.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_80246981_20261022/dispatch/proof_clang_native_baseline"
+        ],
+        [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-march=native",
+          "-O2",
+          "-std=c++23",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/dispatch/candidate.hpp\"",
+          "/tmp/sirkit_floyd_80246981_20261022/dispatch/bench.cpp",
+          "-o",
+          "/tmp/sirkit_floyd_80246981_20261022/dispatch/proof_clang_native_candidate"
+        ]
+      ],
+      "binary_identical": true,
+      "runtime_sections_identical": true
+    }
+  ],
+  "actual_generic_main_equivalence": {
+    "mode": "gcc_plain",
+    "main": "/tmp/sirkit_floyd_20261022/main_dispatch/main.cpp",
+    "main_sha256": "0255ee313cf9b78ffe75f51626ca2952595c337e53ddb574e731a3c4443dea94",
+    "commands": [
+      [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/baseline.hpp\"",
+        "/tmp/sirkit_floyd_20261022/main_dispatch/main.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_80246981_20261022/dispatch/main_plain_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-O2",
+        "-std=c++23",
+        "-DFLOYD_SOURCE=\"/tmp/sirkit_floyd_80246981_20261022/dispatch/candidate.hpp\"",
+        "/tmp/sirkit_floyd_20261022/main_dispatch/main.cpp",
+        "-o",
+        "/tmp/sirkit_floyd_80246981_20261022/dispatch/main_plain_candidate"
+      ]
+    ],
+    "binaries": {
+      "baseline": "68848eec042566d676ac717e8c0d0e645cf2e3fe9bbd707d9c0f558d4b96cdfd",
+      "candidate": "68848eec042566d676ac717e8c0d0e645cf2e3fe9bbd707d9c0f558d4b96cdfd"
+    },
+    "sections": {
+      "baseline": {
+        ".text": "d68822af9fa091ee71499442668f3b89454510a47b5e7bff3f0cd21de54a3278",
+        ".rodata": "6342b1eef6c356035c7c869209c6cc18303432673ebfaf5584a76ed25685717c"
+      },
+      "candidate": {
+        ".text": "d68822af9fa091ee71499442668f3b89454510a47b5e7bff3f0cd21de54a3278",
+        ".rodata": "6342b1eef6c356035c7c869209c6cc18303432673ebfaf5584a76ed25685717c"
+      }
+    },
+    "binary_identical": true,
+    "runtime_sections_identical": true
+  },
+  "equivalence_note": "genericGCCの同じmainはbinary全体一致。genericGCC/Clang plain/nativeのベンチbinaryも全体一致。通常設定での実装変更による速度上積みを主張しない。",
+  "remaining_difference": "native n8長鎖は7回確認で127→138ns（約11ns増）。n8密147→132ns、n32孤立1246→1148ns。n64経路復元の初回約2%遅れは7回追試で52.305/control52.219/candidate52.109usとなり再現せず。全条件で非退行とは断言しない。",
+  "online": "画像AC6msは旧画像7msとの差1ms。時間分解能・ソース未照合のため、安定した14%短縮や本体だけの差と断言しない。",
+  "reproduction": {
+    "baseline_source": "// SPDX-License-Identifier: CC0-1.0\n// 参考: https://zenn.dev/reputeless/books/standard-cpp-for-competitive-programming/viewer/floyd-warshall\n\n#include <algorithm>\n#include <bit>\n#include <cstddef>\n#include <cstdint>\n#include <limits>\n#include <stdexcept>\n#include <vector>\n#include <type_traits>\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n#include <immintrin.h>\n#endif\n\n#ifndef SIRKIT_INF_DEFINED\n#define SIRKIT_INF_DEFINED\ninline constexpr std::int64_t INF = std::int64_t{1} << 60;\n#endif\n\n// FloydWarshall(distances): 正方行列を全点対最短距離で上書きし、グラフ内に負閉路があればtrue。O(V^3)時間。\n// FloydWarshall(distances, next): 距離に加え、経路の次頂点表nextを作る。経路更新・O(V^2)追加領域はこの版のみ。\n// FloydWarshallPath(next, from, to): 次頂点表から頂点列をO(経路長)で復元。未到達・負閉路の影響下なら空。\n// 入力はINFが未接続、有限重みは(-INF, INF)。対角はmin(入力, 0)とする。\n// 出力は未到達INF、負閉路を経由できる組だけ-INF。有限距離が(-INF, INF)外ならoverflow_error。\n// 算術範囲の算出を兼ねて初期行列を走査する。SKIP_RUNTIME_CHECKSで形状・入力値・頂点の検査を除く。\n// 通常版の追加領域はO(V)。大きな重みで広幅演算が必要な場合はO(V^2)。例外時の行列の内容は未規定。\n#ifndef SIRKIT_FLOYD_WARSHALL_DEFINED\n#define SIRKIT_FLOYD_WARSHALL_DEFINED\nnamespace reinsirk::detail {\n\n// boolは既存の実行経路、専用の列挙型は有限範囲のSIMD最適化を選ぶ。\nenum class FloydWarshallSimdMode { Finite = 1 };\n\n#if defined(__SIZEOF_INT128__) && (defined(__GNUC__) || defined(__clang__))\nusing FloydWarshallWide = __int128_t;\n#else\n// 必要なのは最大約92ビット。符号付き上位語と符号なし下位語で標準C++でも扱う。\nstruct FloydWarshallWide\n{\n    std::int64_t high = 0;\n    std::uint64_t low = 0;\n    constexpr FloydWarshallWide() = default;\n    constexpr FloydWarshallWide(std::int64_t value)\n        : high(value < 0 ? -1 : 0), low(static_cast<std::uint64_t>(value)) {}\n    constexpr FloydWarshallWide(std::int64_t upper, std::uint64_t lower)\n        : high(upper), low(lower) {}\n    friend constexpr FloydWarshallWide operator+(FloydWarshallWide a,\n                                                        FloydWarshallWide b)\n    {\n        const auto lower = a.low + b.low;\n        return {a.high + b.high + (lower < a.low), lower};\n    }\n    friend constexpr FloydWarshallWide operator-(FloydWarshallWide value)\n    {\n        const auto lower = std::uint64_t{0} - value.low;\n        return {~value.high + (lower == 0), lower};\n    }\n    friend constexpr bool operator<(FloydWarshallWide a, FloydWarshallWide b)\n    {\n        return a.high < b.high || (a.high == b.high && a.low < b.low);\n    }\n    friend constexpr bool operator==(FloydWarshallWide, FloydWarshallWide) = default;\n    explicit constexpr operator std::int64_t() const { return std::bit_cast<std::int64_t>(low); }\n};\n#endif\n\n// 広幅実装でも下限の絶対値は単純路の最大絶対値より大きい。\ninline FloydWarshallWide FloydWarshallLimit(std::size_t n)\n{\n#if defined(__SIZEOF_INT128__) && (defined(__GNUC__) || defined(__clang__))\n    return static_cast<FloydWarshallWide>(n) * INF;\n#else\n    return {static_cast<std::int64_t>(n >> 4), static_cast<std::uint64_t>(n) << 60};\n#endif\n}\n\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\ntemplate <bool RestorePath, bool HasNegative, bool Dense>\n[[gnu::target(\"avx2\")]]\ninline void FloydWarshallRelaxAvx2(std::vector<std::vector<std::int64_t>> &distance,\n                                 std::int64_t unreachable, std::int64_t lower,\n                                 std::vector<std::vector<int>> *next)\n{\n    const std::size_t n = distance.size();\n    const __m256i v_unreachable = _mm256_set1_epi64x(unreachable);\n    const __m256i v_lower = _mm256_set1_epi64x(lower);\n    for (std::size_t via = 0; via < n; ++via)\n    {\n        const auto *through = distance[via].data();\n        for (std::size_t from = 0; from < n; ++from)\n        {\n            auto *row = distance[from].data();\n            const auto prefix = row[via];\n            if (prefix == unreachable)\n                continue;\n            const __m256i v_prefix = _mm256_set1_epi64x(prefix);\n            int *path = nullptr;\n            int following = 0;\n            if constexpr (RestorePath)\n            {\n                path = (*next)[from].data();\n                following = path[via];\n            }\n            std::size_t to = 0;\n            for (; to + 4 <= n; to += 4)\n            {\n                const __m256i values = _mm256_loadu_si256(reinterpret_cast<const __m256i *>(through + to));\n                const __m256i old = _mm256_loadu_si256(reinterpret_cast<const __m256i *>(row + to));\n                __m256i candidate = _mm256_add_epi64(v_prefix, values);\n                if constexpr (HasNegative)\n                    candidate = _mm256_blendv_epi8(candidate, v_lower, _mm256_cmpgt_epi64(v_lower, candidate));\n                __m256i improve = _mm256_cmpgt_epi64(old, candidate);\n                // 未到達laneの加算結果は捨て、到達済みのlaneだけ更新する。\n                if constexpr (!Dense)\n                    improve = _mm256_andnot_si256(_mm256_cmpeq_epi64(values, v_unreachable), improve);\n                _mm256_storeu_si256(reinterpret_cast<__m256i *>(row + to), _mm256_blendv_epi8(old, candidate, improve));\n                if constexpr (RestorePath)\n                {\n                    const __m128 lo = _mm_castsi128_ps(_mm256_castsi256_si128(improve));\n                    const __m128 hi = _mm_castsi128_ps(_mm256_extracti128_si256(improve, 1));\n                    const __m128i mask = _mm_castps_si128(_mm_shuffle_ps(lo, hi, _MM_SHUFFLE(2, 0, 2, 0)));\n                    const __m128i previous = _mm_loadu_si128(reinterpret_cast<const __m128i *>(path + to));\n                    _mm_storeu_si128(reinterpret_cast<__m128i *>(path + to),\n                                     _mm_blendv_epi8(previous, _mm_set1_epi32(following), mask));\n                }\n            }\n            for (; to < n; ++to)\n            {\n                if constexpr (!Dense)\n                    if (through[to] == unreachable)\n                        continue;\n                auto candidate = prefix + through[to];\n                if constexpr (HasNegative)\n                    candidate = std::max(candidate, lower);\n                if (candidate < row[to])\n                {\n                    row[to] = candidate;\n                    if constexpr (RestorePath)\n                        path[to] = following;\n                }\n            }\n        }\n    }\n}\n#endif\ntemplate <bool RestorePath, bool HasNegative, bool FiniteRange = false, bool Dense = false, class Distance, auto UseSimd = false>\ninline bool FloydWarshallRun(std::vector<std::vector<Distance>> &distance,\n                                    Distance unreachable, Distance lower,\n                                    std::vector<std::vector<int>> *next)\n{\n    const std::size_t n = distance.size();\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n    if constexpr (static_cast<bool>(UseSimd) && std::is_same_v<Distance, std::int64_t>)\n        FloydWarshallRelaxAvx2<RestorePath, HasNegative, Dense || (FiniteRange && std::is_same_v<decltype(UseSimd), FloydWarshallSimdMode>)>(distance, unreachable, lower, next);\n    else\n#endif\n    {\n        for (std::size_t via = 0; via < n; ++via)\n        {\n            const auto *through = distance[via].data();\n            for (std::size_t from = 0; from < n; ++from)\n            {\n                auto *row = distance[from].data();\n                const Distance prefix = row[via];\n                if (prefix == unreachable)\n                    continue;\n                for (std::size_t to = 0; to < n; ++to)\n                {\n                    if constexpr (!Dense) if (through[to] == unreachable)\n                        continue;\n                    Distance candidate = prefix + through[to];\n                    if constexpr (HasNegative)\n                        candidate = std::max(candidate, lower);\n                    if constexpr (RestorePath)\n                    {\n                        if (candidate < row[to])\n                        {\n                            row[to] = candidate;\n                            (*next)[from][to] = (*next)[from][via];\n                        }\n                    }\n                    else\n                        row[to] = std::min(row[to], candidate);\n                }\n            }\n        }\n    }\n    if constexpr (FiniteRange) return false;\n    std::vector<std::size_t> negative;\n    for (std::size_t vertex = 0; vertex < n; ++vertex)\n        if (distance[vertex][vertex] < Distance{0})\n            negative.push_back(vertex);\n    const Distance affected = lower + Distance{-1};\n    for (const std::size_t via : negative)\n    {\n        // 同じ強連結成分の負閉路は一度の伝播で足りる。\n        if (distance[via][via] == affected)\n            continue;\n        for (std::size_t from = 0; from < n; ++from)\n        {\n            if (distance[from][via] == unreachable)\n                continue;\n            for (std::size_t to = 0; to < n; ++to)\n                if (!(distance[via][to] == unreachable))\n                {\n                    distance[from][to] = affected;\n                    if constexpr (RestorePath)\n                        (*next)[from][to] = -1;\n                }\n        }\n    }\n    for (auto &row : distance)\n        for (auto &value : row)\n        {\n            if (value == unreachable)\n                value = Distance{INF};\n            else if (value == affected)\n                value = Distance{-INF};\n            else if (!(Distance{-INF} < value) || !(value < Distance{INF}))\n                throw std::overflow_error(\"FloydWarshall: finite distance collides with INF/-INF\");\n        }\n    return !negative.empty();\n}\n\ntemplate <bool RestorePath, auto UseSimd = false>\ninline bool FloydWarshallImpl(std::vector<std::vector<std::int64_t>> &distance,\n                                     std::vector<std::vector<int>> *next)\n{\n    const std::size_t n = distance.size();\n    if (n > static_cast<std::size_t>(std::numeric_limits<int>::max()))\n        throw std::length_error(\"FloydWarshall: too many vertices\");\n    if constexpr (RestorePath)\n        next->assign(n, std::vector<int>(n, -1));\n    if (n == 0)\n        return false;\n    if (n == 1)\n    {\n#ifndef SKIP_RUNTIME_CHECKS\n        if (distance[0].size() != 1)\n            throw std::invalid_argument(\"FloydWarshall: matrix must be square\");\n        if (distance[0][0] != INF && (distance[0][0] <= -INF || distance[0][0] >= INF))\n            throw std::out_of_range(\"FloydWarshall: weight must be in (-INF, INF)\");\n#endif\n        const bool negative = distance[0][0] < 0;\n        distance[0][0] = negative ? -INF : 0;\n        if constexpr (RestorePath)\n            (*next)[0][0] = negative ? -1 : 0;\n        return negative;\n    }\n    std::int64_t maximum = 0;\n    bool has_negative = false;\n    bool dense = true;\n    constexpr auto unreachable = std::numeric_limits<std::int64_t>::max();\n    for (std::size_t from = 0; from < n; ++from)\n    {\n        auto &row = distance[from];\n#ifndef SKIP_RUNTIME_CHECKS\n        if (row.size() != n)\n            throw std::invalid_argument(\"FloydWarshall: matrix must be square\");\n#endif\n        for (std::size_t to = 0; to < n; ++to)\n        {\n            auto &value = row[to];\n#ifndef SKIP_RUNTIME_CHECKS\n            if (value != INF && (value <= -INF || value >= INF))\n                throw std::out_of_range(\"FloydWarshall: weight must be in (-INF, INF)\");\n#endif\n            if (from == to)\n                value = std::min(value, std::int64_t{0});\n            if (value == INF) {\n                dense = false;\n                continue;\n            }\n            maximum = std::max(maximum, value < 0 ? -value : value);\n            has_negative = has_negative || value < 0;\n            if constexpr (RestorePath)\n                (*next)[from][to] = static_cast<int>(to);\n        }\n    }\n    // 非負で最長単純路もINF未満なら、未接続値と出力の変換が要らない。\n    if (!has_negative && maximum <= (INF - 1) / static_cast<std::int64_t>(n)) {\n        if (dense) return FloydWarshallRun<RestorePath, false, true, true, std::int64_t, UseSimd>(distance, INF, std::int64_t{0}, next);\n        return FloydWarshallRun<RestorePath, false, true, false, std::int64_t, UseSimd>(distance, INF, std::int64_t{0}, next);\n    }\n    for (auto& row : distance)\n        for (auto& value : row)\n            if (value == INF) value = unreachable;\n    // 単純路はn-1辺以下。下限は-n*maximumで、負閉路での際限ない減少を抑える。\n    if (maximum <= unreachable / (2 * static_cast<std::int64_t>(n)))\n    {\n        const auto lower = -static_cast<std::int64_t>(n) * maximum;\n        if (has_negative)\n            return FloydWarshallRun<RestorePath, true, false, false, std::int64_t, UseSimd>(distance, unreachable, lower, next);\n        return FloydWarshallRun<RestorePath, false, false, false, std::int64_t, UseSimd>(distance, unreachable, lower, next);\n    }\n\n    using Wide = FloydWarshallWide;\n    const Wide wide_unreachable = FloydWarshallLimit(n) + Wide{1};\n    std::vector<std::vector<Wide>> wide(n, std::vector<Wide>(n));\n    for (std::size_t from = 0; from < n; ++from)\n        for (std::size_t to = 0; to < n; ++to)\n            wide[from][to] = distance[from][to] == unreachable ? wide_unreachable : Wide{distance[from][to]};\n    const bool negative = has_negative\n        ? FloydWarshallRun<RestorePath, true>(wide, wide_unreachable, -FloydWarshallLimit(n), next)\n        : FloydWarshallRun<RestorePath, false>(wide, wide_unreachable, -FloydWarshallLimit(n), next);\n    for (std::size_t from = 0; from < n; ++from)\n        for (std::size_t to = 0; to < n; ++to)\n            distance[from][to] = static_cast<std::int64_t>(wide[from][to]);\n    return negative;\n}\n\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n#if !defined(__clang__)\ntemplate <bool RestorePath>\n[[gnu::noinline]] inline bool FloydWarshallFiniteVectorized(\n    std::vector<std::vector<std::int64_t>> &distance, std::vector<std::vector<int>> *next)\n{\n    return FloydWarshallImpl<RestorePath, FloydWarshallSimdMode::Finite>(distance, next);\n}\n#endif\ntemplate <bool RestorePath>\n[[gnu::noinline]] inline bool FloydWarshallVectorized(\n    std::vector<std::vector<std::int64_t>> &distance, std::vector<std::vector<int>> *next)\n{\n#if !defined(__clang__)\n    if (distance.size() >= 64)\n        return FloydWarshallFiniteVectorized<RestorePath>(distance, next);\n#endif\n    return FloydWarshallImpl<RestorePath, true>(distance, next);\n}\n#endif\n\n} // namespace reinsirk::detail\n\ninline bool FloydWarshall(std::vector<std::vector<std::int64_t>> &distances)\n{\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__)) && !(defined(__clang__) && defined(__AVX2__))\n#if defined(__clang__)\n    constexpr std::size_t threshold = 32;\n#else\n    constexpr std::size_t threshold = 8;\n#endif\n    if (distances.size() >= threshold && __builtin_cpu_supports(\"avx2\"))\n        return reinsirk::detail::FloydWarshallVectorized<false>(distances, nullptr);\n#endif\n    return reinsirk::detail::FloydWarshallImpl<false>(distances, nullptr);\n}\n\ninline bool FloydWarshall(std::vector<std::vector<std::int64_t>> &distances,\n                          std::vector<std::vector<int>> &next)\n{\n#if !defined(SIRKIT_DISABLE_SIMD) && (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))\n#if defined(__clang__)\n    constexpr std::size_t threshold = 16;\n#else\n    constexpr std::size_t threshold = 8;\n#endif\n    if (distances.size() >= threshold && __builtin_cpu_supports(\"avx2\"))\n        return reinsirk::detail::FloydWarshallVectorized<true>(distances, &next);\n#endif\n    return reinsirk::detail::FloydWarshallImpl<true>(distances, &next);\n}\n\ninline std::vector<int> FloydWarshallPath(const std::vector<std::vector<int>> &next,\n                                        int from, int to)\n{\n    const std::size_t n = next.size();\n#ifndef SKIP_RUNTIME_CHECKS\n    if (from < 0 || to < 0 || static_cast<std::size_t>(from) >= n || static_cast<std::size_t>(to) >= n)\n        throw std::out_of_range(\"FloydWarshallPath: invalid vertex\");\n#endif\n    std::vector<int> path;\n    const auto target = static_cast<std::size_t>(to);\n    for (std::size_t steps = 0; steps <= n; ++steps)\n    {\n        const auto current = static_cast<std::size_t>(from);\n#ifndef SKIP_RUNTIME_CHECKS\n        if (next[current].size() != n)\n            throw std::invalid_argument(\"FloydWarshallPath: table must be square\");\n#endif\n        const int following = next[current][target];\n        if (following == -1)\n            return {};\n        path.push_back(from);\n        if (from == to)\n            return path;\n#ifndef SKIP_RUNTIME_CHECKS\n        if (following < 0 || static_cast<std::size_t>(following) >= n)\n            throw std::out_of_range(\"FloydWarshallPath: invalid next vertex\");\n#endif\n        from = following;\n    }\n    throw std::invalid_argument(\"FloydWarshallPath: cyclic next table\");\n}\n#endif\n",
+    "scripts": {
+      "check.py": "from pathlib import Path\nimport json,subprocess,hashlib,fcntl\np=Path(__file__).parent;r=Path('/home/reinsirk/Atcoder_Env');src=p/'candidate.hpp';digest=hashlib.sha256(src.read_bytes()).hexdigest();rows=[]\nfor test in ['floyd_simd_test','floyd_boundary_test','floyd_finite_range_test']:\n exe=p/test;cmd=['taskset','-c','6','g++','-O2','-std=c++23','-march=native','-DSKIP_RUNTIME_CHECKS','-Wall','-Wextra','-Wpedantic','-DFLOYD_SOURCE=\"'+str(src)+'\"',str(r/'Verify/current/tests'/(test+'.cpp')),'-o',str(exe)];a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0 and not a.stderr,a.stderr\n with open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n  fcntl.flock(lock,fcntl.LOCK_EX);b=subprocess.run(['taskset','-c','10',str(exe)],capture_output=True,text=True);assert b.returncode==0,(b.stdout,b.stderr)\n rows.append(dict(test=test,source_sha256=digest,command=cmd,status='PASS',warnings=a.stderr,stdout=b.stdout,stderr=b.stderr))\n(p/'checks.json').write_text(json.dumps(dict(source_sha256=digest,results=rows),indent=2)+'\\n');print('native three independent tests PASS',digest)\n",
+      "confirm.py": "from pathlib import Path\nimport subprocess,json,statistics,fcntl\np=Path(__file__).parent;variants=['baseline','control','candidate'];cases=[(8,'dense',100000),(8,'line',100000),(32,'isolated',5000),(64,'path',500),(300,'sparse',3)];data={str(n)+'_'+k:{v:[]for v in variants}for n,k,r in cases}\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for round in range(7):\n  for ci,(n,k,r)in enumerate(cases):\n   shift=(round+ci)%3;checks=[]\n   for v in variants[shift:]+variants[:shift]:\n    a=json.loads(subprocess.check_output(['taskset','-c','14',str(p/('gcc_native_'+v)),str(n),k,str(r)],text=True));data[str(n)+'_'+k][v].append(a['ns']);checks.append(a['checksum'])\n   assert len(set(checks))==1\nsummary={case:{v:statistics.median(x)for v,x in d.items()}for case,d in data.items()};(p/'confirm.json').write_text(json.dumps(dict(raw=data,summary=summary,rounds=7),indent=2));print(json.dumps(summary,indent=2))\n",
+      "equivalence.py": "from pathlib import Path\nimport subprocess,json,hashlib,concurrent.futures\np=Path(__file__).parent;cc={'gcc_plain':['g++'],'clang_plain':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0'],'clang_native':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0','-march=native']};sha=lambda b:hashlib.sha256(b).hexdigest();rows=[]\nfor mode,c in cc.items():\n row=dict(mode=mode,sections={},binaries={},commands=[])\n for v,src in [('baseline',p.parent/'baseline.hpp'),('candidate',p/'candidate.hpp')]:\n  exe=p/('proof_'+mode+'_'+v);cmd=['taskset','-c','6',*c,'-O2','-std=c++23','-DSKIP_RUNTIME_CHECKS','-DFLOYD_SOURCE=\"'+str(src)+'\"',str(p/'bench.cpp'),'-o',str(exe)];a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0,a.stderr;row['commands'].append(cmd);row['binaries'][v]=sha(exe.read_bytes());row['sections'][v]={}\n  for section in ['.text','.rodata']:\n   out=p/('proof_'+mode+'_'+v+section);subprocess.run(['objcopy','-O','binary','--only-section='+section,str(exe),str(out)],check=True,capture_output=True);row['sections'][v][section]=sha(out.read_bytes())\n row['binary_identical']=len(set(row['binaries'].values()))==1;row['runtime_sections_identical']=row['sections']['baseline']==row['sections']['candidate'];rows.append(row)\n(p/'equivalence.json').write_text(json.dumps(rows,indent=2)+'\\n');print([(x['mode'],x['binary_identical'],x['runtime_sections_identical'])for x in rows]);assert all(x['runtime_sections_identical']for x in rows)\n",
+      "main_equivalence.py": "from pathlib import Path\nimport subprocess,json,hashlib\np=Path(__file__).parent;src=Path('/tmp/sirkit_floyd_20261022/main_dispatch/main.cpp');sha=lambda b:hashlib.sha256(b).hexdigest();row=dict(mode='gcc_plain',main=str(src),main_sha256=sha(src.read_bytes()),commands=[],binaries={},sections={})\nfor v,h in [('baseline',p.parent/'baseline.hpp'),('candidate',p/'candidate.hpp')]:\n exe=p/('main_plain_'+v);cmd=['taskset','-c','6','g++','-O2','-std=c++23','-DFLOYD_SOURCE=\"'+str(h)+'\"',str(src),'-o',str(exe)];a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0,a.stderr;row['commands'].append(cmd);row['binaries'][v]=sha(exe.read_bytes());row['sections'][v]={}\n for section in ['.text','.rodata']:\n  out=p/('main_plain_'+v+section);subprocess.run(['objcopy','-O','binary','--only-section='+section,str(exe),str(out)],check=True,capture_output=True);row['sections'][v][section]=sha(out.read_bytes())\nrow['binary_identical']=len(set(row['binaries'].values()))==1;row['runtime_sections_identical']=row['sections']['baseline']==row['sections']['candidate'];(p/'main_equivalence.json').write_text(json.dumps(row,indent=2)+'\\n');print(row['mode'],row['binary_identical'],row['runtime_sections_identical']);assert row['binary_identical']\n",
+      "main_probe.py": "from pathlib import Path\nimport subprocess,json,hashlib,statistics,fcntl,time\np=Path(__file__).parent;old=Path('/tmp/sirkit_floyd_20261022/main_dispatch');variants={'baseline':p.parent/'baseline.hpp','control':p.parent/'baseline.hpp','candidate':p/'candidate.hpp'};cmds=[]\nfor v,src in variants.items():\n exe=p/('main_'+v);cmd=['taskset','-c','6','g++','-O2','-std=c++23','-march=native','-DFLOYD_SOURCE=\"'+str(src)+'\"',str(old/'main.cpp'),'-o',str(exe)];a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0,a.stderr;cmds.append(cmd)\n for f in sorted(old.glob('*.in')):\n  a=subprocess.run(['taskset','-c','6',str(exe)],input=f.read_bytes(),capture_output=True,check=True);assert a.stdout.split()==f.with_suffix('.out').read_bytes().split(),(v,f.name)\ncases=['line_8','line_32','line_300','star_300','dense_random_300','random_300_0.02'];data={c:{v:[]for v in variants}for c in cases};keys=list(variants)\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for r in range(9):\n  for ci,c in enumerate(cases):\n   shift=(r+ci)%3\n   for v in keys[shift:]+keys[:shift]:\n    with (old/(c+'.in')).open('rb')as inp:\n     start=time.perf_counter_ns();subprocess.run(['taskset','-c','14',str(p/('main_'+v))],stdin=inp,stdout=subprocess.DEVNULL,check=True);data[c][v].append((time.perf_counter_ns()-start)/1e6)\nsummary={c:{v:statistics.median(values)for v,values in rows.items()}for c,rows in data.items()};(p/'main_results.json').write_text(json.dumps(dict(raw=data,summary=summary,commands=cmds,case_count=14,rounds=9,main_sha256=hashlib.sha256((old/'main.cpp').read_bytes()).hexdigest()),indent=2)+'\\n');print(json.dumps(summary,indent=2))\n",
+      "prepare.py": "from pathlib import Path\np=Path(__file__).parent;old=p.parent/'baseline.hpp';s=old.read_text();a='''#if !defined(__clang__)\n    if (distance.size() >= 64)\n        return FloydWarshallFiniteVectorized<RestorePath>(distance, next);''';assert s.count(a)==1;s=s.replace(a,'''#if !defined(__clang__) && !defined(__AVX2__)\n    if (distance.size() >= 64)\n        return FloydWarshallFiniteVectorized<RestorePath>(distance, next);''')\nfor restore,arg in [('false','nullptr'),('true','&next')]:\n a=f'''    if (distances.size() >= threshold && __builtin_cpu_supports(\"avx2\"))\n        return reinsirk::detail::FloydWarshallVectorized<{restore}>(distances, {arg});'''\n b=f'''    if (distances.size() >= threshold && __builtin_cpu_supports(\"avx2\")) {{\n#if !defined(__clang__) && defined(__AVX2__)\n        if (distances.size() >= 64)\n            return reinsirk::detail::FloydWarshallFiniteVectorized<{restore}>(distances, {arg});\n#endif\n        return reinsirk::detail::FloydWarshallVectorized<{restore}>(distances, {arg});\n    }}''';assert s.count(a)==1;s=s.replace(a,b)\n(p/'candidate.hpp').write_text(s)\n(p/'bench.cpp').write_bytes(Path('/tmp/sirkit_floyd_20261022/expanded_bench.cpp').read_bytes())\ns=Path('/tmp/sirkit_floyd_20261022/dispatch_probe.py').read_text().replace(\"p/'baseline.hpp'\", \"p.parent/'baseline.hpp'\").replace(\"'dispatch':p/'dispatch.hpp'\", \"'candidate':p/'candidate.hpp'\");s=s.replace(\"'clang_plain':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0'],'clang_native':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0','-march=native']\", \"\");s=s.replace(\"str(p/'expanded_bench.cpp')\", \"str(p/'bench.cpp')\");s=s.replace(\"[(8,20000),(32,1000),(64,100)]\", \"[(2,20000),(8,20000),(32,1000),(64,100),(300,3)]\");s=s.replace(\"['dense','isolated','line','path']\", \"['dense','sparse','isolated','line','path']\");s=s.replace(\"p/'dispatch_results.json'\", \"p/'results.json'\").replace(\"p/'dispatch_summary.json'\", \"p/'summary.json'\");(p/'probe.py').write_text(s)\n",
+      "probe.py": "from pathlib import Path\nimport subprocess,json,statistics,fcntl,hashlib,concurrent.futures\np=Path(__file__).parent;variants={'baseline':p.parent/'baseline.hpp','control':p.parent/'baseline.hpp','candidate':p/'candidate.hpp'};modes={'gcc_plain':['g++'],'gcc_native':['g++','-march=native'],}\ndef build(cv):\n c,v=cv;cmd=['taskset','-c','8',*modes[c],'-O2','-std=c++23','-DSKIP_RUNTIME_CHECKS','-DFLOYD_SOURCE=\"'+str(variants[v])+'\"',str(p/'bench.cpp'),'-o',str(p/(c+'_'+v))];a=subprocess.run(cmd,capture_output=True,text=True);assert a.returncode==0,a.stderr;return dict(mode=c,variant=v,command=cmd,warnings=a.stderr)\nwith concurrent.futures.ThreadPoolExecutor(2)as pool:builds=list(pool.map(build,[(c,v)for c in modes for v in variants]))\ncases=[(n,k,rep)for n,rep in [(2,20000),(8,20000),(32,1000),(64,100),(300,3)]for k in ['dense','sparse','isolated','line','path']]\ndata={c:{str(n)+'_'+k:{v:[]for v in variants}for n,k,rep in cases}for c in modes};keys=list(variants)\nwith open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock:\n fcntl.flock(lock,fcntl.LOCK_EX)\n for round in range(5):\n  for c in modes:\n   for ci,(n,k,rep)in enumerate(cases):\n    checks=[];shift=(round+ci)%len(keys)\n    for v in keys[shift:]+keys[:shift]:\n     a=json.loads(subprocess.check_output(['taskset','-c','14',str(p/(c+'_'+v)),str(n),k,str(rep)],text=True));data[c][str(n)+'_'+k][v].append(a['ns']);checks.append(a['checksum'])\n    assert len(set(checks))==1,(c,n,k,checks)\n  (p/'results.json').write_text(json.dumps(data,indent=2));print('round',round,flush=True)\nsummary={c:{case:{v:statistics.median(values)for v,values in rows.items()}for case,rows in casesdata.items()}for c,casesdata in data.items()};(p/'summary.json').write_text(json.dumps(dict(source_hashes={v:hashlib.sha256(s.read_bytes()).hexdigest()for v,s in variants.items()},builds=builds,summary=summary),indent=2));print(json.dumps(summary,indent=2))\n"
+    },
+    "benchmark": "#include FLOYD_SOURCE\n#include <chrono>\n#include <iostream>\n#include <random>\n#include <string>\nusing Matrix=std::vector<std::vector<std::int64_t>>;\nint main(int argc,char**argv){\n const int n=std::stoi(argv[1]);const std::string kind=argv[2];const int repeats=std::stoi(argv[3]);std::mt19937_64 rng(987);\n Matrix source(n,std::vector<std::int64_t>(n,INF));for(int i=0;i<n;++i){source[i][i]=0;for(int j=0;j<n;++j)if(i!=j&&(kind!=\"sparse\"||rng()%100<2))source[i][j]=1+rng()%100000;}\n if(kind==\"isolated\"||kind==\"line\"||kind==\"star\"){\n  for(int i=0;i<n;++i)for(int j=0;j<n;++j)source[i][j]=i==j?0:INF;\n  if(kind==\"line\")for(int i=0;i+1<n;++i)source[i][i+1]=source[i+1][i]=1;\n  if(kind==\"star\")for(int i=1;i<n;++i)source[0][i]=source[i][0]=1;\n }\n if(kind==\"negative\"||kind==\"dag\")for(int i=0;i<n;++i)for(int j=0;j<n;++j)if(source[i][j]!=INF)source[i][j]+=std::int64_t(j-i)*1000;\n if(kind==\"dag\")for(int i=0;i<n;++i)for(int j=0;j<i;++j)source[i][j]=INF;\n if(kind==\"cycle\"&&n>1)source[0][1]=source[1][0]=-100000;\n if(kind==\"wide\")for(int i=0;i<n;++i)for(int j=0;j<n;++j)if(source[i][j]!=INF&&i!=j)source[i][j]=(i<j?INF/2:1);\n std::uint64_t sum=0;std::int64_t elapsed=0;for(int r=0;r<repeats;++r){auto d=source;std::vector<std::vector<int>> path;auto begin=std::chrono::steady_clock::now();bool negative=kind==\"path\"?FloydWarshall(d,path):FloydWarshall(d);auto end=std::chrono::steady_clock::now();elapsed+=std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();sum+=negative;for(const auto&row:d)for(auto v:row)sum=sum*31+static_cast<std::uint64_t>(v);for(const auto&row:path)for(int v:row)sum=sum*31+static_cast<unsigned>(v);}\n std::cout<<\"{\\\"ns\\\":\"<<elapsed/repeats<<\",\\\"checksum\\\":\"<<sum<<\"}\\n\";\n}\n"
+  }
+}

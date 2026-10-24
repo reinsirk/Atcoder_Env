@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-22",
+  "scope": "両整数Trieの二周目の来歴と、圧縮prefix短絡の新規寄与。",
+  "snapshots": {
+    "baseline_sha256": {
+      "classic": "ebc2b6d837c283613d02cd0ee3ca9fa5f0f9584f979676705eeb7b3cc2cda624",
+      "compressed": "427e82273653467078b838f940b8767deeb770aa160658f075fd739998d6599d"
+    },
+    "final_sha256": {
+      "classic": "ebc2b6d837c283613d02cd0ee3ca9fa5f0f9584f979676705eeb7b3cc2cda624",
+      "compressed": "d4efe4037b2331291c351af11aab816a37dfa356fd7acd66d1ba1eb1386007ec"
+    },
+    "driver_sha256": {
+      "compressed": "c5763def1647d50ca3abdbe2e8e4efaaa0221dd0f6ca1a831f1fe861bc9d82e3"
+    },
+    "classic_driver_sha256": "ffd1f56f2785089ed0884abfb3b45341007b899f6d115fb3c15c45238c503ff6",
+    "IO_sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "previous_audits": {
+    "performance-binary-trie-2026-10-19.json": {
+      "sha256": "679a33a198ad803d1f194bbf0add90450fa6bfe8bc5de88b15d4503e4c5ec453",
+      "changes": [
+        "Keep BinaryTrie byte-identical: some compressed public API cases are slower.",
+        "Add separately guarded CompressedBinaryTrie with independently implemented path compression and index-based storage.",
+        "Preserve duplicate counts, anonymous/explicit IDs, lazy XOR, order statistics and logical uncompressed NODES capacity.",
+        "Add insert_unique and reserve; fast buffered judge driver skips runtime checks."
+      ],
+      "reviewed": "採用・棄却と測定条件を確認。node padding、compact、所有分割、GCC suffix、4-count、長い順位の同案は再試行しない。"
+    },
+    "performance-binary-trie-classic-2026-10-19.json": {
+      "sha256": "3bc8198a599c2a3cc1b5cfca73082518b0390ef78b682f80285641fe6b09f6ef",
+      "changes": [
+        "Keep the fixed-depth pointer trie, original Node, per-node unique_ptr ID ownership, 4096-node allocation, and existing add/del/count/rank bodies.",
+        "Clang only: reuse preferred child pointer in min/max; fixed one-bit shift accumulation in XOR min/max. Other compilers keep these queries unchanged.",
+        "Add independent insert_unique method, preserving original add code generation; existing values retain count and IDs without allocation.",
+        "Examples, multiset reference driver, standalone judge driver and package synchronized."
+      ],
+      "reviewed": "採用・棄却と測定条件を確認。node padding、compact、所有分割、GCC suffix、4-count、長い順位の同案は再試行しない。"
+    },
+    "performance-binary-trie-gcc-2026-10-19.json": {
+      "sha256": "3111005038e40554676e0ec415a58992cee38d3269d94eb4bc062aee6959775d",
+      "changes": [
+        "GCC with SKIP_RUNTIME_CHECKS: acquire newly missing suffix nodes in block-sized chunks and connect the detached suffix before commit.",
+        "Keep Node layout, unique_ptr ID ownership, 4096-node blocks, node limit, read and deletion code.",
+        "Keep original insertion for checked GCC, Clang and other compilers; the bulk update had a slower checked/Clang case.",
+        "Use the same buffered IO as the compressed-trie judge driver, without changing the library IO/API."
+      ],
+      "reviewed": "採用・棄却と測定条件を確認。node padding、compact、所有分割、GCC suffix、4-count、長い順位の同案は再試行しない。"
+    },
+    "performance-binary-trie-gcc-insert-2026-10-19.json": {
+      "sha256": "3a7862451e319ad6578a4ef4de1aad7ccb302e0e446c4a340473432168520341",
+      "changes": [
+        "GCC, non-Clang and SKIP_RUNTIME_CHECKS only",
+        "Fuse suffix node acquisition/path recording/child linking; no second path-link loop",
+        "Increment path counts four nodes per iteration with a scalar remainder; same order and only after throwing work succeeds",
+        "No changes to input/output driver, Node layout, ID ownership, block size, deletion or queries"
+      ],
+      "reviewed": "採用・棄却と測定条件を確認。node padding、compact、所有分割、GCC suffix、4-count、長い順位の同案は再試行しない。"
+    },
+    "performance-binary-trie-memory-2026-10-19.json": {
+      "sha256": "64d5adee077b553de35e14e8645c6815814dd261f5fb528fdd188ff326a0d654",
+      "changes": [],
+      "reviewed": "採用・棄却と測定条件を確認。node padding、compact、所有分割、GCC suffix、4-count、長い順位の同案は再試行しない。"
+    }
+  },
+  "prior_snapshot_equivalence": {
+    "classic": {
+      "old_snapshot": "/tmp/atcoder_trie_mem_paired_20261019/kth_opt/tie_wide.cpp",
+      "old_sha256": "f6a7baf087558a72b1085ee703c59da5bfa76bf0562f6d1f84459b9f0054cf0f",
+      "current_baseline_sha256": "ebc2b6d837c283613d02cd0ee3ca9fa5f0f9584f979676705eeb7b3cc2cda624",
+      "guard_rename_only": true,
+      "patch": "--- \n+++ \n@@ -19,8 +19,8 @@\n // get_kth は重複込み・1始まり。ID は重複可、-1 は匿名（ID一覧には含めない）。\n // ID省略の削除は匿名を優先し、なければ任意のID付き要素を削除する。\n // ID一覧は順序不定の読み取り専用参照。次の更新または破棄まで有効。\n-#ifndef REINSIRK_BINARY_TRIE_DEFINED\n-#define REINSIRK_BINARY_TRIE_DEFINED\n+#ifndef SIRKIT_BINARY_TRIE_DEFINED\n+#define SIRKIT_BINARY_TRIE_DEFINED\n template <typename T, int MAX_LOG, std::size_t NODES = 16777216>\n class BinaryTrie\n {\n"
+    },
+    "compressed": {
+      "old_snapshot": "/tmp/atcoder_binary_speed_20261019/package_v38/DataStructure/Compressed_Binary_Trie.cpp",
+      "old_sha256": "58bf4b387135dff60025c05e9852ca2807ee36c6a433ba2c0aa8a754f1d4abaa",
+      "current_baseline_sha256": "427e82273653467078b838f940b8767deeb770aa160658f075fd739998d6599d",
+      "guard_rename_only": true,
+      "patch": "--- \n+++ \n@@ -18,8 +18,8 @@\n // SKIP_RUNTIME_CHECKSで入力検査を除く。容量・オーバーフロー対策は常に有効。\n // キー・XORマスクは 0 <= x < 2^B。NODESは未圧縮時の根込みノード上限。\n // IDは重複可、-1は匿名。ID一覧は順序不定、次の更新または破棄まで有効。\n-#ifndef REINSIRK_COMPRESSED_BINARY_TRIE_DEFINED\n-#define REINSIRK_COMPRESSED_BINARY_TRIE_DEFINED\n+#ifndef SIRKIT_COMPRESSED_BINARY_TRIE_DEFINED\n+#define SIRKIT_COMPRESSED_BINARY_TRIE_DEFINED\n template <typename T, int MAX_LOG, std::size_t NODES = 16777216>\n class CompressedBinaryTrie\n {\n"
+    }
+  },
+  "primary_sources": [
+    {
+      "url": "https://nyaannyaan.github.io/library/data-structure/binary-trie.hpp.html",
+      "access": "web.open 2026-10-22 UTC; documentation cache2weeks ago",
+      "finding": "原典は固定深さ・ポインタ木・再帰と経路複製型。API/遅延XORの由来として確認。圧縮prefix実装を継承するものではない。"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/LICENSE",
+      "access": "web.open 2026-10-22 UTC; cachetoday",
+      "finding": "CC0 1.0 Universalの表示を確認。"
+    },
+    {
+      "url": "https://judge.yosupo.jp/problem/set_xor_min",
+      "access": "web.open 2026-10-22 UTC",
+      "finding": "Verify先。ローカルの公式生成器/params.hでMAX_Q=500000を確認。"
+    }
+  ],
+  "raw_fetch_attempt": [
+    {
+      "name": "binary-trie.hpp",
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/data-structure/binary-trie.hpp",
+      "error": "<urlopen error [Errno 1] Operation not permitted>"
+    },
+    {
+      "name": "LICENSE",
+      "url": "https://raw.githubusercontent.com/NyaanNyaan/library/master/LICENSE",
+      "error": "<urlopen error [Errno 1] Operation not permitted>"
+    }
+  ],
+  "raw_fetch_limits": "shell urllibはsandboxネットワーク制約で失敗したため再取得bytesのSHAは主張しない。一次資料の本文・CC0表示はweb.openで確認し、過去のraw source/license SHAは既存Audit記録として保持。",
+  "history": "旧classic最終f6a7版と圧縮58bf版から現baselineへの差は共通ガードREINSIRK→SIRKITの2行のみと直接比較。ガード統一をアルゴリズム改修・速度成果と扱わない。",
+  "original_vs_reference": "先頭の参考ラベルを維持。通常版は所有権/固定深さ/再利用へ組み直され、圧縮版は既存CC0 APIと不変条件から独立作成した記録がある。原典の実装を現在そのまま継承しているというOriginal Source表示へ変更しない。",
+  "current_contribution": "rootの分岐より上のprefix一致という圧縮トライの不変条件から短絡を作成。候補作成後に出典を確認したが、原典の非圧縮実装にはこのprefix短絡はなく、移植していない。通常版の棄却候補も既存CC0本体から独自に組み直した。",
+  "license": "既存本体と今回の新規寄与はSPDX-License-Identifier: CC0-1.0。旧の提出記録や第三者の別コードの許諾を変更するものではない。",
+  "mathematical_reference": "新しい外部の圧縮トライ実装や数学文献は使っていない。内点splitより上の共通prefixと葉/両子の不変条件から導出。",
+  "test_input_provenance": "既存公式fixture12件は元のAuditで公式hash/checker確認済みの値を再照合。custom3件はQ上限を守り、集合が完全な区間のまま保たれることから期待値を独立に導出。",
+  "limits": "一次資料の再確認と履歴上の記録を区別する。すべての第三者コードとの非一致を保証するものではない。"
+}

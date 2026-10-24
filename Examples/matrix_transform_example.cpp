@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: CC0-1.0
 #include "../Algorithm/rotate.cpp"
+// SIMDを除く場合は、include前にSIRKIT_DISABLE_SIMDを定義する。
 #include <cassert>
 #include <limits>
 #include <string>

@@ -6,7 +6,7 @@ int main() {
     geo::Circle a, b;
     verify_in >> a.center.x >> a.center.y >> a.radius;
     verify_in >> b.center.x >> b.center.y >> b.radius;
-    const auto result = geo::intersection(a, b);
+    const auto result = geo::intersection(a, b, geo::Epsilon{0, 0});
     const auto distance2 = a.center.dist2(b.center);
     const auto radius = std::max(a.radius, b.radius);
     int answer;

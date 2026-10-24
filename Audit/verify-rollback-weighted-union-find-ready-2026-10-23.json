@@ -1,0 +1,1611 @@
+{
+  "date": "2026-10-23",
+  "status": "READY_FOR_TWO_ONLINE_SUBMISSIONS",
+  "reason": "Unionfind with Potentialにはrollback操作がないため、重み計算と履歴復元の提出先を分けて補完する。",
+  "source_sha256": "d53bf7c5c05d5fb9902eb3f1adc5d0a392acf634ff95000e911a06ec9631a401",
+  "artifacts": {
+    "DataStructure/rollback-union-findw.cpp": {
+      "sha256": "d53bf7c5c05d5fb9902eb3f1adc5d0a392acf634ff95000e911a06ec9631a401",
+      "bytes": 24669
+    },
+    "Verify/current/drivers/rollback_weighted_union_find_potential_main.cpp": {
+      "sha256": "3fb2181607a62ff3bac9232f1c3df2b0bb3b85a757d3e0a9c76dd6fb72a65b22",
+      "bytes": 719
+    },
+    "Verify/current/drivers/rollback_weighted_union_find_persistent_main.cpp": {
+      "sha256": "9ead1c1e1a0fef8f864e973750d51e8e76fa0ebcd01e8a24494ea90fced40e5f",
+      "bytes": 1372
+    },
+    "Verify/current/submissions/rollback_weighted_union_find.cpp": {
+      "sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+      "bytes": 51017
+    },
+    "Verify/current/submissions/rollback_weighted_union_find_rollback.cpp": {
+      "sha256": "bdf16511cf7d8f4d1323ccadedf907c1d0c4e55e7a6bcc45c6f746395b9bcd45",
+      "bytes": 35419
+    },
+    "Verify/current/common/fast_io.hpp": {
+      "sha256": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+      "bytes": 9227
+    },
+    "Document/rollback_weighted_union_find.md": {
+      "sha256": "a89fad38adeffd005398b615f5f367288cead6aa7f008b873a47aef7d42f1cef",
+      "bytes": 10957
+    }
+  },
+  "submissions": [
+    {
+      "id": "rollback_weighted_union_find",
+      "problem_url": "https://judge.yosupo.jp/problem/unionfind_with_potential",
+      "source": "Verify/current/submissions/rollback_weighted_union_find.cpp",
+      "coverage": [
+        "mod998244353の非零重み",
+        "unite_checkedのMerged/AlreadyConsistent/Contradiction",
+        "try_diff"
+      ],
+      "limitations": [
+        "undo/rollbackは呼ばない",
+        "MintはACLの必要部分を展開"
+      ],
+      "online_status": "未提出"
+    },
+    {
+      "id": "rollback_weighted_union_find_rollback",
+      "problem_url": "https://judge.yosupo.jp/problem/persistent_unionfind",
+      "source": "Verify/current/submissions/rollback_weighted_union_find_rollback.cpp",
+      "coverage": [
+        "重み0のunite",
+        "冗長結合の履歴",
+        "same",
+        "get_state",
+        "rollback(state)",
+        "版木の分岐と連結状態の復元"
+      ],
+      "limitations": [
+        "非零の重みの復元は判定しない",
+        "各ノード終了時に入口へ戻すため、多件一括rollbackとsnapshot()/rollback()とundo()は別のローカル検証が必要"
+      ],
+      "online_status": "未提出"
+    }
+  ],
+  "official_task_sources": [
+    "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/unionfind_with_potential/task.md",
+    "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/persistent_unionfind/task.md"
+  ],
+  "potential_and_local_samples": {
+    "gcc_native": {
+      "results": [
+        {
+          "id": "rollback_weighted_union_find",
+          "compiler": "g++",
+          "skip_runtime_checks": false,
+          "standard_fallback": false,
+          "submission_sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+          "tested_source_sha256": "9c41f2cb19912d17f95fda1fe0fb3d283250ebdcc087814a379ec246cd07b9ec",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "/tmp/atcoder_verify_4q9w175f/rollback_weighted_union_find_checked.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "1\n-1\n1\n1\n0\n1\n998244254\n99\n999\n0\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "-1\n1\n998244352\n1\n1\n0\n0\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_union_find",
+          "compiler": "g++",
+          "skip_runtime_checks": true,
+          "standard_fallback": false,
+          "submission_sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+          "tested_source_sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/rollback_weighted_union_find.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "1\n-1\n1\n1\n0\n1\n998244254\n99\n999\n0\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "-1\n1\n998244352\n1\n1\n0\n0\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_local",
+          "compiler": "g++",
+          "skip_runtime_checks": false,
+          "standard_fallback": false,
+          "submission_sha256": "7ee0d043d0c090d833487afa76e5a66f62117396a2bd327fc1d44b1a75642140",
+          "tested_source_sha256": "7ee0d043d0c090d833487afa76e5a66f62117396a2bd327fc1d44b1a75642140",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/rollback_weighted_local.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "OK\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_local",
+          "compiler": "g++",
+          "skip_runtime_checks": true,
+          "standard_fallback": false,
+          "submission_sha256": "7ee0d043d0c090d833487afa76e5a66f62117396a2bd327fc1d44b1a75642140",
+          "tested_source_sha256": "0f5ecceec7c23e589655fd1622bbd43506e098cb032b5baa8d1668a1144925b6",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "/tmp/atcoder_verify_4q9w175f/rollback_weighted_local_skip.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "OK\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        }
+      ]
+    },
+    "gcc_portable": {
+      "results": [
+        {
+          "id": "rollback_weighted_union_find",
+          "compiler": "g++",
+          "skip_runtime_checks": false,
+          "standard_fallback": true,
+          "submission_sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+          "tested_source_sha256": "9c41f2cb19912d17f95fda1fe0fb3d283250ebdcc087814a379ec246cd07b9ec",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+            "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/tmp/atcoder_verify__l_dtez5/rollback_weighted_union_find_checked.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "1\n-1\n1\n1\n0\n1\n998244254\n99\n999\n0\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "-1\n1\n998244352\n1\n1\n0\n0\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_union_find",
+          "compiler": "g++",
+          "skip_runtime_checks": true,
+          "standard_fallback": true,
+          "submission_sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+          "tested_source_sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+            "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/rollback_weighted_union_find.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "1\n-1\n1\n1\n0\n1\n998244254\n99\n999\n0\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "-1\n1\n998244352\n1\n1\n0\n0\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_local",
+          "compiler": "g++",
+          "skip_runtime_checks": false,
+          "standard_fallback": true,
+          "submission_sha256": "7ee0d043d0c090d833487afa76e5a66f62117396a2bd327fc1d44b1a75642140",
+          "tested_source_sha256": "7ee0d043d0c090d833487afa76e5a66f62117396a2bd327fc1d44b1a75642140",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+            "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/rollback_weighted_local.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "OK\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_local",
+          "compiler": "g++",
+          "skip_runtime_checks": true,
+          "standard_fallback": true,
+          "submission_sha256": "7ee0d043d0c090d833487afa76e5a66f62117396a2bd327fc1d44b1a75642140",
+          "tested_source_sha256": "0f5ecceec7c23e589655fd1622bbd43506e098cb032b5baa8d1668a1144925b6",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+            "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/tmp/atcoder_verify__l_dtez5/rollback_weighted_local_skip.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "OK\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        }
+      ]
+    },
+    "clang_native": {
+      "results": [
+        {
+          "id": "rollback_weighted_union_find",
+          "compiler": "clang++",
+          "skip_runtime_checks": false,
+          "standard_fallback": false,
+          "submission_sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+          "tested_source_sha256": "9c41f2cb19912d17f95fda1fe0fb3d283250ebdcc087814a379ec246cd07b9ec",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "/tmp/atcoder_verify_i17q_2ib/rollback_weighted_union_find_checked.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "1\n-1\n1\n1\n0\n1\n998244254\n99\n999\n0\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "-1\n1\n998244352\n1\n1\n0\n0\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_union_find",
+          "compiler": "clang++",
+          "skip_runtime_checks": true,
+          "standard_fallback": false,
+          "submission_sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+          "tested_source_sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/rollback_weighted_union_find.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "1\n-1\n1\n1\n0\n1\n998244254\n99\n999\n0\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "-1\n1\n998244352\n1\n1\n0\n0\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_local",
+          "compiler": "clang++",
+          "skip_runtime_checks": false,
+          "standard_fallback": false,
+          "submission_sha256": "7ee0d043d0c090d833487afa76e5a66f62117396a2bd327fc1d44b1a75642140",
+          "tested_source_sha256": "7ee0d043d0c090d833487afa76e5a66f62117396a2bd327fc1d44b1a75642140",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/rollback_weighted_local.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "OK\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_local",
+          "compiler": "clang++",
+          "skip_runtime_checks": true,
+          "standard_fallback": false,
+          "submission_sha256": "7ee0d043d0c090d833487afa76e5a66f62117396a2bd327fc1d44b1a75642140",
+          "tested_source_sha256": "0f5ecceec7c23e589655fd1622bbd43506e098cb032b5baa8d1668a1144925b6",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "/tmp/atcoder_verify_i17q_2ib/rollback_weighted_local_skip.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "OK\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        }
+      ]
+    },
+    "clang_portable": {
+      "results": [
+        {
+          "id": "rollback_weighted_union_find",
+          "compiler": "clang++",
+          "skip_runtime_checks": false,
+          "standard_fallback": true,
+          "submission_sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+          "tested_source_sha256": "9c41f2cb19912d17f95fda1fe0fb3d283250ebdcc087814a379ec246cd07b9ec",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+            "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/tmp/atcoder_verify_0hmotgue/rollback_weighted_union_find_checked.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "1\n-1\n1\n1\n0\n1\n998244254\n99\n999\n0\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "-1\n1\n998244352\n1\n1\n0\n0\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_union_find",
+          "compiler": "clang++",
+          "skip_runtime_checks": true,
+          "standard_fallback": true,
+          "submission_sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+          "tested_source_sha256": "865a9f42dcc84954672e5205aca1da8246a20334eca6aef71838f8fe0a4fcce3",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+            "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/rollback_weighted_union_find.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "1\n-1\n1\n1\n0\n1\n998244254\n99\n999\n0\n",
+              "stderr": ""
+            },
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "-1\n1\n998244352\n1\n1\n0\n0\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_local",
+          "compiler": "clang++",
+          "skip_runtime_checks": false,
+          "standard_fallback": true,
+          "submission_sha256": "7ee0d043d0c090d833487afa76e5a66f62117396a2bd327fc1d44b1a75642140",
+          "tested_source_sha256": "7ee0d043d0c090d833487afa76e5a66f62117396a2bd327fc1d44b1a75642140",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+            "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/rollback_weighted_local.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "OK\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_local",
+          "compiler": "clang++",
+          "skip_runtime_checks": true,
+          "standard_fallback": true,
+          "submission_sha256": "7ee0d043d0c090d833487afa76e5a66f62117396a2bd327fc1d44b1a75642140",
+          "tested_source_sha256": "0f5ecceec7c23e589655fd1622bbd43506e098cb032b5baa8d1668a1144925b6",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+            "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/tmp/atcoder_verify_0hmotgue/rollback_weighted_local_skip.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "OK\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        }
+      ]
+    }
+  },
+  "rollback_samples": {
+    "gcc_native": {
+      "results": [
+        {
+          "id": "rollback_weighted_union_find_rollback",
+          "compiler": "g++",
+          "skip_runtime_checks": false,
+          "standard_fallback": false,
+          "submission_sha256": "bdf16511cf7d8f4d1323ccadedf907c1d0c4e55e7a6bcc45c6f746395b9bcd45",
+          "tested_source_sha256": "245a75377521d0d055a35a27c424a26a99b7c673a6e457d5018cd2326878912e",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "/tmp/atcoder_verify_b5mnlmxz/rollback_weighted_union_find_rollback_checked.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "0\n1\n1\n0\n1\n1\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_union_find_rollback",
+          "compiler": "g++",
+          "skip_runtime_checks": true,
+          "standard_fallback": false,
+          "submission_sha256": "bdf16511cf7d8f4d1323ccadedf907c1d0c4e55e7a6bcc45c6f746395b9bcd45",
+          "tested_source_sha256": "bdf16511cf7d8f4d1323ccadedf907c1d0c4e55e7a6bcc45c6f746395b9bcd45",
+          "command": [
+            "g++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/rollback_weighted_union_find_rollback.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "0\n1\n1\n0\n1\n1\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        }
+      ]
+    },
+    "clang_portable": {
+      "results": [
+        {
+          "id": "rollback_weighted_union_find_rollback",
+          "compiler": "clang++",
+          "skip_runtime_checks": false,
+          "standard_fallback": true,
+          "submission_sha256": "bdf16511cf7d8f4d1323ccadedf907c1d0c4e55e7a6bcc45c6f746395b9bcd45",
+          "tested_source_sha256": "245a75377521d0d055a35a27c424a26a99b7c673a6e457d5018cd2326878912e",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+            "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/tmp/atcoder_verify_0b49a3gd/rollback_weighted_union_find_rollback_checked.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "0\n1\n1\n0\n1\n1\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        },
+        {
+          "id": "rollback_weighted_union_find_rollback",
+          "compiler": "clang++",
+          "skip_runtime_checks": true,
+          "standard_fallback": true,
+          "submission_sha256": "bdf16511cf7d8f4d1323ccadedf907c1d0c4e55e7a6bcc45c6f746395b9bcd45",
+          "tested_source_sha256": "bdf16511cf7d8f4d1323ccadedf907c1d0c4e55e7a6bcc45c6f746395b9bcd45",
+          "command": [
+            "clang++",
+            "-std=c++23",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/15",
+            "-U__SIZEOF_INT128__",
+            "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+            "-DSIRKIT_LINE_CONTAINER_FORCE_PORTABLE",
+            "-DSIRKIT_DISABLE_SIMD",
+            "/home/reinsirk/Atcoder_Env/Verify/current/submissions/rollback_weighted_union_find_rollback.cpp"
+          ],
+          "compile_ok": true,
+          "diagnostics": "",
+          "samples": [
+            {
+              "passed": true,
+              "returncode": 0,
+              "stdout": "0\n1\n1\n0\n1\n1\n",
+              "stderr": ""
+            }
+          ],
+          "passed": true
+        }
+      ]
+    }
+  },
+  "rollback_full_official_and_custom": {
+    "status": "PASS",
+    "source_sha256": "d53bf7c5c05d5fb9902eb3f1adc5d0a392acf634ff95000e911a06ec9631a401",
+    "submission_sha256": "bdf16511cf7d8f4d1323ccadedf907c1d0c4e55e7a6bcc45c6f746395b9bcd45",
+    "builds": [
+      {
+        "name": "gcc_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_rwuf_ready_20261023/rollback_main/gcc_checked.cpp",
+          "-o",
+          "/tmp/sirkit_rwuf_ready_20261023/rollback_main/gcc_checked"
+        ],
+        "source_sha256": "245a75377521d0d055a35a27c424a26a99b7c673a6e457d5018cd2326878912e",
+        "build_returncode": 0,
+        "diagnostics": ""
+      },
+      {
+        "name": "gcc_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_rwuf_ready_20261023/rollback_main/gcc_skip.cpp",
+          "-o",
+          "/tmp/sirkit_rwuf_ready_20261023/rollback_main/gcc_skip"
+        ],
+        "source_sha256": "bdf16511cf7d8f4d1323ccadedf907c1d0c4e55e7a6bcc45c6f746395b9bcd45",
+        "build_returncode": 0,
+        "diagnostics": ""
+      },
+      {
+        "name": "clang_checked",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_rwuf_ready_20261023/rollback_main/clang_checked.cpp",
+          "-o",
+          "/tmp/sirkit_rwuf_ready_20261023/rollback_main/clang_checked",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD"
+        ],
+        "source_sha256": "245a75377521d0d055a35a27c424a26a99b7c673a6e457d5018cd2326878912e",
+        "build_returncode": 0,
+        "diagnostics": ""
+      },
+      {
+        "name": "clang_skip",
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/tmp/sirkit_rwuf_ready_20261023/rollback_main/clang_skip.cpp",
+          "-o",
+          "/tmp/sirkit_rwuf_ready_20261023/rollback_main/clang_skip",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD"
+        ],
+        "source_sha256": "bdf16511cf7d8f4d1323ccadedf907c1d0c4e55e7a6bcc45c6f746395b9bcd45",
+        "build_returncode": 0,
+        "diagnostics": ""
+      }
+    ],
+    "records": [
+      {
+        "build": "gcc_checked",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "69d26bf859c490cc455d2a702e04fb6f52a5454c14c0768418cf102e5c09f08d",
+        "reference_output_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+        "output_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "hand_00.in",
+        "scope": "official",
+        "input_sha256": "ded143c4127c50bfef9f3a510b78a54de012e7b8cd981673fdf24aa70884b515",
+        "reference_output_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+        "output_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+        "reference_output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+        "output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "071c49e6c2e7e7a24acabe279648b4cc4211b58634d710c2b323b4614abf76ea",
+        "reference_output_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+        "output_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "8f93229ab776a7c5691fbb22fb037e270af7fe25b1a3a49990c140e37d42759c",
+        "reference_output_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+        "output_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "984ed94748529df4c100fc064a008fcbb5c8a461c6df9fce689e1a6cdbd825d9",
+        "reference_output_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+        "output_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "5d4a426b01bce8773c29de019fc1415fe309549c9a2ed38d31f11fab93ab3b89",
+        "reference_output_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+        "output_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+        "reference_output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+        "output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+        "reference_output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+        "output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "e6be06d8a4be7e00d906e86e43a093f562b125717a43f65c557e0c7ee230f374",
+        "reference_output_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+        "output_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_03.in",
+        "scope": "official",
+        "input_sha256": "9f8158268781ed9240eea2b30f5ef5956c431eb3de0c307189afdef7aea10a14",
+        "reference_output_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+        "output_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "max_random_04.in",
+        "scope": "official",
+        "input_sha256": "dbded379487164e8125b385915a4c14df9cb8ede0af97772e18ceb4388ad11f2",
+        "reference_output_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+        "output_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "conchon_filliatre_tle_00.in",
+        "scope": "official",
+        "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+        "reference_output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+        "output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "conchon_filliatre_tle_01.in",
+        "scope": "official",
+        "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+        "reference_output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+        "output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "branch_many.in",
+        "scope": "custom",
+        "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+        "reference_output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+        "output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+        "reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "same_component.in",
+        "scope": "custom",
+        "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+        "reference_output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+        "output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_checked",
+        "case": "small_branch.in",
+        "scope": "custom",
+        "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+        "reference_output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+        "output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "69d26bf859c490cc455d2a702e04fb6f52a5454c14c0768418cf102e5c09f08d",
+        "reference_output_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+        "output_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "hand_00.in",
+        "scope": "official",
+        "input_sha256": "ded143c4127c50bfef9f3a510b78a54de012e7b8cd981673fdf24aa70884b515",
+        "reference_output_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+        "output_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+        "reference_output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+        "output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "071c49e6c2e7e7a24acabe279648b4cc4211b58634d710c2b323b4614abf76ea",
+        "reference_output_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+        "output_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "8f93229ab776a7c5691fbb22fb037e270af7fe25b1a3a49990c140e37d42759c",
+        "reference_output_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+        "output_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "984ed94748529df4c100fc064a008fcbb5c8a461c6df9fce689e1a6cdbd825d9",
+        "reference_output_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+        "output_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "5d4a426b01bce8773c29de019fc1415fe309549c9a2ed38d31f11fab93ab3b89",
+        "reference_output_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+        "output_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+        "reference_output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+        "output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+        "reference_output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+        "output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "e6be06d8a4be7e00d906e86e43a093f562b125717a43f65c557e0c7ee230f374",
+        "reference_output_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+        "output_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_03.in",
+        "scope": "official",
+        "input_sha256": "9f8158268781ed9240eea2b30f5ef5956c431eb3de0c307189afdef7aea10a14",
+        "reference_output_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+        "output_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "max_random_04.in",
+        "scope": "official",
+        "input_sha256": "dbded379487164e8125b385915a4c14df9cb8ede0af97772e18ceb4388ad11f2",
+        "reference_output_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+        "output_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "conchon_filliatre_tle_00.in",
+        "scope": "official",
+        "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+        "reference_output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+        "output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "conchon_filliatre_tle_01.in",
+        "scope": "official",
+        "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+        "reference_output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+        "output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "branch_many.in",
+        "scope": "custom",
+        "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+        "reference_output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+        "output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+        "reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "same_component.in",
+        "scope": "custom",
+        "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+        "reference_output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+        "output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+        "returncode": 0
+      },
+      {
+        "build": "gcc_skip",
+        "case": "small_branch.in",
+        "scope": "custom",
+        "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+        "reference_output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+        "output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "69d26bf859c490cc455d2a702e04fb6f52a5454c14c0768418cf102e5c09f08d",
+        "reference_output_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+        "output_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "hand_00.in",
+        "scope": "official",
+        "input_sha256": "ded143c4127c50bfef9f3a510b78a54de012e7b8cd981673fdf24aa70884b515",
+        "reference_output_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+        "output_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+        "reference_output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+        "output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "071c49e6c2e7e7a24acabe279648b4cc4211b58634d710c2b323b4614abf76ea",
+        "reference_output_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+        "output_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "8f93229ab776a7c5691fbb22fb037e270af7fe25b1a3a49990c140e37d42759c",
+        "reference_output_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+        "output_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "984ed94748529df4c100fc064a008fcbb5c8a461c6df9fce689e1a6cdbd825d9",
+        "reference_output_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+        "output_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "5d4a426b01bce8773c29de019fc1415fe309549c9a2ed38d31f11fab93ab3b89",
+        "reference_output_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+        "output_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+        "reference_output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+        "output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+        "reference_output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+        "output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "e6be06d8a4be7e00d906e86e43a093f562b125717a43f65c557e0c7ee230f374",
+        "reference_output_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+        "output_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_03.in",
+        "scope": "official",
+        "input_sha256": "9f8158268781ed9240eea2b30f5ef5956c431eb3de0c307189afdef7aea10a14",
+        "reference_output_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+        "output_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "max_random_04.in",
+        "scope": "official",
+        "input_sha256": "dbded379487164e8125b385915a4c14df9cb8ede0af97772e18ceb4388ad11f2",
+        "reference_output_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+        "output_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "conchon_filliatre_tle_00.in",
+        "scope": "official",
+        "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+        "reference_output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+        "output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "conchon_filliatre_tle_01.in",
+        "scope": "official",
+        "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+        "reference_output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+        "output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "branch_many.in",
+        "scope": "custom",
+        "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+        "reference_output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+        "output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+        "reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "same_component.in",
+        "scope": "custom",
+        "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+        "reference_output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+        "output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+        "returncode": 0
+      },
+      {
+        "build": "clang_checked",
+        "case": "small_branch.in",
+        "scope": "custom",
+        "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+        "reference_output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+        "output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "example_00.in",
+        "scope": "official",
+        "input_sha256": "69d26bf859c490cc455d2a702e04fb6f52a5454c14c0768418cf102e5c09f08d",
+        "reference_output_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+        "output_sha256": "075575e1b446997b8fc19e0f2af11be10f3084efa909e14cdd8811a10f67e94d",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "hand_00.in",
+        "scope": "official",
+        "input_sha256": "ded143c4127c50bfef9f3a510b78a54de012e7b8cd981673fdf24aa70884b515",
+        "reference_output_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+        "output_sha256": "f1aa72ea48a901d6582478c7dabe38c2b57dcdb520609dfc1e718433439addb5",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_00.in",
+        "scope": "official",
+        "input_sha256": "93e6aad77abf0fa20cf3dc838e062a5e82953a2c3b6966e9e352f66bb88ae943",
+        "reference_output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+        "output_sha256": "0a3e22336c198542fb76a26c30bf0854e1341a064ef0d8aa47d147773a4fbdf7",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_01.in",
+        "scope": "official",
+        "input_sha256": "071c49e6c2e7e7a24acabe279648b4cc4211b58634d710c2b323b4614abf76ea",
+        "reference_output_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+        "output_sha256": "99de3001fbe0ca378262698560d3d9e9fd498cc8bb63a15d89d74a58f0608b6d",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_02.in",
+        "scope": "official",
+        "input_sha256": "8f93229ab776a7c5691fbb22fb037e270af7fe25b1a3a49990c140e37d42759c",
+        "reference_output_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+        "output_sha256": "ecce8c0eec4e74c999bcd4f21243e39d302ad3adc9aa39020ef318e04e2b301e",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_03.in",
+        "scope": "official",
+        "input_sha256": "984ed94748529df4c100fc064a008fcbb5c8a461c6df9fce689e1a6cdbd825d9",
+        "reference_output_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+        "output_sha256": "8aed252292e7c8f685b9afb89c939cb285a10f6c8f83000e5acccd27e98caa97",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "random_04.in",
+        "scope": "official",
+        "input_sha256": "5d4a426b01bce8773c29de019fc1415fe309549c9a2ed38d31f11fab93ab3b89",
+        "reference_output_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+        "output_sha256": "1bb5e2713f8565b12979c28e638eedd77a1f9bd6c7e07c2cdf68adc991ae1acc",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_00.in",
+        "scope": "official",
+        "input_sha256": "8537e53f714c0248ac2a38ef7dd73e35c19dfe5a341287bbc9043ebca14bb669",
+        "reference_output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+        "output_sha256": "fd8c8a3dfc095b46d61f8e11138b401a5f028c860cebeb0ae5ffa8ba4db6b96a",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_01.in",
+        "scope": "official",
+        "input_sha256": "e8dba25eb7339193a630a97fa18073a204428d10029a48cb75a91f01d52354c3",
+        "reference_output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+        "output_sha256": "3cc27a793537b788de231fe4f1eb078ed5c00bc6e980f8226c6f9a19bb660e08",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_02.in",
+        "scope": "official",
+        "input_sha256": "e6be06d8a4be7e00d906e86e43a093f562b125717a43f65c557e0c7ee230f374",
+        "reference_output_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+        "output_sha256": "177f128c2e4898c7e3c91816aa5e7768b297ce232246bac734a9870030eca3f2",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_03.in",
+        "scope": "official",
+        "input_sha256": "9f8158268781ed9240eea2b30f5ef5956c431eb3de0c307189afdef7aea10a14",
+        "reference_output_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+        "output_sha256": "6517ac3d2ec5e798252209f1c014b213950d95010f820f0914f50d7b4b1ccc1c",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "max_random_04.in",
+        "scope": "official",
+        "input_sha256": "dbded379487164e8125b385915a4c14df9cb8ede0af97772e18ceb4388ad11f2",
+        "reference_output_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+        "output_sha256": "908235c344140e260a2bd4fac7f194e6a1ef169667430e6985a019ff82b0d7b2",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "conchon_filliatre_tle_00.in",
+        "scope": "official",
+        "input_sha256": "1b20afeab3e522e9f53614a3ff3e6bbea5127115eb11711c4fccbd3473eca9a5",
+        "reference_output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+        "output_sha256": "756fb46d0a17a25c387b53c9c0977e7b619aa4c8ac38acabd91c0da761acf68c",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "conchon_filliatre_tle_01.in",
+        "scope": "official",
+        "input_sha256": "26441337e2f9c423f09aeb47ce843fc45a9e00f1e54d63e8e7cb53348c2f5644",
+        "reference_output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+        "output_sha256": "61d4e6fd17585be414a68ba95e01ce5c428d417556083dcc263540a066aabf9c",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "branch_many.in",
+        "scope": "custom",
+        "input_sha256": "65956d35f84b40bdfd4b0d3805959055b4f3208227d7c78b7e7aaf81cd73c48a",
+        "reference_output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+        "output_sha256": "2ef3e8bc64b11c20eddb85f0d0ff8059f1b650108f44cbe464d57e91311cce82",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "balanced.in",
+        "scope": "custom",
+        "input_sha256": "8921f5e2031c1a1803a515890615be19c29e322a30189d81d7224cbe4fec62cf",
+        "reference_output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "output_sha256": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "same_component.in",
+        "scope": "custom",
+        "input_sha256": "700caabf5805ada0f39d7053de95586d36326a86730fd5a025b7342955279118",
+        "reference_output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+        "output_sha256": "1cab2a8164f21baa0e1a41ccd8043f3f4e2dee306718a7e66930c0035a4475f5",
+        "returncode": 0
+      },
+      {
+        "build": "clang_skip",
+        "case": "small_branch.in",
+        "scope": "custom",
+        "input_sha256": "97d7124f7383d1de2556ae8a8ad4517c987efa4f4f7f5b8e8680811ca2c7dca4",
+        "reference_output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+        "output_sha256": "9469b5327e45312dd89c11c8a0410ae7c2c53a7da0abdb55161968284124cf3c",
+        "returncode": 0
+      }
+    ],
+    "fixture_provenance": "Audit/verify-persistent-union-find-2026-10-22.json",
+    "reference_method": "保存済み版木の独立参照から得た0/1出力。全辺重み0の連結状態と一致。"
+  },
+  "nonzero_weight_and_exception_independent_rerun": {
+    "status": "PASS",
+    "source_sha256": "d53bf7c5c05d5fb9902eb3f1adc5d0a392acf634ff95000e911a06ec9631a401",
+    "rows": [
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/rwuf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_rwuf_ready_20261023/rwuf_reference_test_gcc"
+        ],
+        "test_sha256": "63eb73a0a1d97bdaa4a474c4ba4e1be9f8ee955dd17960ae079b8bb348eb46d2",
+        "build_returncode": 0,
+        "diagnostics": "",
+        "returncode": 0,
+        "stdout": "PASS checks=3119573 states=26185 operations=25200\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/rwuf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_rwuf_ready_20261023/rwuf_exception_test_gcc"
+        ],
+        "test_sha256": "ccd5f86081573831d806895ed155f920541e9a5ff151ad7191da6d5edff64576",
+        "build_returncode": 0,
+        "diagnostics": "",
+        "returncode": 0,
+        "stdout": "PASS checks=762 allocation_failures=21 value_failures=152 live_delta=0 value_live=0\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/rwuf_reference_test.cpp",
+          "-o",
+          "/tmp/sirkit_rwuf_ready_20261023/rwuf_reference_test_clang",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD"
+        ],
+        "test_sha256": "63eb73a0a1d97bdaa4a474c4ba4e1be9f8ee955dd17960ae079b8bb348eb46d2",
+        "build_returncode": 0,
+        "diagnostics": "",
+        "returncode": 0,
+        "stdout": "PASS checks=3119530 states=26185 operations=25200\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic-errors",
+          "/home/reinsirk/Atcoder_Env/Verify/current/tests/rwuf_exception_test.cpp",
+          "-o",
+          "/tmp/sirkit_rwuf_ready_20261023/rwuf_exception_test_clang",
+          "-DSKIP_RUNTIME_CHECKS",
+          "-U__SIZEOF_INT128__",
+          "-DSIRKIT_FORCE_STANDARD_ARITHMETIC",
+          "-DSIRKIT_DISABLE_SIMD"
+        ],
+        "test_sha256": "ccd5f86081573831d806895ed155f920541e9a5ff151ad7191da6d5edff64576",
+        "build_returncode": 0,
+        "diagnostics": "",
+        "returncode": 0,
+        "stdout": "PASS checks=762 allocation_failures=21 value_failures=152 live_delta=0 value_live=0\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "nonzero_reference_method": "履歴付き辺集合を保存し、各状態をBFSで走査して頂点間の差を求める。UFの親木や重み累積を参照として使わない。符号付き/符号なし/剰余型、undo・snapshot・任意位置rollback・矛盾履歴・整数の相殺/範囲外を比較する。",
+  "prior_verification_correspondence": {
+    "audit": "Audit/verify-rollback-weighted-union-find-second-pass-2026-10-22.json",
+    "source_and_two_canonical_tests_match": true
+  },
+  "input_and_check_policy": [
+    "両提出コードの先頭でSKIP_RUNTIME_CHECKSを定義。",
+    "共通高速I/O、必要な問題形式からAPIへの変換と直接呼び出し。バッチ化・照会順の工夫・入力分布による切替なし。",
+    "本体は今回変更していない。異なる問題・mainの実行時間を本体の速度差として比較しない。"
+  ],
+  "docs": "Document/rollback_weighted_union_find.mdのVerify表に各提出の対象と限界を記載。"
+}

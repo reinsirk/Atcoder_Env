@@ -1,58 +1,16 @@
 // SPDX-License-Identifier: CC0-1.0
-#include <algorithm>
-#include <chrono>
-#include <cstddef>
-#include <cstdint>
-#include <limits>
-#include <stdexcept>
-#include <type_traits>
-#include <utility>
-#include <vector>
-
-#ifndef SIRKIT_RANGE_ADD_MIN_DEFINED
-#define SIRKIT_RANGE_ADD_MIN_DEFINED
-// 区間加算・最小値。値と加算後の値は INF 以下、各演算は int64_t に収まること。
-// op(a,b)/e(): 最小値/単位元。mapping(f,x): 加算。composition(f,g)/id(): 加算の合成/0。
-struct RangeAddMin {
-    using S = std::int64_t;
-    using F = std::int64_t;
-    static constexpr S INF = INT64_C(8000000000000000000);
-    static S op(S a, S b) { return std::min(a, b); }
-    static S e() { return INF; }
-    static S mapping(F f, S x) { return x + f; }
-    static F composition(F f, F g) { return f + g; }
-    static F id() { return 0; }
-};
-#endif
-
-#ifndef SIRKIT_RANGE_ADD_SUM_DEFINED
-#define SIRKIT_RANGE_ADD_SUM_DEFINED
-// 区間加算・和。各要素は S{値, 1} とし、演算結果は int64_t に収まること。
-// op(a,b)/e(): 和と個数の合計/空。mapping(f,x): 各要素へ加算。composition(f,g)/id(): 合成/0。
-struct RangeAddSum {
-    struct S {
-        std::int64_t sum, size;
-        friend bool operator<(S a, S b) { return a.sum < b.sum; }
-        friend bool operator==(S a, S b) { return a.sum == b.sum; }
-    };
-    using F = std::int64_t;
-    static S op(S a, S b) { return {a.sum + b.sum, a.size + b.size}; }
-    static S e() { return {0, 0}; }
-    static S mapping(F f, S x) { return {x.sum + f * x.size, x.size}; }
-    static F composition(F f, F g) { return f + g; }
-    static F id() { return 0; }
-};
-#endif
-
-#ifndef SIRKIT_IMPLICIT_TREAP_DEFINED
-#define SIRKIT_IMPLICIT_TREAP_DEFINED
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/implicit_treap.md
+//
+// API一覧
+// [lazy_implicit_treap]
 // 可変長列。通常操作は期待 O(log N)、erase は O(削除数 + log N)、領域 O(最大要素数)。
 // op は結合的、e は単位元。mapping は集約に分配し、composition(f,g) は g の後に f。
 // op・mapping等の計算時間をO(1)として記す。
 // 非可換 op では順方向・逆方向を保持する。添字と区間は 0 始まり・半開区間。
 // 第8引数 Commutative=true は op の可換性を指定する。既知の既定 op は自動認識する。
 // lazy_implicit_treap() は空列、(vector<S>) は O(N) で列を構築する。
-// コピーは O(スロット数) で独立した所有。ムーブ元は空列、swap は O(1)。
+// コピーは O(スロット数) で独立した所有。コピー代入失敗時は元の列を保持する。
+// ムーブ元は空列、swap は O(1)。
 // size() / empty() は要素数・空判定を O(1) で返す。
 // clear() は O(スロット数) で要素を破棄し、確保済み容量を保持する。
 // reserve(n) は容量を確保する。int の範囲を超える要求は例外。
@@ -75,6 +33,58 @@ struct RangeAddSum {
 // max_right(l,g) / max_right<g>(l) は g(prod(l,r)) が真となる最大 r。
 // min_left(r,g) / min_left<g>(r) は g(prod(l,r)) が真となる最小 l。
 // 境界探索は g(e()) が真で区間伸長に単調であること。検査省略時の不正入力は未定義。
+//
+// [既定の作用: RangeAddMin]
+// 区間加算・最小値。値と加算後の値は INF 以下、各演算は int64_t に収まること。
+// op(a,b)/e(): 最小値/単位元。mapping(f,x): 加算。composition(f,g)/id(): 加算の合成/0。
+//
+// [既定の作用: RangeAddSum]
+// 区間加算・和。各要素は S{値, 1} とし、演算結果は int64_t に収まること。
+// op(a,b)/e(): 和と個数の合計/空。mapping(f,x): 各要素へ加算。composition(f,g)/id(): 合成/0。
+
+#include <algorithm>
+#include <chrono>
+#include <cstddef>
+#include <cstdint>
+#include <limits>
+#include <stdexcept>
+#include <type_traits>
+#include <utility>
+#include <vector>
+
+#ifndef SIRKIT_RANGE_ADD_MIN_DEFINED
+#define SIRKIT_RANGE_ADD_MIN_DEFINED
+struct RangeAddMin {
+    using S = std::int64_t;
+    using F = std::int64_t;
+    static constexpr S INF = INT64_C(8000000000000000000);
+    static S op(S a, S b) { return std::min(a, b); }
+    static S e() { return INF; }
+    static S mapping(F f, S x) { return x + f; }
+    static F composition(F f, F g) { return f + g; }
+    static F id() { return 0; }
+};
+#endif
+
+#ifndef SIRKIT_RANGE_ADD_SUM_DEFINED
+#define SIRKIT_RANGE_ADD_SUM_DEFINED
+struct RangeAddSum {
+    struct S {
+        std::int64_t sum, size;
+        friend bool operator<(S a, S b) { return a.sum < b.sum; }
+        friend bool operator==(S a, S b) { return a.sum == b.sum; }
+    };
+    using F = std::int64_t;
+    static S op(S a, S b) { return {a.sum + b.sum, a.size + b.size}; }
+    static S e() { return {0, 0}; }
+    static S mapping(F f, S x) { return {x.sum + f * x.size, x.size}; }
+    static F composition(F f, F g) { return f + g; }
+    static F id() { return 0; }
+};
+#endif
+
+#ifndef SIRKIT_IMPLICIT_TREAP_DEFINED
+#define SIRKIT_IMPLICIT_TREAP_DEFINED
 template<class S = RangeAddMin::S,
          S (*op)(S, S) = RangeAddMin::op,
          S (*e)() = RangeAddMin::e,
@@ -217,6 +227,22 @@ class lazy_implicit_treap {
         pull(p);
         return p;
     }
+    int insert_node(int p, int fresh, int position) {
+        if (p < 0) return fresh;
+        if (nodes_[fresh].priority > nodes_[p].priority) {
+            auto [left, right] = split(p, position);
+            nodes_[fresh].left = left;
+            nodes_[fresh].right = right;
+            pull(fresh);
+            return fresh;
+        }
+        push(p);
+        const int left_size = length(nodes_[p].left);
+        if (position <= left_size) nodes_[p].left = insert_node(nodes_[p].left, fresh, position);
+        else nodes_[p].right = insert_node(nodes_[p].right, fresh, position - left_size - 1);
+        pull(p);
+        return p;
+    }
     int allocate(S value) {
         if (free_ >= 0) {
             int p = free_;
@@ -229,14 +255,30 @@ class lazy_implicit_treap {
         nodes_.emplace_back(std::move(value), priority());
         return static_cast<int>(nodes_.size()) - 1;
     }
+    void recycle(int p) {
+        nodes_[p] = Node(e(), 0);
+        nodes_[p].left = free_;
+        free_ = p;
+    }
+    int erase_node(int p, int position, int& removed) {
+        push(p);
+        const int left_size = length(nodes_[p].left);
+        if (position < left_size) nodes_[p].left = erase_node(nodes_[p].left, position, removed);
+        else if (position > left_size) nodes_[p].right = erase_node(nodes_[p].right, position - left_size - 1, removed);
+        else {
+            const int result = merge(nodes_[p].left, nodes_[p].right);
+            removed = p;
+            return result;
+        }
+        pull(p);
+        return p;
+    }
     void release(int p) {
         if (p < 0) return;
         release(nodes_[p].left);
         release(nodes_[p].right);
         // 値と遅延作用を単位元へ戻して、スロットを再利用する。
-        nodes_[p] = Node(e(), 0);
-        nodes_[p].left = free_;
-        free_ = p;
+        recycle(p);
     }
     void check_position(int p, bool end_allowed = false) const {
 #ifndef SKIP_RUNTIME_CHECKS
@@ -353,7 +395,21 @@ public:
         while (!stack.empty()) { pull(stack.back()); stack.pop_back(); }
     }
     lazy_implicit_treap(const lazy_implicit_treap&) = default;
-    lazy_implicit_treap& operator=(const lazy_implicit_treap&) = default;
+    lazy_implicit_treap& operator=(const lazy_implicit_treap& other) {
+        if (this == &other) return *this;
+        if constexpr (std::is_nothrow_copy_constructible_v<Node> && std::is_nothrow_copy_assignable_v<Node>) {
+            if (other.nodes_.size() <= nodes_.capacity()) {
+                nodes_ = other.nodes_;
+                root_ = other.root_;
+                free_ = other.free_;
+                random_ = other.random_;
+                return *this;
+            }
+        }
+        lazy_implicit_treap temporary(other);
+        swap(temporary);
+        return *this;
+    }
     lazy_implicit_treap(lazy_implicit_treap&& other) noexcept
         : nodes_(std::move(other.nodes_)), root_(std::exchange(other.root_, -1)),
           free_(std::exchange(other.free_, -1)), random_(other.random_) { other.nodes_.clear(); }
@@ -406,10 +462,7 @@ public:
         int p = allocate(std::move(value));
         if (pos == size()) root_ = merge(root_, p);
         else if (pos == 0) root_ = merge(p, root_);
-        else {
-            auto [a, b] = split(root_, pos);
-            root_ = merge(merge(a, p), b);
-        }
+        else root_ = insert_node(root_, p, pos);
     }
     void push_back(S value) { insert_at(size(), std::move(value)); }
     void push_front(S value) { insert_at(0, std::move(value)); }
@@ -423,9 +476,14 @@ public:
         root_ = merge(a, c);
         release(b);
     }
-    void erase_at(int pos) { check_position(pos); erase(pos, pos + 1); }
-    void pop_back() { if (!empty()) erase(size() - 1, size()); }
-    void pop_front() { if (!empty()) erase(0, 1); }
+    void erase_at(int pos) {
+        check_position(pos);
+        int removed = -1;
+        root_ = erase_node(root_, pos, removed);
+        recycle(removed);
+    }
+    void pop_back() { if (!empty()) erase_at(size() - 1); }
+    void pop_front() { if (!empty()) erase_at(0); }
     void apply(int l, int r, F f) {
         check_range(l, r);
         if (l != r) apply_range(root_, l, r, f);

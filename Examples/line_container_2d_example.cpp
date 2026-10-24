@@ -15,6 +15,10 @@ int main() {
     std::cout << x << ' ' << y << '\n'; // 3 -1
     auto [u, v] = points.argmin(2, 1);
     std::cout << u << ' ' << v << '\n'; // 1 2
+    const auto maximum = points.max_with_point(2, 1);
+    std::cout << maximum.value << ' ' << maximum.x << ' ' << maximum.y << '\n'; // 5 3 -1
+    const auto minimum = points.min_with_point(2, 1);
+    std::cout << minimum.value << ' ' << minimum.x << ' ' << minimum.y << '\n'; // 4 1 2
     std::cout << *points.max_optional(0, 1) << ' '
               << *points.min_optional(0, 1) << '\n'; // 2 -1
     std::cout << points.argmax_optional(2, 1)->first << ' '

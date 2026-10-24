@@ -8,6 +8,8 @@ from pathlib import Path
 import re
 import sys
 
+from source_api_docs import render_api_overview
+
 # 依存は生成時に展開し、生成したC++に自作includeを残さない。
 PARTS: dict[str, tuple[str, ...]] = {
     "set_transform": (),
@@ -34,7 +36,7 @@ HEADERS: dict[str, tuple[str, ...]] = {
     "sieve": ("algorithm", "concepts", "cstddef", "cstdint", "limits", "map", "stdexcept", "utility", "vector"),
     "integer_transform_detail": ("array", "span"),
     "divisor_multiple_transform": (),
-    "integer_convolution_detail": (),
+    "integer_convolution_detail": ("type_traits",),
     "gcd_lcm_convolution": (),
     "sparse_transform": ("array", "bit", "type_traits"),
 }
@@ -70,8 +72,10 @@ def load_sources(directory: Path) -> tuple[str, list[str], dict[str, str]]:
     ):
         raise ValueError("includes.txt は標準ヘッダーのincludeだけを記載します")
     references = (directory / "references.txt").read_text(encoding="utf-8").splitlines()
-    if len(references) != 2 or any(not line.startswith("// 参考: https://") for line in references):
-        raise ValueError("references.txt の参考URLが不正です")
+    if len(references) != 4 or any(not line.startswith("// 参考: https://") for line in references[:2]) or any(
+        not line.startswith("// Original Source: https://") for line in references[2:]
+    ):
+        raise ValueError("references.txt の出典URLが不正です")
     pieces: dict[str, str] = {}
     guards: set[str] = set()
     for name in PARTS:
@@ -106,9 +110,12 @@ def main() -> int:
                 content += references[0] + "\n"
             if "integer_transform_detail" in order:
                 content += references[1] + "\n"
+            if "bitwise_convolution" in order:
+                content += "\n".join(references[2:]) + "\n"
             content += "".join(line + "\n" for line in headers.splitlines()
                                if line.removeprefix("#include <").removesuffix(">") in needed_headers)
             content += "\n" + "".join(pieces[part] for part in order)
+            content = render_api_overview(content, ("Document/zeta_mobius.md",))
             target = options.output_dir / relative
             if options.check:
                 if not target.is_file() or target.read_bytes() != content.encode("utf-8"):

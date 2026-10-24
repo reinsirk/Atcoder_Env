@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-22",
+  "round": 2,
+  "scope": "LISIndicesの延長/先頭置換で既知になった末尾との比較を二分探索から除く。長さ系API・所有権・型要件は変更しない。",
+  "baseline_source_sha256": "83840e64868646779fa364b6d1140843e3de9ace73e67acf41334fc68b197c12",
+  "final_source_sha256": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e",
+  "files_sha256": {
+    "Algorithm/LIS.cpp": "fa4e056df28ca4f48fdfd9bdd51a0cf8695ef0aaa2cba59f47303ac2c8f15f1e",
+    "Document/lis.md": "758d6a46433722b9ae0bacbb3d02a7a034da199a0a0f9a53cfc2c8942680feaa",
+    "Examples/lis_example.cpp": "9b65d233036713b3b31d819126ca8e575c6d08c6c554e3ad9b630eee7ee95907"
+  },
+  "driver_io_sha256": {
+    "Verify/current/drivers/lis_main.cpp": "a29976f6877b9608c0f81b5d9397d55462ec6d9d1e237f2032abd8c16ec7f26a",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1"
+  },
+  "license": "CC0-1.0",
+  "prior_record": "Audit/provenance-lis-2026-10-22.jsonを引き継ぐ。長さ系で原典実装を保持するためOriginal Source表記を維持。今回外部コードは取り込まない。",
+  "new_implementation": "既存の復元の境界比較を再利用し、二分探索区間長だけをL-1からL-2へ減らす独自の変更。",
+  "diff": "--- baseline\n+++ final\n@@ -83,7 +83,8 @@\n         else if (!tails.empty() && (Strict ? !(v[tails.front()] < v[i]) : v[i] < v[tails.front()])) hi = 0;\n         else {\n             lo = 1;\n-            std::size_t count = hi - 1;\n+            // 末尾は延長判定済み。間の候補だけを比較し、必要なら末尾へ置く。\n+            std::size_t count = hi - 2;\n             while (count != 0) {\n                 const auto half = count / 2;\n                 const auto mid = lo + half;\n"
+}

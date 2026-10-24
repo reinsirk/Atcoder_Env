@@ -1,0 +1,5908 @@
+{
+  "status": "NO_CANDIDATE_ADOPTED",
+  "baseline_source_sha256": "cc6c9d1f9c3ad6c60b60ece40894f41d145a41bde313bbc055cbc744c458c556",
+  "online_submission": "https://judge.yosupo.jp/submission/412615",
+  "environment": {
+    "compiler_gcc": "g++ (GCC) 15.3.0",
+    "compiler_clang": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+    "flags": [
+      "-std=c++23",
+      "-O2",
+      "SKIP_RUNTIME_CHECKS"
+    ],
+    "clang_stdlib": "GCC15.3",
+    "march_native": false,
+    "cpu": 14,
+    "compile_cpu": 6,
+    "locks": [
+      "/tmp/sirkit_performance_cpu14.lock",
+      "/tmp/atcoder_full_performance_20261018/benchmark.lock"
+    ],
+    "timing": "same main includes process start/output/destruction; API loop steady_clock excludes pre-generated edges/queries and warmup; 5 same-main or 7 API repetitions with rotating order and identical control"
+  },
+  "source_sha256": {
+    "baseline.hpp": "cc6c9d1f9c3ad6c60b60ece40894f41d145a41bde313bbc055cbc744c458c556",
+    "control.hpp": "cc6c9d1f9c3ad6c60b60ece40894f41d145a41bde313bbc055cbc744c458c556",
+    "preload.hpp": "6d260657fd456e208c73ffcb35b9d55b5774024a2c754199eed1e963dd9a84be",
+    "interleave.hpp": "f7834789de17c4f145cbe9dd0776b2c66e82ac9b60882b20ebbf65145231a649",
+    "preload_same.hpp": "bc37bc890a266e48bf7697af1fe1bd730d5a61e950267513968b945c7ab01551",
+    "preload_merge.hpp": "6f7142d4d14742a7f1bfe8eaabe00f09d654680211c840a7dce2acfd39a3f47b",
+    "prepare.py": "38b981104def6b1a9324fa71630dffa6a7a3e82a19619f3efd439e86a624eb51",
+    "measure.py": "ac8df4b5794a1fb99ab6d30094dcd4929fa347ad6b36d07a14f65a5a2329636e",
+    "api.cpp": "d94bd1cdc52d55fadf9ef7fe316538a0bbbe00b845e215c29cbd5ea681e1b6af",
+    "api_measure.py": "1bce4ad9066d5c043a9e865c7fc7914614a127dd7fd1013cc1258564299786a7",
+    "selective_api_measure.py": "0e11d7440b0642556ac607a4b16b0e2700e7ed1bc12f04d4895d15e351f93c02"
+  },
+  "frozen": {
+    "DataStructure/union_find.cpp": "cc6c9d1f9c3ad6c60b60ece40894f41d145a41bde313bbc055cbc744c458c556",
+    "Verify/current/drivers/union_find_main.cpp": "4eaa2d1fb03798169633d103a7a3cf4b93e1b99b8986f7abd05b35183bd3a84d",
+    "Verify/current/common/fast_io.hpp": "291bf8dbc56a1d691f6256fe95b4714183c2cf5d9e55e4bef240e31d1eb178c1",
+    "Verify/current/submissions/union_find.cpp": "155d70b7ee67615ab6c5274a7d7d26ffbf354224a197bcd79e04f8fe843f80d8"
+  },
+  "same_main_screen": {
+    "builds": [
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "/tmp/sirkit_uf_412615_opt/baseline.cpp",
+          "-o",
+          "/tmp/sirkit_uf_412615_opt/gcc_baseline"
+        ],
+        "header_sha256": "cc6c9d1f9c3ad6c60b60ece40894f41d145a41bde313bbc055cbc744c458c556",
+        "source_sha256": "155d70b7ee67615ab6c5274a7d7d26ffbf354224a197bcd79e04f8fe843f80d8"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "/tmp/sirkit_uf_412615_opt/control.cpp",
+          "-o",
+          "/tmp/sirkit_uf_412615_opt/gcc_control"
+        ],
+        "header_sha256": "cc6c9d1f9c3ad6c60b60ece40894f41d145a41bde313bbc055cbc744c458c556",
+        "source_sha256": "155d70b7ee67615ab6c5274a7d7d26ffbf354224a197bcd79e04f8fe843f80d8"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "/tmp/sirkit_uf_412615_opt/preload.cpp",
+          "-o",
+          "/tmp/sirkit_uf_412615_opt/gcc_preload"
+        ],
+        "header_sha256": "6d260657fd456e208c73ffcb35b9d55b5774024a2c754199eed1e963dd9a84be",
+        "source_sha256": "204138f3a18a31d236244110419bb8459d7e3ea49577a98635c694bf26e8d66e"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "g++",
+          "-std=c++23",
+          "-O2",
+          "/tmp/sirkit_uf_412615_opt/interleave.cpp",
+          "-o",
+          "/tmp/sirkit_uf_412615_opt/gcc_interleave"
+        ],
+        "header_sha256": "f7834789de17c4f145cbe9dd0776b2c66e82ac9b60882b20ebbf65145231a649",
+        "source_sha256": "132aa1135729fd2c7d3646efa82e9541e56c69cddbfc9782fa48fc9efdbaa227"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "/tmp/sirkit_uf_412615_opt/baseline.cpp",
+          "-o",
+          "/tmp/sirkit_uf_412615_opt/clang_baseline"
+        ],
+        "header_sha256": "cc6c9d1f9c3ad6c60b60ece40894f41d145a41bde313bbc055cbc744c458c556",
+        "source_sha256": "155d70b7ee67615ab6c5274a7d7d26ffbf354224a197bcd79e04f8fe843f80d8"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "/tmp/sirkit_uf_412615_opt/control.cpp",
+          "-o",
+          "/tmp/sirkit_uf_412615_opt/clang_control"
+        ],
+        "header_sha256": "cc6c9d1f9c3ad6c60b60ece40894f41d145a41bde313bbc055cbc744c458c556",
+        "source_sha256": "155d70b7ee67615ab6c5274a7d7d26ffbf354224a197bcd79e04f8fe843f80d8"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "/tmp/sirkit_uf_412615_opt/preload.cpp",
+          "-o",
+          "/tmp/sirkit_uf_412615_opt/clang_preload"
+        ],
+        "header_sha256": "6d260657fd456e208c73ffcb35b9d55b5774024a2c754199eed1e963dd9a84be",
+        "source_sha256": "204138f3a18a31d236244110419bb8459d7e3ea49577a98635c694bf26e8d66e"
+      },
+      {
+        "command": [
+          "taskset",
+          "-c",
+          "6",
+          "clang++",
+          "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+          "-std=c++23",
+          "-O2",
+          "/tmp/sirkit_uf_412615_opt/interleave.cpp",
+          "-o",
+          "/tmp/sirkit_uf_412615_opt/clang_interleave"
+        ],
+        "header_sha256": "f7834789de17c4f145cbe9dd0776b2c66e82ac9b60882b20ebbf65145231a649",
+        "source_sha256": "132aa1135729fd2c7d3646efa82e9541e56c69cddbfc9782fa48fc9efdbaa227"
+      }
+    ],
+    "raw": {
+      "gcc/random_00.in": {
+        "raw_ms": {
+          "baseline": [
+            9.346366,
+            5.866665,
+            5.871424,
+            5.834925,
+            5.884438
+          ],
+          "control": [
+            6.395935,
+            5.897203,
+            6.091904,
+            6.007846,
+            5.866747
+          ],
+          "preload": [
+            5.847328,
+            5.732821,
+            5.708785,
+            5.944315,
+            5.723902
+          ],
+          "interleave": [
+            5.965009,
+            5.759124,
+            5.803536,
+            5.779557,
+            5.919599
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.871424,
+          "control": 6.007846,
+          "preload": 5.732821,
+          "interleave": 5.803536
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0232349086013885,
+          "preload": 0.976393631255382,
+          "interleave": 0.9884375579075877
+        }
+      },
+      "gcc/random_09.in": {
+        "raw_ms": {
+          "baseline": [
+            7.464526,
+            7.28431,
+            7.231729,
+            7.225641,
+            7.218316
+          ],
+          "control": [
+            7.378751,
+            7.263119,
+            7.299623,
+            7.294988,
+            7.446261
+          ],
+          "preload": [
+            6.966005,
+            7.011148,
+            7.25656,
+            7.131296,
+            7.09971
+          ],
+          "interleave": [
+            7.396972,
+            7.179897,
+            7.359741,
+            7.254686,
+            7.248164
+          ]
+        },
+        "median_ms": {
+          "baseline": 7.231729,
+          "control": 7.299623,
+          "preload": 7.09971,
+          "interleave": 7.254686
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.009388349591087,
+          "preload": 0.9817444763209463,
+          "interleave": 1.0031744828933717
+        }
+      },
+      "gcc/max_random_00.in": {
+        "raw_ms": {
+          "baseline": [
+            8.097455,
+            7.909539,
+            7.859997,
+            6.452436,
+            6.392008
+          ],
+          "control": [
+            7.978513,
+            7.715457,
+            7.699688,
+            6.458917,
+            6.305892
+          ],
+          "preload": [
+            7.629071,
+            7.483482,
+            7.663093,
+            6.322368,
+            6.092153
+          ],
+          "interleave": [
+            7.789062,
+            7.664323,
+            7.763878,
+            6.357133,
+            9.381817
+          ]
+        },
+        "median_ms": {
+          "baseline": 7.859997,
+          "control": 7.699688,
+          "preload": 7.483482,
+          "interleave": 7.763878
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9796044451416458,
+          "preload": 0.9520973099608054,
+          "interleave": 0.987771114925362
+        }
+      },
+      "gcc/max_random_01.in": {
+        "raw_ms": {
+          "baseline": [
+            8.617123,
+            8.145083,
+            7.248636,
+            8.22319,
+            7.987888
+          ],
+          "control": [
+            8.37045,
+            7.973987,
+            10.447448,
+            8.112817,
+            7.984476
+          ],
+          "preload": [
+            7.856534,
+            7.829968,
+            7.710821,
+            7.831566,
+            7.810381
+          ],
+          "interleave": [
+            7.946438,
+            7.900041,
+            7.913069,
+            7.9336,
+            7.992891
+          ]
+        },
+        "median_ms": {
+          "baseline": 8.145083,
+          "control": 8.112817,
+          "preload": 7.829968,
+          "interleave": 7.9336
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9960385916263836,
+          "preload": 0.9613122419992528,
+          "interleave": 0.9740355009273693
+        }
+      },
+      "gcc/path_00.in": {
+        "raw_ms": {
+          "baseline": [
+            5.6859,
+            5.561657,
+            5.489023,
+            5.434355,
+            5.588929
+          ],
+          "control": [
+            5.595266,
+            5.47699,
+            5.536291,
+            5.478811,
+            5.853442
+          ],
+          "preload": [
+            5.422265,
+            5.497935,
+            5.424884,
+            5.600113,
+            5.83484
+          ],
+          "interleave": [
+            5.700297,
+            5.6767,
+            5.76474,
+            5.686389,
+            5.901103
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.561657,
+          "control": 5.536291,
+          "preload": 5.497935,
+          "interleave": 5.700297
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9954391290221601,
+          "preload": 0.9885426231786677,
+          "interleave": 1.0249278227693652
+        }
+      },
+      "gcc/path_03.in": {
+        "raw_ms": {
+          "baseline": [
+            6.207331,
+            5.786583,
+            5.871519,
+            5.69039,
+            5.846248
+          ],
+          "control": [
+            5.936085,
+            5.763962,
+            5.746678,
+            5.712283,
+            5.675021
+          ],
+          "preload": [
+            5.72847,
+            5.711365,
+            5.761177,
+            5.676748,
+            5.775492
+          ],
+          "interleave": [
+            5.958061,
+            6.159442,
+            6.029043,
+            5.97448,
+            5.898723
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.846248,
+          "control": 5.746678,
+          "preload": 5.72847,
+          "interleave": 5.97448
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9829685637694466,
+          "preload": 0.9798540876131152,
+          "interleave": 1.0219340677986974
+        }
+      },
+      "gcc/balanced.in": {
+        "raw_ms": {
+          "baseline": [
+            6.459907,
+            6.400703,
+            6.386481,
+            6.428605,
+            6.199548
+          ],
+          "control": [
+            6.472905,
+            6.34007,
+            6.304404,
+            6.252521,
+            6.471294
+          ],
+          "preload": [
+            6.179842,
+            6.119158,
+            6.298004,
+            6.138022,
+            6.215741
+          ],
+          "interleave": [
+            6.30673,
+            6.294653,
+            6.265373,
+            6.200643,
+            6.427558
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.400703,
+          "control": 6.34007,
+          "preload": 6.179842,
+          "interleave": 6.294653
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9905271342850933,
+          "preload": 0.9654942589899891,
+          "interleave": 0.9834315074453541
+        }
+      },
+      "gcc/star_redundant.in": {
+        "raw_ms": {
+          "baseline": [
+            5.327108,
+            5.001065,
+            5.013372,
+            5.095929,
+            5.149042
+          ],
+          "control": [
+            5.286917,
+            5.194258,
+            4.982659,
+            5.0307,
+            5.032689
+          ],
+          "preload": [
+            5.159442,
+            5.045379,
+            5.064424,
+            5.069661,
+            4.996733
+          ],
+          "interleave": [
+            5.189157,
+            5.164828,
+            5.278649,
+            5.089816,
+            5.039281
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.095929,
+          "control": 5.032689,
+          "preload": 5.064424,
+          "interleave": 5.164828
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9875900939750143,
+          "preload": 0.9938176140209175,
+          "interleave": 1.0135204003038505
+        }
+      },
+      "gcc/same_index_balanced.in": {
+        "raw_ms": {
+          "baseline": [
+            6.08427,
+            5.821621,
+            5.856868,
+            6.008133,
+            5.970443
+          ],
+          "control": [
+            5.981441,
+            5.931294,
+            5.956849,
+            5.969175,
+            6.075773
+          ],
+          "preload": [
+            5.854274,
+            5.842318,
+            5.782971,
+            5.947586,
+            5.969209
+          ],
+          "interleave": [
+            5.990182,
+            5.811626,
+            5.867466,
+            6.055809,
+            6.083668
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.970443,
+          "control": 5.969175,
+          "preload": 5.854274,
+          "interleave": 5.990182
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9997876204496048,
+          "preload": 0.9805426498502707,
+          "interleave": 1.003306119830639
+        }
+      },
+      "gcc/disconnected_pairs.in": {
+        "raw_ms": {
+          "baseline": [
+            5.44106,
+            5.313869,
+            5.186971,
+            5.160354,
+            5.230642
+          ],
+          "control": [
+            5.671806,
+            5.157724,
+            5.162546,
+            5.239488,
+            5.153454
+          ],
+          "preload": [
+            5.288962,
+            5.161676,
+            5.351894,
+            5.325684,
+            5.135307
+          ],
+          "interleave": [
+            5.293703,
+            5.519387,
+            5.289101,
+            5.324034,
+            5.261091
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.230642,
+          "control": 5.162546,
+          "preload": 5.288962,
+          "interleave": 5.293703
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9869813303988306,
+          "preload": 1.0111496829643474,
+          "interleave": 1.0120560726580026
+        }
+      },
+      "gcc/tiny_random.in": {
+        "raw_ms": {
+          "baseline": [
+            5.597654,
+            5.448616,
+            5.46601,
+            5.465722,
+            5.507292
+          ],
+          "control": [
+            5.535379,
+            5.553234,
+            5.448213,
+            5.486932,
+            5.612453
+          ],
+          "preload": [
+            5.441588,
+            5.365229,
+            5.422454,
+            5.463218,
+            5.415919
+          ],
+          "interleave": [
+            5.431723,
+            5.425444,
+            5.527094,
+            5.450686,
+            5.482236
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.46601,
+          "control": 5.535379,
+          "preload": 5.422454,
+          "interleave": 5.450686
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0126909756842744,
+          "preload": 0.9920314818304394,
+          "interleave": 0.9971964925055022
+        }
+      },
+      "clang/random_00.in": {
+        "raw_ms": {
+          "baseline": [
+            6.223051,
+            6.109943,
+            6.170547,
+            6.065189,
+            6.196234
+          ],
+          "control": [
+            6.258705,
+            6.066116,
+            6.29163,
+            6.142679,
+            6.170658
+          ],
+          "preload": [
+            6.000555,
+            6.077574,
+            6.09066,
+            6.009506,
+            6.048679
+          ],
+          "interleave": [
+            6.347136,
+            6.377137,
+            6.451291,
+            6.352309,
+            6.422983
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.170547,
+          "control": 6.170658,
+          "preload": 6.048679,
+          "interleave": 6.377137
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0000179886807443,
+          "preload": 0.9802500491447517,
+          "interleave": 1.0334800140084826
+        }
+      },
+      "clang/random_09.in": {
+        "raw_ms": {
+          "baseline": [
+            7.745015,
+            7.816777,
+            7.822616,
+            7.730791,
+            7.652893
+          ],
+          "control": [
+            7.721577,
+            7.968851,
+            7.659224,
+            7.548026,
+            7.730144
+          ],
+          "preload": [
+            7.545266,
+            7.77115,
+            7.621401,
+            7.546991,
+            7.517043
+          ],
+          "interleave": [
+            8.241816,
+            8.369691,
+            8.036932,
+            8.022336,
+            7.973424
+          ]
+        },
+        "median_ms": {
+          "baseline": 7.745015,
+          "control": 7.721577,
+          "preload": 7.546991,
+          "interleave": 8.036932
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9969737954025911,
+          "preload": 0.9744320701767524,
+          "interleave": 1.0376909534713619
+        }
+      },
+      "clang/max_random_00.in": {
+        "raw_ms": {
+          "baseline": [
+            8.244722,
+            8.282008,
+            8.020628,
+            8.069339,
+            8.045148
+          ],
+          "control": [
+            8.149292,
+            8.303161,
+            8.108928,
+            8.069412,
+            8.120276
+          ],
+          "preload": [
+            7.947463,
+            8.220619,
+            8.053876,
+            7.915511,
+            7.955967
+          ],
+          "interleave": [
+            8.476805,
+            8.636555,
+            8.50719,
+            8.353072,
+            8.39634
+          ]
+        },
+        "median_ms": {
+          "baseline": 8.069339,
+          "control": 8.120276,
+          "preload": 7.955967,
+          "interleave": 8.476805
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0063124129498093,
+          "preload": 0.9859502742417936,
+          "interleave": 1.0504955858218377
+        }
+      },
+      "clang/max_random_01.in": {
+        "raw_ms": {
+          "baseline": [
+            8.52639,
+            8.339972,
+            8.329062,
+            8.312199,
+            8.310259
+          ],
+          "control": [
+            8.388476,
+            8.291505,
+            8.416285,
+            8.456142,
+            8.327526
+          ],
+          "preload": [
+            8.15671,
+            8.24705,
+            8.171492,
+            8.262466,
+            8.236726
+          ],
+          "interleave": [
+            8.650353,
+            8.691388,
+            8.734398,
+            8.546435,
+            8.644259
+          ]
+        },
+        "median_ms": {
+          "baseline": 8.329062,
+          "control": 8.388476,
+          "preload": 8.236726,
+          "interleave": 8.650353
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.007133336262835,
+          "preload": 0.9889139977586913,
+          "interleave": 1.0385746918440517
+        }
+      },
+      "clang/path_00.in": {
+        "raw_ms": {
+          "baseline": [
+            6.345806,
+            6.085032,
+            6.140241,
+            6.103113,
+            6.032692
+          ],
+          "control": [
+            6.181894,
+            6.103308,
+            6.078901,
+            6.031504,
+            6.089166
+          ],
+          "preload": [
+            6.106032,
+            6.114208,
+            6.028628,
+            6.108339,
+            6.276664
+          ],
+          "interleave": [
+            6.308968,
+            6.436741,
+            6.375695,
+            6.370119,
+            6.602819
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.103113,
+          "control": 6.089166,
+          "preload": 6.108339,
+          "interleave": 6.375695
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9977147727725179,
+          "preload": 1.0008562843257205,
+          "interleave": 1.0446627811085918
+        }
+      },
+      "clang/path_03.in": {
+        "raw_ms": {
+          "baseline": [
+            6.64122,
+            6.251294,
+            6.334599,
+            6.301589,
+            6.336775
+          ],
+          "control": [
+            6.497587,
+            6.420758,
+            6.455092,
+            6.310935,
+            6.343622
+          ],
+          "preload": [
+            6.516968,
+            6.429594,
+            6.448931,
+            6.302545,
+            6.314564
+          ],
+          "interleave": [
+            6.67968,
+            6.751939,
+            6.602393,
+            6.661699,
+            6.641746
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.334599,
+          "control": 6.420758,
+          "preload": 6.429594,
+          "interleave": 6.661699
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0136013345122556,
+          "preload": 1.0149962136514088,
+          "interleave": 1.051637049164438
+        }
+      },
+      "clang/balanced.in": {
+        "raw_ms": {
+          "baseline": [
+            6.818187,
+            6.764935,
+            6.77202,
+            6.692563,
+            6.614901
+          ],
+          "control": [
+            6.826135,
+            6.734883,
+            6.718826,
+            6.716903,
+            6.697049
+          ],
+          "preload": [
+            6.710361,
+            6.745904,
+            6.670535,
+            6.70577,
+            6.686557
+          ],
+          "interleave": [
+            6.758376,
+            6.757091,
+            6.853263,
+            6.735254,
+            6.764675
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.764935,
+          "control": 6.718826,
+          "preload": 6.70577,
+          "interleave": 6.758376
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9931841178074882,
+          "preload": 0.9912541657828198,
+          "interleave": 0.9990304415341759
+        }
+      },
+      "clang/star_redundant.in": {
+        "raw_ms": {
+          "baseline": [
+            5.86605,
+            5.568328,
+            5.724463,
+            5.566511,
+            5.482394
+          ],
+          "control": [
+            5.717834,
+            5.486309,
+            5.593513,
+            5.489411,
+            5.515884
+          ],
+          "preload": [
+            5.597322,
+            5.435998,
+            5.493241,
+            5.469954,
+            5.671626
+          ],
+          "interleave": [
+            5.671911,
+            5.579598,
+            5.564169,
+            5.692797,
+            5.611048
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.568328,
+          "control": 5.515884,
+          "preload": 5.493241,
+          "interleave": 5.611048
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9905817329726265,
+          "preload": 0.9865153417686602,
+          "interleave": 1.0076719618528218
+        }
+      },
+      "clang/same_index_balanced.in": {
+        "raw_ms": {
+          "baseline": [
+            6.49937,
+            6.446295,
+            8.015372,
+            6.391723,
+            6.325171
+          ],
+          "control": [
+            6.455963,
+            6.384582,
+            6.372174,
+            6.643966,
+            6.348913
+          ],
+          "preload": [
+            6.413306,
+            6.524259,
+            6.387449,
+            6.313284,
+            6.746859
+          ],
+          "interleave": [
+            6.496146,
+            6.549756,
+            6.337129,
+            6.430686,
+            6.605423
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.446295,
+          "control": 6.384582,
+          "preload": 6.413306,
+          "interleave": 6.496146
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.990426593880671,
+          "preload": 0.9948824867617756,
+          "interleave": 1.0077332793488354
+        }
+      },
+      "clang/disconnected_pairs.in": {
+        "raw_ms": {
+          "baseline": [
+            5.878634,
+            5.721278,
+            5.861249,
+            5.811425,
+            5.765969
+          ],
+          "control": [
+            5.902093,
+            5.658543,
+            5.817363,
+            6.220541,
+            5.874105
+          ],
+          "preload": [
+            5.656207,
+            5.763618,
+            5.757202,
+            5.848317,
+            5.755134
+          ],
+          "interleave": [
+            5.903703,
+            6.019155,
+            5.99277,
+            6.067192,
+            5.793735
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.811425,
+          "control": 5.874105,
+          "preload": 5.757202,
+          "interleave": 5.99277
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0107856506794806,
+          "preload": 0.9906695862030398,
+          "interleave": 1.0312049110158008
+        }
+      },
+      "clang/tiny_random.in": {
+        "raw_ms": {
+          "baseline": [
+            5.651175,
+            5.62546,
+            5.510244,
+            5.569257,
+            5.504509
+          ],
+          "control": [
+            5.604049,
+            5.614478,
+            5.496696,
+            5.624043,
+            5.516797
+          ],
+          "preload": [
+            5.66232,
+            5.816079,
+            5.559168,
+            5.605227,
+            5.532745
+          ],
+          "interleave": [
+            5.800409,
+            5.645,
+            5.703455,
+            5.762526,
+            5.784471
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.569257,
+          "control": 5.604049,
+          "preload": 5.605227,
+          "interleave": 5.762526
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.006247152896697,
+          "preload": 1.006458671237474,
+          "interleave": 1.034702833789139
+        }
+      }
+    },
+    "outputs_sha256": {
+      "gcc/random_00.in/baseline": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+      "gcc/random_00.in/control": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+      "gcc/random_00.in/preload": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+      "gcc/random_00.in/interleave": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+      "gcc/random_09.in/baseline": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+      "gcc/random_09.in/control": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+      "gcc/random_09.in/preload": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+      "gcc/random_09.in/interleave": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+      "gcc/max_random_00.in/baseline": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+      "gcc/max_random_00.in/control": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+      "gcc/max_random_00.in/preload": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+      "gcc/max_random_00.in/interleave": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+      "gcc/max_random_01.in/baseline": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+      "gcc/max_random_01.in/control": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+      "gcc/max_random_01.in/preload": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+      "gcc/max_random_01.in/interleave": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+      "gcc/path_00.in/baseline": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+      "gcc/path_00.in/control": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+      "gcc/path_00.in/preload": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+      "gcc/path_00.in/interleave": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+      "gcc/path_03.in/baseline": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gcc/path_03.in/control": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gcc/path_03.in/preload": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gcc/path_03.in/interleave": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gcc/balanced.in/baseline": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "gcc/balanced.in/control": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "gcc/balanced.in/preload": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "gcc/balanced.in/interleave": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "gcc/star_redundant.in/baseline": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+      "gcc/star_redundant.in/control": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+      "gcc/star_redundant.in/preload": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+      "gcc/star_redundant.in/interleave": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+      "gcc/same_index_balanced.in/baseline": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "gcc/same_index_balanced.in/control": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "gcc/same_index_balanced.in/preload": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "gcc/same_index_balanced.in/interleave": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "gcc/disconnected_pairs.in/baseline": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+      "gcc/disconnected_pairs.in/control": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+      "gcc/disconnected_pairs.in/preload": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+      "gcc/disconnected_pairs.in/interleave": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+      "gcc/tiny_random.in/baseline": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+      "gcc/tiny_random.in/control": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+      "gcc/tiny_random.in/preload": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+      "gcc/tiny_random.in/interleave": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+      "clang/random_00.in/baseline": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+      "clang/random_00.in/control": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+      "clang/random_00.in/preload": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+      "clang/random_00.in/interleave": "e1da4e8994b5a3490aa9a67bb0d0a2b82741959ce843c91c7aafcaf3204f634e",
+      "clang/random_09.in/baseline": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+      "clang/random_09.in/control": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+      "clang/random_09.in/preload": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+      "clang/random_09.in/interleave": "8b1b19dbcff5268fe6ddbc3cfa0678842549d9e8d9d28b247f9993b955641722",
+      "clang/max_random_00.in/baseline": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+      "clang/max_random_00.in/control": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+      "clang/max_random_00.in/preload": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+      "clang/max_random_00.in/interleave": "81dca8f86fe4ac53a4c03650ae1607a29d8eb3a3d6badd127994c8f2f062e142",
+      "clang/max_random_01.in/baseline": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+      "clang/max_random_01.in/control": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+      "clang/max_random_01.in/preload": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+      "clang/max_random_01.in/interleave": "eb1de4f221bac8831442d01981e6c1f9b968ca7e8c023d334a17b91795f64d29",
+      "clang/path_00.in/baseline": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+      "clang/path_00.in/control": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+      "clang/path_00.in/preload": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+      "clang/path_00.in/interleave": "38618589fee0128f74fcc3e242b162f177bc49987ed94a89fa7daf2f2a950034",
+      "clang/path_03.in/baseline": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "clang/path_03.in/control": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "clang/path_03.in/preload": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "clang/path_03.in/interleave": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "clang/balanced.in/baseline": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "clang/balanced.in/control": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "clang/balanced.in/preload": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "clang/balanced.in/interleave": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "clang/star_redundant.in/baseline": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+      "clang/star_redundant.in/control": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+      "clang/star_redundant.in/preload": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+      "clang/star_redundant.in/interleave": "f439a7d58bc6ddfe1103fc840f5add59c1e9ed8ab0d27fd40880bd92f4096137",
+      "clang/same_index_balanced.in/baseline": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "clang/same_index_balanced.in/control": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "clang/same_index_balanced.in/preload": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "clang/same_index_balanced.in/interleave": "c417e81572faefa009772d71bfcb82c0780a7bf7ecef05769ac6ca14d0764e4b",
+      "clang/disconnected_pairs.in/baseline": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+      "clang/disconnected_pairs.in/control": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+      "clang/disconnected_pairs.in/preload": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+      "clang/disconnected_pairs.in/interleave": "2b24177887d7488ecf6c77cf713a167fb66538816615870297afe9db70f90370",
+      "clang/tiny_random.in/baseline": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+      "clang/tiny_random.in/control": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+      "clang/tiny_random.in/preload": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e",
+      "clang/tiny_random.in/interleave": "72ede72d9d1c61e407550ca7dd7d03820dcf198227a078b62a06027ef01e368e"
+    },
+    "inputs": {
+      "/tmp/sirkit_uf_20261022/official/random_00.in": "e9e9198dbfefcdeedeb7f01e04906f6d44d9c7c82a1313c9a632fec2309a65c4",
+      "/tmp/sirkit_uf_20261022/official/random_09.in": "4656f1ee7b9fe35abd0894fa0392ad03cfe394653a56dc35009ff8bef3efa792",
+      "/tmp/sirkit_uf_20261022/official/max_random_00.in": "22e4ddab088f841e9e35c987eaceba2181d63e2cdb4172b89a9678edd9208ae6",
+      "/tmp/sirkit_uf_20261022/official/max_random_01.in": "53bb15acd3f4fb15e1e1a1f828824a56f81b3b82e05e74a76d2f73c9a747755d",
+      "/tmp/sirkit_uf_20261022/official/path_00.in": "412432d3c296d117a7f6c36766feeab06d57f9532c6a40a799a1f8e2df9a1121",
+      "/tmp/sirkit_uf_20261022/official/path_03.in": "9dc473904bf47085708a8223a79698e157b8d61eec279f5204a42b73b8b0d6ed",
+      "/tmp/sirkit_uf_20261022/custom/balanced.in": "8ffd74ebdb528f21c20f9c5727bbe6234819d8c1a18059b555f76a3ef7864601",
+      "/tmp/sirkit_uf_20261022/custom/star_redundant.in": "8ff36b405fe746c0853c4e8b8f8d3a59e27aa89c788296662c95d3839cb9ca15",
+      "/tmp/sirkit_uf_20261022/custom/same_index_balanced.in": "5a9d3ddd7c0cf5e41a4de875db74a1ce2b4ce2a6407b5369f4d1299aefcc720e",
+      "/tmp/sirkit_uf_20261022/custom/disconnected_pairs.in": "a4159fa73c37297e4ed64cd4a76ba330971c1385d9e087eeea3882ff5e0270b4",
+      "/tmp/sirkit_uf_20261022/custom/tiny_random.in": "370a12cdba154076e757d7e8336e99d4e7dab9cb05ce9055a9a216e750675838"
+    },
+    "reps": 5,
+    "cpu": 14,
+    "compile_cpu": 6,
+    "native": false,
+    "standard": "c++23",
+    "O": 2
+  },
+  "api_preload": {
+    "raw": {
+      "gcc/n32/mode0": {
+        "args": [
+          32,
+          0,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            17.776528,
+            17.961415,
+            17.770776,
+            17.983766,
+            18.163882,
+            17.883541,
+            18.119652
+          ],
+          "control": [
+            17.73278,
+            18.120491,
+            17.911358,
+            18.149799,
+            17.863131,
+            17.960676,
+            17.855593
+          ],
+          "preload": [
+            17.234378,
+            17.201328,
+            17.297612,
+            17.122834,
+            17.248529,
+            17.186392,
+            17.126424
+          ]
+        },
+        "median_ms": {
+          "baseline": 17.961415,
+          "control": 17.911358,
+          "preload": 17.201328
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9972130814860634,
+          "preload": 0.9576822316059176
+        }
+      },
+      "gcc/n32/mode1": {
+        "args": [
+          32,
+          1,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            16.371419,
+            15.611847,
+            15.983375,
+            15.912995,
+            15.978914,
+            15.67955,
+            15.882933
+          ],
+          "control": [
+            15.772957,
+            15.668655,
+            16.267001,
+            16.250356,
+            15.766759,
+            15.378637,
+            15.694122
+          ],
+          "preload": [
+            15.185662,
+            15.293596,
+            15.13637,
+            15.336795,
+            15.281764,
+            15.180781,
+            15.568303
+          ]
+        },
+        "median_ms": {
+          "baseline": 15.912995,
+          "control": 15.766759,
+          "preload": 15.281764
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.990810278014918,
+          "preload": 0.9603323572966623
+        }
+      },
+      "gcc/n32/mode2": {
+        "args": [
+          32,
+          2,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            6.572627,
+            6.078914,
+            6.162323,
+            6.063338,
+            6.103488,
+            6.05246,
+            6.463806
+          ],
+          "control": [
+            6.421667,
+            6.165257,
+            6.021581,
+            6.317408,
+            6.332847,
+            6.370399,
+            6.20266
+          ],
+          "preload": [
+            6.020686,
+            6.042119,
+            6.313298,
+            6.156848,
+            6.030581,
+            6.246373,
+            5.84734
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.103488,
+          "control": 6.317408,
+          "preload": 6.042119
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0350488114337246,
+          "preload": 0.9899452575314313
+        }
+      },
+      "gcc/n32/mode3": {
+        "args": [
+          32,
+          3,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            6.354947,
+            6.055265,
+            6.042662,
+            6.193616,
+            6.264722,
+            6.101359,
+            6.308414
+          ],
+          "control": [
+            6.154758,
+            6.281098,
+            6.4474,
+            6.246849,
+            5.91855,
+            6.152138,
+            6.000296
+          ],
+          "preload": [
+            5.78745,
+            5.87589,
+            5.799383,
+            5.836679,
+            5.785991,
+            5.838594,
+            5.892385
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.193616,
+          "control": 6.154758,
+          "preload": 5.836679
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9937261205731839,
+          "preload": 0.9423701760005787
+        }
+      },
+      "gcc/n32/mode4": {
+        "args": [
+          32,
+          4,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            16.014075,
+            16.407729,
+            16.054981,
+            16.223761,
+            16.938482,
+            17.696771,
+            15.963487
+          ],
+          "control": [
+            16.159522,
+            16.292672,
+            16.461886,
+            16.085386,
+            16.052001,
+            16.43477,
+            15.995079
+          ],
+          "preload": [
+            15.550346,
+            15.634351,
+            15.518131,
+            15.630787,
+            15.667816,
+            15.663021,
+            15.711484
+          ]
+        },
+        "median_ms": {
+          "baseline": 16.223761,
+          "control": 16.159522,
+          "preload": 15.634351
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9960404372327724,
+          "preload": 0.9636699529782274
+        }
+      },
+      "gcc/n32/mode5": {
+        "args": [
+          32,
+          5,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            5.749334,
+            5.769488,
+            6.004669,
+            5.674639,
+            5.89711,
+            5.912393,
+            5.758715
+          ],
+          "control": [
+            5.880848,
+            5.816455,
+            5.777063,
+            5.824362,
+            5.896536,
+            5.789355,
+            5.803781
+          ],
+          "preload": [
+            6.249205,
+            5.936201,
+            6.108147,
+            6.093563,
+            6.079322,
+            6.267555,
+            6.161005
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.769488,
+          "control": 5.816455,
+          "preload": 6.108147
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0081405837051747,
+          "preload": 1.0586982761728596
+        }
+      },
+      "gcc/n32/mode6": {
+        "args": [
+          32,
+          6,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            60.744113,
+            61.198709,
+            60.680054,
+            59.676902,
+            60.803814,
+            61.821924,
+            61.288044
+          ],
+          "control": [
+            60.878297,
+            62.21315,
+            60.167898,
+            61.129742,
+            59.940295,
+            61.652126,
+            63.278747
+          ],
+          "preload": [
+            61.536347,
+            60.517235,
+            61.759734,
+            60.461114,
+            61.883402,
+            60.971629,
+            62.11964
+          ]
+        },
+        "median_ms": {
+          "baseline": 60.803814,
+          "control": 61.129742,
+          "preload": 61.536347
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0053603216403497,
+          "preload": 1.0120474843897127
+        }
+      },
+      "gcc/n32/mode7": {
+        "args": [
+          32,
+          7,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            22.11929,
+            22.36644,
+            22.792615,
+            22.325999,
+            22.320389,
+            22.577573,
+            22.57692
+          ],
+          "control": [
+            22.185651,
+            22.077292,
+            22.42026,
+            22.631042,
+            22.155361,
+            22.430594,
+            22.217619
+          ],
+          "preload": [
+            22.397631,
+            22.089277,
+            22.283761,
+            22.376848,
+            22.387774,
+            22.389312,
+            22.646519
+          ]
+        },
+        "median_ms": {
+          "baseline": 22.36644,
+          "control": 22.217619,
+          "preload": 22.387774
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9933462365937538,
+          "preload": 1.0009538397706563
+        }
+      },
+      "gcc/n32/mode8": {
+        "args": [
+          32,
+          8,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            3.679765,
+            3.654555,
+            3.68703,
+            3.680305,
+            3.661281,
+            3.676011,
+            3.722271
+          ],
+          "control": [
+            3.672576,
+            3.682259,
+            3.624113,
+            3.705218,
+            3.691025,
+            3.647602,
+            2.71798
+          ],
+          "preload": [
+            3.622925,
+            3.658924,
+            3.725609,
+            3.613337,
+            3.610629,
+            3.675199,
+            2.162823
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.679765,
+          "control": 3.672576,
+          "preload": 3.622925
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9980463426332931,
+          "preload": 0.9845533614238953
+        }
+      },
+      "gcc/n32/mode9": {
+        "args": [
+          32,
+          9,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            4.959328,
+            4.919451,
+            4.887978,
+            4.937449,
+            5.118295,
+            5.049034,
+            4.956387
+          ],
+          "control": [
+            4.957713,
+            5.025347,
+            4.928608,
+            4.908055,
+            4.93047,
+            4.891661,
+            4.897392
+          ],
+          "preload": [
+            6.479683,
+            6.468672,
+            6.368933,
+            6.478911,
+            6.464318,
+            7.56486,
+            6.384662
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.956387,
+          "control": 4.928608,
+          "preload": 6.468672
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9943953125532771,
+          "preload": 1.3051184259824746
+        }
+      },
+      "gcc/n32/mode10": {
+        "args": [
+          32,
+          10,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.068881,
+            2.091565,
+            2.057887,
+            2.083345,
+            2.073398,
+            2.083371,
+            2.060344
+          ],
+          "control": [
+            2.060448,
+            2.068709,
+            2.061116,
+            2.064499,
+            2.079928,
+            2.056778,
+            2.08551
+          ],
+          "preload": [
+            3.13203,
+            3.110346,
+            3.184741,
+            3.109486,
+            3.135684,
+            3.132055,
+            3.109299
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.073398,
+          "control": 2.064499,
+          "preload": 3.13203
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9957080116793785,
+          "preload": 1.5105782874296203
+        }
+      },
+      "gcc/n32/mode11": {
+        "args": [
+          32,
+          11,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            4.841104,
+            5.340411,
+            5.132143,
+            5.492095,
+            5.272813,
+            5.232411,
+            4.841547
+          ],
+          "control": [
+            5.211716,
+            4.948992,
+            5.162489,
+            5.345553,
+            5.307058,
+            5.212798,
+            5.227287
+          ],
+          "preload": [
+            5.412305,
+            5.191178,
+            5.147892,
+            4.814447,
+            5.188219,
+            5.20563,
+            5.148582
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.232411,
+          "control": 5.212798,
+          "preload": 5.188219
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9962516323736802,
+          "preload": 0.9915541802813274
+        }
+      },
+      "gcc/n131072/mode0": {
+        "args": [
+          131072,
+          0,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            57.622428,
+            58.374546,
+            56.877024,
+            56.842243,
+            56.965961,
+            56.918277,
+            56.872327
+          ],
+          "control": [
+            56.894457,
+            57.078045,
+            57.021773,
+            56.925273,
+            56.858989,
+            56.936096,
+            56.955219
+          ],
+          "preload": [
+            53.315651,
+            53.358435,
+            53.602043,
+            53.964341,
+            53.421949,
+            53.588836,
+            53.614203
+          ]
+        },
+        "median_ms": {
+          "baseline": 56.918277,
+          "control": 56.936096,
+          "preload": 53.588836
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0003130628848795,
+          "preload": 0.9415048877885042
+        }
+      },
+      "gcc/n131072/mode1": {
+        "args": [
+          131072,
+          1,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            12.055777,
+            11.362189,
+            11.437866,
+            11.394834,
+            11.372125,
+            11.38107,
+            11.369802
+          ],
+          "control": [
+            11.38587,
+            11.430713,
+            11.428275,
+            11.42729,
+            11.449455,
+            11.448065,
+            11.448907
+          ],
+          "preload": [
+            11.288363,
+            11.32042,
+            11.268001,
+            11.293246,
+            11.302298,
+            10.762518,
+            11.324375
+          ]
+        },
+        "median_ms": {
+          "baseline": 11.38107,
+          "control": 11.430713,
+          "preload": 11.293246
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0043618921595248,
+          "preload": 0.9922833266116455
+        }
+      },
+      "gcc/n131072/mode2": {
+        "args": [
+          131072,
+          2,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            5.108185,
+            5.072982,
+            5.098308,
+            5.14181,
+            5.102999,
+            5.497164,
+            5.342143
+          ],
+          "control": [
+            5.083597,
+            5.09278,
+            5.097444,
+            5.477081,
+            5.082123,
+            5.457411,
+            5.080933
+          ],
+          "preload": [
+            5.240618,
+            5.292915,
+            4.953366,
+            4.928581,
+            4.990234,
+            4.943436,
+            4.965138
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.108185,
+          "control": 5.09278,
+          "preload": 4.965138
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9969842517449937,
+          "preload": 0.9719965114810838
+        }
+      },
+      "gcc/n131072/mode3": {
+        "args": [
+          131072,
+          3,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            26.793398,
+            25.459089,
+            26.164837,
+            26.59875,
+            26.070843,
+            25.84944,
+            24.691573
+          ],
+          "control": [
+            25.573716,
+            26.327368,
+            26.749451,
+            25.528273,
+            25.035231,
+            26.372181,
+            26.444252
+          ],
+          "preload": [
+            24.041247,
+            24.330083,
+            24.471105,
+            24.08296,
+            24.331833,
+            24.047569,
+            24.041507
+          ]
+        },
+        "median_ms": {
+          "baseline": 26.070843,
+          "control": 26.327368,
+          "preload": 24.08296
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.009839536067169,
+          "preload": 0.923750720297
+        }
+      },
+      "gcc/n131072/mode4": {
+        "args": [
+          131072,
+          4,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            82.621066,
+            82.428952,
+            82.642769,
+            82.7797,
+            82.579976,
+            82.242888,
+            82.885678
+          ],
+          "control": [
+            82.357471,
+            82.220307,
+            82.53656,
+            82.378299,
+            82.5492,
+            82.469834,
+            82.506
+          ],
+          "preload": [
+            76.43829,
+            76.180641,
+            76.407772,
+            76.447061,
+            76.846356,
+            76.389315,
+            76.305782
+          ]
+        },
+        "median_ms": {
+          "baseline": 82.621066,
+          "control": 82.469834,
+          "preload": 76.407772
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9981695709421131,
+          "preload": 0.9247977023196481
+        }
+      },
+      "gcc/n131072/mode5": {
+        "args": [
+          131072,
+          5,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            3.128904,
+            3.105931,
+            3.101469,
+            3.092735,
+            3.095615,
+            3.157676,
+            3.16057
+          ],
+          "control": [
+            3.093139,
+            3.093184,
+            3.092852,
+            3.194078,
+            3.150837,
+            3.117364,
+            3.094137
+          ],
+          "preload": [
+            3.318275,
+            3.360147,
+            3.307859,
+            3.316518,
+            3.352586,
+            3.336935,
+            3.341204
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.105931,
+          "control": 3.094137,
+          "preload": 3.336935
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9962027488698235,
+          "preload": 1.0743751229502523
+        }
+      },
+      "gcc/n131072/mode6": {
+        "args": [
+          131072,
+          6,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            114.19107,
+            114.317363,
+            116.857838,
+            115.342454,
+            115.596209,
+            114.426058,
+            114.589349
+          ],
+          "control": [
+            114.290496,
+            114.600598,
+            115.315249,
+            114.001545,
+            114.501399,
+            115.058699,
+            114.2483
+          ],
+          "preload": [
+            114.140599,
+            114.246829,
+            154.047815,
+            114.361507,
+            114.041654,
+            114.09406,
+            114.622947
+          ]
+        },
+        "median_ms": {
+          "baseline": 114.589349,
+          "control": 114.501399,
+          "preload": 114.246829
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9992324766588909,
+          "preload": 0.9970108914747391
+        }
+      },
+      "gcc/n131072/mode7": {
+        "args": [
+          131072,
+          7,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            42.47631,
+            41.839897,
+            42.383949,
+            42.188831,
+            41.986086,
+            41.891856,
+            42.072655
+          ],
+          "control": [
+            42.206946,
+            42.180631,
+            42.673436,
+            42.269675,
+            42.187019,
+            41.77603,
+            42.010358
+          ],
+          "preload": [
+            41.986225,
+            42.042343,
+            42.151516,
+            42.49308,
+            42.364709,
+            42.073121,
+            42.08227
+          ]
+        },
+        "median_ms": {
+          "baseline": 42.072655,
+          "control": 42.187019,
+          "preload": 42.08227
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0027182501318255,
+          "preload": 1.0002285332361365
+        }
+      },
+      "gcc/n131072/mode8": {
+        "args": [
+          131072,
+          8,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            1.268418,
+            1.270192,
+            1.269361,
+            1.266818,
+            1.267647,
+            1.279762,
+            1.269141
+          ],
+          "control": [
+            1.267196,
+            1.27912,
+            1.274736,
+            1.269413,
+            1.26965,
+            1.267466,
+            1.283918
+          ],
+          "preload": [
+            1.267714,
+            1.271305,
+            1.269585,
+            1.27833,
+            1.28353,
+            1.270591,
+            1.266958
+          ]
+        },
+        "median_ms": {
+          "baseline": 1.269141,
+          "control": 1.26965,
+          "preload": 1.270591
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0004010586688161,
+          "preload": 1.0011425050486904
+        }
+      },
+      "gcc/n131072/mode9": {
+        "args": [
+          131072,
+          9,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            12.734352,
+            12.98163,
+            12.974362,
+            12.922319,
+            12.790785,
+            12.750353,
+            12.741584
+          ],
+          "control": [
+            12.908292,
+            12.846566,
+            13.101036,
+            12.894294,
+            12.797951,
+            12.746786,
+            12.737911
+          ],
+          "preload": [
+            12.577339,
+            12.782716,
+            13.139746,
+            12.659532,
+            12.65596,
+            12.595533,
+            12.587827
+          ]
+        },
+        "median_ms": {
+          "baseline": 12.790785,
+          "control": 12.846566,
+          "preload": 12.65596
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0043610302260573,
+          "preload": 0.9894592083284959
+        }
+      },
+      "gcc/n131072/mode10": {
+        "args": [
+          131072,
+          10,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            4.965896,
+            5.063814,
+            4.908546,
+            5.084001,
+            4.551891,
+            4.606864,
+            5.235492
+          ],
+          "control": [
+            4.979005,
+            4.998566,
+            5.152719,
+            5.195193,
+            6.957071,
+            4.543673,
+            5.189222
+          ],
+          "preload": [
+            5.201132,
+            4.992174,
+            4.902356,
+            5.137036,
+            4.560638,
+            4.553863,
+            5.140988
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.965896,
+          "control": 5.152719,
+          "preload": 4.992174
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0376212067268424,
+          "preload": 1.0052916935835952
+        }
+      },
+      "gcc/n131072/mode11": {
+        "args": [
+          131072,
+          11,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            4.939173,
+            4.846823,
+            4.986747,
+            4.974382,
+            4.909162,
+            5.009281,
+            4.885508
+          ],
+          "control": [
+            4.998301,
+            4.349555,
+            5.058041,
+            4.886017,
+            4.9909,
+            4.918148,
+            4.765361
+          ],
+          "preload": [
+            4.837704,
+            4.258691,
+            4.898948,
+            4.845601,
+            4.628222,
+            4.911331,
+            4.805987
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.939173,
+          "control": 4.918148,
+          "preload": 4.837704
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.995743214501699,
+          "preload": 0.9794562773970459
+        }
+      },
+      "clang/n32/mode0": {
+        "args": [
+          32,
+          0,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            13.141526,
+            13.120665,
+            13.153997,
+            12.889921,
+            13.121228,
+            13.182319,
+            13.120545
+          ],
+          "control": [
+            13.130674,
+            13.186382,
+            13.316963,
+            13.141668,
+            13.126759,
+            13.252892,
+            13.148614
+          ],
+          "preload": [
+            12.24809,
+            9.689251,
+            9.770456,
+            9.806235,
+            9.666678,
+            10.453732,
+            9.718973
+          ]
+        },
+        "median_ms": {
+          "baseline": 13.121228,
+          "control": 13.148614,
+          "preload": 9.770456
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0020871522086194,
+          "preload": 0.7446296947206466
+        }
+      },
+      "clang/n32/mode1": {
+        "args": [
+          32,
+          1,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            12.173283,
+            12.199158,
+            12.186585,
+            12.188823,
+            12.284239,
+            12.180394,
+            12.167162
+          ],
+          "control": [
+            12.177501,
+            12.222298,
+            12.202346,
+            12.175054,
+            12.166529,
+            12.18024,
+            12.194566
+          ],
+          "preload": [
+            12.143223,
+            12.234905,
+            12.152878,
+            12.02377,
+            12.091954,
+            12.174484,
+            12.54201
+          ]
+        },
+        "median_ms": {
+          "baseline": 12.186585,
+          "control": 12.18024,
+          "preload": 12.152878
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9994793455262487,
+          "preload": 0.9972340897798686
+        }
+      },
+      "clang/n32/mode2": {
+        "args": [
+          32,
+          2,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.424038,
+            2.420723,
+            2.420844,
+            2.437017,
+            2.419657,
+            2.420985,
+            2.421598
+          ],
+          "control": [
+            2.420217,
+            2.418935,
+            2.419937,
+            2.421468,
+            2.426613,
+            2.436709,
+            2.421295
+          ],
+          "preload": [
+            2.454493,
+            2.45543,
+            2.211226,
+            2.461104,
+            2.332954,
+            2.258861,
+            2.224274
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.420985,
+          "control": 2.421295,
+          "preload": 2.332954
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0001280470552276,
+          "preload": 0.9636383538105358
+        }
+      },
+      "clang/n32/mode3": {
+        "args": [
+          32,
+          3,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.198698,
+            2.177772,
+            2.400802,
+            2.174114,
+            2.213897,
+            2.20002,
+            2.177199
+          ],
+          "control": [
+            2.211403,
+            2.185471,
+            2.18511,
+            2.175487,
+            2.18984,
+            2.225,
+            2.193555
+          ],
+          "preload": [
+            2.840556,
+            2.628288,
+            2.811512,
+            2.791809,
+            2.717153,
+            2.673441,
+            2.858936
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.198698,
+          "control": 2.18984,
+          "preload": 2.791809
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9959712520773658,
+          "preload": 1.2697555553332018
+        }
+      },
+      "clang/n32/mode4": {
+        "args": [
+          32,
+          4,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            10.649214,
+            10.640885,
+            10.650571,
+            10.63014,
+            10.640918,
+            10.632884,
+            10.643758
+          ],
+          "control": [
+            10.650228,
+            10.625391,
+            10.65322,
+            10.626871,
+            10.629127,
+            10.620734,
+            10.632367
+          ],
+          "preload": [
+            10.354866,
+            10.351891,
+            10.33359,
+            10.317061,
+            10.384344,
+            10.379483,
+            10.321419
+          ]
+        },
+        "median_ms": {
+          "baseline": 10.640918,
+          "control": 10.629127,
+          "preload": 10.351891
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9988919189115075,
+          "preload": 0.9728381517459302
+        }
+      },
+      "clang/n32/mode5": {
+        "args": [
+          32,
+          5,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.829429,
+            2.887694,
+            2.929054,
+            2.942867,
+            2.930079,
+            2.929886,
+            2.959343
+          ],
+          "control": [
+            2.85636,
+            2.951067,
+            2.948561,
+            2.903132,
+            2.860766,
+            2.903676,
+            2.926726
+          ],
+          "preload": [
+            2.919544,
+            2.902792,
+            2.887586,
+            2.975758,
+            2.888285,
+            2.964595,
+            3.021422
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.929886,
+          "control": 2.903676,
+          "preload": 2.919544
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9910542594490024,
+          "preload": 0.9964701698291333
+        }
+      },
+      "clang/n32/mode6": {
+        "args": [
+          32,
+          6,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            34.215219,
+            34.194883,
+            34.273662,
+            34.193848,
+            34.126349,
+            34.291326,
+            34.209319
+          ],
+          "control": [
+            35.690869,
+            34.136066,
+            34.236236,
+            34.094118,
+            34.210005,
+            34.166038,
+            34.010609
+          ],
+          "preload": [
+            35.090348,
+            34.559037,
+            34.400794,
+            34.572579,
+            34.406488,
+            35.182749,
+            34.9496
+          ]
+        },
+        "median_ms": {
+          "baseline": 34.209319,
+          "control": 34.166038,
+          "preload": 34.572579
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9987348184276922,
+          "preload": 1.0106187439744123
+        }
+      },
+      "clang/n32/mode7": {
+        "args": [
+          32,
+          7,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            13.736574,
+            14.041314,
+            14.279373,
+            13.901634,
+            14.072158,
+            13.672379,
+            13.862412
+          ],
+          "control": [
+            14.067052,
+            13.824894,
+            13.894915,
+            13.838278,
+            14.021597,
+            13.586256,
+            13.965935
+          ],
+          "preload": [
+            13.059547,
+            13.081765,
+            13.185078,
+            13.048089,
+            13.123576,
+            13.074545,
+            13.052746
+          ]
+        },
+        "median_ms": {
+          "baseline": 13.901634,
+          "control": 13.894915,
+          "preload": 13.074545
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9995166755217408,
+          "preload": 0.9405041882126951
+        }
+      },
+      "clang/n32/mode8": {
+        "args": [
+          32,
+          8,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.17071,
+            2.230061,
+            2.141452,
+            2.260762,
+            2.115279,
+            2.215571,
+            2.219877
+          ],
+          "control": [
+            2.134783,
+            2.230745,
+            2.218306,
+            2.14029,
+            2.140962,
+            2.190191,
+            2.19535
+          ],
+          "preload": [
+            2.050991,
+            2.207075,
+            2.069871,
+            2.099164,
+            2.158468,
+            2.185867,
+            2.128884
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.215571,
+          "control": 2.190191,
+          "preload": 2.128884
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9885447137555058,
+          "preload": 0.960873743156956
+        }
+      },
+      "clang/n32/mode9": {
+        "args": [
+          32,
+          9,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            4.643333,
+            4.627758,
+            4.619736,
+            4.634375,
+            4.651908,
+            4.678184,
+            4.644034
+          ],
+          "control": [
+            4.660882,
+            4.658514,
+            4.625874,
+            4.672852,
+            4.599941,
+            4.619212,
+            4.626746
+          ],
+          "preload": [
+            4.820122,
+            4.796813,
+            4.750619,
+            4.747058,
+            4.770657,
+            4.948081,
+            4.851718
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.643333,
+          "control": 4.626746,
+          "preload": 4.796813
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9964277815095319,
+          "preload": 1.0330538430045832
+        }
+      },
+      "clang/n32/mode10": {
+        "args": [
+          32,
+          10,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.240472,
+            2.248128,
+            2.235454,
+            2.268212,
+            2.279322,
+            2.234904,
+            2.322027
+          ],
+          "control": [
+            2.312396,
+            2.265038,
+            2.260593,
+            2.271802,
+            2.245413,
+            2.230983,
+            2.234369
+          ],
+          "preload": [
+            2.25202,
+            2.26016,
+            2.237852,
+            2.237956,
+            2.289706,
+            2.250035,
+            2.257465
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.248128,
+          "control": 2.260593,
+          "preload": 2.25202
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0055446131181143,
+          "preload": 1.0017312181512796
+        }
+      },
+      "clang/n32/mode11": {
+        "args": [
+          32,
+          11,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            3.259389,
+            3.334797,
+            3.909942,
+            3.59427,
+            3.870512,
+            3.881287,
+            3.69078
+          ],
+          "control": [
+            3.914642,
+            3.593251,
+            3.714226,
+            3.588888,
+            3.878426,
+            3.889915,
+            3.874564
+          ],
+          "preload": [
+            2.509137,
+            2.321758,
+            2.31034,
+            2.523888,
+            2.574686,
+            2.338952,
+            2.314694
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.69078,
+          "control": 3.874564,
+          "preload": 2.338952
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.049795436195059,
+          "preload": 0.6337283717804908
+        }
+      },
+      "clang/n131072/mode0": {
+        "args": [
+          131072,
+          0,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            53.167688,
+            53.005909,
+            53.359633,
+            52.527614,
+            52.797009,
+            52.671368,
+            52.807465
+          ],
+          "control": [
+            53.262095,
+            53.122468,
+            53.000494,
+            53.063235,
+            52.952632,
+            52.49833,
+            52.790486
+          ],
+          "preload": [
+            50.839162,
+            51.088277,
+            50.86806,
+            50.669701,
+            50.478151,
+            50.58134,
+            50.520134
+          ]
+        },
+        "median_ms": {
+          "baseline": 52.807465,
+          "control": 53.000494,
+          "preload": 50.669701
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.003655335471983,
+          "preload": 0.9595177689366456
+        }
+      },
+      "clang/n131072/mode1": {
+        "args": [
+          131072,
+          1,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            20.920639,
+            20.84972,
+            20.850991,
+            20.852788,
+            20.865412,
+            20.85844,
+            20.851059
+          ],
+          "control": [
+            20.873636,
+            20.861322,
+            20.888478,
+            20.854035,
+            20.95381,
+            20.853553,
+            20.875877
+          ],
+          "preload": [
+            20.433849,
+            20.463922,
+            20.431596,
+            20.604895,
+            20.651103,
+            20.418582,
+            20.42909
+          ]
+        },
+        "median_ms": {
+          "baseline": 20.852788,
+          "control": 20.873636,
+          "preload": 20.433849
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.000999770390415,
+          "preload": 0.9799096888147522
+        }
+      },
+      "clang/n131072/mode2": {
+        "args": [
+          131072,
+          2,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            4.809302,
+            4.487036,
+            4.857517,
+            4.877937,
+            4.966748,
+            4.871709,
+            4.993137
+          ],
+          "control": [
+            4.344161,
+            4.846942,
+            4.817487,
+            4.737304,
+            4.707287,
+            4.819847,
+            4.930652
+          ],
+          "preload": [
+            3.885541,
+            4.398965,
+            3.891408,
+            4.327499,
+            4.43076,
+            4.43107,
+            4.381048
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.871709,
+          "control": 4.817487,
+          "preload": 4.381048
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9888700248721752,
+          "preload": 0.8992835984251112
+        }
+      },
+      "clang/n131072/mode3": {
+        "args": [
+          131072,
+          3,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            19.155719,
+            19.034378,
+            19.344142,
+            19.097026,
+            19.172274,
+            19.078173,
+            19.315777
+          ],
+          "control": [
+            19.176967,
+            19.140024,
+            19.205622,
+            19.153495,
+            19.308764,
+            19.317263,
+            19.058067
+          ],
+          "preload": [
+            19.604005,
+            20.178488,
+            19.86993,
+            19.588089,
+            19.643006,
+            19.659715,
+            19.51972
+          ]
+        },
+        "median_ms": {
+          "baseline": 19.155719,
+          "control": 19.176967,
+          "preload": 19.643006
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0011092248743052,
+          "preload": 1.0254381994223238
+        }
+      },
+      "clang/n131072/mode4": {
+        "args": [
+          131072,
+          4,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            75.499485,
+            75.35024,
+            75.502394,
+            75.572685,
+            75.579529,
+            75.428976,
+            75.507104
+          ],
+          "control": [
+            75.338594,
+            75.602398,
+            76.048261,
+            75.543833,
+            75.761417,
+            75.552799,
+            75.644666
+          ],
+          "preload": [
+            72.285323,
+            72.171502,
+            72.311941,
+            72.247552,
+            72.093734,
+            72.194392,
+            72.264454
+          ]
+        },
+        "median_ms": {
+          "baseline": 75.502394,
+          "control": 75.602398,
+          "preload": 72.247552
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0013245142928846,
+          "preload": 0.9568908768641164
+        }
+      },
+      "clang/n131072/mode5": {
+        "args": [
+          131072,
+          5,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            3.411763,
+            3.406872,
+            3.573413,
+            3.435037,
+            3.554719,
+            3.57612,
+            3.506721
+          ],
+          "control": [
+            3.398586,
+            3.484903,
+            3.525561,
+            3.641288,
+            3.63334,
+            3.485925,
+            3.407618
+          ],
+          "preload": [
+            3.735032,
+            3.703806,
+            3.714566,
+            3.707715,
+            3.718126,
+            3.707454,
+            3.703404
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.506721,
+          "control": 3.485925,
+          "preload": 3.707715
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9940696736352849,
+          "preload": 1.0573167925249827
+        }
+      },
+      "clang/n131072/mode6": {
+        "args": [
+          131072,
+          6,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            113.382312,
+            113.489374,
+            113.350544,
+            113.677622,
+            112.858664,
+            113.058895,
+            113.105253
+          ],
+          "control": [
+            113.400704,
+            113.544202,
+            113.100558,
+            113.77798,
+            113.314796,
+            114.009468,
+            112.924188
+          ],
+          "preload": [
+            113.913408,
+            113.498285,
+            113.64402,
+            114.621592,
+            113.513332,
+            114.101673,
+            115.290951
+          ]
+        },
+        "median_ms": {
+          "baseline": 113.350544,
+          "control": 113.400704,
+          "preload": 113.913408
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0004425210345704,
+          "preload": 1.0049656929745305
+        }
+      },
+      "clang/n131072/mode7": {
+        "args": [
+          131072,
+          7,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            41.61434,
+            41.624209,
+            41.702233,
+            41.754823,
+            41.766915,
+            41.394761,
+            41.407233
+          ],
+          "control": [
+            41.952621,
+            41.174057,
+            41.540901,
+            41.82127,
+            41.963233,
+            41.418648,
+            41.586381
+          ],
+          "preload": [
+            40.367836,
+            41.047971,
+            40.860075,
+            40.654888,
+            40.577381,
+            39.669496,
+            40.211316
+          ]
+        },
+        "median_ms": {
+          "baseline": 41.624209,
+          "control": 41.586381,
+          "preload": 40.577381
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9990912019493272,
+          "preload": 0.9748505010629752
+        }
+      },
+      "clang/n131072/mode8": {
+        "args": [
+          131072,
+          8,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            0.684312,
+            0.681912,
+            0.689513,
+            0.6819,
+            0.685359,
+            0.684194,
+            0.699042
+          ],
+          "control": [
+            0.683832,
+            0.681845,
+            0.691398,
+            0.686543,
+            0.705041,
+            0.681939,
+            0.681912
+          ],
+          "preload": [
+            0.684245,
+            0.683522,
+            0.683882,
+            0.682032,
+            0.681981,
+            0.681914,
+            0.68633
+          ]
+        },
+        "median_ms": {
+          "baseline": 0.684312,
+          "control": 0.683832,
+          "preload": 0.683522
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9992985655665836,
+          "preload": 0.9988455558283356
+        }
+      },
+      "clang/n131072/mode9": {
+        "args": [
+          131072,
+          9,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            11.763168,
+            11.650522,
+            11.676554,
+            11.732166,
+            11.71839,
+            11.776394,
+            11.7044
+          ],
+          "control": [
+            11.691679,
+            11.76039,
+            11.711457,
+            11.663322,
+            11.684131,
+            11.72198,
+            11.890094
+          ],
+          "preload": [
+            11.306977,
+            11.305744,
+            11.224592,
+            11.297966,
+            11.248596,
+            11.253091,
+            11.659677
+          ]
+        },
+        "median_ms": {
+          "baseline": 11.71839,
+          "control": 11.711457,
+          "preload": 11.297966
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9994083658249981,
+          "preload": 0.9641227165165182
+        }
+      },
+      "clang/n131072/mode10": {
+        "args": [
+          131072,
+          10,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            4.69162,
+            4.644991,
+            4.771984,
+            4.57243,
+            4.820361,
+            4.757734,
+            4.711465
+          ],
+          "control": [
+            4.731972,
+            4.915668,
+            4.493601,
+            4.572397,
+            4.718404,
+            4.606555,
+            4.747333
+          ],
+          "preload": [
+            4.666865,
+            4.795367,
+            4.641611,
+            4.539501,
+            4.619216,
+            4.58079,
+            4.801532
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.711465,
+          "control": 4.718404,
+          "preload": 4.641611
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0014727903104448,
+          "preload": 0.9851736137273652
+        }
+      },
+      "clang/n131072/mode11": {
+        "args": [
+          131072,
+          11,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            4.877228,
+            5.067326,
+            5.087424,
+            5.046217,
+            4.853042,
+            5.111752,
+            5.056556
+          ],
+          "control": [
+            5.121908,
+            5.182685,
+            5.097836,
+            5.006091,
+            8.132264,
+            5.015356,
+            4.984724
+          ],
+          "preload": [
+            4.405978,
+            4.408184,
+            4.595231,
+            4.545685,
+            4.547857,
+            4.435158,
+            4.617228
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.056556,
+          "control": 5.097836,
+          "preload": 4.545685
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0081636592178551,
+          "preload": 0.8989685865241085
+        }
+      }
+    },
+    "checksums": {
+      "gcc/n32/mode0": "6400000",
+      "gcc/n32/mode1": "6400000",
+      "gcc/n32/mode2": "3200000",
+      "gcc/n32/mode3": "500000",
+      "gcc/n32/mode4": "5900000",
+      "gcc/n32/mode5": "3200000",
+      "gcc/n32/mode6": "56000000",
+      "gcc/n32/mode7": "17600000",
+      "gcc/n32/mode8": "6400000",
+      "gcc/n32/mode9": "3300000",
+      "gcc/n32/mode10": "0",
+      "gcc/n32/mode11": "0",
+      "gcc/n131072/mode0": "10485760",
+      "gcc/n131072/mode1": "10485760",
+      "gcc/n131072/mode2": "5242880",
+      "gcc/n131072/mode3": "240",
+      "gcc/n131072/mode4": "8574560",
+      "gcc/n131072/mode5": "5242880",
+      "gcc/n131072/mode6": "343605248000",
+      "gcc/n131072/mode7": "85907210240",
+      "gcc/n131072/mode8": "10485760",
+      "gcc/n131072/mode9": "5242920",
+      "gcc/n131072/mode10": "0",
+      "gcc/n131072/mode11": "0",
+      "clang/n32/mode0": "6400000",
+      "clang/n32/mode1": "6400000",
+      "clang/n32/mode2": "3200000",
+      "clang/n32/mode3": "500000",
+      "clang/n32/mode4": "5900000",
+      "clang/n32/mode5": "3200000",
+      "clang/n32/mode6": "56000000",
+      "clang/n32/mode7": "17600000",
+      "clang/n32/mode8": "6400000",
+      "clang/n32/mode9": "3300000",
+      "clang/n32/mode10": "0",
+      "clang/n32/mode11": "0",
+      "clang/n131072/mode0": "10485760",
+      "clang/n131072/mode1": "10485760",
+      "clang/n131072/mode2": "5242880",
+      "clang/n131072/mode3": "240",
+      "clang/n131072/mode4": "8574560",
+      "clang/n131072/mode5": "5242880",
+      "clang/n131072/mode6": "343605248000",
+      "clang/n131072/mode7": "85907210240",
+      "clang/n131072/mode8": "10485760",
+      "clang/n131072/mode9": "5242920",
+      "clang/n131072/mode10": "0",
+      "clang/n131072/mode11": "0"
+    },
+    "builds": [
+      [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/baseline.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_gcc_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/control.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_gcc_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/preload.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_gcc_preload"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/baseline.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_clang_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/control.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_clang_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/preload.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_clang_preload"
+      ]
+    ],
+    "repetitions": 7,
+    "cpu": 14,
+    "compile_cpu": 6
+  },
+  "api_selective": {
+    "raw": {
+      "gcc/n32/mode0": {
+        "args": [
+          32,
+          0,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            9.058027,
+            9.044228,
+            8.989563,
+            9.049866,
+            8.989525,
+            9.003724,
+            9.007826
+          ],
+          "control": [
+            11.676265,
+            8.917215,
+            9.056927,
+            9.125523,
+            8.973162,
+            9.027068,
+            8.987912
+          ],
+          "preload_same": [
+            9.258702,
+            9.279837,
+            9.29452,
+            9.315645,
+            9.33516,
+            9.126967,
+            9.082728
+          ],
+          "preload_merge": [
+            9.153184,
+            9.124173,
+            9.249046,
+            9.246727,
+            9.12885,
+            9.207776,
+            9.103298
+          ]
+        },
+        "median_ms": {
+          "baseline": 9.007826,
+          "control": 9.027068,
+          "preload_same": 9.279837,
+          "preload_merge": 9.153184
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.002136142505417,
+          "preload_same": 1.0301971863133237,
+          "preload_merge": 1.0161368569952394
+        }
+      },
+      "gcc/n32/mode1": {
+        "args": [
+          32,
+          1,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            6.801389,
+            6.598081,
+            6.829899,
+            6.649745,
+            6.977924,
+            6.741063,
+            6.887587
+          ],
+          "control": [
+            7.111817,
+            6.771732,
+            6.732506,
+            6.625869,
+            6.591289,
+            6.867269,
+            6.761636
+          ],
+          "preload_same": [
+            6.53336,
+            6.610107,
+            6.772779,
+            6.746861,
+            6.717092,
+            6.588767,
+            6.849837
+          ],
+          "preload_merge": [
+            6.696649,
+            6.618877,
+            6.669437,
+            6.641112,
+            6.824198,
+            6.776869,
+            6.789146
+          ]
+        },
+        "median_ms": {
+          "baseline": 6.801389,
+          "control": 6.761636,
+          "preload_same": 6.717092,
+          "preload_merge": 6.696649
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9941551644818433,
+          "preload_same": 0.987605914027267,
+          "preload_merge": 0.9846002044582364
+        }
+      },
+      "gcc/n32/mode2": {
+        "args": [
+          32,
+          2,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.381065,
+            2.342346,
+            2.338745,
+            2.37086,
+            2.338569,
+            2.360474,
+            2.347932
+          ],
+          "control": [
+            2.380059,
+            2.39013,
+            2.343928,
+            2.327764,
+            2.317129,
+            2.382036,
+            2.350095
+          ],
+          "preload_same": [
+            2.425427,
+            2.356435,
+            2.398389,
+            2.334922,
+            2.300342,
+            2.472266,
+            2.290491
+          ],
+          "preload_merge": [
+            2.308873,
+            2.368559,
+            2.341401,
+            2.314748,
+            2.339251,
+            2.31425,
+            2.372434
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.347932,
+          "control": 2.350095,
+          "preload_same": 2.356435,
+          "preload_merge": 2.339251
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0009212362197883,
+          "preload_same": 1.0036214847789457,
+          "preload_merge": 0.9963027038261755
+        }
+      },
+      "gcc/n32/mode3": {
+        "args": [
+          32,
+          3,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.767049,
+            2.747619,
+            2.742329,
+            2.796553,
+            2.793397,
+            2.775833,
+            2.749418
+          ],
+          "control": [
+            2.748797,
+            2.801659,
+            2.731528,
+            2.772562,
+            2.809901,
+            2.74577,
+            2.746252
+          ],
+          "preload_same": [
+            2.814581,
+            2.822736,
+            2.881581,
+            2.853134,
+            2.892855,
+            2.893103,
+            2.978257
+          ],
+          "preload_merge": [
+            2.887605,
+            2.84074,
+            2.888065,
+            2.845562,
+            2.955289,
+            2.812435,
+            2.808889
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.767049,
+          "control": 2.748797,
+          "preload_same": 2.881581,
+          "preload_merge": 2.845562
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9934038031129915,
+          "preload_same": 1.041391388443067,
+          "preload_merge": 1.0283742716518574
+        }
+      },
+      "gcc/n32/mode4": {
+        "args": [
+          32,
+          4,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            7.91882,
+            7.922129,
+            7.909182,
+            7.808611,
+            7.977602,
+            8.017422,
+            7.831409
+          ],
+          "control": [
+            7.853552,
+            7.921397,
+            7.941774,
+            8.103364,
+            7.931505,
+            7.865259,
+            7.983883
+          ],
+          "preload_same": [
+            8.088937,
+            8.227917,
+            8.244309,
+            8.057143,
+            7.928676,
+            8.174045,
+            8.239789
+          ],
+          "preload_merge": [
+            8.181953,
+            8.373974,
+            8.132649,
+            8.117291,
+            8.279857,
+            8.163028,
+            8.115819
+          ]
+        },
+        "median_ms": {
+          "baseline": 7.91882,
+          "control": 7.931505,
+          "preload_same": 8.174045,
+          "preload_merge": 8.163028
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0016018800780924,
+          "preload_same": 1.0322301807592544,
+          "preload_merge": 1.0308389381246197
+        }
+      },
+      "gcc/n32/mode5": {
+        "args": [
+          32,
+          5,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.605588,
+            2.691671,
+            2.580891,
+            2.638206,
+            2.569483,
+            2.56263,
+            2.697947
+          ],
+          "control": [
+            2.678065,
+            2.62767,
+            2.678658,
+            2.565365,
+            2.639228,
+            2.652005,
+            2.735993
+          ],
+          "preload_same": [
+            2.990154,
+            2.89268,
+            2.937523,
+            2.978109,
+            2.798977,
+            2.915373,
+            2.893366
+          ],
+          "preload_merge": [
+            2.80038,
+            2.6033,
+            2.68576,
+            2.673819,
+            2.650987,
+            2.669215,
+            2.58806
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.605588,
+          "control": 2.652005,
+          "preload_same": 2.915373,
+          "preload_merge": 2.669215
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0178144050402442,
+          "preload_same": 1.1188925493976791,
+          "preload_merge": 1.024419440064968
+        }
+      },
+      "gcc/n32/mode9": {
+        "args": [
+          32,
+          9,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            4.950273,
+            4.920385,
+            4.930889,
+            4.987477,
+            5.058864,
+            4.882192,
+            4.97973
+          ],
+          "control": [
+            4.960182,
+            4.964234,
+            4.96121,
+            5.162316,
+            4.991456,
+            5.014137,
+            4.937506
+          ],
+          "preload_same": [
+            6.554147,
+            6.543701,
+            6.528515,
+            6.805502,
+            6.435871,
+            6.657407,
+            6.652388
+          ],
+          "preload_merge": [
+            4.920461,
+            4.913554,
+            4.971113,
+            4.876724,
+            4.942941,
+            4.94786,
+            5.095946
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.950273,
+          "control": 4.964234,
+          "preload_same": 6.554147,
+          "preload_merge": 4.942941
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0028202484994262,
+          "preload_same": 1.3239970805650516,
+          "preload_merge": 0.9985188695653755
+        }
+      },
+      "gcc/n32/mode10": {
+        "args": [
+          32,
+          10,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.054882,
+            2.064612,
+            2.089362,
+            2.081193,
+            2.245501,
+            2.072977,
+            2.089578
+          ],
+          "control": [
+            2.097958,
+            2.05259,
+            2.073734,
+            2.064943,
+            2.069277,
+            2.052163,
+            2.077658
+          ],
+          "preload_same": [
+            3.115366,
+            3.202801,
+            3.152024,
+            3.132636,
+            3.104993,
+            3.148641,
+            3.119409
+          ],
+          "preload_merge": [
+            2.069075,
+            2.054176,
+            2.050916,
+            2.055984,
+            2.068181,
+            2.060101,
+            2.054339
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.081193,
+          "control": 2.069277,
+          "preload_same": 3.132636,
+          "preload_merge": 2.055984
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9942744377864043,
+          "preload_same": 1.5052116742656738,
+          "preload_merge": 0.987887235830603
+        }
+      },
+      "gcc/n32/mode11": {
+        "args": [
+          32,
+          11,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            5.26778,
+            4.780722,
+            5.171122,
+            4.773738,
+            5.174622,
+            5.01314,
+            5.490689
+          ],
+          "control": [
+            5.015201,
+            5.4081,
+            5.252933,
+            4.842472,
+            5.492686,
+            5.210553,
+            5.148913
+          ],
+          "preload_same": [
+            5.284946,
+            5.287153,
+            5.260711,
+            5.284888,
+            5.49583,
+            5.256381,
+            5.320123
+          ],
+          "preload_merge": [
+            4.270774,
+            4.287008,
+            4.318665,
+            4.357904,
+            4.343473,
+            4.240322,
+            4.227791
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.171122,
+          "control": 5.210553,
+          "preload_same": 5.284946,
+          "preload_merge": 4.287008
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.007625231042702,
+          "preload_same": 1.02201147062475,
+          "preload_merge": 0.8290285937945382
+        }
+      },
+      "gcc/n131072/mode0": {
+        "args": [
+          131072,
+          0,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            56.817687,
+            56.827684,
+            56.934552,
+            56.778786,
+            56.623486,
+            56.817524,
+            57.135944
+          ],
+          "control": [
+            56.752768,
+            56.89526,
+            56.977064,
+            56.748404,
+            56.647596,
+            56.729714,
+            56.965015
+          ],
+          "preload_same": [
+            53.05531,
+            53.057152,
+            53.05662,
+            53.048628,
+            53.047116,
+            53.116366,
+            53.340816
+          ],
+          "preload_merge": [
+            56.836856,
+            56.665526,
+            56.56875,
+            56.77523,
+            56.513709,
+            56.623382,
+            56.75269
+          ]
+        },
+        "median_ms": {
+          "baseline": 56.817687,
+          "control": 56.752768,
+          "preload_same": 53.05662,
+          "preload_merge": 56.665526
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9988574156494615,
+          "preload_same": 0.9338046443178865,
+          "preload_merge": 0.9973219430773379
+        }
+      },
+      "gcc/n131072/mode1": {
+        "args": [
+          131072,
+          1,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            11.367798,
+            11.385811,
+            11.361882,
+            11.381668,
+            11.379544,
+            11.368593,
+            11.361553
+          ],
+          "control": [
+            11.374942,
+            11.357461,
+            11.369689,
+            11.405003,
+            11.383654,
+            11.354088,
+            11.368146
+          ],
+          "preload_same": [
+            11.234758,
+            11.221423,
+            11.227818,
+            11.306578,
+            11.278151,
+            11.228245,
+            11.248685
+          ],
+          "preload_merge": [
+            11.454959,
+            11.442488,
+            11.444722,
+            11.430941,
+            11.464698,
+            11.460923,
+            11.439039
+          ]
+        },
+        "median_ms": {
+          "baseline": 11.368593,
+          "control": 11.369689,
+          "preload_same": 11.234758,
+          "preload_merge": 11.444722
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0000964059492674,
+          "preload_same": 0.9882276549085712,
+          "preload_merge": 1.0066964311238866
+        }
+      },
+      "gcc/n131072/mode2": {
+        "args": [
+          131072,
+          2,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            5.286077,
+            5.178032,
+            5.273901,
+            5.405526,
+            5.537325,
+            5.412272,
+            5.291421
+          ],
+          "control": [
+            5.315992,
+            5.223054,
+            5.216995,
+            5.03885,
+            5.286225,
+            5.142703,
+            5.276323
+          ],
+          "preload_same": [
+            5.059622,
+            5.130304,
+            5.116764,
+            5.189276,
+            5.33692,
+            5.186452,
+            5.052556
+          ],
+          "preload_merge": [
+            5.405739,
+            5.106678,
+            5.267175,
+            5.340949,
+            5.093783,
+            5.044482,
+            5.307161
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.291421,
+          "control": 5.223054,
+          "preload_same": 5.130304,
+          "preload_merge": 5.267175
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9870796521388112,
+          "preload_same": 0.9695512793255346,
+          "preload_merge": 0.9954178660136852
+        }
+      },
+      "gcc/n131072/mode3": {
+        "args": [
+          131072,
+          3,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            26.116592,
+            25.758393,
+            26.736475,
+            25.534467,
+            24.732645,
+            26.086794,
+            25.973482
+          ],
+          "control": [
+            26.584339,
+            24.701071,
+            27.008152,
+            25.106485,
+            25.29562,
+            25.935083,
+            26.013983
+          ],
+          "preload_same": [
+            23.726619,
+            24.357819,
+            24.412766,
+            23.400976,
+            24.453004,
+            23.418047,
+            24.120792
+          ],
+          "preload_merge": [
+            26.452662,
+            25.264058,
+            25.446496,
+            25.459501,
+            25.60225,
+            25.42168,
+            26.629344
+          ]
+        },
+        "median_ms": {
+          "baseline": 25.973482,
+          "control": 25.935083,
+          "preload_same": 24.120792,
+          "preload_merge": 25.459501
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9985216075380265,
+          "preload_same": 0.9286699411345772,
+          "preload_merge": 0.9802113170656133
+        }
+      },
+      "gcc/n131072/mode4": {
+        "args": [
+          131072,
+          4,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            82.663239,
+            82.569632,
+            82.950177,
+            83.044975,
+            82.132083,
+            82.450872,
+            79.870738
+          ],
+          "control": [
+            82.585592,
+            82.516877,
+            82.558468,
+            82.929244,
+            83.125235,
+            82.808943,
+            79.772588
+          ],
+          "preload_same": [
+            80.594383,
+            80.488935,
+            80.695581,
+            79.901149,
+            79.899337,
+            80.688936,
+            80.115765
+          ],
+          "preload_merge": [
+            78.620194,
+            79.738607,
+            78.899835,
+            78.899242,
+            79.10948,
+            79.174228,
+            75.481179
+          ]
+        },
+        "median_ms": {
+          "baseline": 82.569632,
+          "control": 82.585592,
+          "preload_same": 80.488935,
+          "preload_merge": 78.899835
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0001932914028249,
+          "preload_same": 0.9748006991238619,
+          "preload_merge": 0.9555551246734393
+        }
+      },
+      "gcc/n131072/mode5": {
+        "args": [
+          131072,
+          5,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            3.092273,
+            3.175985,
+            3.137922,
+            3.145202,
+            3.09388,
+            3.090959,
+            3.100806
+          ],
+          "control": [
+            3.120327,
+            3.098243,
+            3.141778,
+            3.117267,
+            3.093093,
+            3.1005,
+            3.160878
+          ],
+          "preload_same": [
+            3.300987,
+            3.329561,
+            3.289039,
+            3.336741,
+            3.371739,
+            3.307284,
+            3.337351
+          ],
+          "preload_merge": [
+            3.184325,
+            3.101211,
+            3.091927,
+            3.223541,
+            3.134988,
+            3.094703,
+            3.102257
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.100806,
+          "control": 3.117267,
+          "preload_same": 3.329561,
+          "preload_merge": 3.102257
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0053086197588628,
+          "preload_same": 1.0737727545676834,
+          "preload_merge": 1.0004679428509877
+        }
+      },
+      "gcc/n131072/mode9": {
+        "args": [
+          131072,
+          9,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            12.739375,
+            12.654737,
+            12.739412,
+            12.677652,
+            12.693676,
+            12.717123,
+            12.709784
+          ],
+          "control": [
+            12.689172,
+            12.706943,
+            12.680494,
+            12.677129,
+            12.705382,
+            12.674739,
+            12.655595
+          ],
+          "preload_same": [
+            12.516199,
+            12.571768,
+            12.544571,
+            12.533668,
+            12.509293,
+            12.604611,
+            12.5512
+          ],
+          "preload_merge": [
+            12.68153,
+            12.699789,
+            12.730893,
+            12.748785,
+            12.696655,
+            12.737304,
+            12.711258
+          ]
+        },
+        "median_ms": {
+          "baseline": 12.709784,
+          "control": 12.680494,
+          "preload_same": 12.544571,
+          "preload_merge": 12.711258
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9976954761780372,
+          "preload_same": 0.9870011166200777,
+          "preload_merge": 1.000115973646759
+        }
+      },
+      "gcc/n131072/mode10": {
+        "args": [
+          131072,
+          10,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            5.095887,
+            5.163428,
+            5.229591,
+            5.29206,
+            5.256478,
+            5.190337,
+            5.147322
+          ],
+          "control": [
+            5.046022,
+            5.186704,
+            5.13373,
+            5.038539,
+            5.035089,
+            4.928365,
+            5.072018
+          ],
+          "preload_same": [
+            5.214439,
+            5.167886,
+            5.150644,
+            4.930161,
+            5.167332,
+            5.190296,
+            5.253611
+          ],
+          "preload_merge": [
+            5.079762,
+            5.162034,
+            4.975009,
+            5.151159,
+            5.264876,
+            5.06296,
+            4.974821
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.190337,
+          "control": 5.046022,
+          "preload_same": 5.167886,
+          "preload_merge": 5.079762
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9721954470393732,
+          "preload_same": 0.9956744619858017,
+          "preload_merge": 0.9786959883337053
+        }
+      },
+      "gcc/n131072/mode11": {
+        "args": [
+          131072,
+          11,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            5.014727,
+            4.94909,
+            4.968824,
+            4.85712,
+            5.103067,
+            4.983456,
+            5.02979
+          ],
+          "control": [
+            4.884206,
+            5.048172,
+            4.895468,
+            4.873931,
+            4.985035,
+            5.019674,
+            4.740117
+          ],
+          "preload_same": [
+            4.984887,
+            4.97879,
+            4.9007,
+            5.087978,
+            4.977518,
+            5.050453,
+            4.859426
+          ],
+          "preload_merge": [
+            4.910853,
+            4.897036,
+            4.961506,
+            4.870602,
+            4.90679,
+            4.931617,
+            4.705323
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.983456,
+          "control": 4.895468,
+          "preload_same": 4.97879,
+          "preload_merge": 4.90679
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9823439797602306,
+          "preload_same": 0.9990637019771018,
+          "preload_merge": 0.9846158970802591
+        }
+      },
+      "clang/n32/mode0": {
+        "args": [
+          32,
+          0,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            13.117426,
+            13.12684,
+            13.207091,
+            13.127774,
+            13.112998,
+            13.113942,
+            13.127779
+          ],
+          "control": [
+            13.130134,
+            13.100605,
+            13.031177,
+            13.120743,
+            13.11647,
+            13.147594,
+            13.121426
+          ],
+          "preload_same": [
+            12.974555,
+            12.989088,
+            12.994615,
+            12.991114,
+            12.987343,
+            13.020651,
+            12.999566
+          ],
+          "preload_merge": [
+            8.897831,
+            8.959984,
+            8.888265,
+            8.983324,
+            9.012891,
+            8.922132,
+            9.013849
+          ]
+        },
+        "median_ms": {
+          "baseline": 13.12684,
+          "control": 13.120743,
+          "preload_same": 12.991114,
+          "preload_merge": 8.959984
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9995355317806874,
+          "preload_same": 0.9896604209390836,
+          "preload_merge": 0.6825697578396629
+        }
+      },
+      "clang/n32/mode1": {
+        "args": [
+          32,
+          1,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            12.179355,
+            12.223978,
+            12.175465,
+            12.191906,
+            12.211419,
+            12.164294,
+            12.180418
+          ],
+          "control": [
+            12.279135,
+            12.189354,
+            12.186612,
+            12.189801,
+            12.17387,
+            12.1722,
+            12.176965
+          ],
+          "preload_same": [
+            12.009522,
+            12.02536,
+            12.026268,
+            11.974778,
+            12.070626,
+            12.220345,
+            12.03104
+          ],
+          "preload_merge": [
+            12.297258,
+            12.233258,
+            12.204173,
+            12.233794,
+            12.226238,
+            12.245429,
+            12.226477
+          ]
+        },
+        "median_ms": {
+          "baseline": 12.180418,
+          "control": 12.186612,
+          "preload_same": 12.026268,
+          "preload_merge": 12.233258
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0005085211361384,
+          "preload_same": 0.987344440888646,
+          "preload_merge": 1.0043381105640217
+        }
+      },
+      "clang/n32/mode2": {
+        "args": [
+          32,
+          2,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.419895,
+            2.445444,
+            2.421253,
+            2.419997,
+            2.437072,
+            2.433527,
+            2.423708
+          ],
+          "control": [
+            2.419981,
+            2.422974,
+            2.422359,
+            2.433225,
+            2.419006,
+            2.420887,
+            2.420024
+          ],
+          "preload_same": [
+            2.293624,
+            2.240506,
+            2.505889,
+            2.302856,
+            2.35696,
+            2.423483,
+            2.295447
+          ],
+          "preload_merge": [
+            2.50604,
+            2.517893,
+            2.487145,
+            2.513175,
+            2.503642,
+            2.475303,
+            2.514412
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.423708,
+          "control": 2.420887,
+          "preload_same": 2.302856,
+          "preload_merge": 2.50604
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9988360809140375,
+          "preload_same": 0.9501375578246224,
+          "preload_merge": 1.0339694385627312
+        }
+      },
+      "clang/n32/mode3": {
+        "args": [
+          32,
+          3,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.185466,
+            2.219419,
+            2.221317,
+            2.200448,
+            2.212578,
+            2.216531,
+            2.193031
+          ],
+          "control": [
+            2.236588,
+            2.187249,
+            2.184317,
+            2.172161,
+            2.175271,
+            2.20472,
+            2.185207
+          ],
+          "preload_same": [
+            2.312624,
+            2.343068,
+            2.398208,
+            2.274518,
+            2.555095,
+            2.277748,
+            2.2704
+          ],
+          "preload_merge": [
+            2.658588,
+            2.715266,
+            2.671609,
+            2.717165,
+            2.697667,
+            2.660627,
+            2.663734
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.212578,
+          "control": 2.185207,
+          "preload_same": 2.312624,
+          "preload_merge": 2.671609
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.987629362671056,
+          "preload_same": 1.0452169369848203,
+          "preload_merge": 1.207464324421557
+        }
+      },
+      "clang/n32/mode4": {
+        "args": [
+          32,
+          4,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            10.651846,
+            10.623197,
+            10.636605,
+            10.640186,
+            10.626545,
+            10.66589,
+            10.650454
+          ],
+          "control": [
+            10.650209,
+            10.645336,
+            10.633991,
+            10.630481,
+            10.620542,
+            10.643595,
+            10.649564
+          ],
+          "preload_same": [
+            10.327908,
+            10.295242,
+            10.287343,
+            10.312846,
+            10.299854,
+            10.314467,
+            10.361417
+          ],
+          "preload_merge": [
+            10.599123,
+            10.667458,
+            10.667036,
+            10.62583,
+            10.664286,
+            10.63098,
+            10.640577
+          ]
+        },
+        "median_ms": {
+          "baseline": 10.640186,
+          "control": 10.643595,
+          "preload_same": 10.312846,
+          "preload_merge": 10.640577
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0003203891360546,
+          "preload_same": 0.9692355002064814,
+          "preload_merge": 1.0000367474779106
+        }
+      },
+      "clang/n32/mode5": {
+        "args": [
+          32,
+          5,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            3.087486,
+            2.846487,
+            2.900534,
+            2.89736,
+            2.973634,
+            2.981504,
+            2.902654
+          ],
+          "control": [
+            2.842567,
+            2.926385,
+            2.963737,
+            2.950717,
+            2.903098,
+            2.85712,
+            2.906946
+          ],
+          "preload_same": [
+            2.946914,
+            2.965526,
+            2.922628,
+            2.925249,
+            2.993799,
+            3.028054,
+            2.931984
+          ],
+          "preload_merge": [
+            2.860188,
+            2.816213,
+            2.807023,
+            2.912659,
+            4.956644,
+            2.860436,
+            2.837305
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.902654,
+          "control": 2.906946,
+          "preload_same": 2.946914,
+          "preload_merge": 2.860188
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0014786467832542,
+          "preload_same": 1.0152481143119365,
+          "preload_merge": 0.9853699407507749
+        }
+      },
+      "clang/n32/mode9": {
+        "args": [
+          32,
+          9,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            4.640891,
+            4.636769,
+            4.633514,
+            4.601382,
+            4.607133,
+            4.638628,
+            4.655173
+          ],
+          "control": [
+            4.654693,
+            4.642482,
+            4.639246,
+            4.594418,
+            4.622456,
+            4.611881,
+            4.679924
+          ],
+          "preload_same": [
+            5.048036,
+            4.97375,
+            4.76993,
+            4.785661,
+            4.865559,
+            5.027459,
+            4.996156
+          ],
+          "preload_merge": [
+            4.913514,
+            5.10505,
+            5.035415,
+            5.038203,
+            4.921989,
+            5.017358,
+            4.999962
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.636769,
+          "control": 4.639246,
+          "preload_same": 4.97375,
+          "preload_merge": 5.017358
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.000534208195405,
+          "preload_same": 1.0726758223236912,
+          "preload_merge": 1.0820806471057756
+        }
+      },
+      "clang/n32/mode10": {
+        "args": [
+          32,
+          10,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            2.25547,
+            2.265393,
+            2.233278,
+            2.247318,
+            2.24631,
+            2.233947,
+            2.254792
+          ],
+          "control": [
+            2.249181,
+            2.229546,
+            2.272785,
+            2.292335,
+            2.291442,
+            2.232341,
+            2.314937
+          ],
+          "preload_same": [
+            2.241872,
+            2.238442,
+            2.243191,
+            2.240389,
+            2.267086,
+            2.243302,
+            2.273646
+          ],
+          "preload_merge": [
+            2.604866,
+            2.589976,
+            2.49988,
+            2.587505,
+            2.611911,
+            2.632033,
+            2.488874
+          ]
+        },
+        "median_ms": {
+          "baseline": 2.247318,
+          "control": 2.272785,
+          "preload_same": 2.243191,
+          "preload_merge": 2.589976
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0113321746188122,
+          "preload_same": 0.9981635887755983,
+          "preload_merge": 1.152474193683315
+        }
+      },
+      "clang/n32/mode11": {
+        "args": [
+          32,
+          11,
+          100000
+        ],
+        "raw_ms": {
+          "baseline": [
+            3.555639,
+            3.118881,
+            3.92359,
+            3.603434,
+            3.335977,
+            3.875696,
+            3.769178
+          ],
+          "control": [
+            3.627168,
+            3.760158,
+            3.898566,
+            3.458428,
+            3.832352,
+            3.150345,
+            3.26289
+          ],
+          "preload_same": [
+            3.888635,
+            3.751048,
+            3.630382,
+            3.373265,
+            3.765988,
+            3.809368,
+            3.88367
+          ],
+          "preload_merge": [
+            2.539728,
+            2.331452,
+            2.543008,
+            2.617303,
+            2.331908,
+            2.453544,
+            2.365155
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.603434,
+          "control": 3.627168,
+          "preload_same": 3.765988,
+          "preload_merge": 2.453544
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.006586494993387,
+          "preload_same": 1.0451108581425386,
+          "preload_merge": 0.6808905061116701
+        }
+      },
+      "clang/n131072/mode0": {
+        "args": [
+          131072,
+          0,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            53.090041,
+            53.272669,
+            52.575226,
+            53.062725,
+            53.186902,
+            53.360717,
+            53.266102
+          ],
+          "control": [
+            52.646349,
+            53.004369,
+            52.910605,
+            53.136926,
+            52.994235,
+            52.607744,
+            52.980748
+          ],
+          "preload_same": [
+            50.198492,
+            50.105724,
+            50.304819,
+            50.561354,
+            50.486217,
+            50.309783,
+            50.259165
+          ],
+          "preload_merge": [
+            53.238672,
+            53.326178,
+            53.487379,
+            53.647007,
+            53.354795,
+            53.072751,
+            53.506691
+          ]
+        },
+        "median_ms": {
+          "baseline": 53.186902,
+          "control": 52.980748,
+          "preload_same": 50.304819,
+          "preload_merge": 53.354795
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9961239705219153,
+          "preload_same": 0.9458121663111718,
+          "preload_merge": 1.0031566606379894
+        }
+      },
+      "clang/n131072/mode1": {
+        "args": [
+          131072,
+          1,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            20.853425,
+            20.86117,
+            20.856866,
+            20.836926,
+            20.877409,
+            20.842047,
+            20.855177
+          ],
+          "control": [
+            20.857338,
+            20.850597,
+            20.858497,
+            20.86792,
+            20.866379,
+            20.860235,
+            20.905231
+          ],
+          "preload_same": [
+            20.364381,
+            20.404715,
+            20.370442,
+            20.380716,
+            20.349981,
+            20.401568,
+            20.412785
+          ],
+          "preload_merge": [
+            20.959264,
+            20.943004,
+            20.925273,
+            20.907267,
+            20.926242,
+            20.948853,
+            20.952429
+          ]
+        },
+        "median_ms": {
+          "baseline": 20.855177,
+          "control": 20.860235,
+          "preload_same": 20.380716,
+          "preload_merge": 20.943004
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0002425297085706,
+          "preload_same": 0.9772497255717368,
+          "preload_merge": 1.004211280489252
+        }
+      },
+      "clang/n131072/mode2": {
+        "args": [
+          131072,
+          2,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            4.888929,
+            4.794832,
+            4.969822,
+            4.860603,
+            4.80437,
+            4.782414,
+            4.718844
+          ],
+          "control": [
+            4.860496,
+            5.043463,
+            4.66934,
+            4.986721,
+            4.947936,
+            4.979193,
+            5.029391
+          ],
+          "preload_same": [
+            4.285519,
+            4.424141,
+            4.44343,
+            4.325852,
+            4.185002,
+            4.445189,
+            4.485651
+          ],
+          "preload_merge": [
+            5.021302,
+            4.995354,
+            4.896843,
+            4.900754,
+            4.940119,
+            4.924369,
+            4.87589
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.80437,
+          "control": 4.979193,
+          "preload_same": 4.424141,
+          "preload_merge": 4.924369
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0363883297914191,
+          "preload_same": 0.9208576774894524,
+          "preload_merge": 1.0249770521421124
+        }
+      },
+      "clang/n131072/mode3": {
+        "args": [
+          131072,
+          3,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            19.28526,
+            19.197818,
+            19.11771,
+            19.291089,
+            19.068687,
+            19.107541,
+            19.033297
+          ],
+          "control": [
+            19.231712,
+            19.203,
+            19.401854,
+            19.111326,
+            19.168196,
+            19.134804,
+            19.031702
+          ],
+          "preload_same": [
+            20.28682,
+            20.309033,
+            20.339706,
+            20.312341,
+            20.344954,
+            20.305116,
+            20.353813
+          ],
+          "preload_merge": [
+            19.972706,
+            19.94939,
+            19.85799,
+            19.950888,
+            19.773964,
+            20.045106,
+            20.096929
+          ]
+        },
+        "median_ms": {
+          "baseline": 19.11771,
+          "control": 19.168196,
+          "preload_same": 20.312341,
+          "preload_merge": 19.950888
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0026407974595284,
+          "preload_same": 1.0624881850388985,
+          "preload_merge": 1.043581474977913
+        }
+      },
+      "clang/n131072/mode4": {
+        "args": [
+          131072,
+          4,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            75.32228,
+            75.693256,
+            75.512766,
+            75.332701,
+            78.850142,
+            75.599045,
+            75.378783
+          ],
+          "control": [
+            75.59489,
+            75.535981,
+            75.034495,
+            75.483852,
+            75.379532,
+            75.45631,
+            75.439756
+          ],
+          "preload_same": [
+            75.32371,
+            75.137613,
+            75.355282,
+            96.175934,
+            75.290412,
+            75.094367,
+            75.250193
+          ],
+          "preload_merge": [
+            72.155213,
+            72.17042,
+            72.09144,
+            71.629531,
+            72.2054,
+            72.012167,
+            72.145789
+          ]
+        },
+        "median_ms": {
+          "baseline": 75.512766,
+          "control": 75.45631,
+          "preload_same": 75.290412,
+          "preload_merge": 72.145789
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9992523648253065,
+          "preload_same": 0.9970554117961988,
+          "preload_merge": 0.9554118173872745
+        }
+      },
+      "clang/n131072/mode5": {
+        "args": [
+          131072,
+          5,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            3.392005,
+            3.493386,
+            3.392063,
+            3.439425,
+            3.403132,
+            3.417233,
+            3.467847
+          ],
+          "control": [
+            3.566507,
+            3.3903,
+            3.649275,
+            3.413811,
+            3.413798,
+            3.643964,
+            3.451382
+          ],
+          "preload_same": [
+            3.706636,
+            3.705945,
+            3.705455,
+            3.718954,
+            3.734577,
+            3.70364,
+            3.709016
+          ],
+          "preload_merge": [
+            3.407677,
+            3.491368,
+            3.433814,
+            3.431263,
+            3.421393,
+            3.458173,
+            3.469304
+          ]
+        },
+        "median_ms": {
+          "baseline": 3.417233,
+          "control": 3.451382,
+          "preload_same": 3.706636,
+          "preload_merge": 3.433814
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.0099931728389606,
+          "preload_same": 1.0846892793087273,
+          "preload_merge": 1.0048521713327712
+        }
+      },
+      "clang/n131072/mode9": {
+        "args": [
+          131072,
+          9,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            11.753321,
+            11.78602,
+            11.672487,
+            11.709107,
+            11.754389,
+            11.667146,
+            11.761724
+          ],
+          "control": [
+            11.717509,
+            11.721705,
+            11.693529,
+            11.691709,
+            11.728015,
+            11.699162,
+            11.780369
+          ],
+          "preload_same": [
+            11.301346,
+            11.254542,
+            11.257399,
+            11.307954,
+            11.266219,
+            11.236379,
+            11.311776
+          ],
+          "preload_merge": [
+            11.796116,
+            11.756011,
+            11.71187,
+            11.690758,
+            11.690299,
+            11.68858,
+            11.801374
+          ]
+        },
+        "median_ms": {
+          "baseline": 11.753321,
+          "control": 11.717509,
+          "preload_same": 11.266219,
+          "preload_merge": 11.71187
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9969530314027839,
+          "preload_same": 0.9585562242365371,
+          "preload_merge": 0.9964732521131686
+        }
+      },
+      "clang/n131072/mode10": {
+        "args": [
+          131072,
+          10,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            4.699746,
+            4.575403,
+            4.60586,
+            4.882862,
+            4.692056,
+            4.778302,
+            4.757166
+          ],
+          "control": [
+            4.568247,
+            4.512603,
+            4.719621,
+            4.623152,
+            4.657769,
+            4.556743,
+            4.569822
+          ],
+          "preload_same": [
+            4.652235,
+            4.7678,
+            4.500427,
+            4.485279,
+            4.578374,
+            4.583218,
+            4.659879
+          ],
+          "preload_merge": [
+            4.726626,
+            4.668076,
+            4.810322,
+            4.419961,
+            4.579228,
+            4.683194,
+            4.558202
+          ]
+        },
+        "median_ms": {
+          "baseline": 4.699746,
+          "control": 4.569822,
+          "preload_same": 4.583218,
+          "preload_merge": 4.668076
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 0.9723551017437964,
+          "preload_same": 0.9752054685508534,
+          "preload_merge": 0.9932613379531574
+        }
+      },
+      "clang/n131072/mode11": {
+        "args": [
+          131072,
+          11,
+          40
+        ],
+        "raw_ms": {
+          "baseline": [
+            5.153481,
+            5.036731,
+            4.986888,
+            5.07486,
+            4.884013,
+            5.136141,
+            5.052121
+          ],
+          "control": [
+            5.149815,
+            4.910587,
+            5.09712,
+            5.119877,
+            5.18631,
+            4.966071,
+            5.109681
+          ],
+          "preload_same": [
+            5.043068,
+            5.033711,
+            4.956532,
+            5.165402,
+            5.045651,
+            5.189135,
+            5.04875
+          ],
+          "preload_merge": [
+            4.501516,
+            4.42302,
+            4.618255,
+            4.422497,
+            4.340517,
+            4.58101,
+            4.62435
+          ]
+        },
+        "median_ms": {
+          "baseline": 5.052121,
+          "control": 5.109681,
+          "preload_same": 5.045651,
+          "preload_merge": 4.501516
+        },
+        "ratio": {
+          "baseline": 1.0,
+          "control": 1.01139323464343,
+          "preload_same": 0.9987193497542914,
+          "preload_merge": 0.8910150805968424
+        }
+      }
+    },
+    "checksums": {
+      "gcc/n32/mode0": "6400000",
+      "gcc/n32/mode1": "6400000",
+      "gcc/n32/mode2": "3200000",
+      "gcc/n32/mode3": "500000",
+      "gcc/n32/mode4": "5900000",
+      "gcc/n32/mode5": "3200000",
+      "gcc/n32/mode9": "3300000",
+      "gcc/n32/mode10": "0",
+      "gcc/n32/mode11": "0",
+      "gcc/n131072/mode0": "10485760",
+      "gcc/n131072/mode1": "10485760",
+      "gcc/n131072/mode2": "5242880",
+      "gcc/n131072/mode3": "240",
+      "gcc/n131072/mode4": "8574560",
+      "gcc/n131072/mode5": "5242880",
+      "gcc/n131072/mode9": "5242920",
+      "gcc/n131072/mode10": "0",
+      "gcc/n131072/mode11": "0",
+      "clang/n32/mode0": "6400000",
+      "clang/n32/mode1": "6400000",
+      "clang/n32/mode2": "3200000",
+      "clang/n32/mode3": "500000",
+      "clang/n32/mode4": "5900000",
+      "clang/n32/mode5": "3200000",
+      "clang/n32/mode9": "3300000",
+      "clang/n32/mode10": "0",
+      "clang/n32/mode11": "0",
+      "clang/n131072/mode0": "10485760",
+      "clang/n131072/mode1": "10485760",
+      "clang/n131072/mode2": "5242880",
+      "clang/n131072/mode3": "240",
+      "clang/n131072/mode4": "8574560",
+      "clang/n131072/mode5": "5242880",
+      "clang/n131072/mode9": "5242920",
+      "clang/n131072/mode10": "0",
+      "clang/n131072/mode11": "0"
+    },
+    "builds": [
+      [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/baseline.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_gcc_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/control.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_gcc_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/preload_same.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_gcc_preload_same"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "g++",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/preload_merge.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_gcc_preload_merge"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/baseline.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_clang_baseline"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/control.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_clang_control"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/preload_same.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_clang_preload_same"
+      ],
+      [
+        "taskset",
+        "-c",
+        "6",
+        "clang++",
+        "--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0",
+        "-std=c++23",
+        "-O2",
+        "-DSKIP_RUNTIME_CHECKS",
+        "-DSOURCE=\"/tmp/sirkit_uf_412615_opt/preload_merge.hpp\"",
+        "/tmp/sirkit_uf_412615_opt/api.cpp",
+        "-o",
+        "/tmp/sirkit_uf_412615_opt/api_clang_preload_merge"
+      ]
+    ],
+    "repetitions": 7,
+    "cpu": 14,
+    "compile_cpu": 6
+  },
+  "rejected": [
+    {
+      "variant": "interleave",
+      "reason": "2 roots advanced alternately reduces dependency length but adds branch/load overhead; Clang path official cases +4.5% to +5.2%, controls -0.2% to +1.4%."
+    },
+    {
+      "variant": "preload",
+      "reason": "2 first-parent loads before sequential halving yield GCC max_random -3.9% to -4.8%, but API GCC n32 root-only +51.1%, copy/groups/query +30.5%; same(v,v) +5.9% small, +7.4% large. Clang same(v,v) also regresses. Same single-root source body unchanged, inline/placement effects can still alter emitted code."
+    },
+    {
+      "variant": "preload_same",
+      "reason": "Limit paired first-load helper to same/issame: GCC n32 root-only +50.5%, copy/groups/query +32.4%, same(v,v) +11.9%; Clang large four-vertex components same +6.2%."
+    },
+    {
+      "variant": "preload_merge",
+      "reason": "Limit helper to merge/unite: Clang n32 four-vertex components same +20.7%, root-only +15.2%, copy/groups/query +8.2%; GCC n32 mixed random +3.1% versus control +0.2%."
+    }
+  ],
+  "prior_rejected_not_repeated": [
+    "full path compression",
+    "path splitting",
+    "same-parent shortcut",
+    "same-vertex shortcut",
+    "merge same-vertex shortcut"
+  ],
+  "correctness": "All measured same-main outputs exactly matched independent reference tokens; API checksums matched baseline and control. No candidate adopted, so no extra full API correctness claim for rejected alternatives. Main and fast IO kept byte-exact by replacing only body in current pasted submission. Public APIs, union tie rule, ownership and standard fallback unchanged in candidates.",
+  "simd": "No added SIMD path or CPU checks; parent traversal is dependent and branch-heavy. No measured SIMD opportunity identified in these candidates.",
+  "conclusion": "No change to production source. Respect small/large and other-operation speed: limited measured improvements did not justify regressions. Results show these specific alternatives are unsuitable; no proof that all further optimizations are impossible.",
+  "reproduction": {
+    "prepare.py": "from pathlib import Path\nimport hashlib,json\nr=Path('/home/reinsirk/Atcoder_Env'); p=Path('/tmp/sirkit_uf_412615_opt'); base=(r/'DataStructure/union_find.cpp').read_text(); assert hashlib.sha256(base.encode()).hexdigest()=='cc6c9d1f9c3ad6c60b60ece40894f41d145a41bde313bbc055cbc744c458c556'\np.joinpath('baseline.hpp').write_text(base);p.joinpath('control.hpp').write_text(base)\npreload='''    std::pair<int, int> leaders_unchecked(int a, int b) {\n        int pa = param[a], pb = param[b];\n        while (pa >= 0) {\n            const int g = param[pa];\n            if (g < 0) { a = pa; break; }\n            a = param[a] = g;\n            pa = param[a];\n        }\n        while (pb >= 0) {\n            const int g = param[pb];\n            if (g < 0) { b = pb; break; }\n            b = param[b] = g;\n            pb = param[b];\n        }\n        return {a, b};\n    }\n'''\ninterleave='''    std::pair<int, int> leaders_unchecked(int a, int b) {\n        int pa = param[a], pb = param[b];\n        while (pa >= 0 && pb >= 0) {\n            const int ga = param[pa], gb = param[pb];\n            if (ga < 0) { a = pa; pa = ga; }\n            else { a = param[a] = ga; pa = param[a]; }\n            if (gb < 0) { b = pb; pb = gb; }\n            else { b = param[b] = gb; pb = param[b]; }\n        }\n        if (pa >= 0) a = leader_unchecked(a);\n        if (pb >= 0) b = leader_unchecked(b);\n        return {a, b};\n    }\n'''\nfor name,helper in [('preload',preload),('interleave',interleave)]:\n t=base.replace('#if defined(__clang__)\\n    //',helper+'#if defined(__clang__)\\n    //',1)\n t=t.replace('a = leader_unchecked(a); b = leader_unchecked(b);','const auto roots = leaders_unchecked(a, b); a = roots.first; b = roots.second;')\n t=t.replace('return leader_unchecked(a) == leader_unchecked(b);','const auto roots = leaders_unchecked(a, b); return roots.first == roots.second;')\n p.joinpath(name+'.hpp').write_text(t)\nsubmitted=(r/'Verify/current/submissions/union_find.cpp').read_text();assert submitted.count(base)==1\nfor v in ['baseline','control','preload','interleave']:p.joinpath(v+'.cpp').write_text(submitted.replace(base,p.joinpath(v+'.hpp').read_text(),1))\np.joinpath('frozen.json').write_text(json.dumps({str(x.relative_to(r)):hashlib.sha256(x.read_bytes()).hexdigest() for x in [r/'DataStructure/union_find.cpp',r/'Verify/current/drivers/union_find_main.cpp',r/'Verify/current/common/fast_io.hpp',r/'Verify/current/submissions/union_find.cpp']},indent=2))\n",
+    "measure.py": "from pathlib import Path\nimport subprocess as sp,json,time,statistics,fcntl,hashlib,random\np=Path(__file__).parent;fixtures=Path('/tmp/sirkit_uf_20261022'); variants=['baseline','control','preload','interleave']; modes={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']};builds=[]\nsha=lambda q:hashlib.sha256(q.read_bytes()).hexdigest()\nfor cc,cmd in modes.items():\n for v in variants:\n  command=['taskset','-c','6',*cmd,'-std=c++23','-O2',str(p/(v+'.cpp')),'-o',str(p/(cc+'_'+v))];sp.run(command,check=True,capture_output=True);builds.append({'command':command,'header_sha256':sha(p/(v+'.hpp')),'source_sha256':sha(p/(v+'.cpp'))})\ncases=[fixtures/'official'/c for c in ['random_00.in','random_09.in','max_random_00.in','max_random_01.in','path_00.in','path_03.in']]+[fixtures/'custom'/c for c in ['balanced.in','star_redundant.in','same_index_balanced.in','disconnected_pairs.in','tiny_random.in']]; refs={c.name:(fixtures/'reference_outputs'/(c.name+'.out')).read_bytes().split()for c in cases};raw={};checks={}\nwith open('/tmp/sirkit_performance_cpu14.lock','a')as lock1,open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as lock2:\n fcntl.flock(lock1,fcntl.LOCK_EX);fcntl.flock(lock2,fcntl.LOCK_EX)\n for cc in modes:\n  for c in cases:\n   rows={v:[]for v in variants}\n   for rep in range(5):\n    order=variants[rep%4:]+variants[:rep%4]\n    for v in order:\n     start=time.perf_counter_ns()\n     with c.open('rb')as f:r=sp.run(['taskset','-c','14',str(p/(cc+'_'+v))],stdin=f,capture_output=True,check=True)\n     rows[v].append((time.perf_counter_ns()-start)/1e6);assert r.stdout.split()==refs[c.name];assert not r.stderr;checks[f'{cc}/{c.name}/{v}']=hashlib.sha256(r.stdout).hexdigest()\n   med={v:statistics.median(ts)for v,ts in rows.items()};raw[f'{cc}/{c.name}']={'raw_ms':rows,'median_ms':med,'ratio':{v:med[v]/med['baseline']for v in variants}};print(cc,c.name,{v:round(med[v]/med['baseline'],3)for v in variants},flush=True)\np.joinpath('screen.json').write_text(json.dumps({'builds':builds,'raw':raw,'outputs_sha256':checks,'inputs':{str(c):sha(c)for c in cases},'reps':5,'cpu':14,'compile_cpu':6,'native':False,'standard':'c++23','O':2},indent=2))\n",
+    "api.cpp": "#include SOURCE\n#include <chrono>\n#include <cstddef>\n#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n#include <random>\n#include <utility>\n#include <vector>\nint main(int argc,char**argv) {\n if(argc!=4)return 1;\n const int n=std::atoi(argv[1]),mode=std::atoi(argv[2]),reps=std::atoi(argv[3]);\n std::mt19937 rng(61022);std::vector<std::pair<int,int>> balanced,star,randoms,queries;\n for(int step=1;step<n;step*=2)for(int i=0;i<n;i+=2*step)balanced.emplace_back(i,i+step);\n for(int i=1;i<n;++i)star.emplace_back(0,i);\n for(int i=0;i<n;++i){randoms.emplace_back(int(rng()%n),int(rng()%n));queries.emplace_back(int(rng()%n),int(rng()%n));}\n UnionFind uf(n),initial(n);\n if(mode==2||mode==5||mode==8||mode==9||mode==10||mode==11)for(auto[a,b]:balanced){uf.unite(a,b);initial.unite(a,b);}\n if(mode==3||mode==7)for(int i=0;i<n;i+=4)for(int j=1;j<4&&i+j<n;++j)uf.unite(i,i+j);\n std::uint64_t checksum=0;\n const auto query=[&](UnionFind& target){for(auto[a,b]:queries)checksum+=target.same(a,b);};\n const auto run=[&](){\n  if(mode==0||mode==1||mode==4){UnionFind local(n);const auto&edges=mode==0?balanced:mode==1?star:randoms;for(auto[a,b]:edges)checksum+=local.merge(a,b);query(local);checksum+=local.component_count();}\n  else if(mode==2||mode==3)query(uf);\n  else if(mode==5){for(int i=0;i<n;++i)checksum+=uf.same(i,i);}\n  else if(mode==6||mode==7||mode==8){auto groups=uf.groups();checksum+=groups.size();for(const auto&g:groups)checksum+=g.size()+static_cast<unsigned>(g.back());}\n  else if(mode==9){UnionFind local=initial;auto groups=local.groups();query(local);checksum+=groups.size();}\n  else if(mode==10){for(auto[a,b]:queries)checksum+=static_cast<unsigned>(uf.root(a))+static_cast<unsigned>(uf.root(b));}\n  else if(mode==11){for(auto[a,b]:queries)checksum+=uf.merge(a,b);}\n };\n run();checksum=0;\n const auto begin=std::chrono::steady_clock::now();for(int r=0;r<reps;++r)run();const auto end=std::chrono::steady_clock::now();\n std::printf(\"%jd %ju\\n\",static_cast<std::intmax_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count()),static_cast<std::uintmax_t>(checksum));\n}\n",
+    "api_measure.py": "from pathlib import Path\nimport subprocess as sp, json,statistics,fcntl,hashlib,random\np=Path(__file__).parent; vs=['baseline','control','preload'];modes={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']};builds=[]\nfor cc,cmd in modes.items():\n for v in vs:\n  command=['taskset','-c','6',*cmd,'-std=c++23','-O2','-DSKIP_RUNTIME_CHECKS','-DSOURCE=\"'+str(p/(v+'.hpp'))+'\"',str(p/'api.cpp'),'-o',str(p/('api_'+cc+'_'+v))];sp.run(command,check=True,capture_output=True);builds.append(command)\nraw={};checks={}\nwith open('/tmp/sirkit_performance_cpu14.lock','a')as l1,open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as l2:\n fcntl.flock(l1,fcntl.LOCK_EX);fcntl.flock(l2,fcntl.LOCK_EX)\n for cc in modes:\n  for n,reps in [(32,100000),(131072,40)]:\n   for mode in [0,1,2,3,4,5,6,7,8,9,10,11]:\n    key=f'{cc}/n{n}/mode{mode}';rows={v:[]for v in vs}\n    for rep in range(7):\n     order=vs[rep%3:]+vs[:rep%3]\n     for v in order:\n      out=sp.check_output(['taskset','-c','14',str(p/('api_'+cc+'_'+v)),str(n),str(mode),str(reps)],text=True).split();assert len(out)==2;elapsed,checksum=out;assert checks.setdefault(key,checksum)==checksum;rows[v].append(int(elapsed)/1e6)\n    med={v:statistics.median(ts)for v,ts in rows.items()};raw[key]={'args':[n,mode,reps],'raw_ms':rows,'median_ms':med,'ratio':{v:med[v]/med['baseline']for v in vs}};print(key,{v:round(med[v]/med['baseline'],3)for v in vs},flush=True)\np.joinpath('api_results.json').write_text(json.dumps({'raw':raw,'checksums':checks,'builds':builds,'repetitions':7,'cpu':14,'compile_cpu':6},indent=2))\n",
+    "selective_api_measure.py": "from pathlib import Path\nimport subprocess as sp, json,statistics,fcntl,hashlib,random\np=Path(__file__).parent; vs=['baseline','control','preload_same','preload_merge'];modes={'gcc':['g++'],'clang':['clang++','--gcc-install-dir=/opt/atcoder/gcc/lib/gcc/x86_64-pc-linux-gnu/15.3.0']};builds=[]\nfor cc,cmd in modes.items():\n for v in vs:\n  command=['taskset','-c','6',*cmd,'-std=c++23','-O2','-DSKIP_RUNTIME_CHECKS','-DSOURCE=\"'+str(p/(v+'.hpp'))+'\"',str(p/'api.cpp'),'-o',str(p/('api_'+cc+'_'+v))];sp.run(command,check=True,capture_output=True);builds.append(command)\nraw={};checks={}\nwith open('/tmp/sirkit_performance_cpu14.lock','a')as l1,open('/tmp/atcoder_full_performance_20261018/benchmark.lock','a')as l2:\n fcntl.flock(l1,fcntl.LOCK_EX);fcntl.flock(l2,fcntl.LOCK_EX)\n for cc in modes:\n  for n,reps in [(32,100000),(131072,40)]:\n   for mode in [0,1,2,3,4,5,9,10,11]:\n    key=f'{cc}/n{n}/mode{mode}';rows={v:[]for v in vs}\n    for rep in range(7):\n     order=vs[rep%4:]+vs[:rep%4]\n     for v in order:\n      out=sp.check_output(['taskset','-c','14',str(p/('api_'+cc+'_'+v)),str(n),str(mode),str(reps)],text=True).split();assert len(out)==2;elapsed,checksum=out;assert checks.setdefault(key,checksum)==checksum;rows[v].append(int(elapsed)/1e6)\n    med={v:statistics.median(ts)for v,ts in rows.items()};raw[key]={'args':[n,mode,reps],'raw_ms':rows,'median_ms':med,'ratio':{v:med[v]/med['baseline']for v in vs}};print(key,{v:round(med[v]/med['baseline'],3)for v in vs},flush=True)\np.joinpath('selective_api_results.json').write_text(json.dumps({'raw':raw,'checksums':checks,'builds':builds,'repetitions':7,'cpu':14,'compile_cpu':6},indent=2))\n"
+  },
+  "source_diffs": {
+    "preload": "--- /tmp/sirkit_uf_412615_opt/baseline.hpp\t2026-10-23 03:05:49.261143428 +0900\n+++ /tmp/sirkit_uf_412615_opt/preload.hpp\t2026-10-23 03:05:49.261194202 +0900\n@@ -41,6 +41,22 @@\n         }\n         return i;\n     }\n+    std::pair<int, int> leaders_unchecked(int a, int b) {\n+        int pa = param[a], pb = param[b];\n+        while (pa >= 0) {\n+            const int g = param[pa];\n+            if (g < 0) { a = pa; break; }\n+            a = param[a] = g;\n+            pa = param[a];\n+        }\n+        while (pb >= 0) {\n+            const int g = param[pb];\n+            if (g < 0) { b = pb; break; }\n+            b = param[b] = g;\n+            pb = param[b];\n+        }\n+        return {a, b};\n+    }\n #if defined(__clang__)\n     // 単一成分の連続処理を分離し、通常の成分列挙のコード生成を保つ。\n     void list_single_component(std::vector<int>& vertices) {\n@@ -82,14 +98,14 @@\n     int leader(int i) { return root(i); }\n     bool merge(int a, int b) {\n         check(a); check(b);\n-        a = leader_unchecked(a); b = leader_unchecked(b);\n+        const auto roots = leaders_unchecked(a, b); a = roots.first; b = roots.second;\n         if (a == b) return false;\n         if (param[a] > param[b]) std::swap(a, b);\n         param[a] += param[b]; param[b] = a; --components_;\n         return true;\n     }\n     void unite(int a, int b) { (void)merge(a, b); }\n-    bool same(int a, int b) { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n+    bool same(int a, int b) { check(a); check(b); const auto roots = leaders_unchecked(a, b); return roots.first == roots.second; }\n     bool issame(int a, int b) { return same(a, b); }\n     int size(int i) { return -param[root(i)]; }\n     int size() const noexcept { return static_cast<int>(param.size()); }\n",
+    "interleave": "--- /tmp/sirkit_uf_412615_opt/baseline.hpp\t2026-10-23 03:05:49.261143428 +0900\n+++ /tmp/sirkit_uf_412615_opt/interleave.hpp\t2026-10-23 03:05:49.261211590 +0900\n@@ -41,6 +41,19 @@\n         }\n         return i;\n     }\n+    std::pair<int, int> leaders_unchecked(int a, int b) {\n+        int pa = param[a], pb = param[b];\n+        while (pa >= 0 && pb >= 0) {\n+            const int ga = param[pa], gb = param[pb];\n+            if (ga < 0) { a = pa; pa = ga; }\n+            else { a = param[a] = ga; pa = param[a]; }\n+            if (gb < 0) { b = pb; pb = gb; }\n+            else { b = param[b] = gb; pb = param[b]; }\n+        }\n+        if (pa >= 0) a = leader_unchecked(a);\n+        if (pb >= 0) b = leader_unchecked(b);\n+        return {a, b};\n+    }\n #if defined(__clang__)\n     // 単一成分の連続処理を分離し、通常の成分列挙のコード生成を保つ。\n     void list_single_component(std::vector<int>& vertices) {\n@@ -82,14 +95,14 @@\n     int leader(int i) { return root(i); }\n     bool merge(int a, int b) {\n         check(a); check(b);\n-        a = leader_unchecked(a); b = leader_unchecked(b);\n+        const auto roots = leaders_unchecked(a, b); a = roots.first; b = roots.second;\n         if (a == b) return false;\n         if (param[a] > param[b]) std::swap(a, b);\n         param[a] += param[b]; param[b] = a; --components_;\n         return true;\n     }\n     void unite(int a, int b) { (void)merge(a, b); }\n-    bool same(int a, int b) { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n+    bool same(int a, int b) { check(a); check(b); const auto roots = leaders_unchecked(a, b); return roots.first == roots.second; }\n     bool issame(int a, int b) { return same(a, b); }\n     int size(int i) { return -param[root(i)]; }\n     int size() const noexcept { return static_cast<int>(param.size()); }\n",
+    "preload_same": "--- /tmp/sirkit_uf_412615_opt/baseline.hpp\t2026-10-23 03:05:49.261143428 +0900\n+++ /tmp/sirkit_uf_412615_opt/preload_same.hpp\t2026-10-23 03:07:26.679200657 +0900\n@@ -41,6 +41,22 @@\n         }\n         return i;\n     }\n+    std::pair<int, int> leaders_unchecked(int a, int b) {\n+        int pa = param[a], pb = param[b];\n+        while (pa >= 0) {\n+            const int g = param[pa];\n+            if (g < 0) { a = pa; break; }\n+            a = param[a] = g;\n+            pa = param[a];\n+        }\n+        while (pb >= 0) {\n+            const int g = param[pb];\n+            if (g < 0) { b = pb; break; }\n+            b = param[b] = g;\n+            pb = param[b];\n+        }\n+        return {a, b};\n+    }\n #if defined(__clang__)\n     // 単一成分の連続処理を分離し、通常の成分列挙のコード生成を保つ。\n     void list_single_component(std::vector<int>& vertices) {\n@@ -89,7 +105,7 @@\n         return true;\n     }\n     void unite(int a, int b) { (void)merge(a, b); }\n-    bool same(int a, int b) { check(a); check(b); return leader_unchecked(a) == leader_unchecked(b); }\n+    bool same(int a, int b) { check(a); check(b); const auto roots = leaders_unchecked(a, b); return roots.first == roots.second; }\n     bool issame(int a, int b) { return same(a, b); }\n     int size(int i) { return -param[root(i)]; }\n     int size() const noexcept { return static_cast<int>(param.size()); }\n",
+    "preload_merge": "--- /tmp/sirkit_uf_412615_opt/baseline.hpp\t2026-10-23 03:05:49.261143428 +0900\n+++ /tmp/sirkit_uf_412615_opt/preload_merge.hpp\t2026-10-23 03:07:26.679255577 +0900\n@@ -41,6 +41,22 @@\n         }\n         return i;\n     }\n+    std::pair<int, int> leaders_unchecked(int a, int b) {\n+        int pa = param[a], pb = param[b];\n+        while (pa >= 0) {\n+            const int g = param[pa];\n+            if (g < 0) { a = pa; break; }\n+            a = param[a] = g;\n+            pa = param[a];\n+        }\n+        while (pb >= 0) {\n+            const int g = param[pb];\n+            if (g < 0) { b = pb; break; }\n+            b = param[b] = g;\n+            pb = param[b];\n+        }\n+        return {a, b};\n+    }\n #if defined(__clang__)\n     // 単一成分の連続処理を分離し、通常の成分列挙のコード生成を保つ。\n     void list_single_component(std::vector<int>& vertices) {\n@@ -82,7 +98,7 @@\n     int leader(int i) { return root(i); }\n     bool merge(int a, int b) {\n         check(a); check(b);\n-        a = leader_unchecked(a); b = leader_unchecked(b);\n+        const auto roots = leaders_unchecked(a, b); a = roots.first; b = roots.second;\n         if (a == b) return false;\n         if (param[a] > param[b]) std::swap(a, b);\n         param[a] += param[b]; param[b] = a; --components_;\n"
+  },
+  "date": "2026-10-23",
+  "library": "DataStructure/union_find.cpp",
+  "online_audit": "Audit/online-union-find-412615-2026-10-23.json",
+  "static_review": {
+    "task": "static review only; no compilation, timing, or production edits",
+    "baseline": {
+      "path": "DataStructure/union_find.cpp",
+      "sha256": "cc6c9d1f9c3ad6c60b60ece40894f41d145a41bde313bbc055cbc744c458c556"
+    },
+    "candidate": {
+      "path": "/tmp/sirkit_uf_412615_opt/preload.hpp",
+      "sha256": "6d260657fd456e208c73ffcb35b9d55b5774024a2c754199eed1e963dd9a84be"
+    },
+    "conclusion": "Correct under the existing single-threaded, valid-index invariants. Performance acceptance is outside this static review; the parent reports concrete regressions and rejection of the full candidate.",
+    "findings": [
+      {
+        "area": "preloaded pb aliasing",
+        "result": "safe",
+        "argument": "The first traversal writes only an actually visited vertex and replaces its parent by its old grandparent. If it never visits original b, param[b] stays unchanged and saved pb is its current parent. If it visits original b with a nonroot parent, it changes param[b] to param[pb] and skips pb; the monotonically ascending traversal cannot subsequently visit skipped pb. Thus saved pb remains a strict ancestor, and param[pb] still equals the compressed parent of b. The first b-loop assignment in that case is idempotent, not a reversal of compression. All later b steps have a freshly loaded parent."
+      },
+      {
+        "area": "same vertex / ancestors / shared component",
+        "result": "safe",
+        "argument": "The invariant above covers a==b, b on a-path, a on b-path and paths meeting above both vertices. An unchanged root cannot acquire a parent until both finds finish. A negative preloaded pb denotes an initial root, which stays the same root during the first traversal."
+      },
+      {
+        "area": "different components",
+        "result": "safe",
+        "argument": "The first find cannot alter any entry in the second component; second preloaded parent is fresh. Both returned leaders are unchanged from ordinary finds."
+      },
+      {
+        "area": "representative ties",
+        "result": "preserved",
+        "argument": "After identical root selection, strict param[a]>param[b] swapping and merge updates are unchanged. Equal-size ties continue to choose the first argument component root."
+      },
+      {
+        "area": "time complexity",
+        "result": "preserved asymptotically",
+        "argument": "Union by size still bounds individual path lengths by O(log n). Both traversals retain path halving. Only when the first traversal has already compressed b can the second traversal begin with one idempotent store and one parent hop instead of a halving step; its remaining steps are ordinary halving. There is no downward parent rewrite or unbounded retry, and the claimed inverse-Ackermann amortized behavior is retained. Constant-factor regressions remain possible and must be measured."
+      },
+      {
+        "area": "ownership / allocations / exceptions",
+        "result": "unchanged",
+        "argument": "The pair holds two ints and allocates nothing. The original vector remains the only owner. Existing bounds checks run for both arguments before any parent loads or writes; valid traversal uses only int assignments and indexed access. Out-of-range exception behavior is unchanged. In SKIP_RUNTIME_CHECKS mode invalid indices continue to violate the API precondition."
+      },
+      {
+        "area": "public API / other methods",
+        "result": "unchanged",
+        "argument": "Only a private helper and the implementations of merge/same change. Signatures, return types, move/copy behavior, reset, groups and single-leader operations are unchanged. Unspecified internal compression shape is allowed to differ."
+      }
+    ],
+    "test_review": {
+      "existing_strengths": "Reference model checks exact root selection including equal-size merge ties; same vertex, reversed construction, reset/move/copy, all pairs, invalid arguments, allocation and ownership are covered.",
+      "coverage_gap": "observe() calls root/leader on vertices before many pair checks and balanced() calls groups() before pair checks, substantially flattening deep paths. Random cases do not guarantee the saved-parent alias case on a fresh deep tree.",
+      "suggestion_if_related_optimization_is_adopted": "Add one deterministic fresh-tree block for each pair, without root/size/groups/observe calls between tree construction and tested same/merge. Build a 16-vertex balanced tree by unioning adjacent roots at widths 1,2,4,8; pairs (15,15),(15,12),(15,14),(14,15) exercise modified b, ancestor b, modified pb, and opposite order. Verify true same / false redundant merge and representative 0 afterwards. For two disjoint 16-vertex balanced trees, merge deep leaves (15,31) and the reversed pair in separate instances; verify tie leader 0 and 16 respectively, size 32, one component. Existing checked mixed-invalid cases already cover index rejection before the helper."
+    }
+  },
+  "final_source_sha256": "cc6c9d1f9c3ad6c60b60ece40894f41d145a41bde313bbc055cbc744c458c556",
+  "online_result": {
+    "status": "AC",
+    "time_ms": 10,
+    "cases": 18
+  }
+}

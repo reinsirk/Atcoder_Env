@@ -35,7 +35,7 @@ Verify先はLibrary Checkerを第一候補とし、対応問題がなければAt
 - 使用したACLの版は[vendor/ACL_COMMIT](vendor/ACL_COMMIT)、ライセンスは[vendor/ACL_LICENSE](vendor/ACL_LICENSE)に保存しています。他の提出コードは標準ヘッダーだけを使います。
 - 旧AOJ・Yukicoderの入力例はローカル回帰として保持しています。現在のオンライン提出先やAC判定には数えません。
 - 全コードを512 KiB以下に制限しています。上限は各提出ファイル単位です。
-- `local`のコードは提出用の問題を持たない補足検査です。HashSetと削除可能PQのA+Bは原典のunit test形式に合わせ、独立照合を実行してからA+Bを出力します。A+Bの入力自体がデータ構造を検証するものではありません。
+- `local`のコードは提出用の問題を持たない補足検査です。HashSetと削除可能PQのunit driverは独立参照と照合します。オンライン判定・速度比較には、それぞれの操作が出力に反映される別の問題を使います。
 
 ## ライブラリ別の入口
 
@@ -52,7 +52,7 @@ Verify先はLibrary Checkerを第一候補とし、対応問題がなければAt
 | [DataStructure/Binary_Trie.cpp](../../DataStructure/Binary_Trie.cpp) | [Set Xor-Min](submissions/binary_trie.cpp) |
 | [DataStructure/Compressed_Binary_Trie.cpp](../../DataStructure/Compressed_Binary_Trie.cpp) | [Set Xor-Min](submissions/compressed_binary_trie.cpp) |
 | [DataStructure/Hash_map.cpp](../../DataStructure/Hash_map.cpp) | [Associative Array](submissions/hash_map.cpp) |
-| [DataStructure/Hash_set.cpp](../../DataStructure/Hash_set.cpp) | [A + B + HashSet independent unit test](submissions/hash_set_unit.cpp) |
+| [DataStructure/Hash_set.cpp](../../DataStructure/Hash_set.cpp) | [ABC344 C](submissions/hash_set_membership.cpp)・[ABC073 C](submissions/hash_set_toggle.cpp)・[ABC164 C](submissions/hash_set_strings.cpp) |
 | [DataStructure/Node.cpp](../../DataStructure/Node.cpp) | [Node 独立ローカル検査](submissions/node_local.cpp) |
 | [DataStructure/dynamic-binary-indexed-tree-2d.cpp](../../DataStructure/dynamic-binary-indexed-tree-2d.cpp) | [Point Add Rectangle Sum](submissions/dynamic_fenwick_2d_rectangle.cpp) |
 | [DataStructure/dynamic-binary-indexed-tree.cpp](../../DataStructure/dynamic-binary-indexed-tree.cpp) | [Point Add Range Sum](submissions/dynamic_fenwick_range.cpp) |
@@ -60,7 +60,7 @@ Verify先はLibrary Checkerを第一候補とし、対応問題がなければAt
 | [DataStructure/dynamic-union-find.cpp](../../DataStructure/dynamic-union-find.cpp) | [Unionfind](submissions/dynamic_union_find.cpp) |
 | [DataStructure/erasable-priority-queue.cpp](../../DataStructure/erasable-priority-queue.cpp) | [Double-Ended Priority Queue](submissions/erasable_priority_queue_double.cpp) |
 | [DataStructure/heap.cpp](../../DataStructure/heap.cpp) | [D - Prefix K-th Max](submissions/heap_priority_queue.cpp) |
-| [DataStructure/implicit_treap.cpp](../../DataStructure/implicit_treap.cpp) | [Dynamic Sequence Range Affine Range Sum](submissions/implicit_treap_affine.cpp) |
+| [DataStructure/implicit_treap.cpp](../../DataStructure/implicit_treap.cpp) | [区間アフィン作用・和](submissions/implicit_treap_affine.cpp)・[両端操作・関数合成](submissions/implicit_treap_deque.cpp) |
 | [DataStructure/line-container-2d.cpp](../../DataStructure/line-container-2d.cpp) | [Line Add Get Min](submissions/line_container_2d_min.cpp) |
 | [DataStructure/line-container.cpp](../../DataStructure/line-container.cpp) | [Line Add Get Min](submissions/line_container_min.cpp) |
 | [DataStructure/persistent-union-find.cpp](../../DataStructure/persistent-union-find.cpp) | [Persistent Unionfind](submissions/persistent_union_find.cpp) |
@@ -128,8 +128,11 @@ Verify先はLibrary Checkerを第一候補とし、対応問題がなければAt
 | [geometry_convex_hull_full](submissions/geometry_convex_hull_full.cpp) | [Static Convex Hull](https://judge.yosupo.jp/problem/static_convex_hull) | convex_hull: 整数点の最小凸包、反時計回り・重複除去・辺上中間点除去・空/1/2点。 |
 | [geometry_convex_hull_split](submissions/geometry_convex_hull_split.cpp) | [Static Convex Hull](https://judge.yosupo.jp/problem/static_convex_hull) | convex_hull: 整数点の最小凸包、反時計回り・重複除去・辺上中間点除去・空/1/2点。 |
 | [hash_map](submissions/hash_map.cpp) | [Associative Array](https://judge.yosupo.jp/problem/associative_array) | operator[]・64ビット整数キー/値・未登録時の零初期値 |
-| [hash_set_unit](submissions/hash_set_unit.cpp) | [A + B + HashSet independent unit test](https://judge.yosupo.jp/problem/aplusb) | 固定種5000更新をstd::setと独立照合・insert/insert_checked/erase/find/contains/count/size/empty/iterator・reserve/clear/copy/move/erase_if・整数・pair・string・vectorキー |
+| [hash_set_membership](submissions/hash_set_membership.cpp) | [ABC344 C - A+B+C](https://atcoder.jp/contests/abc344/tasks/abc344_c) | 整数の追加・重複・所属照会 |
+| [hash_set_toggle](submissions/hash_set_toggle.cpp) | [ABC073 C - Write and Erase](https://atcoder.jp/contests/abc073/tasks/abc073_c) | 追加・検索・削除・再登録・要素数 |
+| [hash_set_strings](submissions/hash_set_strings.cpp) | [ABC164 C - gacha](https://atcoder.jp/contests/abc164/tasks/abc164_c) | 文字列の追加・重複・要素数 |
 | [implicit_treap_affine](submissions/implicit_treap_affine.cpp) | [Dynamic Sequence Range Affine Range Sum](https://judge.yosupo.jp/problem/dynamic_sequence_range_affine_range_sum) | 線形一括構築・insert_at・erase_at・reverse・apply・prod・非自明な作用の合成 |
+| [implicit_treap_deque](submissions/implicit_treap_deque.cpp) | [Deque Operate All Composite](https://judge.yosupo.jp/problem/deque_operate_all_composite) | 両端の追加削除・非可換な関数合成・全体集約・空列 |
 | [internal_hash_map](submissions/internal_hash_map.cpp) | [Associative Array](https://judge.yosupo.jp/problem/associative_array) | operator[]・64ビット整数キー/値・未登録時の零初期値 |
 | [lca](submissions/lca.cpp) | [Lowest Common Ancestor](https://judge.yosupo.jp/problem/lca) | 構築・get |
 | [line_container_2d_min](submissions/line_container_2d_min.cpp) | [Line Add Get Min](https://judge.yosupo.jp/problem/line_add_get_min) | 点追加・整数方向(x,1)のmin_rounded_ll |
@@ -191,6 +194,7 @@ Verify先はLibrary Checkerを第一候補とし、対応問題がなければAt
 
 | コード | 対象 |
 | --- | --- |
+| [hash_set_unit](submissions/hash_set_unit.cpp) | std::setとの固定種5000更新、複合キー・コピー/移動・erase_ifの独立照合。 |
 | [dynamic_hash_local](submissions/dynamic_hash_local.cpp) | BIT検索・reset/clear/copy・64bit疎領域・2D BITのget/set/resetと10億寸法の疎操作・動的UFの負/INT端キー・size/groups/callback・HashMap複合キー/erase/copy/move、GenericHashの符号付き0と集合順不同・内部HashMap初期値/find/enumerate/clear・Li Chao区間の全点直接評価・query_line・読み取り非確保・2e18超の値・LineContainer整数と2D内積を全直線/点走査で照合・小数点・argmax・Heap置換/push_popをmultisetと照合・Treapの列操作をvectorと照合・順序集合・境界探索・非可換文字列 |
 | [graph_local](submissions/graph_local.cpp) | 独立Floyd参照、負閉路の-INF伝播、経路復元、Dijkstra 256/257境界・radix経路 |
 | [binary_trie_local](submissions/binary_trie_local.cpp) | multisetとの5000操作照合、XOR・count・順序統計・ID・キー上端・insert_uniqueの重複時ID不変・更新との混在 |
@@ -208,6 +212,24 @@ Verify先はLibrary Checkerを第一候補とし、対応問題がなければAt
 | [geometry_reference_line](submissions/geometry_reference_line.cpp) | 収録部品ごとの独立既知値。重複・一直線・重なり・零長線分・円の非交差/接触/一致・重心など。 |
 | [geometry_reference_polygon](submissions/geometry_reference_polygon.cpp) | 収録部品ごとの独立既知値。重複・一直線・重なり・零長線分・円の非交差/接触/一致・重心など。 |
 | [geometry_reference_circle](submissions/geometry_reference_circle.cpp) | 収録部品ごとの独立既知値。重複・一直線・重なり・零長線分・円の非交差/接触/一致・重心など。 |
+| [convex_hull_test](tests/convex_hull_test.cpp) | Jarvis法との凸包照合・整列済みAPI・基数整列の閾値・整数端付近の平行移動・浮動許容誤差・未整列入力検査。参照側だけ128ビット拡張を使用。 |
+| [hash_map_test](tests/hash_map_test.cpp) | std::mapとの整数・文字列・衝突照合、次要素を探さないキー削除・墓石・例外・コピー/移動・大容量予約表。 |
+| [hash_map_boundary_test](tests/hash_map_boundary_test.cpp) | 衝突列の回り込み・墓石再利用・逆順反復・複合/順序不定キー・符号付き0・独自同値判定・構築例外・所有権・容量上限。 |
+| [hash_map_storage_test](tests/hash_map_storage_test.cpp) | 未使用領域・墓石・clear後のコピー、自明コピーと非自明ムーブの値、構築例外、過剰alignment、ポインタ値と既定値。 |
+| [hash_set_test](tests/hash_set_test.cpp) | std::setとの整数・文字列・衝突照合、空集合・墓石・大容量予約・コピー/移動・move-onlyキー・例外。 |
+| [hash_set_boundary_test](tests/hash_set_boundary_test.cpp) | 回り込み衝突・墓石と未構築領域のコピー・constキー・独自同値判定・非自明ムーブ・例外・alignment・iteratorと容量境界。 |
+| [hash_set_string_test](tests/hash_set_string_test.cpp) | 空・短長・NUL入り文字列、constキー、再配置・コピー/移動・削除、独自ハッシュの例外時の保持。 |
+| [heap_test](tests/heap_test.cpp) | 全APIのstd::multiset照合、整数端点・重複・容量境界・コピー/ムーブ・入力イテレータ・空の例外。 |
+| [internal_hash_reference_test](tests/internal_hash_reference_test.cpp) | std::mapとの8整数型・Packed・負荷率・初期値・列挙・予約・コピー/移動の独立照合。 |
+| [internal_hash_release_test](tests/internal_hash_release_test.cpp) | 容量・使用率・clearとreleaseの所有権・初期値保持・確保不要の解放と再利用。 |
+| [internal_hash_value_exception_test](tests/internal_hash_value_exception_test.cpp) | 非自明値のコピー/代入・再確保・列挙・factory・default変更の例外後の内容と再利用。 |
+| [internal_hash_trivial_value_test](tests/internal_hash_trivial_value_test.cpp) | 自明な構造体・配列・非所有ポインタ値の初期値・コピー・再確保。 |
+| [internal_hash_shared_guard_test](tests/internal_hash_shared_guard_test.cpp) | 内部表と動的BIT・2次元BIT・Union Findの重複includeと共用。 |
+| [implicit_treap_noncommutative_test](tests/implicit_treap_noncommutative_test.cpp) | vector文字列との照合、非可換連結・非default型・遅延作用・反転・挿入/削除・回転。 |
+| [implicit_treap_affine_test](tests/implicit_treap_affine_test.cpp) | vectorを直接更新する参照との区間アフィン作用・和・挿入/削除・反転・コピー照合。 |
+| [implicit_treap_copy_exception_test](tests/implicit_treap_copy_exception_test.cpp) | コピーの途中失敗で代入先を保ち、遅延状態とスロット再利用を維持することを照合。 |
+| [implicit_treap_copy_capacity_test](tests/implicit_treap_copy_capacity_test.cpp) | 通常型の確保済み容量再利用と、容量不足時の確保失敗でも代入先が変わらないことを照合。 |
+| [implicit_treap_boundary_test](tests/implicit_treap_boundary_test.cpp) | 境界探索の両形式、順序に敏感な述語、作用合成・反転・回転後の端点削除、比較順と等値判定の差、容量保護と所有権。 |
 | [radix_sort_reference](submissions/radix_sort_reference.cpp) | 8整数型全域をstd::stable_sortと照合。小配列閾値の前後、昇降順、作業領域、安定添字順。 |
 | [project_selection_reference](submissions/project_selection_reference.cpp) | 一般2変数劣モジュラ関数・集合利得・復元・再solve・追加・独立コピーを全割当参照で照合。 |
 | [nearest_two_points_reference](submissions/nearest_two_points_reference.cpp) | O(n²)距離二乗・返却添字・全オーバーロード・空/1点・重複・uint64超過を照合。 |
@@ -216,11 +238,21 @@ Verify先はLibrary Checkerを第一候補とし、対応問題がなければAt
 | [trie_local](submissions/trie_local.cpp) | 空文字/全バイト・insert/count/contains・erase/erase_all・prefix/longest_prefix・kth/count_less/lower_bound/items・copy/move/clear/reserve・TrieNode共有 |
 | [combination_masks_local](submissions/combination_masks_local.cpp) | 全n<=14・全k列挙・first/next/for_each・幅64・0・次なし |
 | [rollback_weighted_local](submissions/rollback_weighted_local.cpp) | 冗長/矛盾追加の履歴・undo/snapshot/rollback・copy/clear/reset・差の相殺とINT64_MAX |
+| [lca_reference_test](tests/lca_reference_test.cpp) | 小森の全列挙・BFS参照、深い鎖・星・二分木、根変更・距離・パス・部分木区間・所有権・不正入力。 |
+| [lca_allocation_test](tests/lca_allocation_test.cpp) | 確保失敗時の構築・コピー・buildの内容維持と確保収支。 |
+| [lc2d_reference_test](tests/lc2d_reference_test.cpp) | 全点走査・多倍長整数/浮動小数点参照、全方向・値と点・コピー/移動・検査。 |
+| [lc2d_allocation_test](tests/lc2d_allocation_test.cpp) | 確保失敗時のコピー・追加後の空状態、再利用、所有権と確保収支。 |
+| [lc2d_rounding_test](tests/lc2d_rounding_test.cpp) | 公開APIの半整数前後・切り詰め上限・浮動小数点境界の丸め。 |
+| [lc2d_shared_guard_test](tests/lc2d_shared_guard_test.cpp) | 1次元/2次元版の重複include、順序交換、整数演算の標準代替経路。 |
+| [lc1d_reference_test](tests/lc1d_reference_test.cpp) | 多倍長整数の全直線走査、型の端・相殺・整数床除算・256本の切り替え・値と係数の同時取得。 |
+| [lc1d_allocation_test](tests/lc1d_allocation_test.cpp) | 確保失敗時の追加・コピー・再利用、照会の非確保、確保収支。 |
 | [lca_local](submissions/lca_local.cpp) | 80個の森・BFS親列によるLCA/距離/根変更参照・祖先/パス上k番目・copy/move/clear |
 | [topological_local](submissions/topological_local.cpp) | 0〜4頂点の全有向グラフ・全順列によるDAG/一意性/辞書順参照・Details位置・両ファイルの共有ガード |
 | [rolling_hash_local](submissions/rolling_hash_local.cpp) | 二進加算の剰余積によるget/whole参照・全バイト/空/底の補正・concat/equal/lcp/compare・copy/move/swap |
 | [matrix_transform_local](submissions/matrix_transform_local.cpp) | 全回転・転置・上下左右反転/inplace・vector<int>/vector<bool>/文字盤面・空/幅0/矩形/32境界・INT_MIN/INT_MAX回転数 |
 | [lis_local](submissions/lis_local.cpp) | 400列・各接頭辞の全部分集合参照・狭義/広義・長さ/接頭辞長/添字復元/値列復元 |
+| [lis_reference_test](tests/lis_reference_test.cpp) | 独立DP・全列挙による5 APIの狭義/広義照合、空・容量境界・NaN/無限大・比較専用型。 |
+| [lis_exception_test](tests/lis_exception_test.cpp) | 確保・値コピー・比較の失敗後の入力不変と解放、返却列の所有権。 |
 
 ## 旧入力例のローカル回帰
 
@@ -255,3 +287,49 @@ Verify先はLibrary Checkerを第一候補とし、対応問題がなければAt
 
 [提出コード](submissions/dynamic_fenwick_2d_rectangle.cpp)・[アルゴリズムの説明](../../Document/dynamic_fenwick_2d.md)を参照してください。
 現在のソースとオンライン判定の対応は[manifest](manifest.json)で確認できます。
+
+最近点対の補足検証は[`nearest_reference_test.cpp`](tests/nearest_reference_test.cpp)（多倍長整数・各API・標準代替経路）と[`nearest_exception_test.cpp`](tests/nearest_exception_test.cpp)（確保・入力読取り例外）で行います。
+
+永続Union Findの補足検証は[`puf_reference_test.cpp`](tests/puf_reference_test.cpp)（版ごとの独立参照・各API・汎用型）と[`puf_exception_test.cpp`](tests/puf_exception_test.cpp)（確保・値操作の例外）で行います。
+
+素数判定の補足検証は[`primality_reference_test.cpp`](tests/primality_reference_test.cpp)（独立篩・多倍長整数・各API）、[`primality_allocation_test.cpp`](tests/primality_allocation_test.cpp)（無確保）、[`primality_guard_test.cpp`](tests/primality_guard_test.cpp)（共有部品と併用）で行います。
+
+巻き戻しUnion Findの補足検証は[`ruf_reference_test.cpp`](tests/ruf_reference_test.cpp)（独立な状態履歴・全API）と[`ruf_exception_test.cpp`](tests/ruf_exception_test.cpp)（確保失敗時の状態・所有権）で行います。
+
+重み付き巻き戻しUnion Findの補足検証は[`rwuf_reference_test.cpp`](tests/rwuf_reference_test.cpp)（多倍長整数・独立BFS・全API）と[`rwuf_exception_test.cpp`](tests/rwuf_exception_test.cpp)（確保・値操作の失敗と所有権）で行います。
+
+Rolling Hashの補足検証は[`rh_reference_test.cpp`](tests/rh_reference_test.cpp)（独立剰余演算・全バイト・各API・衝突例）と[`rh_exception_test.cpp`](tests/rh_exception_test.cpp)（構築・コピー・再構築の確保失敗と所有権）で行います。
+
+Union Findの補足検証は[`uf_reference_test.cpp`](tests/uf_reference_test.cpp)（独立な成分ラベル・代表・各API）と[`uf_exception_test.cpp`](tests/uf_exception_test.cpp)（確保失敗・容量再利用・返却値の所有権）で行います。
+
+重み付きUnion Findの補足検証は[`wuf_reference_test.cpp`](tests/wuf_reference_test.cpp)（独立BFS・代表・各API・符号なし整数）と[`wuf_exception_test.cpp`](tests/wuf_exception_test.cpp)（確保・構築・コピー失敗と所有権）で行います。
+
+集合変換・AND/OR畳み込みの補足検証は[`zeta_bitwise_reference_test.cpp`](tests/zeta_bitwise_reference_test.cpp)（独立な直接和・符号なし整数・自己畳み込み・標準代替経路）と[`zeta_bitwise_exception_test.cpp`](tests/zeta_bitwise_exception_test.cpp)（値渡し・確保/値操作失敗・所有権）で行います。
+
+追加の独立参照・境界検査は[トポロジカルソート](tests/topological_reference_test.cpp)、[行列変換](tests/matrix_reference_test.cpp)、[組合せマスク](tests/combination_reference_test.cpp)、[Radix Sort](tests/radix_reference_test.cpp)、[Trie](tests/trie_reference_test.cpp)、[幾何](tests/geometry_performance_reference_test.cpp)を参照してください。
+
+整数篩・GCD/LCM変換の補足検証は[独立参照](tests/zeta_integer_reference_test.cpp)、[値操作と確保失敗](tests/zeta_integer_exception_test.cpp)、[整数型と非可換値](tests/zeta_integer_type_test.cpp)で行います。
+
+負辺を含む最短路の補足検証は[独立参照](tests/negative_shortest_paths_reference_test.cpp)と[確保失敗](tests/negative_shortest_paths_allocation_test.cpp)で行います。
+
+疎な整数変換の補足検証は[約数閉包・型・境界の独立参照](tests/zeta_sparse_reference_test.cpp)と[確保・演算失敗と所有権](tests/zeta_sparse_exception_test.cpp)で行います。
+
+Lucas法の補足検証は[独立参照](tests/lucas_reference_test.cpp)、[桁ブロックと64bit境界](tests/lucas_blocks_test.cpp)、[確保失敗と移動元の再利用](tests/lucas_allocation_test.cpp)で行います。
+
+Project Selectionの補足検証は[全割当・独立最大流参照](tests/project_selection_reference_test.cpp)と[確保失敗時の部分追加・所有権](tests/project_selection_exception_test.cpp)で行います。
+
+整数篩の初期化は[全表の独立照合](tests/zeta_sieve_initialization_test.cpp)で0〜257・境界付近・1000万までの最小素因数表と素数列を確認します。
+
+二巡目の補足検証は[LCAの浅い森の構築](tests/lca_shallow_build_test.cpp)と[永続配列の2添字同時参照](tests/puf_pair_reference_test.cpp)を参照してください。
+
+追加SIMD経路の補足検証は[行列の要素対応・境界](tests/matrix_simd_reference_test.cpp)、[行列の確保失敗](tests/matrix_simd_allocation_test.cpp)、[Radix Sortの境界・検査](tests/radix_simd_reference_test.cpp)を参照してください。専用処理を除いた標準経路も同じ独立参照と照合しています。
+
+二分トライの共通操作と圧縮版の接頭辞境界は[binary_trie_reference_test](tests/binary_trie_reference_test.cpp)・[compressed_binary_trie_prefix_test](tests/compressed_binary_trie_prefix_test.cpp)、確保失敗は[binary_trie_allocation_test](tests/binary_trie_allocation_test.cpp)で確認します。Union Find系の容量再利用と例外保証は[union_reuse_test](tests/union_reuse_test.cpp)で補います。
+
+Rolling Hashの再構築・コピー代入の容量再利用と例外保証は[rh_reuse_test](tests/rh_reuse_test.cpp)で補います。
+
+任意法二項係数の因数分解と計算予算は[独立参照](tests/binomial_factor_reference_test.cpp)・[確保失敗](tests/binomial_factor_allocation_test.cpp)で補います。
+
+最近点対の先頭重複時の入力検査・単一パス読み取り・確保失敗は[nearest_duplicate_test](tests/nearest_duplicate_test.cpp)で補います。
+
+巻き戻しUnion Find系の容量再利用と送出する値型は[rollback_reuse_test](tests/rollback_reuse_test.cpp)・[rollback_reset_value_test](tests/rollback_reset_value_test.cpp)で補います。

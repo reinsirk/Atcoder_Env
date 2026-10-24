@@ -15,14 +15,17 @@
         "unite",
         "same"
       ],
-      "limitations": "groups・コピー・移動はこの問題では対象外。",
+      "limitations": "オンライン結果は判定記録のsource SHAが一致する版に対応。root/leader・成分サイズ/個数・groups・代表のtie・コピー/移動・reset/clear/swap・境界・確保失敗はuf_reference_test/uf_exception_testで独立参照と照合。 同サイズreset・コピー代入の容量再利用と型/確保失敗はunion_reuse_testで補足。同mainの計算本体は二巡目前後で機械語が同一。",
       "samples": [
         {
           "input": "4 7\n1 0 1\n0 0 1\n0 2 3\n1 0 1\n1 1 2\n0 0 2\n1 1 3\n",
           "output": "0\n1\n0\n1\n"
         }
       ],
-      "acl_required": false
+      "acl_required": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412615"
+      ]
     },
     {
       "id": "weighted_union_find",
@@ -41,7 +44,7 @@
         "mod998244353の加法群",
         "矛盾・冗長制約"
       ],
-      "limitations": "移行先のオンライン判定は未実施。整数差の範囲端・所有権操作はこの提出の対象外。ACL Mintは提出コードへ展開。",
+      "limitations": "オンライン結果は判定記録のsource SHAが一致する版に対応。ACL Mintは提出コードへ展開。整数差の途中結果は型の範囲内、重み演算・代入は非送出が前提。root/weight・代表・groups・小型符号なし整数・所有権・reset/clear/swap・境界・確保失敗はwuf_reference_test/wuf_exception_testで補足。 同サイズreset・コピー代入の容量再利用と型/確保失敗はunion_reuse_testで補足。同mainの計算本体は二巡目前後で機械語が同一。",
       "samples": [
         {
           "input": "4 10\n0 1 0 9\n1 0 2\n0 2 1 90\n0 2 0 99\n0 0 2 123\n0 3 1 990\n1 0 2\n1 2 0\n1 3 0\n1 1 1\n",
@@ -77,6 +80,9 @@
           ],
           "status": "historical（旧提出先・旧ドライバー。移行後の検証とは別）"
         }
+      ],
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412620"
       ]
     },
     {
@@ -96,7 +102,7 @@
         "mod998244353の加法群",
         "矛盾・冗長制約"
       ],
-      "limitations": "移行先のオンライン判定は未実施。undo/rollback・整数差の範囲端はrollback_weighted_localで補足。ACL Mintは提出コードへ展開。",
+      "limitations": "オンライン未提出。この問題ではundo/rollbackを呼ばない。重み0の版分岐とrollback(state)はrollback_weighted_union_find_rollbackで補完。非零の重みの復元・snapshot/undo・clear_history・所有権・境界・整数の相殺/範囲外・標準代替演算・型/確保例外はrwuf_reference_test/rwuf_exception_testとrollback_weighted_localで補足。ACL Mintは提出コードへ展開。容量内reset/履歴コピー/groupsはrollback_reuse_test/rollback_reset_value_testで補足。",
       "samples": [
         {
           "input": "4 10\n0 1 0 9\n1 0 2\n0 2 1 90\n0 2 0 99\n0 0 2 123\n0 3 1 990\n1 0 2\n1 2 0\n1 3 0\n1 1 1\n",
@@ -132,6 +138,39 @@
           ],
           "status": "historical（旧提出先・旧ドライバー。移行後の検証とは別）"
         }
+      ],
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412604"
+      ]
+    },
+    {
+      "id": "rollback_weighted_union_find_rollback",
+      "libraries": [
+        "DataStructure/rollback-union-findw.cpp"
+      ],
+      "driver": "Verify/current/drivers/rollback_weighted_union_find_persistent_main.cpp",
+      "title": "Persistent Unionfind（重み付きUFのrollback検証）",
+      "problem_url": "https://judge.yosupo.jp/problem/persistent_unionfind",
+      "selection_reason": "重み計算の問題にはrollback操作がないため、版木を走査して保存位置へのrollbackを使うLibrary Checker問題を併用。",
+      "reference_url": null,
+      "evidence_url": "https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/persistent_unionfind/task.md",
+      "coverage": [
+        "unite（重み0・成功/冗長）",
+        "same",
+        "get_state",
+        "rollback(state)",
+        "版木の分岐・過去の連結状態の復元"
+      ],
+      "limitations": "オンライン未提出。全辺の重みは0。各ノードの終了時に入口の履歴位置へ戻すため、重みが非零の場合や多件の一括復元・snapshot()/rollback()・undo()はこの提出だけでは検証しない。BFSによる独立参照を使うrwuf_reference_testとrollback_weighted_localで補足。",
+      "samples": [
+        {
+          "input": "5 12\n0 -1 0 1\n0 0 0 2\n1 -1 0 1\n1 0 0 1\n1 1 0 1\n0 1 3 4\n0 1 2 3\n1 5 1 4\n0 5 2 3\n1 8 1 4\n0 6 3 4\n1 10 1 4\n",
+          "output": "0\n1\n1\n0\n1\n1\n"
+        }
+      ],
+      "acl_required": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412603"
       ]
     },
     {
@@ -151,14 +190,18 @@
         "get_root",
         "PersistentArray内部更新"
       ],
-      "limitations": "コピー・移動・公開PersistentArrayの単独操作は対象外。",
+      "limitations": "過去のACは旧ソースの記録で、二巡目の現在版は未提出。版別独立参照・汎用型・各APIはtests/puf_reference_test.cppとpuf_value_types_test.cpp、追加get_twoはtests/puf_pair_reference_test.cpp、確保/値操作の例外と所有権はtests/puf_exception_test.cppで補足。測定はAudit/performance-persistent-union-find-second-pass-2026-10-22.json参照。",
       "samples": [
         {
           "input": "5 12\n0 -1 0 1\n0 0 0 2\n1 -1 0 1\n1 0 0 1\n1 1 0 1\n0 1 3 4\n0 1 2 3\n1 5 1 4\n0 5 2 3\n1 8 1 4\n0 6 3 4\n1 10 1 4\n",
           "output": "0\n1\n1\n0\n1\n1\n"
         }
       ],
-      "acl_required": false
+      "acl_required": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412452",
+        "https://judge.yosupo.jp/submission/412456"
+      ]
     },
     {
       "id": "rollback_union_find",
@@ -176,14 +219,17 @@
         "same",
         "undo"
       ],
-      "limitations": "深い版木は反復走査。snapshot/rollbackの既定位置は別途補助検査。",
+      "limitations": "版木の反復走査を使用。snapshot/rollback/clear_history・コピー/移動・確保失敗・入力境界はtests/ruf_*_test.cppの独立参照で補足。 二巡目の容量内reset/履歴コピー/groupsと型・確保例外はrollback_reuse_test/rollback_reset_value_testで補足。数学・undoは維持し、提出全体の高速化とは区別する。",
       "samples": [
         {
           "input": "5 12\n0 -1 0 1\n0 0 0 2\n1 -1 0 1\n1 0 0 1\n1 1 0 1\n0 1 3 4\n0 1 2 3\n1 5 1 4\n0 5 2 3\n1 8 1 4\n0 6 3 4\n1 10 1 4\n",
           "output": "0\n1\n1\n0\n1\n1\n"
         }
       ],
-      "acl_required": false
+      "acl_required": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412482"
+      ]
     },
     {
       "id": "trie_dictionary",
@@ -201,7 +247,7 @@
         "contains",
         "重複語と接頭辞を共有する語"
       ],
-      "limitations": "移行先のオンライン判定は未実施。英小文字・長さ1〜10。削除・個数・空文字・全バイト・順序統計はtrie_localで補足。",
+      "limitations": "全バイト・索引閾値・長い語・コピー/移動・容量/確保失敗はtrie_reference_test/radix_trie_allocation_testで補足。",
       "samples": [
         {
           "input": "3\napple\norange\napple\n",
@@ -243,6 +289,9 @@
           ],
           "status": "historical（旧提出先・旧ドライバー。移行後の検証とは別）"
         }
+      ],
+      "submission_urls": [
+        "https://atcoder.jp/contests/abc164/submissions/80264519"
       ]
     },
     {
@@ -262,7 +311,7 @@
         "lcp（同じ文字列の接尾辞）",
         "lcp内部の区間ハッシュ比較"
       ],
-      "limitations": "移行先のオンライン判定は未実施。ハッシュ衝突の可能性あり。全接尾辞のlcpをO(N log N)で照会し、専用の線形Zアルゴリズムとの速度比較は行わない。concat/equal/compare・全バイト等はrolling_hash_localで補足。",
+      "limitations": "オンライン結果は判定記録のsource SHAが一致する版に対応。ハッシュ衝突による誤判定の可能性あり。各接尾辞へlcpを直接適用し最悪O(N log N)。線形Z参照は正解照合専用で、専用アルゴリズムとの速度比較には使わない。concat/equal/compare・全バイト・底の補正・所有権・assign/clear・例外・標準代替演算はrh_reference_test/rh_exception_testとrolling_hash_localで補足。",
       "samples": [
         {
           "input": "a\n",
@@ -319,6 +368,11 @@
           ],
           "status": "historical（旧提出先・旧ドライバー。移行後の検証とは別）"
         }
+      ],
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412622",
+        "https://judge.yosupo.jp/submission/412625",
+        "https://judge.yosupo.jp/submission/412736"
       ]
     },
     {
@@ -336,14 +390,21 @@
         "構築",
         "get"
       ],
-      "limitations": "根0の単一木。森・根変更・距離・k番目・コピー等は補助検査。",
+      "limitations": "オンライン記録はsource SHA一致版だけに対応。森・任意の根・距離・祖先・パスはtests/lca_reference_test.cpp、浅い森はtests/lca_shallow_build_test.cppとtests/lca_shallow_label_test.cpp、深い分岐とRMQ境界・共有表の寿命はtests/lca_rmq_branch_test.cpp、確保失敗はtests/lca_allocation_test.cppとtests/lca_rmq_allocation_test.cppで別途検証。 根の子部分木の境界・深い単一木・状態切り替えと確保失敗はtests/lca_root_cut_test.cppとtests/lca_root_cut_allocation_test.cppで補足。 子部分木の内側の境界・片側有効・深い分岐と状態切り替えはtests/lca_nested_cut_test.cppとtests/lca_nested_cut_allocation_test.cppで補足。",
       "samples": [
         {
           "input": "5 5\n0 0 2 2\n0 1\n0 4\n1 2\n2 3\n3 4\n",
           "output": "0\n0\n0\n2\n2\n"
         }
       ],
-      "acl_required": false
+      "acl_required": false,
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412738",
+        "https://judge.yosupo.jp/submission/412769",
+        "https://judge.yosupo.jp/submission/412793",
+        "https://judge.yosupo.jp/submission/412803",
+        "https://judge.yosupo.jp/submission/412808"
+      ]
     },
     {
       "id": "lis",
@@ -359,7 +420,7 @@
       "coverage": [
         "LISIndices<true>"
       ],
-      "limitations": "特殊ジャッジ。返す最長列は複数可能。広義・接頭辞長・値列は補助検査。",
+      "limitations": "特殊ジャッジ。返す最長列は複数可能。広義・接頭辞長・各要素を末尾とする長さ・値列・比較専用型・NaN検査・確保/比較例外は独立ローカル検査で補う。 復元時の既知末尾の除外は全三値列/DP/型・例外試験と公式checkerで確認。二巡目の長さ系APIは本体不変。 現行SHAfa4eの提出前公式チェッカー・検査有無・独立参照・例外の再検証と固定main基準時間はAudit/verify-lis-current-2026-10-23.json。オンライン結果はsource SHA一致版だけに対応。 提出412815は現行fa4eと一致し全19ケースAC。追加最適化候補は大規模の退行により全て不採用。比較根拠はAudit/performance-lis-submission-2026-10-23.json。",
       "samples": [
         {
           "input": "5\n3 1 4 1 5\n",
@@ -371,7 +432,10 @@
         }
       ],
       "acl_required": false,
-      "sample_checker": "lis"
+      "sample_checker": "lis",
+      "submission_urls": [
+        "https://judge.yosupo.jp/submission/412815"
+      ]
     },
     {
       "id": "topological",
@@ -388,7 +452,7 @@
         "TopologicalSort",
         "得られた順序に沿うDAG最長路"
       ],
-      "limitations": "移行先のオンライン判定は未実施。DAGが前提。閉路・一意性・辞書順・Detailsはtopological_localで補足。",
+      "limitations": "提出80278518はユーザー提供画像でAC22ms。提出本文はHTTP403で未取得・未照合。本体更新後の再提出80278855はユーザー申告で記録。判定ページ未取得のため結果と本文一致は未確認。通常順・辞書順・閉路・一意性・部分順序・不正辺・入力不変性・確保失敗・キュー切替境界は独立参照と照合。GCC15.2/Clang21、検査有効/無効、ASan/UBSanの結果および固定main比較はAudit/performance-topological-submission-2026-10-23.json参照。 辞書順経路の更新後もFIFOの固定mainはGCC/Clangで.text一致を確認。全APIの最新のローカル検証はAudit/performance-topological-lexicographical-2026-10-23.json参照。",
       "samples": [
         {
           "input": "4 5\n1 2\n1 3\n3 2\n2 4\n3 4\n",
@@ -430,6 +494,10 @@
           ],
           "status": "historical（旧提出先・旧ドライバー。移行後の検証とは別）"
         }
+      ],
+      "submission_urls": [
+        "https://atcoder.jp/contests/dp/submissions/80278518",
+        "https://atcoder.jp/contests/dp/submissions/80278855"
       ]
     },
     {
@@ -447,18 +515,26 @@
         "TopologicalSortLexicographical",
         "閉路時の空結果"
       ],
-      "limitations": "Topological.cppにも同一実装あり。一意性/部分順序結果は補助検査。",
+      "limitations": "提出80279279はユーザー画像でAC39ms（前提出も39ms）。本文はHTTP403で未取得・未照合。固定main比較、GCC/Clang・検査有効/無効・SIMD/標準経路・全API・確保失敗・境界434件・64mask2274件・ASan/UBSanはAudit/performance-topological-lexicographical-2026-10-23.json参照。 再提出後の追加候補は性能退行により不採用、本体不変。判断と測定はAudit/performance-topological-lexicographical-80279279-2026-10-23.json参照。",
       "samples": [
         {
           "input": "4 3\n2 1\n3 4\n2 4\n",
-          "output": "2 1 3 4\n"
+          "output": "2 1 3 4\n",
+          "source": "https://atcoder.jp/contests/abc223/tasks/abc223_d",
+          "origin": "公式問題ページの入力例・出力例"
         },
         {
           "input": "2 3\n1 2\n1 2\n2 1\n",
-          "output": "-1\n"
+          "output": "-1\n",
+          "source": "https://atcoder.jp/contests/abc223/tasks/abc223_d",
+          "origin": "公式問題ページの入力例・出力例"
         }
       ],
-      "acl_required": false
+      "acl_required": false,
+      "submission_urls": [
+        "https://atcoder.jp/contests/abc223/submissions/80278917",
+        "https://atcoder.jp/contests/abc223/submissions/80279279"
+      ]
     },
     {
       "id": "next_combination",
@@ -476,18 +552,31 @@
         "first_combination内部",
         "next_combination内部"
       ],
-      "limitations": "幅28以下、k>=1。0個・全64ビット・末尾停止はローカル補助。",
+      "limitations": "提出80280852はユーザー画像でAC51ms。本文はHTTP403で未取得・未照合。現行本体の検証はAudit/performance-next-combination-submission-2026-10-23.json、追加候補を不採用とした比較はAudit/performance-next-combination-80280852-2026-10-23.json参照。",
       "samples": [
         {
           "input": "5 6 328\n1 2 99\n1 3 102\n2 3 86\n2 4 94\n2 5 95\n3 4 81\n",
-          "output": "33\n"
+          "output": "33\n",
+          "source": "https://atcoder.jp/contests/abc328/tasks/abc328_e",
+          "origin": "公式問題ページの入力例・出力例"
         },
         {
           "input": "6 5 998244353\n1 2 337361568\n1 6 450343304\n2 3 61477244\n2 5 745383438\n4 5 727360840\n",
-          "output": "325437688\n"
+          "output": "325437688\n",
+          "source": "https://atcoder.jp/contests/abc328/tasks/abc328_e",
+          "origin": "公式問題ページの入力例・出力例"
+        },
+        {
+          "input": "8 28 936294041850197\n1 2 473294720906780\n1 3 743030800139244\n1 4 709363019414774\n1 5 383643612490312\n1 6 557102781022861\n1 7 623179288538138\n1 8 739618599410809\n2 3 857687812294404\n2 4 893923168139714\n2 5 581822471860662\n2 6 740549363586558\n2 7 307226438833222\n2 8 447399029952998\n3 4 636318083622768\n3 5 44548707643622\n3 6 307262781240755\n3 7 12070267388230\n3 8 700247263184082\n4 5 560567890325333\n4 6 704726113717147\n4 7 588263818615687\n4 8 549007536393172\n5 6 779230871080408\n5 7 825982583786498\n5 8 713928998174272\n6 7 751331074538826\n6 8 449873635430228\n7 8 11298381761479\n",
+          "output": "11360716373\n",
+          "source": "https://atcoder.jp/contests/abc328/tasks/abc328_e",
+          "origin": "公式問題ページの入力例・出力例"
         }
       ],
-      "acl_required": false
+      "acl_required": false,
+      "submission_urls": [
+        "https://atcoder.jp/contests/abc328/submissions/80280852"
+      ]
     },
     {
       "id": "matrix_rotate",
@@ -503,7 +592,7 @@
       "coverage": [
         "rotate_90r(vector<vector<int>>)"
       ],
-      "limitations": "正方形のみ。矩形・文字盤面・空・反転・転置は補助ローカル検査。",
+      "limitations": "提出80281169は画像でAC1ms、本文はHTTP403で未照合。横長SIMD経路更新後はオンライン未提出。公式3例/補足39入力と全API・境界・検査有無/SIMD有無・GCC/Clang・ASan/UBSanをAudit/performance-matrix-rotate-80281169-2026-10-23.jsonに記録。N<=100の提出問題は追加の横長経路を通らない。",
       "samples": [
         {
           "input": "3\n0 1 1\n1 0 0\n0 1 0\n1 1 0\n0 0 1\n1 1 1\n",
@@ -512,9 +601,18 @@
         {
           "input": "2\n0 0\n0 0\n1 1\n1 1\n",
           "output": "Yes\n"
+        },
+        {
+          "input": "5\n0 0 1 1 0\n1 0 0 1 0\n0 0 1 0 1\n0 1 0 1 0\n0 1 0 0 1\n1 1 0 0 1\n0 1 1 1 0\n0 0 1 1 1\n1 0 1 0 1\n1 1 0 1 0\n",
+          "output": "No\n",
+          "source": "https://atcoder.jp/contests/abc298/tasks/abc298_b",
+          "origin": "公式問題ページの入力例3・出力例3"
         }
       ],
-      "acl_required": false
+      "acl_required": false,
+      "submission_urls": [
+        "https://atcoder.jp/contests/abc298/submissions/80281169"
+      ]
     },
     {
       "id": "node_local",
@@ -615,7 +713,7 @@
         "copy/clear/reset",
         "差の相殺とINT64_MAX"
       ],
-      "limitations": "固定境界検査。広いランダム差分検査は以前の整備テストと区別。",
+      "limitations": "固定境界検査。広いランダム差分検査は以前の整備テストと区別。 二巡目の容量内reset/履歴コピー/groupsと型・確保例外はrollback_reuse_test/rollback_reset_value_testで補足。数学・undoは維持し、提出全体の高速化とは区別する。",
       "samples": [
         {
           "input": "",
@@ -745,7 +843,7 @@
         "狭義/広義",
         "長さ/接頭辞長/添字復元/値列復元"
       ],
-      "limitations": "有限のローカル検査。オンラインジャッジのACとは別。",
+      "limitations": "有限のローカル検査。オンラインジャッジのACとは別。 復元時の既知末尾の除外は全三値列/DP/型・例外試験と公式checkerで確認。二巡目の長さ系APIは本体不変。",
       "samples": [
         {
           "input": "",

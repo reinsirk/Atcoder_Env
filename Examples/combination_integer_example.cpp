@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: CC0-1.0
 #include "../Math/Combination/Binomial_Mod.cpp"
 #include <cassert>
 #include <iostream>
@@ -15,5 +16,9 @@ int main()
     options.table_limit = 0; // テーブルの代わりに積で計算。
     BinomialMod uncached(998244353, 0, options);
     assert(uncached.COM(10, 3) == 120);
+    BinomialMod large_composite(2'000'000'014, 0, options);
+    assert(!large_composite.is_prime_modulus());
+    assert(large_composite.COM(100, 2) == 4950);
+    assert(large_composite.COM(2'000'000'014, 1) == 0);
     std::cout << prime.COM(10, 3) << '\n';
 }

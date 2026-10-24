@@ -1,4 +1,31 @@
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/binomial_coefficient.md
+//
+// API一覧
+// [BinomialOptions]
+// 事前計算と、積による代替計算の上限。
+// table_limit: 各テーブルの最大添字（既定5'100'000）。0ならmax_n=0で構築する。
+// max_multiplicative_steps: 1照会の積の回数上限（既定1'000'000）。超過はlength_error。
+//
+// [BinomialMod]
+// 法1〜UINT32_MAXの二項係数を整数で返す。n,kはint64_t、合成数の法にも対応。
+// BinomialMod(modulus=998244353,max_n=5'000'000,options={}): 法・前計算範囲・上限を指定。範囲外の法はinvalid_argument。
+// BinomialMod(modulus,options): 同じ設定で500万まで前計算する。
+// mod(): 使用中の法を返す。is_prime_modulus(): 素数の法ならtrue（法1はfalse）。
+// prepare(max_n=5'000'000): 上限内で表を準備。照会時の自動拡張も可。上限超過はlength_error、負数はinvalid_argument。
+// COM(n,k): nCkの剰余。n<0,k<0,k>nと法1は0。素数でn<modかつ準備済みならO(1)。
+// Lucas(n,k): 素数の法でCOMと同じ結果。合成数・法1ではdomain_error（COMを使う）。
+// H(n,k): (n+k-1)Ckの剰余。0H0=1（法1は0）、0Hk=0（k>0）。int64_t超過はoverflow_error。
+// 表外は積で計算し、積の回数上限も超えるとlength_error。SKIP_RUNTIME_CHECKSで入力検査を除く。
+//
+// [ModIntBinomial<Mint>]
+// AtCoder modint用。Mintは利用側で用意し、動的な法を変えたら計算器も作り直す。
+// ModIntBinomial(max_n=5'000'000,options={}): Mint::mod()を法として構築・前計算。合成数にも対応。
+// ModIntBinomial(options): 指定した上限で500万まで前計算する。
+// prepare(max_n=5'000'000): 上限内で表を準備。制限・例外はBinomialModと同じ。
+// COM(n,k): nCkをMintで返す。n<0,k<0,k>nと法1は0。素数でn<modかつ準備済みならO(1)。
+// Lucas(n,k): 素数の法でCOMと同じ結果。合成数・法1ではCOMを使う。
+// H(n,k): nHkをMintで返す。0H0=1（法1は0）、0Hk=0（k>0）。int64_t超過はoverflow_error。
 
 #include <algorithm>
 #include <bit>
@@ -7,6 +34,7 @@
 #include <initializer_list>
 #include <limits>
 #include <stdexcept>
+#include <type_traits>
 #include <vector>
 
 #ifndef SIRKIT_PRIMALITY32_DEFINED
@@ -18,35 +46,20 @@ inline bool is_prime_u32(std::uint32_t n) noexcept;
 
 #ifndef SIRKIT_BINOMIAL_OPTIONS_DEFINED
 #define SIRKIT_BINOMIAL_OPTIONS_DEFINED
-// 事前計算と、積による代替計算の上限。
 struct BinomialOptions
 {
-    // 各テーブルの最大添字。0にする場合はmax_n=0で構築する。
     std::uint32_t table_limit = 5'100'000;
 
-    // 1回の問い合わせで許す積のループ回数。超過時は length_error。
     std::uint64_t max_multiplicative_steps = 1'000'000;
 };
 #endif
 
 #ifndef SIRKIT_BINOMIAL_MOD_DEFINED
 #define SIRKIT_BINOMIAL_MOD_DEFINED
-// SKIP_RUNTIME_CHECKSで入力検査を省略する。
-// 二項係数（C++20以降）。法は1〜UINT32_MAX、n・kはint64_t。
-// n<0、k<0、k>n、法1は0。Lucasは素数専用。
-// テーブル上限外は積で代替。積の回数上限も超えると length_error。
 // 理論参考: A. Granville, Arithmetic properties of Binomial Coefficients.
 // https://dms.umontreal.ca/~andrew/Binomial/intro.html
 class BinomialMod
 {
-    // BinomialMod(modulus=998244353, max_n=5'000'000, options={}): 法・前計算範囲・計算上限を指定して構築する。
-    // BinomialMod(modulus, options): 指定した法と上限で構築し、500万まで前計算する。
-    // mod(): 使用中の法を返す。
-    // is_prime_modulus(): 法が素数ならtrueを返す（法1はfalse）。
-    // prepare(max_n=5'000'000): max_nまでの問い合わせ用テーブルを準備する。
-    // COM(n, k): nCkを法で割った余りを返す。n<0、k<0、k>nは0。合成数の法にも対応。
-    // Lucas(n, k): 素数の法でnCkを返す。合成数・法1ではCOMを使う。
-    // H(n, k): 重複組合せnHkの余りを返す。0H0=1（法1は0）、0Hk=0（k>0）。
 public:
     using value_type = std::uint32_t;
     using index_type = std::int64_t;
@@ -192,27 +205,62 @@ private:
             factors_.emplace_back(modulus_, modulus_, 1);
             return;
         }
-        u64 remaining = modulus_;
-        for (u64 p = 2; p <= remaining / p; p += (p == 2 ? 1 : 2))
-        {
-            if (remaining % p != 0)
-                continue;
+        if (modulus_ < 2) return;
+        value_type remaining = modulus_;
+        constexpr value_type primality_threshold = value_type{1} << 25;
+        // 3・5は型に定数を持たせ、定数除算を保つ。
+        const auto remove_factor = [&](auto divisor) {
+            const value_type p = divisor;
+            if (remaining % p != 0) return;
             u64 prime_power = 1;
             unsigned exponent = 0;
-            do
-            {
+            do {
                 remaining /= p;
                 prime_power *= p;
                 ++exponent;
             } while (remaining % p == 0);
-            factors_.emplace_back(static_cast<value_type>(p),
-                                  static_cast<value_type>(prime_power), exponent);
+            factors_.emplace_back(p, static_cast<value_type>(prime_power), exponent);
+            if (remaining > primality_threshold && u64{p} * p < remaining &&
+                reinsirk::detail::is_prime_u32(static_cast<value_type>(remaining))) {
+                factors_.emplace_back(remaining, remaining, 1);
+                remaining = 1;
+            }
+        };
+        // 2の因子は末尾0ビット数で取り除く。
+        if ((remaining & 1) == 0) {
+            const auto exponent = static_cast<unsigned>(std::countr_zero(static_cast<value_type>(remaining)));
+            const auto power = static_cast<value_type>(u64{1} << exponent);
+            remaining >>= exponent;
+            factors_.emplace_back(2, power, exponent);
+            if (remaining > primality_threshold && reinsirk::detail::is_prime_u32(static_cast<value_type>(remaining))) {
+                factors_.emplace_back(remaining, remaining, 1);
+                remaining = 1;
+            }
+        }
+        remove_factor(std::integral_constant<value_type, 3>{});
+        remove_factor(std::integral_constant<value_type, 5>{});
+        // 30と互いに素な候補を7,11,13,...の順に調べる。
+        static constexpr unsigned steps[8] = {4, 2, 4, 2, 4, 6, 2, 6};
+        unsigned step = 0;
+        for (value_type p = 7; u64{p} * p <= remaining; p += steps[step], step = (step + 1) & 7) {
+            if (remaining % p != 0) continue;
+            u64 prime_power = 1;
+            unsigned exponent = 0;
+            do {
+                remaining /= p;
+                prime_power *= p;
+                ++exponent;
+            } while (remaining % p == 0);
+            factors_.emplace_back(p, static_cast<value_type>(prime_power), exponent);
+            if (remaining > primality_threshold && u64{p} * p < remaining &&
+                reinsirk::detail::is_prime_u32(static_cast<value_type>(remaining))) {
+                factors_.emplace_back(remaining, remaining, 1);
+                remaining = 1;
+                break;
+            }
         }
         if (remaining > 1)
-        {
-            factors_.emplace_back(static_cast<value_type>(remaining),
-                                  static_cast<value_type>(remaining), 1);
-        }
+            factors_.emplace_back(remaining, remaining, 1);
         for (auto &factor : factors_)
         {
             const auto other = modulus_ / factor.modulus;
@@ -897,7 +945,6 @@ private:
     }
 
 public:
-    // 法を指定して構築する。既定では500万まで前計算。範囲外の法は invalid_argument。
     explicit BinomialMod(index_type modulus = 998244353,
                          index_type max_n = 5'000'000, BinomialOptions options = {})
         : modulus_(0), options_(options)
@@ -921,21 +968,16 @@ public:
         prepare(max_n);
     }
 
-    // オプションだけ指定した場合も、既定では500万まで前計算する。
     BinomialMod(index_type modulus, BinomialOptions options)
         : BinomialMod(modulus, 5'000'000, options) {}
 
-    // 使用中の法を返す。
     [[nodiscard]] value_type mod() const noexcept { return modulus_; }
 
-    // 法が素数ならtrue（法1はfalse）。
     [[nodiscard]] bool is_prime_modulus() const noexcept
     {
         return factors_.size() == 1 && factors_[0].exponent == 1;
     }
 
-    // max_nまでの問い合わせ用テーブルを準備する。問い合わせ時の自動拡張も可。
-    // 必要な添字がtable_limitを超えると length_error。max_n<0は invalid_argument。
     void prepare(index_type max_n = 5'000'000)
     {
 #ifndef SKIP_RUNTIME_CHECKS
@@ -962,7 +1004,6 @@ public:
 
 #if defined(__GNUC__) && !defined(__clang__) && defined(__SIZEOF_INT128__)
     // GCCでは準備済み照会を短く保ち、汎用処理を分ける。
-    // nCk mod mod()。素数でn<mod・準備済みならO(1)。
     [[nodiscard]] value_type COM(index_type n, index_type k)
     {
         if (modulus_ == 1)
@@ -1019,7 +1060,6 @@ private:
 public:
 
 #else
-    // nCk mod mod()。素数でn<mod・準備済みならO(1)。
     [[nodiscard]] value_type COM(index_type n, index_type k)
     {
         if (modulus_ == 1)
@@ -1070,7 +1110,6 @@ public:
 
 #endif
 
-    // 素数の法でnCkを求める。合成数・法1では domain_error（COMを使う）。
     [[nodiscard]] value_type Lucas(index_type n, index_type k)
     {
 #ifndef SKIP_RUNTIME_CHECKS
@@ -1082,8 +1121,6 @@ public:
         return COM(n, k);
     }
 
-    // 重複組合せnHk=(n+k-1)Ck。0H0=1（法1は0）、0Hk=0（k>0）。
-    // n+k-1がint64_tを超えると overflow_error。
     [[nodiscard]] value_type H(index_type n, index_type k)
     {
         if (n < 0 || k < 0)
@@ -1103,16 +1140,8 @@ public:
 
 #ifndef SIRKIT_MODINT_BINOMIAL_DEFINED
 #define SIRKIT_MODINT_BINOMIAL_DEFINED
-// AtCoder modint用。素数ではMintの階乗表、合成数ではBinomialModを使う。
-// dynamic_modintの法を変えたら作り直す。
 template <class Mint>
 class ModIntBinomial {
-  // ModIntBinomial(max_n=5'000'000, options={}): Mintの法で構築し、前計算する。合成数の法にも対応。
-  // ModIntBinomial(options): 指定した上限で構築し、500万まで前計算する。
-  // prepare(max_n=5'000'000): max_nまでの問い合わせ用テーブルを準備する。
-  // COM(n, k): nCkをMintで返す。n<0、k<0、k>nは0。
-  // Lucas(n, k): 素数の法でnCkをMintで返す。合成数・法1ではCOMを使う。
-  // H(n, k): 重複組合せnHkをMintで返す。0H0=1（法1は0）、0Hk=0（k>0）。
   using u64 = std::uint64_t;
   using u32 = std::uint32_t;
   BinomialMod engine_;
@@ -1384,17 +1413,14 @@ class ModIntBinomial {
   }
 
  public:
-  // Mint::mod()を法として構築し、既定では500万まで前計算する。
   explicit ModIntBinomial(std::int64_t max_n = 5'000'000, BinomialOptions options = {})
       : engine_(Mint::mod(), 0, options), options_(options), prime_(engine_.is_prime_modulus()) {
     prepare(max_n);
   }
 
-  // オプションだけ指定した場合も、既定では500万まで前計算する。
   explicit ModIntBinomial(BinomialOptions options)
       : ModIntBinomial(5'000'000, options) {}
 
-  // max_nまでの問い合わせ用テーブルを準備する。制限はBinomialModと同じ。
   void prepare(std::int64_t max_n = 5'000'000) {
     check_modulus();
 #ifndef SKIP_RUNTIME_CHECKS
@@ -1409,7 +1435,6 @@ class ModIntBinomial {
     ensure_factorials(static_cast<u32>(target));
   }
 
-  // nCkをMintで返す。素数でn<mod・準備済みならO(1)。
   [[nodiscard]] Mint COM(std::int64_t n, std::int64_t k) {
     check_modulus();
     // 通常の準備済み範囲では、Mint の乗算2回だけで答えを求める。
@@ -1420,7 +1445,6 @@ class ModIntBinomial {
     return compute_uncached(n, k);
   }
 
-  // 素数の法でnCkをMintで返す。法は素数を前提とする。
   [[nodiscard]] Mint Lucas(std::int64_t n, std::int64_t k) {
 #ifndef SKIP_RUNTIME_CHECKS
     if (!prime_)
@@ -1429,7 +1453,6 @@ class ModIntBinomial {
     return COM(n, k);
   }
 
-  // 重複組合せnHkをMintで返す。規則はBinomialMod::Hと同じ。
   [[nodiscard]] Mint H(std::int64_t n, std::int64_t k) {
     check_modulus();
     if (n < 0 || k < 0) return Mint(0);
@@ -1446,7 +1469,6 @@ class ModIntBinomial {
 #define SIRKIT_PRIMALITY32_DEFINED
 namespace reinsirk::detail {
 // uint32_t全域の素数判定。Miller-Rabinの底2,7,61を使う。
-// 理論参考: G. Jaeschke (1993), https://doi.org/10.1090/S0025-5718-1993-1192971-8
 inline bool is_prime_u32(std::uint32_t n) noexcept
 {
     // 競技プログラミングでよく使う素数は、累乗計算を省く。
@@ -1467,11 +1489,11 @@ inline bool is_prime_u32(std::uint32_t n) noexcept
     }
     if (n < 2)
         return false;
-    for (std::uint32_t p : {2u, 3u, 5u, 7u, 11u})
-    {
-        if (n % p == 0)
-            return n == p;
-    }
+    if (n % 2u == 0) return n == 2u;
+    if (n % 3u == 0) return n == 3u;
+    if (n % 5u == 0) return n == 5u;
+    if (n % 7u == 0) return n == 7u;
+    if (n % 11u == 0) return n == 11u;
     std::uint32_t odd = n - 1;
     unsigned shifts = 0;
     while ((odd & 1u) == 0)
@@ -1479,7 +1501,7 @@ inline bool is_prime_u32(std::uint32_t n) noexcept
         odd >>= 1;
         ++shifts;
     }
-#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__)
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__SIZEOF_INT128__) && !defined(SIRKIT_FORCE_STANDARD_ARITHMETIC)
     // R=2^64。n<2^32なので、累乗中の剰余は2n未満のまま保持できる。
     using u64 = std::uint64_t;
     using u128 = __uint128_t; // GCC/Clangの128ビット整数拡張。

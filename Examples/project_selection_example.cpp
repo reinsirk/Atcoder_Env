@@ -1,5 +1,8 @@
+// SPDX-License-Identifier: CC0-1.0
 #include "../Graph/Project_Selection.cpp"
+#include <cassert>
 #include <cstdint>
+#include <utility>
 #include <iostream>
 
 int main() {
@@ -22,4 +25,13 @@ int main() {
     model.add_constant(7);
     model.add_all_true_profit({}, 2); // 空集合の条件は常に成立。
     std::cout << model.solve() << ' ' << model.variable_count() << '\n'; // 5 3
+    model.clear(); // 変数と辺配列の領域を再利用。
+    model.add_any_true_cost({0, 1}, 4);
+    model.add_any_false_cost({1, 2}, 3);
+    model.force(0, true);
+    model.force(2, false);
+    std::cout << model.solve() << '\n'; // 7
+    TwoVariableSubmodularOpt<std::int64_t> other;
+    swap(model, other);
+    assert(model.empty() && other.variable_count() == 3);
 }

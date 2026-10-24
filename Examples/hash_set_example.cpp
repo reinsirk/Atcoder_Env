@@ -20,7 +20,7 @@ int main() {
     const auto old_capacity = values.capacity();
     assert(values.erase_if([](std::int64_t x) { return x % 2 == 0; }) == 3);
     for (auto it = values.begin(); it != values.end();) it = values.erase(it);
-    assert(values.empty() && values.capacity() == old_capacity);
+    assert(values.empty() && values.capacity() == old_capacity && values.begin() == values.end());
     values.insert(8);
     values.erase(values.find(8), false);
     values.insert(10);

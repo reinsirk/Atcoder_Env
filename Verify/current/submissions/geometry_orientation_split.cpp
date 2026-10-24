@@ -2,6 +2,32 @@
 
 // Library: Geometry/Point.cpp
 // SPDX-License-Identifier: CC0-1.0
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/geometry_point.md
+// ドキュメント: https://github.com/reinsirk/sirkit-cpp-library/blob/main/Document/geometry_orientation.md
+//
+// API一覧
+// [geo::Epsilon]
+// Epsilon{abs,rel}: 非負有限の絶対・相対許容幅（既定は各1e-12L）。
+// tolerance(scale): abs + rel * abs(scale) を返す。O(1)。
+//
+// [geo::Point]
+// Point<T,C=DefaultCalc<T>>{x,y}: 符号付き整数/浮動小数点の集成体。座標・座標演算はT、差・積・和はCに収まる有限入力。
+// DefaultCalc<T>: 整数は対応環境で128ビット拡張、標準代替はint64_t。浮動小数点はT。
+// PointI/PointD/PointLD/RealPoint: int64_t/double/long double/long doubleのPoint。Value/Calc/Realは座標/計算/距離の型。
+// 比較は座標の完全一致・辞書順。単項-, +,-,*,+=,-=,*= は座標演算、点同士の * は内積、^ は外積。O(1)。
+// dot/cross/norm2/dist2/orient は C、norm/dist は Real、ccw は符号を返す。dist2/orient の差は C で計算する。
+// rotated90(k)/rot90(k) は反時計回り90度の k 倍のコピー/更新、arg は偏角。O(1)。
+// 浮動小数点専用: /,/= は非零スカラー除算、rotated/rot はラジアン回転、normalized は非零点の単位化。
+// almost_equal は成分別の誤差比較。cast<U,D>() は座標型変換。arg_cmp は零点を先頭に偏角・距離順。O(1)。
+// 浮動 arg_cmp は丸めた偏角が等しければ距離順。ostream は (x,y) を出力する。O(1)。
+//
+// [geo::点の関数]
+// 点の関数。座標は有限、整数の差・積は C に収まる入力を扱う。
+// predicate_sign<T,C>(value,scale,eps): 整数は厳密、実数は許容幅で -1/0/1 を返す。O(1)。
+// orientation(a,b,c,eps): 左折1、直進0、右折-1。整数では厳密。O(1)。
+// to_real(p): long double 座標へ変換する。O(1)。
+// distance(p,q): 2点間距離を Point::Real で返す。O(1)。
+
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -20,7 +46,6 @@
 #ifndef SIRKIT_GEO_EPSILON_DEFINED
 #define SIRKIT_GEO_EPSILON_DEFINED
 namespace geo {
-// tolerance(scale): 非負有限の abs/rel から許容幅を返す。O(1)。
 struct Epsilon {
     long double abs = 1e-12L;
     long double rel = 1e-12L;
@@ -39,13 +64,6 @@ template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, 
 #else
 template<class T> using DefaultCalc = std::conditional_t<std::is_integral_v<T>, std::int64_t, T>;
 #endif
-// Point は集成体。座標・座標演算は T、積・差・和は C に収まる有限入力を扱う。
-// 比較は座標の完全一致・辞書順。+,-,*,+=,-=,*= は座標演算、点同士の * は内積、^ は外積。O(1)。
-// dot/cross/norm2/dist2/orient は C、norm/dist は Real、ccw は符号を返す。dist2/orient の差は C で計算する。
-// rotated90(k)/rot90(k) は反時計回り90度の k 倍のコピー/更新、arg は偏角。O(1)。
-// 浮動小数点専用: /,/= は非零スカラー除算、rotated/rot はラジアン回転、normalized は非零点の単位化。
-// almost_equal は成分別の誤差比較。cast<U,D>() は座標型変換。arg_cmp は零点を先頭に偏角・距離順。O(1)。
-// 浮動 arg_cmp は丸めた偏角が等しければ距離順。ostream は (x,y) を出力する。O(1)。
 template<class T, class C = DefaultCalc<T>>
 struct Point {
     static_assert((std::is_integral_v<T> && std::is_signed_v<T>) || std::is_floating_point_v<T>);
@@ -175,11 +193,6 @@ using RealPoint = PointLD;
 #ifndef SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 #define SIRKIT_GEO_POINT_FUNCTIONS_DEFINED
 namespace geo {
-// 点の関数。座標は有限、整数の差・積は C に収まる入力を扱う。
-// predicate_sign<T,C>(value,scale,eps): 整数は厳密、実数は許容幅で -1/0/1 を返す。O(1)。
-// orientation(a,b,c,eps): 左折1、直進0、右折-1。整数では厳密。O(1)。
-// to_real(p): long double 座標へ変換する。O(1)。
-// distance(p,q): 2点間距離を Point::Real で返す。O(1)。
 
 template<class T, class C> int predicate_sign(C value, C scale, Epsilon eps = {}) {
     if constexpr (std::is_integral_v<T>) return (value > 0) - (value < 0);
