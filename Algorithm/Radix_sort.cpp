@@ -136,12 +136,15 @@ template <RadixInteger T> struct RadixSortDetail {
                 previous = value;
                 Unsigned encoded = key(value);
                 different |= encoded ^ first;
+#if defined(__GNUC__) && !defined(__clang__)
                 if constexpr (bytes == 4) {
                     ++counts[0][encoded & Unsigned{255}];
                     ++counts[1][(encoded >> 8) & Unsigned{255}];
                     ++counts[2][(encoded >> 16) & Unsigned{255}];
                     ++counts[3][(encoded >> 24) & Unsigned{255}];
-                } else {
+                } else
+#endif
+                {
                     for (std::size_t byte = 0; byte < bytes; ++byte) {
                         ++counts[byte][encoded & Unsigned{255}];
                         if constexpr (bytes > 1) encoded >>= 8;
